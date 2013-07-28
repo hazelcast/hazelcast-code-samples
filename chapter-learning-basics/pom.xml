@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <artifactId>chapter-learning-basics</artifactId>
+    <name>Chapter Learning Basics</name>
+    <groupId>book.hazelcast.basics</groupId>
+    <description>
+        All the code samples for the learning basics chapter
+    </description>
+
+    <parent>
+        <groupId>book.hazelcast</groupId>
+        <artifactId>book-hazelcast</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modules>
+        <module>configure-programmatic</module>
+        <module>configure-xml</module>
+        <module>wildcard-configuration</module>
+        <module>multiple-hazelcast-instances</module>
+        <module>loading-instances</module>
+        <module>unique-names</module>
+        <module>destroying-instances</module>
+        <module>configure-logging</module>
+    </modules>
+
+</project>

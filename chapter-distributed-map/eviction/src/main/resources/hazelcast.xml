@@ -1,0 +1,15 @@
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.0.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <network>
+        <join>
+            <multicast enabled="true"/>
+        </join>
+    </network>
+
+    <map name="persons">
+        <max-size policy="used_heap_size">20</max-size>
+        <eviction-policy>LRU</eviction-policy>
+    </map>
+</hazelcast>

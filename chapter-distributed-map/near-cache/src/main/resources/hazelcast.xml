@@ -1,0 +1,14 @@
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.0.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <map name="articles">
+        <near-cache>
+            <max-size>5000</max-size>
+            <time-to-live-seconds>60</time-to-live-seconds>
+            <eviction-policy>NONE</eviction-policy>
+            <invalidate-on-change>false</invalidate-on-change>
+        </near-cache>
+    </map>
+</hazelcast>

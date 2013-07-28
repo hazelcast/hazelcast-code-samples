@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <artifactId>chapter-distributed-collections</artifactId>
+    <groupId>book.hazelcast.collections</groupId>
+    <name>Chapter Distributed Collections</name>
+    <description>
+        All the code samples for the distributed collections chapter.
+    </description>
+
+    <parent>
+        <groupId>book.hazelcast</groupId>
+        <artifactId>book-hazelcast</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modules>
+        <module>blockingqueue</module>
+        <module>boundedblockingqueue</module>
+        <module>queuestore</module>
+        <module>list</module>
+        <module>set</module>
+        <module>itemlisteners</module>
+    </modules>
+
+</project>

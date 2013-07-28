@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+
+    <artifactId>destroying-instances</artifactId>
+    <name>Chapter Learning Basics - Destroying instances</name>
+
+    <description>
+        Chapter Learning Basics - Destroying instances
+    </description>
+
+    <parent>
+        <groupId>book.hazelcast.basics</groupId>
+        <artifactId>chapter-learning-basics</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+
+</project>
