@@ -5,7 +5,6 @@
 
     <artifactId>backups</artifactId>
     <name>Chapter SPI: Backups</name>
-    <groupId>book.hazelcast.spi</groupId>
     <description>
         The code example for the Backups
     </description>

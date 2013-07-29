@@ -24,7 +24,7 @@
         <module>sqlquery</module>
         <module>index</module>
         <module>locking</module>
-        <module>multimap</module>
+        <module>multi-map</module>
         <module>mapstore</module>
         <module>data-locality</module>
         <module>near-cache</module>

@@ -5,7 +5,6 @@
 
     <artifactId>container</artifactId>
     <name>Chapter SPI: Container</name>
-    <groupId>book.hazelcast.spi</groupId>
     <description>
         The code example for the Container.
     </description>

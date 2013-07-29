@@ -25,11 +25,6 @@ public class CounterService implements ManagedService, RemoteService {
     }
 
     @Override
-    public String getServiceName() {
-        return NAME;
-    }
-
-    @Override
     public void destroyDistributedObject(Object objectId) {
     }
 

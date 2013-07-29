@@ -2,7 +2,6 @@ import com.hazelcast.core.DistributedObject;
 import com.hazelcast.partition.MigrationEndpoint;
 import com.hazelcast.spi.*;
 
-import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService, MigrationAwareService {
@@ -29,11 +28,6 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public String getServiceName() {
-        return NAME;
-    }
-
-    @Override
     public void beforeMigration(PartitionMigrationEvent e) {
         //no-op
     }
@@ -50,22 +44,13 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public Operation prepareMigrationOperation(PartitionMigrationEvent e) {
-        if (e.getReplicaIndex() > 1) return null;
-
-        Container container = containers[e.getPartitionId()];
-        Map<String, Integer> migrationData = container.toMigrationData();
-        if (migrationData.isEmpty()) return null;
-        return new CounterMigrationOperation(migrationData);
-    }
-
-    @Override
     public void commitMigration(PartitionMigrationEvent e) {
-        if (e.getMigrationEndpoint() == MigrationEndpoint.SOURCE
-                && e.getMigrationType() == MigrationType.MOVE) {
+        if (e.getMigrationEndpoint() == MigrationEndpoint.SOURCE) {
             Container c = containers[e.getPartitionId()];
             c.clear();
         }
+
+        //todo
     }
 
     @Override

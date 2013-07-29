@@ -5,7 +5,6 @@
 
     <artifactId>getting-started</artifactId>
     <name>Chapter SPI: Getting started</name>
-    <groupId>book.hazelcast.spi</groupId>
     <description>
         Contains the code for the Getting started example of the SPI chapter.
     </description>

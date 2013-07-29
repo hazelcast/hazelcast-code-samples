@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 class Container {
-    private final ConcurrentMap<String, Integer> counterMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Integer> counterMap = new ConcurrentHashMap();
 
     int inc(String id, int amount) {
         Integer counter = counterMap.get(id);
@@ -25,6 +25,6 @@ class Container {
     }
 
     Map<String, Integer> toMigrationData() {
-        return new HashMap<>(counterMap);
+        return new HashMap(counterMap);
     }
 }
