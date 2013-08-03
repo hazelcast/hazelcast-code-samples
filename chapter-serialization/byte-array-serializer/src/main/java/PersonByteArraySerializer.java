@@ -15,7 +15,6 @@ public class PersonByteArraySerializer implements ByteArraySerializer<Person> {
 
     @Override
     public byte[] write(Person object) throws IOException {
-        System.out.println("Writing");
         return object.getName().getBytes();
     }
 
