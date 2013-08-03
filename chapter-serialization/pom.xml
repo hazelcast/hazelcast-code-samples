@@ -23,7 +23,7 @@
         <module>dataserializable</module>
         <module>portable</module>
         <module>stream-serializer</module>
-        <module>plain-serializer</module>
+        <module>byte-array-serializer</module>
         <module>global-serializer</module>
         <module>hazelcastinstanceaware</module>
         <module>managed-context</module>

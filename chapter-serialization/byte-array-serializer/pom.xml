@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>plain-serializer</artifactId>
-    <name>Plain Serializer</name>
+    <artifactId>bytearray-serializer</artifactId>
+    <name>ByteArray Serializer</name>
     <description>
-        A Plain Serializer example
+        A ByteArray Serializer
     </description>
 
     <parent>
