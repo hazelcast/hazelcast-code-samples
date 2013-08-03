@@ -6,10 +6,12 @@ import java.util.Map;
 public class Member {
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        Map<String, Person> map = hz.getMap("map");
-        map.put("foo", new Person("foo"));
-        System.out.println("finished writing");
-        System.out.println(map.get("foo"));
-        System.out.println("finished reading");
+        Map<String, Car> map = hz.getMap("map");
+
+        Person owner = new Person("peter");
+        Car car = new Car(owner, "red");
+
+        map.put("mycar", car);
+        System.out.println(map.get("mycar"));
     }
 }

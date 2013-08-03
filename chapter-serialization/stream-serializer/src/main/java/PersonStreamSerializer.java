@@ -5,14 +5,9 @@ import com.hazelcast.nio.serialization.StreamSerializer;
 import java.io.IOException;
 
 public class PersonStreamSerializer implements StreamSerializer<Person> {
-
-    @Override
-    public void destroy() {
-    }
-
     @Override
     public int getTypeId() {
-        return 1;
+        return MySerializationConstants.PERSON_TYPE;
     }
 
     @Override
@@ -22,6 +17,11 @@ public class PersonStreamSerializer implements StreamSerializer<Person> {
 
     @Override
     public Person read(ObjectDataInput in) throws IOException {
-        return new Person(in.readUTF());
+        String name = in.readUTF();
+        return new Person(name);
+    }
+
+    @Override
+    public void destroy() {
     }
 }

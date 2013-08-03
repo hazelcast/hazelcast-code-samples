@@ -1,3 +1,6 @@
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
+
 public class Person {
     private String name;
 

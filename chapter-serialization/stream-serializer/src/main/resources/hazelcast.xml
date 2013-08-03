@@ -6,6 +6,9 @@
     <serialization>
         <serializers>
             <serializer type-class="Person">PersonStreamSerializer</serializer>
+            <serializer type-class="Car">CarStreamSerializer</serializer>
+            <serializer type-class="java.util.LinkedList">LinkedListStreamSerializer</serializer>
+            <serializer type-class="java.util.HashMap">HashMapStreamSerializer</serializer>
         </serializers>
     </serialization>
 </hazelcast>
