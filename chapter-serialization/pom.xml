@@ -28,5 +28,6 @@
         <module>portable</module>
         <module>serializable</module>
         <module>stream-serializer</module>
+        <module>user-context</module>
     </modules>
 </project>
