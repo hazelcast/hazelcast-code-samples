@@ -1,20 +1,21 @@
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.ManagedContext;
 
 import java.io.Serializable;
 import java.util.Map;
 
 class DummyObject implements Serializable {
-    transient Thread transientField = new Thread();
-    String serializableField = "someValue";
+    transient Thread trans = new Thread();
+    String ser= "someValue";
 
     @Override
     public String toString() {
         return "DummyObject{" +
-                "serializableField='" + serializableField + '\'' +
-                ", transientField=" + transientField +
+                "ser='" + ser + '\'' +
+                ", trans=" + trans +
                 '}';
     }
 }
@@ -23,7 +24,7 @@ class ManagedContextImpl implements ManagedContext {
     @Override
     public Object initialize(Object obj) {
         if (obj instanceof DummyObject) {
-            ((DummyObject) obj).transientField = new Thread();
+            ((DummyObject) obj).trans = new Thread();
         }
         return obj;
     }

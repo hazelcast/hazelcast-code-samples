@@ -20,7 +20,7 @@
     <modules>
         <module>serializable</module>
         <module>externalizable</module>
-        <module>dataserializable</module>
+        <module>data-serializable</module>
         <module>portable</module>
         <module>stream-serializer</module>
         <module>byte-array-serializer</module>
