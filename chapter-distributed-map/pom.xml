@@ -29,7 +29,7 @@
         <module>data-locality</module>
         <module>near-cache</module>
         <module>eviction</module>
-        <module>executeOnKey</module>
+        <module>execute-on-key</module>
     </modules>
 
 </project>
