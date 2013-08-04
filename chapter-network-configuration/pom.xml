@@ -24,7 +24,7 @@
         <module>aws</module>
         <module>groups</module>
         <module>partitiongroup</module>
-        <module>encryption</module>
+        <module>symmetric-encryption</module>
         <module>ssl</module>
         <module>firewall</module>
     </modules>
