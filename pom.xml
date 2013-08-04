@@ -13,7 +13,7 @@
     </description>
 
     <properties>
-        <hazelcast.version>3.0-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.0</hazelcast.version>
     </properties>
 
     <dependencies>
