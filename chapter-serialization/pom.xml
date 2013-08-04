@@ -18,14 +18,15 @@
     </parent>
 
     <modules>
-        <module>serializable</module>
-        <module>externalizable</module>
-        <module>data-serializable</module>
-        <module>portable</module>
-        <module>stream-serializer</module>
         <module>byte-array-serializer</module>
+        <module>data-serializable</module>
+        <module>externalizable</module>
         <module>global-serializer</module>
-        <module>hazelcastinstanceaware</module>
+        <module>hazelcast-instance-aware</module>
+        <module>identified-data-serializable</module>
         <module>managed-context</module>
+        <module>portable</module>
+        <module>serializable</module>
+        <module>stream-serializer</module>
     </modules>
 </project>
