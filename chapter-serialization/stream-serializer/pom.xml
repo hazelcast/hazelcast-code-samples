@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>stream-serializer</artifactId>
-    <name>Stream Serializer</name>
+    <name>Chapter Serialization: Stream Serializer</name>
     <description>
         A Stream Serializer example
     </description>

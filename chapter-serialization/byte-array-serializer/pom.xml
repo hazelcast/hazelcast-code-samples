@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>bytearray-serializer</artifactId>
-    <name>ByteArray Serializer</name>
+    <name>Chapter Serialization: ByteArray Serializer</name>
     <description>
         A ByteArray Serializer
     </description>

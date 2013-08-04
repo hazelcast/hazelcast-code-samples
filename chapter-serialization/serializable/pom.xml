@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>serializable</artifactId>
-    <name>Serializable</name>
+    <name>Chapter Serialization: Serializable</name>
     <description>
         The Serializable example
     </description>

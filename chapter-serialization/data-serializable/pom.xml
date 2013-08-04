@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>data-serializable</artifactId>
-    <name>DataSerializable</name>
+    <name>Chapter Serialization: DataSerializable</name>
     <description>
         The DataSerializable example
     </description>

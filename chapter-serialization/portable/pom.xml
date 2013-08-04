@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>portable</artifactId>
-    <name>Portable</name>
+    <name>Chapter Serialization: Portable</name>
     <description>
         The Portable example
     </description>

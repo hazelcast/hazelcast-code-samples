@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>user-context</artifactId>
-    <name>UserContext</name>
+    <name>Chapter Serialization: UserContext</name>
     <description>
         The User Context example
     </description>

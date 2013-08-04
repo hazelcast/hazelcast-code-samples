@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>managed-context</artifactId>
-    <name>ManagedContext</name>
+    <name>Chapter Serialization: ManagedContext</name>
     <description>
         The ManagedContext example
     </description>

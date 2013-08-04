@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>externalizable</artifactId>
-    <name>Externalizable</name>
+    <name>Chapter Serialization: Externalizable</name>
     <description>
         The Externalizable example
     </description>
