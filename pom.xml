@@ -13,8 +13,16 @@
     </description>
 
     <properties>
-        <hazelcast.version>3.0</hazelcast.version>
+        <hazelcast.version>3.0.1-SNAPSHOT</hazelcast.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>snapshot-repository</id>
+            <name>Maven2 Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
