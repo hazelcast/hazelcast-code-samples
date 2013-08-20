@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>hashcodeandequals</artifactId>
+    <artifactId>hashcode-and-equals</artifactId>
     <name>Chapter DistributedMap - Hashcode and equals</name>
 
     <description>

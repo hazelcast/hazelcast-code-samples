@@ -19,7 +19,7 @@
 
     <modules>
         <module>basics</module>
-        <module>hashcodeandequals</module>
+        <module>hashcode-and-equals</module>
         <module>criteria-api</module>
         <module>sqlquery</module>
         <module>index</module>
