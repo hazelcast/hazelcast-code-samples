@@ -13,8 +13,8 @@ public class BrokenValueMember {
         Map<String, Pair> objectMap = hz.getMap("objectMap");
         Map<String, Pair> cachedMap = hz.getMap("cachedMap");
 
-        Pair v1 = new Pair("a", "b");
-        Pair v2 = new Pair("a", "c");
+        Pair v1 = new Pair("a", "1");
+        Pair v2 = new Pair("a", "2");
 
         normalMap.put("key", v1);
         binaryMap.put("key", v1);

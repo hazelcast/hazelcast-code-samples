@@ -12,8 +12,8 @@ public class BrokenKeyMember {
         Map<Pair, String> normalMap = new HashMap<>();
         Map<Pair, String> hzMap = hz.getMap("map");
 
-        Pair key1 = new Pair("a", "b");
-        Pair key2 = new Pair("a", "c");
+        Pair key1 = new Pair("a", "1");
+        Pair key2 = new Pair("a", "2");
 
         normalMap.put(key1, "foo");
         hzMap.put(key1, "foo");
