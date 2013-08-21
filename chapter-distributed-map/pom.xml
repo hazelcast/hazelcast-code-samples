@@ -23,6 +23,7 @@
         <module>criteria-api</module>
         <module>sqlquery</module>
         <module>index</module>
+        <module>in-memory-format</module>
         <module>locking</module>
         <module>multi-map</module>
         <module>mapstore</module>

@@ -4,9 +4,20 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <network>
         <join>
-            <tcp-ip enabled="true">
-                <member>127.0.0.1</member>
-            </tcp-ip>
+            <multicast enabled="true"/>
         </join>
     </network>
+
+    <map name="binaryMap">
+       <in-memory-format>BINARY</in-memory-format>
+    </map>
+
+    <map name="objectMap">
+        <in-memory-format>OBJECT</in-memory-format>
+    </map>
+
+    <map name="cachedMap">
+        <in-memory-format>CACHED</in-memory-format>
+    </map>
+
 </hazelcast>
