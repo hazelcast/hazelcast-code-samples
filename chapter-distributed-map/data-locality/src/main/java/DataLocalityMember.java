@@ -25,10 +25,10 @@ public class DataLocalityMember {
 
         PartitionService pService = hz.getPartitionService();
         Partition cPartition = pService.getPartition(customerId);
-        Partition kPartition = pService.getPartition(orderKey);
-        Partition oPartition = pService.getPartition(orderId);
+        Partition oPartition = pService.getPartition(orderKey);
+        Partition wPartition = pService.getPartition(orderId);
         System.out.printf("Partition for customer: %s\n", cPartition.getPartitionId());
-        System.out.printf("Partition for order with OrderKey: %s\n", kPartition.getPartitionId());
-        System.out.printf("Partition for order without OrderKey: %s\n", oPartition.getPartitionId());
+        System.out.printf("Partition for order with OrderKey: %s\n", oPartition.getPartitionId());
+        System.out.printf("Partition for order without OrderKey: %s\n", wPartition.getPartitionId());
     }
 }
