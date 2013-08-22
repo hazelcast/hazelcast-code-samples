@@ -18,7 +18,7 @@ public class DataLocalityMember {
         long orderId = 200;
         long articleId = 300;
         Customer customer = new Customer(customerId);
-        customerMap.put(customer.id, customer);
+        customerMap.put(customerId, customer);
         OrderKey orderKey = new OrderKey(orderId, customer.id);
         Order order = new Order(orderKey.orderId, customer.id, articleId);
         orderMap.put(orderKey, order);
