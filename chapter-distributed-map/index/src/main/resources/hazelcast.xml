@@ -8,10 +8,13 @@
         </join>
     </network>
 
-    <map name="persons">
+    <map name="personsWithIndex">
         <indexes>
             <index ordered="false">name</index>
         </indexes>
+    </map>
+
+    <map name="personsWithoutIndex">
     </map>
 
 </hazelcast>
