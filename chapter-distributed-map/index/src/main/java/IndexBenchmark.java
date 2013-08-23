@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class IndexBenchmark {
     public final static int MAP_SIZE = 100000;
     public final static int TIME_SECONDS = 60;
-    public final static int UPDATE_PERCENTAGE = 10;
+    public final static int UPDATE_PERCENTAGE = 100;
 
     private static final String[] names = new String[]{"Jacob", "Sophia", "Mason", "Isabella",
             "William", "Emma", "Jayden", "Olivia", "Noah", "Ava", "Michael", "Emily",
