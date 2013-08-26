@@ -44,6 +44,7 @@
         <module>chapter-transactions</module>
         <module>chapter-serialization</module>
         <module>chapter-spi</module>
+        <module>chapter-performance</module>
     </modules>
 
     <build>

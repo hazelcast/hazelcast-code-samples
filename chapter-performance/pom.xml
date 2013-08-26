@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <artifactId>chapter-performance</artifactId>
+    <name>Chapter Performance</name>
+    <groupId>book.hazelcast.performance</groupId>
+    <description>
+        All the code samples for the Performance chapter
+    </description>
+
+    <parent>
+        <groupId>book.hazelcast</groupId>
+        <artifactId>book-hazelcast</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modules>
+        <module>partitioning</module>
+     </modules>
+</project>

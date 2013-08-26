@@ -8,7 +8,7 @@
         </join>
     </network>
 
-    <map name="persons">
+    <map name="cities">
         <backup-count>1</backup-count>
         <async-backup-count>1</async-backup-count>
     </map>
