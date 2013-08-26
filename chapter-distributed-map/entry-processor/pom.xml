@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>execute-on-key</artifactId>
-    <name>Chapter DistributedMap - Execute On Key</name>
+    <artifactId>entry-processor</artifactId>
+    <name>Chapter DistributedMap - EntryProcessor</name>
 
     <description>
-        Chapter Distributed Map - Execute On Key
+        Chapter Distributed Map - EntryProcessor
     </description>
 
     <parent>

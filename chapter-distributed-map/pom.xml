@@ -31,7 +31,7 @@
         <module>data-locality</module>
         <module>near-cache</module>
         <module>eviction</module>
-        <module>execute-on-key</module>
+        <module>entry-processor</module>
     </modules>
 
 </project>

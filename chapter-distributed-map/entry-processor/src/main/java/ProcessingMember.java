@@ -20,7 +20,7 @@ public class ProcessingMember {
 
             @Override
             public EntryBackupProcessor getBackupProcessor() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return null;
             }
         });
     }
