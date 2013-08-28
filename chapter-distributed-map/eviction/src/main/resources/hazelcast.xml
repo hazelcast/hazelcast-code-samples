@@ -9,7 +9,8 @@
     </network>
 
     <map name="persons">
-        <max-size policy="used_heap_size">20</max-size>
         <eviction-policy>LRU</eviction-policy>
+        <max-size policy="used_heap_size">20</max-size>
+
     </map>
 </hazelcast>

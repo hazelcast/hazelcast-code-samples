@@ -7,7 +7,7 @@ public class FullMember {
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         BlockingQueue<String> queue = hz.getQueue("queue");
-        System.out.print("Full member up");
+        System.out.println("Full member up");
         for (; ; )
             System.out.println(queue.take());
     }
