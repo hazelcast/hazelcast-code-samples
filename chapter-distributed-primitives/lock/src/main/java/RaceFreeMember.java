@@ -28,5 +28,6 @@ public class RaceFreeMember {
             }
         }
         System.out.println("Finished");
+        System.exit(0);
     }
 }

@@ -21,5 +21,6 @@ public class RacyMember {
             }
         }
         System.out.println("Finished");
+        System.exit(0);
     }
 }
