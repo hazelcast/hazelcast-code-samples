@@ -27,7 +27,7 @@ public class EntryProcessorMember{
         @Override
         public Object process(Map.Entry< String, Employee> entry) {
             entry.getValue().incSalary(10);
-            return entry;
+            return null;
         }
     }
 }
