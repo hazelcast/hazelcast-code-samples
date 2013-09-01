@@ -6,13 +6,12 @@ import com.hazelcast.core.HazelcastInstance;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
-
 /**
  * keytool -genkey -alias hazelcast -keyalg RSA -keypass password -keystore hazelcast.ks -storepass password
  * keytool -export -alias hazelcast -file hazelcast.cer -keystore hazelcast.ks -storepass password
  * keytool -import -v -trustcacerts -alias hazelcast -keypass password -file hazelcast.cer -keystore hazelcast.ts -storepass password
  */
-public class FullMember {
+public class Member {
     public static void main(String[] args) throws Exception {
         System.setProperty("javax.net.ssl.keyStore", new File("hazelcast.ks").getAbsolutePath());
         System.setProperty("javax.net.ssl.trustStore", new File("hazelcast.ts").getAbsolutePath());

@@ -3,7 +3,7 @@ import com.hazelcast.core.HazelcastInstance;
 
 import java.util.concurrent.BlockingQueue;
 
-public class FullMember {
+public class Member {
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         BlockingQueue<String> queue = hz.getQueue("queue");

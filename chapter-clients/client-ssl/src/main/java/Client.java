@@ -12,10 +12,8 @@ public class Client {
         System.setProperty("javax.net.ssl.trustStore", new File("hazelcast.ts").getAbsolutePath());
         System.setProperty("javax.net.ssl.keyStorePassword", "password");
 
-
         ClientConfig config = new ClientConfig();
         config.addAddress("127.0.0.1");
-        config.setRedoOperation(true);
         config.getSocketOptions().setSocketFactory(new SSLSocketFactory());
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient(config);

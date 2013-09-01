@@ -1,0 +1,5 @@
+To create a keystore and truststore, the following commands were used:
+
+keytool -genkey -alias hazelcast -keyalg RSA -keypass password -keystore hazelcast.ks -storepass password
+keytool -export -alias hazelcast -file hazelcast.cer -keystore hazelcast.ks -storepass password
+keytool -import -v -trustcacerts -alias hazelcast -keypass password -file hazelcast.cer -keystore hazelcast.ts -storepass password
