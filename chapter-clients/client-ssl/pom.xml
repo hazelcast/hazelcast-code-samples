@@ -3,19 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>server</artifactId>
-    <name>Chapter Clients - Basic Server</name>
-
+    <artifactId>client-ssl</artifactId>
+    <name>Chapter Clients - Client SSL</name>
+    <groupId>book.hazelcast.client.basic</groupId>
     <description>
-        Chapter Clients - Basic Server
+        Client SSL
     </description>
 
     <parent>
-        <groupId>book.hazelcast.client.basic</groupId>
-        <artifactId>basic</artifactId>
+        <groupId>book.hazelcast.client</groupId>
+        <artifactId>chapter-clients</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
 
 </project>
