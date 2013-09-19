@@ -20,7 +20,7 @@
         <repository>
             <id>snapshot-repository</id>
             <name>Maven2 Snapshot Repository</name>
-            <url>http://search.maven.org/</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
 
