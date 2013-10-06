@@ -18,11 +18,12 @@
     </parent>
 
     <modules>
-        <module>byte-array-serializer</module>
+        <module>bytearray-serializer</module>
         <module>data-serializable</module>
         <module>externalizable</module>
         <module>global-serializer</module>
         <module>hazelcast-instance-aware</module>
+        <module>kryo-serializer</module>
         <module>identified-data-serializable</module>
         <module>managed-context</module>
         <module>portable</module>
