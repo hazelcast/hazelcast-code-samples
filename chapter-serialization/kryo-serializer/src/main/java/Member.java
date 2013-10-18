@@ -10,5 +10,6 @@ public class Member {
         map.put("Peter", new Person("Peter"));
         Person p = map.get("Peter");
         System.out.println(p);
+        System.exit(0);
     }
 }
