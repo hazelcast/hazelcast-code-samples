@@ -27,6 +27,11 @@ public class CounterProxy implements Counter {
     }
 
     @Override
+    public String getPartitionKey() {
+        throw new RuntimeException("todo");
+    }
+
+    @Override
     public int inc(int amount) {
         IncOperation operation = new IncOperation(objectId, amount);
         int partitionId = nodeEngine.getPartitionService().getPartitionId(objectId);
