@@ -19,6 +19,7 @@
 
     <modules>
         <module>atomiclong</module>
+        <module>atomicreference</module>
         <module>idgenerator</module>
         <module>lock</module>
         <module>condition</module>
