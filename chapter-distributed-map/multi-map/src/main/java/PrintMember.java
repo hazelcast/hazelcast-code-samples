@@ -12,8 +12,5 @@ public class PrintMember {
             Collection<String> values = map.get(key);
             System.out.printf("%s -> %s\n", key, values);
         }
-
-        map.remove("Peter", "Holland");
-        map.remove("Peter", "England");
-    }
+  }
 }

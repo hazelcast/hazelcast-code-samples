@@ -17,7 +17,6 @@ public class HashMapStreamSerializer implements StreamSerializer<HashMap> {
     @Override
     public HashMap read(final ObjectDataInput in) throws IOException {
         int size = in.readInt();
-        //todo: loadFactor, accessorder
         HashMap m = new HashMap(size);
         for(int k=0;k<size;k++){
             Object key = in.readObject();

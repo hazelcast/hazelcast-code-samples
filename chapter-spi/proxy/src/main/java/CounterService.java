@@ -20,12 +20,12 @@ public class CounterService implements ManagedService, RemoteService {
     }
 
     @Override
-    public DistributedObject createDistributedObject(Object objectId) {
-        return new CounterProxy(String.valueOf(objectId), nodeEngine);
+    public DistributedObject createDistributedObject(String objectName) {
+        return new CounterProxy(objectName, nodeEngine);
     }
 
     @Override
-    public void destroyDistributedObject(Object objectId) {
+    public void destroyDistributedObject(String objectName) {
     }
 
     @Override

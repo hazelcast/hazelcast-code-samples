@@ -62,16 +62,16 @@ public class PredicateMember {
         return (Set<Person>) personMap.values(predicate);
     }
 
+    public Set<Person> getWithNameAndAgeSimplified(String name, int age) {
+        EntryObject e = new PredicateBuilder().getEntryObject();
+        Predicate predicate = e.get("name").equal(name).and(e.get("age").equal(age));
+        return (Set<Person>) personMap.values(predicate);
+    }
+
     public Set<Person> getWithNameAndAge(String name, int age) {
         Predicate namePredicate = equal("name", name);
         Predicate agePredicate = equal("name", age);
         Predicate predicate = and(namePredicate, agePredicate);
-        return (Set<Person>) personMap.values(predicate);
-    }
-
-    public Set<Person> getWithNameAndAgeSimplified(String name, int age) {
-        EntryObject e = new PredicateBuilder().getEntryObject();
-        Predicate predicate = e.get("name").equal(name).and(e.get("age").equal(age));
         return (Set<Person>) personMap.values(predicate);
     }
 

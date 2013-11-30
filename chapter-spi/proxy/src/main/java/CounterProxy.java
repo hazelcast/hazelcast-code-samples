@@ -3,7 +3,6 @@ import com.hazelcast.spi.InvocationBuilder;
 import com.hazelcast.spi.NodeEngine;
 import com.hazelcast.util.ExceptionUtil;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class CounterProxy implements Counter {
@@ -28,6 +27,11 @@ public class CounterProxy implements Counter {
     @Override
     public String getName() {
         return objectId;
+    }
+
+    @Override
+    public String getPartitionKey() {
+        throw new RuntimeException("todo");
     }
 
     @Override

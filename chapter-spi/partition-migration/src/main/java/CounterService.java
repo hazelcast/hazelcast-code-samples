@@ -23,8 +23,13 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public DistributedObject createDistributedObject(Object objectId) {
-        return new DistributedCounterProxy(String.valueOf(objectId), nodeEngine);
+    public DistributedObject createDistributedObject(String objectName) {
+        return new DistributedCounterProxy(objectName, nodeEngine);
+    }
+
+    @Override
+    public void destroyDistributedObject(String objectName) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -59,10 +64,6 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
             Container c = containers[e.getPartitionId()];
             c.clear();
         }
-    }
-
-    @Override
-    public void destroyDistributedObject(Object objectId) {
     }
 
     @Override
