@@ -9,6 +9,10 @@
     </network>
 
     <map name="cities">
+        <time-to-live-seconds>4</time-to-live-seconds>
+        <indexes>
+            <index>name</index>
+        </indexes>
         <backup-count>1</backup-count>
         <async-backup-count>1</async-backup-count>
     </map>
