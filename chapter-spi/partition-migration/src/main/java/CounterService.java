@@ -1,7 +1,12 @@
+import com.hazelcast.concurrent.atomiclong.AtomicLongReplicationOperation;
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.partition.MigrationEndpoint;
+import com.hazelcast.partition.strategy.StringPartitioningStrategy;
 import com.hazelcast.spi.*;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService, MigrationAwareService {
@@ -19,7 +24,7 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public void shutdown() {
+    public void shutdown(boolean terminate) {
     }
 
     @Override
@@ -39,13 +44,16 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
 
     @Override
     public void clearPartitionReplica(int partitionId) {
-        //todo:
+        containers[partitionId].clear();
     }
 
     @Override
     public Operation prepareReplicationOperation(PartitionReplicationEvent event) {
-        //todo:
-        return null;
+        if (event.getReplicaIndex() > 1) {
+            return null;
+        }
+        Map<String,Integer> data = containers[event.getPartitionId()].toMigrationData();
+        return data.isEmpty() ? null : new CounterMigrationOperation(data);
     }
 
     @Override

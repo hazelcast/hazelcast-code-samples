@@ -14,6 +14,16 @@ public class CounterProxy implements Counter {
     }
 
     @Override
+    public String getPartitionKey() {
+        return objectId;
+    }
+
+    @Override
+    public String getServiceName() {
+        return CounterService.NAME;
+    }
+
+    @Override
     public Object getId() {
         return objectId;
     }

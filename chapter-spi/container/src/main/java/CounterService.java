@@ -19,12 +19,12 @@ public class CounterService implements ManagedService, RemoteService {
     }
 
     @Override
-    public void shutdown() {
+    public void shutdown(boolean terminate) {
     }
 
     @Override
     public DistributedObject createDistributedObject(String objectName) {
-        throw new RuntimeException("todo");
+        return new CounterProxy(objectName,nodeEngine);
     }
 
     @Override

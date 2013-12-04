@@ -11,7 +11,6 @@ public class BrokenValueMember {
         Map<String, Pair> normalMap = new HashMap<String,Pair>();
         Map<String, Pair> binaryMap = hz.getMap("binaryMap");
         Map<String, Pair> objectMap = hz.getMap("objectMap");
-        Map<String, Pair> cachedMap = hz.getMap("cachedMap");
 
         Pair v1 = new Pair("a", "1");
         Pair v2 = new Pair("a", "2");
@@ -19,12 +18,10 @@ public class BrokenValueMember {
         normalMap.put("key", v1);
         binaryMap.put("key", v1);
         objectMap.put("key", v1);
-        cachedMap.put("key", v1);
 
         System.out.println("normalMap.contains:" + normalMap.containsValue(v2));
         System.out.println("binaryMap.contains:" + binaryMap.containsValue(v2));
         System.out.println("objectMap.contains:" + objectMap.containsValue(v2));
-        System.out.println("cachedMap.contains:" + cachedMap.containsValue(v2));
         System.exit(0);
     }
 }

@@ -23,6 +23,6 @@ public final class Pair implements Serializable {
 
     @Override
     public int hashCode() {
-       return significant.hashCode();
+       return significant.hashCode() + 31* insignificant.hashCode();
     }
 }

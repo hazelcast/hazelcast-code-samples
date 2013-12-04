@@ -4,6 +4,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.query.EntryObject;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.PredicateBuilder;
+import com.hazelcast.query.Predicates;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,7 +59,7 @@ public class PredicateMember {
     }
 
     public Set<Person> getWithName(String name) {
-        Predicate predicate = equal("name", name);
+        Predicate predicate = Predicates.equal("name", name);
         return (Set<Person>) personMap.values(predicate);
     }
 

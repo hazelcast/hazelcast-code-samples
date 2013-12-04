@@ -7,10 +7,6 @@
         <in-memory-format>OBJECT</in-memory-format>
     </map>
 
-    <map name="cachedMap">
-        <in-memory-format>CACHED</in-memory-format>
-    </map>
-
     <map name="binaryMap">
         <in-memory-format>BINARY</in-memory-format>
     </map>

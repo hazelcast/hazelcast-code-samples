@@ -5,7 +5,7 @@ import com.hazelcast.spi.*;
 import java.util.Map;
 import java.util.Properties;
 
-public class CounterService implements ManagedService, RemoteService, MigrationAwareService {
+public class CounterService implements ManagedService, RemoteService {
     public final static String NAME = "CounterService";
     private NodeEngine nodeEngine;
     Container[] containers;
@@ -19,61 +19,16 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public void shutdown() {
+    public void shutdown(boolean terminate) {
     }
 
     @Override
-    public DistributedObject createDistributedObject(Object objectId) {
+    public DistributedObject createDistributedObject(String objectId) {
         return new CounterProxy(String.valueOf(objectId), nodeEngine);
     }
 
     @Override
-    public String getServiceName() {
-        return NAME;
-    }
-
-    @Override
-    public void beforeMigration(PartitionMigrationEvent e) {
-        //no-op
-    }
-
-    @Override
-    public void clearPartitionReplica(int partitionId) {
-        //todo: book
-    }
-
-    @Override
-    public Operation prepareReplicationOperation(PartitionReplicationEvent event) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public Operation prepareMigrationOperation(PartitionMigrationEvent e) {
-        if (e.getReplicaIndex() > 1) return null;
-
-        Container container = containers[e.getPartitionId()];
-        Map<String, Integer> migrationData = container.toMigrationData();
-        if (migrationData.isEmpty()) return null;
-        return new CounterMigrationOperation(migrationData);
-    }
-
-    @Override
-    public void commitMigration(PartitionMigrationEvent e) {
-        if (e.getMigrationEndpoint() == MigrationEndpoint.SOURCE
-                && e.getMigrationType() == MigrationType.MOVE) {
-            containers[e.getPartitionId()].clear();
-        }
-    }
-
-    @Override
-    public void rollbackMigration(PartitionMigrationEvent e) {
-        if (e.getMigrationEndpoint() == MigrationEndpoint.DESTINATION)
-            containers[e.getPartitionId()].clear();
-    }
-
-
-    @Override
-    public void destroyDistributedObject(Object objectId) {
+    public void destroyDistributedObject(String objectId) {
     }
 
     @Override
