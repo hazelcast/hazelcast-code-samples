@@ -1,6 +1,5 @@
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
-import com.hazelcast.client.connection.SSLSocketFactory;
 import com.hazelcast.core.HazelcastInstance;
 
 import java.io.File;
@@ -14,7 +13,7 @@ public class Client {
 
         ClientConfig config = new ClientConfig();
         config.addAddress("127.0.0.1");
-        config.getSocketOptions().setSocketFactory(new SSLSocketFactory());
+        //config.getSocketOptions().setSocketFactory(new SSLSocketFactory());
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient(config);
         BlockingQueue <String> queue = client.getQueue("queue");

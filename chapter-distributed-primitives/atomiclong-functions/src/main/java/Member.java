@@ -1,7 +1,7 @@
-import com.hazelcast.core.Function;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IAtomicLong;
+import com.hazelcast.core.IFunction;
 
 import java.lang.System;
 
@@ -40,7 +40,7 @@ public class Member {
         }
     }
 
-    private static class Add2Function implements Function<Long,Long> {
+    private static class Add2Function implements IFunction<Long,Long> {
         @Override
         public Long apply(Long input) {
             return input+2;

@@ -37,7 +37,7 @@ public class Member {
         System.exit(0);
     }
 
-    public static class IncFuntion implements Function<Double,Double>{
+    public static class IncFuntion implements IFunction<Double,Double>{
         @Override
         public Double apply(Double input) {
             return input++;

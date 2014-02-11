@@ -40,7 +40,7 @@ public class CounterProxy implements Counter {
         InvocationBuilder builder = nodeEngine.getOperationService()
                 .createInvocationBuilder(CounterService.NAME, operation, partitionId);
         try {
-            return (Integer) builder.build().invoke().get();
+            return (Integer) builder.invoke().get();
         } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);
         }

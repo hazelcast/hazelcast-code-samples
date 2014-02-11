@@ -1,4 +1,3 @@
-import com.hazelcast.spi.Invocation;
 import com.hazelcast.spi.InvocationBuilder;
 import com.hazelcast.spi.NodeEngine;
 import com.hazelcast.util.ExceptionUtil;
@@ -41,8 +40,7 @@ public class CounterProxy implements Counter {
         InvocationBuilder builder = nodeEngine.getOperationService()
                 .createInvocationBuilder(CounterService.NAME, operation, partitionId);
         try {
-            final Invocation invocation = builder.build();
-            final Future<Integer> future = invocation.invoke();
+            final Future<Integer> future = builder.invoke();
             return future.get();
         } catch(Exception e){
             throw ExceptionUtil.rethrow(e);
