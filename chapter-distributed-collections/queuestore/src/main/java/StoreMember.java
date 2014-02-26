@@ -13,8 +13,8 @@ public class StoreMember {
         queueConfig.setQueueStoreConfig(storeConfig);
         Config config = new Config().addQueueConfig(queueConfig);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
-        IQueue<Long> queue = hz.getQueue("queue");
-        queue.put(System.currentTimeMillis());
+        IQueue<Item> queue = hz.getQueue("queue");
+        queue.put(new Item());
         System.exit(0);
     }
 }
