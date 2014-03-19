@@ -4,8 +4,6 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <map name="personMap">
-        <cache-value>false</cache-value>
-        <record-type></record-type>
         <map-store enabled="true">
             <class-name>PersonMapStore</class-name>
         </map-store>
