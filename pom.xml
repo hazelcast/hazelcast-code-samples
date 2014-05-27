@@ -13,7 +13,7 @@
     </description>
 
     <properties>
-        <hazelcast.version>3.3-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.2.1</hazelcast.version>
     </properties>
 
     <repositories>
@@ -40,6 +40,7 @@
         <module>chapter-distributed-executor</module>
         <module>chapter-distributed-topic</module>
         <module>chapter-clients</module>
+        <module>chapter-mapreduce</module>
         <module>chapter-network-configuration</module>
         <module>chapter-transactions</module>
         <module>chapter-serialization</module>

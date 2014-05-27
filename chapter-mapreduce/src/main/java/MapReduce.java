@@ -10,8 +10,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * A simple example that sums the numbers 1 to 100.
  * Created by gluck on 27/05/2014.
  */
 public class MapReduce {
@@ -23,118 +25,75 @@ public class MapReduce {
         final HazelcastInstance hz2 = Hazelcast.newHazelcastInstance();
         final HazelcastInstance hz3 = Hazelcast.newHazelcastInstance();
 
+        //Create a default map.
         IMap<Integer, Integer> m1 = hz1.getMap("default");
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             m1.put(i, i);
         }
 
-        JobTracker tracker = hz1.getJobTracker("default");
+        //Create a job tracker with default config.
+        JobTracker tracker = hz1.getJobTracker("myJobTracker");
+
+        //Using a built-in source from our IMap. This supplies key value pairs.
         KeyValueSource<Integer, Integer> kvs = KeyValueSource.fromMap(m1);
-        KeyValueSource<Integer, Integer> wrapper = new MyMapKeyValueSourceAdapter<Integer, Integer>(kvs);
-        Job<Integer, Integer> job = tracker.newJob(wrapper);
-        ICompletableFuture<Map<String, List<Integer>>> future = job.mapper(new MyMapper()).submit();
 
-        Map<String, List<Integer>> result = future.get();
+        //Create a new Job with our source.
+        Job<Integer, Integer> job = tracker.newJob(kvs);
 
-        for (String s : result.keySet()) {
-            System.out.println("String: " + s);
+        //Configure the job.
+        ICompletableFuture<Map<String, Integer>> myMapReduceFuture =
+                job.mapper(new MyMapper()).reducer(new MyReducerFactory())
+                        .submit();
+
+        Map<String, Integer> result = myMapReduceFuture.get();
+
+        System.out.println("The sum of the numbers 1 to 10,000 is: " + result.get("all_values"));
+    }
+
+    /**
+     * My mapper emits a key value pair per map key. An IMap only ever has one.
+     *
+     * As I want to do a sum, I am going to accumulate all of these to one key called "all_values".
+     * Unfortunately, this maps all to one node. If we were doing a classic group by, we would get
+     * paralellisation.
+     */
+    public static class MyMapper implements Mapper<Integer, Integer, String, Integer> {
+
+        @Override
+        public void map(Integer key, Integer value, Context<String, Integer> context) {
+            context.emit("all_values", value);
         }
     }
 
-    public static class MyMapper
-            implements Mapper<Integer, Integer, String, Integer> {
+
+    public static class MyReducerFactory implements ReducerFactory<String, Integer, Integer> {
 
         @Override
-        public void map(Integer key, Integer value, Context<String, Integer> collector) {
-            collector.emit(String.valueOf(key), value);
+        public Reducer<String, Integer, Integer> newReducer(String key) {
+            return new MyReducer();
+        }
+    }
+
+    /**
+     * Reduces to a sum. One of these if created per key.
+     */
+    public static class MyReducer extends Reducer<String, Integer, Integer> {
+
+        private AtomicInteger sum = new AtomicInteger(0);
+
+        @Override
+        public void reduce(Integer value) {
+            sum.addAndGet(value);
+        }
+
+        @Override
+        public Integer finalizeReduce() {
+            return sum.get();
         }
     }
 
 
-    public static class MyMapKeyValueSourceAdapter<K, V>
-            extends KeyValueSource<K, V>
-            implements DataSerializable, PartitionIdAware {
 
-        private volatile KeyValueSource<K, V> keyValueSource;
-        private int openCount = 0;
-
-        public MyMapKeyValueSourceAdapter() {
-        }
-
-        public MyMapKeyValueSourceAdapter(KeyValueSource<K, V> keyValueSource) {
-            this.keyValueSource = keyValueSource;
-        }
-
-        @Override
-        public boolean open(NodeEngine nodeEngine) {
-            if (openCount < 2) {
-                openCount++;
-                return false;
-            }
-            return keyValueSource.open(nodeEngine);
-        }
-
-        @Override
-        public boolean hasNext() {
-            return keyValueSource.hasNext();
-        }
-
-        @Override
-        public K key() {
-            return keyValueSource.key();
-        }
-
-        @Override
-        public Map.Entry<K, V> element() {
-            return keyValueSource.element();
-        }
-
-        @Override
-        public boolean reset() {
-            return keyValueSource.reset();
-        }
-
-        public static <K1, V1> KeyValueSource<K1, V1> fromMap(IMap<K1, V1> map) {
-            return KeyValueSource.fromMap(map);
-        }
-
-        public static <K1, V1> KeyValueSource<K1, V1> fromMultiMap(MultiMap<K1, V1> multiMap) {
-            return KeyValueSource.fromMultiMap(multiMap);
-        }
-
-        public static <V1> KeyValueSource<String, V1> fromList(IList<V1> list) {
-            return KeyValueSource.fromList(list);
-        }
-
-        public static <V1> KeyValueSource<String, V1> fromSet(ISet<V1> set) {
-            return KeyValueSource.fromSet(set);
-        }
-
-        @Override
-        public void close()
-                throws IOException {
-            keyValueSource.close();
-        }
-
-        @Override
-        public void writeData(ObjectDataOutput out)
-                throws IOException {
-            out.writeObject(keyValueSource);
-        }
-
-        @Override
-        public void readData(ObjectDataInput in)
-                throws IOException {
-            keyValueSource = in.readObject();
-        }
-
-        @Override
-        public void setPartitionId(int partitionId) {
-            if (keyValueSource instanceof PartitionIdAware) {
-                ((PartitionIdAware) keyValueSource).setPartitionId(partitionId);
-            }
-        }
-    }
 
 
 
