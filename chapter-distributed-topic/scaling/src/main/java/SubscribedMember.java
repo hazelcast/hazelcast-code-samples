@@ -1,4 +1,6 @@
 import com.hazelcast.core.*;
+import com.hazelcast.logging.ILogger;
+import com.hazelcast.logging.Logger;
 import com.hazelcast.util.executor.StripedExecutor;
 import com.hazelcast.util.executor.StripedRunnable;
 
@@ -7,8 +9,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class SubscribedMember {
+    private final static ILogger log = Logger.getLogger(SubscribedMember.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         ITopic<Date> topic = hz.getTopic("topic");
         topic.addMessageListener(new MessageListenerImpl("topic"));
@@ -16,7 +19,7 @@ public class SubscribedMember {
     }
 
     private final static StripedExecutor executor = new StripedExecutor(
-        Executors.newFixedThreadPool(10), 10
+            log, "listeners", null, 10,10000
     );
 
     private static class MessageListenerImpl
