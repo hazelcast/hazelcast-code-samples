@@ -45,7 +45,6 @@
         <module>chapter-serialization</module>
         <module>chapter-spi</module>
         <module>chapter-performance</module>
-        <module>chapter-mapreduce</module>
     </modules>
 
     <build>
