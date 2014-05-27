@@ -65,7 +65,9 @@ public class MapReduce {
         }
     }
 
-
+    /**
+     * Returns a Reducer. Multiple reducers run on one Node, therefore we must provide a factory.
+     */
     public static class MyReducerFactory implements ReducerFactory<String, Integer, Integer> {
 
         @Override
