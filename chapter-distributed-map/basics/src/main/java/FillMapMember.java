@@ -10,5 +10,6 @@ public class FillMapMember {
         map.put("1", "Tokyo");
         map.put("2", "Paris");
         map.put("3", "New York");
+        System.out.println("Finished loading map");
     }
 }
