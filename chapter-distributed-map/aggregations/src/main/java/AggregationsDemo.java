@@ -79,7 +79,7 @@ public class AggregationsDemo {
         System.out.println("Sum of all salaries: " + sumSalary);
 
         // In Java 8:
-        // int sumSalary = employees.aggregate(Supplier.all(), Aggregations.integerSum());
+        // int sumSalary = employees.aggregate(Supplier.all((value) -> value.getSalaryPerMonth()), Aggregations.integerSum());
     }
 
     private static void countEmployees(IMap<String, Employee> employees) {
