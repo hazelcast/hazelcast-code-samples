@@ -20,39 +20,40 @@ public class AggregationsDemo {
 
     public static void main(String[] args) {
         // Build Hazelcast cluster
+        System.out.println("Starting instance 1");
         Hazelcast.newHazelcastInstance();
+        System.out.println("Starting instance 2");
         Hazelcast.newHazelcastInstance();
+        System.out.println("Starting instance 3");
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
 
-        try {
-            // Retrieve the Hazelcast IMap
-            IMap<String, Employee> employees = hz.getMap("employees");
+        // Retrieve the Hazelcast IMap
+        IMap<String, Employee> employees = hz.getMap("employees");
 
-            // Fill in demo data
-            fillEmployeeMap(employees);
+        // Fill in demo data
+        fillEmployeeMap(employees);
 
-            // We simple calculate a average over all salaries on all employees
-            simpleSalaryAverage(employees);
+        // We simple calculate a average over all salaries on all employees
+        simpleSalaryAverage(employees);
 
-            // Here we first search Hazelcast employees using the Predicate and calculate the average only on those
-            companyBasedSalaryAverage(employees);
+        // Here we first search Hazelcast employees using the Predicate and calculate the average only on those
+        companyBasedSalaryAverage(employees);
 
-            // Now we just sum up the salaries
-            salarySum(employees);
+        // Now we just sum up the salaries
+        salarySum(employees);
 
-            // This time we count the employees that we calculate on (let's expect it to be 10k ;-))
-            countEmployees(employees);
+        // This time we count the employees that we calculate on (let's expect it to be 10k ;-))
+        countEmployees(employees);
 
-            // Last but not least we want to get all distinct first names of the employees
-            distinctEmployeeFirstNames(employees);
+        // Last but not least we want to get all distinct first names of the employees
+        distinctEmployeeFirstNames(employees);
 
-        } finally {
-            // Shutdown Hazelcast cluster
-            Hazelcast.shutdownAll();
-        }
     }
 
     private static void simpleSalaryAverage(IMap<String, Employee> employees) {
+
+        System.out.println("Calculating salary average");
+
         // Create the PropertyExtractor to extract salary value from the employee
         PropertyExtractor<Employee, Integer> propertyExtractor = new SalaryPropertyExtractor();
 
@@ -65,12 +66,16 @@ public class AggregationsDemo {
         // Execute the aggregation and print the result
         int avgSalary = employees.aggregate(supplier, aggregation);
         System.out.println("Overall average salary: " + avgSalary);
+        System.out.println("\n");
 
         // In Java 8:
         // int avgSalary = employees.aggregate(Supplier.all((value) -> value.getSalaryPerMonth()), Aggregations.integerAvg());
     }
 
     private static void companyBasedSalaryAverage(IMap<String, Employee> employees) {
+
+        System.out.println("Calculating average monthly salary for Hazelcast");
+
         // Create the Predicate to select only Hazelcast employees
         Predicate<String, Employee> companyPredicate = new CompanyPredicate("Hazelcast");
 
@@ -89,6 +94,7 @@ public class AggregationsDemo {
         // Execute the aggregation and print the result
         int avgSalary = employees.aggregate(supplier, aggregation);
         System.out.println("Hazelcast average salary: " + avgSalary);
+        System.out.println("\n");
 
         // In Java 8:
         // int avgSalary = employees.aggregate(
@@ -111,6 +117,7 @@ public class AggregationsDemo {
         // Execute the aggregation and print the result
         int sumSalary = employees.aggregate(supplier, aggregation);
         System.out.println("Sum of all salaries: " + sumSalary);
+        System.out.println("\n");
 
         // In Java 8:
         // int sumSalary = employees.aggregate(Supplier.all((value) -> value.getSalaryPerMonth()), Aggregations.integerSum());
@@ -126,6 +133,7 @@ public class AggregationsDemo {
         // Execute the aggregation and print the result
         long countEmployee = employees.aggregate(supplier, aggregation);
         System.out.println("Number of employees: " + countEmployee);
+        System.out.println("\n");
 
         // In Java 8:
         // long countEmployees = employees.aggregate(Supplier.all(), Aggregations.count());
@@ -144,6 +152,7 @@ public class AggregationsDemo {
         // Execute the aggregation and print the result
         Set<String> allFirstNames = employees.aggregate(supplier, aggregation);
         System.out.println("All first names: " + allFirstNames);
+        System.out.println("\n");
 
         // In Java 8:
         // Set<String> allFirstNames = employees.aggregate(Supplier.all((value) -> value.getFirstName()),
@@ -166,7 +175,9 @@ public class AggregationsDemo {
 
             String key = UUID.randomUUID().toString();
             employees.put(key, employee);
+
         }
+        System.out.println("Employee map filled.");
     }
 
 }

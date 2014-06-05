@@ -70,8 +70,11 @@ public class MapReduce {
      */
     public static class MyReducerFactory implements ReducerFactory<String, Integer, Integer> {
 
+
+
+
         @Override
-        public Reducer<String, Integer, Integer> newReducer(String key) {
+        public Reducer<Integer, Integer> newReducer(String key) {
             return new MyReducer();
         }
     }
@@ -79,7 +82,7 @@ public class MapReduce {
     /**
      * Reduces to a sum. One of these if created per key.
      */
-    public static class MyReducer extends Reducer<String, Integer, Integer> {
+    public static class MyReducer extends Reducer<Integer, Integer> {
 
         private AtomicInteger sum = new AtomicInteger(0);
 
