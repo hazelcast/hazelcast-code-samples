@@ -18,6 +18,11 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>3.3-RC1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
+
 </project>
