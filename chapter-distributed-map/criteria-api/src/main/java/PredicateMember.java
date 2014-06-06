@@ -33,12 +33,26 @@ public class PredicateMember {
         s.add(p);
         Person p1 = (Person) s.iterator().next();
         Person p2 = (Person) s.iterator().next();
-        System.out.println(p1 == p2);
 
-        //System.out.println("Results");
-        //for (Person c :getWithName("Peter")) {
-        //    System.out.println(c);
-        //}
+        System.out.println("Get with name Peter");
+        for (Person person :getWithName("Peter")) {
+            System.out.println(person);
+        }
+
+        System.out.println("Get not with name Peter");
+        for (Person person :getNotWithName("Peter")) {
+            System.out.println(person);
+        }
+
+        System.out.println("Find name Peter and age 36");
+        for (Person person :getWithNameAndAge("Peter", 36)) {
+            System.out.println(person);
+        }
+
+        System.out.println("Find name Peter and age 37");
+        for (Person person :getWithNameAndAge("Peter", 37)) {
+            System.out.println(person);
+        }
     }
 
     public Set<Person> getWithNameNaive(String name) {
@@ -71,7 +85,7 @@ public class PredicateMember {
 
     public Set<Person> getWithNameAndAge(String name, int age) {
         Predicate namePredicate = equal("name", name);
-        Predicate agePredicate = equal("name", age);
+        Predicate agePredicate = equal("age", age);
         Predicate predicate = and(namePredicate, agePredicate);
         return (Set<Person>) personMap.values(predicate);
     }
