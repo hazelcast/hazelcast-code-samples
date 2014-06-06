@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <version>0.1-SNAPSHOT</version>
-    <groupId>book.hazelcast</groupId>
+    <groupId>com.hazelcast.samples</groupId>
 
-    <artifactId>book-hazelcast</artifactId>
-    <name>Book Hazelcast</name>
+    <artifactId>code-samples</artifactId>
+    <name>Sample Code</name>
 
     <description>
-        Maven project containing all examples of the Hazelcast book
+        Maven project containing all examples of the sample code
     </description>
 
     <properties>
