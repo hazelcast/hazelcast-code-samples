@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>semaphore</artifactId>
-    <name>Chapter Distributed Primitives - Semaphore</name>
+    <name>Distributed Primitives - Semaphore</name>
 
     <description>
         Chapter Distributed Primitives - Semaphore
     </description>
 
     <parent>
-        <groupId>book.hazelcast.primitives</groupId>
+        <groupId>com.hazelcast.samples.primitives</groupId>
         <artifactId>chapter-distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

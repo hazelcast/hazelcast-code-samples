@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>atomicreference</artifactId>
-    <name>Chapter Distributed Primitives - IAtomicReference</name>
+    <name>Distributed Primitives - IAtomicReference</name>
 
     <description>
         Chapter Distributed Primitives - IAtomicReference
     </description>
 
     <parent>
-        <groupId>book.hazelcast.primitives</groupId>
+        <groupId>com.hazelcast.samples.primitives</groupId>
         <artifactId>chapter-distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

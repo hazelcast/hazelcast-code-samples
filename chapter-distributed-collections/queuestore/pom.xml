@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>queuestore</artifactId>
-    <name>Chapter Distributed Collections - QueueStore</name>
+    <name>Distributed Collections - QueueStore</name>
 
     <description>
         Chapter Distributed Collections - QueueStore
     </description>
 
     <parent>
-        <groupId>book.hazelcast.collections</groupId>
+        <groupId>com.hazelcast.samples.collections</groupId>
         <artifactId>chapter-distributed-collections</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

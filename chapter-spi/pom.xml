@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-spi</artifactId>
-    <name>Chapter SPI</name>
-    <groupId>book.hazelcast.spi</groupId>
+    <name>SPI</name>
+    <groupId>com.hazelcast.samples.spi</groupId>
     <description>
         All the code samples for the SPI chapter
     </description>

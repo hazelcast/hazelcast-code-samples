@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>multiple-hazelcast-instances</artifactId>
-    <name>Chapter Learning Basics - Multiple Hazelcast Instances</name>
+    <name>Learning Basics - Multiple Hazelcast Instances</name>
 
     <description>
         Chapter Learning Basics - Multiple Hazelcast Instances
     </description>
 
     <parent>
-        <groupId>book.hazelcast.basics</groupId>
+        <groupId>com.hazelcast.samples.basics</groupId>
         <artifactId>chapter-learning-basics</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

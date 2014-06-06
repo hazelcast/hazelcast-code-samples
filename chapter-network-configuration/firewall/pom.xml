@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>firewall</artifactId>
-    <name>Chapter Network Configuration - Firewall</name>
+    <name>Network Configuration - Firewall</name>
 
     <description>
         Chapter Network Configuration - Firewall
     </description>
 
     <parent>
-        <groupId>book.hazelcast.network-configuration</groupId>
+        <groupId>com.hazelcast.samples.network-configuration</groupId>
         <artifactId>chapter-network-configuration</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

@@ -5,7 +5,7 @@
 
     <artifactId>chapter-distributed-executor</artifactId>
     <groupId>chapter-distributed-executor</groupId>
-    <name>Chapter Distributed Executor</name>
+    <name>Distributed Executor</name>
     <description>
         All the code samples for the distributed executor chapter
     </description>

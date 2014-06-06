@@ -10,7 +10,7 @@
     </properties>
 
     <artifactId>configure-logging</artifactId>
-    <name>Chapter Learning Basics - Logging Configuration</name>
+    <name>Learning Basics - Logging Configuration</name>
 
     <description>
         Chapter Learning Basics - Logging Configuration
@@ -39,7 +39,7 @@
     </dependencies>
 
     <parent>
-        <groupId>book.hazelcast.basics</groupId>
+        <groupId>com.hazelcast.samples.basics</groupId>
         <artifactId>chapter-learning-basics</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

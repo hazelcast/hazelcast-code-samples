@@ -4,13 +4,13 @@
     <packaging>jar</packaging>
 
     <artifactId>partitioning</artifactId>
-    <name>Chapter Performance: Partitioning</name>
+    <name>Performance: Partitioning</name>
     <description>
         The code example for the Partitioning.
     </description>
 
     <parent>
-        <groupId>book.hazelcast.performance</groupId>
+        <groupId>com.hazelcast.samples.performance</groupId>
         <artifactId>chapter-performance</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

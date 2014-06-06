@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>lock</artifactId>
-    <name>Chapter Distributed Primitives - Lock</name>
+    <name>Distributed Primitives - Lock</name>
 
     <description>
         Chapter Distributed Primitives - Lock
     </description>
 
     <parent>
-        <groupId>book.hazelcast.primitives</groupId>
+        <groupId>com.hazelcast.samples.primitives</groupId>
         <artifactId>chapter-distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

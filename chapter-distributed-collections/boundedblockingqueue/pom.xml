@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>boundedblockingqueue</artifactId>
-    <name>Chapter Distributed Collections - Bounded BlockingQueue</name>
+    <name>Distributed Collections - Bounded BlockingQueue</name>
 
     <description>
         Chapter Distributed Collections - Bounded BlockingQueue
     </description>
 
     <parent>
-        <groupId>book.hazelcast.collections</groupId>
+        <groupId>com.hazelcast.samples.collections</groupId>
         <artifactId>chapter-distributed-collections</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

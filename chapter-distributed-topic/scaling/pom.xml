@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>scaling</artifactId>
-    <name>Chapter Distributed Topic - Scaling</name>
+    <name>Distributed Topic - Scaling</name>
 
     <description>
         Chapter Distributed Topic - Scaling
     </description>
 
     <parent>
-        <groupId>book.hazelcast.topic</groupId>
+        <groupId>com.hazelcast.samples.topic</groupId>
         <artifactId>chapter-distributed-topic</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

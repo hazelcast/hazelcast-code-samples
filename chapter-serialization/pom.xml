@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-serialization</artifactId>
-    <groupId>book.hazelcast.serialization</groupId>
-    <name>Chapter Serialization</name>
+    <groupId>com.hazelcast.samples.serialization</groupId>
+    <name>Serialization</name>
     <description>
         All the code samples for the serialization chapter
     </description>

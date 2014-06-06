@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>bytearray-serializer</artifactId>
-    <name>Chapter Serialization: ByteArray Serializer</name>
+    <name>Serialization: ByteArray Serializer</name>
     <description>
         A ByteArray Serializer
     </description>
 
     <parent>
         <artifactId>chapter-serialization</artifactId>
-        <groupId>book.hazelcast.serialization</groupId>
+        <groupId>com.hazelcast.samples.serialization</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

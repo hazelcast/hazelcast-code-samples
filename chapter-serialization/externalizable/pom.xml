@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>externalizable</artifactId>
-    <name>Chapter Serialization: Externalizable</name>
+    <name>Serialization: Externalizable</name>
     <description>
         The Externalizable example
     </description>
 
     <parent>
         <artifactId>chapter-serialization</artifactId>
-        <groupId>book.hazelcast.serialization</groupId>
+        <groupId>com.hazelcast.samples.serialization</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

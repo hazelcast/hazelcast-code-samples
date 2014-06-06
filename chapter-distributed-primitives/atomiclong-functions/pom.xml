@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>atomiclong-functions</artifactId>
-    <name>Chapter Distributed Primitives - IAtomicLong Functions</name>
+    <name>Distributed Primitives - IAtomicLong Functions</name>
 
     <description>
         Chapter Distributed Primitives - IAtomicLong and Functions
     </description>
 
     <parent>
-        <groupId>book.hazelcast.primitives</groupId>
+        <groupId>com.hazelcast.samples.primitives</groupId>
         <artifactId>chapter-distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

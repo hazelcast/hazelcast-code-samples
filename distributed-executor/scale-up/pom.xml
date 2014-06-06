@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>scale-up</artifactId>
-    <name>Chapter Distributed Executor - Scale Up</name>
+    <name>Distributed Executor - Scale Up</name>
 
     <description>
         Chapter Distributed Executor - Scale Up

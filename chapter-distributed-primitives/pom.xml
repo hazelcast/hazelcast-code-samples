@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-distributed-primitives</artifactId>
-    <name>Chapter Distributed Primitives</name>
-    <groupId>book.hazelcast.primitives</groupId>
+    <name>Distributed Primitives</name>
+    <groupId>com.hazelcast.samples.primitives</groupId>
     <description>
         All the code samples for the distributed primitives chapter.
     </description>

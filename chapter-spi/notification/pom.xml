@@ -4,13 +4,13 @@
     <packaging>jar</packaging>
 
     <artifactId>notification</artifactId>
-    <name>Chapter SPI: Notification</name>
+    <name>SPI: Notification</name>
     <description>
         The code example for the Notification
     </description>
 
     <parent>
-        <groupId>book.hazelcast.spi</groupId>
+        <groupId>com.hazelcast.samples.spi</groupId>
         <artifactId>chapter-spi</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

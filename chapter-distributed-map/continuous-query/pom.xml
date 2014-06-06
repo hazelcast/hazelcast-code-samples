@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>continuous-query</artifactId>
-    <name>Chapter DistributedMap - Continuous Query</name>
+    <name>DistributedMap - Continuous Query</name>
 
     <description>
         Chapter DistributedMap : Continuous Query
     </description>
 
     <parent>
-        <groupId>book.hazelcast.distributed-map</groupId>
+        <groupId>com.hazelcast.sample.distributed-map</groupId>
         <artifactId>chapter-distributed-map</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

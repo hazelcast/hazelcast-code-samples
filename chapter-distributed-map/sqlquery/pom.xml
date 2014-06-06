@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>sqlquery</artifactId>
-    <name>Chapter DistributedMap - SqlQuery</name>
+    <name>DistributedMap - SqlQuery</name>
 
     <description>
         Chapter Distributed Map - SqlQuery
     </description>
 
     <parent>
-        <groupId>book.hazelcast.distributed-map</groupId>
+        <groupId>com.hazelcast.samples.distributed-map</groupId>
         <artifactId>chapter-distributed-map</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

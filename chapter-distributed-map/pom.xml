@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-distributed-map</artifactId>
-    <name>Chapter DistributedMap</name>
-    <groupId>book.hazelcast.distributed-map</groupId>
+    <name>DistributedMap</name>
+    <groupId>com.hazelcast.samples.distributed-map</groupId>
     <description>
         Chapter about the distributed Map
     </description>

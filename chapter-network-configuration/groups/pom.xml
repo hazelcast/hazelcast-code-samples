@@ -4,14 +4,14 @@
     <packaging>pom</packaging>
 
     <artifactId>groups</artifactId>
-    <name>Chapter Network Configuration - Groups</name>
+    <name>Network Configuration - Groups</name>
 
     <description>
         Chapter Network Configuration - Groups
     </description>
 
     <parent>
-        <groupId>book.hazelcast.network-configuration</groupId>
+        <groupId>com.hazelcast.samples.network-configuration</groupId>
         <artifactId>chapter-network-configuration</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

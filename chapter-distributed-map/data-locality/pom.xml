@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>data-locality</artifactId>
-    <name>Chapter DistributedMap - Data Locality</name>
+    <name>DistributedMap - Data Locality</name>
 
     <description>
         Chapter DistributedMap : Data Locality
     </description>
 
     <parent>
-        <groupId>book.hazelcast.distributed-map</groupId>
+        <groupId>com.hazelcast.samples.distributed-map</groupId>
         <artifactId>chapter-distributed-map</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>basic-pub-sub</artifactId>
-    <name>Chapter Distributed Topic - Basic Pub Sub</name>
+    <name>Distributed Topic - Basic Pub Sub</name>
 
     <description>
         Chapter Distributed Topic - Basic Pub Sub
     </description>
 
     <parent>
-        <groupId>book.hazelcast.topic</groupId>
+        <groupId>com.hazelcast.samples.topic</groupId>
         <artifactId>chapter-distributed-topic</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

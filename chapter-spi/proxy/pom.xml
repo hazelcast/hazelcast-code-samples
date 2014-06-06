@@ -4,13 +4,13 @@
     <packaging>jar</packaging>
 
     <artifactId>proxy</artifactId>
-    <name>Chapter SPI: Proxy</name>
+    <name>SPI: Proxy</name>
     <description>
         The code example for the Proxy
     </description>
 
     <parent>
-        <groupId>book.hazelcast.spi</groupId>
+        <groupId>com.hazelcast.samples.spi</groupId>
         <artifactId>chapter-spi</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

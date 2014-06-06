@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-learning-basics</artifactId>
-    <name>Chapter Learning Basics</name>
-    <groupId>book.hazelcast.basics</groupId>
+    <name>Learning Basics</name>
+    <groupId>com.hazelcast.samples.basics</groupId>
     <description>
         All the code samples for the learning basics chapter
     </description>

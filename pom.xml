@@ -9,7 +9,7 @@
     <name>Sample Code</name>
 
     <description>
-        Maven project containing all examples of the sample code
+        Hazelcast sample code.
     </description>
 
     <properties>
@@ -37,7 +37,7 @@
         <module>chapter-distributed-primitives</module>
         <module>chapter-distributed-collections</module>
         <module>chapter-distributed-map</module>
-        <module>chapter-distributed-executor</module>
+        <module>distributed-executor</module>
         <module>chapter-distributed-topic</module>
         <module>chapter-clients</module>
         <module>chapter-mapreduce</module>

@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>symmetric-encryption</artifactId>
-    <name>Chapter Network Configuration - Symmetric Encryption</name>
+    <name>Network Configuration - Symmetric Encryption</name>
 
     <description>
         Chapter Network Configuration - Symmetric Encryption
     </description>
 
     <parent>
-        <groupId>book.hazelcast.network-configuration</groupId>
+        <groupId>com.hazelcast.samples.network-configuration</groupId>
         <artifactId>chapter-network-configuration</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

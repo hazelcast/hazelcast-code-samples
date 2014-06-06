@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>idgenerator</artifactId>
-    <name>Chapter Distributed Primitives - IdGenerator</name>
+    <name>Distributed Primitives - IdGenerator</name>
 
     <description>
         Chapter Distributed Primitives - IdGenerator
     </description>
 
     <parent>
-        <groupId>book.hazelcast.primitives</groupId>
+        <groupId>com.hazelcast.samples.primitives</groupId>
         <artifactId>chapter-distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

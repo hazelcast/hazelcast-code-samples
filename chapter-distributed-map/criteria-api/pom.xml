@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>criteria-api</artifactId>
-    <name>Chapter DistributedMap - Criteria API</name>
+    <name>DistributedMap - Criteria API</name>
 
     <description>
         Chapter Distributed Map - Criteria API
     </description>
 
     <parent>
-        <groupId>book.hazelcast.distributed-map</groupId>
+        <groupId>com.hazelcast.samples.distributed-map</groupId>
         <artifactId>chapter-distributed-map</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

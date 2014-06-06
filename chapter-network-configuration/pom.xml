@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-network-configuration</artifactId>
-    <name>Chapter Network Configuration</name>
-    <groupId>book.hazelcast.network-configuration</groupId>
+    <name>Network Configuration</name>
+    <groupId>com.hazelcast.samples.network-configuration</groupId>
     <description>
         All the code samples for the network configuration
     </description>

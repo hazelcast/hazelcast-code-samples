@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-transactions</artifactId>
-    <name>Chapter Transactions</name>
-    <groupId>book.hazelcast.transactions</groupId>
+    <name>Transactions</name>
+    <groupId>com.hazelcast.samples.transactions</groupId>
     <description>
        The Transaction chapter code examples
     </description>

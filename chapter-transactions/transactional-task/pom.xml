@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>transactional-task</artifactId>
-    <name>Chapter Transactions - Transactional Task</name>
+    <name>Transactions - Transactional Task</name>
     <description>
         All the code samples for the Transactional Task
     </description>
 
     <parent>
         <artifactId>chapter-transactions</artifactId>
-        <groupId>book.hazelcast.transactions</groupId>
+        <groupId>com.hazelcast.samples.transactions</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>entry-listener</artifactId>
-    <name>Chapter DistributedMap - EntryListener</name>
+    <name>DistributedMap - EntryListener</name>
 
     <description>
         Chapter DistributedMap : EntryListener
     </description>
 
     <parent>
-        <groupId>book.hazelcast.distributed-map</groupId>
+        <groupId>com.hazelcast.samples.distributed-map</groupId>
         <artifactId>chapter-distributed-map</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

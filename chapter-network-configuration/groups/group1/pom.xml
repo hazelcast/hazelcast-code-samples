@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>group1</artifactId>
-    <name>Chapter Network Configuration - Group1</name>
+    <name>Network Configuration - Group1</name>
 
     <description>
         Chapter Network Configuration - Group1
     </description>
 
     <parent>
-        <groupId>book.hazelcast.network-configuration</groupId>
+        <groupId>com.hazelcast.samples.network-configuration</groupId>
         <artifactId>groups</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

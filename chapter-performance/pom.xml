@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-performance</artifactId>
-    <name>Chapter Performance</name>
-    <groupId>book.hazelcast.performance</groupId>
+    <name>Performance</name>
+    <groupId>com.hazelcast.samples.performance</groupId>
     <description>
         All the code samples for the Performance chapter
     </description>

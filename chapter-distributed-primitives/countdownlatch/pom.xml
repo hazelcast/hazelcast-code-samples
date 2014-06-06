@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>countdownlatch</artifactId>
-    <name>Chapter Distributed Primitives - CountdownLatch</name>
+    <name>Distributed Primitives - CountdownLatch</name>
 
     <description>
         Chapter Distributed Primitives - CountdownLatch
     </description>
 
     <parent>
-        <groupId>book.hazelcast.primitives</groupId>
+        <groupId>com.hazelcast.samples.primitives</groupId>
         <artifactId>chapter-distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

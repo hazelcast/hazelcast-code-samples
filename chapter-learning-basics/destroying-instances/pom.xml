@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>destroying-instances</artifactId>
-    <name>Chapter Learning Basics - Destroying instances</name>
+    <name>Learning Basics - Destroying instances</name>
 
     <description>
         Chapter Learning Basics - Destroying instances
     </description>
 
     <parent>
-        <groupId>book.hazelcast.basics</groupId>
+        <groupId>com.hazelcast.samples.basics</groupId>
         <artifactId>chapter-learning-basics</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

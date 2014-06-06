@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>itemlisteners</artifactId>
-    <name>Chapter Distributed Collections - Item Listeners</name>
+    <name>Distributed Collections - Item Listeners</name>
 
     <description>
         Chapter Distributed Collections - Item Listeners
     </description>
 
     <parent>
-        <groupId>book.hazelcast.collections</groupId>
+        <groupId>com.hazelcast.samples.collections</groupId>
         <artifactId>chapter-distributed-collections</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

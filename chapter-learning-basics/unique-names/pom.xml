@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
      <artifactId>unique-names</artifactId>
-    <name>Chapter Learning Basics - Unique Names</name>
+    <name>Learning Basics - Unique Names</name>
 
     <description>
         Chapter Learning Basics - Creating distributed objects with unique names
     </description>
 
     <parent>
-        <groupId>book.hazelcast.basics</groupId>
+        <groupId>com.hazelcast.samples.basics</groupId>
         <artifactId>chapter-learning-basics</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

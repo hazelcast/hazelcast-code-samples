@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>tcpip</artifactId>
-    <name>Chapter Network Configuration - TcpIp</name>
+    <name>Network Configuration - TcpIp</name>
 
     <description>
         Chapter Network Configuration - Tcp/Ip
     </description>
 
     <parent>
-        <groupId>book.hazelcast.network-configuration</groupId>
+        <groupId>com.hazelcast.samples.network-configuration</groupId>
         <artifactId>chapter-network-configuration</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

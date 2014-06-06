@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>execution-callback</artifactId>
-    <name>Chapter Distributed Executor - Execution Callback</name>
+    <artifactId>basic-executor</artifactId>
+    <name>Distributed Executor - Basic Executor</name>
 
     <description>
-        Chapter Distributed Executor - Execution Callback
+        Chapter Distributed Executor - Basic Executor
     </description>
 
     <parent>

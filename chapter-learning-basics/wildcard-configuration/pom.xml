@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>wildcard-configuration</artifactId>
-    <name>Chapter Learning Basics - Wildcard Configuration</name>
+    <name>Learning Basics - Wildcard Configuration</name>
 
     <description>
         Chapter Learning Basics - Wildcard Configuration
     </description>
 
     <parent>
-        <groupId>book.hazelcast.basics</groupId>
+        <groupId>com.hazelcast.samples.basics</groupId>
         <artifactId>chapter-learning-basics</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

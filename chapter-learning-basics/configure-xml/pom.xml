@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>configure-xml</artifactId>
-    <name>Chapter Learning Basics - Configure XML</name>
+    <name>Learning Basics - Configure XML</name>
 
     <description>
         Chapter Learning Basics - Configure XML
     </description>
 
     <parent>
-        <groupId>book.hazelcast.basics</groupId>
+        <groupId>com.hazelcast.samples.basics</groupId>
         <artifactId>chapter-learning-basics</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

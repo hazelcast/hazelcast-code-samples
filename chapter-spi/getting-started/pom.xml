@@ -4,13 +4,13 @@
     <packaging>jar</packaging>
 
     <artifactId>getting-started</artifactId>
-    <name>Chapter SPI: Getting started</name>
+    <name>SPI: Getting started</name>
     <description>
         Contains the code for the Getting started example of the SPI chapter.
     </description>
 
     <parent>
-        <groupId>book.hazelcast.spi</groupId>
+        <groupId>com.hazelcast.samples.spi</groupId>
         <artifactId>chapter-spi</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

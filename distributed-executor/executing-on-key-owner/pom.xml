@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>executing-on-specific-member</artifactId>
-    <name>Chapter Distributed Executor - Executing on specific member</name>
+    <artifactId>executing-on-key-owner</artifactId>
+    <name>Distributed Executor - Executing on key owner</name>
 
     <description>
-        Chapter Distributed Executor - Executing on specific member
+        Chapter Distributed Executor - Executing on key owner
     </description>
 
     <parent>

@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>mapstore</artifactId>
-    <name>Chapter DistributedMap - MapStore</name>
+    <name>DistributedMap - MapStore</name>
 
     <description>
     </description>
@@ -18,7 +18,7 @@
     </dependencies>
 
     <parent>
-        <groupId>book.hazelcast.distributed-map</groupId>
+        <groupId>com.hazelcast.samples.distributed-map</groupId>
         <artifactId>chapter-distributed-map</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

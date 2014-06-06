@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>condition</artifactId>
-    <name>Chapter Distributed Primitives - Condition</name>
+    <name>Distributed Primitives - Condition</name>
 
     <description>
         Chapter Distributed Primitives - Condition
     </description>
 
     <parent>
-        <groupId>book.hazelcast.primitives</groupId>
+        <groupId>com.hazelcast.samples.primitives</groupId>
         <artifactId>chapter-distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

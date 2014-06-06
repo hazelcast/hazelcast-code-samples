@@ -4,8 +4,8 @@
     <packaging>pom</packaging>
 
     <artifactId>chapter-distributed-topic</artifactId>
-    <name>Chapter Distributed Topic</name>
-    <groupId>book.hazelcast.topic</groupId>
+    <name>Distributed Topic</name>
+    <groupId>com.hazelcast.samples.topic</groupId>
     <description>
         All the code samples for the distributed topic chapter
     </description>

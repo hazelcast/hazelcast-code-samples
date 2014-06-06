@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>loading-instances</artifactId>
-    <name>Chapter Learning Basics - Loading instances</name>
+    <name>Learning Basics - Loading instances</name>
 
     <description>
         Chapter Learning Basics - Loading instances
     </description>
 
     <parent>
-        <groupId>book.hazelcast.basics</groupId>
+        <groupId>com.hazelcast.samples.basics</groupId>
         <artifactId>chapter-learning-basics</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

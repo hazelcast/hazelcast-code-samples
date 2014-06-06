@@ -4,14 +4,14 @@
     <packaging>jar</packaging>
 
     <artifactId>backup</artifactId>
-    <name>Chapter DistributedMap - Backup</name>
+    <name>DistributedMap - Backup</name>
 
     <description>
         Chapter DistributedMap : Backup
     </description>
 
     <parent>
-        <groupId>book.hazelcast.distributed-map</groupId>
+        <groupId>com.hazelcast.samples.distributed-map</groupId>
         <artifactId>chapter-distributed-map</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

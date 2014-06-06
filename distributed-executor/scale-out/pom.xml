@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>scale-out</artifactId>
-    <name>Chapter Distributed Executor - Scale Out</name>
+    <name>Distributed Executor - Scale Out</name>
 
     <description>
         Chapter Distributed Executor - Scale Out
