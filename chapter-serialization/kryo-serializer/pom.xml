@@ -10,7 +10,7 @@
     </description>
 
     <parent>
-        <artifactId>chapter-serialization</artifactId>
+        <artifactId>serialization</artifactId>
         <groupId>com.hazelcast.samples.serialization</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

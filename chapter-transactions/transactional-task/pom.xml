@@ -10,7 +10,7 @@
     </description>
 
     <parent>
-        <artifactId>chapter-transactions</artifactId>
+        <artifactId>transactions</artifactId>
         <groupId>com.hazelcast.samples.transactions</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <artifactId>chapter-distributed-primitives</artifactId>
+    <artifactId>distributed-primitives</artifactId>
     <name>Distributed Primitives</name>
     <groupId>com.hazelcast.samples.primitives</groupId>
     <description>

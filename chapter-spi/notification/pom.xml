@@ -11,7 +11,7 @@
 
     <parent>
         <groupId>com.hazelcast.samples.spi</groupId>
-        <artifactId>chapter-spi</artifactId>
+        <artifactId>spi</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

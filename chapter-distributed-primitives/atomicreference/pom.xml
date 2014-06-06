@@ -12,7 +12,7 @@
 
     <parent>
         <groupId>com.hazelcast.samples.primitives</groupId>
-        <artifactId>chapter-distributed-primitives</artifactId>
+        <artifactId>distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

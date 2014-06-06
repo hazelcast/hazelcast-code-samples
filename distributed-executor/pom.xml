@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <artifactId>chapter-distributed-executor</artifactId>
+    <artifactId>distributed-executor</artifactId>
     <groupId>chapter-distributed-executor</groupId>
     <name>Distributed Executor</name>
     <description>

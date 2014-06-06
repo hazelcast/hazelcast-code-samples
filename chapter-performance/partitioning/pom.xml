@@ -11,7 +11,7 @@
 
     <parent>
         <groupId>com.hazelcast.samples.performance</groupId>
-        <artifactId>chapter-performance</artifactId>
+        <artifactId>performance</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

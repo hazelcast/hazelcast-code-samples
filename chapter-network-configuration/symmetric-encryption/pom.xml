@@ -12,7 +12,7 @@
 
     <parent>
         <groupId>com.hazelcast.samples.network-configuration</groupId>
-        <artifactId>chapter-network-configuration</artifactId>
+        <artifactId>network-configuration</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

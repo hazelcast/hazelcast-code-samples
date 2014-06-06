@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <artifactId>chapter-network-configuration</artifactId>
+    <artifactId>network-configuration</artifactId>
     <name>Network Configuration</name>
     <groupId>com.hazelcast.samples.network-configuration</groupId>
     <description>

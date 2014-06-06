@@ -40,7 +40,7 @@
 
     <parent>
         <groupId>com.hazelcast.samples.basics</groupId>
-        <artifactId>chapter-learning-basics</artifactId>
+        <artifactId>learning-basics</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

@@ -8,7 +8,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>chapter-mapreduce</artifactId>
+    <artifactId>mapreduce</artifactId>
     <packaging>pom</packaging>
     <name>chapter-mapreduce</name>
     <description>Map/Reduce Examples</description>
