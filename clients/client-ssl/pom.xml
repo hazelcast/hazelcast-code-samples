@@ -3,16 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>atomiclong</artifactId>
-    <name>Distributed Primitives - IAtomicLong</name>
-
+    <artifactId>client-ssl</artifactId>
+    <name>Clients - Client SSL</name>
+    <groupId>book.hazelcast.client.basic</groupId>
     <description>
-        Chapter Distributed Primitives - IAtomicLong
+        Client SSL
     </description>
 
     <parent>
-        <groupId>com.hazelcast.samples.primitives</groupId>
-        <artifactId>distributed-primitives</artifactId>
+        <groupId>book.hazelcast.client</groupId>
+        <artifactId>clients</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

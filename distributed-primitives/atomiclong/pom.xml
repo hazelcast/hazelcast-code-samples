@@ -3,19 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>basic</artifactId>
-    <name>Chapter Clients - Basic</name>
-    <groupId>book.hazelcast.client.basic</groupId>
+    <artifactId>atomiclong</artifactId>
+    <name>Distributed Primitives - IAtomicLong</name>
+
     <description>
-        Basic Client/Server
+        Distributed Primitives - IAtomicLong
     </description>
 
     <parent>
-        <groupId>book.hazelcast.client</groupId>
-        <artifactId>chapter-clients</artifactId>
+        <groupId>com.hazelcast.samples.primitives</groupId>
+        <artifactId>distributed-primitives</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
 
 </project>

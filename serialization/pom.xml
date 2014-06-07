@@ -7,7 +7,7 @@
     <groupId>com.hazelcast.samples.serialization</groupId>
     <name>Serialization</name>
     <description>
-        All the code samples for the serialization chapter
+        Serialization code samples
     </description>
 
     <parent>

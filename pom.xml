@@ -33,19 +33,19 @@
     </dependencies>
 
     <modules>
-        <module>chapter-learning-basics</module>
-        <module>chapter-distributed-primitives</module>
-        <module>chapter-distributed-collections</module>
-        <module>chapter-distributed-map</module>
+        <module>learning-basics</module>
+        <module>distributed-primitives</module>
+        <module>distributed-collections</module>
+        <module>distributed-map</module>
         <module>distributed-executor</module>
-        <module>chapter-distributed-topic</module>
-        <module>chapter-clients</module>
-        <module>chapter-mapreduce</module>
-        <module>chapter-network-configuration</module>
-        <module>chapter-transactions</module>
-        <module>chapter-serialization</module>
-        <module>chapter-spi</module>
-        <module>chapter-performance</module>
+        <module>distributed-topic</module>
+        <module>clients</module>
+        <module>mapreduce</module>
+        <module>network-configuration</module>
+        <module>transactions</module>
+        <module>serialization</module>
+        <module>spi</module>
+        <module>performance</module>
     </modules>
 
     <build>
