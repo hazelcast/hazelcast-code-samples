@@ -7,7 +7,7 @@
     <name>DistributedMap - Eviction</name>
 
     <description>
-        Chapter DistributedMap : Eviction
+        DistributedMap : Eviction
     </description>
 
     <parent>

@@ -7,7 +7,7 @@
     <name>DistributedMap</name>
     <groupId>com.hazelcast.samples.distributed-map</groupId>
     <description>
-        Chapter about the distributed Map
+        about the distributed Map
     </description>
 
     <parent>

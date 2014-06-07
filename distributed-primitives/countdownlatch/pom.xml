@@ -7,7 +7,7 @@
     <name>Distributed Primitives - CountdownLatch</name>
 
     <description>
-        Chapter Distributed Primitives - CountdownLatch
+        Distributed Primitives - CountdownLatch
     </description>
 
     <parent>

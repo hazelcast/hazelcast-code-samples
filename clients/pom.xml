@@ -4,7 +4,7 @@
     <packaging>pom</packaging>
 
     <artifactId>clients</artifactId>
-    <name>Chapter Clients</name>
+    <name>Clients</name>
     <groupId>book.hazelcast.client</groupId>
     <description>
         All the code samples for the Hazelcast clients
