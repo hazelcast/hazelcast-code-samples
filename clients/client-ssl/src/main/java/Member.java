@@ -1,5 +1,4 @@
 import com.hazelcast.config.Config;
-import com.hazelcast.config.SSLConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
@@ -15,7 +14,7 @@ public class Member {
         Config config = new Config();
         config.getManagementCenterConfig().setEnabled(true);
         config.getManagementCenterConfig().setUrl("http://localhost:8083/mancenter/");
-       // config.getNetworkConfig().setSSLConfig(new SSLConfig().setEnabled(true));
+        // config.getNetworkConfig().setSSLConfig(new SSLConfig().setEnabled(true));
 
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         BlockingQueue<String> queue = hz.getQueue("queue");

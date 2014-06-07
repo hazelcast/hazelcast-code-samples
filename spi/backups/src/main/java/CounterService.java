@@ -1,14 +1,14 @@
 import com.hazelcast.core.DistributedObject;
-import com.hazelcast.partition.MigrationEndpoint;
-import com.hazelcast.spi.*;
+import com.hazelcast.spi.ManagedService;
+import com.hazelcast.spi.NodeEngine;
+import com.hazelcast.spi.RemoteService;
 
-import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService {
     public final static String NAME = "CounterService";
-    private NodeEngine nodeEngine;
     Container[] containers;
+    private NodeEngine nodeEngine;
 
     @Override
     public void init(NodeEngine nodeEngine, Properties properties) {

@@ -42,7 +42,7 @@ public class DistributedCounterProxy implements Counter {
         try {
             Future<Integer> future = builder.invoke();
             return future.get();
-        } catch(Exception e){
+        } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);
         }
     }

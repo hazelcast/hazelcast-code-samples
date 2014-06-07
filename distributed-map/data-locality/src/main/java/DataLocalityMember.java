@@ -1,14 +1,12 @@
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Partition;
-import com.hazelcast.core.PartitionService;
 
 import java.util.Map;
 
 public class DataLocalityMember {
     public static void main(String[] args) {
-        Config config= new Config();
+        Config config = new Config();
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         Map<Long, Customer> customerMap = hz.getMap("customers");

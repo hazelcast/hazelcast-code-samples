@@ -42,7 +42,7 @@ public class CounterProxy implements Counter {
         try {
             final Future<Integer> future = builder.invoke();
             return future.get();
-        } catch(Exception e){
+        } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);
         }
     }

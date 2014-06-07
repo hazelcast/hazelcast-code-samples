@@ -11,7 +11,7 @@ public class Employee implements Serializable {
         return salary;
     }
 
-    public void incSalary(int delta){
-        salary+=delta;
+    public void incSalary(int delta) {
+        salary += delta;
     }
 }

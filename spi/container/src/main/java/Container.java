@@ -2,7 +2,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 class Container {
-    private final ConcurrentMap<String, Integer> counterMap = new ConcurrentHashMap<String,Integer>();
+    private final ConcurrentMap<String, Integer> counterMap = new ConcurrentHashMap<String, Integer>();
 
     int inc(String id, int amount) {
         Integer counter = counterMap.get(id);

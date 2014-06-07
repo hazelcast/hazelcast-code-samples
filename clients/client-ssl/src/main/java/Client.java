@@ -16,7 +16,7 @@ public class Client {
         //config.getSocketOptions().setSocketFactory(new SSLSocketFactory());
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient(config);
-        BlockingQueue <String> queue = client.getQueue("queue");
+        BlockingQueue<String> queue = client.getQueue("queue");
         queue.put("Hello!");
         System.out.println("Message send by client!");
         System.exit(0);

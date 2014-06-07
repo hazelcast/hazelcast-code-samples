@@ -1,21 +1,14 @@
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.partition.MigrationEndpoint;
-import com.hazelcast.spi.ManagedService;
-import com.hazelcast.spi.MigrationAwareService;
-import com.hazelcast.spi.NodeEngine;
-import com.hazelcast.spi.Operation;
-import com.hazelcast.spi.PartitionMigrationEvent;
-import com.hazelcast.spi.PartitionReplicationEvent;
-import com.hazelcast.spi.RemoteService;
+import com.hazelcast.spi.*;
 
 import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService, MigrationAwareService {
     public final static String NAME = "CounterService";
-
-    private NodeEngine nodeEngine;
     Container[] containers;
+    private NodeEngine nodeEngine;
 
     @Override
     public void init(NodeEngine nodeEngine, Properties properties) {

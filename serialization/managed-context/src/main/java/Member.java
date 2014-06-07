@@ -1,7 +1,6 @@
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.ManagedContext;
 
 import java.io.Serializable;
@@ -9,7 +8,7 @@ import java.util.Map;
 
 class DummyObject implements Serializable {
     transient Thread trans = new Thread();
-    String ser= "someValue";
+    String ser = "someValue";
 
     @Override
     public String toString() {

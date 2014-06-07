@@ -5,11 +5,12 @@ import com.hazelcast.util.executor.StripedExecutor;
 import com.hazelcast.util.executor.StripedRunnable;
 
 import java.util.Date;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class SubscribedMember {
     private final static ILogger log = Logger.getLogger(SubscribedMember.class);
+    private final static StripedExecutor executor = new StripedExecutor(
+            log, "listeners", null, 10, 10000
+    );
 
     public static void main(String[] args) throws InterruptedException {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
@@ -18,16 +19,12 @@ public class SubscribedMember {
         System.out.println("Subscribed");
     }
 
-    private final static StripedExecutor executor = new StripedExecutor(
-            log, "listeners", null, 10,10000
-    );
-
     private static class MessageListenerImpl
             implements MessageListener<Date> {
 
         private final String topicName;
 
-        public MessageListenerImpl(String topicName){
+        public MessageListenerImpl(String topicName) {
             this.topicName = topicName;
         }
 

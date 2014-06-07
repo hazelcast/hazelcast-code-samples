@@ -12,7 +12,7 @@ public class TransactionalTaskMember {
         hz.executeTransaction(new TransactionalTask() {
             @Override
             public Object execute(TransactionalTaskContext context) throws TransactionException {
-                TransactionalMap<String,String> map = context.getMap("map");
+                TransactionalMap<String, String> map = context.getMap("map");
                 map.put("1", "1");
                 map.put("2", "2");
                 return null;

@@ -1,9 +1,8 @@
-
-public class Car  {
+public class Car {
     private String color;
     private Person owner;
 
-    public Car(Person owner,String color) {
+    public Car(Person owner, String color) {
         this.color = color;
         this.owner = owner;
     }

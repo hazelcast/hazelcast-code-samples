@@ -18,10 +18,10 @@ public class HashMapStreamSerializer implements StreamSerializer<HashMap> {
     public HashMap read(final ObjectDataInput in) throws IOException {
         int size = in.readInt();
         HashMap m = new HashMap(size);
-        for(int k=0;k<size;k++){
+        for (int k = 0; k < size; k++) {
             Object key = in.readObject();
             Object value = in.readObject();
-            m.put(key,value);
+            m.put(key, value);
         }
         return m;
     }
@@ -31,7 +31,7 @@ public class HashMapStreamSerializer implements StreamSerializer<HashMap> {
         out.writeInt(m.size());
 
         Set<Map.Entry> entrySet = m.entrySet();
-        for(Map.Entry entry: entrySet){
+        for (Map.Entry entry : entrySet) {
             out.writeObject(entry.getKey());
             out.writeObject(entry.getValue());
         }

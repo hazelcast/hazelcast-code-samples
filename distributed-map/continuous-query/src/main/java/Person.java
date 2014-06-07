@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 
-public class Person implements Serializable{
+public class Person implements Serializable {
 
     private final String name;
 

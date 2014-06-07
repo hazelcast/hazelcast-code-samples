@@ -21,7 +21,7 @@ public class CarStreamSerializer implements StreamSerializer<Car> {
     public Car read(ObjectDataInput in) throws IOException {
         Person owner = in.readObject();
         String color = in.readUTF();
-        return new Car(owner,color);
+        return new Car(owner, color);
     }
 
     @Override

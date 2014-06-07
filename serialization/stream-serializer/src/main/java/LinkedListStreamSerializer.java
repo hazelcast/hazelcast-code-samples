@@ -15,7 +15,7 @@ public class LinkedListStreamSerializer implements StreamSerializer<LinkedList> 
     @Override
     public void write(ObjectDataOutput out, LinkedList l) throws IOException {
         out.writeInt(l.size());
-        for(Object o: l){
+        for (Object o : l) {
             out.writeObject(o);
         }
     }
@@ -24,8 +24,8 @@ public class LinkedListStreamSerializer implements StreamSerializer<LinkedList> 
     public LinkedList read(ObjectDataInput in) throws IOException {
         LinkedList l = new LinkedList();
         int size = in.readInt();
-        for(int k=0;k<size;k++){
-           l.add(in.readObject());
+        for (int k = 0; k < size; k++) {
+            l.add(in.readObject());
         }
         return l;
     }

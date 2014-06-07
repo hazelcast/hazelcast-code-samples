@@ -7,7 +7,6 @@ import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.UUID;
 
 public class Member {
@@ -20,16 +19,16 @@ public class Member {
     private final IMap<Object, Object> orders;
     private final IMap<Object, Object> customers;
 
-    public static void main(String[] args) {
-        Member member = new Member();
-        member.generateTestData();
-        member.run();
-    }
-
     public Member() {
         hz = Hazelcast.newHazelcastInstance();
         customers = hz.getMap("customers");
         orders = hz.getMap("orders");
+    }
+
+    public static void main(String[] args) {
+        Member member = new Member();
+        member.generateTestData();
+        member.run();
     }
 
     public void generateTestData() {
@@ -38,11 +37,11 @@ public class Member {
             customer.setCustomerId(UUID.randomUUID().toString());
             customers.put(customer.getCustomerId(), customer);
 
-            for(int l=0;l<ORDER_PER_CUSTOMER_COUNT;l++){
+            for (int l = 0; l < ORDER_PER_CUSTOMER_COUNT; l++) {
                 Order order = new Order();
                 order.setOrderId(UUID.randomUUID().toString());
                 order.setCustomerId(customer.getCustomerId());
-                orders.put(order.getOrderId(),order);
+                orders.put(order.getOrderId(), order);
             }
         }
     }

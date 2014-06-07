@@ -16,6 +16,6 @@ public class WaitingMember {
         } finally {
             lock.unlock();
         }
-        System.out.println("Wait finished, counter: "+counter.get());
+        System.out.println("Wait finished, counter: " + counter.get());
     }
 }

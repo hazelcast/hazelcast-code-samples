@@ -7,7 +7,7 @@ import com.hazelcast.transaction.TransactionOptions;
 import java.util.concurrent.TimeUnit;
 
 public class TransactionalMember {
-    public static void main(String[] args)throws Exception {
+    public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         TransactionOptions txOptions = new TransactionOptions()
                 .setTimeout(10, TimeUnit.SECONDS);

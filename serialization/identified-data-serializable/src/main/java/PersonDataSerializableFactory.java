@@ -1,7 +1,7 @@
 import com.hazelcast.nio.serialization.DataSerializableFactory;
 import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
 
-public class PersonDataSerializableFactory implements DataSerializableFactory{
+public class PersonDataSerializableFactory implements DataSerializableFactory {
 
     public static final int ID = 1;
 
@@ -9,9 +9,9 @@ public class PersonDataSerializableFactory implements DataSerializableFactory{
 
     @Override
     public IdentifiedDataSerializable create(int typeId) {
-        if(typeId == PERSON_TYPE){
+        if (typeId == PERSON_TYPE) {
             return new Person();
-        }else{
+        } else {
             return null;
         }
     }

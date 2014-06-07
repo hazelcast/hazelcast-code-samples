@@ -7,8 +7,8 @@ import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService {
     public final static String NAME = "CounterService";
-    private NodeEngine nodeEngine;
     Container[] containers;
+    private NodeEngine nodeEngine;
 
     @Override
     public void init(NodeEngine nodeEngine, Properties properties) {
@@ -24,7 +24,7 @@ public class CounterService implements ManagedService, RemoteService {
 
     @Override
     public DistributedObject createDistributedObject(String objectName) {
-        return new CounterProxy(objectName,nodeEngine);
+        return new CounterProxy(objectName, nodeEngine);
     }
 
     @Override

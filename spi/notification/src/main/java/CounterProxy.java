@@ -3,7 +3,6 @@ import com.hazelcast.spi.InvocationBuilder;
 import com.hazelcast.spi.NodeEngine;
 import com.hazelcast.util.ExceptionUtil;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class CounterProxy implements Counter {
@@ -26,7 +25,7 @@ public class CounterProxy implements Counter {
     }
 
     @Override
-    public void await(int value) throws InterruptedException{
+    public void await(int value) throws InterruptedException {
         AwaitOperation operation = new AwaitOperation(objectId, value);
         int partitionId = nodeEngine.getPartitionService().getPartitionId(objectId);
         InvocationBuilder builder = nodeEngine.getOperationService()
@@ -34,8 +33,8 @@ public class CounterProxy implements Counter {
         try {
             Invocation invocation = builder.build();
             final Future future = invocation.invoke();
-             future.get();
-        } catch(Exception e){
+            future.get();
+        } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);
         }
     }
@@ -47,9 +46,9 @@ public class CounterProxy implements Counter {
         InvocationBuilder builder = nodeEngine.getOperationService()
                 .createInvocationBuilder(CounterService.NAME, operation, partitionId);
         try {
-             Invocation invocation = builder.build();
+            Invocation invocation = builder.build();
             final Future<Integer> future = invocation.invoke();
-            return  future.get();
+            return future.get();
         } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);
         }

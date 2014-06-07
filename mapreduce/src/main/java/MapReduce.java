@@ -1,13 +1,9 @@
-import com.hazelcast.core.*;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ICompletableFuture;
+import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.*;
-import com.hazelcast.nio.ObjectDataInput;
-import com.hazelcast.nio.ObjectDataOutput;
-import com.hazelcast.nio.serialization.DataSerializable;
-import com.hazelcast.spi.NodeEngine;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -52,7 +48,7 @@ public class MapReduce {
 
     /**
      * My mapper emits a key value pair per map key. An IMap only ever has one.
-     *
+     * <p/>
      * As I want to do a sum, I am going to accumulate all of these to one key called "all_values".
      * Unfortunately, this maps all to one node. If we were doing a classic group by, we would get
      * paralellisation.
@@ -69,8 +65,6 @@ public class MapReduce {
      * Returns a Reducer. Multiple reducers run on one Node, therefore we must provide a factory.
      */
     public static class MyReducerFactory implements ReducerFactory<String, Integer, Integer> {
-
-
 
 
         @Override
@@ -96,10 +90,6 @@ public class MapReduce {
             return sum.get();
         }
     }
-
-
-
-
 
 
 }

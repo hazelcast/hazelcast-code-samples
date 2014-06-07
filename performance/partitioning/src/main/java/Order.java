@@ -4,7 +4,7 @@ import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
 
-public class Order implements DataSerializable{
+public class Order implements DataSerializable {
     private String orderId;
     private String customerId;
     private int amount;

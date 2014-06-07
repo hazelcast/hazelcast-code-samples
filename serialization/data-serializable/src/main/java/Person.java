@@ -7,7 +7,8 @@ import java.io.IOException;
 public class Person implements DataSerializable {
     private String name;
 
-    public Person(){}
+    public Person() {
+    }
 
     public Person(String name) {
         this.name = name;

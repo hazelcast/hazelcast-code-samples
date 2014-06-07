@@ -5,12 +5,12 @@ import com.hazelcast.map.MapInterceptor;
 
 public class MapInterceptorMember {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        IMap<String,String> map = hz.getMap("themap");
+        IMap<String, String> map = hz.getMap("themap");
         map.addInterceptor(new MyMapInterceptor());
 
-        map.put("1","1");
+        map.put("1", "1");
         System.out.println(map.get("1"));
     }
 
@@ -18,7 +18,7 @@ public class MapInterceptorMember {
 
         @Override
         public Object interceptGet(Object value) {
-            return value+"-foo";
+            return value + "-foo";
         }
 
         @Override

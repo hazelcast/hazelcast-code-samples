@@ -35,22 +35,22 @@ public class PredicateMember {
         Person p2 = (Person) s.iterator().next();
 
         System.out.println("Get with name Peter");
-        for (Person person :getWithName("Peter")) {
+        for (Person person : getWithName("Peter")) {
             System.out.println(person);
         }
 
         System.out.println("Get not with name Peter");
-        for (Person person :getNotWithName("Peter")) {
+        for (Person person : getNotWithName("Peter")) {
             System.out.println(person);
         }
 
         System.out.println("Find name Peter and age 36");
-        for (Person person :getWithNameAndAge("Peter", 36)) {
+        for (Person person : getWithNameAndAge("Peter", 36)) {
             System.out.println(person);
         }
 
         System.out.println("Find name Peter and age 37");
-        for (Person person :getWithNameAndAge("Peter", 37)) {
+        for (Person person : getWithNameAndAge("Peter", 37)) {
             System.out.println(person);
         }
     }
