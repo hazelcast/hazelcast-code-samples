@@ -1,4 +1,4 @@
-## Code examples
+## Code Samples
 
 This repository contains an extensive collection of code samples which you can use to learn how
 to use our features. 
