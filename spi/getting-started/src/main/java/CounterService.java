@@ -13,11 +13,11 @@ public class CounterService implements ManagedService {
     }
 
     @Override
-    public void shutdown(boolean terminate) {
-        System.out.println("CounterService.shutdown");
+    public void reset() {
     }
 
     @Override
-    public void reset() {
+    public void shutdown() {
+        System.out.println("CounterService.shutdown");
     }
 }

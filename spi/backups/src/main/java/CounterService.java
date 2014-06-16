@@ -19,7 +19,7 @@ public class CounterService implements ManagedService, RemoteService {
     }
 
     @Override
-    public void shutdown(boolean terminate) {
+    public void shutdown() {
     }
 
     @Override

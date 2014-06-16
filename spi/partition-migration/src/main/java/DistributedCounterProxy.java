@@ -40,7 +40,7 @@ public class DistributedCounterProxy implements Counter {
         InvocationBuilder builder = nodeEngine.getOperationService()
                 .createInvocationBuilder(CounterService.NAME, operation, partitionId);
         try {
-            Future<Integer> future = builder.invoke();
+            Future<Integer> future = builder.build().invoke();
             return future.get();
         } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);

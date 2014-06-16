@@ -19,10 +19,6 @@ public class CounterService implements ManagedService, RemoteService {
     }
 
     @Override
-    public void shutdown(boolean terminate) {
-    }
-
-    @Override
     public DistributedObject createDistributedObject(String objectName) {
         return new CounterProxy(objectName, nodeEngine);
     }
@@ -34,5 +30,10 @@ public class CounterService implements ManagedService, RemoteService {
 
     @Override
     public void reset() {
+    }
+
+    @Override
+    public void shutdown() {
+
     }
 }

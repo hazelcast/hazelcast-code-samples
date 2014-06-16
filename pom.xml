@@ -13,7 +13,7 @@
     </description>
 
     <properties>
-        <hazelcast.version>3.3-RC1-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.1</hazelcast.version>
     </properties>
 
     <repositories>
@@ -51,7 +51,6 @@
         <module>serialization</module>
         <module>spi</module>
         <module>performance</module>
-        <module>demo</module>
     </modules>
 
     <build>
