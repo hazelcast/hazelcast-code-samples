@@ -30,6 +30,11 @@
             <artifactId>hazelcast</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-client</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
     </dependencies>
 
     <modules>
@@ -46,11 +51,12 @@
         <module>serialization</module>
         <module>spi</module>
         <module>performance</module>
+        <module>demo</module>
     </modules>
 
     <build>
-        <plugins>
-            <plugin>
+         <plugins>
+             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>

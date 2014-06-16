@@ -11,3 +11,4 @@ target/
 .patch
 *.iml
 mydatabase*
+bin/
