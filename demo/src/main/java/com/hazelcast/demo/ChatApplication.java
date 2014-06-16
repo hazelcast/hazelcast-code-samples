@@ -20,6 +20,7 @@ import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.EntryListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.IMap;
+import com.hazelcast.core.MapEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -136,6 +137,10 @@ public class ChatApplication {
         }
 
         public void entryEvicted(EntryEvent event) {
+        }
+
+        public void mapEvicted(MapEvent event) {
+
         }
     }
 }

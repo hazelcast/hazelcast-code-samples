@@ -32,5 +32,11 @@ public class ContinuousQueryMember {
         public void entryEvicted(EntryEvent<String, String> event) {
             System.out.println("entryEvicted:" + event);
         }
+
+        @Override
+        public void mapEvicted(MapEvent event) {
+            System.out.println("mapEvicted:" + event);
+
+        }
     }
 }
