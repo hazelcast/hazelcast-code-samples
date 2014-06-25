@@ -35,6 +35,11 @@ public class ListeningMember {
             System.out.println("mapEvicted:" + event);
 
         }
+        
+        @Override
+        public void mapCleared(MapEvent event) {
+            System.out.println("mapCleared:" + event);
+        }
 
     }
 }

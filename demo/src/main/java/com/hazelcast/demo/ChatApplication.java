@@ -142,5 +142,9 @@ public class ChatApplication {
         public void mapEvicted(MapEvent event) {
 
         }
+    
+        public void mapCleared(MapEvent event) {
+
+        }
     }
 }
