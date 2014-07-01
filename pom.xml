@@ -52,6 +52,7 @@
         <module>spi</module>
         <module>performance</module>
         <module>demo</module>
+        <module>spring-data-integration</module>
     </modules>
 
     <build>
