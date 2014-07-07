@@ -10,7 +10,7 @@
 
     <artifactId>mapreduce</artifactId>
     <packaging>pom</packaging>
-    <name>mapreduce</name>
+    <name>Map/Reduce</name>
     <description>Map/Reduce Examples</description>
 
     <properties>

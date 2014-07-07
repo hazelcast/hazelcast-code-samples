@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-data-integration</artifactId>
-
+    <name>Spring Data Integration</name>
 
     <properties>
         <org.mongodb.version>2.7.3</org.mongodb.version>
