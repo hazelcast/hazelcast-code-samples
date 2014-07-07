@@ -16,7 +16,6 @@ public class Member {
             System.out.println(counter.inc(1));
         }
 
-
         System.out.println("Finished");
     }
 }

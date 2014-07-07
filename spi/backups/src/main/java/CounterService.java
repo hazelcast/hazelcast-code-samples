@@ -1,11 +1,11 @@
 import com.hazelcast.core.DistributedObject;
-import com.hazelcast.spi.ManagedService;
-import com.hazelcast.spi.NodeEngine;
-import com.hazelcast.spi.RemoteService;
+import com.hazelcast.partition.MigrationEndpoint;
+import com.hazelcast.spi.*;
 
+import java.util.Map;
 import java.util.Properties;
 
-public class CounterService implements ManagedService, RemoteService {
+public class CounterService implements ManagedService, RemoteService, MigrationAwareService {
     public final static String NAME = "CounterService";
     Container[] containers;
     private NodeEngine nodeEngine;
@@ -23,12 +23,57 @@ public class CounterService implements ManagedService, RemoteService {
     }
 
     @Override
-    public DistributedObject createDistributedObject(String objectId) {
-        return new CounterProxy(String.valueOf(objectId), nodeEngine, this);
+    public DistributedObject createDistributedObject(String objectName) {
+        int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
+        Container container = containers[partitionId];
+        container.init(objectName);
+        return new CounterProxy(objectName, nodeEngine,this);
     }
 
     @Override
-    public void destroyDistributedObject(String objectId) {
+    public void destroyDistributedObject(String objectName) {
+        int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
+        Container container = containers[partitionId];
+        container.destroy(objectName);
+    }
+
+    @Override
+    public void beforeMigration(PartitionMigrationEvent e) {
+        //no-op
+    }
+
+    @Override
+    public void clearPartitionReplica(int partitionId) {
+        Container container = containers[partitionId];
+        container.clear();
+    }
+
+    @Override
+    public Operation prepareReplicationOperation(PartitionReplicationEvent e) {
+        if (e.getReplicaIndex() > 1) {
+            return null;
+        }
+        Container container = containers[e.getPartitionId()];
+        Map<String, Integer> data = container.toMigrationData();
+        return data.isEmpty() ? null : new CounterMigrationOperation(data);
+    }
+
+    @Override
+    public void commitMigration(PartitionMigrationEvent e) {
+        if (e.getMigrationEndpoint() == MigrationEndpoint.SOURCE) {
+            Container c = containers[e.getPartitionId()];
+            c.clear();
+        }
+
+        //todo
+    }
+
+    @Override
+    public void rollbackMigration(PartitionMigrationEvent e) {
+        if (e.getMigrationEndpoint() == MigrationEndpoint.DESTINATION) {
+            Container c = containers[e.getPartitionId()];
+            c.clear();
+        }
     }
 
     @Override

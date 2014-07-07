@@ -19,19 +19,7 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation,
         this.objectId = objectId;
     }
 
-    @Override
-    protected void writeInternal(ObjectDataOutput out) throws IOException {
-        super.writeInternal(out);
-        out.writeUTF(objectId);
-        out.writeInt(amount);
-    }
 
-    @Override
-    protected void readInternal(ObjectDataInput in) throws IOException {
-        super.readInternal(in);
-        objectId = in.readUTF();
-        amount = in.readInt();
-    }
 
     @Override
     public void run() throws Exception {
@@ -39,6 +27,16 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation,
         System.out.println("Executing " + objectId + ".inc() on: " + getNodeEngine().getThisAddress());
         Container c = service.containers[getPartitionId()];
         returnValue = c.inc(objectId, amount);
+    }
+
+    @Override
+       public boolean returnsResponse() {
+        return true;
+    }
+
+    @Override
+    public Object getResponse() {
+        return returnValue;
     }
 
     @Override
@@ -61,13 +59,17 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation,
         return new IncBackupOperation(objectId, amount);
     }
 
-    @Override
-    public boolean returnsResponse() {
-        return true;
+      @Override
+    protected void writeInternal(ObjectDataOutput out) throws IOException {
+        super.writeInternal(out);
+        out.writeUTF(objectId);
+        out.writeInt(amount);
     }
 
     @Override
-    public Object getResponse() {
-        return returnValue;
+    protected void readInternal(ObjectDataInput in) throws IOException {
+        super.readInternal(in);
+        objectId = in.readUTF();
+        amount = in.readInt();
     }
 }

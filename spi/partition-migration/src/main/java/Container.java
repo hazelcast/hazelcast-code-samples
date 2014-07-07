@@ -26,7 +26,6 @@ class Container {
         return new HashMap(values);
     }
 
-
     public void init(String objectName) {
         values.put(objectName,0);
     }
