@@ -4,9 +4,9 @@
     <packaging>jar</packaging>
 
     <artifactId>container</artifactId>
-    <name>SPI: Container</name>
+    <name>SPI: CounterService.Container</name>
     <description>
-        The code example for the Container.
+        The code example for the CounterService.Container.
     </description>
 
     <parent>

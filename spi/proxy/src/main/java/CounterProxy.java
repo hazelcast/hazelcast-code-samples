@@ -1,16 +1,16 @@
+import com.hazelcast.spi.AbstractDistributedObject;
 import com.hazelcast.spi.InvocationBuilder;
 import com.hazelcast.spi.NodeEngine;
 import com.hazelcast.util.ExceptionUtil;
 
 import java.util.concurrent.Future;
 
-public class CounterProxy implements Counter {
-    private final NodeEngine nodeEngine;
-    private final String objectId;
+public class CounterProxy extends AbstractDistributedObject<CounterService> implements Counter {
+    private final String name;
 
-    public CounterProxy(String objectId, NodeEngine nodeEngine) {
-        this.nodeEngine = nodeEngine;
-        this.objectId = objectId;
+    public CounterProxy(String name, NodeEngine nodeEngine, CounterService counterService) {
+        super(nodeEngine, counterService);
+        this.name = name;
     }
 
     @Override
@@ -19,24 +19,15 @@ public class CounterProxy implements Counter {
     }
 
     @Override
-    public Object getId() {
-        return objectId;
-    }
-
-    @Override
     public String getName() {
-        return objectId;
-    }
-
-    @Override
-    public String getPartitionKey() {
-        throw new RuntimeException("todo");
+        return name;
     }
 
     @Override
     public int inc(int amount) {
-        IncOperation operation = new IncOperation(objectId, amount);
-        int partitionId = nodeEngine.getPartitionService().getPartitionId(objectId);
+        NodeEngine nodeEngine = getNodeEngine();
+        IncOperation operation = new IncOperation(name, amount);
+        int partitionId = nodeEngine.getPartitionService().getPartitionId(name);
         InvocationBuilder builder = nodeEngine.getOperationService()
                 .createInvocationBuilder(CounterService.NAME, operation, partitionId);
         try {
@@ -45,9 +36,5 @@ public class CounterProxy implements Counter {
         } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);
         }
-    }
-
-    @Override
-    public void destroy() {
     }
 }

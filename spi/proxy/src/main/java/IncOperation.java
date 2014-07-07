@@ -9,26 +9,13 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation 
     private String objectId;
     private int amount, returnValue;
 
+    // Important to have a no-arg constructor for deserialization
     public IncOperation() {
     }
 
     public IncOperation(String objectId, int amount) {
         this.amount = amount;
         this.objectId = objectId;
-    }
-
-    @Override
-    protected void writeInternal(ObjectDataOutput out) throws IOException {
-        super.writeInternal(out);
-        out.writeUTF(objectId);
-        out.writeInt(amount);
-    }
-
-    @Override
-    protected void readInternal(ObjectDataInput in) throws IOException {
-        super.readInternal(in);
-        objectId = in.readUTF();
-        amount = in.readInt();
     }
 
     @Override
@@ -45,5 +32,19 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation 
     @Override
     public Object getResponse() {
         return returnValue;
+    }
+
+    @Override
+    protected void writeInternal(ObjectDataOutput out) throws IOException {
+        super.writeInternal(out);
+        out.writeUTF(objectId);
+        out.writeInt(amount);
+    }
+
+    @Override
+    protected void readInternal(ObjectDataInput in) throws IOException {
+        super.readInternal(in);
+        objectId = in.readUTF();
+        amount = in.readInt();
     }
 }

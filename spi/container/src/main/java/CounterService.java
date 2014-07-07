@@ -1,8 +1,9 @@
-import com.hazelcast.core.DistributedObject;
 import com.hazelcast.spi.ManagedService;
 import com.hazelcast.spi.NodeEngine;
 import com.hazelcast.spi.RemoteService;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService {
@@ -23,16 +24,25 @@ public class CounterService implements ManagedService, RemoteService {
     }
 
     @Override
-    public DistributedObject createDistributedObject(String objectName) {
-        return new CounterProxy(objectName, nodeEngine);
+    public CounterProxy createDistributedObject(String objectName) {
+        int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
+        Container container = containers[partitionId];
+        container.values.put(objectName, 0);
+        return new CounterProxy(objectName, nodeEngine, this);
     }
 
     @Override
     public void destroyDistributedObject(String objectName) {
-        throw new RuntimeException("todo");
+        int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
+        Container container = containers[partitionId];
+        container.values.remove(objectName);
     }
 
     @Override
     public void reset() {
+    }
+
+    public static class Container {
+        final Map<String, Integer> values = new HashMap<String, Integer>();
     }
 }
