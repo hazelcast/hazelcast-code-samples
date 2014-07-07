@@ -11,7 +11,7 @@ public class Member {
 
         Counter[] counters = new Counter[4];
         for (int k = 0; k < counters.length; k++)
-            counters[k] = instances[0].getDistributedObject(CounterService.NAME, "counter-"+k);
+            counters[k] = instances[0].getDistributedObject(CounterService.NAME, k+"counter");
 
         for (Counter counter : counters)
             System.out.println(counter.inc(1));

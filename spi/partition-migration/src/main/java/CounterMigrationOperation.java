@@ -18,6 +18,13 @@ public class CounterMigrationOperation extends AbstractOperation {
     }
 
     @Override
+    public void run() throws Exception {
+        CounterService service = getService();
+        Container container = service.containers[getPartitionId()];
+        container.applyMigrationData(migrationData);
+    }
+
+    @Override
     protected void writeInternal(ObjectDataOutput out) throws IOException {
         out.writeInt(migrationData.size());
         for (Map.Entry<String, Integer> entry : migrationData.entrySet()) {
@@ -32,12 +39,5 @@ public class CounterMigrationOperation extends AbstractOperation {
         migrationData = new HashMap<String, Integer>();
         for (int i = 0; i < size; i++)
             migrationData.put(in.readUTF(), in.readInt());
-    }
-
-    @Override
-    public void run() throws Exception {
-        CounterService service = getService();
-        Container container = service.containers[getPartitionId()];
-        container.applyMigrationData(migrationData);
     }
 }

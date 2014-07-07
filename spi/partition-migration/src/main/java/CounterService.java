@@ -24,12 +24,17 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
 
     @Override
     public DistributedObject createDistributedObject(String objectName) {
-        return new DistributedCounterProxy(objectName, nodeEngine);
+        int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
+        Container container = containers[partitionId];
+        container.init(objectName);
+        return new CounterProxy(objectName, nodeEngine,this);
     }
 
     @Override
     public void destroyDistributedObject(String objectName) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
+        Container container = containers[partitionId];
+        container.destroy(objectName);
     }
 
     @Override
@@ -39,15 +44,17 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
 
     @Override
     public void clearPartitionReplica(int partitionId) {
-        containers[partitionId].clear();
+        Container container = containers[partitionId];
+        container.clear();
     }
 
     @Override
-    public Operation prepareReplicationOperation(PartitionReplicationEvent event) {
-        if (event.getReplicaIndex() > 1) {
+    public Operation prepareReplicationOperation(PartitionReplicationEvent e) {
+        if (e.getReplicaIndex() > 1) {
             return null;
         }
-        Map<String, Integer> data = containers[event.getPartitionId()].toMigrationData();
+        Container container = containers[e.getPartitionId()];
+        Map<String, Integer> data = container.toMigrationData();
         return data.isEmpty() ? null : new CounterMigrationOperation(data);
     }
 

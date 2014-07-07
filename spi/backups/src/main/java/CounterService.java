@@ -24,7 +24,7 @@ public class CounterService implements ManagedService, RemoteService {
 
     @Override
     public DistributedObject createDistributedObject(String objectId) {
-        return new CounterProxy(String.valueOf(objectId), nodeEngine);
+        return new CounterProxy(String.valueOf(objectId), nodeEngine, this);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class CounterService implements ManagedService, RemoteService {
     public CounterProxy createDistributedObject(String objectName) {
         int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
         Container container = containers[partitionId];
-        container.values.put(objectName, 0);
+        container.init(objectName);
         return new CounterProxy(objectName, nodeEngine, this);
     }
 
@@ -35,7 +35,7 @@ public class CounterService implements ManagedService, RemoteService {
     public void destroyDistributedObject(String objectName) {
         int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
         Container container = containers[partitionId];
-        container.values.remove(objectName);
+        container.destroy(objectName);
     }
 
     @Override
@@ -44,5 +44,13 @@ public class CounterService implements ManagedService, RemoteService {
 
     public static class Container {
         final Map<String, Integer> values = new HashMap<String, Integer>();
+
+        private void init(String objectName) {
+            values.put(objectName, 0);
+        }
+
+        private void destroy(String objectName){
+            values.remove(objectName);
+        }
     }
 }
