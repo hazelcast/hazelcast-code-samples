@@ -19,8 +19,6 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation,
         this.objectId = objectId;
     }
 
-
-
     @Override
     public void run() throws Exception {
         CounterService service = getService();

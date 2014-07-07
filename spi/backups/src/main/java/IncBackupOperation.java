@@ -18,6 +18,14 @@ public class IncBackupOperation extends AbstractOperation implements BackupOpera
     }
 
     @Override
+    public void run() throws Exception {
+        CounterService service = getService();
+        System.out.println("Executing backup " + objectId + ".inc() on: " + getNodeEngine().getThisAddress());
+        Container c = service.containers[getPartitionId()];
+        c.inc(objectId, amount);
+    }
+
+    @Override
     protected void writeInternal(ObjectDataOutput out) throws IOException {
         super.writeInternal(out);
         out.writeUTF(objectId);
@@ -29,13 +37,5 @@ public class IncBackupOperation extends AbstractOperation implements BackupOpera
         super.readInternal(in);
         objectId = in.readUTF();
         amount = in.readInt();
-    }
-
-    @Override
-    public void run() throws Exception {
-        CounterService service = getService();
-        System.out.println("Executing backup " + objectId + ".inc() on: " + getNodeEngine().getThisAddress());
-        Container c = service.containers[getPartitionId()];
-        c.inc(objectId, amount);
     }
 }

@@ -9,13 +9,9 @@ public class Member {
             instances[k] = instance;
         }
 
-        Counter[] counters = new Counter[4];
-        for (int k = 0; k < counters.length; k++) {
-            Counter counter = instances[0].getDistributedObject(CounterService.NAME, "counter" + k);
-            counters[k] = counter;
-            System.out.println(counter.inc(1));
-        }
-
+        Counter counter = instances[0].getDistributedObject(CounterService.NAME, "counter");
+        counter.inc(1);
         System.out.println("Finished");
+        System.exit(0);
     }
 }
