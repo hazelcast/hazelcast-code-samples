@@ -53,6 +53,7 @@
         <module>performance</module>
         <module>demo</module>
         <module>spring-data-integration</module>
+        <module>tomcat-session-replication</module>
     </modules>
 
     <build>
