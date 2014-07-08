@@ -29,7 +29,7 @@ public class CounterMigrationOperation extends AbstractOperation {
     @Override
     protected void readInternal(ObjectDataInput in) throws IOException {
         int size = in.readInt();
-        migrationData = new HashMap<>();
+        migrationData = new HashMap();
         for (int i = 0; i < size; i++)
             migrationData.put(in.readUTF(), in.readInt());
     }
