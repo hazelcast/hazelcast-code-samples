@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate4</artifactId>
+            <artifactId>hazelcast-all</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
 
