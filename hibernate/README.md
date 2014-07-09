@@ -18,7 +18,7 @@ By default "hibernate-core" and "hazelcast-hibernate4" added to project as follo
 <dependency>
     <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast-hibernate4</artifactId>
-    <version>3.2.3</version>
+    <version>${hazelcast.version}</version>
 </dependency>
 ```
 But project is also compatible with hibernate 3.X.X versions. You can change these entries accordingly.
