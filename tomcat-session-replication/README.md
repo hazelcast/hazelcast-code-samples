@@ -4,10 +4,10 @@ This project is prepared to serve as a sample application for Hazelcast, the lea
 <h3>Tomcat Configuration</h3>
 
 <h4>P2P Deployment</h4>
-Follow P2P deployment steps at: http://hazelcast.org/docs/latest/manual/html/sessionreplication.html
+Follow steps under "Sample P2P Configuration to use Hazelcast Session Replication" title at: http://hazelcast.org/docs/latest/manual/html/sessionreplication.html
 <h4>Client-Server Deployment</h4>
 
-Follow Client-Server deployment steps at: http://hazelcast.org/docs/latest/manual/html/sessionreplication.html
+Follow steps under "Sample Client/Server Configuration to use Hazelcast Session Replication" title at: http://hazelcast.org/docs/latest/manual/html/sessionreplication.html
 
 <br />
 
