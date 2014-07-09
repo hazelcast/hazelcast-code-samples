@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate4</artifactId>
-            <version>3.2.3</version>
+            <version>${hazelcast.version}</version>
         </dependency>
 
         <dependency>
