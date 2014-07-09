@@ -12,3 +12,4 @@ target/
 *.iml
 mydatabase*
 bin/
+hibernateDB
