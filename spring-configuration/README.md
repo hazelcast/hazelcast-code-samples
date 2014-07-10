@@ -16,16 +16,16 @@ Running Sample Application
 
 1) Clone the repository to your local using:
 
-    ` git clone git@github.com:hazelcast/hazelcast-code-samples.git
+    git clone git@github.com:hazelcast/hazelcast-code-samples.git
 
 2) Go to "spring-configuration" folder
 
 3) Compile the project with:
 
-    ` mvn compile
+    mvn compile
     
 4) Run the following commands respectively:
 
-    - ` mvn exec:java -Dexec.mainClass="com.hazelcast.springconfiguration.HazelcastDataTypes"
+    mvn exec:java -Dexec.mainClass="com.hazelcast.springconfiguration.HazelcastDataTypes"
     
-    - ` mvn exec:java -Dexec.mainClass="com.hazelcast.springconfiguration.SpringClient"
+    mvn exec:java -Dexec.mainClass="com.hazelcast.springconfiguration.SpringClient"
