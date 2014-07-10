@@ -9,6 +9,9 @@ import javax.cache.event.CacheEntryUpdatedListener;
 import java.io.Serializable;
 import java.util.Iterator;
 
+/**
+ * Simple Cache Entry Listener to print the received events to System.out
+ */
 public class MyCacheEntryListener<K, V> implements CacheEntryCreatedListener<K, V>,
         CacheEntryUpdatedListener<K, V>, CacheEntryExpiredListener<K, V>,
         CacheEntryRemovedListener<K, V>, Serializable {
