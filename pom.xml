@@ -27,10 +27,10 @@
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
+            <artifactId>hazelcast-all</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
-        <dependency>
+       <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-client</artifactId>
             <version>${hazelcast.version}</version>
@@ -55,6 +55,7 @@
         <module>spring-data-integration</module>
         <module>tomcat-session-replication</module>
         <module>hibernate</module>
+        <module>spring-cache</module>
         <!--<module>jcache</module>-->
     </modules>
 
