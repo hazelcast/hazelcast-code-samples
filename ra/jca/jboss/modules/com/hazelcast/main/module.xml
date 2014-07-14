@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module xmlns="urn:jboss:module:1.1" name="com.hazelcast">
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <resource-root path="hazelcast-3.2.3.jar"/>
+        <resource-root path="hazelcast-jca-3.2.3.jar"/>
+        <!--resource-root path="slf4j-api-1.6.6.jar"/-->
+        <!-- Insert resources here -->
+    </resources>
+
+    <dependencies>
+	        <module name="javax.api"/>
+			<module name="javax.resource.api"/>
+	        <module name="javax.transaction.api"/>
+	        <module name="org.apache.log4j"/>
+    </dependencies>
+</module>
