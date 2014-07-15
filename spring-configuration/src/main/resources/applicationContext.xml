@@ -1,0 +1,62 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+              http://www.hazelcast.com/schema/spring
+              http://www.hazelcast.com/schema/spring/hazelcast-spring-3.3.xsd
+              http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+       ">
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/hazelcast-config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="com.hazelcast.springconfiguration.TestBean" name="springTestBean">
+        <property name="result" value="${value}"/>
+    </bean>
+
+    <hz:hazelcast id="instance">
+        <hz:config>
+            <hz:group name="${name}" password="${password}"/>
+            <hz:properties>
+                <hz:property name="hazelcast.merge.first.run.delay.seconds">5</hz:property>
+                <hz:property name="hazelcast.merge.next.run.delay.seconds">5</hz:property>
+            </hz:properties>
+            <hz:network port="${defaultPort}" port-auto-increment="true">
+                <hz:join>
+                    <hz:multicast enabled="true"/>
+                </hz:join>
+            </hz:network>
+        </hz:config>
+    </hz:hazelcast>
+
+    <hz:client id="client">
+        <hz:group name="${name}" password="${password}"/>
+        <hz:network>
+            <hz:member>127.0.0.1:5705</hz:member>
+        </hz:network>
+    </hz:client>
+
+    <hz:map             id="map"             instance-ref="instance" name="Map" lazy-init="false"/>
+    <hz:multiMap        id="multiMap"        instance-ref="instance" name="Multimap"/>
+    <hz:queue           id="queue"           instance-ref="instance" name="Queue"/>
+    <hz:topic           id="topic"           instance-ref="instance" name="Topic" depends-on="instance, client"/>
+    <hz:set             id="set"             instance-ref="instance" name="Set"/>
+    <hz:list            id="list"            instance-ref="instance" name="List"/>
+    <hz:executorService id="executorService" instance-ref="instance" name="ExecutorService"/>
+    <hz:idGenerator     id="idGenerator"     instance-ref="instance" name="IdGenerator"/>
+    <hz:atomicLong      id="atomicLong"      instance-ref="instance" name="atomicLong"/>
+    <hz:atomicReference id="atomicReference" instance-ref="instance" name="atomicReference"/>
+    <hz:countDownLatch  id="countDownLatch"  instance-ref="instance" name="countDownLatch"/>
+    <hz:semaphore       id="semaphore"       instance-ref="instance" name="semaphore"/>
+    <hz:lock            id="lock"            instance-ref="instance" name="lock"/>
+
+</beans>
