@@ -56,6 +56,7 @@
         <module>tomcat-session-replication</module>
         <module>hibernate</module>
         <module>spring-cache</module>
+        <module>spring-hibernate</module>
         <!--<module>jcache</module>-->
     </modules>
 
