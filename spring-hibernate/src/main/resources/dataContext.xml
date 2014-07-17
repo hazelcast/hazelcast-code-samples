@@ -18,21 +18,10 @@
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
     
     <!-- Data Source Declaration -->
-	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close"    
-			    p:driverClassName="${jdbc.db.driverClassName}"
-			    p:url="${jdbc.db.url}"
-			    p:username="${jdbc.db.username}"
-			    p:password="${jdbc.db.password}"
-			    p:initialSize="${jdbc.db.initialSize}"
-			    p:minIdle="${jdbc.db.minIdle}"
-			    p:maxIdle="${jdbc.db.maxIdle}"
-			    p:maxActive="${jdbc.db.maxActive}"
-			    p:testWhileIdle="${jdbc.db.testWhileIdle}"
-			    p:testOnBorrow="${jdbc.db.testOnBorrow}"
-			    p:testOnReturn="${jdbc.db.testOnReturn}"
-			    p:initSQL="${jdbc.db.initSQL}"
-			    p:validationQuery="${jdbc.db.validationQuery}"
-			    p:timeBetweenEvictionRunsMillis="${jdbc.db.timeBetweenEvictionRunsMillis}"/>	
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+        <property name="url" value="jdbc:derby:springHibernateDB" />
+    </bean>
 	
     <!-- Session Factory Declaration -->
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
