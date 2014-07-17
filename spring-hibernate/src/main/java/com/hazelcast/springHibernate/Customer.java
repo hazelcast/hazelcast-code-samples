@@ -1,12 +1,12 @@
 package com.hazelcast.springHibernate;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 /**
  * Created by Esref Ozturk <esrefozturk93@gmail.com> on 17.07.2014.
  */

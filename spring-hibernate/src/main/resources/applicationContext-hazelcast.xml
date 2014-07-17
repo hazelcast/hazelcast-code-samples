@@ -7,21 +7,14 @@
         http://www.hazelcast.com/schema/spring/hazelcast-spring-3.2.xsd">
 
 	<hz:map id="customerMap" name="customerMap" instance-ref="instance" />
-	
-	<!-- Hazelcast Instance configuration -->
+
 	<hz:hazelcast id="instance">
 	    <hz:config>
-	    	
-	    	<!-- Hazelcast Instance Name -->
+
 	    	<hz:instance-name>${hz.instance.name}</hz:instance-name>
-	    	
-	    	<!-- Hazelcast Group Name and Password -->
+
 	        <hz:group name="${hz.group.name}" password="${hz.group.password}"/>
-	        
-	        <!-- Hazelcast Management Center URL -->
-	    	<hz:management-center  enabled="${hz.management.center.enabled}" url="${hz.management.center.url}"/>
-	        
-	        <!-- Hazelcast Tcp based network configuration -->
+
 	        <hz:network port="${hz.network.port}" port-auto-increment="${hz.network.port.auto.increment}">
 	            <hz:join>
 	                <hz:tcp-ip enabled="${hz.tcp.ip.enabled}">

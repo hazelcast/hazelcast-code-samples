@@ -13,7 +13,6 @@ public class DistributedMapService implements IDistributedMapService {
 
 	public DistributedMapService(IMap<String, Customer> customerMap) {
 		setCustomerMap(customerMap);
-		getCustomerMap().addEntryListener(new CustomerEntryListener(), true);		
 	}
 	
 

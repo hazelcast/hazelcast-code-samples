@@ -3,7 +3,6 @@ package com.hazelcast.springHibernate;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 
 /**
@@ -14,7 +13,6 @@ import java.util.*;
 public class CustomerDAO implements ICustomerDAO {
  
     private SessionFactory sessionFactory;
- 
 
 	@Transactional(readOnly = false)
     @Override
@@ -31,7 +29,6 @@ public class CustomerDAO implements ICustomerDAO {
 			sessionFactory.getCurrentSession().save(customer); 
 		}           	
     }
-	
 
 	@Transactional(readOnly = false)
     @Override
@@ -40,7 +37,6 @@ public class CustomerDAO implements ICustomerDAO {
         query.setParameter("id", id);
         query.executeUpdate();   	
     }
- 
 
 	@Override
     public List<Customer> getCustomers() {
@@ -48,7 +44,6 @@ public class CustomerDAO implements ICustomerDAO {
 		List<Customer> list = sessionFactory.getCurrentSession().createQuery("from Customer").list();
         return list;
     }
-    
 
     @Override
 	public Customer getCustomerById(String id) {
@@ -57,11 +52,10 @@ public class CustomerDAO implements ICustomerDAO {
 							                .setParameter(0, id).uniqueResult();
 		return customer;
 	}
-    
 
     @Override
 	public Map<String, Customer> getCustomerMap(Collection<String> idCol) {
-    	Map<String, Customer> customerMap = new HashMap<String, Customer>();
+    	Map<String, Customer> customerMap = new HashMap<>();
 		for(String id : idCol) {
 			Customer customer = (Customer) sessionFactory
 					                    .getCurrentSession()
@@ -73,7 +67,6 @@ public class CustomerDAO implements ICustomerDAO {
 		
 		return customerMap;
 	}
-    
 
     @Override
 	public Set<String> getCustomerIds() {
@@ -84,10 +77,9 @@ public class CustomerDAO implements ICustomerDAO {
 							        .list();
 		return new HashSet<String>(customerIdList);
 	}
-    
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-    }	
- 
+    }
+
 }
