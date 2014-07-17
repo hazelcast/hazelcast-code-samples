@@ -23,16 +23,13 @@ public class InitializeDB {
             Statement st = conn.createStatement();
             st.executeUpdate("CREATE TABLE  CUSTOMER(" +
                     "ID VARCHAR(255) PRIMARY KEY NOT NULL," +
-                    "CITY VARCHAR(255) NOT NULL," +
-                    "COUNTRY VARCHAR(255) NOT NULL," +
-                    "STREET_NAME VARCHAR(255) NOT NULL," +
                     "NAME VARCHAR(255) NOT NULL," +
                     "SURNAME VARCHAR(255) NOT NULL" +
                     ")");
-            st.executeUpdate("INSERT INTO CUSTOMER VALUES ('1', 'City1', 'Country1', 'StreetName1', 'Name1', 'Surname1')");
-            st.executeUpdate("INSERT INTO CUSTOMER VALUES ('2', 'City2', 'Country2', 'StreetName2', 'Name2', 'Surname2')");
-            st.executeUpdate("INSERT INTO CUSTOMER VALUES ('3', 'City3', 'Country3', 'StreetName3', 'Name3', 'Surname3')");
-            st.executeUpdate("INSERT INTO CUSTOMER VALUES ('4', 'City4', 'Country4', 'StreetName4', 'Name4', 'Surname4')");
+            st.executeUpdate("INSERT INTO CUSTOMER VALUES ('1', 'Name1', 'Surname1')");
+            st.executeUpdate("INSERT INTO CUSTOMER VALUES ('2', 'Name2', 'Surname2')");
+            st.executeUpdate("INSERT INTO CUSTOMER VALUES ('3', 'Name3', 'Surname3')");
+            st.executeUpdate("INSERT INTO CUSTOMER VALUES ('4', 'Name4', 'Surname4')");
         }
         catch( SQLException s){
             System.out.println(s);
