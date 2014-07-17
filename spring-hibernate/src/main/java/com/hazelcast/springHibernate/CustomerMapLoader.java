@@ -18,7 +18,6 @@ public class CustomerMapLoader implements MapLoader<String, Customer> {
 		return customer;
 	}
 
-
 	@Override
 	public Map<String, Customer> loadAll(Collection<String> idCol) {
 		Map<String, Customer> customerMap = getCustomerDAO().getCustomerMap(idCol);
@@ -26,15 +25,13 @@ public class CustomerMapLoader implements MapLoader<String, Customer> {
 		return customerMap;
 	}
 
-
 	@Override
 	public Set<String> loadAllKeys() {
 		return null;
 	}
 
-
-	public ICustomerDAO getCustomerDAO() {
+	public CustomerDAO getCustomerDAO() {
 		return ApplicationContextUtil.getApplicationContext().getBean(CustomerDAO.class);
-	}	
-	
+	}
+
 }
