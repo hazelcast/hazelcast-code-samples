@@ -29,7 +29,6 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>com.hazelcast.springHibernate.Customer</value>
-				<value>com.hazelcast.springHibernate.Address</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
