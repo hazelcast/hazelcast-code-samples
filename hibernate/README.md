@@ -17,21 +17,15 @@ By default "hibernate-core" added to project in "pom.xml" file as follows:
 But project is also compatible with hibernate 3.X.X versions. You can change these entries accordingly.
 
 <h2>How to Run Sample Application</h2>
-1) clone the repository to your local using:
-```
-git clone https://github.com/hazelcastInternsSummer14/hibernate.git
-```
-2) go to "hibernate" folder
-
-3) Compile project using:
+1) Compile project using:
 ```
 mvn compile
 ```
-4) Create database using:
+2) Create database using:
 ```
 mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.CreateDB"
 ```
-5) After running the following code, you can add or delete employees. Start with writing help in the application:
+3) After running the following code, you can add or delete employees. Start with writing help in the application:
 ```
 mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.ManageEmployee"
 ```

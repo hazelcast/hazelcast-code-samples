@@ -57,6 +57,7 @@
         <module>hibernate</module>
         <module>spring-configuration</module>
         <module>spring-cache</module>
+        <module>spring-hibernate</module>
         <!--<module>jcache</module>-->
     </modules>
 
