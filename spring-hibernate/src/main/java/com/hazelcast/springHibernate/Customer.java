@@ -1,30 +1,22 @@
 package com.hazelcast.springHibernate;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 /**
  * Created by Esref Ozturk <esrefozturk93@gmail.com> on 17.07.2014.
  */
 
-@Entity
-@Table(name="CUSTOMER")
+
 public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1856862670651243395L;
 
-    @Id
-    @Column(name="ID", unique = true, nullable = false)
+
     private String id;
 
-    @Column(name="NAME", unique = false, nullable = false)
+
     private String name;
 
-    @Column(name="SURNAME", unique = false, nullable = false)
+
     private String surname;
 
     public Customer() {

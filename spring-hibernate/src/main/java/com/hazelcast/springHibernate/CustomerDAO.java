@@ -9,7 +9,7 @@ import java.util.*;
  * Created by Esref Ozturk <esrefozturk93@gmail.com> on 17.07.2014.
  */
 
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class CustomerDAO {
  
     private SessionFactory sessionFactory;
