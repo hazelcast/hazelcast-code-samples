@@ -34,7 +34,7 @@
         </property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
 			</props>
 		</property>
