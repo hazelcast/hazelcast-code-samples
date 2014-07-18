@@ -5,7 +5,6 @@
 
     <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast-jca-example</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Hazelcast JCA Simple Example</name>
     <description>Hazelcast JCA Simple Example</description>
@@ -15,9 +14,16 @@
         <version.jboss.maven.plugin>7.1.1.Final</version.jboss.maven.plugin>
         <version.jboss.spec.javaee.6.0>3.0.2.Final</version.jboss.spec.javaee.6.0>
         <version.war.plugin>2.4</version.war.plugin>
-    	<maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
     </properties>
+
+    <parent>
+        <groupId>com.hazelcast.samples</groupId>
+        <artifactId>code-samples</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
     <dependencyManagement>
         <dependencies>
@@ -47,17 +53,16 @@
             <artifactId>jboss-ejb-api_3.1_spec</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>3.2.3</version>
+            <version>${hazelcast.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-jca</artifactId>
-            <version>3.2.3</version>
+            <version>${hazelcast.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -66,14 +71,19 @@
             <version>2.0.0</version>
             <scope>provided</scope>
         </dependency>
-
-
+        
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-ra</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-	    <plugin>
+            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${version.war.plugin}</version>
                 <configuration>
@@ -95,37 +105,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>jboss-ga-repository</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <repositories>
-                <repository>
-                    <id>jboss-ga-repository</id>
-                    <url>http://maven.repository.redhat.com/techpreview/all</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>jboss-ga-plugin-repository</id>
-                    <url>http://maven.repository.redhat.com/techpreview/all</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                </pluginRepository>
-            </pluginRepositories>
-        </profile>
-    </profiles>
 </project>
