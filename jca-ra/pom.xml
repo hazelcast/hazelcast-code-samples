@@ -74,7 +74,7 @@
         
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-ra</artifactId>
+            <artifactId>hazelcast-jca-rar</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
         
