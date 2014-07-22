@@ -26,7 +26,7 @@ public class CreateDB {
                                                     "salary     INT         default NULL)");
         }
         catch( SQLException s){
-            System.out.println(s);
+            s.printStackTrace();
         }
     }
 }
