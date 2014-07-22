@@ -7,8 +7,8 @@
     <groupId>com.hazelcast</groupId>
     <artifactId>session-replication</artifactId>
     <packaging>war</packaging>
-    <name>Hazelcast Session Replication Simple Example</name>
-    <description>Hazelcast Session Replication Simple Example</description>
+    <name>Hazelcast Filter Based Session Replication</name>
+    <description>Hazelcast Filter Based Session Replication Example</description>
 
     <parent>
         <artifactId>code-samples</artifactId>

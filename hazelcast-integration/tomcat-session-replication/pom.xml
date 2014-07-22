@@ -14,7 +14,7 @@
 <groupId>com</groupId>
 <packaging>war</packaging>
 <version>1.0-SNAPSHOT</version>
-<name>example Maven Webapp</name>
+<name>Tomcat Based Session Replication Example</name>
 <url>http://maven.apache.org</url>
 <dependencies>
     <dependency>

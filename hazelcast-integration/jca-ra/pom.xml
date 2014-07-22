@@ -6,8 +6,8 @@
     <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast-jca-example</artifactId>
     <packaging>war</packaging>
-    <name>Hazelcast JCA Simple Example</name>
-    <description>Hazelcast JCA Simple Example</description>
+    <name>Hazelcast JCA Example</name>
+    <description>Hazelcast JCA Example</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
