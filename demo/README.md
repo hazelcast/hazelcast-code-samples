@@ -13,15 +13,11 @@ mvn install
 ```
 cd demo/bin
 ```
+* list available scripts
 
-### Available Scripts
-
-Following scripts are available for demo purposes.
-
-- console.sh / console.bat
-- clientConsole.sh / clientConsole.bat
-- simpleMapTest.sh / simpleMapTest.bat
-
+```
+ls -lrt
+```
 
 
 
