@@ -31,7 +31,7 @@ You should have installed JBoss AS or JBoss EAP and Apache Maven on your system.
 <h1>GlassFish</h1>
 <h2>Glassfish Configuration</h2>
 * `git clone https://github.com/hazelcast/hazelcast-code-samples.git` - Clone repo into the local
-* `cd hazelcast-code-samples/jca-ra`
+* `cd hazelcast-code-samples/hazelcast-integration/jca-ra`
 * `cp -R resources/glassfish/src/* src/` - copy all Glassfish requirements.
 * `mvn install` - Create war file for example
 * `cp -R target/glassfish/* $GLASSFISH_HOME/` - copy all Glassfish requirements.
