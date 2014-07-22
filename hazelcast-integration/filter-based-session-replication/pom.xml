@@ -11,10 +11,9 @@
     <description>Hazelcast Filter Based Session Replication Example</description>
 
     <parent>
-        <artifactId>code-samples</artifactId>
+        <artifactId>hazelcast-integration</artifactId>
         <groupId>com.hazelcast.samples</groupId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
 
