@@ -6,12 +6,18 @@ You should have installed Apache Maven(http://maven.apache.org/download.cgi).
 
 It would be great if you have also installed Python 2x(https://www.python.org/downloads/) on your system.
 
-By default "hibernate-core" added to project in "pom.xml" file as follows:
+By default "hibernate-core" and "hazelcast-hibernate4" added to project in "pom.xml" file as follows:
 ```
 <dependency>
     <groupId>org.hibernate</groupId>
     <artifactId>hibernate-core</artifactId>
     <version>4.3.5.Final</version>
+</dependency>
+
+<dependency>
+    <groupId>com.hazelcast</groupId>
+    <artifactId>hazelcast-hibernate4</artifactId>
+    <version>${hazelcast.version}</version>
 </dependency>
 ```
 But project is also compatible with hibernate 3.X.X versions. You can change these entries accordingly.
@@ -36,13 +42,13 @@ Execute the following commands in ManageEmployee. You will see that an employee 
 [1. session]command: change
 [2. session]command: add
 Id: 1
-First Name: Ali
-Last Name: Veli
+First Name: Name
+Last Name: Surname
 Salary: 100
 [2. session]command: close
 [2. session]command: change
 [1. session]command: list
-Id: 1 First Name: Ali Last Name: Veli Salary: 100
+Id: 1 First Name: Name Last Name: Surname Salary: 100
 ```
 <h2>Extras</h2>
 - You can configure "src/main/resources/hibernate.cfg.xml" file using "src/main/resources/conf.py" script.
