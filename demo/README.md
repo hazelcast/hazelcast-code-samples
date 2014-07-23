@@ -2,7 +2,7 @@
 
 ### Prerequisites
 
-* Download code-samples zip file (3.3 releases) from https://github.com/hazelcast/hazelcast-code-samples/releases or http://hazelcast.org/download/
+* Download code-samples zip file (3.3 releases or later) from https://github.com/hazelcast/hazelcast-code-samples/releases or http://hazelcast.org/download/
 * unzip it to your local disk
 * install maven project
 
