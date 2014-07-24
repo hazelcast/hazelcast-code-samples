@@ -24,7 +24,9 @@ public class EntryProcessorMember {
     static class EmployeeRaiseEntryProcessor extends AbstractEntryProcessor<String, Employee> {
         @Override
         public Object process(Map.Entry<String, Employee> entry) {
-            entry.getValue().incSalary(10);
+            Employee value = entry.getValue();
+            value.incSalary(10);
+            entry.setValue(value);
             return null;
         }
     }
