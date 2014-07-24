@@ -6,7 +6,7 @@ You should have installed Tomcat or Jetty and Apache Maven on your system. There
 
 <h1>Build</h1>
 * `git clone https://github.com/hazelcast/hazelcast-code-samples.git` - Clone repo into the local
-* `cd hazelcast-code-samples/session-replication`
+* `cd hazelcast-code-samples/hazelcast-integration/filter-based-session-replication/`
 * `mvn install` - Create war file for example
 
 <h1>Tomcat Deployment</h1>
