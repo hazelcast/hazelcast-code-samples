@@ -23,6 +23,7 @@
         <module>spring-data-integration</module>
         <module>spring-hibernate-2ndlevel-cache</module>
         <module>tomcat-session-replication</module>
+        <module>spring-security</module>
     </modules>
 
     <dependencies>
