@@ -20,7 +20,7 @@
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
   <listener>
-    <listener-class>com.hazelcast.web.spring.SpringAwareWebFilter</listener-class>
+    <listener-class>com.hazelcast.web.SessionListener</listener-class>
   </listener>
   <context-param>
     <param-name>contextConfigLocation</param-name>
