@@ -13,7 +13,7 @@
     </description>
 
     <properties>
-        <hazelcast.version>3.3-RC4-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.4-SNAPSHOT</hazelcast.version>
     </properties>
 
     <repositories>
