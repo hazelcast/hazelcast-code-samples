@@ -22,6 +22,10 @@
             <id>snapshot-repository</id>
             <name>Maven2 Snapshot Repository</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
 
@@ -29,11 +33,6 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-all</artifactId>
-            <version>${hazelcast.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-client</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
@@ -55,6 +54,7 @@
         <module>demo</module>
         <module>hazelcast-integration</module>
         <module>monitoring</module>
+        <module>replicated-map</module>
         <!--<module>jcache</module>-->
     </modules>
 
