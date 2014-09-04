@@ -19,7 +19,7 @@
 
     <modules>
         <module>socket-interceptor</module>
-
+        <module>security-interceptor</module>
     </modules>
 
     <repositories>
