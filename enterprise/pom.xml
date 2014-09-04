@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <artifactId>transactions</artifactId>
-    <name>Transactions</name>
-    <groupId>com.hazelcast.samples.transactions</groupId>
+    <artifactId>enterprise</artifactId>
+    <name>Enterprise</name>
+    <groupId>com.hazelcast.samples.enterprise</groupId>
     <description>
-        The Transaction chapter code examples
+        The Enterprise chapter code examples
     </description>
 
     <parent>
@@ -18,15 +18,25 @@
     </parent>
 
     <modules>
-        <module>transaction-basics</module>
-        <module>transactional-task</module>
+        <module>socket-interceptor</module>
 
     </modules>
+
+    <repositories>
+        <repository>
+            <id>Hazelcast Private Snapshot Repository</id>
+            <url>https://repository-hazelcast-l337.forge.cloudbees.com/snapshot/</url>
+        </repository>
+        <repository>
+            <id>Hazelcast Private Release Repository</id>
+            <url>https://repository-hazelcast-l337.forge.cloudbees.com/release/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-all</artifactId>
+            <artifactId>hazelcast-enterprise-all</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>

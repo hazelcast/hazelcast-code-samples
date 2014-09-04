@@ -49,7 +49,7 @@ public class CustomerDAO {
 	}
 
 	public Map<String, Customer> getCustomerMap(Collection<String> idCol) {
-    	Map<String, Customer> customerMap = new HashMap<>();
+    	Map<String, Customer> customerMap = new HashMap();
 		for(String id : idCol) {
 			Customer customer = (Customer) sessionFactory
 					                    .getCurrentSession()

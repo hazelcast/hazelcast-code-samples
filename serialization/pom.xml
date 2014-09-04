@@ -31,4 +31,12 @@
         <module>stream-serializer</module>
         <module>user-context</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+    </dependencies>
 </project>
