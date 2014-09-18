@@ -18,7 +18,6 @@
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.source>1.6</maven.compiler.source>
         <jsr107.api.version>1.0.0</jsr107.api.version>
-        <hazelcast.jcache.version>3.3-JCACHE</hazelcast.jcache.version>
     </properties>
 
 
@@ -32,15 +31,8 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>${hazelcast.jcache.version}</version>
+            <version>${hazelcast.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-client</artifactId>
-            <version>${hazelcast.jcache.version}</version>
-        </dependency>
-
     </dependencies>
 
 
