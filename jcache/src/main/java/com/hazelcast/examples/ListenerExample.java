@@ -1,5 +1,7 @@
 package com.hazelcast.examples;
 
+import javax.cache.Cache;
+import javax.cache.CacheManager;
 import javax.cache.configuration.CacheEntryListenerConfiguration;
 import javax.cache.configuration.FactoryBuilder;
 import javax.cache.configuration.MutableCacheEntryListenerConfiguration;
@@ -13,11 +15,30 @@ import javax.cache.configuration.MutableCacheEntryListenerConfiguration;
 public class ListenerExample extends AbstractApp {
 
 
-    public ListenerExample() {
+    public void runApp()
+            throws InterruptedException {
+
+        //first thin is we need to initialize the cache Manager
+        final CacheManager cacheManager = initCacheManager();
+
+        //create a cache with the provided name
+        final Cache<String, Integer> cache = initCache("theCache", cacheManager);
+
+        //registering the CacheEntryListener
+        registerListener(cache);
+
+        //doing some operations on the cache to cause event fire
+        triggerEvents(cache);
+
+        //lets wait for 5 sec to make sure every event has fired
+        sleepFor(5000);
+
+        //lastly shutdown the cache manager
+        shutdown();
     }
 
 
-    public void registerListener(){
+    public void registerListener(Cache<String, Integer> cache){
         //create the EntryListener
         MyCacheEntryListener<String, Integer> clientListener =  new MyCacheEntryListener<String, Integer>();
 
@@ -28,7 +49,7 @@ public class ListenerExample extends AbstractApp {
         cache.registerCacheEntryListener(conf);
     }
 
-    public void triggerEvents() throws InterruptedException {
+    public void triggerEvents(Cache<String, Integer> cache) throws InterruptedException {
         //this will fire create event
         cache.put("theKey", 66);
 
@@ -50,27 +71,10 @@ public class ListenerExample extends AbstractApp {
 
     }
 
-
     public static void main(String[] args) throws InterruptedException {
-        ListenerExample app = new ListenerExample();
-
-        //first thin is we need to initialize the cache Manager
-        app.initCacheManager();
-
-        //create a cache with the provided name
-        app.initCache("theCache");
-
-        //registering the CacheEntryListener
-        app.registerListener();
-
-        //doing some operations on the cache to cause event fire
-        app.triggerEvents();
-
-        //lets wait for 5 sec to make sure every event has fired
-        Thread.sleep(5000);
-
-        //lastly shutdown the cache manager
-        app.shutdown();
-
+        new ListenerExample().runApp();
     }
+
+
+
 }
