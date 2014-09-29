@@ -16,9 +16,7 @@
 
 package com.hazelcast.examples;
 
-import com.hazelcast.cache.HazelcastCacheManager;
-import com.hazelcast.cache.HazelcastCachingProvider;
-import com.hazelcast.cache.ICache;
+import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
@@ -26,13 +24,15 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceNotActiveException;
 import com.hazelcast.logging.ILogger;
 
+import javax.cache.Cache;
+import javax.cache.CacheManager;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * A simple bechmark test of jcache.
+ * A simple benchmark test for JCache.
  */
 public final class SimpleCacheTest {
 
@@ -70,6 +70,7 @@ public final class SimpleCacheTest {
         int g2 = rand.nextInt(255);
         int g3 = rand.nextInt(255);
         System.setProperty("hazelcast.multicast.group", "224." + g1 + "." + g2 + "." + g3);
+        System.setProperty("hazelcast.jcache.provider.type", "server");
     }
 
     private SimpleCacheTest(final int threadCount, final int entryCount, final int valueSize,
@@ -138,11 +139,11 @@ public final class SimpleCacheTest {
     }
 
     private void run(ExecutorService es) {
-        HazelcastCachingProvider hcp = new HazelcastCachingProvider();
+        final HazelcastServerCachingProvider cachingProvider = HazelcastServerCachingProvider.createCachingProvider(instance);
 
-        HazelcastCacheManager cacheManager = new HazelcastCacheManager(hcp,instance,hcp.getDefaultURI(),hcp.getDefaultClassLoader(),null);
+        final CacheManager cacheManager = cachingProvider.getCacheManager();
 
-        final ICache<String, Object> cache = cacheManager.getCache(NAMESPACE);
+        final Cache<String, Object> cache = cacheManager.getCache(NAMESPACE);
 //        final IMap<String, Object> map = instance.getMap(NAMESPACE);
         for (int i = 0; i < threadCount; i++) {
             es.execute(new Runnable() {

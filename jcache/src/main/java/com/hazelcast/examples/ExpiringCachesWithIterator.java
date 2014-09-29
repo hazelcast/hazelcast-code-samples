@@ -4,20 +4,17 @@ import javax.cache.Cache;
 import javax.cache.CacheManager;
 
 /**
- * Basic example
- * Configures a cache with access expiry of 10 secs.
- *
+ * Created by asim on 29.09.2014.
  */
-public class BasicOperationsExample  extends AbstractApp {
+public class ExpiringCachesWithIterator extends AbstractApp{
 
 
     public static void main(String[] args) throws InterruptedException {
-        new BasicOperationsExample().runApp();
+        new ExpiringCachesWithIterator().runApp();
     }
 
     public void runApp()
             throws InterruptedException {
-
         //first thin is we need to initialize the cache Manager
         final CacheManager cacheManager = initCacheManager();
 
@@ -33,8 +30,8 @@ public class BasicOperationsExample  extends AbstractApp {
         //lets wait for 10 sec to expire the content
         sleepFor(10 * 1000);
 
-        //and print the content again, and see everything has expired and values are null
-        printContent(cache);
+        //and print the content again, and see everything has expired and we have no values
+        printContentWithIterator(cache);
 
         //lastly shutdown the cache manager
         shutdown();

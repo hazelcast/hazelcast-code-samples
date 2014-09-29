@@ -1,22 +1,24 @@
-package com.hazelcast.examples;
+package com.hazelcast.examples.jcache.client;
+
+import com.hazelcast.examples.AbstractApp;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 
 /**
- * Basic example
- * Configures a cache with access expiry of 10 secs.
- *
+ * Simple Client cache example
  */
-public class BasicOperationsExample  extends AbstractApp {
-
+public class SingleClientBasicExample extends AbstractApp{
 
     public static void main(String[] args) throws InterruptedException {
-        new BasicOperationsExample().runApp();
+        new SingleClientBasicExample().runApp();
     }
 
     public void runApp()
             throws InterruptedException {
+
+        //Force client be used as a provider
+        clientSetup();
 
         //first thin is we need to initialize the cache Manager
         final CacheManager cacheManager = initCacheManager();
@@ -39,4 +41,7 @@ public class BasicOperationsExample  extends AbstractApp {
         //lastly shutdown the cache manager
         shutdown();
     }
+
+
+
 }
