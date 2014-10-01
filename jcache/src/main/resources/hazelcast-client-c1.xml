@@ -30,4 +30,11 @@
         </cluster-members>
     </network>
 
+    <serialization>
+        <portable-version>1</portable-version>
+        <portable-factories>
+            <portable-factory factory-id="1">com.hazelcast.examples.jcache.client.PortableDomainObjectExample$DomainObjectPortableFactory</portable-factory>
+        </portable-factories>
+    </serialization>
+
 </hazelcast-client>
