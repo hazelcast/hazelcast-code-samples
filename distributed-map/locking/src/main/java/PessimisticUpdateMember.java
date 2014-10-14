@@ -9,7 +9,7 @@ public class PessimisticUpdateMember {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IMap<String, Value> map = hz.getMap("map");
         String key = "1";
-        map.put(key, new Value());
+        setup(map, key);
         System.out.println("Starting");
         for (int k = 0; k < 1000; k++) {
             map.lock(key);
@@ -23,6 +23,16 @@ public class PessimisticUpdateMember {
             }
         }
         System.out.println("Finished! Result = " + map.get(key).amount);
+        hz.shutdown();
+    }
+
+    public static void setup(IMap<String, Value> map, String key ) {
+        map.lock(key);
+        Value v = map.get(key);
+        if(v == null) {
+            map.put(key, new Value());
+        }
+        map.unlock(key);
     }
 
     static class Value implements Serializable {
