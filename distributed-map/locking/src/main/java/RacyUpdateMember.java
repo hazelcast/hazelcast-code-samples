@@ -22,6 +22,11 @@ public class RacyUpdateMember {
         hz.shutdown();
     }
 
+    /**
+     * setup method makes sure to only initialise the value if it hasn't been done yet.
+     * @param map
+     * @param key
+     */
     public static void setup(IMap<String, Value> map, String key ) {
         map.lock(key);
         Value v = map.get(key);
