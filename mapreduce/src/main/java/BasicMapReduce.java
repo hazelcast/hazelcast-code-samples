@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * A simple example that sums the numbers 1 to 100.
  * Created by gluck on 27/05/2014.
  */
-public class MapReduce {
+public class BasicMapReduce {
 
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
