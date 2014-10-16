@@ -24,8 +24,8 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class SalaryDataReader
@@ -35,8 +35,9 @@ public class SalaryDataReader
     public List<SalaryYear> read(InputStream is)
             throws Exception {
 
-        List<SalaryYear> elements = new ArrayList<>();
-        try (ICsvListReader reader = new CsvListReader(new InputStreamReader(is), CsvPreference.EXCEL_PREFERENCE)) {
+        List<SalaryYear> elements = new ArrayList<SalaryYear>();
+        ICsvListReader reader = new CsvListReader(new InputStreamReader(is), CsvPreference.EXCEL_PREFERENCE);
+        try {
             reader.getHeader(true);
 
             List<String> element;
@@ -47,7 +48,7 @@ public class SalaryDataReader
                 salaryYear.setEmail(tokens[0]);
                 salaryYear.setYear(2013);
 
-                List<SalaryMonth> months = new ArrayList<>(12);
+                List<SalaryMonth> months = new ArrayList<SalaryMonth>(12);
                 for (int i = 1; i < 13; i++) {
                     months.add(buildSalaryMonth(i, tokens[i]));
                 }
@@ -55,6 +56,8 @@ public class SalaryDataReader
                 salaryYear.setMonths(months);
                 elements.add(salaryYear);
             }
+        } finally {
+            reader.close();
         }
         return elements;
     }
@@ -62,7 +65,7 @@ public class SalaryDataReader
     private SalaryMonth buildSalaryMonth(int month, String token) {
         SalaryMonth salaryMonth = new SalaryMonth();
         salaryMonth.setSalary(Integer.parseInt(token));
-        salaryMonth.setMonth(Month.of(month));
+        salaryMonth.setMonth(month);
         return salaryMonth;
     }
 }

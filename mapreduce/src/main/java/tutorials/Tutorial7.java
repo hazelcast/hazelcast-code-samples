@@ -18,7 +18,9 @@ package tutorials;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.mapreduce.aggregation.Aggregation;
 import com.hazelcast.mapreduce.aggregation.Aggregations;
+import com.hazelcast.mapreduce.aggregation.PropertyExtractor;
 import com.hazelcast.mapreduce.aggregation.Supplier;
 import model.SalaryYear;
 
@@ -31,9 +33,19 @@ public class Tutorial7
 
         IMap<String, SalaryYear> map = hazelcastInstance.getMap("salaries");
         Supplier<String, SalaryYear, Integer> supplier =
-                Supplier.all((entry) -> entry.getAnnualSalary());
+                Supplier.all(new SalaryPropertyExtractor());
 
-        int sum = map.aggregate(supplier, Aggregations.integerSum());
+        Aggregation<String, Integer, Integer> aggregation = Aggregations.integerSum();
+        int sum = map.aggregate(supplier, aggregation);
         System.out.println("Salary sum: " + sum);
+    }
+
+    private static class SalaryPropertyExtractor
+            implements PropertyExtractor<SalaryYear, Integer> {
+
+        @Override
+        public Integer extract(SalaryYear salaryYear) {
+            return salaryYear.getAnnualSalary();
+        }
     }
 }

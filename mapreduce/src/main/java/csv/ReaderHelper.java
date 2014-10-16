@@ -47,12 +47,15 @@ public final class ReaderHelper {
             throws Exception {
 
         StateDataReader stateDataReader = new StateDataReader();
-        try (InputStream is = CLASS_LOADER.getResourceAsStream("state_table.csv")) {
+        InputStream is = CLASS_LOADER.getResourceAsStream("state_table.csv");
+        try {
             IMap<Integer, State> statesMap = hazelcastInstance.getMap("states");
             List<State> states = stateDataReader.read(is);
             for (State state : states) {
                 statesMap.put(state.getId(), state);
             }
+        } finally {
+            is.close();
         }
     }
 
@@ -60,10 +63,13 @@ public final class ReaderHelper {
             throws Exception {
 
         PersonDataReader personDataReader = new PersonDataReader();
-        try (InputStream is = CLASS_LOADER.getResourceAsStream("us-500.csv")) {
+        InputStream is = CLASS_LOADER.getResourceAsStream("us-500.csv");
+        try {
             IList<Person> personsList = hazelcastInstance.getList("persons");
             List<Person> persons = personDataReader.read(is);
             personsList.addAll(persons);
+        } finally {
+            is.close();
         }
     }
 
@@ -71,12 +77,15 @@ public final class ReaderHelper {
             throws Exception {
 
         SalaryDataReader salaryDataReader = new SalaryDataReader();
-        try (InputStream is = CLASS_LOADER.getResourceAsStream("salary.csv")) {
+        InputStream is = CLASS_LOADER.getResourceAsStream("salary.csv");
+        try {
             IMap<String, SalaryYear> salariesMap = hazelcastInstance.getMap("salaries");
             List<SalaryYear> salaries = salaryDataReader.read(is);
             for (SalaryYear salary : salaries) {
                 salariesMap.put(salary.getEmail(), salary);
             }
+        } finally {
+            is.close();
         }
     }
 
@@ -84,10 +93,13 @@ public final class ReaderHelper {
             throws Exception {
 
         CrimeDataReader crimeDataReader = new CrimeDataReader();
-        try (InputStream is = CLASS_LOADER.getResourceAsStream("CrimeStatebyState.csv")) {
+        InputStream is = CLASS_LOADER.getResourceAsStream("CrimeStatebyState.csv");
+        try {
             IList<Crime> crimesList = hazelcastInstance.getList("crimes");
             List<Crime> crimes = crimeDataReader.read(is);
             crimesList.addAll(crimes);
+        } finally {
+            is.close();
         }
     }
 }

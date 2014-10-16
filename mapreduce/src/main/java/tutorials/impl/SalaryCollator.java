@@ -29,7 +29,7 @@ public class SalaryCollator
 
     @Override
     public List<Map.Entry<String, Integer>> collate(Iterable<Map.Entry<String, Integer>> values) {
-        List<Map.Entry<String, Integer>> result = new ArrayList<>();
+        List<Map.Entry<String, Integer>> result = new ArrayList<Map.Entry<String, Integer>>();
         for (Map.Entry<String, Integer> value : values) {
             result.add(value);
         }

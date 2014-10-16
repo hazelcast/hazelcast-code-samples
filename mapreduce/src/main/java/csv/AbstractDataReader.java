@@ -46,14 +46,17 @@ public abstract class AbstractDataReader<T>
     public List<T> read(InputStream is)
             throws Exception {
 
-        List<T> elements = new ArrayList<>();
-        try (ICsvBeanReader reader = new CsvBeanReader(new InputStreamReader(is), CsvPreference.EXCEL_PREFERENCE)) {
+        List<T> elements = new ArrayList<T>();
+        ICsvBeanReader reader = new CsvBeanReader(new InputStreamReader(is), CsvPreference.EXCEL_PREFERENCE);
+        try {
             String[] headers = mapHeaderNames(reader.getHeader(true));
 
             T element;
             while ((element = reader.read(type, headers, cellProcessors)) != null) {
                 elements.add(element);
             }
+        } finally {
+            reader.close();
         }
         return elements;
     }

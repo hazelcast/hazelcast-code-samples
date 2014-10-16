@@ -82,7 +82,7 @@ public class SalaryYear
         email = in.readUTF();
         year = in.readInt();
         int length = in.readInt();
-        months = new ArrayList<>(12);
+        months = new ArrayList<SalaryMonth>(12);
         for (int i = 0; i < length; i++) {
             SalaryMonth salaryMonth = new SalaryMonth();
             salaryMonth.readData(in);

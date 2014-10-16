@@ -21,19 +21,18 @@ import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
-import java.time.Month;
 
 public class SalaryMonth
         implements DataSerializable {
 
-    private Month month;
+    private int month;
     private int salary;
 
-    public Month getMonth() {
+    public int getMonth() {
         return month;
     }
 
-    public void setMonth(Month month) {
+    public void setMonth(int month) {
         this.month = month;
     }
 
@@ -49,7 +48,7 @@ public class SalaryMonth
     public void writeData(ObjectDataOutput out)
             throws IOException {
 
-        out.writeInt(month.getValue());
+        out.writeInt(month);
         out.writeInt(salary);
     }
 
@@ -57,7 +56,7 @@ public class SalaryMonth
     public void readData(ObjectDataInput in)
             throws IOException {
 
-        month = Month.of(in.readInt());
+        month = in.readInt();
         salary = in.readInt();
     }
 
