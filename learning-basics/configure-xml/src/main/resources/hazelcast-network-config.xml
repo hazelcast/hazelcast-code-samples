@@ -2,10 +2,7 @@
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
                                http://www.hazelcast.com/schema/config/hazelcast-config-3.4.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
-
-    <group>
-        <name>dev-configured-from-xml</name>
-        <password>1234</password>
-    </group>
-    <import resource="hazelcast-network-config.xml"/>
+    <network>
+        <port>7000</port>
+    </network>
 </hazelcast>
