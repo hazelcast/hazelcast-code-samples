@@ -18,6 +18,15 @@ You can find detailed explanations at:
 </br>
 http://tomcat.apache.org/connectors-doc/generic_howto/quick.html
 
+<h3>Jetty Configuration</h3>
+
+<h4>P2P Deployment</h4>
+Follow steps under "Sample P2P Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast/blob/master/hazelcast-documentation/src/JettySessionReplication.md
+
+<h4>Client-Server Deployment</h4>
+
+Follow steps under "Sample Client/Server Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast/blob/master/hazelcast-documentation/src/JettySessionReplication.md
+
 <h2>How to Run Sample Application</h2>
 
 
