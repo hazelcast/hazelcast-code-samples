@@ -40,6 +40,9 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        // Configure to use server mode since client is available on classpath
+        System.setProperty("hazelcast.jcache.provider.type", "server");
+
         // Create the fake database access
         UserDao userDao = new UserDaoImpl();
 
@@ -118,7 +121,7 @@ public class Main {
                         .setTypes(Integer.class, User.class)
                         // Configure to expire entries 30 secs after creation in the cache
                         .setExpiryPolicyFactory(FactoryBuilder.factoryOf(
-                                new AccessedExpiryPolicy(new Duration(TimeUnit.SECONDS, 1))
+                                new AccessedExpiryPolicy(new Duration(TimeUnit.SECONDS, 30))
                         ))
                         // Configure read-through of the underlying store
                         .setReadThrough(true)
