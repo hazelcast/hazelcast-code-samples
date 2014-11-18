@@ -57,11 +57,6 @@
     <servlet-name>appServlet</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-  <listener>
-    <listener-class>
-	      org.springframework.security.web.session.HttpSessionEventPublisher
-	    </listener-class>
-  </listener>
   <session-config>
     <session-timeout>10</session-timeout>
   </session-config>
