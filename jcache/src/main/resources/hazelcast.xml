@@ -1,0 +1,12 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.2.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <serialization>
+        <portable-version>1</portable-version>
+        <portable-factories>
+            <portable-factory factory-id="1">PortableDomainObjectExample</portable-factory>
+        </portable-factories>
+    </serialization>
+</hazelcast>
