@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>in-memory-format</artifactId>
-    <name>DistributedMap - In Memory Format</name>
+    <artifactId>distributed-map-basics</artifactId>
+    <name>DistributedMap - Basics</name>
 
     <description>
-        DistributedMap : In Memory Format
+        DistributedMap - Basics
     </description>
 
     <parent>

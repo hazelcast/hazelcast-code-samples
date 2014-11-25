@@ -18,14 +18,14 @@
     </parent>
 
     <modules>
-        <module>basics</module>
+        <module>distributed-map-basics</module>
         <module>aggregations</module>
         <module>backup</module>
         <module>hashcode-and-equals</module>
         <module>criteria-api</module>
         <module>sqlquery</module>
         <module>index</module>
-        <module>in-memory-format</module>
+        <module>distributed-in-memory-format</module>
         <module>locking</module>
         <module>multi-map</module>
         <module>mapstore</module>
@@ -33,7 +33,7 @@
         <module>near-cache</module>
         <module>eviction</module>
         <module>entry-processor</module>
-        <module>entry-listener</module>
+        <module>distributed-entry-listener</module>
         <module>continuous-query</module>
         <module>map-interceptor</module>
     </modules>
