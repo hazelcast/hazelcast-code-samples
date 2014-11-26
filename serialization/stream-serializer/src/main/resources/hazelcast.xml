@@ -1,14 +1,15 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.2.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.4.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <serialization>
         <serializers>
-            <serializer type-class="Person">PersonStreamSerializer</serializer>
-            <serializer type-class="Car">CarStreamSerializer</serializer>
-            <serializer type-class="java.util.LinkedList">LinkedListStreamSerializer</serializer>
-            <serializer type-class="java.util.HashMap">HashMapStreamSerializer</serializer>
+            <serializer type-class="Person" class-name="PersonStreamSerializer"/>
+            <serializer type-class="Car" class-name="CarStreamSerializer"/>
+            <serializer type-class="java.util.LinkedList" class-name="LinkedListStreamSerializer"/>
+            <serializer type-class="java.util.HashMap" class-name="HashMapStreamSerializer"/>
+            <serializer type-class="ExtendedArrayList" class-name="ExtendedArrayListSerializer"/>
         </serializers>
     </serialization>
 </hazelcast>
