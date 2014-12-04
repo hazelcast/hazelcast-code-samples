@@ -3,6 +3,7 @@ package com.hazelcast.spring.cache;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -18,6 +19,7 @@ public class DeclarativeCacheManager {
         config.getNetworkConfig().getJoin().getTcpIpConfig().addMember("127.0.0.1:5701");
 
         Hazelcast.newHazelcastInstance(config);
+        @SuppressWarnings("resource") // https://jira.spring.io/browse/SPR-11227
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
         IDummyBean dummy = (IDummyBean)context.getBean("dummyBean");
 

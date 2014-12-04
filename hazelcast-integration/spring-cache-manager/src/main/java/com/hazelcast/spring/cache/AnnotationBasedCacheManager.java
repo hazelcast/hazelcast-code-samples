@@ -40,6 +40,7 @@ public class AnnotationBasedCacheManager {
         HazelcastClient.shutdownAll();
         Hazelcast.shutdownAll();
 
+        context.close();
 
     }
 }
