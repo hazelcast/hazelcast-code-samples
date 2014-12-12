@@ -7,6 +7,7 @@ import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.SerializationConfig;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.instance.GroupProperties;
 import com.hazelcast.instance.HazelcastInstanceFactory;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
@@ -20,7 +21,30 @@ import javax.cache.spi.CachingProvider;
  */
 public abstract class HiDensityCacheUsageSupport {
 
-    protected static final String LICENSE_KEY = "---- YOUR LICENCE KEY HERE ----";
+    protected static final String LICENSE_KEY;
+
+    /**
+     * It is advised using native memory (off-heap) serialization
+     * because you want no more GC since you are using Hi-Density cache.
+     * In native memory (off-heap) serialization, serializations in Hazelcast (operations, etc ...)
+     * is done on a natively allocated memory (off-heap) instead of using byte array for storing byte stream.
+     *
+     * It is not necessary but it is a good practice for Hi-Density cache usage.
+     * "USE_NATIVE_MEMORY_SERIALIZATION" is "false" by default since there is no guarantee that
+     * "sun.misc.Unsafe" is available. But if you sure that "sun.misc.Unsafe" is available
+     *  (by the way you can also check it by "com.hazelcast.nio.UnsafeHelper.UNSAFE_AVAILABLE"),
+     *  it is advised that set "USE_NATIVE_MEMORY_SERIALIZATION" to "true.
+     *
+     *  Note: This field is not defined as final and can be updated in
+     *        any concrete implementation of "HiDensityCacheUsageSupport".
+     */
+    protected static boolean USE_NATIVE_MEMORY_SERIALIZATION = false;
+
+    static {
+        // Pass your license key as system property like
+        // "-Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>"
+        LICENSE_KEY = System.getProperty(GroupProperties.PROP_ENTERPRISE_LICENSE_KEY);
+    }
 
     protected static HazelcastInstance instance;
     protected static CachingProvider cachingProvider;
@@ -62,10 +86,16 @@ public abstract class HiDensityCacheUsageSupport {
     }
 
     protected static SerializationConfig createSerializationConfig() {
-        return
-                new SerializationConfig()
-                        .setAllowUnsafe(true)
-                        .setUseNativeByteOrder(true);
+        SerializationConfig serializationConfig = new SerializationConfig();
+        if (USE_NATIVE_MEMORY_SERIALIZATION) {
+            serializationConfig =
+                    serializationConfig
+                            // Use native memory (off-heap) based storage for holding byte stream
+                            .setAllowUnsafe(true)
+                            // Use native byte order of JVM/OS to prevent extra byte order convertions
+                            .setUseNativeByteOrder(true);
+        }
+        return serializationConfig;
     }
 
     protected static ICache createCache(String cacheName) {
