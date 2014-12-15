@@ -1,0 +1,31 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+
+    <artifactId>hidensity-cache</artifactId>
+    <name>Enterprise - HiDensity Cache</name>
+    <description>
+        All the code samples for the HiDensity Cache
+    </description>
+
+    <parent>
+        <artifactId>enterprise</artifactId>
+        <groupId>com.hazelcast.samples.enterprise</groupId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <jsr107.api.version>1.0.0</jsr107.api.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>${jsr107.api.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
