@@ -24,6 +24,8 @@
         <module>spring-hibernate-2ndlevel-cache</module>
         <module>enterprise-session-replication</module>
         <module>spring-security</module>
+        <module>../../../../IdeaProjects/dbrimley/hazelcast-code-samples/amazon-ec2</module>
+        <module>amazon-ec2</module>
     </modules>
 
     <dependencies>
