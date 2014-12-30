@@ -1,70 +1,84 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
-Vagrant.configure(2) do |config|
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "base"
+NUM_BOXES=3
 
-  # Disable automatic box update checking. If you disable this, then
-  # boxes will only be checked for updates when the user runs
-  # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
+Vagrant.require_version ">= 1.5.0"
 
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  # Create a private network, which allows host-only access to the machine
-  # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
-
-  # Create a public network, which generally matched to bridged network.
-  # Bridged networks make the machine appear as another physical device on
-  # your network.
-  # config.vm.network "public_network"
-
-  # Share an additional folder to the guest VM. The first argument is
-  # the path on the host to the actual folder. The second argument is
-  # the path on the guest to mount the folder. And the optional third
-  # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
-
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
+  # A Vagrant plugin that ensures the desired version of Chef is installed via the platform-specific Omnibus packages. 
+  # This proves very useful when using Vagrant with provisioner-less baseboxes OR cloud images.
   #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
+  # Make sure you've pre-installed vagrant-omnibus by running this on the command line :-
   #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
-  #
-  # View the documentation for the provider you are using for more
-  # information on available options.
+  # vagrant plugin install vagrant-omnibus
+  
+  config.omnibus.chef_version = :latest
 
-  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
-  # such as FTP and Heroku are also available. See the documentation at
-  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
-  # config.push.define "atlas" do |push|
-  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
-  # end
+  # Enable Berkshelf cookbook dependency manager (http://berkshelf.com/)
+  # If you're using a later version of Chef DK it will come pre-installed.
+  
+  config.berkshelf.enabled = true
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-  # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline <<-SHELL
-  #   sudo apt-get install apache2
-  # SHELL
+  # VIRTUAL BOX PROVIDER
+
+  config.vm.provider :virtualbox do |vb, override|
+    override.vm.box = "ubuntu/trusty64"
+  
+        override.vm.provision "chef_solo" do |chef|
+          #chef.log_level = :debug
+          chef.cookbooks_path = "../chef/cookbooks"
+          chef.add_recipe "hazelcast"
+        end
+  end
+
+  # AMAZON EC2 PROVIDER
+
+  # To use the Amazon provider you'll need to install the AWS Vagrant Plugin
+  # Follow the instructions found here :-
+  # https://github.com/mitchellh/vagrant-aws
+
+  config.vm.provider :aws do |aws, override|
+
+    override.vm.box = "dummy"
+    override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+
+    aws.region =  "us-east-1"
+    aws.access_key_id = ENV['AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['AWS_SECRET_KEY']
+    aws.instance_type = 'm3.medium'
+    aws.ami = "ami-9eaa1cf6" # Ubuntu Server 14.04 LTS (HVM), SSD Volume Type
+    aws.keypair_name = ENV['AWS_KEY_PAIR_NAME']
+    aws.security_groups = ENV['AWS_SECURITY_GROUPS']
+
+    aws.tags = {'hazelcast_service' => 'true'}
+
+    override.ssh.username = 'ubuntu'
+    override.ssh.private_key_path = "/Users/dbrimley/Dev/aws/wan-rep-demo/us-east-1/david.pem"
+
+    override.vm.provision "chef_solo" do |chef|
+      chef.cookbooks_path = "../chef/cookbooks"
+      chef.json = {
+                      :hazelcast => {
+                      :network_aws_access_key => ENV['AWS_ACCESS_KEY'],
+                      :network_aws_secret_key => ENV['AWS_SECRET_KEY'],
+                      :network_aws_region => "us-east-1",
+                      :network_aws_host_header => "https://ec2.us-east-1.amazonaws.com",
+                      :network_aws_security_group => ENV['AWS_SECURITY_GROUPS'],
+                      :network_aws_tag_key => "hazelcast_service",
+                      :network_aws_tag_value => "true"
+                    }}
+      chef.add_recipe "hazelcast"
+    end
+  end
+
+  (1..NUM_BOXES).each do |i|    
+    config.vm.define "hazelcast#{i}".to_sym do |vm|
+    end
+  end
+
 end
