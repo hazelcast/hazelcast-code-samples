@@ -308,7 +308,13 @@ public class Client {
 }
 ```
 
-If you run this you should be able to connect into the Amazon Hazelcast cluster you have already running and perform the simple Map Put.
+If you run this you should be able to connect into the Amazon Hazelcast cluster you have already running and perform the simple Map Put.  Remember though you'll have to provide you credentials in the same way that you edited the VagrantFile.  So this means providing the Access Key and Secret Key along with your Security Group Name.
+
+## Amazon Security Gotchas
+
+Make sure your security group allows connections to the hazelcast ports otherwise your client will not be able to connect.  By default Hazelcast searches for a port on 5701 and works its way up on a machine until it finds a free one.
+
+Also make sure your Amazon security group allows SSH connections, otherwise when you run `vagrant ssh` it will fail.
 
 ## Finally
 
