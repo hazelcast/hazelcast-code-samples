@@ -77,10 +77,79 @@ One other important line of code in the VagrantFile, which is right at the top
 `NUM_BOXES=2`
 This configures the number of virtual machines we will create, lets leave it at 2 for now.
 
+### Vagrant ARISE !
+
 Now we're ready to fire up our environment.
 
 Within the vagrant directory where you have the VagrantFile simply type
 
 `vagrant up`
+
+If all goes to plan, you should see vagrant begin to provide the virtual machines and then Chef will run on this machine and install Java and finally our Hazelcast service.
+
+### Check your virtual machines
+
+When the command line returns we can use vagrant to ssh into the boxes.  This is one of the areas that Vagrant really makes easy, you do not have to know any IP addresses or keys to connect. You simply type
+
+`vagrant ssh <box name>`
+
+So in our case this would be either 'hazelcast1' or 'hazelcast2' if we created the 2 machines.
+
+You'll recall that the Chef recipe firstly installed Java and then it installed a service which runs from our java code.  Lets check that's all started up correctly, so once you've ssh to one of the machines...
+
+`cd /var/log/upstart`
+
+This is where the `hazelcast.log` file will be if the service started correctly.  When you examine this log file make sure you `sudo` as it is owned by root.  If you don't you'll just be presented with an empty file.  
+
+If all went to plan you should see something like this...
+
+```
+Dec 31, 2014 2:53:21 PM com.hazelcast.config.XmlConfigLocator
+INFO: Loading configuration /opt/hazelcast/hazelcast.xml from System property 'hazelcast.config'
+Dec 31, 2014 2:53:21 PM com.hazelcast.config.XmlConfigLocator
+INFO: Using configuration file at /opt/hazelcast/hazelcast.xml
+Dec 31, 2014 2:53:21 PM com.hazelcast.instance.DefaultAddressPicker
+INFO: [LOCAL] [dev] [3.4-RC1-SNAPSHOT] Prefer IPv4 stack is true.
+Dec 31, 2014 2:53:21 PM com.hazelcast.instance.DefaultAddressPicker
+INFO: [LOCAL] [dev] [3.4-RC1-SNAPSHOT] Picked Address[192.168.0.19]:5701, using socket ServerSocket[addr=/0.0.0.$
+Dec 31, 2014 2:53:22 PM com.hazelcast.spi.OperationService
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Backpressure is disabled
+Dec 31, 2014 2:53:22 PM com.hazelcast.spi.impl.BasicOperationScheduler
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Starting with 2 generic operation threads and 2 partition ope$
+Dec 31, 2014 2:53:22 PM com.hazelcast.system
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Hazelcast 3.4-RC1-SNAPSHOT (20141215 - 24f7902) starting at A$
+Dec 31, 2014 2:53:22 PM com.hazelcast.system
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Copyright (C) 2008-2014 Hazelcast.com
+Dec 31, 2014 2:53:22 PM com.hazelcast.instance.Node
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Creating MulticastJoiner
+Dec 31, 2014 2:53:22 PM com.hazelcast.core.LifecycleService
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Address[192.168.0.19]:5701 is STARTING
+Dec 31, 2014 2:53:26 PM com.hazelcast.cluster.impl.MulticastJoiner
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT]
+
+
+Members [1] {
+        Member [192.168.0.19]:5701 this
+}
+
+Dec 31, 2014 2:53:26 PM com.hazelcast.core.LifecycleService
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Address[192.168.0.19]:5701 is STARTED
+Dec 31, 2014 2:55:16 PM com.hazelcast.nio.tcp.SocketAcceptor
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Accepting socket connection from /192.168.0.20:46709
+Dec 31, 2014 2:55:21 PM com.hazelcast.nio.tcp.TcpIpConnectionManager
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Established socket connection between /192.168.0.19:5701 and $
+Dec 31, 2014 2:55:27 PM com.hazelcast.cluster.ClusterService
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT]
+
+Members [2] {
+        Member [192.168.0.19]:5701 this
+        Member [192.168.0.20]:5701
+}
+
+```
+
+
+
+
 
 

@@ -4,7 +4,7 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
-NUM_BOXES=20
+NUM_BOXES=2
 PROJECT_NAME="hazelcast-integration-amazon-ec2"
 CHEF_COOKBOOKS_PATH="../chef/cookbooks"
 CHEF_RECIPE=PROJECT_NAME
