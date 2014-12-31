@@ -234,9 +234,27 @@ In order to run up within Amazon EC2 we have to give an extra argument to our `v
 
 `vagrant up --provider=aws`
 
-Running this should now execute the Amazon EC2 porition of the VagrantFile.
+Running this should now execute the Amazon EC2 portion of the VagrantFile.
 
 If you have configured your amazon values correctly you should now see the Amazon instances being created.  Once finished ssh into the boxes as we have done before and check in the `/var/log/upstart` directory to confirm everything is ok with the Hazelcast cluster.
+
+To bring the cluster down always remember 
+
+`vagrant destroy`
+
+## Scale Up
+
+Remember that variable we had in the VagrantFile?
+
+`NUM_BOXES=2`
+
+Now we're running in Amazon rather than our desktop we can create a much larger cluster to play with.  For example why not try creating a cluster of 20 members, or 50 members?
+
+When you run with this number of instances remember to destroy the machines once you're finished or you'll end up with a very large bill from Amazon.
+
+`vagrant destroy --force`
+
+Using the --force flag will stop you having to confirm each machine kill, which could get boring if you have many many machines.
 
 ## Hazelcast Clients connecting to an Amazon EC2 Cluster
 
@@ -297,6 +315,8 @@ If you run this you should be able to connect into the Amazon Hazelcast cluster 
 Once you've finished experimenting within Amazon remember to stop everything, otherwise it can get very expensive leaving instances running.  To do this you can run another vagrant command
 
 `vagrant destroy`
+
+
 
 
 
