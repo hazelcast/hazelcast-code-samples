@@ -40,7 +40,7 @@ For example to install vagrant-aws plugin you'll need to run on the command line
 
 `vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box`
 
-## First Steps
+## First Steps (Virtual Box as a provider)
 
 To begin with lets validate that everything is installed correctly.  If it is, we should be able to start up a simple hazelcast cluster running on some Ubuntu virtual machines running on your own desktop.  We'll use the Vagrants default platform provider, VirtualBox to do this.
 
@@ -48,7 +48,7 @@ Take a look at the VagrantFile within `/src/main/vagrant`
 
 You should see the following block of configuration that tells Vagrant to set-up an Ubuntu instance and then to run Chef Solo. 
 
-'  # VIRTUAL BOX PROVIDER
+`  # VIRTUAL BOX PROVIDER
 
   config.vm.provider :virtualbox do |vb, override|
 
@@ -61,22 +61,24 @@ You should see the following block of configuration that tells Vagrant to set-up
       chef.cookbooks_path = CHEF_COOKBOOKS_PATH
       chef.add_recipe "hazelcast-integration-amazon-ec2"
     end
-  end'
+  end`
 
 This is the default provider that vagrant will run and you can see we are doing three things in this block of code.
 
 (1) Create a virtual machine based on "ubuntu/trusty64"
+
 (2) When starting the Virtual Machine create a bridged network, remember you'll have to change the network interface name to something that matches on your system replacing "en3: Thunderbolt Ethernet"
+
 (3) Once the machine is running it will execute Chef Solo and run the "hazelcast-integration-amazon-ec2" recipe.  This recipe is responsible for installing Java on this machine and then installing our Hazelcast project as a service.
 
 One other important line of code in the VagrantFile, which is right at the top
-'NUM_BOXES=2'
+`NUM_BOXES=2`
 This configures the number of virtual machines we will create, lets leave it at 2 for now.
 
 Now we're ready to fire up our environment.
 
 Within the vagrant directory where you have the VagrantFile simply type
 
-'vagrant up'
+`vagrant up`
 
 
