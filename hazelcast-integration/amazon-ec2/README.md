@@ -148,6 +148,63 @@ Members [2] {
 
 ```
 
+## Getting Big (Hazelcast and Amazon EC2)
+
+You could use the above steps to tinker and experiment with your Java code and your Hazelcast cluster from your own desktop machine.  However you may want to run your cluster on much more powerful hardware.  This is where vagrant comes to the rescue again.
+
+Lets take another look at the [VagrantFile](./src/main/vagrant/Vagrantfile) within `/src/main/vagrant`
+
+If you scroll down a little further past the VirtualBox provider code you'll see another block that deals with AWS explicitly.
+
+```ruby
+# AMAZON EC2 PROVIDER
+
+  # To use the Amazon provider you'll need to install the AWS Vagrant Plugin
+  # Follow the instructions found here :-
+  # https://github.com/mitchellh/vagrant-aws
+
+  config.vm.provider :aws do |aws, override|
+
+    override.vm.box = "dummy"
+    override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+
+    aws.region =  "us-east-1"
+    aws.access_key_id = ENV['AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['AWS_SECRET_KEY']
+    aws.instance_type = 'm3.medium'
+    aws.ami = "ami-9eaa1cf6" # Ubuntu Server 14.04 LTS (HVM), SSD Volume Type
+    aws.keypair_name = 'david'
+    aws.security_groups = 'david-us-east-1-sg'
+
+    aws.tags = {'hazelcast_service' => 'true'}
+
+    override.ssh.username = 'ubuntu'
+    override.ssh.private_key_path = '~/.ssh/aws.pem'
+
+    override.vm.provision "chef_solo" do |chef|
+      chef.cookbooks_path = CHEF_COOKBOOKS_PATH
+      chef.json = {
+                      :hazelcast => {
+                      :network_aws_access_key => ENV['AWS_ACCESS_KEY'],
+                      :network_aws_secret_key => ENV['AWS_SECRET_KEY'],
+                      :network_aws_region => "us-east-1",
+                      :network_aws_host_header => "https://ec2.us-east-1.amazonaws.com",
+                      :network_aws_security_group => "david-us-east-1-sg",
+                      :network_aws_tag_key => "hazelcast_service",
+                      :network_aws_tag_value => "true",
+                      :network_multicast_enabled => "false",
+                      :network_aws_enabled => "true" 
+                    }}
+      chef.add_recipe "hazelcast-integration-amazon-ec2"
+    end
+
+  end
+```
+
+This whole section is slightly more convoluted than the previous Virtual Box deployment.  There are a number of areas that are worth discussion in more depth.
+
+
+
 
 
 
