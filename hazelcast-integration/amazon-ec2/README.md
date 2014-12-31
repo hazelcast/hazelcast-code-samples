@@ -44,7 +44,7 @@ Additionally for the AWS provider to work you'll need to add a dummy box to Vagr
 
 To begin with lets validate that everything is installed correctly.  If it is, we should be able to start up a simple hazelcast cluster running on some Ubuntu virtual machines running on your own desktop.  We'll use Vagrants default platform provider, VirtualBox to do this.
 
-Take a look at the [VagrantFile](src/main/vagrant/VagrantFile) within `/src/main/vagrant`
+Take a look at the [VagrantFile](hazelcast-code-samples/hazelcast-integration/amazon-ec2/src/main/vagrant/Vagrantfile) within `/src/main/vagrant`
 
 You should see the following block of configuration that tells Vagrant to set-up an Ubuntu instance and then to run Chef Solo. 
 
