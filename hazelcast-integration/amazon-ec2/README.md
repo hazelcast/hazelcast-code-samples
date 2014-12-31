@@ -242,7 +242,7 @@ If you have configured your amazon values correctly you should now see the Amazo
 
 Now we have our Hazelcast Cluster running in EC2 we can demonstrate a cool feature of Hazelcast Clients.  Using the same Amazon REST API the Hazelcast Client can search in an EC2 region for machines that poses a particular tag.
 
-Take a look at the Java [Client.java](./src/main/java/com/hazelcast/samples/amazon/ec2/client.Client.java) within `/src/main/java/com/hazelcast/samples/amazon/ec2` 
+Take a look at the Java [Client.java](./src/main/java/com/hazelcast/samples/amazon/ec2/client/Client.java) within `/src/main/java/com/hazelcast/samples/amazon/ec2` 
 
 ```java
 package com.hazelcast.samples.amazon.ec2.client;
@@ -291,6 +291,12 @@ public class Client {
 ```
 
 If you run this you should be able to connect into the Amazon Hazelcast cluster you have already running and perform the simple Map Put.
+
+## Finally
+
+Once you've finished experimenting within Amazon remember to stop everything, otherwise it can get very expensive leaving instances running.  To do this you can run another vagrant command
+
+`vagrant destroy`
 
 
 
