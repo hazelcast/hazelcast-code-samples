@@ -8,6 +8,25 @@ This project demonstrates two things
 
 2. Demonstration of Hazelcasts auto discovery mechanisms for client connections and also for cluster formation.
 
+## Assumptions
+
+This isn't intended as a beginners guide to Amazon EC2, Vagrant or Chef.  There are much more worthy guides all over the internet.  If you're new to these tools please familiarize yourself before proceeding.
+
+### Amazon EC2
+
+I'll be assuming you have prior knowledge of things like Amazon EC2, you'll certainly have already set-up your own instances, maybe via the EC2 control panel.
+
+If not I recommend you run through the following exercise...
+http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html
+
+### Vagrant
+
+Vagrant is a wonderful command line tool that lets you start up virtual machines either on your own desktop (using VirtualBox) or via another provider such as Amazon EC2.  Vagrant also takes care of running provisioner's such as Chef.  It simplifies mundane tasks such as connecting to the machines once they are up.
+
+### Chef
+
+Chef is used to install software on the newly created virtual machine.  The instructions to do this are created in files called recipes.
+
 ## Project Structure
 
 The project follows a standard java quickstart maven layout with some additional directories
@@ -203,7 +222,75 @@ If you scroll down a little further past the VirtualBox provider code you'll see
 
 This whole section is slightly more convoluted than the previous Virtual Box deployment.  There are a number of areas that are worth discussion in more depth.
 
+1. Observe the override.vm entries.  This is telling vagrant to use an AWS box.  This box is configured with various information which allows Vagrant to connect to AWS.  You'll need to provide your own AWS credentials here such as your access key and secret key.  Also notice that keypair_name, security_groups and ssh.private_key_path will all have to be changed to match your own personal values you have set-up in EC2.
 
+2. By default Hazelcast uses Multicast for peer discovery and cluster set-up.  This isn't possible in Amazon. To get around this Hazelcast can discover it's peers within the Amazon region by using tags.  Each member on start-up uses the Amazon EC2 Rest API to query for IP address that hold the tag, in this case {"hazelcast_service":"true"}.  So the following line places this tag on each virtual machine `aws.tags = {'hazelcast_service' => 'true'}`
+
+3. Finally you'll see the chef_solo configuration. The entries attributed to `chef.json` are manipulating the hazelcast.xml configuration for each member.  You can see we're setting the secret keys and access keys again, which make it possible for the Hazelcast Java Instance to query the Amazon REST API.  You'll also see we're enabling aws member discovery and disabling multicast.
+
+### Let's do this thing
+
+In order to run up within Amazon EC2 we have to give an extra argument to our `vagrant up` command....
+
+`vagrant up --provider=aws`
+
+Running this should now execute the Amazon EC2 porition of the VagrantFile.
+
+If you have configured your amazon values correctly you should now see the Amazon instances being created.  Once finished ssh into the boxes as we have done before and check in the `/var/log/upstart` directory to confirm everything is ok with the Hazelcast cluster.
+
+## Hazelcast Clients connecting to an Amazon EC2 Cluster
+
+Now we have our Hazelcast Cluster running in EC2 we can demonstrate a cool feature of Hazelcast Clients.  Using the same Amazon REST API the Hazelcast Client can search in an EC2 region for machines that poses a particular tag.
+
+Take a look at the Java [Client.java](./src/main/java/com/hazelcast/samples/amazon/ec2/client.Client.java) within `/src/main/java/com/hazelcast/samples/amazon/ec2` 
+
+```java
+package com.hazelcast.samples.amazon.ec2.client;
+
+import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.config.ClientAwsConfig;
+import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.client.config.ClientNetworkConfig;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+
+/**
+ * Example of a client connecting to a Hazelcast Cluster running on Amazon EC2.
+ *
+ * By default we have set insideAws to false, this means that you can run this client from your desktop and it will
+ * connect into Amazon EC2.
+ */
+public class Client {
+
+    public static void main(String args[]){
+
+        ClientConfig clientConfig = new ClientConfig();
+        ClientNetworkConfig clientNetworkConfig = new ClientNetworkConfig();
+        ClientAwsConfig awsConfig = new ClientAwsConfig();
+
+        awsConfig.setInsideAws(false);
+        awsConfig.setEnabled(true);
+        awsConfig.setAccessKey("-- YOUR AWS ACCESS KEY --");
+        awsConfig.setSecretKey("-- YOUR AWS SECRET KEY --");
+        awsConfig.setRegion("us-east-1");
+        awsConfig.setSecurityGroupName("david-us-east-1-sg");
+        awsConfig.setTagKey("hazelcast_service");
+        awsConfig.setTagValue("true");
+
+        clientConfig.setNetworkConfig(clientNetworkConfig.setAwsConfig(awsConfig));
+
+        HazelcastInstance hazelcastClientInstance = HazelcastClient.newHazelcastClient(clientConfig);
+
+        // Now do something...
+        IMap<Object, Object> testMap = hazelcastClientInstance.getMap("test");
+        testMap.put("testKey","testValue");
+
+    }
+
+}
+```
+
+If you run this you should be able to connect into the Amazon Hazelcast cluster you have already running and perform the simple Map Put.
 
 
 

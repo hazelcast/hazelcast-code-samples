@@ -23,8 +23,8 @@ public class Client {
 
         awsConfig.setInsideAws(false);
         awsConfig.setEnabled(true);
-        awsConfig.setAccessKey("AKIAIUYNBDCKRZUCBDNQ");
-        awsConfig.setSecretKey("dOvLY2dSmIsS7MJe9SMjwXJLbKd9+2kI958Voq2f");
+        awsConfig.setAccessKey("-- YOUR AMAZON ACCESS KEY --");
+        awsConfig.setSecretKey("-- YOUR AMAZON SECRET KEY --");
         awsConfig.setRegion("us-east-1");
         awsConfig.setSecurityGroupName("david-us-east-1-sg");
         awsConfig.setTagKey("hazelcast_service");
