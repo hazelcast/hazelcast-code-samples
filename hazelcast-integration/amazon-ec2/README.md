@@ -48,9 +48,10 @@ Take a look at the VagrantFile within `/src/main/vagrant`
 
 You should see the following block of configuration that tells Vagrant to set-up an Ubuntu instance and then to run Chef Solo. 
 
-`  # VIRTUAL BOX PROVIDER
+```ruby
+# VirtualBox Provider
 
-  config.vm.provider :virtualbox do |vb, override|
+config.vm.provider :virtualbox do |vb, override|
 
     override.vm.box = "ubuntu/trusty64"
 
@@ -61,7 +62,8 @@ You should see the following block of configuration that tells Vagrant to set-up
       chef.cookbooks_path = CHEF_COOKBOOKS_PATH
       chef.add_recipe "hazelcast-integration-amazon-ec2"
     end
-  end`
+end
+```
 
 This is the default provider that vagrant will run and you can see we are doing three things in this block of code.
 
