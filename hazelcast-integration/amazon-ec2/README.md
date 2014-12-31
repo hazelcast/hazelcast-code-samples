@@ -58,6 +58,11 @@ For example to install vagrant-aws plugin you'll need to run on the command line
 Additionally for the AWS provider to work you'll need to add a dummy box to Vagrant
 
 `vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box`
+## Build the Java Binaries
+
+Before we can deploy anything we need to build the java project and generate the jar file with dependencies.
+
+`mvn assembly:assembly' at the project root.
 
 ## First Steps (Virtual Box as a provider)
 
