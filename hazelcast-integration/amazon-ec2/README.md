@@ -36,15 +36,15 @@ For example to install vagrant-aws plugin you'll need to run on the command line
 
 `vagrant plugin install vagrant-aws`
 
-5. Additionally for the AWS provider to work you'll need to add a dummy box to Vagrant
+Additionally for the AWS provider to work you'll need to add a dummy box to Vagrant
 
 `vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box`
 
 ## First Steps (Virtual Box as a provider)
 
-To begin with lets validate that everything is installed correctly.  If it is, we should be able to start up a simple hazelcast cluster running on some Ubuntu virtual machines running on your own desktop.  We'll use the Vagrants default platform provider, VirtualBox to do this.
+To begin with lets validate that everything is installed correctly.  If it is, we should be able to start up a simple hazelcast cluster running on some Ubuntu virtual machines running on your own desktop.  We'll use Vagrants default platform provider, VirtualBox to do this.
 
-Take a look at the VagrantFile within `/src/main/vagrant`
+Take a look at the [VagrantFile](src/main/vagrant/VagrantFile) within `/src/main/vagrant`
 
 You should see the following block of configuration that tells Vagrant to set-up an Ubuntu instance and then to run Chef Solo. 
 
