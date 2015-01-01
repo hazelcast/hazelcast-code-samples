@@ -158,6 +158,19 @@ service 'hazelcast' do
 end
 ```
 
+There are five steps in this Chef Recipe that we should examine.
+
+1. Including other recipes, we know we need Java installed on our fresh Ubuntu box to run Hazelcast, so we `include-recipe 'java'`
+
+2. We create any directories that we need using the `directory` command
+
+3. Now we come to a really handy feature, templating.  What we're doing here is to take the [hazelcast.xml.erb](./src/main/chef/cookbooks/hazelcast-integration-amazon-ec2/templates/default) file which is under `/src/main/chef/cookbooks/hazelcast-integration-amazon-ec2/templates/default`,Chef then replaces the placeholders in this file firstly with any defaults found in the [default.rb](./src/main/chef/cookbooks/hazelcast-integration-amazon-ec2/attributes/default.rb) which is under `src/main/chef/cookbooks/hazelcast-integration-amazon-ec2/attributes`.  Also these defaults can be overridden and you'll see we do that later on in the Vagrant script when we use the chef_json attribute to set Amazon network settings for Hazelcast.  Finally it places this file in the following directory on the virtual machine `#{hazelcast_currentdir}/hazelcast.xml`
+
+4. We use templating again when we create the hazelcast.conf file which defines the Hazelcast Upstart Service.
+
+5. Lastly we create and start the upstart service.
+
+
 ### Vagrant ARISE !
 
 Now we're ready to fire up our environment.
