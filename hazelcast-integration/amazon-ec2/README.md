@@ -35,6 +35,8 @@ The project follows a standard java quickstart maven layout with some additional
 
 `/src/main/chef` - contains the Chef cookbook that installs the sample application.
 
+`/src/main/java` - contains some simple java code for a Hazelcast Cluster Node and also a Hazelcast Client that connects into an Amazon EC2 Hazelcast Cluster
+
 ## Required Software
 
 1. Install [VirtualBox](https://www.virtualbox.org/) this is the default Vagrant Provider, you'll use this to test out deployments and creating Virtual Machines on your own desktop prior to running out on Amazon EC2.
