@@ -61,7 +61,7 @@ Additionally for the AWS provider to work you'll need to add a dummy box to Vagr
 
 Before we can deploy anything we need to build the java project and generate the jar file with dependencies.
 
-`mvn assembly:assembly' at the project root.
+`mvn assembly:assembly` at the project root.
 
 ## First Steps (Virtual Box as a provider)
 
