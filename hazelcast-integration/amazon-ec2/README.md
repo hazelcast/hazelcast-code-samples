@@ -61,11 +61,13 @@ Additionally for the AWS provider to work you'll need to add a dummy box to Vagr
 `vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box`
 ## Build the Java Binaries
 
-Before we can deploy anything we need to build the java project and generate the jar file with dependencies.
+Before we can deploy anything we need to build the java project and generate the jar file with dependencies.  This jar file will contain the Hazelcast server and client classes along with dependent jars, in this case the Hazelcast jar.
 
 `mvn assembly:assembly` at the project root.
 
-## First Steps (Virtual Box as a provider)
+Once this is built we will have a `/target` directory that should contain `amazon-ec2-0.1-SNAPSHOT-jar-with-dependencies.jar`
+
+## First Deployment (Virtual Box as a provider)
 
 To begin with lets validate that everything is installed correctly.  If it is, we should be able to start up a simple hazelcast cluster running on some Ubuntu virtual machines running on your own desktop.  We'll use Vagrants default platform provider, VirtualBox to do this.
 
@@ -101,6 +103,60 @@ This is the default provider that vagrant will run and you can see we are doing 
 One other important line of code in the VagrantFile, which is right at the top
 `NUM_BOXES=2`
 This configures the number of virtual machines we will create, lets leave it at 2 for now.
+
+## How do we get the binaries onto the virtual machines?
+
+As we're experimenting with development workflows from the desktop we need a simple and quick way to deploy our binaries to the virtual machines.
+
+As workflow progresses to UAT/QA and ultimately production you would amend your CHEF recipies to download your developed code from a Maven repository.
+
+But for our purposes we can simply mount the `/target` directory onto the virtual machines.  You'll see we achieve that in our VagrantFile where we mount `target` to a directory on the virtual machines called `/mnt`
+
+```ruby
+# Attach Local Release Directory to Virtual Machines
+  config.vm.synced_folder "../../../target/","/mnt/hazelcast-integration-amazon-ec2/target"
+```
+
+## What is the Chef recipe doing?
+
+You'll have noted that once Vagrant has created the virtual machines it installs Chef on those machines using the Omnibus plug-in and then executes the Chef recipe called `hazelcast-integration-amazon-ec2`.  Let's take a look at that code now.
+
+```ruby
+#
+# Cookbook Name:: hazelcast-integration-amazon-ec2
+# Recipe:: default
+#
+# Apache License, Version 2.0
+
+hazelcast_currentdir = node['hazelcast']['current_dir']
+
+include_recipe 'java'
+
+directory "#{hazelcast_currentdir}"
+
+# Replaces environment specific settings in hazelcast.xml
+template "#{hazelcast_currentdir}/hazelcast.xml" do
+  source "hazelcast.xml.erb"
+  notifies :reload, 'service[hazelcast]', :immediately
+end
+
+# Hazelcast Service Configuration
+template "/etc/init/hazelcast.conf" do
+  source "hazelcast.conf.erb"
+  mode "0755"
+  owner "root"
+  group "root"
+  notifies :reload, 'service[hazelcast]', :immediately
+end
+
+# Creates the Hazelcast Service
+service 'hazelcast' do
+  supports :status => true, :restart => true, :reload => true
+  provider Chef::Provider::Service::Upstart if platform?("ubuntu")
+  start_command "/usr/bin/service hazelcast start" if platform?("ubuntu")
+  action [:enable, :start]
+end
+```
 
 ### Vagrant ARISE !
 
