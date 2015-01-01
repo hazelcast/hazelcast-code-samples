@@ -45,7 +45,6 @@ The project follows a standard java quickstart maven layout with some additional
 
 4. Install [Vagrant Plug-ins](https://docs.vagrantup.com/v2/plugins/usage.html) required for the Vagrant script to run.  Try to ensure you at least have the following installed...
 
-* berkshelf (3.2.2)
 * vagrant-aws (0.6.0)
 * vagrant-berkshelf (4.0.1)
 * vagrant-omnibus (1.4.1)
