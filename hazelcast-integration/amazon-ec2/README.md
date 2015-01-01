@@ -119,7 +119,7 @@ But for our purposes we can simply mount the `/target` directory onto the virtua
 
 ## What is the Chef recipe doing?
 
-You'll have noted that once Vagrant has created the virtual machines it installs Chef on those machines using the Omnibus plug-in and then executes the Chef recipe called `hazelcast-integration-amazon-ec2`.  Let's take a look at that code now, you'll find the source for that in a file called [default.rb](./src/main/chef/cookbooks/hazelcast-integration-amazon-ec2/recipes/default.rb)
+You'll have noted that once Vagrant has created the virtual machines it installs Chef on those machines using the Omnibus plug-in and then executes the Chef recipe called `hazelcast-integration-amazon-ec2`.  Let's take a look at that code now, you'll find the source for that in a file called [default.rb](./src/main/chef/cookbooks/hazelcast-integration-amazon-ec2/recipes/default.rb) under `/src/main/chef/cookbooks/hazelcast-integration-amazon-ec2/recipes`
 
 ```ruby
 #
