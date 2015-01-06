@@ -18,8 +18,6 @@ package com.hazelcast.spring.mongodb;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.MapLoaderLifecycleSupport;
 import com.hazelcast.core.MapStore;
-import com.mongodb.*;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,6 +27,14 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 public class MongoMapStore implements MapStore, MapLoaderLifecycleSupport {
 

@@ -1,15 +1,17 @@
+package jdbc;
 import com.hazelcast.core.MapStore;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static java.lang.String.format;
+import data.Person;
 
 public class PersonMapStore implements MapStore<Long, Person> {
     private final Connection con;
@@ -18,7 +20,7 @@ public class PersonMapStore implements MapStore<Long, Person> {
         try {
             con = DriverManager.getConnection("jdbc:hsqldb:mydatabase", "SA", "");
             con.createStatement().executeUpdate(
-                    "create table if not exists person (id bigint, name varchar(45))");
+                    "create table if not exists person (id bigint not null, name varchar(45), primary key (id))");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -59,7 +61,7 @@ public class PersonMapStore implements MapStore<Long, Person> {
             try {
                 if (!resultSet.next()) return null;
                 String name = resultSet.getString(1);
-                return new Person(name);
+                return new Person(key, name);
             } finally {
                 resultSet.close();
             }
@@ -74,7 +76,13 @@ public class PersonMapStore implements MapStore<Long, Person> {
         return result;
     }
 
-    public Set<Long> loadAllKeys() {
-        return null;
+    public Iterable<Long> loadAllKeys() {
+        try {
+            PreparedStatement statement = con.prepareStatement("select id from person");
+            return new StatementIterable<Long>(statement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }
