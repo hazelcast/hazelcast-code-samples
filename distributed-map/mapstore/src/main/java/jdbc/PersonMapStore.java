@@ -14,13 +14,16 @@ import static java.lang.String.format;
 import data.Person;
 
 public class PersonMapStore implements MapStore<Long, Person> {
+
     private final Connection con;
+    private PreparedStatement allKeysStatement;
 
     public PersonMapStore() {
         try {
             con = DriverManager.getConnection("jdbc:hsqldb:mydatabase", "SA", "");
             con.createStatement().executeUpdate(
                     "create table if not exists person (id bigint not null, name varchar(45), primary key (id))");
+            allKeysStatement = con.prepareStatement("select id from person");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -77,12 +80,7 @@ public class PersonMapStore implements MapStore<Long, Person> {
     }
 
     public Iterable<Long> loadAllKeys() {
-        try {
-            PreparedStatement statement = con.prepareStatement("select id from person");
-            return new StatementIterable<Long>(statement);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return new StatementIterable<Long>(allKeysStatement);
     }
 
 }
