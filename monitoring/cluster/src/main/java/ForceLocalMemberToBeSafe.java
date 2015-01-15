@@ -22,6 +22,7 @@ import com.hazelcast.core.IExecutorService;
 import com.hazelcast.core.Member;
 import com.hazelcast.core.MemberSelector;
 
+import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -49,7 +50,7 @@ public class ForceLocalMemberToBeSafe {
 
     }
 
-    private static class MemberSafe implements Callable<Boolean>, HazelcastInstanceAware {
+    private static class MemberSafe implements Callable<Boolean>, HazelcastInstanceAware, Serializable {
 
         private HazelcastInstance node;
 
