@@ -11,7 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hibernate-2ndlevel-cache</artifactId>
+    <artifactId>hibernate-jpa-2ndlevel-cache</artifactId>
     <name>Hibernate 2nd Level Cache</name>
 
     <dependencies>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate3</artifactId>
-            <version>3.0-RC2</version>
+            <version>${hazelcast.version}</version>
         </dependency>
 
         <dependency>

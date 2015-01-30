@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.Properties;
 
 /**
- * Created by Esref Ozturk <esrefozturk93@gmail.com> on 08.07.2014.
- */
+* Created by tgrl on 29.01.2015.
+*/
 public class CreateDB {
     public static void main( String args[] ){
         try {
