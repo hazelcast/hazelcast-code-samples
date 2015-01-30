@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Created by Esref Ozturk <esrefozturk93@gmail.com> on 26.06.2014.
- */
+* Created by tgrl on 29.01.2015.
+*/
 @Entity
 @Table(name = "EMPLOYEE")
 public class Employee {
