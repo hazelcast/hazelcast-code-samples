@@ -9,7 +9,7 @@ By default some dependencies added to project in "pom.xml" file as follows:
     <dependency>
         <groupId>com.hazelcast</groupId>
         <artifactId>hazelcast-hibernate3</artifactId>
-        <version>3.0-RC2</version>
+        <version>${hazelcast.version}</version>
     </dependency>
 
     <dependency>
