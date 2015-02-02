@@ -9,7 +9,7 @@ import java.util.Scanner;
 /**
  * Created by tgrl on 29.01.2015.
  */
-public class ManageEmployee {
+public class ManageEmployeeJPA {
 
     private static EntityManager em;
     private static Scanner reader;
@@ -97,10 +97,10 @@ public class ManageEmployee {
         List<Employee> employeeList = em.createQuery("Select a from Employee a", Employee.class).getResultList();
 
         for (Employee employee : employeeList){
-            System.out.println("ID: " + employee.getId();
-            System.out.println("First name: " + employee.getFirstName();
-            System.out.println("Last name: " + employee.getLastName();
-            System.out.println("Salary: " + employee.getSalary();
+            System.out.println("ID: " + employee.getId());
+            System.out.println("First name: " + employee.getFirstName());
+            System.out.println("Last name: " + employee.getLastName());
+            System.out.println("Salary: " + employee.getSalary());
         }
         
     }
