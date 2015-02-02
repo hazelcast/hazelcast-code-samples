@@ -97,7 +97,10 @@ public class ManageEmployee {
         List<Employee> employeeList = em.createQuery("Select a from Employee a", Employee.class).getResultList();
 
         for (Employee employee : employeeList){
-            System.out.println("" + employee.getFirstName());
+            System.out.println("First name: " + employee.getId();
+            System.out.println("First name: " + employee.getFirstName();
+            System.out.println("First name: " + employee.getLastName();
+            System.out.println("First name: " + employee.getSalary();
         }
         
     }
