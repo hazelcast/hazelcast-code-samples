@@ -1,5 +1,5 @@
 <h1>Hibernate 2nd Level Cache with Hazelcast by using JPA</h1>
-In this repository, you can find a sample implementation of hibernate 2nd level cache with hazelcast. You can also find detailed explanation at http://hazelcast.org/ 
+In this repository, you can find a sample implementation of hibernate 2nd level cache with hazelcast by using JPA. You can also find detailed explanation at http://hazelcast.org/ 
 
 <h2>Prerequisites</h2>
 You should have installed Apache Maven(http://maven.apache.org/download.cgi).
@@ -58,7 +58,7 @@ mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.CreateDB"
 mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.ManageEmployeeJPA"
 ```
 <h3>Sample Use Case</h3>
-Execute the following commands in ManageEmployeeJPA. You will see that an employee will be created at the second session but you can see it in the first session too.
+Execute the following commands in ManageEmployeeJPA.
 ```
 Command:
 add
