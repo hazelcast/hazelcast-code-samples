@@ -11,20 +11,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hibernate-2ndlevel-cache</artifactId>
+    <artifactId>hibernate-jpa-2ndlevel-cache</artifactId>
     <name>Hibernate 2nd Level Cache</name>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>4.3.8.Final</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate4</artifactId>
+            <artifactId>hazelcast-hibernate3</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
 
@@ -47,9 +41,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.5</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>3.6.9.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.0.Final</version>
         </dependency>
 
     </dependencies>
