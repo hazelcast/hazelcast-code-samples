@@ -1,8 +1,24 @@
 package com.hazelcast.hibernate;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.ejb.EntityManagerFactoryImpl;
+import org.hibernate.jmx.StatisticsService;
+import org.hibernate.stat.EntityStatistics;
+import org.hibernate.stat.QueryStatistics;
+import org.hibernate.stat.SecondLevelCacheStatistics;
+import org.hibernate.stat.Statistics;
+
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MBeanServerFactory;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,27 +27,65 @@ import java.util.Scanner;
  */
 public class ManageEmployeeJPA {
 
+    public static final String FIRST_NAME = "John ";
+    public static final String LAST_NAME = "Dow ";
+    public static final int ENTRY_COUNT = 20;
+    public static final String SELECT_A_FROM_EMPLOYEE_A = "Select a from Employee a";
     private static EntityManager em;
     private static Scanner reader;
     private static String command;
+    private static Statistics statistics;
 
     public static void main(String[] args) {
+        init();
+        populateDb();
+        processConsoleComand();
+    }
 
+    private static void populateDb() {
+        for (int i = 1; i < ENTRY_COUNT; i++) {
+            removeEmployee(i);
+            createEmployee(i, FIRST_NAME + i, LAST_NAME + i, i);
+        }
+    }
+
+    private static void init() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hiberjpa");
         em = emf.createEntityManager();
-        
-        System.out.println("Command: ");
-        
+        EntityManagerFactoryImpl emfi = (EntityManagerFactoryImpl) emf;
+        SessionFactory sessionFactory = emfi.getSessionFactory();
+        statistics = sessionFactory.getStatistics();
+        registerMBean(sessionFactory);
+    }
+
+    private static void registerMBean(SessionFactory sessionFactory) {
+        ArrayList<MBeanServer> list = MBeanServerFactory.findMBeanServer(null);
+        MBeanServer server = list.get(0);
+        try {
+            ObjectName objectName = new ObjectName("org.hibernate:name=HibernateStatistics");
+            StatisticsService mBean = new StatisticsService();
+            mBean.setSessionFactory(sessionFactory);
+            server.registerMBean(mBean, objectName);
+        } catch (MalformedObjectNameException e) {
+            e.printStackTrace();
+        } catch (InstanceAlreadyExistsException e) {
+            e.printStackTrace();
+        } catch (MBeanRegistrationException e) {
+            e.printStackTrace();
+        } catch (NotCompliantMBeanException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void processConsoleComand() {
         reader = new Scanner(System.in);
-        
-        
         while (true){
+            System.out.println("Command: ");
             command = reader.nextLine();
             if (command.equals("list")){
 
                 System.out.println("List: ");
                 listEmployee();
-                reader.nextLine();
 
             }else if (command.equals("add")){
 
@@ -44,8 +98,7 @@ public class ManageEmployeeJPA {
                 String lname = reader.nextLine();
                 System.out.print("Salary: ");
                 int salary = reader.nextInt();
-                reader.nextLine();
-                
+
                 createEmployee(id, fname, lname, salary);
 
             }else if (command.equals("remove")){
@@ -53,7 +106,6 @@ public class ManageEmployeeJPA {
                 System.out.println("Key: ");
                 int id = reader.nextInt();
                 removeEmployee(id);
-                reader.nextLine();
 
             }else if (command.equals("update")){
 
@@ -68,14 +120,58 @@ public class ManageEmployeeJPA {
                 int salary = reader.nextInt();
                 System.out.print("Key: ");
                 int key = reader.nextInt();
-                reader.nextLine();
-                
+
                 updateEmployee(id, fname, lname, salary, key);
+            } else if (command.equals("show")) {
 
+                System.out.println("Key: ");
+                int id = reader.nextInt();
+                showEmployee(id);
+            } else {
+                System.err.println("Command not found: " + command);
             }
+            printStatistics();
+            reader.nextLine();
         }
-        
+    }
 
+    private static void showEmployee(int id) {
+        Employee employee = em.find(Employee.class, id);
+        if (employee != null) {
+            printEmployee(employee);
+        } else {
+            System.out.println("not found");
+        }
+    }
+
+    private static void printStatistics() {
+        String name = Employee.class.getName();
+
+        EntityStatistics entityStatistics = statistics.getEntityStatistics(name);
+        if (entityStatistics != null) {
+            System.out.println("EntityStatistics for " + name);
+            System.out.println(entityStatistics);
+        } else {
+            System.err.println("EntityStatistics null for " + name);
+        }
+
+        QueryStatistics queryStats = statistics.getQueryStatistics(SELECT_A_FROM_EMPLOYEE_A);
+        if (queryStats != null) {
+            System.out.println("QueryStatistics for " + SELECT_A_FROM_EMPLOYEE_A);
+            System.out.println(queryStats);
+        } else {
+            System.err.println("QueryStatistics null for " + SELECT_A_FROM_EMPLOYEE_A);
+        }
+
+        String regionName = "com.hazelcast.hibernate.Employee";
+        SecondLevelCacheStatistics cacheStats = statistics.getSecondLevelCacheStatistics(
+                regionName);
+        if (cacheStats != null) {
+            System.out.println("Region stats for " + regionName);
+            System.out.println(cacheStats);
+        } else {
+            System.err.println("SecondLevelCacheStatistics null for " + regionName);
+        }
     }
 
     private static void createEmployee(int id, String first_name, String last_name, int salary) {
@@ -87,24 +183,31 @@ public class ManageEmployeeJPA {
     
     private static void removeEmployee(int key){
         Employee employee = em.find(Employee.class, key);
-        em.getTransaction().begin();
-        em.remove(employee);
-        em.getTransaction().commit();
-        
+        if (employee != null) {
+            em.getTransaction().begin();
+            em.remove(employee);
+            em.getTransaction().commit();
+        }
     }
     
     private static void listEmployee(){
-        List<Employee> employeeList = em.createQuery("Select a from Employee a", Employee.class).getResultList();
+        List<Employee> employeeList = em
+                .createQuery(SELECT_A_FROM_EMPLOYEE_A, Employee.class)
+                .getResultList();
 
         for (Employee employee : employeeList){
-            System.out.println("ID: " + employee.getId());
-            System.out.println("First name: " + employee.getFirstName());
-            System.out.println("Last name: " + employee.getLastName());
-            System.out.println("Salary: " + employee.getSalary());
+            printEmployee(employee);
         }
         
     }
-    
+
+    private static void printEmployee(Employee employee) {
+        System.out.println("ID: " + employee.getId());
+        System.out.println("First name: " + employee.getFirstName());
+        System.out.println("Last name: " + employee.getLastName());
+        System.out.println("Salary: " + employee.getSalary());
+    }
+
     private static void updateEmployee(int id, String first_name, String last_name, int salary, int key){
         Employee employee = em.find(Employee.class, key);
         em.getTransaction().begin();
@@ -113,7 +216,6 @@ public class ManageEmployeeJPA {
         employee.setLastName(last_name);
         employee.setSalary(salary);
         em.getTransaction().commit();
-        
     }
 
 }

@@ -83,4 +83,9 @@ Key:
 1
 ```
 
+After application running it creates sample db with 19 records (id range from 1 to 19).
+If execute 'show' command with id in range above you will not see any SQL statements in the console (cached entities).
+
+4) Also you may see Hibernate statistics via jconsole.
+
 
