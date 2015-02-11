@@ -1,5 +1,8 @@
 package com.hazelcast.hibernate;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.hibernate.instance.HazelcastAccessor;
 import org.hibernate.SessionFactory;
 import org.hibernate.ejb.EntityManagerFactoryImpl;
 import org.hibernate.jmx.StatisticsService;
@@ -35,6 +38,7 @@ public class ManageEmployeeJPA {
     private static Scanner reader;
     private static String command;
     private static Statistics statistics;
+    private static HazelcastInstance hazelcast;
 
     public static void main(String[] args) {
         init();
@@ -56,6 +60,7 @@ public class ManageEmployeeJPA {
         SessionFactory sessionFactory = emfi.getSessionFactory();
         statistics = sessionFactory.getStatistics();
         registerMBean(sessionFactory);
+        hazelcast = HazelcastAccessor.getHazelcastInstance(sessionFactory);
     }
 
     private static void registerMBean(SessionFactory sessionFactory) {
@@ -123,14 +128,14 @@ public class ManageEmployeeJPA {
 
                 updateEmployee(id, fname, lname, salary, key);
             } else if (command.equals("show")) {
-
                 System.out.println("Key: ");
                 int id = reader.nextInt();
                 showEmployee(id);
+            } else if (command.equals("stats")){
+                printStatistics();
             } else {
                 System.err.println("Command not found: " + command);
             }
-            printStatistics();
             reader.nextLine();
         }
     }
@@ -145,32 +150,42 @@ public class ManageEmployeeJPA {
     }
 
     private static void printStatistics() {
+        printHibernateStatistics();
+        printHazelcastStatistics();
+    }
+
+    private static void printHazelcastStatistics() {
+        IMap<Object, Object> map = hazelcast.getMap(Employee.class.getName());
+        System.out.println("Hazelcast.Map cache size is " + map.size() + " entries");
+    }
+
+    private static void printHibernateStatistics() {
         String name = Employee.class.getName();
 
         EntityStatistics entityStatistics = statistics.getEntityStatistics(name);
         if (entityStatistics != null) {
-            System.out.println("EntityStatistics for " + name);
+            System.out.println("Hibernate.EntityStatistics for " + name);
             System.out.println(entityStatistics);
         } else {
-            System.err.println("EntityStatistics null for " + name);
+            System.err.println("Hibernate.EntityStatistics null for " + name);
         }
 
         QueryStatistics queryStats = statistics.getQueryStatistics(SELECT_A_FROM_EMPLOYEE_A);
         if (queryStats != null) {
-            System.out.println("QueryStatistics for " + SELECT_A_FROM_EMPLOYEE_A);
+            System.out.println("Hibernate.QueryStatistics for " + SELECT_A_FROM_EMPLOYEE_A);
             System.out.println(queryStats);
         } else {
-            System.err.println("QueryStatistics null for " + SELECT_A_FROM_EMPLOYEE_A);
+            System.err.println("Hibernate.QueryStatistics null for " + SELECT_A_FROM_EMPLOYEE_A);
         }
 
         String regionName = "com.hazelcast.hibernate.Employee";
         SecondLevelCacheStatistics cacheStats = statistics.getSecondLevelCacheStatistics(
                 regionName);
         if (cacheStats != null) {
-            System.out.println("Region stats for " + regionName);
+            System.out.println("Hibernate.SecondLevelCacheStatistics stats for " + regionName);
             System.out.println(cacheStats);
         } else {
-            System.err.println("SecondLevelCacheStatistics null for " + regionName);
+            System.err.println("Hibernate.SecondLevelCacheStatistics null for " + regionName);
         }
     }
 

@@ -12,7 +12,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hibernate-jpa-2ndlevel-cache</artifactId>
-    <name>Hibernate 2nd Level Cache</name>
+    <name>Hibernate JPA 2nd Level Cache</name>
 
     <dependencies>
 
