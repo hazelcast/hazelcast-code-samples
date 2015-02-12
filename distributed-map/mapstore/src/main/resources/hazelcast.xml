@@ -5,7 +5,7 @@
 
     <map name="personMap">
         <map-store enabled="true">
-            <class-name>PersonMapStore</class-name>
+            <class-name>jdbc.PersonMapStore</class-name>
         </map-store>
     </map>
 </hazelcast>

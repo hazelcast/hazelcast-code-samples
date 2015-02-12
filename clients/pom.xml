@@ -20,6 +20,7 @@
     <modules>
         <module>basic</module>
         <module>client-ssl</module>
+        <module>rest</module>
     </modules>
 
     <dependencies>

@@ -1,5 +1,8 @@
 package com.hazelcast.hibernate;
 
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.hibernate.instance.HazelcastAccessor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -8,6 +11,7 @@ import org.hibernate.cfg.Configuration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Created by Esref Ozturk <esrefozturk93@gmail.com> on 26.06.2014.
@@ -20,6 +24,9 @@ public class ManageEmployee {
     private static Scanner reader;
     private static String command;
     private static int current;
+    
+    HazelcastInstance hazelcastInstance = HazelcastAccessor.getHazelcastInstance(factory);
+    
 
     public static void main(String[] args) throws InterruptedException {
         try{
