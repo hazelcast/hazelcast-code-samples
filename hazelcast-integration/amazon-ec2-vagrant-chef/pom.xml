@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>amazon-ec2</artifactId>
+    <artifactId>amazon-ec2-vagrant-chef</artifactId>
     <packaging>jar</packaging>
 
-    <name>amazon-ec2</name>
+    <name>amazon-ec2-vagrant-chef</name>
     <url>http://maven.apache.org</url>
 
     <properties>
