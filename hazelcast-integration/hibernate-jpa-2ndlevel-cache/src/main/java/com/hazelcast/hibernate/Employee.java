@@ -1,5 +1,6 @@
 package com.hazelcast.hibernate;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 * Created by tgrl on 29.01.2015.
 */
 @Entity
+@Cacheable
 @Table(name = "EMPLOYEE")
 public class Employee {
 
