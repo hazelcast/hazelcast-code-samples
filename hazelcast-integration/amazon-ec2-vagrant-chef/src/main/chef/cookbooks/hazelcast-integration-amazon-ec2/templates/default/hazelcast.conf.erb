@@ -1,0 +1,11 @@
+# hazelcast
+ 
+description "hazelcast daemon"
+
+start on (filesystem and net-device-up IFACE=lo)
+stop on runlevel [!2345]
+respawn
+respawn limit 10 5
+
+exec java -server -Xms256M -Xmx256M -Djava.net.preferIPv4Stack=true -Dhazelcast.config=<%=node['hazelcast']['current_dir'] %>/hazelcast.xml -cp  <%=node['hazelcast']['distribution'] %>/amazon-ec2-0.1-SNAPSHOT-jar-with-dependencies.jar com.hazelcast.core.server.StartServer
+

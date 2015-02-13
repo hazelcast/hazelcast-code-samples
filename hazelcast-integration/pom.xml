@@ -25,6 +25,7 @@
         <module>enterprise-session-replication</module>
         <module>spring-security</module>
         <module>hibernate-jpa-2ndlevel-cache</module>
+        <module>amazon-ec2-vagrant-chef</module>
     </modules>
 
     <dependencies>
