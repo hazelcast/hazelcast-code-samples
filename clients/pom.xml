@@ -5,7 +5,7 @@
 
     <artifactId>clients</artifactId>
     <name>Clients</name>
-    <groupId>book.hazelcast.client</groupId>
+    <groupId>book.hazelcast.client.basic</groupId>
     <description>
         All the code samples for the Hazelcast clients
     </description>
