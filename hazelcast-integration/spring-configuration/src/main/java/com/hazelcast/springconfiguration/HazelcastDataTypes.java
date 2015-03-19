@@ -5,6 +5,8 @@ import com.hazelcast.core.*;
 import com.hazelcast.springconfiguration.TestBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -104,15 +106,19 @@ public class HazelcastDataTypes
         System.out.println("Added element: " + list.iterator().next() + "\n");
     }
 
+    private static class EchoTask implements Runnable, Serializable
+    {
+        public void run()
+        {
+            System.out.println("ExecuterService Run\n");
+        }
+    }
+
     public static void ExecuteExecuterService()
     {
         System.out.println("### ExecuterService Execution Started... ###");
         IExecutorService executorService = (IExecutorService) context.getBean("executorService");
-        executorService.execute(new Runnable() {
-            public void run() {
-                System.out.println("ExecuterService Run\n");
-            }
-        });
+        executorService.execute(new EchoTask());
         executorService.shutdown();
     }
 
