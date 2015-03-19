@@ -12,7 +12,7 @@ public class Client {
         System.setProperty("javax.net.ssl.keyStorePassword", "password");
 
         ClientConfig config = new ClientConfig();
-        config.addAddress("127.0.0.1");
+        config.getNetworkConfig().addAddress("127.0.0.1");
         //config.getSocketOptions().setSocketFactory(new SSLSocketFactory());
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient(config);

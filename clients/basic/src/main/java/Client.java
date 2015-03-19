@@ -6,8 +6,10 @@ import java.util.concurrent.BlockingQueue;
 
 public class Client {
     public static void main(String[] args) throws Exception {
-        ClientConfig clientConfig = new ClientConfig().addAddress("127.0.0.1");
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.getNetworkConfig().addAddress("127.0.0.1");
         HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
+        System.out.println(clientConfig.toString());
         BlockingQueue<String> queue = client.getQueue("queue");
         queue.put("Hello!");
         System.out.println("Message send by client!");
