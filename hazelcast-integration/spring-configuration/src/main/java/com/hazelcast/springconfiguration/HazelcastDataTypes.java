@@ -1,10 +1,26 @@
 package com.hazelcast.springconfiguration;
 
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.*;
-import com.hazelcast.springconfiguration.TestBean;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.IAtomicLong;
+import com.hazelcast.core.IAtomicReference;
+import com.hazelcast.core.ICountDownLatch;
+import com.hazelcast.core.IExecutorService;
+import com.hazelcast.core.IList;
+import com.hazelcast.core.ILock;
+import com.hazelcast.core.IMap;
+import com.hazelcast.core.IQueue;
+import com.hazelcast.core.ISemaphore;
+import com.hazelcast.core.ISet;
+import com.hazelcast.core.ITopic;
+import com.hazelcast.core.IdGenerator;
+import com.hazelcast.core.Message;
+import com.hazelcast.core.MessageListener;
+import com.hazelcast.core.MultiMap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -108,11 +124,7 @@ public class HazelcastDataTypes
     {
         System.out.println("### ExecuterService Execution Started... ###");
         IExecutorService executorService = (IExecutorService) context.getBean("executorService");
-        executorService.execute(new Runnable() {
-            public void run() {
-                System.out.println("ExecuterService Run\n");
-            }
-        });
+        executorService.execute(new EchoTask("hello"));
         executorService.shutdown();
     }
 
@@ -178,5 +190,18 @@ public class HazelcastDataTypes
         lock.unlock();
         System.out.println("unlock() call...");
         System.out.println("is locked? :" + lock.isLocked());
+    }
+
+    private static class EchoTask implements Runnable, Serializable {
+        private final String msg;
+
+        public EchoTask( String msg ) {
+            this.msg = msg;
+        }
+
+        @Override
+        public void run() {
+            System.out.println( "echo:" + msg );
+        }
     }
 }
