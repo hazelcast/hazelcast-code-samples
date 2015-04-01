@@ -17,6 +17,7 @@ import com.hazelcast.core.IdGenerator;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 import com.hazelcast.core.MultiMap;
+import com.hazelcast.core.ReplicatedMap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -39,6 +40,7 @@ public class HazelcastDataTypes
 
         ExecuteMap();
         ExecuteMultiMap();
+        ExecuteReplicatedMap();
         ExecuteQueue();
         ExecuteTopic();
         ExecuteSet();
@@ -75,6 +77,17 @@ public class HazelcastDataTypes
         multimap.put(k, v);
         System.out.println("A random pair is added to multiMap.");
         System.out.println("Added value: " + multimap.get(k) + "\n");
+    }
+
+    public static void ExecuteReplicatedMap()
+    {
+        System.out.println("### ReplicatedMap Execution Started... ###");
+        int k = rand.nextInt(100);
+        int v = rand.nextInt(100);
+        ReplicatedMap<Integer, Integer> replicatedMap = (ReplicatedMap<Integer, Integer>) context.getBean("replicatedMap");
+        replicatedMap.put(k, v);
+        System.out.println("A random pair is added to replicatedMap.");
+        System.out.println("Added value: " + replicatedMap.get(k) + "\n");
     }
 
     public static void ExecuteQueue()

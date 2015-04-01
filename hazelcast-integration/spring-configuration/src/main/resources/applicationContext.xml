@@ -7,7 +7,7 @@
                "http://www.springframework.org/schema/beans
               http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
               http://www.hazelcast.com/schema/spring
-              http://www.hazelcast.com/schema/spring/hazelcast-spring-3.3.xsd
+              http://www.hazelcast.com/schema/spring/hazelcast-spring-3.5.xsd
               http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
        ">
 
@@ -47,6 +47,7 @@
 
     <hz:map             id="map"             instance-ref="instance" name="Map" lazy-init="false"/>
     <hz:multiMap        id="multiMap"        instance-ref="instance" name="Multimap"/>
+    <hz:replicatedMap   id="replicatedMap"   instance-ref="instance" name="ReplicatedMap"/>
     <hz:queue           id="queue"           instance-ref="instance" name="Queue"/>
     <hz:topic           id="topic"           instance-ref="instance" name="Topic" depends-on="instance, client"/>
     <hz:set             id="set"             instance-ref="instance" name="Set"/>
