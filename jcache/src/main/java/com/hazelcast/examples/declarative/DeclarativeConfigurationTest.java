@@ -2,7 +2,7 @@ package com.hazelcast.examples.declarative;
 
 import com.hazelcast.cache.ICache;
 import com.hazelcast.config.CacheConfig;
-import com.hazelcast.config.CacheEvictionConfig;
+import com.hazelcast.config.EvictionConfig;
 
 import javax.cache.CacheManager;
 import javax.cache.Caching;
@@ -49,7 +49,7 @@ public class DeclarativeConfigurationTest {
         System.out.println("backup count: " + cacheConfig.getBackupCount());
         System.out.println("async backup count: " + cacheConfig.getAsyncBackupCount());
 
-        CacheEvictionConfig evictionConfig = cacheConfig.getEvictionConfig();
+        EvictionConfig evictionConfig = cacheConfig.getEvictionConfig();
         System.out.println("max-size: " + evictionConfig.getSize());
         System.out.println("max-size-policy: " + evictionConfig.getMaxSizePolicy());
         System.out.println("eviction-policy: " + evictionConfig.getEvictionPolicy());

@@ -2,7 +2,7 @@ package com.hazelcast.examples.declarative;
 
 import com.hazelcast.cache.ICache;
 import com.hazelcast.config.CacheConfig;
-import com.hazelcast.config.CacheEvictionConfig;
+import com.hazelcast.config.EvictionConfig;
 
 import javax.cache.CacheManager;
 import javax.cache.Caching;
@@ -25,7 +25,7 @@ public class EvictionTest {
         ICache<Object, Object> cache = cacheManager.getCache("cache").unwrap(ICache.class);
         CacheConfig cacheConfig = cache.getConfiguration(CacheConfig.class);
 
-        CacheEvictionConfig evictionConfig = cacheConfig.getEvictionConfig();
+        EvictionConfig evictionConfig = cacheConfig.getEvictionConfig();
         System.out.println("cache configured with eviction -> size:" + evictionConfig.getSize()
                 + " policy:" + evictionConfig.getEvictionPolicyType());
 
