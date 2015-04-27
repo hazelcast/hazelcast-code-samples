@@ -20,6 +20,7 @@
     <modules>
         <module>socket-interceptor</module>
         <module>security-interceptor</module>
+        <module>hidensity-cache</module>
     </modules>
 
     <repositories>

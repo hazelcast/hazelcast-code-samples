@@ -1,8 +1,8 @@
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
 import com.hazelcast.config.CacheConfig;
-import com.hazelcast.config.CacheEvictionConfig;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.EvictionConfig;
 import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.SerializationConfig;
@@ -67,11 +67,11 @@ public abstract class HiDensityCacheUsageSupport {
                         .setStatisticsEnabled(true);
     }
 
-    protected static CacheEvictionConfig createEvictionConfig() {
+    protected static EvictionConfig createEvictionConfig() {
         return
-                new CacheEvictionConfig()
+                new EvictionConfig()
                         .setSize(90) // %90 percentage of native memory can be used
-                        .setMaxSizePolicy(CacheEvictionConfig.CacheMaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
+                        .setMaxSizePolicy(EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
     }
 
     protected static NativeMemoryConfig createMemoryConfig() {
