@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>JCache</artifactId>
-    <name>JCache</name>
+    <artifactId>jcache</artifactId>
+    <name>jcache</name>
     <description>Hazelcast JCache Examples</description>
 
     <properties>
