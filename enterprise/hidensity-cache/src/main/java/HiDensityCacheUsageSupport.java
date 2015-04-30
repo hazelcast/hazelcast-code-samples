@@ -71,7 +71,7 @@ public abstract class HiDensityCacheUsageSupport {
         return
                 new EvictionConfig()
                         .setSize(90) // %90 percentage of native memory can be used
-                        .setMaxSizePolicy(EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
+                        .setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
     }
 
     protected static NativeMemoryConfig createMemoryConfig() {
