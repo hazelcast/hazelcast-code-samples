@@ -21,6 +21,7 @@
         <module>socket-interceptor</module>
         <module>security-interceptor</module>
         <module>hidensity-cache</module>
+        <module>wan-replication</module>
     </modules>
 
     <repositories>
