@@ -6,13 +6,19 @@ Here, Hazelcast's use case is Enterprise Wan Replication.
 <h3>Scenario</h3>
 
 Very briefly, you can send map or cache replication events via Wan Replication.
-In this project we have two clusters ( clusterA and clusterB) and clusterA replicates events to
+In this project we have two clusters (clusterA and clusterB) and clusterA replicates events to
 clusterB. Also there is a command line interface that you can put objects from clusterA and check the objects in clusterB.
 
 In this project there are two sample applications. One of them is for Map Replication and the other one is for Cache Replication.
 
 
 <h2>How to Run Sample Application</h2>
+
+First you need to set your licence keys.
+
+- EnterpriseMapWanReplicationClusterA reads licence key from hazelcast.xml under resources folder. Simply, change `<license-key>YOUR_LICENSE_KEY</license-key>` with yours. 
+- For EnterpriseMapWanReplicationClusterB, EnterpriseCacheWanReplicationClusterA and EnterpriseCacheWanReplicationClusterB, change the value of `static String licenseKey = "YOUR_LICENSE_KEY";`
+
 
 
 <h3>Map Wan Replication</h3>
