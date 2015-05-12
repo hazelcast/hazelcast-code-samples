@@ -38,17 +38,4 @@
         <allow-unsafe>true</allow-unsafe>
     </serialization>
 
-    <native-memory allocator-type="POOLED" enabled="false">
-        <size unit="GIGABYTES" value="1" />
-    </native-memory>
-
-    <!-- <near-cache name="default">
-        <max-size>50000</max-size>
-        <time-to-live-seconds>900</time-to-live-seconds>
-        <eviction-policy>LRU</eviction-policy>
-        <invalidate-on-change>true</invalidate-on-change>
-        <in-memory-format>OFFHEAP</in-memory-format>
-        <local-update-policy>INVALIDATE</local-update-policy>
-    </near-cache> -->
-
 </hazelcast-client>
