@@ -2,30 +2,29 @@
 
 ## Introduction
 
-This project demonstrates two things
+This project allows you to:
 
-1. An example of deploying a Hazelcast project onto Amazon EC2 using third party tools such as [Vagrant](https://www.vagrantup.com/) and [Chef](https://www.chef.io/chef/)
+- deploy a Hazelcast project onto Amazon EC2 using third party tools such as [Vagrant](https://www.vagrantup.com/) and [Chef](https://www.chef.io/chef/), and
 
-2. Demonstration of Hazelcasts auto discovery mechanisms for client connections and also for cluster formation.
+- demonstrate Hazelcast's auto discovery mechanisms for client connections and cluster formation.
 
 ## Assumptions
 
-This isn't intended as a beginners guide to Amazon EC2, Vagrant or Chef.  There are much more worthy guides all over the internet.  If you're new to these tools please familiarize yourself before proceeding.
+This project is not intended as a beginners guide to Amazon EC2, Vagrant, or Chef. If you are new to these tools, please familiarize yourself with them before proceeding.
 
 ### Amazon EC2
 
-I'll be assuming you have prior knowledge of things like Amazon EC2, you'll certainly have already set-up your own instances, maybe via the EC2 control panel.
+You should have prior knowledge of Amazon EC2; for example, you should know how to set up your own instances, maybe via the EC2 control panel.
 
-If not I recommend you run through the following exercise...
-http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html
+You can try Amazon EC2 by running through the following exercise [EC2 Get Started](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html).
 
 ### Vagrant
 
-Vagrant is a wonderful command line tool that lets you start up virtual machines either on your own desktop (using VirtualBox) or via another provider such as Amazon EC2.  Vagrant also takes care of running provisioner's such as Chef.  It simplifies mundane tasks such as connecting to the machines once they are up.
+Vagrant is a command line tool that lets you start up virtual machines either on your own desktop (using VirtualBox) or via another provider such as Amazon EC2. Vagrant also takes care of running provisioners, such as Chef. It simplifies mundane tasks such as connecting to the machines once they are up.
 
 ### Chef
 
-Chef is used to install software on the newly created virtual machine.  The instructions to do this are created in files called recipes.
+Chef installs software on the newly created virtual machine. The instructions to do this are created in files called recipes.
 
 ## Project Structure
 
