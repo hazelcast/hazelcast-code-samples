@@ -3,7 +3,7 @@ package com.hazelcast.cache.wanreplication;
 import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.AbstractHazelcastCacheManager;
-import com.hazelcast.cache.merge.HigherHitCacheMergePolicy;
+import com.hazelcast.cache.merge.HigherHitsCacheMergePolicy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.WanReplicationConfig;
@@ -133,7 +133,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         WanReplicationRef wanReplicationRef = new WanReplicationRef();
         wanReplicationRef.setName("AtoB");
         config.setLicenseKey(licenseKey);
-        wanReplicationRef.setMergePolicy(HigherHitCacheMergePolicy.class.getName());
+        wanReplicationRef.setMergePolicy(HigherHitsCacheMergePolicy.class.getName());
         config.getCacheConfig("default").setWanReplicationRef(wanReplicationRef);
         
         return config;
