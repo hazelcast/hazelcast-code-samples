@@ -26,6 +26,11 @@
             <artifactId>cache-api</artifactId>
             <version>${jsr107.api.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hazelcast.samples</groupId>
+            <artifactId>jcache</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
