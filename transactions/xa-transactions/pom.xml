@@ -1,0 +1,36 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+
+    <artifactId>xa-transactions</artifactId>
+    <name>Transactions - XA Transaction</name>
+    <description>
+        All the code samples for the XA Transactions
+    </description>
+
+    <properties>
+        <atomikos-version>3.9.3</atomikos-version>
+    </properties>
+
+    <parent>
+        <artifactId>transactions</artifactId>
+        <groupId>com.hazelcast.samples.transactions</groupId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions-jdbc</artifactId>
+            <version>${atomikos-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jta_1.1_spec</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+    </dependencies>
+
+</project>
