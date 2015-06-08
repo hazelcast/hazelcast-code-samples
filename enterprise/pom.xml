@@ -23,6 +23,7 @@
         <module>hidensity-cache</module>
         <module>wan-replication</module>
         <module>hd-memory-client-server</module>
+        <module>continuous-query-cache</module>
     </modules>
 
     <repositories>
