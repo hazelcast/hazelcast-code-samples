@@ -20,7 +20,7 @@
     <modules>
         <module>transaction-basics</module>
         <module>transactional-task</module>
-
+        <module>xa-transactions</module>
     </modules>
 
     <dependencies>
