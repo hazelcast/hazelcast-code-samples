@@ -36,6 +36,7 @@
         <module>distributed-map</module>
         <module>distributed-executor</module>
         <module>distributed-topic</module>
+        <module>cluster-quorum</module>
         <module>clients</module>
         <module>mapreduce</module>
         <module>network-configuration</module>
