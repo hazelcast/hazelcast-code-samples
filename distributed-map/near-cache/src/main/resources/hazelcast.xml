@@ -9,6 +9,8 @@
             <time-to-live-seconds>60</time-to-live-seconds>
             <eviction-policy>NONE</eviction-policy>
             <invalidate-on-change>false</invalidate-on-change>
+            <in-memory-format>OBJECT</in-memory-format>
+            <cache-local-entries>true</cache-local-entries>
         </near-cache>
     </map>
 </hazelcast>
