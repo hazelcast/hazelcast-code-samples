@@ -1,0 +1,17 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.5.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <network>
+        <join>
+            <multicast enabled="true"/>
+        </join>
+    </network>
+
+    <ringbuffer name="rb">
+        <capacity>1000</capacity>
+        <time-to-live-seconds>5</time-to-live-seconds>
+    </ringbuffer>
+
+</hazelcast>

@@ -24,6 +24,7 @@
         <module>list</module>
         <module>set</module>
         <module>itemlisteners</module>
+        <module>ringbuffer</module>
     </modules>
 
     <dependencies>

@@ -1,0 +1,20 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+
+    <artifactId>ringbuffer</artifactId>
+    <name>Distributed Collections - Ringbuffer</name>
+
+    <description>
+        Distributed Collections - Ringbuffer
+    </description>
+
+    <parent>
+        <groupId>com.hazelcast.samples.collections</groupId>
+        <artifactId>distributed-collections</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+</project>
