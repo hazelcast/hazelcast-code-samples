@@ -1,0 +1,23 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.5.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <network>
+        <join>
+            <multicast enabled="true"/>
+        </join>
+    </network>
+
+    <!-- This is the ringbuffer that is used by the 'sometopic' Reliable-topic. As you can see the
+         ringbuffer has the same name as the topic. -->
+    <ringbuffer name="sometopic">
+        <capacity>1000</capacity>
+        <time-to-live-seconds>5</time-to-live-seconds>
+    </ringbuffer>
+
+    <reliable-topic name="sometopic">
+        <!-- the default is BLOCKED; so this configuration isn't needed-->
+        <topic-overload-policy>BLOCK</topic-overload-policy>
+    </reliable-topic>
+</hazelcast>

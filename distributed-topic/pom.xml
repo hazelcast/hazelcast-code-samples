@@ -20,6 +20,7 @@
     <modules>
         <module>basic-pub-sub</module>
         <module>scaling</module>
+        <module>reliable-topic</module>
     </modules>
 
     <dependencies>
