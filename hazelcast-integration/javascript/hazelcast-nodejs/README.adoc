@@ -1,0 +1,43 @@
+= Hazelcast NodeJS integration example
+Viktor Gamov <viktor@hazelcast.com>, © 2015 Hazelcast, Inc.
+2015-01-09
+:revdate: 2015-01-09 15:11:17 -0600
+:linkattrs:
+:ast: &ast;
+:y: &#10003;
+:n: &#10008;
+:y: icon:check-sign[role="green"]
+:n: icon:check-minus[role="red"]
+:c: icon:file-text-alt[role="blue"]
+:toc: auto
+:toc-placement: auto
+:toc-position: right
+:toc-title: Table of content
+:toclevels: 3
+:idprefix:
+:idseparator: -
+:sectanchors:
+:icons: font
+:source-highlighter: highlight.js
+:highlightjs-theme: idea
+:experimental:
+
+It's a quick and dirty POC of Hazelcast client integration with NodeJS. It uses `node-java` https://www.npmjs.com/package/java[Node module] to invoke Java class from JavaScript code.
+
+== Run the example
+
+.Start hazelcast member node
+----
+cd lib
+java -jar hazelcast-3.5.jar
+----
+
+.Install npm dependencies and start nodejs client using jars from `lib` directory
+----
+npm install && node app.js
+----
+
+.Install npm dependencies and start nodejs client using jars from using Maven
+----
+npm install && node appWithMaven.js
+----
