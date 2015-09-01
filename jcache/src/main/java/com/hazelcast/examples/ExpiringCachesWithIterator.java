@@ -15,7 +15,7 @@ public class ExpiringCachesWithIterator extends AbstractApp{
 
     public void runApp()
             throws InterruptedException {
-        //first thin is we need to initialize the cache Manager
+        //first thing is we need to initialize the cache Manager
         final CacheManager cacheManager = initCacheManager();
 
         //create a cache with the provided name
