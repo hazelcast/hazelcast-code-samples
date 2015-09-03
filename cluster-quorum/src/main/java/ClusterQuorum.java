@@ -4,6 +4,7 @@ import com.hazelcast.config.QuorumConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.quorum.QuorumException;
 
 public class ClusterQuorum {
 
@@ -20,25 +21,29 @@ public class ClusterQuorum {
         config.addMapConfig(mapConfig);
         config.addQuorumConfig(quorumConfig);
 
-
         HazelcastInstance instance1 = Hazelcast.newHazelcastInstance(config);
         HazelcastInstance instance2 = Hazelcast.newHazelcastInstance(config);
 
-        IMap<Object, Object> map = instance1.getMap(NAME);
-        map.put("key", "value");
+        IMap<String, String> map = instance1.getMap(NAME);
 
-        System.out.println("Quorum is satisfied and key/value put into the map without problem");
+        // Quorum will succeed
+        System.out.println("Quorum is satisfied, so the following put will throw no exception");
+        map.put("key1", "we have the quorum");
 
-        System.out.println("Now killing one instance, and there won't be enough members for quorum presence");
+        String value = map.get("key1");
+        System.out.println("'key1' has the value '" + value + "'");
+
+        // Quorum will fail
+        System.out.println("Shutdown one instance, so there won't be enough members for quorum presence");
         instance2.getLifecycleService().shutdown();
 
-        System.out.println("Following put operation will fail");
+        System.out.println("The following put operation will fail");
         try {
-            map.put("key2", "value2");
-        } catch (Exception e) {
-            System.out.println("Put operation failed with exception -> " + e.getMessage());
+            map.put("key2", "will not succeed");
+        } catch (QuorumException expected) {
+            System.out.println("Put operation failed with expected QuorumException: " + expected.getMessage());
         }
-        instance1.shutdown();
-        instance2.shutdown();
+
+        Hazelcast.shutdownAll();
     }
 }
