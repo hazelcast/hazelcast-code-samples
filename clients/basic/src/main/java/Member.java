@@ -4,11 +4,14 @@ import com.hazelcast.core.HazelcastInstance;
 import java.util.concurrent.BlockingQueue;
 
 public class Member {
+
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        System.out.println("Hazelcast Member instance is running!");
+
         BlockingQueue<String> queue = hz.getQueue("queue");
-        System.out.println("Full member up");
-        for (; ; )
+        for (; ; ) {
             System.out.println(queue.take());
+        }
     }
 }

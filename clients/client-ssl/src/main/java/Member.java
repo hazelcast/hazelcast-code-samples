@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
 public class Member {
+
     public static void main(String[] args) throws Exception {
         System.setProperty("javax.net.ssl.keyStore", new File("hazelcast.ks").getAbsolutePath());
         System.setProperty("javax.net.ssl.trustStore", new File("hazelcast.ts").getAbsolutePath());
@@ -17,9 +18,11 @@ public class Member {
         // config.getNetworkConfig().setSSLConfig(new SSLConfig().setEnabled(true));
 
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
+        System.out.println("Hazelcast Member instance is running!");
+
         BlockingQueue<String> queue = hz.getQueue("queue");
-        System.out.println("Full member up");
-        for (; ; )
+        for (; ; ) {
             System.out.println(queue.take());
+        }
     }
 }
