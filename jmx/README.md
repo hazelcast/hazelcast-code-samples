@@ -1,6 +1,6 @@
 ## Hazelcast JMX Example
 
-### Perquisites
+### Prerequisites
  
 For this example to work, you need to enable these JVM flags:
 
