@@ -50,6 +50,7 @@
         <module>replicated-map</module>
         <module>enterprise</module>
         <module>jcache</module>
+        <module>jmx</module>
     </modules>
 
     <build>
