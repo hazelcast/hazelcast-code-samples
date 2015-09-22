@@ -2,10 +2,10 @@ import java.io.Serializable;
 
 /**
  * Simple Person class
- *
- * @since 2/6/15
  */
+@SuppressWarnings("unused")
 public class Person implements Serializable {
+
     private String name;
 
     public Person(String name) {
@@ -21,7 +21,8 @@ public class Person implements Serializable {
         return this;
     }
 
-    @Override public String toString() {
-        return "Person {" + "name='" + name + '\'' + '}';
+    @Override
+    public String toString() {
+        return "Person {name='" + name + "'}";
     }
 }
