@@ -3,7 +3,7 @@ package com.hazelcast.cache.wanreplication;
 import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.AbstractHazelcastCacheManager;
-import com.hazelcast.cache.merge.HigherHitsCacheMergePolicy;
+import com.hazelcast.cache.impl.merge.policy.HigherHitsCacheMergePolicy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.WanReplicationConfig;
