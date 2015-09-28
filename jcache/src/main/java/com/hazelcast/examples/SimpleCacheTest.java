@@ -26,6 +26,8 @@ import com.hazelcast.logging.ILogger;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
+import javax.cache.configuration.MutableConfiguration;
+import javax.cache.expiry.AccessedExpiryPolicy;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -143,7 +145,14 @@ public final class SimpleCacheTest {
 
         final CacheManager cacheManager = cachingProvider.getCacheManager();
 
-        final Cache<String, Object> cache = cacheManager.getCache(NAMESPACE);
+        //configure the cache
+        final MutableConfiguration<String, Object> config = new MutableConfiguration<String, Object>();
+        config.setStoreByValue(true)
+                .setTypes(String.class, Object.class)
+                .setStatisticsEnabled(false);
+
+        final Cache<String, Object> cache = cacheManager.createCache(NAMESPACE,config);
+
 //        final IMap<String, Object> map = instance.getMap(NAMESPACE);
         for (int i = 0; i < threadCount; i++) {
             es.execute(new Runnable() {
