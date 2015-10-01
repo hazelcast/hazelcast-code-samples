@@ -108,7 +108,7 @@ public class Main {
     private static Cache<Integer, User> configureCache(UserDao userDao) {
         // Explicitly retrieve the Hazelcast backed javax.cache.spi.CachingProvider
         CachingProvider cachingProvider = Caching.getCachingProvider(
-                "com.hazelcast.cache.impl.HazelcastCachingProvider"
+                "com.hazelcast.cache.HazelcastCachingProvider"
         );
 
         // Retrieve the javax.cache.CacheManager
