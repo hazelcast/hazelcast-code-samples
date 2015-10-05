@@ -4,6 +4,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 
+import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -12,10 +13,12 @@ public class IndexBenchmark {
     public final static int MAP_SIZE = 100000;
     public final static int TIME_SECONDS = 60;
     public final static int UPDATE_PERCENTAGE = 10;
-    private static final String[] names = new String[]{"Jacob", "Sophia", "Mason", "Isabella",
+    private static final String[] forenames = new String[]{"Jacob", "Sophia", "Mason", "Isabella",
             "William", "Emma", "Jayden", "Olivia", "Noah", "Ava", "Michael", "Emily",
             "Ethan", "Abigail", "Alexander", "Madison", "Aiden", "Mia", "Daniel", "Chloe"};
-
+    private static final String[] surnames = new String[]{"Chaney","Webb","Strickland","Gregory",
+            "Salinas","Yang","Meyer","Nicholson","Liu","Andrade","Reynolds","Shannon","Pace",
+            "Finley","Forbes","Burnett","Rich","Mcknight","Ibarra","Parrish"};
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
 
@@ -32,8 +35,9 @@ public class IndexBenchmark {
         System.out.println("Generating testdata");
         Random random = new Random();
         for (int k = 0; k < MAP_SIZE; k++) {
-            String name = names[random.nextInt(names.length)];
-            personMap.put("" + k, new Person(name));
+            String forename = forenames[random.nextInt(forenames.length)];
+            String surname = surnames[random.nextInt(surnames.length)];
+            personMap.put("" + k, new Person(new Name(forename,surname)));
         }
         System.out.println("Testdata generated");
 
@@ -46,12 +50,14 @@ public class IndexBenchmark {
             int x = random.nextInt(100);
             if (x < UPDATE_PERCENTAGE) {
                 int id = random.nextInt(MAP_SIZE);
-                String name = names[random.nextInt(names.length)];
-                personMap.put("" + id, new Person(name));
+                String forename = forenames[random.nextInt(forenames.length)];
+                String surname = surnames[random.nextInt(surnames.length)];
+                personMap.put("" + id, new Person(new Name(forename,surname)));
                 updateCount++;
             } else {
-                Predicate predicate = Predicates.equal("name", names[random.nextInt(names.length)]);
-                personMap.values(predicate);
+                Predicate predicate = Predicates.equal("name.surname", surnames[random.nextInt(surnames.length)]);
+
+                Collection values = personMap.values(predicate);
                 searchCount++;
             }
         }

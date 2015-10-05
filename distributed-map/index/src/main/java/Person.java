@@ -1,9 +1,9 @@
 import java.io.Serializable;
 
 public class Person implements Serializable {
-    public String name;
+    public Name name;
 
-    public Person(String name) {
+    public Person(Name name) {
         this.name = name;
     }
 
