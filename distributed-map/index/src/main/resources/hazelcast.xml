@@ -10,7 +10,7 @@
 
     <map name="personsWithIndex">
         <indexes>
-            <index ordered="false">name</index>
+            <index ordered="false">name.surname</index>
         </indexes>
     </map>
 
