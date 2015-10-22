@@ -1,0 +1,52 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <group>
+        <name>dev</name>
+        <password>dev-pass</password>
+    </group>
+
+    <network>
+        <port auto-increment="true" port-count="100">5701</port>
+        <outbound-ports>
+            <!--
+            Allowed port range when connecting to other nodes.
+            0 or * means use system provided port.
+            -->
+            <ports>0</ports>
+        </outbound-ports>
+        <join>
+            <multicast enabled="true">
+                <multicast-group>224.2.2.3</multicast-group>
+                <multicast-port>54327</multicast-port>
+            </multicast>
+            <tcp-ip enabled="false">
+            </tcp-ip>
+            <aws enabled="false">
+            </aws>
+        </join>
+    </network>
+
+    <cache name="my-cache-higherhits">
+        <merge-policy>HIGHER_HITS</merge-policy>
+    </cache>
+
+    <cache name="my-cache-latestaccess">
+        <merge-policy>LATEST_ACCESS</merge-policy>
+    </cache>
+
+    <cache name="my-cache-passthrough">
+        <merge-policy>PASS_THROUGH</merge-policy>
+    </cache>
+
+    <cache name="my-cache-putifabsent">
+        <merge-policy>PUT_IF_ABSENT</merge-policy>
+    </cache>
+
+    <cache name="my-cache-custom">
+        <merge-policy>com.hazelcast.examples.splitbrain.custom.CacheSplitBrainSampleWithCustomCacheMergePolicy$CustomCacheMergePolicy</merge-policy>
+    </cache>
+
+</hazelcast>
