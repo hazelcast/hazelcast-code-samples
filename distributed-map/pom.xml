@@ -36,6 +36,7 @@
         <module>entry-listener</module>
 		<module>partition-lost-listener</module>
         <module>continuous-query</module>
+        <module>query-collections</module>
         <module>map-interceptor</module>
     </modules>
 
