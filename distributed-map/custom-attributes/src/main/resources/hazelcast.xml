@@ -1,0 +1,18 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+    <network>
+        <join>
+            <multicast enabled="true"/>
+        </join>
+    </network>
+
+    <map name="people">
+        <!-- custom attribute defined together with extractor -->
+        <attributes>
+            <attribute extractor="com.test.customer.AgeInMonthsExtractor">ageInMonths</attribute>
+        </attributes>
+    </map>
+
+</hazelcast>
