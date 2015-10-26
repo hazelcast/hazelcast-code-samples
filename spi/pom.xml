@@ -24,6 +24,7 @@
         <module>partition-migration</module>
         <module>backups</module>
         <!-- module>notification</module -->
+        <module>discovery</module>
     </modules>
 
     <dependencies>
