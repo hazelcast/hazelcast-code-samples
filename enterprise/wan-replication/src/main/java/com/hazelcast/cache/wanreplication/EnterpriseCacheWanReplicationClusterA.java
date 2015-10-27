@@ -3,7 +3,7 @@ package com.hazelcast.cache.wanreplication;
 import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.AbstractHazelcastCacheManager;
-import com.hazelcast.cache.impl.merge.policy.HigherHitsCacheMergePolicy;
+import com.hazelcast.cache.merge.HigherHitsCacheMergePolicy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.WanReplicationConfig;
@@ -12,7 +12,6 @@ import com.hazelcast.config.WanTargetClusterConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.enterprise.wan.replication.WanNoDelayReplication;
-import com.hazelcast.instance.GroupProperties;
 
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
@@ -62,7 +61,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         }
 
         ICache cache = manager.getOrCreateCache("default",new CacheConfig(clusterA.getConfig().getCacheConfig("default")));
-        
+
         System.out.println("Cluster is ready now.");
         System.out.println("write \"help\" for the command lists:");
         for (; ; ) {
@@ -118,8 +117,6 @@ public class EnterpriseCacheWanReplicationClusterA {
         config.setClassLoader(createCacheManagerClassLoader());
         WanReplicationConfig wanReplicationConfig = new WanReplicationConfig();
         wanReplicationConfig.setName("AtoB");
-        config.setProperty(GroupProperties.PROP_ELASTIC_MEMORY_ENABLED, "false");
-        
 
         WanTargetClusterConfig targetConfigClusterB = new WanTargetClusterConfig();
         targetConfigClusterB.addEndpoint("127.0.0.1:5702").setReplicationImpl(WanNoDelayReplication.class.getName());
@@ -135,7 +132,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         config.setLicenseKey(licenseKey);
         wanReplicationRef.setMergePolicy(HigherHitsCacheMergePolicy.class.getName());
         config.getCacheConfig("default").setWanReplicationRef(wanReplicationRef);
-        
+
         return config;
     }
 

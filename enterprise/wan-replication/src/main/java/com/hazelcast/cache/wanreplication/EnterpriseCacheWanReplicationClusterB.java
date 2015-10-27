@@ -7,7 +7,6 @@ import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.GroupProperties;
 
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
@@ -111,7 +110,6 @@ public class EnterpriseCacheWanReplicationClusterB {
         config.setInstanceName("clusterB");
         config.getNetworkConfig().setPort(5702);
         config.setClassLoader(createCacheManagerClassLoader());
-        config.setProperty(GroupProperties.PROP_ELASTIC_MEMORY_ENABLED, "false");
 
         return config;
     }

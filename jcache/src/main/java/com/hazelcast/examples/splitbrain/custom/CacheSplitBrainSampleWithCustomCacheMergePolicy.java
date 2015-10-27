@@ -8,13 +8,10 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.examples.splitbrain.AbstractCacheSplitBrainSample;
 import com.hazelcast.instance.HazelcastInstanceFactory;
-import com.hazelcast.nio.ObjectDataInput;
-import com.hazelcast.nio.ObjectDataOutput;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.spi.CachingProvider;
-import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -80,17 +77,6 @@ abstract class CacheSplitBrainSampleWithCustomCacheMergePolicy extends AbstractC
             }
             return null;
         }
-
-        @Override
-        public void writeData(ObjectDataOutput out) throws IOException {
-
-        }
-
-        @Override
-        public void readData(ObjectDataInput in) throws IOException {
-
-        }
-
     }
 
 }
