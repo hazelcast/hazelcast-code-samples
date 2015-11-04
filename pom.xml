@@ -51,6 +51,7 @@
         <module>enterprise</module>
         <module>jcache</module>
         <module>jmx</module>
+        <module>osgi</module>
     </modules>
 
     <build>
