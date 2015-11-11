@@ -29,7 +29,7 @@
     <groupId>com.hazelcast.mongodb</groupId>
     <artifactId>mongodb-integration</artifactId>
     <name>hazelcast-mongodb-integration-sample</name>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <properties>
         <java-version>1.6</java-version>
         <mongo-java-driver.version>3.0.4</mongo-java-driver.version>
