@@ -4,8 +4,10 @@ import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.AbstractHazelcastCacheManager;
 import com.hazelcast.cache.merge.HigherHitsCacheMergePolicy;
+import com.hazelcast.cache.wanreplication.filter.SampleCacheWanEventFilter;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.WanAcknowledgeType;
 import com.hazelcast.config.WanReplicationConfig;
 import com.hazelcast.config.WanReplicationRef;
 import com.hazelcast.config.WanTargetClusterConfig;
@@ -121,6 +123,8 @@ public class EnterpriseCacheWanReplicationClusterA {
         WanTargetClusterConfig targetConfigClusterB = new WanTargetClusterConfig();
         targetConfigClusterB.addEndpoint("127.0.0.1:5702").setReplicationImpl(WanNoDelayReplication.class.getName());
         targetConfigClusterB.setGroupName("clusterB").setGroupPassword("clusterB-pass");
+        //Setting acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE
+        targetConfigClusterB.setAcknowledgeType(WanAcknowledgeType.ACK_ON_OPERATION_COMPLETE);
         wanReplicationConfig.addTargetClusterConfig(targetConfigClusterB);
 
 
@@ -131,6 +135,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         wanReplicationRef.setName("AtoB");
         config.setLicenseKey(licenseKey);
         wanReplicationRef.setMergePolicy(HigherHitsCacheMergePolicy.class.getName());
+        wanReplicationRef.addFilter(SampleCacheWanEventFilter.class.getName());
         config.getCacheConfig("default").setWanReplicationRef(wanReplicationRef);
 
         return config;
