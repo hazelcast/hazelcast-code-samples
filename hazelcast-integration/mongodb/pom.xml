@@ -19,41 +19,26 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <artifactId>code-samples</artifactId>
+        <artifactId>hazelcast-integration</artifactId>
         <groupId>com.hazelcast.samples</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>hazelcast-integration</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>filter-based-session-replication</module>
-        <module>hibernate-2ndlevel-cache</module>
-        <module>jca-ra</module>
-        <module>spring-cache-manager</module>
-        <module>spring-configuration</module>
-        <module>spring-data-integration</module>
-        <module>spring-hibernate-2ndlevel-cache</module>
-        <module>enterprise-session-replication</module>
-        <module>spring-security</module>
-        <module>hibernate-jpa-2ndlevel-cache</module>
-        <module>amazon-ec2-vagrant-chef</module>
-        <module>mongodb</module>
-    </modules>
-
+    <groupId>com.hazelcast.mongodb</groupId>
+    <artifactId>mongodb-integration</artifactId>
+    <name>hazelcast-mongodb-integration-sample</name>
+    <packaging>war</packaging>
+    <properties>
+        <java-version>1.6</java-version>
+        <mongo-java-driver.version>3.0.4</mongo-java-driver.version>
+    </properties>
     <dependencies>
-         <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-all</artifactId>
-            <version>${hazelcast.version}</version>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${mongo-java-driver.version}</version>
         </dependency>
     </dependencies>
-
-
 </project>
