@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hazelcast.version>3.5.4-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.5.5-SNAPSHOT</hazelcast.version>
     </properties>
 
     <repositories>
