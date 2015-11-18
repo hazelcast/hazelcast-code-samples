@@ -25,7 +25,6 @@ import java.io.Serializable;
  *
  * @author Viktor Gamov on 11/4/15.
  *         Twitter: @gamussa
- * @since 0.0.1
  */
 public class Supplement implements Serializable{
     private final String name;

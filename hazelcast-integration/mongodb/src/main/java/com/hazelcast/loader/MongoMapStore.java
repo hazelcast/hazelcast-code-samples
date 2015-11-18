@@ -36,11 +36,10 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.in;
 
 /**
- * MapStore for MongoDB
+ * MapStore implementation for MongoDB
  *
  * @author Viktor Gamov on 11/4/15.
  *         Twitter: @gamussa
- * @since 0.0.1
  */
 public class MongoMapStore implements MapStore<String, Supplement>, MapLoaderLifecycleSupport {
     private MongoClient mongoClient;
@@ -48,40 +47,6 @@ public class MongoMapStore implements MapStore<String, Supplement>, MapLoaderLif
 
 
     public MongoMapStore() {
-    }
-
-
-    @Override public Map loadAll(Collection keys) {
-        System.out.println("LoadAll " + keys);
-        final HashMap<String, Supplement> result = new HashMap<String, Supplement>();
-
-        final FindIterable<Document> id = collection.find(in("_id", keys));
-        for (Document document : id) {
-            final String name = (String) document.get("name");
-            final Integer price = document.getInteger("price");
-            result.put(document.get("_id").toString(), new Supplement(name, price));
-        }
-        return result;
-    }
-
-    @Override public Supplement load(String key) {
-        System.out.println("Load " + key);
-        final Document document =
-            (Document) collection.find(eq("_id", key)).first();
-        final String name = (String) document.get("name");
-        final Integer price = document.getInteger("price");
-        return new Supplement(name, price);
-
-    }
-
-    @Override public Iterable loadAllKeys() {
-        System.out.println("LoadAllKeys");
-        List<String> keys = new LinkedList<String>();
-        final FindIterable<Document> ids = collection.find().projection(Projections.include("_id"));
-        for (Document document : ids) {
-            keys.add(document.get("_id").toString());
-        }
-        return keys;
     }
 
 
@@ -96,19 +61,54 @@ public class MongoMapStore implements MapStore<String, Supplement>, MapLoaderLif
     }
 
 
+    @Override
+    public void destroy() {
+        mongoClient.close();
+    }
 
-    @Override public void destroy() {
+    @Override public Supplement load(String key) {
+        System.out.println("Load " + key);
+        final Document document =
+            (Document) collection.find(eq("_id", key)).first();
+        final String name = (String) document.get("name");
+        final Integer price = document.getInteger("price");
+        return new Supplement(name, price);
 
     }
 
-    @Override public void store(String key, Supplement value) {
+    @Override public Map loadAll(Collection keys) {
+        System.out.println("LoadAll " + keys);
+        final HashMap<String, Supplement> result = new HashMap<String, Supplement>();
+
+        final FindIterable<Document> id = collection.find(in("_id", keys));
+        for (Document document : id) {
+            final String name = (String) document.get("name");
+            final Integer price = document.getInteger("price");
+            result.put(document.get("_id").toString(), new Supplement(name, price));
+        }
+        return result;
+    }
+
+    @Override public Iterable loadAllKeys() {
+        System.out.println("LoadAllKeys");
+        List<String> keys = new LinkedList<String>();
+        final FindIterable<Document> ids = collection.find().projection(Projections.include("_id"));
+        for (Document document : ids) {
+            keys.add(document.get("_id").toString());
+        }
+        return keys;
+    }
+
+    @Override
+    public void store(String key, Supplement value) {
         Document doc = new Document("name", value.getName()).append("price", value.getPrice())
             .append("_id", key);
         this.collection.insertOne(doc);
         //this.collection.replaceOne(doc, doc);
     }
 
-    @Override public void storeAll(Map<String, Supplement> map) {
+    @Override
+    public void storeAll(Map<String, Supplement> map) {
         final List<InsertOneModel> batch = new LinkedList<InsertOneModel>();
         for (Map.Entry<String, Supplement> entry : map.entrySet()) {
             final String k = entry.getKey();
@@ -122,12 +122,14 @@ public class MongoMapStore implements MapStore<String, Supplement>, MapLoaderLif
 
     }
 
-    @Override public void delete(String key) {
+    @Override
+    public void delete(String key) {
         this.collection.deleteOne(eq("_id", key));
 
     }
 
-    @Override public void deleteAll(Collection<String> keys) {
+    @Override
+    public void deleteAll(Collection<String> keys) {
         this.collection.deleteMany(in("_id", keys));
     }
 }
