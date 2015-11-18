@@ -45,6 +45,7 @@
         <module>hibernate-jpa-2ndlevel-cache</module>
         <module>amazon-ec2-vagrant-chef</module>
         <module>mongodb</module>
+        <module>spring-jcache</module>
     </modules>
 
     <dependencies>
