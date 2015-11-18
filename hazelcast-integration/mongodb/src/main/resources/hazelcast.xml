@@ -25,6 +25,10 @@
 
     <management-center enabled="true">http://localhost:8080/mancenter</management-center>
 
+    <!--
+        For development purposes, MongoDB should be installed locally according to this manual
+        https://docs.mongodb.org/manual/installation/
+    -->
     <map name="supplements">
         <map-store enabled="true" initial-mode="LAZY">
             <class-name>com.hazelcast.loader.MongoMapStore</class-name>

@@ -25,11 +25,13 @@ import com.hazelcast.core.IMap;
 import java.io.FileNotFoundException;
 
 /**
- * Starter application for read-through / write-through example with Hazelcast and MongoDB
+ * Starter application for read-through / write-through example with Hazelcast and MongoDB.
+ *
+ * Connection details should be interred in `hazelcast.xml` under MapStore config for IMap
+ * Properties includes: connection url, database and collection names
  *
  * @author Viktor Gamov on 11/2/15.
  *         Twitter: @gamussa
- * @since 0.0.1
  */
 public class ReadWriteThroughCache {
     public static void main(String[] args) throws FileNotFoundException {
