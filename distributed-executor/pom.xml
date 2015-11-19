@@ -24,6 +24,7 @@
         <module>executing-on-specific-member</module>
         <module>executing-on-key-owner</module>
         <module>executing-on-all-members</module>
+        <module>executing-on-lite-members</module>
         <module>futures</module>
         <module>execution-callback</module>
     </modules>
