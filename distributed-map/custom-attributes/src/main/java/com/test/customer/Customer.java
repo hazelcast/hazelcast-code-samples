@@ -4,24 +4,27 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class Customer implements Serializable {
-    private final String id = UUID.randomUUID().toString();
-    public String name;
-    public boolean active;
-    public int age;
 
-    public Customer(String name, boolean active, int age) {
-        this.active = active;
-        this.age = age;
+    private final String id = UUID.randomUUID().toString();
+
+    public String name;
+    public String surname;
+    public int yearOfBirth;
+
+    public Customer(String name, String surname, int yearOfBirth) {
         this.name = name;
+        this.surname = surname;
+        this.yearOfBirth = yearOfBirth;
     }
 
     @Override
     public String toString() {
         return "Customer{" +
-                "active=" + active +
-                ", id='" + id + '\'' +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", age=" + age +
+                ", surname='" + surname + '\'' +
+                ", yearOfBirth=" + yearOfBirth +
                 '}';
     }
+
 }

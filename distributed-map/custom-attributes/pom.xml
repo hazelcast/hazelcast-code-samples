@@ -10,8 +10,8 @@
 
     <artifactId>custom-attributes</artifactId>
     <packaging>pom</packaging>
-    <name>Custom Attributes</name>
-    <description>Custom Attributes Examples</description>
+    <name>DistributedMap - Custom Attributes</name>
+    <description>DistributedMap - Custom Attributes Examples</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
