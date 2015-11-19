@@ -8,11 +8,20 @@
         </join>
     </network>
 
-    <map name="people">
-        <!-- custom attribute defined together with extractor -->
+    <map name="cars">
+        <!-- custom attribute definitions -->
         <attributes>
-            <attribute extractor="com.test.customer.AgeInMonthsExtractor">ageInMonths</attribute>
+            <attribute extractor="com.test.car.attribute.CarAttributeExtractor">attribute</attribute>
+            <attribute extractor="com.test.car.trip.CarTripDistanceExtractor">tripDistance</attribute>
         </attributes>
+
+        <!-- index definitions using custom attributes -->
+        <indexes>
+            <!-- custom attribute using an extraction parameter -->
+            <index ordered="true">attribute[name]</index>
+            <!-- custom attribute without an extraction parameter -->
+            <index ordered="true">tripDistance</index>
+        </indexes>
     </map>
 
 </hazelcast>
