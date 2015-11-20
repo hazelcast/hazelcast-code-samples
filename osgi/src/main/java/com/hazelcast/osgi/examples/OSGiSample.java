@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
-import static org.ops4j.pax.tinybundles.core.TinyBundles.*;
+import static org.ops4j.pax.tinybundles.core.TinyBundles.bundle;
+import static org.ops4j.pax.tinybundles.core.TinyBundles.withBnd;
 
 /**
  * Demonstrates how to use Hazelcast's OSGI support through {@link com.hazelcast.osgi.HazelcastOSGiService}.
@@ -28,7 +29,7 @@ public class OSGiSample {
         BundleContext bundleContext = null;
         try {
             FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
-            Map frameworkConfigs = new HashMap();
+            Map<String, String> frameworkConfigs = new HashMap<String, String>();
             frameworkConfigs.put(Constants.FRAMEWORK_BOOTDELEGATION, "*");
             frameworkConfigs.put(Constants.FRAMEWORK_STORAGE_CLEAN, Constants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT);
             frameworkConfigs.put(Constants.FRAMEWORK_BUNDLE_PARENT, Constants.FRAMEWORK_BUNDLE_PARENT_APP);
@@ -43,39 +44,37 @@ public class OSGiSample {
             // Find the Hazelcast jar which is OSGI bundle also
             String bundleLocation = Hazelcast.class.getProtectionDomain().getCodeSource().getLocation().toString();
 
-            System.out.println("Loading `Hazelcast` bundle from " + bundleLocation + " ...");
+            System.out.println("Loading `Hazelcast` bundle from " + bundleLocation + "...");
 
             // Install Hazelcast bundle
             installedBundles.add(bundleContext.installBundle(bundleLocation));
 
             // Create a sample bundle which is activated by our sample activator
-            InputStream sampleBundleInputStream =
-                    bundle()
-                        .add(SampleActivator.class)
-                        .set(Constants.BUNDLE_SYMBOLICNAME, SAMPLE_BUNDLE_ID)
-                        .set(Constants.BUNDLE_VERSION, SAMPLE_BUNDLE_VERSION)
-                        .set(Constants.BUNDLE_ACTIVATOR, SampleActivator.class.getName())
+            InputStream sampleBundleInputStream = bundle()
+                    .add(SampleActivator.class)
+                    .set(Constants.BUNDLE_SYMBOLICNAME, SAMPLE_BUNDLE_ID)
+                    .set(Constants.BUNDLE_VERSION, SAMPLE_BUNDLE_VERSION)
+                    .set(Constants.BUNDLE_ACTIVATOR, SampleActivator.class.getName())
                     .build(withBnd());
 
-            System.out.println("Loading sample bundle ...");
+            System.out.println("Loading sample bundle...");
 
             // Install our sample bundle
             installedBundles.add(bundleContext.installBundle(SAMPLE_BUNDLE_ID, sampleBundleInputStream));
 
             // Start installed bundles
             for (Bundle bundle : installedBundles) {
-                System.out.println("Starting bundle " + bundle + " ...");
+                System.out.println("Starting bundle " + bundle + "...");
                 bundle.start();
             }
         } finally {
             if (bundleContext != null) {
                 // Stop all bundles
                 for (Bundle bundle : bundleContext.getBundles()) {
-                    System.out.println("Stopping bundle " + bundle + " ...");
+                    System.out.println("Stopping bundle " + bundle + "...");
                     bundle.stop();
                 }
             }
         }
     }
-
 }

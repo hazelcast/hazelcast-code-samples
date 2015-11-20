@@ -10,11 +10,12 @@ import org.osgi.framework.ServiceReference;
 /**
  * {@link org.osgi.framework.BundleActivator} implementation for OSGI sample which is activated by our sample bundle.
  */
+@SuppressWarnings("unused")
 public class SampleActivator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        System.out.println("Starting activator " + this + " in bundle " + context.getBundle() + " ...");
+        System.out.println("Starting activator " + this + " in bundle " + context.getBundle() + "...");
 
         // Find the service reference of `HazelcastOSGiService` instance
         ServiceReference serviceRef =
@@ -56,7 +57,6 @@ public class SampleActivator implements BundleActivator {
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        System.out.println("Stopping activator " + this + " in bundle " + context.getBundle() + " ...");
+        System.out.println("Stopping activator " + this + " in bundle " + context.getBundle() + "...");
     }
-
 }
