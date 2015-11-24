@@ -27,6 +27,7 @@
         <module>symmetric-encryption</module>
         <module>ssl</module>
         <module>firewall</module>
+        <module>jclouds</module>
     </modules>
 
     <dependencies>
