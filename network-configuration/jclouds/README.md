@@ -1,5 +1,5 @@
 <h1>ABOUT</h1>
-A simple example of Hazelcast clouds module.
+A simple example of hazelcast-jclouds module.
 
 <h2>Requirements</h2>
 You should include dependencies for providers served under jclouds lab. This example only works for google-compute engine and providers,
