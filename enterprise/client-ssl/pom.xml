@@ -5,14 +5,14 @@
 
     <artifactId>client-ssl</artifactId>
     <name>Clients - Client SSL</name>
-    <groupId>book.hazelcast.client.basic</groupId>
+    <!--<groupId>book.hazelcast.client.basic</groupId>-->
     <description>
         Client SSL
     </description>
 
     <parent>
-        <groupId>book.hazelcast.client</groupId>
-        <artifactId>clients</artifactId>
+        <artifactId>enterprise</artifactId>
+        <groupId>com.hazelcast.samples.enterprise</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
