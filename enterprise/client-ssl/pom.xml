@@ -4,8 +4,7 @@
     <packaging>jar</packaging>
 
     <artifactId>client-ssl</artifactId>
-    <name>Clients - Client SSL</name>
-    <!--<groupId>book.hazelcast.client.basic</groupId>-->
+    <name>Client SSL</name>
     <description>
         Client SSL
     </description>

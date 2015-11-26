@@ -19,7 +19,6 @@
 
     <modules>
         <module>basic</module>
-        <module>client-ssl</module>
         <module>client-rest</module>
     </modules>
 

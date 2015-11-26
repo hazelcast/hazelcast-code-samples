@@ -10,6 +10,10 @@ public class Member {
 
     public static void main(String[] args) throws Exception {
         Config config = new Config();
+
+        //Please set your enterprise license key to make the sample work.
+        config.setLicenseKey("YOUR_ENTERPRISE_LICENSE_KEY");
+
         SSLConfig sslConfig = new SSLConfig();
         sslConfig.setEnabled(true);
         sslConfig.setFactoryClassName("com.hazelcast.nio.ssl.BasicSSLContextFactory");
