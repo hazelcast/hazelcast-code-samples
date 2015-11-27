@@ -13,7 +13,7 @@ public class MasterMember {
         }
         System.out.println("MasterMember finished!");
 
-        executor.shutdown();
         executor.execute(new EchoTask("foo"));
+        executor.shutdown();
     }
 }
