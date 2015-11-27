@@ -27,6 +27,7 @@ public class OSGiSample {
 
     public static void main(String[] args) throws Exception {
         BundleContext bundleContext = null;
+        Bundle sampleBundle = null;
         try {
             FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
             Map<String, String> frameworkConfigs = new HashMap<String, String>();
@@ -60,7 +61,8 @@ public class OSGiSample {
             System.out.println("Loading sample bundle...");
 
             // Install our sample bundle
-            installedBundles.add(bundleContext.installBundle(SAMPLE_BUNDLE_ID, sampleBundleInputStream));
+            sampleBundle = bundleContext.installBundle(SAMPLE_BUNDLE_ID, sampleBundleInputStream);
+            installedBundles.add(sampleBundle);
 
             // Start installed bundles
             for (Bundle bundle : installedBundles) {
@@ -69,10 +71,17 @@ public class OSGiSample {
             }
         } finally {
             if (bundleContext != null) {
-                // Stop all bundles
+                if (sampleBundle != null) {
+                    // Stop our sample bundle first
+                    System.out.println("Stopping bundle " + sampleBundle + "...");
+                    sampleBundle.stop();
+                }
+                // Stop all bundles except sample bundle because it is already stopped above
                 for (Bundle bundle : bundleContext.getBundles()) {
-                    System.out.println("Stopping bundle " + bundle + "...");
-                    bundle.stop();
+                    if (bundle != sampleBundle) {
+                        System.out.println("Stopping bundle " + bundle + "...");
+                        bundle.stop();
+                    }
                 }
             }
         }

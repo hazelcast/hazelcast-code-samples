@@ -13,6 +13,9 @@ import org.osgi.framework.ServiceReference;
 @SuppressWarnings("unused")
 public class SampleActivator implements BundleActivator {
 
+    private HazelcastOSGiService hazelcastOsgiService;
+    private HazelcastOSGiInstance hazelcastOSGiInstance;
+
     @Override
     public void start(BundleContext context) throws Exception {
         System.out.println("Starting activator " + this + " in bundle " + context.getBundle() + "...");
@@ -25,38 +28,42 @@ public class SampleActivator implements BundleActivator {
         }
 
         // Get the `HazelcastOSGiService` over service reference
-        HazelcastOSGiService hazelcastOsgiService = (HazelcastOSGiService) context.getService(serviceRef);
+        hazelcastOsgiService = (HazelcastOSGiService) context.getService(serviceRef);
 
         // Get the default Hazelcast instance owned by `hazelcastOsgiService`
         // Returns null if `HAZELCAST_OSGI_START` is not enabled
         HazelcastOSGiInstance defaultInstance = hazelcastOsgiService.getDefaultHazelcastInstance();
+        System.out.println("Default Hazelcast instance (available when `"
+                + HazelcastOSGiService.HAZELCAST_OSGI_START + "` flag is enabled): " + defaultInstance);
 
-        // Creates a new Hazelcast instance with default configurations as owned by `hazelcastOsgiService`
+        // Create a new Hazelcast instance with default configurations as owned by `hazelcastOsgiService`
         HazelcastOSGiInstance newInstance1 = hazelcastOsgiService.newHazelcastInstance();
+        System.out.println("New Hazelcast OSGI instance with default config: " + newInstance1);
 
-        // Creates a new Hazelcast instance with specified configuration as owned by `hazelcastOsgiService`
-        Config config = new Config();
-        config.setInstanceName("OSGI-Instance");
-
-        HazelcastOSGiInstance newInstance2 = hazelcastOsgiService.newHazelcastInstance(config);
+        // Create a new Hazelcast instance with specified configuration as owned by `hazelcastOsgiService`
+        hazelcastOSGiInstance = hazelcastOsgiService.newHazelcastInstance(new Config("OSGI-Instance"));
+        System.out.println("New Hazelcast OSGI instance with specified config (name=`OSGI-Instance`): " + hazelcastOSGiInstance);
 
         // Gets the Hazelcast instance with name `OSGI-Instance` which is `newInstance2` created below
         HazelcastOSGiInstance instance = hazelcastOsgiService.getHazelcastInstanceByName("OSGI-Instance");
+        System.out.println("Hazelcast OSGI instance by name `OSGI-Instance`: " + instance);
 
-        // Shuts down the Hazelcast instance with name `OSGI-Instance` which is `newInstance2`
-        hazelcastOsgiService.shutdownHazelcastInstance(instance);
-
+        System.out.println("Here are all Hazelcast OSGI instances:");
         // Print all active Hazelcast instances owned by `hazelcastOsgiService`
         for (HazelcastOSGiInstance osgiInstance : hazelcastOsgiService.getAllHazelcastInstances()) {
-            System.out.println(osgiInstance);
+            System.out.println("\t- " + osgiInstance);
         }
-
-        // Shuts down all Hazelcast instances owned by `hazelcastOsgiService`
-        hazelcastOsgiService.shutdownAll();
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
         System.out.println("Stopping activator " + this + " in bundle " + context.getBundle() + "...");
+
+        System.out.println("Shutting down Hazelcast OSGI instance: " + hazelcastOSGiInstance);
+        hazelcastOsgiService.shutdownHazelcastInstance(hazelcastOSGiInstance);
+
+        System.out.println("Shutting down all Hazelcast OSGI instances ...");
+        // Shuts down all Hazelcast instances owned by `hazelcastOsgiService`
+        hazelcastOsgiService.shutdownAll();
     }
 }
