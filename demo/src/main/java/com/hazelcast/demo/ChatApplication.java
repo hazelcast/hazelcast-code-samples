@@ -17,10 +17,11 @@
 package com.hazelcast.demo;
 
 import com.hazelcast.core.EntryEvent;
-import com.hazelcast.core.EntryListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.IMap;
-import com.hazelcast.core.MapEvent;
+import com.hazelcast.map.listener.EntryAddedListener;
+import com.hazelcast.map.listener.EntryRemovedListener;
+import com.hazelcast.map.listener.EntryUpdatedListener;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -32,7 +33,6 @@ public class ChatApplication {
 
     private String username;
     private final IMap<String, ChatMessage> map = Hazelcast.newHazelcastInstance(null).getMap("chat-application");
-
 
     /**
      * Starts a simple chat application
@@ -114,37 +114,28 @@ public class ChatApplication {
     /**
      * Notifies entry changes to Chat
      */
-    private class ChatCallback implements EntryListener {
+    private class ChatCallback implements EntryAddedListener<String, ChatMessage>,
+            EntryRemovedListener<String, ChatMessage>,
+            EntryUpdatedListener<String, ChatMessage> {
         public ChatCallback() {
         }
 
-        public void entryAdded(EntryEvent event) {
+        public void entryAdded(EntryEvent<String, ChatMessage> event) {
             if (!username.equals(event.getKey())) {
                 System.out.println(event.getValue());
             }
         }
 
-        public void entryRemoved(EntryEvent event) {
+        public void entryRemoved(EntryEvent<String, ChatMessage> event) {
             if (!username.equals(event.getKey())) {
                 System.out.println(event.getKey() + " left");
             }
         }
 
-        public void entryUpdated(EntryEvent event) {
+        public void entryUpdated(EntryEvent<String, ChatMessage> event) {
             if (!username.equals(event.getKey())) {
                 System.out.println(event.getValue().toString());
             }
-        }
-
-        public void entryEvicted(EntryEvent event) {
-        }
-
-        public void mapEvicted(MapEvent event) {
-
-        }
-    
-        public void mapCleared(MapEvent event) {
-
         }
     }
 }
