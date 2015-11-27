@@ -16,11 +16,7 @@
 
 package com.hazelcast.demo;
 
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Member;
-import com.hazelcast.core.MultiMap;
-import com.hazelcast.core.Partition;
+import com.hazelcast.core.*;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -32,8 +28,6 @@ import java.util.logging.Logger;
  * Tests for MultiMap
  */
 public final class SimpleMultiMapTest {
-
-
 
     private static Logger logger = Logger.getLogger(SimpleMapTest.class.getName());
     private static HazelcastInstance instance = Hazelcast.newHazelcastInstance(null);
