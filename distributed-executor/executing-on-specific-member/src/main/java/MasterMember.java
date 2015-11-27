@@ -8,7 +8,7 @@ public class MasterMember {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IExecutorService executorService = hz.getExecutorService("executor");
         for (Member member : hz.getCluster().getMembers()) {
-            EchoTask task = new EchoTask("echo" + member.getInetSocketAddress());
+            EchoTask task = new EchoTask("echo" + member.getSocketAddress());
             executorService.executeOnMember(task, member);
         }
     }
