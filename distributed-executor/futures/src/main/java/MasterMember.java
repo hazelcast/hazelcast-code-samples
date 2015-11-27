@@ -10,7 +10,10 @@ public class MasterMember {
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IExecutorService executor = hz.getExecutorService("executor");
-        int n = Integer.parseInt(args[0]);
+        int n = 10;
+        if (args.length != 0){
+            n = Integer.parseInt(args[0]);
+        }
         Future<Long> future = executor.submit(new FibonacciCallable(n));
         try {
             long result = future.get(10, TimeUnit.SECONDS);
