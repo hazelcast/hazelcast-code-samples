@@ -16,31 +16,15 @@
 
 package com.hazelcast.demo;
 
-import com.hazelcast.core.EntryAdapter;
-import com.hazelcast.core.EntryEvent;
-import com.hazelcast.core.EntryListener;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ITopic;
-import com.hazelcast.core.Message;
-import com.hazelcast.core.MessageListener;
+import com.hazelcast.config.Config;
+import com.hazelcast.core.*;
+import com.hazelcast.instance.GroupProperty;
+import com.hazelcast.internal.monitors.HealthMonitorLevel;
 import com.hazelcast.query.SqlPredicate;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -66,7 +50,10 @@ public class AllTest {
     AllTest(int nThreads) {
         this.nThreads = nThreads;
         ex = Executors.newFixedThreadPool(nThreads);
-        hazelcast = Hazelcast.newHazelcastInstance(null);
+        Config config = new Config();
+        config.setProperty(GroupProperty.HEALTH_MONITORING_LEVEL.toString(), HealthMonitorLevel.NOISY.toString());
+        config.setProperty(GroupProperty.HEALTH_MONITORING_DELAY_SECONDS.toString(), Integer.toString(STATS_SECONDS));
+        hazelcast = Hazelcast.newHazelcastInstance(config);
         List<Runnable> mapOperations = loadMapOperations();
         List<Runnable> qOperations = loadQOperations();
         List<Runnable> topicOperations = loadTopicOperations();
@@ -105,14 +92,7 @@ public class AllTest {
     }
 
     private void qStats() {
-//        LocalQueueOperationStats qOpStats = hazelcast.getQueue("myQ").getLocalQueueStats().getOperationStats();
-//        long period = ((qOpStats.getPeriodEnd() - qOpStats.getPeriodStart()) / 1000);
-//        if (period == 0) {
-//            return;
-//        }
-//        log(qOpStats);
-//        log("Q Operations per Second : " + (qOpStats.getOfferOperationCount() + qOpStats.getEmptyPollOperationCount() +
-// qOpStats.getEmptyPollOperationCount() + qOpStats.getRejectedOfferOperationCount()) / period);
+        log(hazelcast.getQueue("myQ").getLocalQueueStats());
     }
 
     private void log(Object message) {
@@ -122,13 +102,7 @@ public class AllTest {
     }
 
     private void mapStats() {
-//        LocalMapOperationStats mapOpStats = hazelcast.getMap("myMap").getLocalMapStats().getOperationStats();
-//        long period = ((mapOpStats.getPeriodEnd() - mapOpStats.getPeriodStart()) / 1000);
-//        if (period == 0) {
-//            return;
-//        }
-//        log(mapOpStats);
-//        log("Map Operations per Second : " + mapOpStats.total() / period);
+        log(hazelcast.getMap("myMap").getLocalMapStats());
     }
 
     private void topicStats() {
@@ -151,7 +125,6 @@ public class AllTest {
                         int opId = random.nextInt(operations.size());
                         Runnable operation = operations.get(opId);
                         operation.run();
-//                        System.out.println("Runnning..." + Thread.currentThread());
                     }
                 }
             });
@@ -330,19 +303,6 @@ public class AllTest {
                 }
             }
         }, 1);
-//        addOperation(operations, new Runnable() {
-//            public void run() {
-//                IMap map = hazelcast.getMap("myMap");
-//                int key = random.nextInt(SIZE);
-//                map.lockMap(10, TimeUnit.MILLISECONDS);
-//                try {
-//                    Thread.sleep(1);
-//                } catch (InterruptedException e) {
-//                } finally {
-//                    map.unlockMap();
-//                }
-//            }
-//        }, 1);
         addOperation(operations, new Runnable() {
             public void run() {
                 IMap map = hazelcast.getMap("myMap");
