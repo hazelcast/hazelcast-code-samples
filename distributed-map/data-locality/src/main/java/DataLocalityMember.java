@@ -1,6 +1,8 @@
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.Partition;
+import com.hazelcast.core.PartitionService;
 
 import java.util.Map;
 
@@ -21,12 +23,12 @@ public class DataLocalityMember {
         Order order = new Order(orderKey.orderId, customer.id, articleId);
         orderMap.put(orderKey, order);
 
-        //PartitionService pService = hz.getPartitionService();
-        //Partition cPartition = pService.getPartition(customerId);
-        //Partition oPartition = pService.getPartition(orderKey);
-        //Partition wPartition = pService.getPartition(orderId);
-        //System.out.printf("Partition for customer: %s\n", cPartition.getPartitionId());
-        //System.out.printf("Partition for order with OrderKey: %s\n", oPartition.getPartitionId());
-        //System.out.printf("Partition for order without OrderKey: %s\n", wPartition.getPartitionId());
+        PartitionService pService = hz.getPartitionService();
+        Partition cPartition = pService.getPartition(customerId);
+        Partition oPartition = pService.getPartition(orderKey);
+        Partition wPartition = pService.getPartition(orderId);
+        System.out.printf("Partition for customer: %s\n", cPartition.getPartitionId());
+        System.out.printf("Partition for order with OrderKey: %s\n", oPartition.getPartitionId());
+        System.out.printf("Partition for order without OrderKey: %s\n", wPartition.getPartitionId());
     }
 }
