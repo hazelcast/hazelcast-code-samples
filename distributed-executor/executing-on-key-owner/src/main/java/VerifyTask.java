@@ -19,6 +19,6 @@ public class VerifyTask implements Runnable, Serializable, HazelcastInstanceAwar
     public void run() {
         IMap map = hz.getMap("map");
         boolean localKey = map.localKeySet().contains(key);
-        System.out.println("Key is local:" + key);
+        System.out.println("Key is local:" + localKey);
     }
 }
