@@ -15,9 +15,10 @@
   ~ limitations under the License.
   -->
 
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.6.xsd"
-           xmlns="http://www.hazelcast.com/schema/config"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
 
     <properties>
         <property name="hazelcast.discovery.enabled">true</property>
@@ -26,7 +27,7 @@
     <network>
         <join>
             <multicast enabled="false"/>
-            <tcp-ip enabled="false" />
+            <tcp-ip enabled="false"/>
             <aws enabled="false"/>
             <discovery-strategies>
                 <discovery-strategy enabled="true" class="com.hazelcast.jclouds.JCloudsDiscoveryStrategy">
@@ -40,5 +41,4 @@
             </discovery-strategies>
         </join>
     </network>
-
 </hazelcast>
