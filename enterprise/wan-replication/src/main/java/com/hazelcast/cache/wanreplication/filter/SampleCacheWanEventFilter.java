@@ -6,12 +6,15 @@ import com.hazelcast.enterprise.wan.WanFilterEventType;
 
 /**
  * Sample {@link CacheWanEventFilter} implementation.
- * It simply allows all events to be replicated, no filtering is applied.
+ * It filters entries if their value starts with "filter".
  */
-public class SampleCacheWanEventFilter implements CacheWanEventFilter {
+public class SampleCacheWanEventFilter implements CacheWanEventFilter<String, String> {
 
     @Override
-    public boolean filter(String s, CacheEntryView cacheEntryView, WanFilterEventType wanFilterEventType) {
+    public boolean filter(String s, CacheEntryView<String, String> cacheEntryView, WanFilterEventType wanFilterEventType) {
+        if (cacheEntryView.getValue().startsWith("filter")) {
+            return true;
+        }
         return false;
     }
 }
