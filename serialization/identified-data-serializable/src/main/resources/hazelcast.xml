@@ -1,12 +1,11 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.2.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <serialization>
         <data-serializable-factories>
             <data-serializable-factory factory-id="1">PersonDataSerializableFactory</data-serializable-factory>
         </data-serializable-factories>
-
     </serialization>
 </hazelcast>
