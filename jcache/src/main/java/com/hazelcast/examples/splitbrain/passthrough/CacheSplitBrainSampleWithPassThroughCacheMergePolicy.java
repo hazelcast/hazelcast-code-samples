@@ -26,7 +26,7 @@ abstract class CacheSplitBrainSampleWithPassThroughCacheMergePolicy extends Abst
 
     protected abstract Config getConfig();
 
-    protected abstract Cache getCache(String cacheName, CacheManager cacheManager);
+    protected abstract Cache<String, Object> getCache(String cacheName, CacheManager cacheManager);
 
     protected void run() {
         try {
@@ -43,8 +43,8 @@ abstract class CacheSplitBrainSampleWithPassThroughCacheMergePolicy extends Abst
             CacheManager cacheManager1 = cachingProvider1.getCacheManager();
             CacheManager cacheManager2 = cachingProvider2.getCacheManager();
 
-            Cache cache1 = getCache(CACHE_NAME, cacheManager1);
-            Cache cache2 = getCache(CACHE_NAME, cacheManager2);
+            Cache<String, Object> cache1 = getCache(CACHE_NAME, cacheManager1);
+            Cache<String, Object> cache2 = getCache(CACHE_NAME, cacheManager2);
 
             String key = generateKeyOwnedBy(h1);
             cache1.put(key, "value");
@@ -55,11 +55,10 @@ abstract class CacheSplitBrainSampleWithPassThroughCacheMergePolicy extends Abst
             assertClusterSizeEventually(2, h1);
             assertClusterSizeEventually(2, h2);
 
-            Cache cacheTest = cacheManager2.getCache(CACHE_NAME);
+            Cache<String, Object> cacheTest = cacheManager2.getCache(CACHE_NAME);
             assertEquals("passThroughValue", cacheTest.get(key));
         } finally {
             HazelcastInstanceFactory.shutdownAll();
         }
     }
-
 }

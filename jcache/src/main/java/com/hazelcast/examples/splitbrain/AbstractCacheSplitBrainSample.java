@@ -66,16 +66,14 @@ public abstract class AbstractCacheSplitBrainSample {
     protected static void assertEquals(String message, Object expected, Object actual) {
         if (equalsRegardingNull(expected, actual)) {
             return;
-        } else {
-            failNotEquals(message, expected, actual);
         }
+        failNotEquals(message, expected, actual);
     }
 
     private static boolean equalsRegardingNull(Object expected, Object actual) {
         if (expected == null) {
             return actual == null;
         }
-
         return isEquals(expected, actual);
     }
 
@@ -95,8 +93,8 @@ public abstract class AbstractCacheSplitBrainSample {
         String expectedString = String.valueOf(expected);
         String actualString = String.valueOf(actual);
         if (expectedString.equals(actualString)) {
-            return formatted + "expected: "
-                    + formatClassAndValue(expected, expectedString)
+            return formatted
+                    + "expected: " + formatClassAndValue(expected, expectedString)
                     + " but was: " + formatClassAndValue(actual, actualString);
         } else {
             return formatted + "expected:<" + expectedString + "> but was:<" + actualString + ">";
@@ -140,12 +138,17 @@ public abstract class AbstractCacheSplitBrainSample {
     protected static void assertClusterSize(int expectedSize, HazelcastInstance instance) {
         int clusterSize = instance.getCluster().getMembers().size();
         if (expectedSize != clusterSize) {
-            ConnectionManager connectionManager = getNode(instance).getConnectionManager();
+            Node node = getNode(instance);
+            if (node == null) {
+                throw new NullPointerException("node is null!");
+            }
+            ConnectionManager connectionManager = node.getConnectionManager();
             int activeConnectionCount = connectionManager.getActiveConnectionCount();
-            throw new AssertionError(String.format("Cluster size is not correct. Expected: %d Actual: %d %s",
+            throw new AssertionError(String.format(
+                    "Cluster size is not correct. Expected: %d Actual: %d ActiveConnectionCount: %d",
                     expectedSize,
                     clusterSize,
-                    "ActiveConnectionCount: " + activeConnectionCount));
+                    activeConnectionCount));
         }
     }
 
@@ -166,16 +169,16 @@ public abstract class AbstractCacheSplitBrainSample {
         try {
             boolean completed = latch.await(ASSERT_EVENTUALLY_TIMEOUT, TimeUnit.SECONDS);
             if (message == null) {
-                assertTrue(String.format("CountDownLatch failed to complete within %d seconds , count left: %d",
-                                            ASSERT_EVENTUALLY_TIMEOUT,
-                                            latch.getCount()),
-                           completed);
+                assertTrue(String.format("CountDownLatch failed to complete within %d seconds, count left: %d",
+                        ASSERT_EVENTUALLY_TIMEOUT,
+                        latch.getCount()),
+                        completed);
             } else {
-                assertTrue(String.format("%s, failed to complete within %d seconds , count left: %d",
-                                            message,
-                                            ASSERT_EVENTUALLY_TIMEOUT,
-                                            latch.getCount()),
-                           completed);
+                assertTrue(String.format("%s, failed to complete within %d seconds, count left: %d",
+                        message,
+                        ASSERT_EVENTUALLY_TIMEOUT,
+                        latch.getCount()),
+                        completed);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -269,6 +272,9 @@ public abstract class AbstractCacheSplitBrainSample {
         int memberCount = cluster.getMembers().size();
 
         Node node = getNode(instance);
+        if (node == null) {
+            throw new NullPointerException("node is null!");
+        }
         InternalPartitionService internalPartitionService = node.getPartitionService();
         int partitionCount = internalPartitionService.getPartitionCount();
 
@@ -287,8 +293,7 @@ public abstract class AbstractCacheSplitBrainSample {
 
     protected static Config newDeclarativeConfig() {
         try {
-            Config config =
-                    new XmlConfigBuilder("jcache/src/main/resources/hazelcast-splitbrain.xml").build();
+            Config config = new XmlConfigBuilder("jcache/src/main/resources/hazelcast-splitbrain.xml").build();
             config.setProperty(GroupProperty.MERGE_FIRST_RUN_DELAY_SECONDS, "5");
             config.setProperty(GroupProperty.MERGE_NEXT_RUN_DELAY_SECONDS, "3");
             config.getGroupConfig().setName(generateRandomString(10));
@@ -298,8 +303,8 @@ public abstract class AbstractCacheSplitBrainSample {
         }
     }
 
-    protected static CacheConfig newCacheConfig(String cacheName, String mergePolicy) {
-        CacheConfig cacheConfig = new CacheConfig();
+    protected static CacheConfig<String, Object> newCacheConfig(String cacheName, String mergePolicy) {
+        CacheConfig<String, Object> cacheConfig = new CacheConfig<String, Object>();
         cacheConfig.setName(cacheName);
         cacheConfig.setMergePolicy(mergePolicy);
         return cacheConfig;
@@ -319,7 +324,6 @@ public abstract class AbstractCacheSplitBrainSample {
                 latch.countDown();
             }
         }
-
     }
 
     private static class SampleMemberShipListener implements MembershipListener {
@@ -332,7 +336,6 @@ public abstract class AbstractCacheSplitBrainSample {
 
         @Override
         public void memberAdded(MembershipEvent membershipEvent) {
-
         }
 
         @Override
@@ -342,9 +345,7 @@ public abstract class AbstractCacheSplitBrainSample {
 
         @Override
         public void memberAttributeChanged(MemberAttributeEvent memberAttributeEvent) {
-
         }
-
     }
 
     protected static CountDownLatch simulateSplitBrain(HazelcastInstance h1, HazelcastInstance h2) {
@@ -361,5 +362,4 @@ public abstract class AbstractCacheSplitBrainSample {
 
         return lifeCycleListener.latch;
     }
-
 }
