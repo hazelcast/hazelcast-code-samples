@@ -76,6 +76,9 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
 
         List<String> assignments = new ArrayList<String>();
         for (String line : lines) {
+            if (line.isEmpty()) {
+                continue;
+            }
             // example:
             // 192.168.0.1   host1.cluster.local
             if (matchesDomain(line)) {
