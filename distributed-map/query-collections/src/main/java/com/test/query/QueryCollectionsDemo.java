@@ -16,16 +16,21 @@ public class QueryCollectionsDemo {
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        IMap<String, Person> map = hz.getMap("map");
+        IMap<Integer, Person> map = hz.getMap("map");
 
-        map.put("1", new Person("peter", limb("left-hand"), limb("right-hand")));
-        map.put("2", new Person("hans", limb("left-leg"), limb("right-leg")));
+        map.put(1, new Person("Georg", limb("left-leg"), limb("right-leg")));
+        map.put(2, new Person("Peter", limb("left-hand"), limb("right-hand")));
+        map.put(3, new Person("Hans", limb("left-leg"), limb("right-leg")));
+        map.put(4, new Person("Stefanie", limb("left-arm"), limb("right-arm")));
 
         Set<Person> employees = (Set<Person>) map.values(new SqlPredicate("limbs[any].name == right-leg"));
-        System.out.println("People:" + employees);
+        System.out.println("People: " + employees);
+
+        Hazelcast.shutdownAll();
     }
 
     public static class Person implements Serializable {
+
         final String name;
         final List<Limb> limbs;
 
@@ -36,11 +41,12 @@ public class QueryCollectionsDemo {
 
         @Override
         public String toString() {
-            return "Person{name='" + name + '}';
+            return "Person{name='" + name + "'}";
         }
     }
 
     public static class Limb implements Serializable {
+
         final String name;
 
         public Limb(String name) {
