@@ -19,12 +19,11 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", yearOfBirth=" + yearOfBirth +
-                '}';
+        return "Customer{"
+                + "id='" + id + '\''
+                + ", name='" + name + '\''
+                + ", surname='" + surname + '\''
+                + ", yearOfBirth=" + yearOfBirth
+                + '}';
     }
-
 }
