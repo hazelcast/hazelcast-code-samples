@@ -15,6 +15,7 @@ import static com.hazelcast.config.MaxSizeConfig.MaxSizePolicy.PER_NODE;
 
 public class HDEviction {
 
+    private static final String LICENSE_KEY = "";
     private static final int MAX_ENTRY_COUNT = 1000;
 
     public static void main(String[] args) {
@@ -25,12 +26,10 @@ public class HDEviction {
             map.put("key-" + i, "value-" + i);
         }
 
-        System.out.println("Map size is " + map.size()
-                + " and it is below the allowed max entry count " + MAX_ENTRY_COUNT);
+        System.out.println("Map size is " + map.size() + " and it is below the allowed max entry count " + MAX_ENTRY_COUNT);
 
         hazelcastInstance.shutdown();
     }
-
 
     public static Config newConfig() {
         MaxSizeConfig maxSizeConfig = new MaxSizeConfig();
@@ -53,6 +52,10 @@ public class HDEviction {
         Config config = new Config();
         config.addMapConfig(mapConfig);
         config.setNativeMemoryConfig(memoryConfig);
+        if (!LICENSE_KEY.isEmpty()) {
+            config.setLicenseKey(LICENSE_KEY);
+        }
+
         return config;
     }
 }

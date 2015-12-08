@@ -17,6 +17,8 @@ import static com.hazelcast.memory.MemoryUnit.MEGABYTES;
 
 public class ServerHDNearCache {
 
+    private static final String LICENSE_KEY = "";
+
     public static void main(String[] args) {
         HazelcastInstance node = Hazelcast.newHazelcastInstance(newConfig());
         IMap<String, String> map = node.getMap("default");
@@ -26,7 +28,7 @@ public class ServerHDNearCache {
 
         // first `get` puts remote entry into near-cache
         for (int i = 0; i < 1000; i++) {
-            map.get(i);
+            map.get("key-" + i);
         }
 
         long ownedEntryCount = map.getLocalMapStats().getNearCacheStats().getOwnedEntryCount();
@@ -57,8 +59,10 @@ public class ServerHDNearCache {
         Config config = new Config();
         config.addMapConfig(mapConfig);
         config.setNativeMemoryConfig(memoryConfig);
+        if (!LICENSE_KEY.isEmpty()) {
+            config.setLicenseKey(LICENSE_KEY);
+        }
 
         return config;
     }
-
 }

@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class HDSimplePopulation {
 
+    private static final String LICENSE_KEY = "";
+
     public static void main(String[] args) {
         HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(newConfig());
 
@@ -23,7 +25,6 @@ public class HDSimplePopulation {
 
         hazelcastInstance.shutdown();
     }
-
 
     public static Config newConfig() {
         MapConfig mapConfig = new MapConfig();
@@ -39,6 +40,10 @@ public class HDSimplePopulation {
         Config config = new Config();
         config.addMapConfig(mapConfig);
         config.setNativeMemoryConfig(memoryConfig);
+        if (!LICENSE_KEY.isEmpty()) {
+            config.setLicenseKey(LICENSE_KEY);
+        }
+
         return config;
     }
 }

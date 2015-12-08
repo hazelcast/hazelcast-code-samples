@@ -2,6 +2,7 @@ package nearcache;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.config.Config;
 import com.hazelcast.config.EvictionConfig;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.NearCacheConfig;
@@ -17,9 +18,11 @@ import static com.hazelcast.memory.MemoryUnit.MEGABYTES;
 
 public class ClientHDNearCache {
 
+    private static final String LICENSE_KEY = "";
+
     public static void main(String[] args) {
         // start server
-        HazelcastInstance server = Hazelcast.newHazelcastInstance();
+        HazelcastInstance server = Hazelcast.newHazelcastInstance(newConfig());
 
         // start client
         HazelcastInstance client = HazelcastClient.newHazelcastClient(newClientConfig("mapName"));
@@ -31,7 +34,7 @@ public class ClientHDNearCache {
 
         // first `get` puts remote entry into near-cache
         for (int i = 0; i < 1000; i++) {
-            map.get(i);
+            map.get("key-" + i);
         }
 
         long ownedEntryCount = map.getLocalMapStats().getNearCacheStats().getOwnedEntryCount();
@@ -39,7 +42,15 @@ public class ClientHDNearCache {
 
         client.shutdown();
         server.shutdown();
+    }
 
+    public static Config newConfig() {
+        Config config = new Config();
+        if (!LICENSE_KEY.isEmpty()) {
+            config.setLicenseKey(LICENSE_KEY);
+        }
+
+        return config;
     }
 
     private static ClientConfig newClientConfig(String mapName) {
@@ -60,6 +71,10 @@ public class ClientHDNearCache {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.setNativeMemoryConfig(memoryConfig);
         clientConfig.addNearCacheConfig(nearCacheConfig);
+        if (!LICENSE_KEY.isEmpty()) {
+            clientConfig.setLicenseKey(LICENSE_KEY);
+        }
+
         return clientConfig;
     }
 }
