@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public class EchoTask implements Runnable, Serializable {
+
     private final String msg;
 
     public EchoTask(String msg) {
@@ -13,6 +14,7 @@ public class EchoTask implements Runnable, Serializable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("echo:" + msg);
+
+        System.out.println("Echo: " + msg);
     }
 }
