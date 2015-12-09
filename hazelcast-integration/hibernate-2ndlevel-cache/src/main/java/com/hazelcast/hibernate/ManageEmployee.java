@@ -36,13 +36,13 @@ public class ManageEmployee {
             System.out.print("[" + current + ". session] Enter command: ");
             String command = reader.nextLine();
             if (command.equals("list")) {
-                List employees = currentSession.createQuery("FROM employee").list();
+                List employees = currentSession.createQuery("FROM Employee").list();
                 for (Object entry : employees) {
                     Employee employee = (Employee) entry;
                     System.out.print("Id: " + employee.getId());
-                    System.out.print(" First name: " + employee.getFirstName());
-                    System.out.print(" Last name: " + employee.getLastName());
-                    System.out.println(" Salary: " + employee.getSalary());
+                    System.out.print(", first name: " + employee.getFirstName());
+                    System.out.print(", last name: " + employee.getLastName());
+                    System.out.println(", salary: " + employee.getSalary());
                 }
             } else if (command.equals("add")) {
                 System.out.print("Id: ");
