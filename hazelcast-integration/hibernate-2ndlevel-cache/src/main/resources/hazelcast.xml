@@ -67,8 +67,6 @@
         <eviction-policy>NONE</eviction-policy>
         <max-size policy="PER_NODE">0</max-size>
         <eviction-percentage>25</eviction-percentage>
-        <eviction-delay-seconds>3</eviction-delay-seconds>
-        <invalidate-on-change>true</invalidate-on-change>
         <merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
     </map>
 

@@ -1,6 +1,5 @@
 package com.hazelcast.hibernate;
 
-import com.hazelcast.hibernate.instance.HazelcastAccessor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -22,7 +21,6 @@ public class ManageEmployee {
             System.err.println("Failed to create sessionFactory object: " + ex.getMessage());
             throw new ExceptionInInitializerError(ex);
         }
-        HazelcastAccessor.getHazelcastInstance(factory);
 
         Scanner reader = new Scanner(System.in);
         Session session1 = factory.openSession();
