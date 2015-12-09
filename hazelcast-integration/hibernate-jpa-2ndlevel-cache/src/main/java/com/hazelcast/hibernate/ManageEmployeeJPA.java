@@ -42,7 +42,7 @@ public class ManageEmployeeJPA {
     public static void main(String[] args) {
         init();
         populateDb();
-        processConsoleComand();
+        processConsoleCommand();
         Hazelcast.shutdownAll();
     }
 
@@ -82,7 +82,7 @@ public class ManageEmployeeJPA {
         }
     }
 
-    private static void processConsoleComand() {
+    private static void processConsoleCommand() {
         Scanner reader = new Scanner(System.in);
         while (true) {
             System.out.println("Command: ");
@@ -129,7 +129,6 @@ public class ManageEmployeeJPA {
             } else {
                 System.err.println("Command not found: " + command);
             }
-            reader.nextLine();
         }
     }
 
