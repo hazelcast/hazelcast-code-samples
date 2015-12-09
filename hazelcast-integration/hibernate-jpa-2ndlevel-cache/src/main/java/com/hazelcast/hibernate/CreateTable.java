@@ -9,7 +9,7 @@ import java.util.Properties;
 /**
  * @author tgrl
  */
-public class CreateDB {
+public class CreateTable {
 
     public static void main(String args[]) {
         try {

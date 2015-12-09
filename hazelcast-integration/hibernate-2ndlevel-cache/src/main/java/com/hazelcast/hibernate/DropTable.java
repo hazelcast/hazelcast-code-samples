@@ -6,10 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-/**
- * @author Esref Ozturk <esrefozturk93@gmail.com>
- */
-public class CreateDB {
+public class DropTable {
 
     public static void main(String args[]) {
         try {
@@ -20,10 +17,7 @@ public class CreateDB {
         try {
             Connection conn = DriverManager.getConnection("jdbc:derby:hibernateDB;create=true", new Properties());
             Statement st = conn.createStatement();
-            st.executeUpdate("CREATE TABLE employee(id INT PRIMARY KEY NOT NULL"
-                    + ", first_name VARCHAR(20) default NULL"
-                    + ", last_name  VARCHAR(20) default NULL"
-                    + ", salary     INT         default NULL)");
+            st.executeUpdate("DROP TABLE employee");
         } catch (SQLException e) {
             e.printStackTrace();
         }
