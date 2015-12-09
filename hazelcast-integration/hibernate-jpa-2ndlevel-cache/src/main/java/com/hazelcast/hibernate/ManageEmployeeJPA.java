@@ -1,5 +1,6 @@
 package com.hazelcast.hibernate;
 
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.hibernate.instance.HazelcastAccessor;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Created by tgrl on 29.01.2015.
+ * @author tgrl
  */
 public class ManageEmployeeJPA {
 
@@ -35,8 +36,6 @@ public class ManageEmployeeJPA {
     public static final int ENTRY_COUNT = 20;
     public static final String SELECT_A_FROM_EMPLOYEE_A = "Select a from Employee a";
     private static EntityManager em;
-    private static Scanner reader;
-    private static String command;
     private static Statistics statistics;
     private static HazelcastInstance hazelcast;
 
@@ -44,6 +43,7 @@ public class ManageEmployeeJPA {
         init();
         populateDb();
         processConsoleComand();
+        Hazelcast.shutdownAll();
     }
 
     private static void populateDb() {
@@ -83,17 +83,14 @@ public class ManageEmployeeJPA {
     }
 
     private static void processConsoleComand() {
-        reader = new Scanner(System.in);
-        while (true){
+        Scanner reader = new Scanner(System.in);
+        while (true) {
             System.out.println("Command: ");
-            command = reader.nextLine();
-            if (command.equals("list")){
-
+            String command = reader.nextLine();
+            if (command.equals("list")) {
                 System.out.println("List: ");
                 listEmployee();
-
-            }else if (command.equals("add")){
-
+            } else if (command.equals("add")) {
                 System.out.print("Id: ");
                 int id = reader.nextInt();
                 reader.nextLine();
@@ -103,17 +100,12 @@ public class ManageEmployeeJPA {
                 String lname = reader.nextLine();
                 System.out.print("Salary: ");
                 int salary = reader.nextInt();
-
                 createEmployee(id, fname, lname, salary);
-
-            }else if (command.equals("remove")){
-
+            } else if (command.equals("remove")) {
                 System.out.println("Key: ");
                 int id = reader.nextInt();
                 removeEmployee(id);
-
-            }else if (command.equals("update")){
-
+            } else if (command.equals("update")) {
                 System.out.print("Id: ");
                 int id = reader.nextInt();
                 reader.nextLine();
@@ -125,14 +117,15 @@ public class ManageEmployeeJPA {
                 int salary = reader.nextInt();
                 System.out.print("Key: ");
                 int key = reader.nextInt();
-
                 updateEmployee(id, fname, lname, salary, key);
             } else if (command.equals("show")) {
                 System.out.println("Key: ");
                 int id = reader.nextInt();
                 showEmployee(id);
-            } else if (command.equals("stats")){
+            } else if (command.equals("stats")) {
                 printStatistics();
+            } else if (command.endsWith("exit")) {
+                break;
             } else {
                 System.err.println("Command not found: " + command);
             }
@@ -179,8 +172,7 @@ public class ManageEmployeeJPA {
         }
 
         String regionName = "com.hazelcast.hibernate.Employee";
-        SecondLevelCacheStatistics cacheStats = statistics.getSecondLevelCacheStatistics(
-                regionName);
+        SecondLevelCacheStatistics cacheStats = statistics.getSecondLevelCacheStatistics(regionName);
         if (cacheStats != null) {
             System.out.println("Hibernate.SecondLevelCacheStatistics stats for " + regionName);
             System.out.println(cacheStats);
@@ -195,8 +187,8 @@ public class ManageEmployeeJPA {
         em.persist(emp);
         em.getTransaction().commit();
     }
-    
-    private static void removeEmployee(int key){
+
+    private static void removeEmployee(int key) {
         Employee employee = em.find(Employee.class, key);
         if (employee != null) {
             em.getTransaction().begin();
@@ -204,16 +196,15 @@ public class ManageEmployeeJPA {
             em.getTransaction().commit();
         }
     }
-    
-    private static void listEmployee(){
+
+    private static void listEmployee() {
         List<Employee> employeeList = em
                 .createQuery(SELECT_A_FROM_EMPLOYEE_A, Employee.class)
                 .getResultList();
 
-        for (Employee employee : employeeList){
+        for (Employee employee : employeeList) {
             printEmployee(employee);
         }
-        
     }
 
     private static void printEmployee(Employee employee) {
@@ -223,7 +214,7 @@ public class ManageEmployeeJPA {
         System.out.println("Salary: " + employee.getSalary());
     }
 
-    private static void updateEmployee(int id, String first_name, String last_name, int salary, int key){
+    private static void updateEmployee(int id, String first_name, String last_name, int salary, int key) {
         Employee employee = em.find(Employee.class, key);
         em.getTransaction().begin();
         employee.setId(id);
@@ -232,6 +223,4 @@ public class ManageEmployeeJPA {
         employee.setSalary(salary);
         em.getTransaction().commit();
     }
-
 }
-
