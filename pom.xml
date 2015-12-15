@@ -52,6 +52,7 @@
         <module>jcache</module>
         <module>jmx</module>
         <module>osgi</module>
+        <module>cluster</module>
     </modules>
 
     <build>
