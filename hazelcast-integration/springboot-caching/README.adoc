@@ -1,0 +1,44 @@
+= Spring Boot Hazelcast Integration Example via Spring Framework Caching Abstraction
+Viktor Gamov <viktor@hazelcast.com>, © 2015 Hazelcast, Inc.
+2015-12-28
+:revdate: 2015-12-27 1:11:50 -0600
+:linkattrs:
+:ast: &ast;
+:y: &#10003;
+:n: &#10008;
+:y: icon:check-sign[role="green"]
+:n: icon:check-minus[role="red"]
+:c: icon:file-text-alt[role="blue"]
+:toc: auto
+:toc-placement: auto
+:toc-position: right
+:toc-title: Table of content
+:toclevels: 3
+:idprefix:
+:idseparator: -
+:sectanchors:
+:icons: font
+:source-highlighter: highlight.js
+:highlightjs-theme: idea
+:experimental:
+
+Spring Boot Hazelcast Integration Example via http://docs.spring.io/spring/docs/current/spring-framework-reference/html/cache.html[Spring Framework Caching Abstraction]. 
+
+NOTE: This example *doesn't* have the dependencies on JSR-107 / JCache jars.
+For JCache example, use `springboot-caching-jcache` project.
+
+toc::[]
+
+This is an example of Spring Boot Caching Auto Configuration feature for Hazelcast and Spring Framework Caching Abstraction:
+
+- A `BootifulMember` is a Spring Boot application with fully auto-configured embedded Hazelcast member.
+During application startup, Spring Boot scans classpath for `hazelcast.xml` and automatically instantiates Spring's
+`CacheManager` bean backed by `HazelcastInstance`.
+Use `startBootifulMember.sh` to start a cluster member from command line.
+- `BootifulClient` also uses Spring Boot auto configuration for Hazelcast.
+It scans Spring Configuration for `CacheManager` bean backed by `HazelcastClient.newHazelcastClientinstance()` and picks `hazelcast-client.xml` from classpath.
+Use `startBootifulClient.sh` to start a client and connect to the cluster from command line.
+
+NOTE: By running `mvn package spring-boot:repackage`, Spring Boot maven plugin will generate executable jar `java -jar
+ ..` with `BootifulMember` as a main class.
+
