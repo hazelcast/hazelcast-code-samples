@@ -1,0 +1,40 @@
+= Spring Boot Hazelcast Integration via JCache Example
+Viktor Gamov <viktor@hazelcast.com>, © 2015 Hazelcast, Inc.
+2015-12-27
+:revdate: 2015-12-27 1:11:50 -0600
+:linkattrs:
+:ast: &ast;
+:y: &#10003;
+:n: &#10008;
+:y: icon:check-sign[role="green"]
+:n: icon:check-minus[role="red"]
+:c: icon:file-text-alt[role="blue"]
+:toc: auto
+:toc-placement: auto
+:toc-position: right
+:toc-title: Table of content
+:toclevels: 3
+:idprefix:
+:idseparator: -
+:sectanchors:
+:icons: font
+:source-highlighter: highlight.js
+:highlightjs-theme: idea
+:experimental:
+
+Spring Boot Hazelcast Integration via JCache Example
+
+toc::[]
+
+This is an example of Spring Boot Caching Auto Configuration feature for Hazelcast and JCache:
+
+- `BootifulMember` uses Spring Boot auto configuration for Hazelcast.
+It scans classpath for `hazelcast.xml` and automatically instantiates Spring's `CacheManager` bean with `HazelcastInstance`. 
+Use `startBootifulMember.sh` to start a cluster member from command line.
+- `BootifulClient` uses SpringBoot auto configuration for JCache. 
+It scans classpath for `jcache` jars and instantiates `JCacheCacheManager` backed by `Caching.getCachingProvider()`.
+Because Hazelcast client jar is in a classpath, by default, it uses the client caching provider and picks `hazelcast-client.xml` from classpath.
+Use `startBootifulClient.sh` to start client and connect to the cluster.
+
+By running `mvn package spring-boot:repackage`, Spring Boot maven plugin will generate executable jar `java -jar ..`
+with  `BootifulMember` as a main class.

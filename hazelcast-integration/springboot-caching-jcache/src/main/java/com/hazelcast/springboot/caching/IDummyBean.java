@@ -18,14 +18,10 @@
 
 package com.hazelcast.springboot.caching;
 
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import javax.cache.annotation.CacheResult;
 
 public interface IDummyBean {
 
-    @Cacheable("city")
+    @CacheResult(cacheName = "city")
     String getCity();
-
-    @CachePut(value = "city", key = "#city + 1")
-    String setCity(String city);
 }

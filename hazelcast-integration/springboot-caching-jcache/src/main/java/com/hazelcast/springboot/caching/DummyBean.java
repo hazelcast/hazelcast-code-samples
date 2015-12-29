@@ -18,14 +18,19 @@
 
 package com.hazelcast.springboot.caching;
 
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import java.util.concurrent.TimeUnit;
 
-public interface IDummyBean {
+public class DummyBean implements IDummyBean {
 
-    @Cacheable("city")
-    String getCity();
-
-    @CachePut(value = "city", key = "#city + 1")
-    String setCity(String city);
+    @Override
+    public String getCity() {
+        System.out.println("DummyBean.getCity() called!");
+        try {
+            // emulation of slow method
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "Ankara";
+    }
 }

@@ -33,4 +33,8 @@ public class DummyBean implements IDummyBean {
         }
         return "Ankara";
     }
+
+    @Override public String setCity(String city) {
+        return city;
+    }
 }

@@ -20,8 +20,7 @@ package com.hazelcast.springboot.caching;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 
@@ -32,10 +31,13 @@ import org.springframework.cache.annotation.EnableCaching;
  *         Twitter: @gamussa
  */
 @SpringBootApplication(scanBasePackages = "com.hazelcast.springboot.caching.BootifulMember")
+@EnableAutoConfiguration(
+    exclude = {
+        // disable Hazelcast Auto Configuration, and use JCache configuration for the member example
+        HazelcastAutoConfiguration.class
+    })
 @EnableCaching
-@EnableAutoConfiguration(exclude = {EmbeddedServletContainerAutoConfiguration.class, WebMvcAutoConfiguration.class})
 public class BootifulMember {
-
     public static void main(String[] args) {
         new SpringApplicationBuilder()
             .profiles("member")

@@ -18,29 +18,21 @@
 
 package com.hazelcast.springboot.caching;
 
-import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.spring.cache.HazelcastCacheManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
+import static java.lang.System.out;
 
 /**
  * Hazelcast Client initialized by Spring Boot auto configuration
@@ -50,6 +42,8 @@ import static java.lang.System.nanoTime;
  */
 
 @SpringBootApplication(scanBasePackages = "com.hazelcast.springboot.caching.BootifulClient")
+// disable Hazelcast Auto Configuration, and use JCache configuration for the client example
+@EnableAutoConfiguration(exclude = {HazelcastAutoConfiguration.class})
 @EnableCaching
 public class BootifulClient {
 
@@ -65,49 +59,24 @@ public class BootifulClient {
         return new DummyBean();
     }
 
-    @Bean
-    CacheManager cacheManager() {
-        return new HazelcastCacheManager(hazelcastInstance());
-    }
-
-    @Bean
-    KeyGenerator keyGenerator() {
-        return new SimpleKeyGenerator();
-    }
-
-    @Bean
-    @Profile("client")
-    HazelcastInstance hazelcastInstance() {
-        // for client HazelcastInstance LocalMapStatistics will not available
-        return HazelcastClient.newHazelcastClient();
-        // return Hazelcast.newHazelcastInstance();
-    }
-
-    @RestController
-    static class CityController {
-
-        private final Logger logger = LoggerFactory.getLogger(CityController.class);
+    @Component
+    static class Runner implements CommandLineRunner {
 
         @Autowired
         IDummyBean dummy;
 
-        @Autowired
-        HazelcastInstance hazelcastInstance;
+        @Override public void run(String... strings) throws Exception {
 
-        @RequestMapping("/city")
-        public String getCity() {
             String logFormat = "%s call took %d millis with result: %s";
             long start1 = nanoTime();
             String city = dummy.getCity();
             long end1 = nanoTime();
-            logger.info(format(logFormat, "Rest", TimeUnit.NANOSECONDS.toMillis(end1 - start1), city));
-            return city;
-        }
+            out.println(format(logFormat, "First", TimeUnit.NANOSECONDS.toMillis(end1 - start1), city));
 
-        @RequestMapping(value = "city/{city}", method = RequestMethod.GET)
-        public String setCity(@PathVariable String city) {
-            return dummy.setCity(city);
+            long start2 = nanoTime();
+            city = dummy.getCity();
+            long end2 = nanoTime();
+            out.println(format(logFormat, "Second", TimeUnit.NANOSECONDS.toMillis(end2 - start2), city));
         }
-
     }
 }
