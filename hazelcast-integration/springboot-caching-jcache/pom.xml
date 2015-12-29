@@ -28,7 +28,7 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>springboot-caching</artifactId>
+    <artifactId>springboot-caching-jcache</artifactId>
     <packaging>jar</packaging>
     <name>Spring Boot: Hazelcast via Spring JCache</name>
     <description>Spring Boot Hazelcast Integration Example via Spring JCache</description>
@@ -43,7 +43,6 @@
             <artifactId>cache-api</artifactId>
             <version>1.0.0</version>
         </dependency>
-
     </dependencies>
     <!-- adding SpringBoot BOM -->
     <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html#using-boot-maven-without-a-parent-->
