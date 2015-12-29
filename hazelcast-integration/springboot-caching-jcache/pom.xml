@@ -28,15 +28,20 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>springboot-spring-caching</artifactId>
+    <artifactId>springboot-caching</artifactId>
     <packaging>jar</packaging>
-    <name>Spring Boot: Hazelcast via Spring Caching Abstraction</name>
-    <description>Spring Boot Hazelcast Integration Example via Spring Caching Abstraction</description>
+    <name>Spring Boot: Hazelcast via Spring JCache</name>
+    <description>Spring Boot Hazelcast Integration Example via Spring JCache</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>
