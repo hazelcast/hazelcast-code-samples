@@ -1,4 +1,5 @@
-<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.2.xsd">
+<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.6.xsd">
 
     <group>
         <name>hibernate</name>
@@ -66,8 +67,6 @@
         <eviction-policy>NONE</eviction-policy>
         <max-size policy="PER_NODE">0</max-size>
         <eviction-percentage>25</eviction-percentage>
-        <eviction-delay-seconds>3</eviction-delay-seconds>
-        <invalidate-on-change>true</invalidate-on-change>
         <merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
     </map>
 

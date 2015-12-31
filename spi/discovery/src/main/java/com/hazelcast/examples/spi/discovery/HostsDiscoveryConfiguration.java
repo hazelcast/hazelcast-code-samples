@@ -29,8 +29,7 @@ public class HostsDiscoveryConfiguration {
      */
     public static final PropertyDefinition DOMAIN = new SimplePropertyDefinition("site-domain", PropertyTypeConverter.STRING);
 
-    // Prevent instantiation
+    // prevent instantiation
     private HostsDiscoveryConfiguration() {
     }
-
 }

@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hazelcast.version>3.6-RC2-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.6-SNAPSHOT</hazelcast.version>
     </properties>
 
     <repositories>
@@ -52,6 +52,7 @@
         <module>jcache</module>
         <module>jmx</module>
         <module>osgi</module>
+        <module>cluster</module>
     </modules>
 
     <build>

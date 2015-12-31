@@ -2,6 +2,7 @@ import java.io.Serializable;
 import java.util.concurrent.Callable;
 
 public class FibonacciCallable implements Callable<Long>, Serializable {
+
     private final int input;
 
     public FibonacciCallable(int input) {
@@ -13,7 +14,10 @@ public class FibonacciCallable implements Callable<Long>, Serializable {
     }
 
     private long calculate(int n) {
-        if (n <= 1) return n;
-        else return calculate(n - 1) + calculate(n - 2);
+        if (n <= 1) {
+            return n;
+        } else {
+            return calculate(n - 1) + calculate(n - 2);
+        }
     }
 }

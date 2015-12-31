@@ -4,8 +4,8 @@ import com.hazelcast.core.HazelcastInstanceAware;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
-public class ComputationHeavyTask implements
-        Callable<Integer>, Serializable, HazelcastInstanceAware {
+public class ComputationHeavyTask implements Callable<Integer>, Serializable, HazelcastInstanceAware {
+
     private transient HazelcastInstance hz;
 
     public void setHazelcastInstance(HazelcastInstance hz) {

@@ -12,5 +12,4 @@ public class CarTripDistanceExtractor extends ValueExtractor<Car, String> {
         Integer tripStopMileage = (Integer) car.getAttribute("tripStop");
         valueCollector.addObject(tripStopMileage - tripStartMileage);
     }
-
 }

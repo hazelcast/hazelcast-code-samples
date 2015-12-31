@@ -1,10 +1,12 @@
 package com.hazelcast.examples.jcache.client;
 
+import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.examples.AbstractApp;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.expiry.Duration;
+import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -30,9 +32,12 @@ public class ClientDataProducer extends AbstractApp{
         //Force client be used as a provider
         clientSetup();
 
+        Properties properties1 = HazelcastCachingProvider.propertiesByLocation("classpath:hazelcast-client-c1.xml");
+        Properties properties2 = HazelcastCachingProvider.propertiesByLocation("classpath:hazelcast-client-c2.xml");
+
         //first thin is we need to initialize the cache Managers for each cluster
-        final CacheManager cacheManager1 = initCacheManager(uri1);
-        final CacheManager cacheManager2 = initCacheManager(uri2);
+        final CacheManager cacheManager1 = initCacheManager(uri1, properties1);
+        final CacheManager cacheManager2 = initCacheManager(uri2, properties2);
 
         //create a cache with the provided name
         final Cache<String, Integer> cacheAtCluster1 = initCache("theCache", cacheManager1, new Duration(TimeUnit.SECONDS,10));
