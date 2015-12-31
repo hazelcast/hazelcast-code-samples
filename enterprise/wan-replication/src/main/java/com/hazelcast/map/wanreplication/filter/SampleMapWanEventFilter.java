@@ -6,12 +6,14 @@ import com.hazelcast.map.wan.filter.MapWanEventFilter;
 
 /**
  * Sample {@link MapWanEventFilter} implementation.
- * It simply allows all events to be replicated, no filtering is applied.
+ * It filters entries if their value starts with "filter".
  */
-public class SampleMapWanEventFilter implements MapWanEventFilter {
-
+public class SampleMapWanEventFilter implements MapWanEventFilter<String, String> {
     @Override
-    public boolean filter(String s, EntryView entryView, WanFilterEventType wanFilterEventType) {
+    public boolean filter(String s, EntryView<String, String> entryView, WanFilterEventType wanFilterEventType) {
+        if (entryView.getValue().startsWith("filter")) {
+            return true;
+        }
         return false;
     }
 }

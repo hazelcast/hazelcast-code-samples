@@ -6,9 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @author tgrl
+ */
 @Entity
 @Cacheable
-@Table(name = "EMPLOYEE")
+@Table(name = "employee")
 @SuppressWarnings("unused")
 public class Employee {
 
@@ -47,16 +50,16 @@ public class Employee {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String first_name) {
+        this.firstName = first_name;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String last_name) {
+        this.lastName = last_name;
     }
 
     public int getSalary() {

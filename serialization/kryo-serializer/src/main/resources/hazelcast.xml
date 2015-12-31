@@ -5,7 +5,7 @@
 
     <serialization>
         <serializers>
-            <serializer type-class="Person" class-name="PersonKryoSerializer" />
+            <serializer type-class="Person" class-name="PersonKryoSerializer"/>
         </serializers>
     </serialization>
 </hazelcast>

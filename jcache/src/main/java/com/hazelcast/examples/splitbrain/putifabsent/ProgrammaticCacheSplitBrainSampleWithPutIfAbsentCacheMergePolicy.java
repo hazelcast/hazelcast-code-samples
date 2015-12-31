@@ -19,8 +19,8 @@ public class ProgrammaticCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy
     }
 
     @Override
-    protected Cache getCache(String cacheName, CacheManager cacheManager) {
-        CacheConfig cacheConfig = newCacheConfig(cacheName, PutIfAbsentCacheMergePolicy.class.getName());
+    protected Cache<String, Object> getCache(String cacheName, CacheManager cacheManager) {
+        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, PutIfAbsentCacheMergePolicy.class.getName());
         return cacheManager.createCache(cacheName, cacheConfig);
     }
 

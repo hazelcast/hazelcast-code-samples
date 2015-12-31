@@ -38,8 +38,8 @@ public class BootifulMember {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder()
-                .profiles("member")
-                .sources(BootifulMember.class)
-                .run(args);
+            .profiles("member")
+            .sources(BootifulMember.class)
+            .run(args);
     }
 }

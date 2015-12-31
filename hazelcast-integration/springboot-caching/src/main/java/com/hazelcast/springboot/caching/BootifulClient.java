@@ -48,16 +48,16 @@ import static java.lang.System.nanoTime;
  * @author Viktor Gamov on 12/26/15.
  *         Twitter: @gamussa
  */
+
 @SpringBootApplication(scanBasePackages = "com.hazelcast.springboot.caching.BootifulClient")
 @EnableCaching
-@SuppressWarnings("unused")
 public class BootifulClient {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder()
-                .sources(BootifulClient.class)
-                .profiles("client")
-                .run(args);
+            .sources(BootifulClient.class)
+            .profiles("client")
+            .run(args);
     }
 
     @Bean
@@ -86,7 +86,7 @@ public class BootifulClient {
     @RestController
     static class CityController {
 
-        private static final Logger LOGGER = LoggerFactory.getLogger(CityController.class);
+        private final Logger logger = LoggerFactory.getLogger(CityController.class);
 
         @Autowired
         IDummyBean dummy;
@@ -100,7 +100,7 @@ public class BootifulClient {
             long start1 = nanoTime();
             String city = dummy.getCity();
             long end1 = nanoTime();
-            LOGGER.info(format(logFormat, "Rest", TimeUnit.NANOSECONDS.toMillis(end1 - start1), city));
+            logger.info(format(logFormat, "Rest", TimeUnit.NANOSECONDS.toMillis(end1 - start1), city));
             return city;
         }
 
@@ -108,5 +108,6 @@ public class BootifulClient {
         public String setCity(@PathVariable String city) {
             return dummy.setCity(city);
         }
+
     }
 }

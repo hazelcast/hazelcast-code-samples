@@ -3,9 +3,9 @@
                                http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
-    <import resource="hazelcast-network-config.xml"/>
     <group>
         <name>dev-configured-from-xml</name>
         <password>1234</password>
     </group>
+    <import resource="hazelcast-network-config.xml"/>
 </hazelcast>

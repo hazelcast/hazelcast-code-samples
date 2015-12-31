@@ -26,9 +26,7 @@
         <name>bootifulcluster</name>
         <password>bootiful-pass</password>
     </group>
-
     <management-center enabled="false" update-interval="3">http://localhost:8080/mancenter</management-center>
-
     <network>
         <join>
             <multicast enabled="true"/>

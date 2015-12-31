@@ -31,16 +31,17 @@ import org.springframework.cache.annotation.EnableCaching;
  *         Twitter: @gamussa
  */
 @SpringBootApplication(scanBasePackages = "com.hazelcast.springboot.caching.BootifulMember")
-@EnableAutoConfiguration(exclude = {
+@EnableAutoConfiguration(
+    exclude = {
         // disable Hazelcast Auto Configuration, and use JCache configuration for the member example
         HazelcastAutoConfiguration.class
-})
+    })
 @EnableCaching
 public class BootifulMember {
     public static void main(String[] args) {
         new SpringApplicationBuilder()
-                .profiles("member")
-                .sources(BootifulMember.class)
-                .run(args);
+            .profiles("member")
+            .sources(BootifulMember.class)
+            .run(args);
     }
 }

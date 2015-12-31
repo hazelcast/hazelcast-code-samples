@@ -6,6 +6,7 @@ public class StartLiteMember {
     public static void main(String[] args) {
         Config config = new Config();
         config.setLiteMember(true);
+
         Hazelcast.newHazelcastInstance(config);
     }
 }

@@ -10,6 +10,5 @@
     </network>
 
     <partition-group group-type="HOST_AWARE">
-
     </partition-group>
 </hazelcast>

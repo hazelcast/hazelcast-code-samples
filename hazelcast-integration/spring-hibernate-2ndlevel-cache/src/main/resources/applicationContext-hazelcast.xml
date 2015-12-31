@@ -10,6 +10,7 @@
 
     <hz:hazelcast id="instance">
         <hz:config>
+
             <hz:instance-name>${hz.instance.name}</hz:instance-name>
 
             <hz:group name="${hz.group.name}" password="${hz.group.password}"/>
@@ -26,8 +27,11 @@
                 <hz:map-store write-delay-seconds="0" class-name="com.hazelcast.springHibernate.CustomerMapLoader"
                               enabled="true"/>
             </hz:map>
+
         </hz:config>
+
     </hz:hazelcast>
 
     <hz:hibernate-region-factory id="regionFactory" instance-ref="instance"/>
+
 </beans>

@@ -4,8 +4,10 @@
     <packaging>jar</packaging>
 
     <artifactId>continuous-query-cache</artifactId>
-    <name>Continuous Query Cache (CQC)</name>
-    <description>All the code samples for CQC</description>
+    <name>Enterprise - Continuous Query Cache</name>
+    <description>
+        Continuous Query Cache samples.
+    </description>
 
     <parent>
         <artifactId>enterprise</artifactId>
@@ -13,20 +15,6 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
-    <properties>
-        <!-- needed for checkstyle/findbugs -->
-        <main.basedir>${project.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
@@ -40,4 +28,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

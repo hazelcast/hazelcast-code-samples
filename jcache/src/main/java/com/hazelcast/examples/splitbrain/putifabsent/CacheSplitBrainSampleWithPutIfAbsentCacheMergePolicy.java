@@ -23,14 +23,13 @@ import java.util.concurrent.CountDownLatch;
  */
 abstract class CacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
-    private static final String CACHE_NAME = BASE_CACHE_NAME + "-putifabsent";
-
     protected abstract Config getConfig();
 
-    protected abstract Cache getCache(String cacheName, CacheManager cacheManager);
+    protected abstract Cache<String, Object> getCache(String cacheName, CacheManager cacheManager);
 
     protected void run() {
         try {
+            final String CACHE_NAME = BASE_CACHE_NAME + "-putifabsent";
             Config config = getConfig();
             HazelcastInstance h1 = Hazelcast.newHazelcastInstance(config);
             HazelcastInstance h2 = Hazelcast.newHazelcastInstance(config);
@@ -43,11 +42,11 @@ abstract class CacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy extends Abst
             CacheManager cacheManager1 = cachingProvider1.getCacheManager();
             CacheManager cacheManager2 = cachingProvider2.getCacheManager();
 
-            Cache<String, String> cache1 = getCache(CACHE_NAME, cacheManager1);
-            Cache<String, String> cache2 = getCache(CACHE_NAME, cacheManager2);
+            Cache<String, Object> cache1 = getCache(CACHE_NAME, cacheManager1);
+            Cache<String, Object> cache2 = getCache(CACHE_NAME, cacheManager2);
 
-            // TODO We assume that until here and also while doing get/put, cluster is still split
-            // this assumptions seems fragile due to time sensitivity
+            // TODO We assume that until here and also while doing get/put, cluster is still splitted.
+            // This assumptions seems fragile due to time sensitivity.
 
             cache1.put("key1", "PutIfAbsentValue1");
 
@@ -58,7 +57,7 @@ abstract class CacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy extends Abst
             assertClusterSizeEventually(2, h1);
             assertClusterSizeEventually(2, h2);
 
-            Cache<String, String> cacheTest = cacheManager2.getCache(CACHE_NAME);
+            Cache<String, Object> cacheTest = cacheManager2.getCache(CACHE_NAME);
             assertEquals("PutIfAbsentValue1", cacheTest.get("key1"));
             assertEquals("PutIfAbsentValue2", cacheTest.get("key2"));
         } finally {

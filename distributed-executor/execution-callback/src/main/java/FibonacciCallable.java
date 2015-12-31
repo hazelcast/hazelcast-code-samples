@@ -1,15 +1,14 @@
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
-class FibonacciCallable implements Callable<Long>, Serializable {
+public class FibonacciCallable implements Callable<Long>, Serializable {
 
     private final int input;
 
-    FibonacciCallable(int input) {
+    public FibonacciCallable(int input) {
         this.input = input;
     }
 
-    @Override
     public Long call() {
         return calculate(input);
     }

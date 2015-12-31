@@ -1,5 +1,8 @@
 package com.hazelcast.hibernate;
 
+/**
+ * @author Esref Ozturk <esrefozturk93@gmail.com>
+ */
 @SuppressWarnings("unused")
 public class Employee {
 
@@ -30,16 +33,16 @@ public class Employee {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String first_name) {
+        this.firstName = first_name;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String last_name) {
+        this.lastName = last_name;
     }
 
     public int getSalary() {

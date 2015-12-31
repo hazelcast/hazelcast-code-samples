@@ -37,4 +37,11 @@
         </indexes>
     </map>
 
+    <map name="customers">
+        <!-- custom attribute defined together with extractor -->
+        <attributes>
+            <attribute extractor="com.test.customer.AgeExtractor">age</attribute>
+        </attributes>
+    </map>
+
 </hazelcast>
