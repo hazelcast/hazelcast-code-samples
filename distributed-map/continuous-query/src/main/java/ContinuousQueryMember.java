@@ -1,4 +1,5 @@
 import com.hazelcast.core.*;
+import com.hazelcast.map.listener.*;
 import com.hazelcast.query.SqlPredicate;
 
 public class ContinuousQueryMember {
@@ -12,7 +13,9 @@ public class ContinuousQueryMember {
     }
 
     static class MyEntryListener
-            implements EntryListener<String, String> {
+            implements EntryAddedListener<String, String>, EntryUpdatedListener<String, String>,
+            EntryRemovedListener<String, String>, EntryEvictedListener<String, String>,
+            MapEvictedListener, MapClearedListener {
         @Override
         public void entryAdded(EntryEvent<String, String> event) {
             System.out.println("entryAdded:" + event);

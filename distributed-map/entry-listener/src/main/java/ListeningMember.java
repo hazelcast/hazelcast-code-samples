@@ -1,4 +1,10 @@
-import com.hazelcast.core.*;
+import com.hazelcast.core.EntryEvent;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.map.listener.EntryAddedListener;
+import com.hazelcast.map.listener.EntryRemovedListener;
+import com.hazelcast.map.listener.EntryUpdatedListener;
 
 public class ListeningMember {
 
@@ -9,7 +15,8 @@ public class ListeningMember {
         System.out.println("EntryListener registered");
     }
 
-    static class MyEntryListener implements EntryListener<String, String> {
+    static class MyEntryListener implements EntryAddedListener<String, String>,
+            EntryRemovedListener<String, String>, EntryUpdatedListener<String, String> {
         @Override
         public void entryAdded(EntryEvent<String, String> event) {
             System.out.println("entryAdded:" + event);
@@ -24,22 +31,5 @@ public class ListeningMember {
         public void entryUpdated(EntryEvent<String, String> event) {
             System.out.println("entryUpdated:" + event);
         }
-
-        @Override
-        public void entryEvicted(EntryEvent<String, String> event) {
-            System.out.println("entryEvicted:" + event);
-        }
-
-        @Override
-        public void mapEvicted(MapEvent event) {
-            System.out.println("mapEvicted:" + event);
-
-        }
-        
-        @Override
-        public void mapCleared(MapEvent event) {
-            System.out.println("mapCleared:" + event);
-        }
-
     }
 }

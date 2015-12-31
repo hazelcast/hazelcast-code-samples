@@ -8,6 +8,19 @@
         </join>
     </network>
 
+    <map name="people">
+        <!-- custom attribute definitions -->
+        <attributes>
+            <attribute extractor="com.test.customer.AgeExtractor">age</attribute>
+        </attributes>
+
+        <!-- index definitions using custom attributes -->
+        <indexes>
+            <!-- custom attribute without an extraction parameter -->
+            <index ordered="true">age</index>
+        </indexes>
+    </map>
+
     <map name="cars">
         <!-- custom attribute definitions -->
         <attributes>
