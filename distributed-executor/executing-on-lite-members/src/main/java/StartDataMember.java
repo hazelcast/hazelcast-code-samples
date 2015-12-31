@@ -6,13 +6,10 @@ import com.hazelcast.core.IExecutorService;
 import java.util.concurrent.Future;
 
 public class StartDataMember {
-
     public static void main(String[] args) throws Exception {
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        IExecutorService executor = hz.getExecutorService("executor");
-
-        Future<Integer> future = executor.submit(new ComputationHeavyTask(), MemberSelectors.LITE_MEMBER_SELECTOR);
-
+        final HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        final IExecutorService executor = hz.getExecutorService("executor");
+        final Future<Integer> future = executor.submit(new ComputationHeavyTask(), MemberSelectors.LITE_MEMBER_SELECTOR);
         System.out.println("Result: " + future.get());
     }
 }

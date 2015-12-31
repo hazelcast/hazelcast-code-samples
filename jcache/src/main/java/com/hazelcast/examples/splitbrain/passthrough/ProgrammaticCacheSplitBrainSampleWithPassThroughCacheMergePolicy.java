@@ -19,12 +19,13 @@ public class ProgrammaticCacheSplitBrainSampleWithPassThroughCacheMergePolicy
     }
 
     @Override
-    protected Cache<String, Object> getCache(String cacheName, CacheManager cacheManager) {
-        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, PassThroughCacheMergePolicy.class.getName());
+    protected Cache getCache(String cacheName, CacheManager cacheManager) {
+        CacheConfig cacheConfig = newCacheConfig(cacheName, PassThroughCacheMergePolicy.class.getName());
         return cacheManager.createCache(cacheName, cacheConfig);
     }
 
     public static void main(String[] args) {
         new ProgrammaticCacheSplitBrainSampleWithPassThroughCacheMergePolicy().run();
     }
+
 }

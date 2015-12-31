@@ -1,18 +1,19 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
 
-    <artifactId>discovery-spi</artifactId>
-    <name>Discovery SPI</name>
-    <description>
-        Sample code for implementing discovery providers
-    </description>
+  <groupId>com.hazelcast.samples.spi</groupId>
+  <artifactId>discovery-spi</artifactId>
+  <name>Discovery SPI</name>
+  <description>
+    Sample code for implementing discovery providers
+  </description>
 
-    <parent>
-        <groupId>com.hazelcast.samples.spi</groupId>
-        <artifactId>spi</artifactId>
-        <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
+  <parent>
+    <groupId>com.hazelcast.samples.spi</groupId>
+    <artifactId>spi</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 </project>

@@ -38,7 +38,8 @@ import java.util.Map;
 /**
  * THIS CODE IS NOT PRODUCTION READY!
  */
-public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
+public class HostsDiscoveryStrategy
+        extends AbstractDiscoveryStrategy {
 
     private static final String HOSTS_NIX = "/etc/hosts";
     private static final String HOSTS_WINDOWS = "%SystemRoot%\\system32\\drivers\\etc\\hosts";
@@ -48,7 +49,7 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
     HostsDiscoveryStrategy(ILogger logger, Map<String, Comparable> properties) {
         super(logger, properties);
 
-        // make it possible to override the value from the configuration on
+        // Make it possible to override the value from the configuration on
         // the system's environment or JVM properties -Ddiscovery.hosts.site-domain=some.domain
         this.siteDomain = getOrNull("discovery.hosts", HostsDiscoveryConfiguration.DOMAIN);
     }
@@ -71,15 +72,12 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
 
         File hosts = new File(hostsPath);
 
-        // read all lines
+        // Read all lines
         List<String> lines = readLines(hosts);
 
         List<String> assignments = new ArrayList<String>();
         for (String line : lines) {
-            if (line.isEmpty()) {
-                continue;
-            }
-            // example:
+            // Example:
             // 192.168.0.1   host1.cluster.local
             if (matchesDomain(line)) {
                 assignments.add(line);
@@ -152,4 +150,5 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
             throw new RuntimeException("Could not resolve ip address", e);
         }
     }
+
 }

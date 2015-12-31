@@ -5,8 +5,8 @@ import com.hazelcast.core.IMap;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
-public class SumTask implements Callable<Integer>, Serializable, HazelcastInstanceAware {
-
+public class SumTask implements
+        Callable<Integer>, Serializable, HazelcastInstanceAware {
     private transient HazelcastInstance hz;
 
     public void setHazelcastInstance(HazelcastInstance hz) {
@@ -20,7 +20,7 @@ public class SumTask implements Callable<Integer>, Serializable, HazelcastInstan
             System.out.println("Calculating for key: " + key);
             result += map.get(key);
         }
-        System.out.println("Local result: " + result);
+        System.out.println("Local Result: " + result);
         return result;
     }
 }

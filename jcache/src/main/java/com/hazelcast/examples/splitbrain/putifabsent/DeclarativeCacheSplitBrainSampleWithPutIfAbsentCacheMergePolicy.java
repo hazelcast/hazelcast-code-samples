@@ -17,11 +17,12 @@ public class DeclarativeCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy
     }
 
     @Override
-    protected Cache<String, Object> getCache(String cacheName, CacheManager cacheManager) {
+    protected Cache getCache(String cacheName, CacheManager cacheManager) {
         return cacheManager.getCache(cacheName);
     }
 
     public static void main(String[] args) {
         new DeclarativeCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy().run();
     }
+
 }

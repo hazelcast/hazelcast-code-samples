@@ -10,7 +10,6 @@ import javax.cache.spi.CachingProvider;
 import java.io.File;
 import java.net.URI;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -53,13 +52,9 @@ public class AbstractApp {
      * initialize the JCache Manager that we will use for creating and getting a cache object
      */
     public CacheManager initCacheManager(URI uri) {
-        return initCacheManager(uri, null);
-    }
-
-    public CacheManager initCacheManager(URI uri, Properties properties) {
         //resolve a cache manager
         cachingProvider = Caching.getCachingProvider();
-        return cachingProvider.getCacheManager(uri, null, properties);
+        return cachingProvider.getCacheManager(uri, null);
     }
 
     public CacheManager initCacheManager() {

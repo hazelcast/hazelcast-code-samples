@@ -12,4 +12,5 @@ public class AgeExtractor extends ValueExtractor<Customer, String> {
         int age = Calendar.getInstance().get(Calendar.YEAR) - customer.yearOfBirth;
         valueCollector.addObject(age);
     }
+
 }

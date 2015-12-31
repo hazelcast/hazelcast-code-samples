@@ -5,7 +5,6 @@ import com.hazelcast.core.IMap;
 import java.io.Serializable;
 
 public class VerifyTask implements Runnable, Serializable, HazelcastInstanceAware {
-
     private final String key;
     private transient HazelcastInstance hz;
 
@@ -20,6 +19,6 @@ public class VerifyTask implements Runnable, Serializable, HazelcastInstanceAwar
     public void run() {
         IMap map = hz.getMap("map");
         boolean localKey = map.localKeySet().contains(key);
-        System.out.println("Key " + key + " is local: " + localKey);
+        System.out.println("Key is local:" + localKey);
     }
 }

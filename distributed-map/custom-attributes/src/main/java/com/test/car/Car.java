@@ -33,8 +33,8 @@ public class Car implements Serializable {
 
     @Override
     public String toString() {
-        return "Car{"
-                + "attributes=" + attributes
-                + '}';
+        return "Car{" +
+                "attributes=" + attributes +
+                '}';
     }
 }

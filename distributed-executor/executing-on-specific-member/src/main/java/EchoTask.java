@@ -8,6 +8,6 @@ public class EchoTask implements Runnable, Serializable {
     }
 
     public void run() {
-        System.out.println("Echo: " + msg);
+        System.out.println(msg);
     }
 }
