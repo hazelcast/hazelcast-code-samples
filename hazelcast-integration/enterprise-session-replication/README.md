@@ -34,7 +34,7 @@ Follow steps under "Sample Client/Server Configuration to use Hazelcast Session 
 
 2) Clone the repository via `git clone https://github.com/hazelcast/hazelcast-code-samples.git`
 
-3) Then go to `hazelcast-integration/tomcat-session-replication` folder.
+3) Then go to `hazelcast-integration/enterprise-session-replication` folder.
 
 4) Run maven via `mvn package`
 
