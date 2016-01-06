@@ -5,11 +5,11 @@ This project is prepared to serve as a sample application for Hazelcast, the lea
 <h3>Tomcat Configuration</h3>
 
 <h4>P2P Deployment</h4>
-Follow steps under "Sample P2P Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast/blob/master/hazelcast-documentation/src/TomcatSessionReplication.md
+Follow steps under "Sample P2P Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast-reference-manual/blob/master/src/IntegratedClustering/TomcatSessionReplication.md
 
 <h4>Client-Server Deployment</h4>
 
-Follow steps under "Sample Client/Server Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast/blob/master/hazelcast-documentation/src/TomcatSessionReplication.md
+Follow steps under "Sample Client/Server Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast-reference-manual/blob/master/src/IntegratedClustering/TomcatSessionReplication.md
 
 
 <h3>Load Balancing With Tomcat</h3>
@@ -21,11 +21,11 @@ http://tomcat.apache.org/connectors-doc/generic_howto/quick.html
 <h3>Jetty Configuration</h3>
 
 <h4>P2P Deployment</h4>
-Follow steps under "Sample P2P Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast/blob/master/hazelcast-documentation/src/JettySessionReplication.md
+Follow steps under "Sample P2P Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast-reference-manual/blob/master/src/IntegratedClustering/JettySessionReplication.md
 
 <h4>Client-Server Deployment</h4>
 
-Follow steps under "Sample Client/Server Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast/blob/master/hazelcast-documentation/src/JettySessionReplication.md
+Follow steps under "Sample Client/Server Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast-reference-manual/blob/master/src/IntegratedClustering/JettySessionReplication.md
 
 <h2>How to Run Sample Application</h2>
 
