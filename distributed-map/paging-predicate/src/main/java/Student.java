@@ -16,16 +16,12 @@
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class Student implements Serializable, Comparable<Student> {
 
-    private String name;
-
-    private int id;
-
-    private ClassName className;
-
-    public Student() {
-    }
+    private final String name;
+    private final int id;
+    private final ClassName className;
 
     public Student(String name, int id, ClassName className) {
         this.name = name;
@@ -37,24 +33,12 @@ public class Student implements Serializable, Comparable<Student> {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public ClassName getClassName() {
         return className;
-    }
-
-    public void setClassName(ClassName className) {
-        this.className = className;
     }
 
     @Override
@@ -64,16 +48,10 @@ public class Student implements Serializable, Comparable<Student> {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
-                ", className=" + className +
-                '}';
+        return "Student{"
+                + "name='" + name + '\''
+                + ", id=" + id
+                + ", className=" + className
+                + '}';
     }
-
-    enum ClassName {
-        ClassA, ClassB
-    }
-
-
 }

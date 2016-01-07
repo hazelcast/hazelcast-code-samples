@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
-
 public class PagingPredicateQuery {
 
     public static void main(String[] args) {
@@ -35,15 +34,15 @@ public class PagingPredicateQuery {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         IMap<Integer, Student> map = hz.getMap("map");
 
-        //Fill map
+        // fill map
         for (int i = 0; i < 20; i++) {
-            Student.ClassName className = i % 2 == 0 ? Student.ClassName.ClassA : Student.ClassName.ClassB;
+            ClassName className = (i % 2 == 0 ? ClassName.ClassA : ClassName.ClassB);
             Student student = new Student("Student-" + i, i, className);
             map.put(i, student);
         }
 
         // an equal predicate to filter out non ClassA students
-        EqualPredicate equalPredicate = new EqualPredicate("className", Student.ClassName.ClassA.name());
+        EqualPredicate equalPredicate = new EqualPredicate("className", ClassName.ClassA.name());
 
         // a comparator which helps to sort in descending order of id field
         Comparator<Map.Entry> descendingComparator = new Comparator<Map.Entry>() {
@@ -58,44 +57,45 @@ public class PagingPredicateQuery {
         // a predicate which filters out non ClassA students, sort them descending order and fetches 4 students for each page
         PagingPredicate pagingPredicate = new PagingPredicate(equalPredicate, descendingComparator, 4);
 
-        // Expected results:
-        // Page1 -> Student-18, Student-16, Student-14, Student-12
-        // Page2 -> Student-10, Student-8, Student-6, Student-4
-        // Page3 -> Student-2, Student-0
+        // expected result:
+        // Page 1 -> Student-18, Student-16, Student-14, Student-12
+        // Page 2 -> Student-10, Student-8, Student-6, Student-4
+        // Page 3 -> Student-2, Student-0
         Collection<Student> values = map.values(pagingPredicate);
-        System.err.print("\nPage1 -> ");
+        System.out.print("\nPage 1 -> ");
         for (Student value : values) {
-            System.err.print(value + ", ");
+            System.out.print(value + ", ");
         }
 
         pagingPredicate.nextPage();
         values = map.values(pagingPredicate);
-        System.err.print("\nPage2 -> ");
+        System.out.print("\nPage 2 -> ");
         for (Student value : values) {
-            System.err.print(value + ", ");
+            System.out.print(value + ", ");
         }
 
         pagingPredicate.nextPage();
         values = map.values(pagingPredicate);
-        System.err.print("\nPage3 -> ");
+        System.out.print("\nPage 3 -> ");
         for (Student value : values) {
-            System.err.print(value + ", ");
+            System.out.print(value + ", ");
         }
 
-
-        // a predicate which fetches 3 students for each page, natural order(see Student.compareTo),
+        // a predicate which fetches 3 students for each page, natural order (see Student.compareTo()),
         // does not filter out anything
         pagingPredicate = new PagingPredicate(3);
 
-        // Since first page is 0, we are requesting 6th page here
-        // Expected results:
-        // Page 4 -> Student-15, Student-16, Student-17
+        // since first page is 0, we are requesting the 6th page here
+        // expected result:
+        // Page 6 -> Student-15, Student-16, Student-17
         pagingPredicate.setPage(5);
         values = map.values(pagingPredicate);
-        System.err.print("\n\nPage6 -> ");
+        System.out.print("\n\nPage 6 -> ");
         for (Student value : values) {
-            System.err.print(value + ", ");
+            System.out.print(value + ", ");
         }
-        System.exit(0);
+
+        System.out.println();
+        Hazelcast.shutdownAll();
     }
 }
