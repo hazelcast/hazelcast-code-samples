@@ -1,17 +1,17 @@
 package com.hazelcast.hibernate;
 
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.hibernate.instance.HazelcastAccessor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Logger;
 
 /**
  * Created by Esref Ozturk <esrefozturk93@gmail.com> on 26.06.2014.
@@ -30,7 +30,11 @@ public class ManageEmployee {
 
     public static void main(String[] args) throws InterruptedException {
         try{
-            factory = new Configuration().configure().buildSessionFactory();
+            Configuration configuration = new Configuration();
+            configuration.configure();
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                    configuration.getProperties()).build();
+            factory = configuration.buildSessionFactory(serviceRegistry);
         }catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);
