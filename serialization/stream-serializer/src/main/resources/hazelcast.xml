@@ -7,8 +7,6 @@
         <serializers>
             <serializer type-class="Person" class-name="PersonStreamSerializer"/>
             <serializer type-class="Car" class-name="CarStreamSerializer"/>
-            <serializer type-class="java.util.LinkedList" class-name="LinkedListStreamSerializer"/>
-            <serializer type-class="java.util.HashMap" class-name="HashMapStreamSerializer"/>
             <serializer type-class="ExtendedArrayList" class-name="ExtendedArrayListSerializer"/>
         </serializers>
     </serialization>

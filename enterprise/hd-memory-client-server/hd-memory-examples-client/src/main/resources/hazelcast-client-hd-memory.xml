@@ -15,9 +15,10 @@
   ~ limitations under the License.
   -->
 
-<hazelcast-client xsi:schemaLocation="http://www.hazelcast.com/schema/client-config hazelcast-client-config-3.6.xsd"
-                  xmlns="http://www.hazelcast.com/schema/client-config"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<hazelcast-client xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
+                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.6.xsd"
+                  xmlns="http://www.hazelcast.com/schema/client-config">
 
     <group>
         <name>cache</name>
@@ -37,5 +38,4 @@
         <use-native-byte-order>true</use-native-byte-order>
         <allow-unsafe>true</allow-unsafe>
     </serialization>
-
 </hazelcast-client>

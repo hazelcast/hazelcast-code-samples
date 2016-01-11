@@ -3,7 +3,7 @@
                                http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
-    <cache name="cache" >
+    <cache name="cache">
         <eviction size="100000" eviction-policy="LFU" max-size-policy="ENTRY_COUNT"/>
     </cache>
 </hazelcast>

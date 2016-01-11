@@ -16,5 +16,4 @@
         <backup-count>1</backup-count>
         <async-backup-count>1</async-backup-count>
     </map>
-
 </hazelcast>

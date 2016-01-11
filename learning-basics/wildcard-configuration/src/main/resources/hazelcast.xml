@@ -6,5 +6,4 @@
     <map name="testmap*">
         <time-to-live-seconds>10</time-to-live-seconds>
     </map>
-
 </hazelcast>

@@ -1,5 +1,7 @@
-<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.6.xsd">
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
 
     <group>
         <name>hibernate</name>
@@ -109,5 +111,4 @@
     </serialization>
 
     <services enable-defaults="true"/>
-
 </hazelcast>

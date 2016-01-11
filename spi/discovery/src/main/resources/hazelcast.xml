@@ -15,9 +15,10 @@
   ~ limitations under the License.
   -->
 
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.6.xsd"
-           xmlns="http://www.hazelcast.com/schema/config"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
 
     <!-- activate Discovery SPI -->
     <properties>
@@ -34,8 +35,7 @@
             <!-- activate our discovery strategy -->
             <discovery-strategies>
                 <!-- class equals to the DiscoveryStrategy not the factory! -->
-                <discovery-strategy enabled="true"
-                                    class="com.hazelcast.examples.spi.discovery.HostsDiscoveryStrategy">
+                <discovery-strategy enabled="true" class="com.hazelcast.examples.spi.discovery.HostsDiscoveryStrategy">
                     <properties>
                         <property name="site-domain">cluster.local</property>
                     </properties>
