@@ -59,8 +59,7 @@ public final class SimpleMapTest {
         System.setProperty("java.net.preferIPv4Stack", "true");
     }
 
-    private SimpleMapTest(final int threadCount, final int entryCount, final int valueSize,
-                          final int getPercentage, final int putPercentage, final boolean load) {
+    private SimpleMapTest(int threadCount, int entryCount, int valueSize, int getPercentage, int putPercentage, boolean load) {
         this.threadCount = threadCount;
         this.entryCount = entryCount;
         this.valueSize = valueSize;
@@ -217,9 +216,9 @@ public final class SimpleMapTest {
             long removesNow = removes.getAndSet(0);
             long total = getsNow + putsNow + removesNow;
 
-            logger.info("total= " + total + ", gets:" + getsNow
-                    + ", puts:" + putsNow + ", removes:" + removesNow);
-            logger.info("Operations per Second : " + total / STATS_SECONDS);
+            logger.info("total: " + total + ", gets: " + getsNow
+                    + ", puts: " + putsNow + ", removes: " + removesNow);
+            logger.info("Operations per Second: " + total / STATS_SECONDS);
         }
     }
 

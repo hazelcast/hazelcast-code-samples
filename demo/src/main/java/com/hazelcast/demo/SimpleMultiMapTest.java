@@ -81,16 +81,14 @@ public final class SimpleMultiMapTest {
             public void run() {
                 while (true) {
                     try {
-                        //noinspection BusyWait
                         Thread.sleep(STATS_SECONDS * 1000);
-                        LOGGER.info("cluster size:"
-                                + INSTANCE.getCluster().getMembers().size());
+                        LOGGER.info("cluster size: " + INSTANCE.getCluster().getMembers().size());
                         int putCount = puts.getAndSet(0);
                         int getCount = gets.getAndSet(0);
                         int removeCount = removes.getAndSet(0);
-                        LOGGER.info("TOTAL:" + (removeCount + putCount + getCount) / STATS_SECONDS);
-                        LOGGER.info("PUTS:" + putCount / STATS_SECONDS);
-                        LOGGER.info("GEtS:" + getCount / STATS_SECONDS);
+                        LOGGER.info("TOTAL: " + (removeCount + putCount + getCount) / STATS_SECONDS);
+                        LOGGER.info("PUTS: " + putCount / STATS_SECONDS);
+                        LOGGER.info("GETS: " + getCount / STATS_SECONDS);
                         LOGGER.info("REMOVES:" + removeCount / STATS_SECONDS);
                     } catch (InterruptedException ignored) {
                         return;
@@ -102,7 +100,7 @@ public final class SimpleMultiMapTest {
 
     private static void load(boolean load, ExecutorService es, final MultiMap<String, byte[]> map) {
         if (load) {
-            final Member thisMember = INSTANCE.getCluster().getLocalMember();
+            Member thisMember = INSTANCE.getCluster().getLocalMember();
             for (int i = 0; i < entryCount; i++) {
                 final String key = String.valueOf(i);
                 Partition partition = INSTANCE.getPartitionService().getPartition(key);

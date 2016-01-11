@@ -57,10 +57,8 @@ public final class SimpleFunctionalMapTest {
             public void run() {
                 while (true) {
                     try {
-                        //noinspection BusyWait
                         Thread.sleep(STATS_SECONDS * 1000);
-                        System.out.println("cluster size:"
-                                + hazelcast.getCluster().getMembers().size());
+                        System.out.println("cluster size: " + hazelcast.getCluster().getMembers().size());
                         Stats currentStats = stats.getAndReset();
                         System.out.println(currentStats);
                     } catch (Exception e) {
@@ -119,7 +117,7 @@ public final class SimpleFunctionalMapTest {
                 sb.append("\n");
                 total += value.get();
             }
-            sb.append("Operations per Second : " + total / STATS_SECONDS + " \n");
+            sb.append("Operations per second: ").append(total / STATS_SECONDS).append(" \n");
             return sb.toString();
         }
 
@@ -141,7 +139,7 @@ public final class SimpleFunctionalMapTest {
         @Override
         @SuppressWarnings("checkstyle:cyclomaticcomplexity")
         public void run() {
-            IMap map = hazelcast.getMap("default");
+            IMap<Object, Object> map = hazelcast.getMap("default");
             while (true) {
                 int keyInt = (int) (RANDOM.nextFloat() * ENTRY_COUNT);
                 int operation = ((int) (RANDOM.nextFloat() * 1000)) % 20;
@@ -167,19 +165,19 @@ public final class SimpleFunctionalMapTest {
                     stats.increment("putIfAbsent");
                 } else if (operation < 7) {
                     Collection col = map.values();
-                    for (Object o : col) {
+                    for (Object object : col) {
                         int i = 0;
                     }
                     stats.increment("values");
                 } else if (operation < 8) {
                     Collection col = map.keySet();
-                    for (Object o : col) {
+                    for (Object object : col) {
                         int i = 0;
                     }
                     stats.increment("keySet");
                 } else if (operation < 9) {
                     Collection col = map.entrySet();
-                    for (Object o : col) {
+                    for (Object object : col) {
                         int i = 0;
                     }
                     stats.increment("entrySet");

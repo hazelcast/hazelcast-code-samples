@@ -119,8 +119,8 @@ public final class LongRunningTest {
             }
             try {
                 int nextSeconds = random(nextActionMin, nextActionMax);
-                log("Next Action after " + nextSeconds + " seconds.");
-                log("members:" + nodes.size() + ", starts: " + starts + ", stops:" + stops + ", restart:" + restarts);
+                log("Next action after " + nextSeconds + " seconds.");
+                log("members: " + nodes.size() + ", starts: " + starts + ", stops: " + stops + ", restart: " + restarts);
                 Thread.sleep(nextSeconds * 1000);
             } catch (InterruptedException e) {
                 break;
@@ -249,7 +249,7 @@ public final class LongRunningTest {
                             Thread.sleep(STATS_SECONDS * 1000);
                             int clusterSize = hazelcast.getCluster().getMembers().size();
                             Stats currentStats = stats.getAndReset();
-                            logger.info("Cluster size: " + clusterSize + ", Operations per Second: "
+                            logger.info("Cluster size: " + clusterSize + ", Operations per second: "
                                     + (currentStats.total() / STATS_SECONDS));
                         } catch (HazelcastInstanceNotActiveException e) {
                             throw new RuntimeException(e);

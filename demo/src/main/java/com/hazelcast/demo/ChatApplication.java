@@ -43,7 +43,7 @@ public class ChatApplication {
         ChatApplication application = new ChatApplication();
         String username = (args != null && args.length > 0) ? args[0] : null;
         if (username == null) {
-            System.out.println("enter username:");
+            System.out.println("Enter username: ");
             int input;
             StringBuilder u = new StringBuilder();
             try {
@@ -55,7 +55,7 @@ public class ChatApplication {
             }
             username = u.toString();
         }
-        System.out.println("hello " + username);
+        System.out.println("Hello " + username);
         application.setUsername(username);
         application.run();
     }
