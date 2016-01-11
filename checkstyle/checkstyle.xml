@@ -214,7 +214,7 @@
         <!--<module name="ArrayTrailingComma"/>-->
         <module name="CovariantEquals"/>
         <module name="DeclarationOrder"/>
-        <module name="ExplicitInitialization"/>
+        <!--<module name="ExplicitInitialization"/>-->
         <module name="DefaultComesLast"/>
         <module name="FallThrough"/>
         <module name="MultipleVariableDeclarations"/>

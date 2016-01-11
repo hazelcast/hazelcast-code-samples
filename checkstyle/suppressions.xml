@@ -18,5 +18,4 @@
     <suppress checks="MethodName" files="Test\.java$"/>
     <suppress checks="TypeName" files="Test\.java$"/>
     <suppress checks="JUnitTestCase" files="Test\.java$"/>
-    <suppress checks="ExplicitInitialization" files="Test\.java$"/>
 </suppressions>
