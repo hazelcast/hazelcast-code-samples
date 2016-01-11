@@ -11,16 +11,16 @@ import static java.lang.Math.min;
 public class Writer {
 
     public static void main(String[] args) throws Exception {
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-
         Random random = new Random();
 
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         Ringbuffer<Long> rb = hz.getRingbuffer("rb");
-        long k = 100;
+
+        long i = 100;
         while (true) {
             long sleepMs = 100;
             for (; ; ) {
-                long result = rb.addAsync(k, OverflowPolicy.FAIL).get();
+                long result = rb.addAsync(i, OverflowPolicy.FAIL).get();
                 if (result != -1) {
                     break;
                 }
@@ -31,8 +31,8 @@ public class Writer {
             // add a bit of random delay to make it look a bit more realistic
             Thread.sleep(random.nextInt(10));
 
-            System.out.println("Written: " + k);
-            k++;
+            System.out.println("Written: " + i);
+            i++;
         }
     }
 }

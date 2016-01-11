@@ -9,8 +9,12 @@ import com.hazelcast.query.Predicates;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.hazelcast.query.Predicates.*;
+import static com.hazelcast.query.Predicates.and;
+import static com.hazelcast.query.Predicates.equal;
+import static com.hazelcast.query.Predicates.not;
+import static com.hazelcast.query.Predicates.or;
 
+@SuppressWarnings("unused")
 public class PredicateMember {
 
     private HazelcastInstance hz = Hazelcast.newHazelcastInstance();
@@ -20,7 +24,7 @@ public class PredicateMember {
         new PredicateMember().run();
     }
 
-    public void run() {
+    private void run() {
         personMap.put("1", new Person("Peter", true, 36));
         personMap.put("2", new Person("John", true, 50));
         personMap.put("3", new Person("Marry", false, 20));
@@ -28,11 +32,11 @@ public class PredicateMember {
         personMap.put("5", new Person("Rob", true, 60));
         personMap.put("6", new Person("Jane", false, 43));
 
-        Set s = hz.getSet("foo");
+        Set<Person> set = hz.getSet("foo");
         Person p = new Person("Peter", true, 37);
-        s.add(p);
-        Person p1 = (Person) s.iterator().next();
-        Person p2 = (Person) s.iterator().next();
+        set.add(p);
+        Person p1 = set.iterator().next();
+        Person p2 = set.iterator().next();
 
         System.out.println("Get with name Peter");
         for (Person person : getWithName("Peter")) {
@@ -55,42 +59,41 @@ public class PredicateMember {
         }
     }
 
-    public Set<Person> getWithNameNaive(String name) {
+    private Set<Person> getWithNameNaive(String name) {
         Set<Person> result = new HashSet<Person>();
         for (Person person : personMap.values()) {
-            if (person.name.equals(name)) {
+            if (person.getName().equals(name)) {
                 result.add(person);
             }
         }
-
         return result;
     }
 
-    public Set<Person> getNotWithName(String name) {
+    private Set<Person> getNotWithName(String name) {
         Predicate namePredicate = equal("name", name);
         Predicate predicate = not(namePredicate);
         return (Set<Person>) personMap.values(predicate);
     }
 
-    public Set<Person> getWithName(String name) {
+    private Set<Person> getWithName(String name) {
         Predicate predicate = Predicates.equal("name", name);
         return (Set<Person>) personMap.values(predicate);
     }
 
-    public Set<Person> getWithNameAndAgeSimplified(String name, int age) {
+    private Set<Person> getWithNameAndAgeSimplified(String name, int age) {
         EntryObject e = new PredicateBuilder().getEntryObject();
         Predicate predicate = e.get("name").equal(name).and(e.get("age").equal(age));
         return (Set<Person>) personMap.values(predicate);
     }
 
-    public Set<Person> getWithNameAndAge(String name, int age) {
+    private Set<Person> getWithNameAndAge(String name, int age) {
         Predicate namePredicate = equal("name", name);
         Predicate agePredicate = equal("age", age);
         Predicate predicate = and(namePredicate, agePredicate);
         return (Set<Person>) personMap.values(predicate);
     }
 
-    public Set<Person> getWithNameOrAge(String name, int age) {
+    private Set<Person> getWithNameOrAge(String name, int age) {
         Predicate namePredicate = equal("name", name);
         Predicate agePredicate = equal("age", age);
         Predicate predicate = or(namePredicate, agePredicate);

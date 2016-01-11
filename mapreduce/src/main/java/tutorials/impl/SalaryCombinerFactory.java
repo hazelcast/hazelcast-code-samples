@@ -19,16 +19,14 @@ package tutorials.impl;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
 
-public class SalaryCombinerFactory
-        implements CombinerFactory<String, Integer, SalaryTuple> {
+public class SalaryCombinerFactory implements CombinerFactory<String, Integer, SalaryTuple> {
 
     @Override
     public Combiner<Integer, SalaryTuple> newCombiner(String key) {
         return new SalaryCombiner();
     }
 
-    private static class SalaryCombiner
-            extends Combiner<Integer, SalaryTuple> {
+    private static class SalaryCombiner extends Combiner<Integer, SalaryTuple> {
 
         private int count;
         private int amount;

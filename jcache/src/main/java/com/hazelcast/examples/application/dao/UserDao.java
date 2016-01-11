@@ -17,7 +17,7 @@ public interface UserDao {
      * @param userId the user's id to search for
      * @return the user if found otherwise null
      */
-    User findUserById( int userId );
+    User findUserById(int userId);
 
     /**
      * Stores the given {@link com.hazelcast.examples.application.model.User}
@@ -25,10 +25,10 @@ public interface UserDao {
      * merging process takes place.
      *
      * @param userId the user's id to store to
-     * @param user the user instance to store
+     * @param user   the user instance to store
      * @return true if store was successful otherwise false
      */
-    boolean storeUser( int userId, User user );
+    boolean storeUser(int userId, User user);
 
     /**
      * Removes all data for the given userId
@@ -36,7 +36,7 @@ public interface UserDao {
      * @param userId the user's id to remove
      * @return true is store was successful otherwise false
      */
-    boolean removeUser( int userId );
+    boolean removeUser(int userId);
 
     /**
      * Returns a collection of all userIds currently stored in the store
@@ -44,5 +44,4 @@ public interface UserDao {
      * @return a collection of all userIds, never returns null
      */
     Collection<Integer> allUserIds();
-
 }

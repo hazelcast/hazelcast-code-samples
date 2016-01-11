@@ -24,13 +24,14 @@ import java.util.concurrent.CountDownLatch;
  */
 abstract class CacheSplitBrainSampleWithHigherHitsCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
+    private static final String CACHE_NAME = BASE_CACHE_NAME + "-higherhits";
+
     protected abstract Config getConfig();
 
     protected abstract Cache getCache(String cacheName, CacheManager cacheManager);
 
     protected void run() {
         try {
-            final String CACHE_NAME = BASE_CACHE_NAME + "-higherhits";
             Config config = getConfig();
             HazelcastInstance h1 = Hazelcast.newHazelcastInstance(config);
             HazelcastInstance h2 = Hazelcast.newHazelcastInstance(config);
@@ -43,11 +44,11 @@ abstract class CacheSplitBrainSampleWithHigherHitsCacheMergePolicy extends Abstr
             CacheManager cacheManager1 = cachingProvider1.getCacheManager();
             CacheManager cacheManager2 = cachingProvider2.getCacheManager();
 
-            Cache cache1 = getCache(CACHE_NAME, cacheManager1);
-            Cache cache2 = getCache(CACHE_NAME, cacheManager2);
+            Cache<String, String> cache1 = getCache(CACHE_NAME, cacheManager1);
+            Cache<String, String> cache2 = getCache(CACHE_NAME, cacheManager2);
 
-            // TODO We assume that until here and also while doing get/put, cluster is still splitted.
-            // This assumptions seems fragile due to time sensitivity.
+            // TODO We assume that until here and also while doing get/put, cluster is still split
+            // this assumptions seems fragile due to time sensitivity
 
             cache1.put("key1", "higherHitsValue");
             cache1.put("key2", "value2");
@@ -67,7 +68,7 @@ abstract class CacheSplitBrainSampleWithHigherHitsCacheMergePolicy extends Abstr
             assertClusterSizeEventually(2, h1);
             assertClusterSizeEventually(2, h2);
 
-            Cache cacheTest = cacheManager2.getCache(CACHE_NAME);
+            Cache<String, String> cacheTest = cacheManager2.getCache(CACHE_NAME);
             assertEquals("higherHitsValue", cacheTest.get("key1"));
             assertEquals("higherHitsValue2", cacheTest.get("key2"));
         } finally {

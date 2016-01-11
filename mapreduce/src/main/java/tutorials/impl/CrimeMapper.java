@@ -21,8 +21,7 @@ import com.hazelcast.mapreduce.Mapper;
 import model.Crime;
 import model.CrimeCategory;
 
-public class CrimeMapper
-        implements Mapper<String, Crime, CrimeCategory, Integer> {
+public class CrimeMapper implements Mapper<String, Crime, CrimeCategory, Integer> {
 
     private String stateName;
 

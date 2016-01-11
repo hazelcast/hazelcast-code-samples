@@ -1,4 +1,4 @@
-package tutorials;/*
+/*
  * Copyright (c) 2008-2013, Hazelcast, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,11 @@ package tutorials;/*
  * limitations under the License.
  */
 
+package tutorials;
+
 import com.hazelcast.core.HazelcastInstance;
 
 public interface Tutorial {
 
-    void execute(HazelcastInstance hazelcastInstance)
-            throws Exception;
-
+    void execute(HazelcastInstance hazelcastInstance) throws Exception;
 }

@@ -1,4 +1,9 @@
-import com.hazelcast.core.*;
+import com.hazelcast.core.EntryEvent;
+import com.hazelcast.core.EntryListener;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.MapEvent;
+import com.hazelcast.core.ReplicatedMap;
 
 public class ListeningMember {
 
@@ -9,25 +14,26 @@ public class ListeningMember {
         System.out.println("EntryListener registered");
     }
 
-    static class MyEntryListener implements EntryListener<String, String> {
+    private static class MyEntryListener implements EntryListener<String, String> {
+
         @Override
         public void entryAdded(EntryEvent<String, String> event) {
-            System.out.println("entryAdded:" + event);
+            System.out.println("entryAdded: " + event);
         }
 
         @Override
         public void entryRemoved(EntryEvent<String, String> event) {
-            System.out.println("entryRemoved:" + event);
+            System.out.println("entryRemoved: " + event);
         }
 
         @Override
         public void entryUpdated(EntryEvent<String, String> event) {
-            System.out.println("entryUpdated:" + event);
+            System.out.println("entryUpdated: " + event);
         }
 
         @Override
         public void entryEvicted(EntryEvent<String, String> event) {
-            System.out.println("entryEvicted:" + event);
+            System.out.println("entryEvicted: " + event);
         }
 
         @Override
@@ -35,11 +41,10 @@ public class ListeningMember {
             System.out.println("mapEvicted:" + event);
 
         }
-        
+
         @Override
         public void mapCleared(MapEvent event) {
-            System.out.println("mapCleared:" + event);
+            System.out.println("mapCleared: " + event);
         }
-
     }
 }

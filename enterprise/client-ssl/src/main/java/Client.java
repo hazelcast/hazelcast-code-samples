@@ -11,7 +11,7 @@ public class Client {
     public static void main(String[] args) throws Exception {
         ClientConfig clientConfig = new ClientConfig();
 
-        //Please set your enterprise license key to make the sample work.
+        // please set your enterprise license key to make the sample work
         clientConfig.setLicenseKey("YOUR_ENTERPRISE_LICENSE_KEY");
 
         clientConfig.getNetworkConfig().addAddress("127.0.0.1");

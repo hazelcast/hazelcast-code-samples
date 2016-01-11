@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableCaching
-public class CachingConfiguration implements CachingConfigurer{
+class CachingConfiguration implements CachingConfigurer {
 
     @Bean
     public CacheManager cacheManager() {
@@ -29,5 +29,4 @@ public class CachingConfiguration implements CachingConfigurer{
     public KeyGenerator keyGenerator() {
         return null;
     }
-
 }

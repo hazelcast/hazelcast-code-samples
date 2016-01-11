@@ -5,8 +5,8 @@ import com.hazelcast.core.IMap;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
-public class SumTask implements
-        Callable<Integer>, Serializable, HazelcastInstanceAware {
+class SumTask implements Callable<Integer>, Serializable, HazelcastInstanceAware {
+
     private transient HazelcastInstance hz;
 
     public void setHazelcastInstance(HazelcastInstance hz) {

@@ -11,7 +11,6 @@ import com.hazelcast.query.Predicate;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-
 /**
  * This example demonstrates the usage of a continuous-query-cache (CQC) from Hazelcast client.
  * Also in this example you can see how a CQC is configured from client side.
@@ -22,24 +21,20 @@ public class ClientServer {
         String mapName = "mapName";
         String cacheName = "cqc";
 
-        HazelcastInstance server1 = Hazelcast.newHazelcastInstance();
-        HazelcastInstance server2 = Hazelcast.newHazelcastInstance();
-
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        Hazelcast.newHazelcastInstance();
 
         QueryCacheConfig queryCacheConfig = new QueryCacheConfig(cacheName);
         queryCacheConfig.getPredicateConfig().setImplementation(new OddKeysPredicate());
-
 
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.addQueryCacheConfig(mapName, queryCacheConfig);
         HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
 
-
         IEnterpriseMap<Integer, Integer> clientMap = (IEnterpriseMap) client.getMap(mapName);
         QueryCache<Integer, Integer> cache = clientMap.getQueryCache(cacheName);
 
-
-        IMap<Integer, Integer> serverMap = server1.getMap(mapName);
+        IMap<Integer, Integer> serverMap = hz.getMap(mapName);
         for (int i = 0; i < 1002; i++) {
             serverMap.put(i, i);
         }
@@ -53,13 +48,11 @@ public class ClientServer {
             }
         }
 
-
         try {
             for (int i = 0; i < 1002; i += 2) {
                 Integer cached = cache.get(i);
                 if (cached != null && i != cached) {
-                    throw new AssertionError("Unexpected error, values should be equal expected = "
-                            + i + ", cached = " + cached);
+                    throw new AssertionError("Unexpected error, values should be equal expected = " + i + ", cached = " + cached);
                 }
             }
 

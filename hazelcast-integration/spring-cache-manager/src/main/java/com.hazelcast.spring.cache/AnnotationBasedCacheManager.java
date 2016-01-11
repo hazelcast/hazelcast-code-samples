@@ -5,12 +5,9 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-/**
- * Created by mesutcelik on 7/10/14.
- */
 public class AnnotationBasedCacheManager {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         Config config = new Config();
         config.getGroupConfig().setName("grp");
         config.getGroupConfig().setPassword("grp-pass");
@@ -26,20 +23,18 @@ public class AnnotationBasedCacheManager {
         context.register(DummyBean.class);
         context.refresh();
 
-       IDummyBean dummy = (IDummyBean)context.getBean("dummyBean");
+        IDummyBean dummy = (IDummyBean) context.getBean("dummyBean");
 
         System.out.println("#######  BEGIN #######");
         System.out.println("####### first call to getName method #######");
         String city = dummy.getCity();
-        System.out.println("city:" + city);
+        System.out.println("city: " + city);
         System.out.println("####### second call to getName method  #######");
         city = dummy.getCity();
-        System.out.println("city:"+ city);
+        System.out.println("city: " + city);
         System.out.println("#######  END #######");
         Thread.sleep(2);
         HazelcastClient.shutdownAll();
         Hazelcast.shutdownAll();
-
-
     }
 }

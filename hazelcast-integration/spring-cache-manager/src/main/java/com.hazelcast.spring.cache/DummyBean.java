@@ -7,5 +7,4 @@ public class DummyBean implements IDummyBean {
         System.out.println("getCity called");
         return "Istanbul";
     }
-
- }
+}

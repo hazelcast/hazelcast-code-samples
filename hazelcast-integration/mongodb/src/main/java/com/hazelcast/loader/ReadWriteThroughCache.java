@@ -34,10 +34,10 @@ import java.io.FileNotFoundException;
  *         Twitter: @gamussa
  */
 public class ReadWriteThroughCache {
-    public static void main(String[] args) throws FileNotFoundException {
 
-        final HazelcastInstance instance = Hazelcast.newHazelcastInstance();
-        final IMap<String, Supplement> supplements = instance.getMap("supplements");
+    public static void main(String[] args) throws FileNotFoundException {
+        HazelcastInstance instance = Hazelcast.newHazelcastInstance();
+        IMap<String, Supplement> supplements = instance.getMap("supplements");
         System.out.println(supplements.size());
 
         supplements.set("1", new Supplement("bcaa", 10));

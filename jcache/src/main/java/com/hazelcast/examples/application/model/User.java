@@ -2,6 +2,7 @@ package com.hazelcast.examples.application.model;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class User implements Serializable {
 
     private int userId;
@@ -61,9 +62,9 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                '}';
+        return "User{"
+                + "userId=" + userId
+                + ", username='" + username + '\''
+                + '}';
     }
 }

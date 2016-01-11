@@ -15,10 +15,9 @@ public class StatementIterable<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         try {
-            return new ResultSetIterator<T>( statement.executeQuery() );
+            return new ResultSetIterator<T>(statement.executeQuery());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

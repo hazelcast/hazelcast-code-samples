@@ -24,5 +24,4 @@ public class DeclarativeCacheSplitBrainSampleWithHigherHitsCacheMergePolicy
     public static void main(String[] args) {
         new DeclarativeCacheSplitBrainSampleWithHigherHitsCacheMergePolicy().run();
     }
-
 }

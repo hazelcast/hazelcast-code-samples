@@ -30,13 +30,10 @@ import tutorials.impl.SalarySumReducerFactory;
 
 import java.util.Map;
 
-public class Tutorial6
-        implements Tutorial {
+public class Tutorial6 implements Tutorial {
 
     @Override
-    public void execute(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    public void execute(HazelcastInstance hazelcastInstance) throws Exception {
         JobTracker jobTracker = hazelcastInstance.getJobTracker("default");
 
         IMap<String, SalaryYear> map = hazelcastInstance.getMap("salaries");
@@ -44,17 +41,16 @@ public class Tutorial6
 
         Job<String, SalaryYear> job = jobTracker.newJob(source);
 
-        JobCompletableFuture<Integer> future = job //
-                .mapper(new SalarySumMapper()) //
-                .combiner(new SalarySumCombinerFactory()) //
-                .reducer(new SalarySumReducerFactory()) //
+        JobCompletableFuture<Integer> future = job
+                .mapper(new SalarySumMapper())
+                .combiner(new SalarySumCombinerFactory())
+                .reducer(new SalarySumReducerFactory())
                 .submit(new SalarySumCollator());
 
         System.out.println("Salary sum: " + future.get());
     }
 
-    private static class SalarySumCollator
-            implements Collator<Map.Entry<String, Integer>, Integer> {
+    private static class SalarySumCollator implements Collator<Map.Entry<String, Integer>, Integer> {
 
         @Override
         public Integer collate(Iterable<Map.Entry<String, Integer>> values) {

@@ -19,16 +19,14 @@ package tutorials.impl;
 import com.hazelcast.mapreduce.Reducer;
 import model.CrimeCategory;
 
-public class CrimeReducerFactory
-        implements com.hazelcast.mapreduce.ReducerFactory<CrimeCategory, Integer, Integer> {
+public class CrimeReducerFactory implements com.hazelcast.mapreduce.ReducerFactory<CrimeCategory, Integer, Integer> {
 
     @Override
     public Reducer<Integer, Integer> newReducer(CrimeCategory key) {
         return new CrimeReducer();
     }
 
-    private static class CrimeReducer
-            extends Reducer<Integer, Integer> {
+    private static class CrimeReducer extends Reducer<Integer, Integer> {
 
         private volatile int count;
 

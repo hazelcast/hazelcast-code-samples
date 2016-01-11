@@ -19,7 +19,7 @@ package csv;
 import java.io.InputStream;
 import java.util.List;
 
-public interface DataReader<T> {
-    List<T> read(InputStream is)
-            throws Exception;
+interface DataReader<T> {
+
+    List<T> read(InputStream is) throws Exception;
 }

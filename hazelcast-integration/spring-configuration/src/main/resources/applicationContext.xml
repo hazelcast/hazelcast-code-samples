@@ -44,19 +44,18 @@
         </hz:network>
     </hz:client>
 
-    <hz:map             id="map"             instance-ref="instance" name="Map" lazy-init="false"/>
-    <hz:multiMap        id="multiMap"        instance-ref="instance" name="Multimap"/>
-    <hz:replicatedMap   id="replicatedMap"   instance-ref="instance" name="ReplicatedMap"/>
-    <hz:queue           id="queue"           instance-ref="instance" name="Queue"/>
-    <hz:topic           id="topic"           instance-ref="instance" name="Topic" depends-on="instance, client"/>
-    <hz:set             id="set"             instance-ref="instance" name="Set"/>
-    <hz:list            id="list"            instance-ref="instance" name="List"/>
+    <hz:map id="map" instance-ref="instance" name="Map" lazy-init="false"/>
+    <hz:multiMap id="multiMap" instance-ref="instance" name="Multimap"/>
+    <hz:replicatedMap id="replicatedMap" instance-ref="instance" name="ReplicatedMap"/>
+    <hz:queue id="queue" instance-ref="instance" name="Queue"/>
+    <hz:topic id="topic" instance-ref="instance" name="Topic" depends-on="instance, client"/>
+    <hz:set id="set" instance-ref="instance" name="Set"/>
+    <hz:list id="list" instance-ref="instance" name="List"/>
     <hz:executorService id="executorService" instance-ref="instance" name="ExecutorService"/>
-    <hz:idGenerator     id="idGenerator"     instance-ref="instance" name="IdGenerator"/>
-    <hz:atomicLong      id="atomicLong"      instance-ref="instance" name="atomicLong"/>
+    <hz:idGenerator id="idGenerator" instance-ref="instance" name="IdGenerator"/>
+    <hz:atomicLong id="atomicLong" instance-ref="instance" name="atomicLong"/>
     <hz:atomicReference id="atomicReference" instance-ref="instance" name="atomicReference"/>
-    <hz:countDownLatch  id="countDownLatch"  instance-ref="instance" name="countDownLatch"/>
-    <hz:semaphore       id="semaphore"       instance-ref="instance" name="semaphore"/>
-    <hz:lock            id="lock"            instance-ref="instance" name="lock"/>
-
+    <hz:countDownLatch id="countDownLatch" instance-ref="instance" name="countDownLatch"/>
+    <hz:semaphore id="semaphore" instance-ref="instance" name="semaphore"/>
+    <hz:lock id="lock" instance-ref="instance" name="lock"/>
 </beans>

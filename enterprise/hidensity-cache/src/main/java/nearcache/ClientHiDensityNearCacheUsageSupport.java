@@ -13,7 +13,7 @@ import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.NearCacheConfig;
 import com.hazelcast.examples.nearcache.ClientNearCacheUsageSupport;
-import com.hazelcast.instance.GroupProperties;
+import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.memory.MemoryManager;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
@@ -21,25 +21,24 @@ import com.hazelcast.nio.serialization.EnterpriseSerializationService;
 
 import javax.cache.spi.CachingProvider;
 
-public abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsageSupport {
+abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsageSupport {
 
     // Pass your license key as system property like
     // "-Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>"
-    protected static final String LICENSE_KEY = System.getProperty(GroupProperties.PROP_ENTERPRISE_LICENSE_KEY);
+    private static final String LICENSE_KEY = GroupProperty.ENTERPRISE_LICENSE_KEY.getSystemProperty();
 
-    protected static final MemorySize SERVER_NATIVE_MEMORY_SIZE = new MemorySize(256, MemoryUnit.MEGABYTES);
-    protected static final MemorySize CLIENT_NATIVE_MEMORY_SIZE = new MemorySize(128, MemoryUnit.MEGABYTES);
+    private static final MemorySize SERVER_NATIVE_MEMORY_SIZE = new MemorySize(256, MemoryUnit.MEGABYTES);
+    private static final MemorySize CLIENT_NATIVE_MEMORY_SIZE = new MemorySize(128, MemoryUnit.MEGABYTES);
 
-    public ClientHiDensityNearCacheUsageSupport() {
+    ClientHiDensityNearCacheUsageSupport() {
         super(InMemoryFormat.NATIVE);
     }
 
     protected Config createConfig() {
         Config config = super.createConfig();
-        NativeMemoryConfig nativeMemoryConfig =
-                new NativeMemoryConfig()
-                        .setSize(SERVER_NATIVE_MEMORY_SIZE)
-                        .setEnabled(true);
+        NativeMemoryConfig nativeMemoryConfig = new NativeMemoryConfig()
+                .setSize(SERVER_NATIVE_MEMORY_SIZE)
+                .setEnabled(true);
         config.setNativeMemoryConfig(nativeMemoryConfig);
         config.setLicenseKey(LICENSE_KEY);
         return config;
@@ -47,10 +46,9 @@ public abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCac
 
     protected ClientConfig createClientConfig() {
         ClientConfig clientConfig = super.createClientConfig();
-        NativeMemoryConfig nativeMemoryConfig =
-                new NativeMemoryConfig()
-                        .setSize(CLIENT_NATIVE_MEMORY_SIZE)
-                        .setEnabled(true);
+        NativeMemoryConfig nativeMemoryConfig = new NativeMemoryConfig()
+                .setSize(CLIENT_NATIVE_MEMORY_SIZE)
+                .setEnabled(true);
         clientConfig.setNativeMemoryConfig(nativeMemoryConfig);
         clientConfig.setLicenseKey(LICENSE_KEY);
         return clientConfig;
@@ -81,10 +79,10 @@ public abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCac
         return nearCacheConfig;
     }
 
-    public class HiDensityNearCacheSupportContext<K, V> {
+    class HiDensityNearCacheSupportContext<K, V> {
 
-        public final ICache<K, V> cache;
-        public final MemoryManager memoryManager;
+        final ICache<K, V> cache;
+        final MemoryManager memoryManager;
 
         HiDensityNearCacheSupportContext(ICache<K, V> cache, MemoryManager memoryManager) {
             this.cache = cache;
@@ -93,21 +91,21 @@ public abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCac
 
     }
 
-    protected <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache() {
+    <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache() {
         return createHiDensityCacheWithHiDensityNearCache(DEFAULT_CACHE_NAME, createNearCacheConfig());
     }
 
-    protected <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(String cacheName) {
+    <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(String cacheName) {
         return createHiDensityCacheWithHiDensityNearCache(cacheName, createNearCacheConfig(cacheName));
     }
 
-    protected <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(
+    <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(
             InMemoryFormat inMemoryFormat) {
         return createHiDensityCacheWithHiDensityNearCache(DEFAULT_CACHE_NAME, createNearCacheConfig(inMemoryFormat));
     }
 
-    protected <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(String cacheName,
-            NearCacheConfig nearCacheConfig) {
+    <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(String cacheName,
+                                                                                             NearCacheConfig nearCacheConfig) {
         ClientConfig clientConfig = createClientConfig();
         clientConfig.addNearCacheConfig(nearCacheConfig);
         HazelcastClientProxy client = (HazelcastClientProxy) HazelcastClient.newHazelcastClient(clientConfig);
@@ -124,5 +122,4 @@ public abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCac
 
         return new HiDensityNearCacheSupportContext(cache, enterpriseSerializationService.getMemoryManager());
     }
-
 }

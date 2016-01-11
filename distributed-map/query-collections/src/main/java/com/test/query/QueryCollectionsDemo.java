@@ -22,10 +22,13 @@ public class QueryCollectionsDemo {
         map.put("2", new Person("hans", limb("left-leg"), limb("right-leg")));
 
         Set<Person> employees = (Set<Person>) map.values(new SqlPredicate("limbs[any].name == right-leg"));
-        System.out.println("People:" + employees);
+        System.out.println("People: " + employees);
+
+        Hazelcast.shutdownAll();
     }
 
-    public static class Person implements Serializable {
+    static final class Person implements Serializable {
+
         final String name;
         final List<Limb> limbs;
 
@@ -36,19 +39,30 @@ public class QueryCollectionsDemo {
 
         @Override
         public String toString() {
-            return "Person{name='" + name + '}';
+            return "Person{"
+                    + "name='" + name + '\''
+                    + ", limbs=" + limbs
+                    + '}';
         }
     }
 
-    public static class Limb implements Serializable {
+    static final class Limb implements Serializable {
+
         final String name;
 
-        public Limb(String name) {
+        Limb(String name) {
             this.name = name;
         }
 
-        public static Limb limb(String name) {
+        static Limb limb(String name) {
             return new Limb(name);
+        }
+
+        @Override
+        public String toString() {
+            return "Limb{"
+                    + "name='" + name + '\''
+                    + '}';
         }
     }
 }

@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public final class Pair implements Serializable {
+
     private final String significant;
     private final String insignificant;
 

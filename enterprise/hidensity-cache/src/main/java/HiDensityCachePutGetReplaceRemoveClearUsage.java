@@ -7,11 +7,12 @@ import java.util.concurrent.Future;
  */
 public class HiDensityCachePutGetReplaceRemoveClearUsage extends HiDensityCacheUsageSupport {
 
+    @SuppressWarnings("checkstyle:methodlength")
     public static void main(String[] args) {
         init();
 
         try {
-            ICache cache = createCache("MyCacheForPutGetRemoveUsage");
+            ICache<String, String> cache = createCache("MyCacheForPutGetRemoveUsage");
 
             cache.put("key1", "value1");
             System.out.println("Put value \"value1\" with key \"key1\"");
@@ -81,38 +82,38 @@ public class HiDensityCachePutGetReplaceRemoveClearUsage extends HiDensityCacheU
             System.out.println("Size of cache: " + cache.size());
 
             cache.put("key1", "value1");
-            Future f = cache.getAsync("key1");
-            System.out.println("Get value as async with key \"key1\": " + f.get());
+            Future future = cache.getAsync("key1");
+            System.out.println("Get value as async with key \"key1\": " + future.get());
 
             cache.putAsync("key1", "value2");
             System.out.println("Put value \"value2\" as async with key \"key1\"");
 
             while (true) {
-                Object val = cache.get("key1");
-                if (val.equals("value2")) {
-                    System.out.println("Get value with key \"key1\": " + f.get());
+                Object value = cache.get("key1");
+                if (value.equals("value2")) {
+                    System.out.println("Get value with key \"key1\": " + future.get());
                     break;
                 }
                 Thread.sleep(100);
             }
 
-            f = cache.getAndPutAsync("key1", "value3");
-            System.out.println("Put value \"value3\" as async with key \"key1\" and get its old value: " + f.get());
+            future = cache.getAndPutAsync("key1", "value3");
+            System.out.println("Put value \"value3\" as async with key \"key1\" and get its old value: " + future.get());
 
-            f = cache.removeAsync("key2");
-            System.out.println("Remove as async from cache with key \"key2\": " + f.get());
+            future = cache.removeAsync("key2");
+            System.out.println("Remove as async from cache with key \"key2\": " + future.get());
 
-            f = cache.removeAsync("key1");
-            System.out.println("Remove as async from cache with key \"key1\": " + f.get());
+            future = cache.removeAsync("key1");
+            System.out.println("Remove as async from cache with key \"key1\": " + future.get());
 
             cache.put("key1", "value4");
             System.out.println("Put value \"value4\" with key \"key1\"");
 
-            f = cache.getAndRemoveAsync("key2");
-            System.out.println("Remove as async with key \"key1\" and get its old value: " + f.get());
+            future = cache.getAndRemoveAsync("key2");
+            System.out.println("Remove as async with key \"key1\" and get its old value: " + future.get());
 
-            f = cache.getAndRemoveAsync("key1");
-            System.out.println("Remove as async with key \"key1\" and get its old value: " + f.get());
+            future = cache.getAndRemoveAsync("key1");
+            System.out.println("Remove as async with key \"key1\" and get its old value: " + future.get());
 
             cache.destroy();
         } catch (Throwable t) {
@@ -121,5 +122,4 @@ public class HiDensityCachePutGetReplaceRemoveClearUsage extends HiDensityCacheU
             destroy();
         }
     }
-
 }

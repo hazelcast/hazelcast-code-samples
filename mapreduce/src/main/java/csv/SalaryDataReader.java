@@ -25,16 +25,12 @@ import org.supercsv.prefs.CsvPreference;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class SalaryDataReader
-        implements DataReader<SalaryYear> {
+class SalaryDataReader implements DataReader<SalaryYear> {
 
     @Override
-    public List<SalaryYear> read(InputStream is)
-            throws Exception {
-
+    public List<SalaryYear> read(InputStream is) throws Exception {
         List<SalaryYear> elements = new ArrayList<SalaryYear>();
         ICsvListReader reader = new CsvListReader(new InputStreamReader(is), CsvPreference.EXCEL_PREFERENCE);
         try {

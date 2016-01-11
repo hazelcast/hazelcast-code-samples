@@ -8,7 +8,7 @@
         <password>clusterA-pass</password>
     </group>
     <license-key>YOUR_LICENSE_KEY</license-key>
-    
+
     <network>
         <port>5701</port>
         <join>

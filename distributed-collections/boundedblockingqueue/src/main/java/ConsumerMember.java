@@ -3,6 +3,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 
 public class ConsumerMember {
+
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IQueue<Integer> queue = hz.getQueue("queue");

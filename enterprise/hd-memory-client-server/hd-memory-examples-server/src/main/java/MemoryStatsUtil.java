@@ -10,28 +10,30 @@ import com.hazelcast.util.ExceptionUtil;
 
 import java.lang.reflect.Method;
 
-public class MemoryStatsUtil {
+class MemoryStatsUtil {
 
-    public static MemoryStats getMemoryStats(HazelcastInstance hz) {
-        Node node = getNode(hz); // or another way for getting "Node" over "HazelcastInstance"
+    static MemoryStats getMemoryStats(HazelcastInstance hz) {
+        // use this method or another way for getting "Node" from a "HazelcastInstance"
+        Node node = getNode(hz);
         if (node != null) {
             EnterpriseSerializationService serializationService =
-                (EnterpriseSerializationService) node.getSerializationService();
+                    (EnterpriseSerializationService) node.getSerializationService();
             MemoryManager memoryManager = serializationService.getMemoryManager();
             return memoryManager.getMemoryStats();
-        } else
+        } else {
             return new DefaultMemoryStats();
+        }
     }
 
-    public static Node getNode(HazelcastInstance hz) {
+    private static Node getNode(HazelcastInstance hz) {
         HazelcastInstanceImpl impl = getHazelcastInstanceImpl(hz);
         return impl != null ? impl.node : null;
     }
 
-    public static HazelcastInstanceImpl getHazelcastInstanceImpl(HazelcastInstance hz) {
+    private static HazelcastInstanceImpl getHazelcastInstanceImpl(HazelcastInstance hz) {
         HazelcastInstanceImpl impl = null;
         if (hz instanceof HazelcastInstanceProxy) {
-            Method original = null;
+            Method original;
             try {
                 original = HazelcastInstanceProxy.class.getDeclaredMethod("getOriginal");
                 original.setAccessible(true);

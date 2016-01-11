@@ -12,8 +12,8 @@ public class ExtendedArrayListSerializer implements StreamSerializer<ExtendedArr
         if (object != null) {
             int size = object.size();
             out.writeInt(size);
-            for (int i = 0; i < size; i++) {
-                out.writeObject(object.get(i));
+            for (Object anObject : object) {
+                out.writeObject(anObject);
             }
         }
     }
@@ -33,7 +33,7 @@ public class ExtendedArrayListSerializer implements StreamSerializer<ExtendedArr
 
     @Override
     public int getTypeId() {
-        return MySerializationConstants.EXTENDED_ARRAYLIST_TYPE;
+        return MySerializationConstants.EXTENDED_ARRAYLIST_TYPE.getId();
     }
 
     @Override

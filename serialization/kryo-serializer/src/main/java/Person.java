@@ -1,4 +1,6 @@
+@SuppressWarnings("unused")
 public class Person {
+
     private String name;
 
     private Person() {

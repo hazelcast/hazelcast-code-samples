@@ -4,13 +4,15 @@ import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 public class Person implements DataSerializable {
+
     private String name;
 
     public Person() {
     }
 
-    public Person(String name) {
+    Person(String name) {
         this.name = name;
     }
 

@@ -8,14 +8,13 @@ import java.util.Iterator;
  */
 public class HiDensityCacheIteratorUsage extends HiDensityCacheUsageSupport {
 
+    private static final int SIZE = 1000;
+
     public static void main(String[] args) {
         init();
 
         try {
-            final int SIZE = 1000;
-
-            ICache cache = createCache("MyCacheForIteratorUsage");
-
+            ICache<Integer, Integer> cache = createCache("MyCacheForIteratorUsage");
             for (int i = 0; i < SIZE; i++) {
                 cache.put(i, i * i);
             }
@@ -35,5 +34,4 @@ public class HiDensityCacheIteratorUsage extends HiDensityCacheUsageSupport {
             destroy();
         }
     }
-
 }

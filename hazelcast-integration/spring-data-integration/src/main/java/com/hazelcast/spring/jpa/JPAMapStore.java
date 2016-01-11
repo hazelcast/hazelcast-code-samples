@@ -24,8 +24,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-
+@SuppressWarnings("unused")
 public class JPAMapStore implements MapStore<Serializable, Object> {
+
     private CrudRepository crudRepository;
 
     public CrudRepository getCrudRepository() {
@@ -54,7 +55,7 @@ public class JPAMapStore implements MapStore<Serializable, Object> {
 
     // override this method after implementing deleteAll in your custom repository implementation
     public void deleteAll(Collection keys) {
-        for(Object key: keys ) {
+        for (Object key : keys) {
             crudRepository.delete(key);
         }
     }

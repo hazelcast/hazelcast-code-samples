@@ -1,9 +1,11 @@
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class Person implements Serializable {
-    public String name;
-    public boolean male;
-    public int age;
+
+    private final String name;
+    private final boolean male;
+    private final int age;
 
     public Person(String name, boolean active, int age) {
         this.male = active;
@@ -11,12 +13,24 @@ public class Person implements Serializable {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public boolean isMale() {
+        return male;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
     @Override
     public String toString() {
-        return "Person{" +
-                "male=" + male +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                '}';
+        return "Person{"
+                + "male=" + male
+                + ", name='" + name + '\''
+                + ", age=" + age
+                + '}';
     }
 }

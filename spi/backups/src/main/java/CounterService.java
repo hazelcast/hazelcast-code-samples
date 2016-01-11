@@ -1,12 +1,20 @@
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.partition.MigrationEndpoint;
-import com.hazelcast.spi.*;
+import com.hazelcast.spi.ManagedService;
+import com.hazelcast.spi.MigrationAwareService;
+import com.hazelcast.spi.NodeEngine;
+import com.hazelcast.spi.Operation;
+import com.hazelcast.spi.PartitionMigrationEvent;
+import com.hazelcast.spi.PartitionReplicationEvent;
+import com.hazelcast.spi.RemoteService;
 
 import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService, MigrationAwareService {
-    public final static String NAME = "CounterService";
+
+    static final String NAME = "CounterService";
+
     Container[] containers;
     private NodeEngine nodeEngine;
 
@@ -14,8 +22,9 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     public void init(NodeEngine nodeEngine, Properties properties) {
         this.nodeEngine = nodeEngine;
         containers = new Container[nodeEngine.getPartitionService().getPartitionCount()];
-        for (int k = 0; k < containers.length; k++)
-            containers[k] = new Container();
+        for (int i = 0; i < containers.length; i++) {
+            containers[i] = new Container();
+        }
     }
 
     @Override
@@ -27,7 +36,7 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
         int partitionId = nodeEngine.getPartitionService().getPartitionId(objectName);
         Container container = containers[partitionId];
         container.init(objectName);
-        return new CounterProxy(objectName, nodeEngine,this);
+        return new CounterProxy(objectName, nodeEngine, this);
     }
 
     @Override
@@ -38,7 +47,7 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public void beforeMigration(PartitionMigrationEvent e) {
+    public void beforeMigration(PartitionMigrationEvent event) {
         //no-op
     }
 
@@ -49,30 +58,29 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public Operation prepareReplicationOperation(PartitionReplicationEvent e) {
-        if (e.getReplicaIndex() > 1) {
+    public Operation prepareReplicationOperation(PartitionReplicationEvent event) {
+        if (event.getReplicaIndex() > 1) {
             return null;
         }
-        Container container = containers[e.getPartitionId()];
+        Container container = containers[event.getPartitionId()];
         Map<String, Integer> data = container.toMigrationData();
         return data.isEmpty() ? null : new CounterMigrationOperation(data);
     }
 
     @Override
-    public void commitMigration(PartitionMigrationEvent e) {
-        if (e.getMigrationEndpoint() == MigrationEndpoint.SOURCE) {
-            Container c = containers[e.getPartitionId()];
-            c.clear();
+    public void commitMigration(PartitionMigrationEvent event) {
+        if (event.getMigrationEndpoint() == MigrationEndpoint.SOURCE) {
+            Container container = containers[event.getPartitionId()];
+            container.clear();
         }
-
-        //todo
+        // TODO
     }
 
     @Override
-    public void rollbackMigration(PartitionMigrationEvent e) {
-        if (e.getMigrationEndpoint() == MigrationEndpoint.DESTINATION) {
-            Container c = containers[e.getPartitionId()];
-            c.clear();
+    public void rollbackMigration(PartitionMigrationEvent event) {
+        if (event.getMigrationEndpoint() == MigrationEndpoint.DESTINATION) {
+            Container container = containers[event.getPartitionId()];
+            container.clear();
         }
     }
 

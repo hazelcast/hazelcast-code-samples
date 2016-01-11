@@ -2,6 +2,7 @@ package com.hazelcast.examples;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
@@ -11,15 +12,14 @@ public class QuorumExample {
 
     private static final String CACHE_NAME = "cache-with-quorum";
 
-    public static void main(String[] args)
-            throws URISyntaxException {
+    public static void main(String[] args) throws URISyntaxException {
         System.setProperty("hazelcast.jcache.provider.type", "server");
         System.setProperty("hazelcast.config", "classpath:hazelcast-quorum.xml");
 
-        //this creates a cluster with 1 node
+        // this creates a cluster with 1 node
         HazelcastInstance instance1 = Hazelcast.newHazelcastInstance();
 
-        //this creates a new node and joins the cluster creating a cluster with 2 nodes
+        // this creates a new node and joins the cluster creating a cluster with 2 nodes
         CacheManager cacheManager = Caching.getCachingProvider().getCacheManager();
 
         Cache<String, String> cache = cacheManager.getCache(CACHE_NAME);

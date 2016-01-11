@@ -22,8 +22,8 @@ import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
 
-public class State
-        implements DataSerializable {
+@SuppressWarnings({"unused", "checkstyle:methodcount"})
+public class State implements DataSerializable {
 
     private int id;
     private String name;
@@ -180,9 +180,7 @@ public class State
     }
 
     @Override
-    public void writeData(ObjectDataOutput out)
-            throws IOException {
-
+    public void writeData(ObjectDataOutput out) throws IOException {
         out.writeInt(id);
         out.writeUTF(name);
         out.writeUTF(abbreviation);
@@ -203,9 +201,7 @@ public class State
     }
 
     @Override
-    public void readData(ObjectDataInput in)
-            throws IOException {
-
+    public void readData(ObjectDataInput in) throws IOException {
         id = in.readInt();
         name = in.readUTF();
         abbreviation = in.readUTF();
@@ -227,24 +223,24 @@ public class State
 
     @Override
     public String toString() {
-        return "State{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", abbreviation='" + abbreviation + '\'' +
-                ", country='" + country + '\'' +
-                ", type='" + type + '\'' +
-                ", sort=" + sort +
-                ", status='" + status + '\'' +
-                ", occupied='" + occupied + '\'' +
-                ", notes='" + notes + '\'' +
-                ", fipsState=" + fipsState +
-                ", assocPress='" + assocPress + '\'' +
-                ", standardFederalRegion='" + standardFederalRegion + '\'' +
-                ", censusRegion=" + censusRegion +
-                ", censusRegionName='" + censusRegionName + '\'' +
-                ", censusDivision=" + censusDivision +
-                ", censusDevisionName='" + censusDevisionName + '\'' +
-                ", circuitCourt=" + circuitCourt +
-                '}';
+        return "State{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", abbreviation='" + abbreviation + '\''
+                + ", country='" + country + '\''
+                + ", type='" + type + '\''
+                + ", sort=" + sort
+                + ", status='" + status + '\''
+                + ", occupied='" + occupied + '\''
+                + ", notes='" + notes + '\''
+                + ", fipsState=" + fipsState
+                + ", assocPress='" + assocPress + '\''
+                + ", standardFederalRegion='" + standardFederalRegion + '\''
+                + ", censusRegion=" + censusRegion
+                + ", censusRegionName='" + censusRegionName + '\''
+                + ", censusDivision=" + censusDivision
+                + ", censusDevisionName='" + censusDevisionName + '\''
+                + ", circuitCourt=" + circuitCourt
+                + '}';
     }
 }

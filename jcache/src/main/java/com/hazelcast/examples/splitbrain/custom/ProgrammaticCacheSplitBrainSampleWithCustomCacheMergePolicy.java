@@ -26,5 +26,4 @@ public class ProgrammaticCacheSplitBrainSampleWithCustomCacheMergePolicy
     public static void main(String[] args) {
         new ProgrammaticCacheSplitBrainSampleWithCustomCacheMergePolicy().run();
     }
-
 }

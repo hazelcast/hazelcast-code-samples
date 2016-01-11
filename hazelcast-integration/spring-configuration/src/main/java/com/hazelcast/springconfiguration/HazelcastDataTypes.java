@@ -24,125 +24,113 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import java.io.Serializable;
 import java.util.Random;
 
-/**
- * Created by Mustafa Orkun Acar <mustafaorkunacar@gmail.com> on 07.07.2014.
- */
+public class HazelcastDataTypes {
 
-public class HazelcastDataTypes
-{
-    static Random rand = new Random();
-    static ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-    static TestBean testBean = (TestBean) context.getBean("springTestBean");
+    private static final Random RANDOM = new Random();
 
-    public static void main(String[] args)
-    {
+    private static ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+    private static TestBean testBean = (TestBean) context.getBean("springTestBean");
+
+    public static void main(String[] args) {
         System.out.println(testBean.getResult());
+        System.out.println();
 
-        ExecuteMap();
-        ExecuteMultiMap();
-        ExecuteReplicatedMap();
-        ExecuteQueue();
-        ExecuteTopic();
-        ExecuteSet();
-        ExecuteList();
-        ExecuteExecuterService();
-        ExecuteIdGenerator();
-        ExecuteAtomicLong();
-        ExecuteAtomicReference();
-        ExecuteCountDownLatch();
-        ExecuteSemaphore();
-        ExecuteLock();
+        executeMap();
+        executeMultiMap();
+        executeReplicatedMap();
+        executeQueue();
+        executeTopic();
+        executeSet();
+        executeList();
+        executeExecutorService();
+        executeIdGenerator();
+        executeAtomicLong();
+        executeAtomicReference();
+        executeCountDownLatch();
+        executeSemaphore();
+        executeLock();
 
         Hazelcast.shutdownAll();
         HazelcastClient.shutdownAll();
     }
 
-    public static void ExecuteMap()
-    {
-        System.out.println("\n### Map Execution Started... ###");
-        int k = rand.nextInt(100);
-        int v = rand.nextInt(100);
-        IMap map = (IMap) context.getBean("map");
-        map.put(k, v);
+    private static void executeMap() {
+        System.out.println("### Map Execution Started... ###");
+        int key = RANDOM.nextInt(100);
+        int value = RANDOM.nextInt(100);
+        IMap<Integer, Integer> map = (IMap<Integer, Integer>) context.getBean("map");
+        map.put(key, value);
         System.out.println("A random pair is added to map.");
-        System.out.println("Added value: " + map.get(k) + "\n");
+        System.out.println("Added value: " + map.get(key) + "\n");
     }
 
-    public static void ExecuteMultiMap()
-    {
+    private static void executeMultiMap() {
         System.out.println("### MultiMap Execution Started... ###");
-        int k = rand.nextInt(100);
-        int v = rand.nextInt(100);
-        MultiMap<Integer, Integer> multimap = (MultiMap) context.getBean("multiMap");
-        multimap.put(k, v);
+        int key = RANDOM.nextInt(100);
+        int value = RANDOM.nextInt(100);
+        MultiMap<Integer, Integer> multimap = (MultiMap<Integer, Integer>) context.getBean("multiMap");
+        multimap.put(key, value);
         System.out.println("A random pair is added to multiMap.");
-        System.out.println("Added value: " + multimap.get(k) + "\n");
+        System.out.println("Added value: " + multimap.get(key) + "\n");
     }
 
-    public static void ExecuteReplicatedMap()
-    {
+    private static void executeReplicatedMap() {
         System.out.println("### ReplicatedMap Execution Started... ###");
-        int k = rand.nextInt(100);
-        int v = rand.nextInt(100);
+        int key = RANDOM.nextInt(100);
+        int value = RANDOM.nextInt(100);
         ReplicatedMap<Integer, Integer> replicatedMap = (ReplicatedMap<Integer, Integer>) context.getBean("replicatedMap");
-        replicatedMap.put(k, v);
+        replicatedMap.put(key, value);
         System.out.println("A random pair is added to replicatedMap.");
-        System.out.println("Added value: " + replicatedMap.get(k) + "\n");
+        System.out.println("Added value: " + replicatedMap.get(key) + "\n");
     }
 
-    public static void ExecuteQueue()
-    {
+    private static void executeQueue() {
         System.out.println("### Queue Execution Started... ###");
-        int k = rand.nextInt(100);
-        IQueue queue = (IQueue) context.getBean("queue");
-        queue.add(k);
+        int key = RANDOM.nextInt(100);
+        IQueue<Integer> queue = (IQueue<Integer>) context.getBean("queue");
+        queue.add(key);
         System.out.println("A random integer is added to queue.");
         System.out.println("Added element: " + queue.poll() + "\n");
     }
 
-    public static void ExecuteTopic()
-    {
+    private static void executeTopic() {
         System.out.println("### Topic Execution Started... ###");
-        ITopic topic = (ITopic) context.getBean("topic");
-        topic.addMessageListener(new MessageListener() {
+        ITopic<String> topic = (ITopic<String>) context.getBean("topic");
+        topic.addMessageListener(new MessageListener<String>() {
             @Override
-            public void onMessage(Message message) {
+            public void onMessage(Message<String> message) {
                 System.out.println("Topic Received Message: " + message + "\n");
             }
         });
         topic.publish("object");
     }
 
-    public static void ExecuteSet()
-    {
+    private static void executeSet() {
         System.out.println("### Set Execution Started... ###");
-        int k = rand.nextInt(100);
-        ISet set = (ISet) context.getBean("set");
-        set.add(k);
+        int key = RANDOM.nextInt(100);
+        ISet<Integer> set = (ISet<Integer>) context.getBean("set");
+        set.add(key);
         System.out.println("A random integer is added to set.");
         System.out.println("Added element: " + set.iterator().next() + "\n");
     }
 
-    public static void ExecuteList()
-    {
+    private static void executeList() {
         System.out.println("### List Execution Started... ###");
-        int k = rand.nextInt(100);
+        int key = RANDOM.nextInt(100);
         IList<Integer> list = (IList<Integer>) context.getBean("list");
-        list.add(k);
+        list.add(key);
         System.out.println("A random integer is added to list.");
         System.out.println("Added element: " + list.iterator().next() + "\n");
     }
 
-    public static void ExecuteExecuterService()
-    {
-        System.out.println("### ExecuterService Execution Started... ###");
+    private static void executeExecutorService() {
+        System.out.println("### ExecutorService Execution Started... ###");
         IExecutorService executorService = (IExecutorService) context.getBean("executorService");
         executorService.execute(new EchoTask("hello"));
         executorService.shutdown();
     }
 
-    public static void ExecuteIdGenerator()
-    {
+    private static void executeIdGenerator() {
         System.out.println("### IdGenerator Execution Started... ###");
         IdGenerator idgenerator = (IdGenerator) context.getBean("idGenerator");
         idgenerator.init(100L);
@@ -150,8 +138,7 @@ public class HazelcastDataTypes
         System.out.println("NewId: " + idgenerator.newId() + "\n");
     }
 
-    public static void ExecuteAtomicLong()
-    {
+    private static void executeAtomicLong() {
         System.out.println("### AtomicLong Execution Started... ###");
         IAtomicLong atomicLong = (IAtomicLong) context.getBean("atomicLong");
         atomicLong.set(100L);
@@ -159,16 +146,14 @@ public class HazelcastDataTypes
         System.out.println("AtomicLong: " + atomicLong.get() + "\n");
     }
 
-    public static void ExecuteAtomicReference()
-    {
+    private static void executeAtomicReference() {
         System.out.println("### AtomicReference Execution Started... ###");
-        IAtomicReference atomicReference = (IAtomicReference) context.getBean("atomicReference");
+        IAtomicReference<String> atomicReference = (IAtomicReference<String>) context.getBean("atomicReference");
         atomicReference.set("Executing AtomicReference");
         System.out.println(atomicReference.get() + "\n");
     }
 
-    public static void ExecuteCountDownLatch()
-    {
+    private static void executeCountDownLatch() {
         System.out.println("### CountDownLatch Execution Started... ###");
         ICountDownLatch countDownLatch = (ICountDownLatch) context.getBean("countDownLatch");
         countDownLatch.trySetCount(10);
@@ -178,14 +163,16 @@ public class HazelcastDataTypes
         System.out.println("CountDownLatch Count :" + countDownLatch.getCount() + "\n");
     }
 
-    public static void ExecuteSemaphore()
-    {
+    private static void executeSemaphore() {
         System.out.println("### Semaphore Execution Started... ###");
         ISemaphore semaphore = (ISemaphore) context.getBean("semaphore");
         semaphore.init(5);
         System.out.println("Semaphore initialized with 5.");
-        try { semaphore.acquire(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
+        try {
+            semaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("Semaphore acquired once.");
         System.out.println("Available semaphore permits: " + semaphore.availablePermits());
         semaphore.release();
@@ -193,8 +180,7 @@ public class HazelcastDataTypes
         System.out.println("Available semaphore permits: " + semaphore.availablePermits() + "\n");
     }
 
-    public static void ExecuteLock()
-    {
+    private static void executeLock() {
         System.out.println("### Lock Execution Started... ###");
         ILock lock = (ILock) context.getBean("lock");
         lock.lock();
@@ -206,15 +192,16 @@ public class HazelcastDataTypes
     }
 
     private static class EchoTask implements Runnable, Serializable {
+
         private final String msg;
 
-        public EchoTask( String msg ) {
+        EchoTask(String msg) {
             this.msg = msg;
         }
 
         @Override
         public void run() {
-            System.out.println( "echo:" + msg );
+            System.out.println("echo:" + msg);
         }
     }
 }

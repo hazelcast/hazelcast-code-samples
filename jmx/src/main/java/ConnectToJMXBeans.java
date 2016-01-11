@@ -15,57 +15,56 @@ import java.util.TreeSet;
 
 public class ConnectToJMXBeans {
 
-    private static HazelcastInstance hz;
-    private static int port = 9999;
-    private static String hostname;
-    private static JMXServiceURL url;
+    private static final int PORT = 9999;
 
     public static void main(String[] args) throws Exception {
-        // Parameters for connecting to the JMX Service
-        hostname = InetAddress.getLocalHost().getHostName();
-        url = new JMXServiceURL("service:jmx:rmi://" + hostname + ":" + port + "/jndi/rmi://" + hostname + ":" + port + "/jmxrmi");
+        // parameters for connecting to the JMX Service
+        String hostname = InetAddress.getLocalHost().getHostName();
+        JMXServiceURL url = new JMXServiceURL("service:jmx:rmi://" + hostname + ":" + PORT
+                + "/jndi/rmi://" + hostname + ":" + PORT + "/jmxrmi");
 
-        // Starting a Hazelcast member
+        // starting a Hazelcast member
         Config config = new Config();
         config.setProperty(GroupProperty.ENABLE_JMX, "true");
-        hz = Hazelcast.newHazelcastInstance(config);
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
 
-        // Create and populate a distributed map
+        // create and populate a distributed map
         IMap<Integer, Integer> map = hz.getMap("trial");
-        for(int i=0; i<10; i++) {
-            map.put(i, i*3);
+        for (int i = 0; i < 10; i++) {
+            map.put(i, i * 3);
         }
 
-        // Connect to the JMX Service
-        JMXConnector jmxc = JMXConnectorFactory.connect(url, null);
-        MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
+        // connect to the JMX Service
+        JMXConnector jmxConnector = JMXConnectorFactory.connect(url, null);
+        MBeanServerConnection mbsc = jmxConnector.getMBeanServerConnection();
 
         // See all Beans available
-        Set<ObjectName> names =
-                new TreeSet<ObjectName>(mbsc.queryNames(null, null));
+        Set<ObjectName> names = new TreeSet<ObjectName>(mbsc.queryNames(null, null));
         for (ObjectName name : names) {
-            System.out.println("\tBean Name = " + name);
+            System.out.println("\tBean name: " + name);
         }
 
         // Bean name for the map
-        final ObjectName mapMBeanName = new ObjectName("com.hazelcast:instance="+hz.getName()+",type=IMap,name=trial");
+        ObjectName mapMBeanName = new ObjectName("com.hazelcast:instance=" + hz.getName() + ",type=IMap,name=trial");
 
-        // Usage of Getter methods
-        System.out.println("\nTotal entries on map " + mbsc.getAttribute(mapMBeanName, "name") + " : "
+        // usage of Getter methods
+        System.out.println("\nTotal entries on map " + mbsc.getAttribute(mapMBeanName, "name") + ": "
                 + mbsc.getAttribute(mapMBeanName, "localOwnedEntryCount"));
 
-        // Usage of Invoking methods
-            // Get all map entries
-        String [] params = {""};
-        String [] signatures = {"java.lang.String"};
+        // usage of invoking methods
+
+        // get all map entries
+        String[] params = {""};
+        String[] signatures = {"java.lang.String"};
         String mapValues = (String) mbsc.invoke(mapMBeanName, "values", params, signatures);
         System.out.print("\nValues in the map: ");
         System.out.println(mapValues);
-            // Clear Map
+
+        // clear Map
         System.out.println("\nClearing the map...");
         mbsc.invoke(mapMBeanName, "clear", null, null);
 
-        System.out.println("\nTotal entries on map " + mbsc.getAttribute(mapMBeanName, "name") + " : "
+        System.out.println("\nTotal entries on map " + mbsc.getAttribute(mapMBeanName, "name") + ": "
                 + mbsc.getAttribute(mapMBeanName, "localOwnedEntryCount"));
     }
 }

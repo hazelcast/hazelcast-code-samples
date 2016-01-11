@@ -23,7 +23,7 @@ public class NaiveProcessingMember {
         for (Map.Entry<String, Employee> entry : employees.entrySet()) {
             System.out.println(entry.getKey() + " salary: " + entry.getValue().getSalary());
         }
-        System.exit(0);
-    }
 
+        Hazelcast.shutdownAll();
+    }
 }

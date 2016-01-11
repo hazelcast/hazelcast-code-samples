@@ -5,14 +5,16 @@ import com.hazelcast.spi.BackupOperation;
 
 import java.io.IOException;
 
-public class IncBackupOperation extends AbstractOperation implements BackupOperation {
+@SuppressWarnings("unused")
+class IncBackupOperation extends AbstractOperation implements BackupOperation {
+
     private String objectId;
     private int amount;
 
     public IncBackupOperation() {
     }
 
-    public IncBackupOperation(String objectId, int amount) {
+    IncBackupOperation(String objectId, int amount) {
         this.amount = amount;
         this.objectId = objectId;
     }
@@ -35,7 +37,7 @@ public class IncBackupOperation extends AbstractOperation implements BackupOpera
     public void run() throws Exception {
         CounterService service = getService();
         System.out.println("Executing backup " + objectId + ".inc() on: " + getNodeEngine().getThisAddress());
-        Container c = service.containers[getPartitionId()];
-        c.inc(objectId, amount);
+        Container container = service.containers[getPartitionId()];
+        container.inc(objectId, amount);
     }
 }

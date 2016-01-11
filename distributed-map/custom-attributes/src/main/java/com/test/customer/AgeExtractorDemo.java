@@ -18,9 +18,10 @@ public class AgeExtractorDemo {
         map.put("2", new Customer("eathen", "hunt", 1965));
         map.put("3", new Customer("roger", "moore", 1995));
 
-        // We're using a custom attribute 'age' which is provided by the 'AgeExtractor'
+        // we're using a custom attribute 'age' which is provided by the 'AgeExtractor'
         Set<Customer> employees = (Set<Customer>) map.values(new SqlPredicate("age < 50"));
-        System.out.println("Employees:" + employees);
-    }
+        System.out.println("Employees: " + employees);
 
+        Hazelcast.shutdownAll();
+    }
 }

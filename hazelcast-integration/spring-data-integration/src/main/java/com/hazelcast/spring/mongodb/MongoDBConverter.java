@@ -17,7 +17,9 @@ package com.hazelcast.spring.mongodb;
 
 import com.mongodb.DBObject;
 
-public interface MongoDBConverter {
+interface MongoDBConverter {
+
     DBObject toDBObject(Object obj);
+
     Object toObject(Class clazz, DBObject dbObject);
 }

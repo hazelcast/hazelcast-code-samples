@@ -33,13 +33,13 @@ import java.util.concurrent.ConcurrentMap;
 public class LoadAll {
 
     public static void main(String[] args) {
-        final int numberOfEntriesToAdd = 1000;
-        final String mapName = LoadAll.class.getCanonicalName();
+        int numberOfEntriesToAdd = 1000;
+        String mapName = LoadAll.class.getCanonicalName();
 
-        final Config config = createNewConfig(mapName);
-        final HazelcastInstance node = Hazelcast.newHazelcastInstance(config);
+        Config config = createNewConfig(mapName);
+        HazelcastInstance node = Hazelcast.newHazelcastInstance(config);
 
-        final IMap<Integer, Integer> map = node.getMap(mapName);
+        IMap<Integer, Integer> map = node.getMap(mapName);
 
         populateMap(map, numberOfEntriesToAdd);
 
@@ -47,11 +47,11 @@ public class LoadAll {
 
         map.evictAll();
 
-        System.out.printf("# After evictAll map size\t: %d\n", map.size());
+        System.out.printf("# After evictAll map size: %d\n", map.size());
 
         map.loadAll(true);
 
-        System.out.printf("# After loadAll map size\t: %d\n", map.size());
+        System.out.printf("# After loadAll map size: %d\n", map.size());
     }
 
     private static void populateMap(IMap<Integer, Integer> map, int itemCount) {
@@ -61,67 +61,65 @@ public class LoadAll {
     }
 
     private static Config createNewConfig(String mapName) {
-        final SimpleStore simpleStore = new SimpleStore();
-        XmlConfigBuilder configBuilder = new XmlConfigBuilder();
-        Config config = configBuilder.build();
-        MapConfig mapConfig = config.getMapConfig(mapName);
+        SimpleStore simpleStore = new SimpleStore();
+
         MapStoreConfig mapStoreConfig = new MapStoreConfig();
         mapStoreConfig.setImplementation(simpleStore);
         mapStoreConfig.setWriteDelaySeconds(0);
+
+        XmlConfigBuilder configBuilder = new XmlConfigBuilder();
+        Config config = configBuilder.build();
+        MapConfig mapConfig = config.getMapConfig(mapName);
         mapConfig.setMapStoreConfig(mapStoreConfig);
+
         return config;
     }
 
+    private static class SimpleStore implements MapStore<Integer, Integer> {
 
-    private static class SimpleStore implements MapStore {
-        private ConcurrentMap store = new ConcurrentHashMap();
+        private ConcurrentMap<Integer, Integer> store = new ConcurrentHashMap<Integer, Integer>();
 
         @Override
-        public void store(Object key, Object value) {
+        public void store(Integer key, Integer value) {
             store.put(key, value);
         }
 
         @Override
-        public void storeAll(Map map) {
-            final Set<Map.Entry> entrySet = map.entrySet();
-            for (Map.Entry entry : entrySet) {
-                final Object key = entry.getKey();
-                final Object value = entry.getValue();
+        public void storeAll(Map<Integer, Integer> map) {
+            Set<Map.Entry<Integer, Integer>> entrySet = map.entrySet();
+            for (Map.Entry<Integer, Integer> entry : entrySet) {
+                Integer key = entry.getKey();
+                Integer value = entry.getValue();
                 store(key, value);
             }
-
         }
 
         @Override
-        public void delete(Object key) {
-
+        public void delete(Integer key) {
         }
 
         @Override
-        public void deleteAll(Collection keys) {
-
+        public void deleteAll(Collection<Integer> keys) {
         }
 
         @Override
-        public Object load(Object key) {
+        public Integer load(Integer key) {
             return store.get(key);
         }
 
         @Override
-        public Map loadAll(Collection keys) {
-            final Map map = new HashMap();
-            for (Object key : keys) {
-                final Object value = load(key);
+        public Map<Integer, Integer> loadAll(Collection<Integer> keys) {
+            Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+            for (Integer key : keys) {
+                Integer value = load(key);
                 map.put(key, value);
             }
             return map;
         }
 
         @Override
-        public Set loadAllKeys() {
+        public Set<Integer> loadAllKeys() {
             return store.keySet();
         }
     }
-
-
 }

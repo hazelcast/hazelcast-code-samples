@@ -20,8 +20,7 @@ import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 import model.Person;
 
-public class StateBasedMapper
-        implements Mapper<String, Person, String, Person> {
+public class StateBasedMapper implements Mapper<String, Person, String, Person> {
 
     private String state;
 

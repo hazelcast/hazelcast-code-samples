@@ -20,7 +20,7 @@ public class EvictionTest {
         CachingProvider cachingProvider = Caching.getCachingProvider();
         CacheManager cacheManager = cachingProvider.getCacheManager();
 
-        // Since we already defined our cache in xml file
+        // since we already defined our cache in XML file,
         // we don't need to create a cache, one will be created when we call getCache
         ICache<Object, Object> cache = cacheManager.getCache("cache").unwrap(ICache.class);
         CacheConfig cacheConfig = cache.getConfiguration(CacheConfig.class);
@@ -30,7 +30,7 @@ public class EvictionTest {
                 + " policy:" + evictionConfig.getEvictionPolicyType());
 
 
-        //initial put [0 to 50.000]
+        // initial put [0 to 50.000]
         for (int i = 0; i < 50000; i++) {
             cache.put(i, i);
         }

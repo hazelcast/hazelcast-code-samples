@@ -1,4 +1,8 @@
-import com.hazelcast.core.*;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ITopic;
+import com.hazelcast.core.Message;
+import com.hazelcast.core.MessageListener;
 import com.hazelcast.logging.ILogger;
 import com.hazelcast.logging.Logger;
 import com.hazelcast.util.executor.StripedExecutor;
@@ -7,9 +11,10 @@ import com.hazelcast.util.executor.StripedRunnable;
 import java.util.Date;
 
 public class SubscribedMember {
-    private final static ILogger log = Logger.getLogger(SubscribedMember.class);
-    private final static StripedExecutor executor = new StripedExecutor(
-            log, "listeners", null, 10, 10000
+
+    private static final ILogger LOGGER = Logger.getLogger(SubscribedMember.class);
+    private static final StripedExecutor EXECUTOR = new StripedExecutor(
+            LOGGER, "listeners", null, 10, 10000
     );
 
     public static void main(String[] args) throws InterruptedException {
@@ -19,12 +24,11 @@ public class SubscribedMember {
         System.out.println("Subscribed");
     }
 
-    private static class MessageListenerImpl
-            implements MessageListener<Date> {
+    private static class MessageListenerImpl implements MessageListener<Date> {
 
         private final String topicName;
 
-        public MessageListenerImpl(String topicName) {
+        MessageListenerImpl(String topicName) {
             this.topicName = topicName;
         }
 
@@ -41,7 +45,7 @@ public class SubscribedMember {
                     System.out.println("Received: " + m.getMessageObject());
                 }
             };
-            executor.execute(task);
+            EXECUTOR.execute(task);
         }
     }
 }

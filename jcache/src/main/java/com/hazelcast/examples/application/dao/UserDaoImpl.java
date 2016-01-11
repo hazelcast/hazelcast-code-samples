@@ -22,10 +22,11 @@ public class UserDaoImpl implements UserDao {
     public User findUserById(int userId) {
         User user = users.get(userId);
         if (user != null) {
-            // Add latency to show the caching effect
+            // add latency to show the caching effect
             try {
                 Thread.sleep(300);
-            } catch (InterruptedException ignore) {
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
             return user;
@@ -48,5 +49,4 @@ public class UserDaoImpl implements UserDao {
     public Collection<Integer> allUserIds() {
         return new ArrayList<Integer>(users.keySet());
     }
-
 }

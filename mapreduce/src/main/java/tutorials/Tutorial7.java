@@ -24,24 +24,19 @@ import com.hazelcast.mapreduce.aggregation.PropertyExtractor;
 import com.hazelcast.mapreduce.aggregation.Supplier;
 import model.SalaryYear;
 
-public class Tutorial7
-        implements Tutorial {
+public class Tutorial7 implements Tutorial {
 
     @Override
-    public void execute(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    public void execute(HazelcastInstance hazelcastInstance) throws Exception {
         IMap<String, SalaryYear> map = hazelcastInstance.getMap("salaries");
-        Supplier<String, SalaryYear, Integer> supplier =
-                Supplier.all(new SalaryPropertyExtractor());
+        Supplier<String, SalaryYear, Integer> supplier = Supplier.all(new SalaryPropertyExtractor());
 
         Aggregation<String, Integer, Integer> aggregation = Aggregations.integerSum();
         int sum = map.aggregate(supplier, aggregation);
         System.out.println("Salary sum: " + sum);
     }
 
-    private static class SalaryPropertyExtractor
-            implements PropertyExtractor<SalaryYear, Integer> {
+    private static class SalaryPropertyExtractor implements PropertyExtractor<SalaryYear, Integer> {
 
         @Override
         public Integer extract(SalaryYear salaryYear) {

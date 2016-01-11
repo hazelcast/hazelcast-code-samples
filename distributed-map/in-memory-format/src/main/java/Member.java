@@ -8,8 +8,8 @@ public class Member {
 
     public static void main(String[] args) {
         HazelcastInstance instance = Hazelcast.newHazelcastInstance();
-        IMap binaryMap = instance.getMap("binaryMap");
-        IMap objectMap = instance.getMap("objectMap");
+        IMap<String, Person> binaryMap = instance.getMap("binaryMap");
+        IMap<String, Person> objectMap = instance.getMap("objectMap");
 
         Person person = new Person();
         binaryMap.put("peter", person);
@@ -22,6 +22,5 @@ public class Member {
     }
 
     public static class Person implements Serializable {
-
     }
 }

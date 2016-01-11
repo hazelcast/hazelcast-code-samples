@@ -8,8 +8,8 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import static com.hazelcast.spring.jcache.DummyBeanTest.doInvocation;
 
 public class SpringJCacheXMLConfig {
-    public static void main(String[] args)
-        throws InterruptedException {
+
+    public static void main(String[] args) throws InterruptedException {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 
         doInvocation(context);

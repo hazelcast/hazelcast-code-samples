@@ -46,7 +46,8 @@
     </cache>
 
     <cache name="my-cache-custom">
-        <merge-policy>com.hazelcast.examples.splitbrain.custom.CacheSplitBrainSampleWithCustomCacheMergePolicy$CustomCacheMergePolicy</merge-policy>
+        <merge-policy>
+            com.hazelcast.examples.splitbrain.custom.CacheSplitBrainSampleWithCustomCacheMergePolicy$CustomCacheMergePolicy
+        </merge-policy>
     </cache>
-
 </hazelcast>

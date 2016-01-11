@@ -16,10 +16,12 @@
 
 package tutorials.impl;
 
-public class ToStringPrettyfier {
+public final class ToStringPrettyfier {
+
     private ToStringPrettyfier() {
     }
 
+    @SuppressWarnings("checkstyle:cyclomaticcomplexity")
     private static String prettify(String toStringValue) {
         int depth = 0;
 
@@ -29,9 +31,7 @@ public class ToStringPrettyfier {
         boolean openDoubleQuote = false;
 
         StringBuilder sb = new StringBuilder(chars.length);
-        for (int i = 0; i < chars.length; i++) {
-            char c = chars[i];
-
+        for (char c : chars) {
             if (c == ',' && !openQuote && !openDoubleQuote) {
                 sb.append(',').append('\n');
                 indent(sb, depth);

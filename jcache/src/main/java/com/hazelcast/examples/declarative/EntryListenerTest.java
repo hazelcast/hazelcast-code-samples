@@ -21,13 +21,15 @@ public class EntryListenerTest {
         CachingProvider cachingProvider = Caching.getCachingProvider();
         CacheManager cacheManager = cachingProvider.getCacheManager();
 
-        // Since we already defined our cache in xml file
+        // since we already defined our cache in XML file,
         // we don't need to create a cache, one will be created when we call getCache
         ICache<Object, Object> cache = cacheManager.getCache("cache").unwrap(ICache.class);
         CacheConfig cacheConfig = cache.getConfiguration(CacheConfig.class);
-        Iterable<CacheEntryListenerConfiguration> cacheEntryListenerConfigurations = cacheConfig.getCacheEntryListenerConfigurations();
+        Iterable<CacheEntryListenerConfiguration> cacheEntryListenerConfigurations
+                = cacheConfig.getCacheEntryListenerConfigurations();
         for (CacheEntryListenerConfiguration cacheEntryListenerConfiguration : cacheEntryListenerConfigurations) {
-            System.out.println("cache configured with listener -> " + cacheEntryListenerConfiguration.getCacheEntryListenerFactory());
+            System.out.println("cache configured with listener -> "
+                    + cacheEntryListenerConfiguration.getCacheEntryListenerFactory());
         }
 
         // entry create

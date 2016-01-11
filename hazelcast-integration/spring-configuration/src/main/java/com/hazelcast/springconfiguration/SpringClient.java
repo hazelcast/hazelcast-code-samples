@@ -8,14 +8,9 @@ import com.hazelcast.core.IMap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-/**
- * Created by Mustafa Orkun Acar <mustafaorkunacar@gmail.com> on 09.07.2014.
- */
+public class SpringClient {
 
-public class SpringClient
-{
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Config config = new Config();
         config.getGroupConfig().setName("name");
         config.getGroupConfig().setPassword("pwd");
@@ -27,8 +22,8 @@ public class SpringClient
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 
         System.out.println("#######  CLIENT BEGIN #######");
-        HazelcastInstance client =  (HazelcastInstance) context.getBean("client");
-        IMap map = client.getMap("map");
+        HazelcastInstance client = (HazelcastInstance) context.getBean("client");
+        IMap<String, String> map = client.getMap("map");
         map.put("city", "Istanbul");
         System.out.println("City: " + map.get("city"));
         System.out.println("#######  CLIENT END #######");

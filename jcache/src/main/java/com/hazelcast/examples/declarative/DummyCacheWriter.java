@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class DummyCacheWriter implements CacheWriter<String, String> {
 
-    Map<String, String> map = new HashMap<String, String>();
+    private final Map<String, String> map = new HashMap<String, String>();
 
     @Override
     public void write(Cache.Entry<? extends String, ? extends String> entry) throws CacheWriterException {

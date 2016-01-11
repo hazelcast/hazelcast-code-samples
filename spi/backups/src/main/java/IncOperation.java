@@ -7,14 +7,17 @@ import com.hazelcast.spi.PartitionAwareOperation;
 
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 class IncOperation extends AbstractOperation implements PartitionAwareOperation, BackupAwareOperation {
+
     private String objectId;
-    private int amount, returnValue;
+    private int amount;
+    private int returnValue;
 
     public IncOperation() {
     }
 
-    public IncOperation(String objectId, int amount) {
+    IncOperation(String objectId, int amount) {
         this.amount = amount;
         this.objectId = objectId;
     }
@@ -23,12 +26,12 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation,
     public void run() throws Exception {
         CounterService service = getService();
         System.out.println("Executing " + objectId + ".inc() on: " + getNodeEngine().getThisAddress());
-        Container c = service.containers[getPartitionId()];
-        returnValue = c.inc(objectId, amount);
+        Container container = service.containers[getPartitionId()];
+        returnValue = container.inc(objectId, amount);
     }
 
     @Override
-       public boolean returnsResponse() {
+    public boolean returnsResponse() {
         return true;
     }
 
@@ -57,7 +60,7 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation,
         return new IncBackupOperation(objectId, amount);
     }
 
-      @Override
+    @Override
     protected void writeInternal(ObjectDataOutput out) throws IOException {
         super.writeInternal(out);
         out.writeUTF(objectId);

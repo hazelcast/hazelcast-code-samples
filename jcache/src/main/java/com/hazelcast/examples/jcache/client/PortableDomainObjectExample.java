@@ -12,14 +12,15 @@ import javax.cache.configuration.MutableConfiguration;
 import java.io.IOException;
 
 public class PortableDomainObjectExample extends AbstractApp {
+
     private static final String KEY = "foo";
 
-    public void runApp() {
+    private void runApp() {
         ClusterGroup server = startServer();
         clientSetup();
 
-        final CacheManager cacheManager = initCacheManager(uri1);
-        final Cache<String, DomainObject> cache = getCache(cacheManager);
+        CacheManager cacheManager = initCacheManager(uri1);
+        Cache<String, DomainObject> cache = getCache(cacheManager);
 
         DomainObject originalObject = new DomainObject("foo", 0);
         cache.put(KEY, originalObject);
@@ -50,22 +51,22 @@ public class PortableDomainObjectExample extends AbstractApp {
         return server;
     }
 
-
     public static void main(String[] args) {
         new PortableDomainObjectExample().runApp();
     }
 
-    public static class DomainObject implements Portable {
+    private static final class DomainObject implements Portable {
+
         private String name;
         private long id;
 
-        public DomainObject(String name, long id) {
+        DomainObject(String name, long id) {
             this.name = name;
             this.id = id;
         }
 
         private DomainObject() {
-            //used by DomainObjectPortableFactory only
+            // used by DomainObjectPortableFactory only
         }
 
         @Override
@@ -94,15 +95,19 @@ public class PortableDomainObjectExample extends AbstractApp {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             DomainObject that = (DomainObject) o;
 
-            if (id != that.id) return false;
-            if (name != null ? !name.equals(that.name) : that.name != null) return false;
-
-            return true;
+            if (id != that.id) {
+                return false;
+            }
+            return name != null ? name.equals(that.name) : that.name == null;
         }
 
         @Override
@@ -114,8 +119,9 @@ public class PortableDomainObjectExample extends AbstractApp {
     }
 
     public static class DomainObjectPortableFactory implements PortableFactory {
-        public final static int DOMAIN_CLASS_ID = 1;
-        public final static int FACTORY_ID = 1;
+
+        static final int DOMAIN_CLASS_ID = 1;
+        static final int FACTORY_ID = 1;
 
         @Override
         public Portable create(int i) {
@@ -123,9 +129,8 @@ public class PortableDomainObjectExample extends AbstractApp {
                 case DOMAIN_CLASS_ID:
                     return new DomainObject();
                 default:
-                    throw new IllegalArgumentException("Factory "+getClass().getName()+" doesn't know objectId "+i);
+                    throw new IllegalArgumentException("Factory " + getClass().getName() + " doesn't know objectId " + i);
             }
         }
     }
-
 }

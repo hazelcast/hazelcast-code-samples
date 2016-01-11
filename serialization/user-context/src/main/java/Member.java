@@ -4,6 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IExecutorService;
 
 public class Member {
+
     public static void main(String[] args) {
         EchoService echoService = new EchoService();
 
@@ -13,5 +14,7 @@ public class Member {
 
         IExecutorService executor = hz.getExecutorService("echoExecutor");
         executor.execute(new EchoTask("hello"));
+
+        Hazelcast.shutdownAll();
     }
 }

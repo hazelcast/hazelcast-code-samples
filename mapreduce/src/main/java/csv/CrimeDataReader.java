@@ -25,28 +25,26 @@ import org.supercsv.cellprocessor.ift.StringCellProcessor;
 import org.supercsv.exception.SuperCsvCellProcessorException;
 import org.supercsv.util.CsvContext;
 
-public class CrimeDataReader
-        extends AbstractDataReader<Crime> {
+class CrimeDataReader extends AbstractDataReader<Crime> {
 
-    public CrimeDataReader() {
+    @SuppressWarnings("checkstyle:trailingcomment")
+    CrimeDataReader() {
         super(new CellProcessor[]{ //
-                                   NOT_NULL, // state
-                                   new TypeOfCrimeCellProcessor(), // type of crime
-                                   new CrimeCategoryCellProcessor(), // crime
-                                   INT, // year
-                                   INT // count
+                NOT_NULL, // state
+                new TypeOfCrimeCellProcessor(), // type of crime
+                new CrimeCategoryCellProcessor(), // crime
+                INT, // year
+                INT // count
         }, Crime.class);
     }
 
-    private static class TypeOfCrimeCellProcessor
-            extends CellProcessorAdaptor
-            implements StringCellProcessor {
+    private static class TypeOfCrimeCellProcessor extends CellProcessorAdaptor implements StringCellProcessor {
 
         @Override
         public Object execute(Object value, CsvContext context) {
             validateInputNotNull(value, context);
 
-            final TypeOfCrime result;
+            TypeOfCrime result;
             if (value instanceof TypeOfCrime) {
                 result = (TypeOfCrime) value;
             } else if (value instanceof String) {
@@ -55,7 +53,6 @@ public class CrimeDataReader
                     throw new SuperCsvCellProcessorException(String.format("typeOfCrime for value '%s' not found", value),
                             context, this);
                 }
-
             } else {
                 final String actualClassName = value.getClass().getName();
                 throw new SuperCsvCellProcessorException(
@@ -63,20 +60,17 @@ public class CrimeDataReader
                                 actualClassName), context, this
                 );
             }
-
             return next.execute(result, context);
         }
     }
 
-    private static class CrimeCategoryCellProcessor
-            extends CellProcessorAdaptor
-            implements StringCellProcessor {
+    private static class CrimeCategoryCellProcessor extends CellProcessorAdaptor implements StringCellProcessor {
 
         @Override
         public Object execute(Object value, CsvContext context) {
             validateInputNotNull(value, context);
 
-            final CrimeCategory result;
+            CrimeCategory result;
             if (value instanceof CrimeCategory) {
                 result = (CrimeCategory) value;
             } else if (value instanceof String) {
@@ -85,7 +79,6 @@ public class CrimeDataReader
                     throw new SuperCsvCellProcessorException(String.format("crimeCategory for value '%s' not found", value),
                             context, this);
                 }
-
             } else {
                 final String actualClassName = value.getClass().getName();
                 throw new SuperCsvCellProcessorException(
@@ -93,7 +86,6 @@ public class CrimeDataReader
                                 actualClassName), context, this
                 );
             }
-
             return next.execute(result, context);
         }
     }

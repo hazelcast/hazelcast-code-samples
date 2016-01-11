@@ -14,67 +14,60 @@ import javax.cache.configuration.MutableCacheEntryListenerConfiguration;
  */
 public class ListenerExample extends AbstractApp {
 
-
-    public void runApp()
-            throws InterruptedException {
-
-        //first thing is we need to initialize the cache Manager
+    private void runApp() throws InterruptedException {
+        // initialize the CacheManager
         final CacheManager cacheManager = initCacheManager();
 
-        //create a cache with the provided name
+        // create a cache with the provided name
         final Cache<String, Integer> cache = initCache("theCache", cacheManager);
 
-        //registering the CacheEntryListener
+        // register the CacheEntryListener
         registerListener(cache);
 
-        //doing some operations on the cache to cause event fire
+        // do some operations on the cache to cause event fire
         triggerEvents(cache);
 
-        //lets wait for 5 sec to make sure every event has fired
+        // wait for 5 sec to make sure every event has fired
         sleepFor(5000);
 
-        //lastly shutdown the cache manager
+        // shutdown the CacheManager
         shutdown();
     }
 
+    private void registerListener(Cache<String, Integer> cache) {
+        // create the EntryListener
+        MyCacheEntryListener<String, Integer> clientListener = new MyCacheEntryListener<String, Integer>();
 
-    public void registerListener(Cache<String, Integer> cache){
-        //create the EntryListener
-        MyCacheEntryListener<String, Integer> clientListener =  new MyCacheEntryListener<String, Integer>();
+        // using our listener, let's create a configuration
+        CacheEntryListenerConfiguration<String, Integer> conf = new MutableCacheEntryListenerConfiguration<String, Integer>(
+                FactoryBuilder.factoryOf(clientListener), null, true, false);
 
-        //using out listener, lets create a configuration
-        CacheEntryListenerConfiguration<String, Integer> conf = new MutableCacheEntryListenerConfiguration<String, Integer>(FactoryBuilder.factoryOf(clientListener), null, true, false);
-
-        //register it to the cache at run-time
+        // register it to the cache at run-time
         cache.registerCacheEntryListener(conf);
     }
 
-    public void triggerEvents(Cache<String, Integer> cache) throws InterruptedException {
-        //this will fire create event
+    private void triggerEvents(Cache<String, Integer> cache) throws InterruptedException {
+        // this will fire create event
         cache.put("theKey", 66);
 
-        //but this one will fire an update event as we have it already
+        // but this one will fire an update event as we have it already
         cache.put("theKey", 111);
 
-        //fire remove
+        // fire remove
         cache.remove("theKey");
 
-        //lets put a value and then access it to start an expiry
+        // put a value and then access it to start an expiry
         cache.put("theKey", 66);
         cache.get("theKey");
 
-        //lets wait for 10 sec to expire the content
+        // wait for 10 sec to expire the content
         Thread.sleep(10 * 1000);
 
-        //will force to expire if we access it and fire expire event
+        // will force to expire if we access it and fire expire event
         cache.get("theKey");
-
     }
 
     public static void main(String[] args) throws InterruptedException {
         new ListenerExample().runApp();
     }
-
-
-
 }

@@ -44,66 +44,14 @@ public final class SimpleFunctionalMapTest {
 
     /**
      * This test runs continuously until an exception is thrown.
-     * No args
      */
     public static void main(String[] args) {
-
         int threadCount = 40;
         final Stats stats = new Stats();
         final HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance(null);
         ExecutorService es = Executors.newFixedThreadPool(threadCount);
         for (int i = 0; i < threadCount; i++) {
-            es.submit(new Runnable() {
-                public void run() {
-                    IMap map = hazelcast.getMap("default");
-                    while (true) {
-                        int keyInt = (int) (RANDOM.nextFloat() * ENTRY_COUNT);
-                        int operation = ((int) (RANDOM.nextFloat() * 1000)) % 20;
-                        Object key = String.valueOf(keyInt);
-                        if (operation < 1) {
-                            map.size();
-                            stats.increment("size");
-                        } else if (operation < 2) {
-                            map.get(key);
-                            stats.increment("get");
-                        } else if (operation < 3) {
-                            map.remove(key);
-                            stats.increment("remove");
-                        } else if (operation < 4) {
-                            map.containsKey(key);
-                            stats.increment("containsKey");
-                        } else if (operation < 5) {
-                            Object value = String.valueOf(key);
-                            map.containsValue(value);
-                            stats.increment("containsValue");
-                        } else if (operation < 6) {
-                            map.putIfAbsent(key, createValue());
-                            stats.increment("putIfAbsent");
-                        } else if (operation < 7) {
-                            Collection col = map.values();
-                            for (Object o : col) {
-                                int i = 0;
-                            }
-                            stats.increment("values");
-                        } else if (operation < 8) {
-                            Collection col = map.keySet();
-                            for (Object o : col) {
-                                int i = 0;
-                            }
-                            stats.increment("keySet");
-                        } else if (operation < 9) {
-                            Collection col = map.entrySet();
-                            for (Object o : col) {
-                                int i = 0;
-                            }
-                            stats.increment("entrySet");
-                        } else {
-                            map.put(key, createValue());
-                            stats.increment("put");
-                        }
-                    }
-                }
-            });
+            es.submit(new TestRunnable(hazelcast, stats));
         }
         Executors.newSingleThreadExecutor().submit(new Runnable() {
             public void run() {
@@ -123,7 +71,7 @@ public final class SimpleFunctionalMapTest {
         });
     }
 
-    public static Object createValue() {
+    private static Object createValue() {
         int numberOfK = (((int) (RANDOM.nextFloat() * 1000)) % 40) + 1;
         return new byte[numberOfK * KB];
     }
@@ -131,10 +79,10 @@ public final class SimpleFunctionalMapTest {
     /**
      * Map statistics class
      */
-    public static class Stats {
+    private static class Stats {
         Map<String, AtomicLong> mapStats = new ConcurrentHashMap<String, AtomicLong>(10);
 
-        public Stats() {
+        Stats() {
             mapStats.put("put", new AtomicLong(0));
             mapStats.put("get", new AtomicLong(0));
             mapStats.put("remove", new AtomicLong(0));
@@ -148,7 +96,7 @@ public final class SimpleFunctionalMapTest {
             mapStats.put("putIfAbsent", new AtomicLong(0));
         }
 
-        public Stats getAndReset() {
+        Stats getAndReset() {
             Stats newOne = new Stats();
             Set<Map.Entry<String, AtomicLong>> entries = newOne.mapStats.entrySet();
             for (Map.Entry<String, AtomicLong> entry : entries) {
@@ -167,7 +115,7 @@ public final class SimpleFunctionalMapTest {
             for (Map.Entry<String, AtomicLong> entry : entries) {
                 String key = entry.getKey();
                 AtomicLong value = entry.getValue();
-                sb.append(key + ":" + value.get());
+                sb.append(key).append(":").append(value.get());
                 sb.append("\n");
                 total += value.get();
             }
@@ -175,8 +123,71 @@ public final class SimpleFunctionalMapTest {
             return sb.toString();
         }
 
-        public void increment(String operation) {
+        void increment(String operation) {
             mapStats.get(operation).incrementAndGet();
+        }
+    }
+
+    private static class TestRunnable implements Runnable {
+
+        private final HazelcastInstance hazelcast;
+        private final Stats stats;
+
+        TestRunnable(HazelcastInstance hazelcast, Stats stats) {
+            this.hazelcast = hazelcast;
+            this.stats = stats;
+        }
+
+        @Override
+        @SuppressWarnings("checkstyle:cyclomaticcomplexity")
+        public void run() {
+            IMap map = hazelcast.getMap("default");
+            while (true) {
+                int keyInt = (int) (RANDOM.nextFloat() * ENTRY_COUNT);
+                int operation = ((int) (RANDOM.nextFloat() * 1000)) % 20;
+                Object key = String.valueOf(keyInt);
+                if (operation < 1) {
+                    map.size();
+                    stats.increment("size");
+                } else if (operation < 2) {
+                    map.get(key);
+                    stats.increment("get");
+                } else if (operation < 3) {
+                    map.remove(key);
+                    stats.increment("remove");
+                } else if (operation < 4) {
+                    map.containsKey(key);
+                    stats.increment("containsKey");
+                } else if (operation < 5) {
+                    Object value = String.valueOf(key);
+                    map.containsValue(value);
+                    stats.increment("containsValue");
+                } else if (operation < 6) {
+                    map.putIfAbsent(key, createValue());
+                    stats.increment("putIfAbsent");
+                } else if (operation < 7) {
+                    Collection col = map.values();
+                    for (Object o : col) {
+                        int i = 0;
+                    }
+                    stats.increment("values");
+                } else if (operation < 8) {
+                    Collection col = map.keySet();
+                    for (Object o : col) {
+                        int i = 0;
+                    }
+                    stats.increment("keySet");
+                } else if (operation < 9) {
+                    Collection col = map.entrySet();
+                    for (Object o : col) {
+                        int i = 0;
+                    }
+                    stats.increment("entrySet");
+                } else {
+                    map.put(key, createValue());
+                    stats.increment("put");
+                }
+            }
         }
     }
 }

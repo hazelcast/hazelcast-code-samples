@@ -22,8 +22,8 @@ import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
 
-public class Crime
-        implements DataSerializable {
+@SuppressWarnings("unused")
+public class Crime implements DataSerializable {
 
     private String state;
     private TypeOfCrime typeOfCrime;
@@ -72,9 +72,7 @@ public class Crime
     }
 
     @Override
-    public void writeData(ObjectDataOutput out)
-            throws IOException {
-
+    public void writeData(ObjectDataOutput out) throws IOException {
         out.writeUTF(state);
         out.writeInt(typeOfCrime.ordinal());
         out.writeInt(crime.ordinal());
@@ -83,9 +81,7 @@ public class Crime
     }
 
     @Override
-    public void readData(ObjectDataInput in)
-            throws IOException {
-
+    public void readData(ObjectDataInput in) throws IOException {
         state = in.readUTF();
         typeOfCrime = TypeOfCrime.byOrdinal(in.readInt());
         crime = CrimeCategory.byOrdinal(in.readInt());
@@ -95,12 +91,12 @@ public class Crime
 
     @Override
     public String toString() {
-        return "Crime{" +
-                "state='" + state + '\'' +
-                ", typeOfCrime=" + typeOfCrime +
-                ", crime=" + crime +
-                ", year=" + year +
-                ", count=" + count +
-                '}';
+        return "Crime{"
+                + "state='" + state + '\''
+                + ", typeOfCrime=" + typeOfCrime
+                + ", crime=" + crime
+                + ", year=" + year
+                + ", count=" + count
+                + '}';
     }
 }

@@ -22,13 +22,12 @@ import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
 
-public class SalaryTuple
-        implements DataSerializable {
+class SalaryTuple implements DataSerializable {
 
     private int count;
     private int amount;
 
-    public SalaryTuple() {
+    SalaryTuple() {
     }
 
     public SalaryTuple(int count, int amount) {
@@ -53,17 +52,13 @@ public class SalaryTuple
     }
 
     @Override
-    public void writeData(ObjectDataOutput out)
-            throws IOException {
-
+    public void writeData(ObjectDataOutput out) throws IOException {
         out.writeInt(count);
         out.writeInt(amount);
     }
 
     @Override
-    public void readData(ObjectDataInput in)
-            throws IOException {
-
+    public void readData(ObjectDataInput in) throws IOException {
         count = in.readInt();
         amount = in.readInt();
     }

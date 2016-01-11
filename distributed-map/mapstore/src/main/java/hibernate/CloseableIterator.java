@@ -1,12 +1,14 @@
 package hibernate;
 
+import org.hibernate.engine.HibernateIterator;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.hibernate.engine.HibernateIterator;
-
-/** Iterator implementing Closeable and delegating to a Hibernate iterator **/
+/**
+ * Iterator implementing Closeable and delegating to a Hibernate iterator
+ **/
 public class CloseableIterator<T> implements Iterator<T>, Closeable {
 
     private HibernateIterator iterator;

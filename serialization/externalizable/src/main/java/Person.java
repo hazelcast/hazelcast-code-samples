@@ -3,10 +3,15 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+@SuppressWarnings("unused")
 public class Person implements Externalizable {
+
     private String name;
 
-    public Person(String name) {
+    public Person() {
+    }
+
+    Person(String name) {
         this.name = name;
     }
 

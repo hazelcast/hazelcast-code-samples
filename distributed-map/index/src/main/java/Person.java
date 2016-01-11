@@ -1,9 +1,10 @@
 import java.io.Serializable;
 
 public class Person implements Serializable {
-    public Name name;
 
-    public Person(Name name) {
+    private final Name name;
+
+    Person(Name name) {
         this.name = name;
     }
 

@@ -1,5 +1,14 @@
-import com.hazelcast.core.*;
-import com.hazelcast.map.listener.*;
+import com.hazelcast.core.EntryEvent;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.core.MapEvent;
+import com.hazelcast.map.listener.EntryAddedListener;
+import com.hazelcast.map.listener.EntryEvictedListener;
+import com.hazelcast.map.listener.EntryRemovedListener;
+import com.hazelcast.map.listener.EntryUpdatedListener;
+import com.hazelcast.map.listener.MapClearedListener;
+import com.hazelcast.map.listener.MapEvictedListener;
 import com.hazelcast.query.SqlPredicate;
 
 public class ContinuousQueryMember {
@@ -39,13 +48,12 @@ public class ContinuousQueryMember {
         @Override
         public void mapEvicted(MapEvent event) {
             System.out.println("mapEvicted:" + event);
-
         }
+
         @Override
         public void mapCleared(MapEvent event) {
             System.out.println("mapCleared:" + event);
 
         }
-        
     }
 }

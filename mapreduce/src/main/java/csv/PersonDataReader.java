@@ -19,23 +19,23 @@ package csv;
 import model.Person;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-public class PersonDataReader
-        extends AbstractDataReader<Person> {
+class PersonDataReader extends AbstractDataReader<Person> {
 
-    public PersonDataReader() {
+    @SuppressWarnings("checkstyle:trailingcomment")
+    PersonDataReader() {
         super(new CellProcessor[]{ //
-                                   NOT_NULL, // first_name
-                                   NOT_NULL, // last_name
-                                   NOT_NULL, // company_name
-                                   NOT_NULL, // address
-                                   NOT_NULL, // city
-                                   NOT_NULL, // county
-                                   NOT_NULL, // state
-                                   INT, // zip
-                                   NOT_NULL, // phone1
-                                   NOT_NULL, // phone2
-                                   NOT_NULL, // email
-                                   NOT_NULL // web
+                NOT_NULL, // first_name
+                NOT_NULL, // last_name
+                NOT_NULL, // company_name
+                NOT_NULL, // address
+                NOT_NULL, // city
+                NOT_NULL, // county
+                NOT_NULL, // state
+                INT, // zip
+                NOT_NULL, // phone1
+                NOT_NULL, // phone2
+                NOT_NULL, // email
+                NOT_NULL // web
         }, Person.class);
     }
 }

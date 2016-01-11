@@ -5,13 +5,14 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import java.io.IOException;
 
 public class Customer implements DataSerializable {
+
     private String customerId;
 
-    public String getCustomerId() {
+    String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 

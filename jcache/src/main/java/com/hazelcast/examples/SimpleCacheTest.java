@@ -27,7 +27,6 @@ import com.hazelcast.logging.ILogger;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.configuration.MutableConfiguration;
-import javax.cache.expiry.AccessedExpiryPolicy;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,7 +53,7 @@ public final class SimpleCacheTest {
     private final boolean load;
 
     static {
-        final String logging = "hazelcast.logging.type";
+        String logging = "hazelcast.logging.type";
         if (System.getProperty(logging) == null) {
             System.setProperty(logging, "jdk");
         }
@@ -93,10 +92,7 @@ public final class SimpleCacheTest {
     }
 
     /**
-     *
      * Expects the Management Center to be running.
-     * @param input
-     * @throws InterruptedException
      */
     public static void main(String[] input) throws InterruptedException {
         int threadCount = 400;
@@ -141,19 +137,18 @@ public final class SimpleCacheTest {
     }
 
     private void run(ExecutorService es) {
-        final HazelcastServerCachingProvider cachingProvider = HazelcastServerCachingProvider.createCachingProvider(instance);
+        HazelcastServerCachingProvider cachingProvider = HazelcastServerCachingProvider.createCachingProvider(instance);
+        CacheManager cacheManager = cachingProvider.getCacheManager();
 
-        final CacheManager cacheManager = cachingProvider.getCacheManager();
-
-        //configure the cache
-        final MutableConfiguration<String, Object> config = new MutableConfiguration<String, Object>();
+        // configure the cache
+        MutableConfiguration<String, Object> config = new MutableConfiguration<String, Object>();
         config.setStoreByValue(true)
                 .setTypes(String.class, Object.class)
                 .setStatisticsEnabled(false);
 
-        final Cache<String, Object> cache = cacheManager.createCache(NAMESPACE,config);
+        final Cache<String, Object> cache = cacheManager.createCache(NAMESPACE, config);
 
-//        final IMap<String, Object> map = instance.getMap(NAMESPACE);
+        //IMap<String, Object> map = instance.getMap(NAMESPACE);
         for (int i = 0; i < threadCount; i++) {
             es.execute(new Runnable() {
                 public void run() {
@@ -186,9 +181,8 @@ public final class SimpleCacheTest {
         return new byte[valueSize];
     }
 
-
     private void startPrintStats() {
-        Thread t = new Thread() {
+        Thread thread = new Thread() {
             {
                 setDaemon(true);
                 setName("PrintStats." + instance.getName());
@@ -205,7 +199,7 @@ public final class SimpleCacheTest {
                 }
             }
         };
-        t.start();
+        thread.start();
     }
 
     /**
@@ -217,15 +211,14 @@ public final class SimpleCacheTest {
         private AtomicLong puts = new AtomicLong();
         private AtomicLong removes = new AtomicLong();
 
-        public void printAndReset() {
+        void printAndReset() {
             long getsNow = gets.getAndSet(0);
             long putsNow = puts.getAndSet(0);
             long removesNow = removes.getAndSet(0);
             long total = getsNow + putsNow + removesNow;
 
-            logger.info("total= " + total + ", gets:" + getsNow
-                    + ", puts:" + putsNow + ", removes:" + removesNow);
-            logger.info("Operations per Second : " + total / STATS_SECONDS);
+            logger.info("total= " + total + ", gets:" + getsNow + ", puts:" + putsNow + ", removes:" + removesNow);
+            logger.info("Operations per Second: " + total / STATS_SECONDS);
         }
     }
 

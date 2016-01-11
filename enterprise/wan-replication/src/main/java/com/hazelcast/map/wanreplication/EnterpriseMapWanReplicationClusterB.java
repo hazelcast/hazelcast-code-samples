@@ -9,11 +9,11 @@ import java.util.Scanner;
 
 public class EnterpriseMapWanReplicationClusterB {
 
-    static String licenseKey = "YOUR_LICENSE_KEY", command, token;
-    static HazelcastInstance clusterB;
+    private static final String LICENSE_KEY = "YOUR_LICENSE_KEY";
+
+    private static HazelcastInstance clusterB;
 
     public static void main(String[] args) throws InterruptedException {
-
         initClusters();
         waitUntilClusterSafe();
         Scanner reader = new Scanner(System.in);
@@ -23,21 +23,24 @@ public class EnterpriseMapWanReplicationClusterB {
         for (; ; ) {
             Thread.sleep(100);
             System.out.println("Command:");
-            command = reader.nextLine();
-            if (command.equals("help")) printHelpCommands();
-            if (command.equals("size")) System.out.println("map size: " + map.size());
+            String command = reader.nextLine();
+            if (command.equals("help")) {
+                printHelpCommands();
+            }
+            if (command.equals("size")) {
+                System.out.println("map size: " + map.size());
+            }
             if (command.startsWith("get")) {
-                token = command.split(" ")[1];
+                String token = command.split(" ")[1];
                 System.out.println(map.get(token));
             }
         }
     }
 
     private static void printHelpCommands() {
-        System.out.println("Commands:\n" +
-                        "1) get [key]\n" +
-                        "2) size\n"
-        );
+        System.out.println("Commands:\n"
+                + "1) get [key]\n"
+                + "2) size\n");
     }
 
     private static void waitUntilClusterSafe() throws InterruptedException {
@@ -50,13 +53,11 @@ public class EnterpriseMapWanReplicationClusterB {
         clusterB = Hazelcast.newHazelcastInstance(getConfigClusterB());
     }
 
-
-    static Config getConfigClusterB() {
+    private static Config getConfigClusterB() {
         Config config = new Config();
-        config.setLicenseKey(licenseKey).getGroupConfig().setName("clusterB").setPassword("clusterB-pass");
+        config.setLicenseKey(LICENSE_KEY).getGroupConfig().setName("clusterB").setPassword("clusterB-pass");
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5702");
         return config;
     }
-
 }

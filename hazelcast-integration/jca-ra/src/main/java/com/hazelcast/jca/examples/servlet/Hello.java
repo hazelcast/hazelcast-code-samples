@@ -1,21 +1,18 @@
 package com.hazelcast.jca.examples.servlet;
 
-import javax.annotation.Resource;
-
 import com.hazelcast.core.IMap;
-
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import java.io.IOException;
-import javax.resource.ResourceException;
-import javax.resource.cci.ConnectionFactory;
-
 import com.hazelcast.jca.HazelcastConnection;
 
+import javax.annotation.Resource;
+import javax.resource.ResourceException;
+import javax.resource.cci.ConnectionFactory;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/Hello")
 public class Hello extends HttpServlet {
@@ -30,7 +27,8 @@ public class Hello extends HttpServlet {
 
         PrintWriter out = resp.getWriter();
         out.write("<h1>Hazelcast JCA Example</h1>");
-        out.write("<form action='?' method='GET'><input name='action' value='put' type='hidden' /><input type='text' name='data' /><input type='submit' value='PUT' /></form>");
+        out.write("<form action='?' method='GET'><input name='action' value='put' type='hidden' />"
+                + "<input type='text' name='data' /><input type='submit' value='PUT' /></form>");
         out.write("<a href='?action=clear'>CLEAR</a>");
         out.write("<br />");
         out.write("<br />");
@@ -72,7 +70,7 @@ public class Hello extends HttpServlet {
     private HazelcastConnection getConnection() {
         HazelcastConnection c = null;
         try {
-            return  (HazelcastConnection) connectionFactory.getConnection();
+            return (HazelcastConnection) connectionFactory.getConnection();
         } catch (ResourceException e) {
             throw new RuntimeException(e);
         }
@@ -87,5 +85,4 @@ public class Hello extends HttpServlet {
             }
         }
     }
-
 }

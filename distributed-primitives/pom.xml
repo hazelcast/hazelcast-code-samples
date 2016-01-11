@@ -17,6 +17,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <modules>
         <module>atomiclong</module>
         <module>atomiclong-functions</module>
@@ -35,5 +41,4 @@
             <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
-
 </project>

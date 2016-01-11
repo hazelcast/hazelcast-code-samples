@@ -8,15 +8,15 @@ public class Person implements Serializable {
 
     private String name;
 
-    public Person(String name) {
+    Person(String name) {
         this.name = name;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public Person setName(String name) {
+    Person setName(String name) {
         this.name = name;
         return this;
     }

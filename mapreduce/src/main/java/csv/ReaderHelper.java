@@ -34,18 +34,14 @@ public final class ReaderHelper {
     private ReaderHelper() {
     }
 
-    public static void read(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    public static void read(HazelcastInstance hazelcastInstance) throws Exception {
         readStates(hazelcastInstance);
         readPeople(hazelcastInstance);
         readCrimes(hazelcastInstance);
         readSalary(hazelcastInstance);
     }
 
-    private static void readStates(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    private static void readStates(HazelcastInstance hazelcastInstance) throws Exception {
         StateDataReader stateDataReader = new StateDataReader();
         InputStream is = CLASS_LOADER.getResourceAsStream("state_table.csv");
         try {
@@ -59,9 +55,7 @@ public final class ReaderHelper {
         }
     }
 
-    private static void readPeople(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    private static void readPeople(HazelcastInstance hazelcastInstance) throws Exception {
         PersonDataReader personDataReader = new PersonDataReader();
         InputStream is = CLASS_LOADER.getResourceAsStream("us-500.csv");
         try {
@@ -73,9 +67,7 @@ public final class ReaderHelper {
         }
     }
 
-    private static void readSalary(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    private static void readSalary(HazelcastInstance hazelcastInstance) throws Exception {
         SalaryDataReader salaryDataReader = new SalaryDataReader();
         InputStream is = CLASS_LOADER.getResourceAsStream("salary.csv");
         try {
@@ -89,9 +81,7 @@ public final class ReaderHelper {
         }
     }
 
-    private static void readCrimes(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    private static void readCrimes(HazelcastInstance hazelcastInstance) throws Exception {
         CrimeDataReader crimeDataReader = new CrimeDataReader();
         InputStream is = CLASS_LOADER.getResourceAsStream("CrimeStatebyState.csv");
         try {

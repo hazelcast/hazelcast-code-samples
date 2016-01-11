@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BrokenValueMember {
+
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
 

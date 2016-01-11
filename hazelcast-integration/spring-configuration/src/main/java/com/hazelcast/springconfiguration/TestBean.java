@@ -1,12 +1,15 @@
 package com.hazelcast.springconfiguration;
 
-/**
- * Created by Mustafa Orkun Acar <mustafaorkunacar@gmail.com> on 07.07.2014.
- */
+@SuppressWarnings("unused")
+public class TestBean {
 
-public class TestBean
-{
     private String result;
-    public String getResult() { return result; }
-    public void setResult(String Result) { result = Result; }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

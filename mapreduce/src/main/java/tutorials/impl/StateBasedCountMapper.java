@@ -27,11 +27,10 @@ import model.State;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StateBasedCountMapper
-        extends LifecycleMapperAdapter<String, Person, String, Integer>
+public class StateBasedCountMapper extends LifecycleMapperAdapter<String, Person, String, Integer>
         implements HazelcastInstanceAware {
 
-    private static final Integer ONE = Integer.valueOf(1);
+    private static final Integer ONE = 1;
 
     private String state;
     private transient HazelcastInstance hazelcastInstance;

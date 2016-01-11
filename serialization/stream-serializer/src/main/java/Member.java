@@ -4,6 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import java.util.Map;
 
 public class Member {
+
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         Map<String, Car> map = hz.getMap("map");
@@ -21,5 +22,6 @@ public class Member {
         ExtendedArrayList deserialized = arrayListMap.get("extended");
         System.out.println(deserialized);
 
+        Hazelcast.shutdownAll();
     }
 }

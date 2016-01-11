@@ -24,5 +24,4 @@ public interface Command {
      * @return the description of the command
      */
     String description();
-
 }

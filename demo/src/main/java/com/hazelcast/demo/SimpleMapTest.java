@@ -75,10 +75,7 @@ public final class SimpleMapTest {
     }
 
     /**
-     *
      * Expects the Management Center to be running.
-     * @param input
-     * @throws InterruptedException
      */
     public static void main(String[] input) throws InterruptedException {
         int threadCount = 40;
@@ -185,7 +182,7 @@ public final class SimpleMapTest {
     }
 
     private void startPrintStats() {
-        Thread t = new Thread() {
+        Thread thread = new Thread() {
             {
                 setDaemon(true);
                 setName("PrintStats." + instance.getName());
@@ -202,7 +199,7 @@ public final class SimpleMapTest {
                 }
             }
         };
-        t.start();
+        thread.start();
     }
 
     /**
@@ -214,7 +211,7 @@ public final class SimpleMapTest {
         private AtomicLong puts = new AtomicLong();
         private AtomicLong removes = new AtomicLong();
 
-        public void printAndReset() {
+        void printAndReset() {
             long getsNow = gets.getAndSet(0);
             long putsNow = puts.getAndSet(0);
             long removesNow = removes.getAndSet(0);

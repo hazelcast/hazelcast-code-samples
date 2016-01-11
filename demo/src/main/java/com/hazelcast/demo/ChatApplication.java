@@ -60,12 +60,12 @@ public class ChatApplication {
         application.run();
     }
 
-    public void setUsername(String name) {
+    private void setUsername(String name) {
         this.username = name;
         new ChatMessage(username, "has joined").send(map);
     }
 
-    public void run() {
+    private void run() {
         showConnected(map);
         map.addEntryListener(new ChatCallback(), true);
         while (true) {
@@ -94,30 +94,32 @@ public class ChatApplication {
      * A Chat Message class
      */
     private static class ChatMessage implements Serializable {
+
         private String username;
         private String message;
 
-        public ChatMessage(String username, String message) {
+        ChatMessage(String username, String message) {
             this.username = username;
             this.message = message;
         }
 
-        public String toString() {
-            return username + ": " + message;
+        void send(IMap<String, ChatMessage> map) {
+            map.put(username, this);
         }
 
-        public void send(IMap<String, ChatMessage> map) {
-            map.put(username, this);
+        @Override
+        public String toString() {
+            return username + ": " + message;
         }
     }
 
     /**
      * Notifies entry changes to Chat
      */
-    private class ChatCallback implements EntryAddedListener<String, ChatMessage>,
-            EntryRemovedListener<String, ChatMessage>,
+    private class ChatCallback implements EntryAddedListener<String, ChatMessage>, EntryRemovedListener<String, ChatMessage>,
             EntryUpdatedListener<String, ChatMessage> {
-        public ChatCallback() {
+
+        ChatCallback() {
         }
 
         public void entryAdded(EntryEvent<String, ChatMessage> event) {

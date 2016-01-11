@@ -1,13 +1,23 @@
 import java.io.Serializable;
 
-public final class Order implements Serializable {
-    public final long orderId;
-    public final long customerId;
-    public final long articleId;
+final class Order implements Serializable {
 
-    public Order(long orderId, long customerId, long articleId) {
+    private final long orderId;
+    private final long customerId;
+    private final long articleId;
+
+    Order(long orderId, long customerId, long articleId) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.articleId = articleId;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{"
+                + "orderId=" + orderId
+                + ", customerId=" + customerId
+                + ", articleId=" + articleId
+                + '}';
     }
 }

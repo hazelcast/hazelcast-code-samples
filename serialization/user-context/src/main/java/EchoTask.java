@@ -3,20 +3,18 @@ import com.hazelcast.core.HazelcastInstanceAware;
 
 import java.io.Serializable;
 
-public class EchoTask implements Runnable,
-        Serializable, HazelcastInstanceAware {
+public class EchoTask implements Runnable, Serializable, HazelcastInstanceAware {
 
     private final String msg;
     private transient HazelcastInstance hz;
 
-    public EchoTask(String msg) {
+    EchoTask(String msg) {
         this.msg = msg;
     }
 
     @Override
     public void run() {
-        EchoService echoService =
-                (EchoService) hz.getUserContext().get("echoService");
+        EchoService echoService = (EchoService) hz.getUserContext().get("echoService");
         echoService.echo(msg);
     }
 

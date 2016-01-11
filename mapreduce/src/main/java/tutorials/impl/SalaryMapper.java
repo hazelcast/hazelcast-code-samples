@@ -29,11 +29,7 @@ import model.State;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SalaryMapper
-        extends LifecycleMapperAdapter<String, Person, String, Integer>
-        implements HazelcastInstanceAware {
-
-    private static final Integer ONE = Integer.valueOf(1);
+public class SalaryMapper extends LifecycleMapperAdapter<String, Person, String, Integer> implements HazelcastInstanceAware {
 
     private String state;
     private transient HazelcastInstance hazelcastInstance;
@@ -71,7 +67,7 @@ public class SalaryMapper
 
         IMap<String, SalaryYear> salariesMap = hazelcastInstance.getMap("salaries");
 
-        // Person's partition key is email!
+        // person's partition key is email!
         SalaryYear salaryYear = salariesMap.get(value.getEmail());
 
         for (SalaryMonth salaryMonth : salaryYear.getMonths()) {

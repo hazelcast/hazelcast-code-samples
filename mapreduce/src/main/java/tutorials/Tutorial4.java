@@ -28,13 +28,10 @@ import tutorials.impl.SalaryMapper;
 import tutorials.impl.SalaryReducerFactory;
 import tutorials.impl.ToStringPrettyfier;
 
-public class Tutorial4
-        implements Tutorial {
+public class Tutorial4 implements Tutorial {
 
     @Override
-    public void execute(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    public void execute(HazelcastInstance hazelcastInstance) throws Exception {
         JobTracker jobTracker = hazelcastInstance.getJobTracker("default");
 
         IList<Person> list = hazelcastInstance.getList("persons");
@@ -42,9 +39,9 @@ public class Tutorial4
 
         Job<String, Person> job = jobTracker.newJob(source);
 
-        ICompletableFuture future = job.mapper(new SalaryMapper()) //
-                .combiner(new SalaryCombinerFactory()) //
-                .reducer(new SalaryReducerFactory()) //
+        ICompletableFuture future = job.mapper(new SalaryMapper())
+                .combiner(new SalaryCombinerFactory())
+                .reducer(new SalaryReducerFactory())
                 .submit();
 
         System.out.println(ToStringPrettyfier.toString(future.get()));

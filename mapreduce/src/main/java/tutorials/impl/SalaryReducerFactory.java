@@ -19,16 +19,14 @@ package tutorials.impl;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
-public class SalaryReducerFactory
-        implements ReducerFactory<String, SalaryTuple, Integer> {
+public class SalaryReducerFactory implements ReducerFactory<String, SalaryTuple, Integer> {
 
     @Override
     public Reducer<SalaryTuple, Integer> newReducer(String key) {
         return new SalaryReducer();
     }
 
-    private static class SalaryReducer
-            extends Reducer<SalaryTuple, Integer> {
+    private static class SalaryReducer extends Reducer<SalaryTuple, Integer> {
 
         private volatile int count;
         private volatile int amount;

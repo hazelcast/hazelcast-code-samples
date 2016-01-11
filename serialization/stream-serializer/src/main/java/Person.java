@@ -1,4 +1,5 @@
 public class Person {
+
     private String name;
 
     public Person() {
@@ -8,14 +9,14 @@ public class Person {
         this.name = name;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                '}';
+        return "Person{"
+                + "name='" + name + '\''
+                + '}';
     }
 }

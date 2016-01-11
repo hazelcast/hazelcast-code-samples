@@ -24,8 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class SalaryCollator
-        implements Collator<Map.Entry<String, Integer>, List<Map.Entry<String, Integer>>> {
+public class SalaryCollator implements Collator<Map.Entry<String, Integer>, List<Map.Entry<String, Integer>>> {
 
     @Override
     public List<Map.Entry<String, Integer>> collate(Iterable<Map.Entry<String, Integer>> values) {
@@ -37,12 +36,13 @@ public class SalaryCollator
         return result;
     }
 
-    private static class AvgSalaryComparator
-            implements Comparator<Map.Entry<String, Integer>> {
+    private static class AvgSalaryComparator implements Comparator<Map.Entry<String, Integer>> {
 
         @Override
         public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-            return Integer.compare(o2.getValue(), o1.getValue());
+            int value1 = o1.getValue();
+            int value2 = o2.getValue();
+            return (value2 < value1) ? -1 : ((value2 == value1) ? 0 : 1);
         }
     }
 }

@@ -11,7 +11,7 @@ import org.osgi.framework.ServiceReference;
  * {@link org.osgi.framework.BundleActivator} implementation for OSGI sample which is activated by our sample bundle.
  */
 @SuppressWarnings("unused")
-public class SampleActivator implements BundleActivator {
+class SampleActivator implements BundleActivator {
 
     private HazelcastOSGiService hazelcastOsgiService;
     private HazelcastOSGiInstance hazelcastOSGiInstance;

@@ -3,12 +3,13 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 
 public class ProducerMember {
+
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IQueue<Integer> queue = hz.getQueue("queue");
-        for (int k = 1; k < 1000; k++) {
-            queue.put(200 + k);
-            System.out.println("Producing: " + k);
+        for (int i = 1; i < 1000; i++) {
+            queue.put(200 + i);
+            System.out.println("Producing: " + i);
             Thread.sleep(1000);
         }
         queue.put(-1);

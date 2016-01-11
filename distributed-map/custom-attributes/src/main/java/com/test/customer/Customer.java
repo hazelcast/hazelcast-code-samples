@@ -3,13 +3,14 @@ package com.test.customer;
 import java.io.Serializable;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class Customer implements Serializable {
 
     private final String id = UUID.randomUUID().toString();
 
-    public String name;
-    public String surname;
-    public int yearOfBirth;
+    private String name;
+    private String surname;
+    private int yearOfBirth;
 
     public Customer(String name, String surname, int yearOfBirth) {
         this.name = name;
@@ -17,14 +18,29 @@ public class Customer implements Serializable {
         this.yearOfBirth = yearOfBirth;
     }
 
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", yearOfBirth=" + yearOfBirth +
-                '}';
+    public String getId() {
+        return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{"
+                + "id='" + id + '\''
+                + ", name='" + name + '\''
+                + ", surname='" + surname + '\''
+                + ", yearOfBirth=" + yearOfBirth
+                + '}';
+    }
 }

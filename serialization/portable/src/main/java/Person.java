@@ -5,12 +5,13 @@ import com.hazelcast.nio.serialization.PortableWriter;
 import java.io.IOException;
 
 public class Person implements Portable {
+
     private String name;
 
     Person() {
     }
 
-    public Person(String name) {
+    Person(String name) {
         this.name = name;
     }
 

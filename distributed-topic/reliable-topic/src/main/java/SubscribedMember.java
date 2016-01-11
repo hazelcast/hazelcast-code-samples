@@ -4,9 +4,6 @@ import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 
-import java.util.Date;
-import java.util.Random;
-
 public class SubscribedMember {
 
     public static void main(String[] args) throws InterruptedException {

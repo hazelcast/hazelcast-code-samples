@@ -4,6 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IExecutorService;
 
 public class MasterMember {
+
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IExecutorService executor = hz.getExecutorService("executor");

@@ -6,7 +6,8 @@ import com.hazelcast.spi.RemoteService;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService {
-    public static final String NAME = "CounterService";
+
+    static final String NAME = "CounterService";
 
     private NodeEngine nodeEngine;
 

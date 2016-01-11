@@ -19,9 +19,10 @@ import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import csv.ReaderHelper;
-import tutorials.*;
+import tutorials.Tutorial;
+import tutorials.Tutorial1;
 
-import java.util.Arrays;
+import static java.util.Collections.singletonList;
 
 /**
  * State collection: http://statetable.com/
@@ -30,17 +31,15 @@ import java.util.Arrays;
  */
 public class TutorialExamples {
 
-    public static void main(String[] args)
-            throws Exception {
-
-        // Prepare Hazelcast cluster
+    public static void main(String[] args) throws Exception {
+        // prepare Hazelcast cluster
         HazelcastInstance hazelcastInstance = buildCluster(2);
 
-        // Read CSV data
+        // read CSV data
         ReaderHelper.read(hazelcastInstance);
 
         try {
-            // Execute tutorials.Tutorial
+            // execute tutorials.Tutorial
             Tutorial tutorial = new Tutorial1();
             // tutorials.Tutorial tutorial = new Tutorial2();
             // tutorials.Tutorial tutorial = new Tutorial3();
@@ -49,9 +48,8 @@ public class TutorialExamples {
             // tutorials.Tutorial tutorial = new Tutorial6();
             // tutorials.Tutorial tutorial = new Tutorial7();
             tutorial.execute(hazelcastInstance);
-
         } finally {
-            // Shutdown cluster
+            // shutdown cluster
             Hazelcast.shutdownAll();
         }
     }
@@ -61,7 +59,7 @@ public class TutorialExamples {
         NetworkConfig networkConfig = config.getNetworkConfig();
         networkConfig.getJoin().getMulticastConfig().setEnabled(false);
         networkConfig.getJoin().getTcpIpConfig().setEnabled(true);
-        networkConfig.getJoin().getTcpIpConfig().setMembers(Arrays.asList(new String[]{"127.0.0.1"}));
+        networkConfig.getJoin().getTcpIpConfig().setMembers(singletonList("127.0.0.1"));
 
         HazelcastInstance[] hazelcastInstances = new HazelcastInstance[memberCount];
         for (int i = 0; i < memberCount; i++) {

@@ -18,6 +18,7 @@ import java.util.Map;
  * This class contains all context information to execute {@link com.hazelcast.examples.application.commands.Command}
  * implementations and allow them access to commands, cache, dao and shell input / output.
  */
+@SuppressWarnings("unused")
 public class Context {
 
     private final BufferedReader input;

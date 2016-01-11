@@ -20,7 +20,7 @@ import com.hazelcast.config.properties.PropertyDefinition;
 import com.hazelcast.config.properties.PropertyTypeConverter;
 import com.hazelcast.config.properties.SimplePropertyDefinition;
 
-public class HostsDiscoveryConfiguration {
+public final class HostsDiscoveryConfiguration {
 
     /**
      * <tt>site-domain</tt> configures the basic site domain for the lookup, to
@@ -29,8 +29,7 @@ public class HostsDiscoveryConfiguration {
      */
     public static final PropertyDefinition DOMAIN = new SimplePropertyDefinition("site-domain", PropertyTypeConverter.STRING);
 
-    // Prevent instantiation
+    // prevent instantiation
     private HostsDiscoveryConfiguration() {
     }
-
 }

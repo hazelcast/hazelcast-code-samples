@@ -16,14 +16,11 @@ public class Peer2Peer {
         Hazelcast.newHazelcastInstance();
 
         IEnterpriseMap<Integer, String> map = (IEnterpriseMap) node.getMap("test");
-
-        QueryCache<Integer, String> cache = map.getQueryCache("myCache",
-                new SqlPredicate("__key > 3 and __key < 84"), true);
+        QueryCache<Integer, String> cache = map.getQueryCache("myCache", new SqlPredicate("__key > 3 and __key < 84"), true);
 
         for (int i = 0; i < 100; i++) {
             map.put(i, String.valueOf(i));
         }
-
 
         while (true) {
             sleepSeconds(1);
@@ -39,8 +36,8 @@ public class Peer2Peer {
                 String value = cache.get(i);
                 String valueExpected = String.valueOf(i);
                 if (!valueExpected.equals(value)) {
-                    throw new AssertionError("Unexpected error, values should be equal valueExpected = "
-                            + valueExpected + ", value = " + value);
+                    throw new AssertionError(
+                            "Unexpected error, values should be equal valueExpected = " + valueExpected + ", value = " + value);
                 }
             }
 
@@ -48,8 +45,6 @@ public class Peer2Peer {
         } finally {
             node.shutdown();
         }
-
-
     }
 
     private static void sleepSeconds(int seconds) {

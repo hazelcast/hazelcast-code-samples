@@ -3,8 +3,7 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.SocketInterceptorConfig;
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.GroupProperties;
+import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.nio.MemberSocketInterceptor;
 
 import java.io.IOException;
@@ -17,60 +16,61 @@ import java.util.Properties;
 public class SocketInterceptorClient {
 
     public static void main(String[] args) {
-        //Enter your licenceKey below
+        // enter your licenceKey below
         String licenceKey = "---- LICENCE KEY ----";
-        final Config config = createConfig(licenceKey);
-        final HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
+        Config config = createConfig(licenceKey);
+        Hazelcast.newHazelcastInstance(config);
 
-        final ClientConfig clientConfig = createClientConfig();
-        final HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
-
+        ClientConfig clientConfig = createClientConfig();
+        HazelcastClient.newHazelcastClient(clientConfig);
     }
 
-    static Config createConfig(String licenceKey) {
-        final Config config = new Config();
+    private static Config createConfig(String licenceKey) {
+        Config config = new Config();
         config.setLicenseKey(licenceKey);
-        config.setProperty(GroupProperties.PROP_WAIT_SECONDS_BEFORE_JOIN, "0");
-        final SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
+        config.setProperty(GroupProperty.WAIT_SECONDS_BEFORE_JOIN, "0");
+
+        SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
         interceptorConfig.setEnabled(true).setClassName(MySocketInterceptor.class.getName());
         config.getNetworkConfig().setSocketInterceptorConfig(interceptorConfig);
+
         return config;
     }
 
-    static ClientConfig createClientConfig() {
-        final ClientConfig clientConfig = new ClientConfig();
-        final SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
+    private static ClientConfig createClientConfig() {
+        ClientConfig clientConfig = new ClientConfig();
+        SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
         interceptorConfig.setEnabled(true).setClassName(MySocketInterceptor.class.getName());
         clientConfig.getNetworkConfig().setSocketInterceptorConfig(interceptorConfig);
         return clientConfig;
     }
 
-    public static class MySocketInterceptor implements MemberSocketInterceptor {
+    private static class MySocketInterceptor implements MemberSocketInterceptor {
 
         public MySocketInterceptor() {
         }
 
         @Override
-        public void onAccept(final Socket socket) throws IOException {
+        public void onAccept(Socket socket) throws IOException {
             socket.getOutputStream().write("a-member".getBytes());
-            final byte[] bytes = new byte[1024];
-            final int len = socket.getInputStream().read(bytes);
-            final String otherMemberId = new String(bytes, 0, len);
+            byte[] bytes = new byte[1024];
+            int len = socket.getInputStream().read(bytes);
+            String otherMemberId = new String(bytes, 0, len);
             if (!otherMemberId.equals("a-client")) {
                 throw new RuntimeException("Not a known client!!!");
             }
         }
 
         @Override
-        public void init(final Properties properties) {
+        public void init(Properties properties) {
         }
 
         @Override
-        public void onConnect(final Socket socket) throws IOException {
+        public void onConnect(Socket socket) throws IOException {
             socket.getOutputStream().write("a-client".getBytes());
-            final byte[] bytes = new byte[1024];
-            final int len = socket.getInputStream().read(bytes);
-            final String otherMemberId = new String(bytes, 0, len);
+            byte[] bytes = new byte[1024];
+            int len = socket.getInputStream().read(bytes);
+            String otherMemberId = new String(bytes, 0, len);
             if (!otherMemberId.equals("a-member")) {
                 throw new RuntimeException("Not a known member!!!");
             }

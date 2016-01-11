@@ -9,8 +9,7 @@ public class AgeExtractor extends ValueExtractor<Customer, String> {
 
     @Override
     public void extract(Customer customer, String argument, ValueCollector valueCollector) {
-        int age = Calendar.getInstance().get(Calendar.YEAR) - customer.yearOfBirth;
+        int age = Calendar.getInstance().get(Calendar.YEAR) - customer.getYearOfBirth();
         valueCollector.addObject(age);
     }
-
 }

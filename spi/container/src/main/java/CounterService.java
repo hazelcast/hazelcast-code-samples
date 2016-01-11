@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService {
-    public final static String NAME = "CounterService";
+
+    static final String NAME = "CounterService";
+
     Container[] containers;
     private NodeEngine nodeEngine;
 
@@ -15,8 +17,9 @@ public class CounterService implements ManagedService, RemoteService {
     public void init(NodeEngine nodeEngine, Properties properties) {
         this.nodeEngine = nodeEngine;
         containers = new Container[nodeEngine.getPartitionService().getPartitionCount()];
-        for (int k = 0; k < containers.length; k++)
-            containers[k] = new Container();
+        for (int i = 0; i < containers.length; i++) {
+            containers[i] = new Container();
+        }
     }
 
     @Override
@@ -43,13 +46,14 @@ public class CounterService implements ManagedService, RemoteService {
     }
 
     public static class Container {
+
         final Map<String, Integer> values = new HashMap<String, Integer>();
 
         private void init(String objectName) {
             values.put(objectName, 0);
         }
 
-        private void destroy(String objectName){
+        private void destroy(String objectName) {
             values.remove(objectName);
         }
     }

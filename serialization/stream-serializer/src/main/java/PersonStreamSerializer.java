@@ -5,9 +5,10 @@ import com.hazelcast.nio.serialization.StreamSerializer;
 import java.io.IOException;
 
 public class PersonStreamSerializer implements StreamSerializer<Person> {
+
     @Override
     public int getTypeId() {
-        return MySerializationConstants.PERSON_TYPE;
+        return MySerializationConstants.PERSON_TYPE.getId();
     }
 
     @Override

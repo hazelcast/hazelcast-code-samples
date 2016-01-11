@@ -21,10 +21,9 @@ import com.hazelcast.mapreduce.Mapper;
 
 import java.util.StringTokenizer;
 
-public class TokenizerMapper
-        implements Mapper<String, String, String, Integer> {
+class TokenizerMapper implements Mapper<String, String, String, Integer> {
 
-    private static final Integer ONE = Integer.valueOf(1);
+    private static final Integer ONE = 1;
 
     @Override
     public void map(String key, String value, Context<String, Integer> context) {

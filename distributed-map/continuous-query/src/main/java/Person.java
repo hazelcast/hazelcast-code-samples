@@ -1,6 +1,5 @@
 import java.io.Serializable;
 
-
 public class Person implements Serializable {
 
     private final String name;
@@ -11,8 +10,8 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                '}';
+        return "Person{"
+                + "name='" + name + '\''
+                + '}';
     }
 }

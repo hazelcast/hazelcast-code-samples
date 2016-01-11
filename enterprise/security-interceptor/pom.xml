@@ -5,9 +5,7 @@
 
     <artifactId>security-interceptor</artifactId>
     <name>Enterprise - Security Interceptor</name>
-    <description>
-        All the code samples for the Security Interceptor
-    </description>
+    <description>All the code samples for the Security Interceptor</description>
 
     <parent>
         <artifactId>enterprise</artifactId>
@@ -16,4 +14,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>

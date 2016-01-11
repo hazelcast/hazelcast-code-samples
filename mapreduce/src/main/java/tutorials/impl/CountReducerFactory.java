@@ -19,16 +19,14 @@ package tutorials.impl;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
-public class CountReducerFactory
-        implements ReducerFactory<String, Integer, Integer> {
+public class CountReducerFactory implements ReducerFactory<String, Integer, Integer> {
 
     @Override
     public Reducer<Integer, Integer> newReducer(String key) {
         return new CountReducer();
     }
 
-    private static class CountReducer
-            extends Reducer<Integer, Integer> {
+    private static class CountReducer extends Reducer<Integer, Integer> {
 
         private volatile int count;
 

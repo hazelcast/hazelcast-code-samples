@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 /**
  * A long running test
  */
-public class LongRunningTest {
+public final class LongRunningTest {
 
     private static final int STATS_SECONDS = 10;
     private static final Logger LOGGER = Logger.getLogger(LongRunningTest.class.getName());
@@ -52,7 +52,13 @@ public class LongRunningTest {
     private int nextActionMin = 90;
     private int nextActionMax = 180;
 
-    public LongRunningTest(String[] input) {
+    static {
+        System.setProperty("hazelcast.version.check.enabled", "false");
+        System.setProperty("hazelcast.socket.bind.any", "false");
+        System.setProperty("hazelcast.partition.migration.interval", "0");
+    }
+
+    private LongRunningTest(String[] input) {
         if (input != null && input.length > 0) {
             for (String arg : input) {
                 arg = arg.trim();
@@ -71,11 +77,11 @@ public class LongRunningTest {
     }
 
     public static void main(String[] args) {
-        LongRunningTest t = new LongRunningTest(args);
-        t.run();
+        LongRunningTest test = new LongRunningTest(args);
+        test.run();
     }
 
-    public void run() {
+    private void run() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 log("Shutting down " + nodes.size());
@@ -122,11 +128,11 @@ public class LongRunningTest {
         }
     }
 
-    void log(Object obj) {
+    private void log(Object obj) {
         LOGGER.info(obj.toString());
     }
 
-    void addNode() {
+    private void addNode() {
         starts++;
         int entryCount = random(10000);
         int threadCount = random(10, 50);
@@ -138,7 +144,7 @@ public class LongRunningTest {
         log("Started " + node);
     }
 
-    void restartNode() {
+    private void restartNode() {
         restarts++;
         log("Restarting...");
         removeNode();
@@ -150,18 +156,18 @@ public class LongRunningTest {
         addNode();
     }
 
-    void removeNode() {
+    private void removeNode() {
         stops++;
         TheNode node = nodes.remove(random(nodes.size()));
         node.stop();
         log("Stopped " + node);
     }
 
-    int random(int length) {
+    private int random(int length) {
         return ((int) (random.nextFloat() * 10000000) % length);
     }
 
-    int random(int from, int to) {
+    private int random(int from, int to) {
         double diff = (to - from);
         return (int) (diff * random.nextFloat() + from);
     }
@@ -169,7 +175,8 @@ public class LongRunningTest {
     /**
      * A NodeEngine instance
      */
-    class TheNode {
+    private class TheNode {
+
         final int entryCount;
         final int threadCount;
         final int valueSize;
@@ -178,6 +185,7 @@ public class LongRunningTest {
         final ExecutorService es;
         final ExecutorService esStats;
         final HazelcastInstance hazelcast;
+
         volatile boolean running = true;
 
         TheNode(int nodeId, int entryCount, int threadCount, int valueSize) {
@@ -192,7 +200,7 @@ public class LongRunningTest {
             createTime = System.currentTimeMillis();
         }
 
-        public void stop() {
+        void stop() {
             try {
                 running = false;
                 es.shutdown();
@@ -204,7 +212,7 @@ public class LongRunningTest {
             }
         }
 
-        public void start() {
+        void start() {
             final Stats stats = new Stats();
             for (int i = 0; i < threadCount; i++) {
                 es.submit(new Runnable() {
@@ -268,13 +276,13 @@ public class LongRunningTest {
     /**
      * Basic statistics value object
      */
-    class Stats {
+    private class Stats {
 
         private AtomicLong mapPuts = new AtomicLong();
         private AtomicLong mapGets = new AtomicLong();
         private AtomicLong mapRemoves = new AtomicLong();
 
-        public Stats getAndReset() {
+        Stats getAndReset() {
             long mapPutsNow = mapPuts.getAndSet(0);
             long mapGetsNow = mapGets.getAndSet(0);
             long mapRemovesNow = mapRemoves.getAndSet(0);
@@ -285,19 +293,14 @@ public class LongRunningTest {
             return newOne;
         }
 
-        public long total() {
+        long total() {
             return mapPuts.get() + mapGets.get() + mapRemoves.get();
         }
 
+        @Override
         public String toString() {
-            return "total= " + total() + ", puts:" + mapPuts.get() + ", gets:" + mapGets.get()
-                    + ", remove:" + mapRemoves.get();
+            return "total: " + total() + ", puts: " + mapPuts.get()
+                    + ", gets: " + mapGets.get() + ", remove: " + mapRemoves.get();
         }
-    }
-
-    static {
-        System.setProperty("hazelcast.version.check.enabled", "false");
-        System.setProperty("hazelcast.socket.bind.any", "false");
-        System.setProperty("hazelcast.partition.migration.interval", "0");
     }
 }

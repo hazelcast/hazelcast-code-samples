@@ -24,18 +24,16 @@ import com.hazelcast.core.MemberSelector;
 
 import java.io.Serializable;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class ForceLocalMemberToBeSafe {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         Config config = new Config();
         config.getMemberAttributeConfig().setBooleanAttribute("EAST", true);
 
-        final HazelcastInstance node = Hazelcast.newHazelcastInstance(config);
-
+        HazelcastInstance node = Hazelcast.newHazelcastInstance(config);
         IExecutorService executorService = node.getExecutorService(ForceLocalMemberToBeSafe.class.getName());
 
         Future<Boolean> result = executorService.submit(new MemberSafe(), new MemberSelector() {
@@ -47,7 +45,6 @@ public class ForceLocalMemberToBeSafe {
         });
 
         System.out.printf("# Is forcing member to be safe is successful\t: %s\n", result.get());
-
     }
 
     private static class MemberSafe implements Callable<Boolean>, HazelcastInstanceAware, Serializable {
@@ -56,7 +53,7 @@ public class ForceLocalMemberToBeSafe {
 
         @Override
         public Boolean call() throws Exception {
-            final boolean safe = node.getPartitionService().forceLocalMemberToBeSafe(5, TimeUnit.SECONDS);
+            boolean safe = node.getPartitionService().forceLocalMemberToBeSafe(5, TimeUnit.SECONDS);
             return safe;
         }
 
@@ -65,6 +62,4 @@ public class ForceLocalMemberToBeSafe {
             this.node = node;
         }
     }
-
-
 }

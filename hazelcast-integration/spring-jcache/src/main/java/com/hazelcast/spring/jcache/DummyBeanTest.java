@@ -11,7 +11,8 @@ import static java.lang.System.out;
 /**
  * Calculation time for non-cached and cached results of DummyBean.getCity() invocations
  */
-public class DummyBeanTest {
+class DummyBeanTest {
+
     static void doInvocation(ApplicationContext context) {
         IDummyBean dummy = (IDummyBean) context.getBean("dummyBean");
 

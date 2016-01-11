@@ -1,15 +1,27 @@
 package hibernate;
 
-import java.util.Properties;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-public class HibernateUtil {
+import java.util.Properties;
 
-    private static final SessionFactory sessionFactory = buildSessionFactory();
+@SuppressWarnings("unused")
+final class HibernateUtil {
+
+    private static final SessionFactory SESSION_FACTORY = buildSessionFactory();
+
+    private HibernateUtil() {
+    }
+
+    public static SessionFactory getSessionFactory() {
+        return SESSION_FACTORY;
+    }
+
+    public static void shutdown() {
+        getSessionFactory().close();
+    }
 
     private static SessionFactory buildSessionFactory() {
         try {
@@ -23,13 +35,4 @@ public class HibernateUtil {
             throw new ExceptionInInitializerError(ex);
         }
     }
-
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
-    public static void shutdown() {
-        getSessionFactory().close();
-    }
-
 }

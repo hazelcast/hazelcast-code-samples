@@ -5,12 +5,13 @@ import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
 import java.io.IOException;
 
 public class Person implements IdentifiedDataSerializable {
+
     private String name;
 
     public Person() {
     }
 
-    public Person(String name) {
+    Person(String name) {
         this.name = name;
     }
 

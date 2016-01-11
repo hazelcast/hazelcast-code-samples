@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public class Employee implements Serializable {
+
     private int salary;
 
     public Employee(int salary) {

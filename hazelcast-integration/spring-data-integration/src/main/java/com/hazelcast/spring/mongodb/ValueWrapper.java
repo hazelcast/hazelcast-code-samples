@@ -15,10 +15,12 @@
  */
 package com.hazelcast.spring.mongodb;
 
-public class ValueWrapper {
+@SuppressWarnings("unused")
+class ValueWrapper {
+
     private Object value;
 
-    public ValueWrapper(Object value) {
+    ValueWrapper(Object value) {
         this.value = value;
     }
 

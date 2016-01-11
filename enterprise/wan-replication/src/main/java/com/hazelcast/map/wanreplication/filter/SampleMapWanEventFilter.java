@@ -9,6 +9,7 @@ import com.hazelcast.map.wan.filter.MapWanEventFilter;
  * It simply allows all events to be replicated, no filtering is applied.
  */
 public class SampleMapWanEventFilter implements MapWanEventFilter {
+
     @Override
     public boolean filter(String s, EntryView entryView, WanFilterEventType wanFilterEventType) {
         return false;

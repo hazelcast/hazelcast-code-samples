@@ -20,6 +20,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hazelcast-integration</artifactId>
+    <packaging>pom</packaging>
 
     <parent>
         <artifactId>code-samples</artifactId>
@@ -27,10 +31,11 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>hazelcast-integration</artifactId>
-    <packaging>pom</packaging>
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <modules>
         <module>filter-based-session-replication</module>
@@ -49,12 +54,10 @@
     </modules>
 
     <dependencies>
-         <dependency>
+        <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-all</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
-
-
 </project>

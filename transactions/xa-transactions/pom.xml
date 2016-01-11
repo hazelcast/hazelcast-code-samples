@@ -9,16 +9,20 @@
         All the code samples for the XA Transactions
     </description>
 
-    <properties>
-        <atomikos-version>3.9.3</atomikos-version>
-    </properties>
-
     <parent>
         <artifactId>transactions</artifactId>
         <groupId>com.hazelcast.samples.transactions</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <atomikos-version>3.9.3</atomikos-version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -32,5 +36,4 @@
             <version>1.1.1</version>
         </dependency>
     </dependencies>
-
 </project>

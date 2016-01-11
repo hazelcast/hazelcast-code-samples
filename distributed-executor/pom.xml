@@ -17,6 +17,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <modules>
         <module>basic-executor</module>
         <module>scale-up</module>
@@ -36,5 +42,4 @@
             <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
-
 </project>

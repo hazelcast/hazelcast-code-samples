@@ -17,6 +17,7 @@
 package model;
 
 public enum CrimeCategory {
+
     MurderAndNonnegligentManslaughter("Murder and nonnegligent Manslaughter"),
     MotorVehicleTheft("Motor vehicle theft"),
     Robbery("Robbery"),
@@ -27,7 +28,7 @@ public enum CrimeCategory {
 
     private final String value;
 
-    private CrimeCategory(String value) {
+    CrimeCategory(String value) {
         this.value = value;
     }
 

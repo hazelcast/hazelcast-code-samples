@@ -2,11 +2,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <modules>
-        <module>hd-memory-examples-server</module>
-        <module>hd-memory-examples-client</module>
-    </modules>
     <packaging>pom</packaging>
 
     <artifactId>hd-memory-client-server</artifactId>
@@ -24,8 +19,13 @@
     </parent>
 
     <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-
+    <modules>
+        <module>hd-memory-examples-server</module>
+        <module>hd-memory-examples-client</module>
+    </modules>
 </project>

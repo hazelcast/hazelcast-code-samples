@@ -4,6 +4,7 @@ import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.IFunction;
 
 public class Member {
+
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IAtomicLong atomicLong = hz.getAtomicLong("counter");

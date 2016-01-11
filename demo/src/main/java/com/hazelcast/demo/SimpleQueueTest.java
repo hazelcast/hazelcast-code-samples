@@ -38,7 +38,6 @@ public final class SimpleQueueTest {
 
     /**
      * Creates a cluster and exercises a queue until stopped
-     * @param args none
      */
     public static void main(String[] args) {
         int threadCount = 5;
@@ -71,11 +70,10 @@ public final class SimpleQueueTest {
                 while (true) {
                     try {
                         Thread.sleep(STATS_SECONDS * 1000);
-                        System.out.println("cluster size:"
-                                + hz1.getCluster().getMembers().size());
+                        System.out.println("cluster size: " + hz1.getCluster().getMembers().size());
                         Stats currentStats = stats.getAndReset();
                         System.out.println(currentStats);
-                        System.out.println("Operations per Second : " + currentStats.total()
+                        System.out.println("Operations per Second: " + currentStats.total()
                                 / STATS_SECONDS);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -88,12 +86,12 @@ public final class SimpleQueueTest {
     /**
      * A basic statistics class
      */
-    public static class Stats {
+    private static class Stats {
 
         private AtomicLong offers = new AtomicLong();
         private AtomicLong polls = new AtomicLong();
 
-        public Stats getAndReset() {
+        Stats getAndReset() {
             long offersNow = offers.getAndSet(0);
             long pollsNow = polls.getAndSet(0);
             Stats newOne = new Stats();
@@ -102,12 +100,13 @@ public final class SimpleQueueTest {
             return newOne;
         }
 
-        public long total() {
+        long total() {
             return offers.get() + polls.get();
         }
 
+        @Override
         public String toString() {
-            return "total= " + total() + ", offers:" + offers.get() + ", polls:" + polls.get();
+            return "total: " + total() + ", offers: " + offers.get() + ", polls: " + polls.get();
         }
     }
 }

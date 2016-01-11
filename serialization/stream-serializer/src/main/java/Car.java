@@ -1,4 +1,5 @@
 public class Car {
+
     private String color;
     private Person owner;
 
@@ -7,19 +8,19 @@ public class Car {
         this.owner = owner;
     }
 
-    public String getColor() {
+    String getColor() {
         return color;
     }
 
-    public Person getOwner() {
+    Person getOwner() {
         return owner;
     }
 
     @Override
     public String toString() {
-        return "Car{" +
-                "color='" + color + '\'' +
-                ", owner=" + owner +
-                '}';
+        return "Car{"
+                + "color='" + color + '\''
+                + ", owner=" + owner
+                + '}';
     }
 }

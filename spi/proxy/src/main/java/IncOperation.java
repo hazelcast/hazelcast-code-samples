@@ -5,15 +5,18 @@ import com.hazelcast.spi.PartitionAwareOperation;
 
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 class IncOperation extends AbstractOperation implements PartitionAwareOperation {
-    private String objectId;
-    private int amount, returnValue;
 
-    // Important to have a no-arg constructor for deserialization
+    private String objectId;
+    private int amount;
+    private int returnValue;
+
+    // it is important to have a no-arg constructor for deserialization
     public IncOperation() {
     }
 
-    public IncOperation(String objectId, int amount) {
+    IncOperation(String objectId, int amount) {
         this.amount = amount;
         this.objectId = objectId;
     }

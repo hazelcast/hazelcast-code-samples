@@ -5,7 +5,7 @@ import javax.cache.expiry.EternalExpiryPolicy;
 import javax.cache.expiry.ExpiryPolicy;
 
 /**
- * TODO add a proper JavaDoc
+ * TODO: add a proper JavaDoc
  */
 public class ExpiryPolicyFactory implements Factory<ExpiryPolicy> {
 

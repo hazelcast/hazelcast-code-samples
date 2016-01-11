@@ -24,5 +24,4 @@ public class DeclarativeCacheSplitBrainSampleWithPassThroughCacheMergePolicy
     public static void main(String[] args) {
         new DeclarativeCacheSplitBrainSampleWithPassThroughCacheMergePolicy().run();
     }
-
 }

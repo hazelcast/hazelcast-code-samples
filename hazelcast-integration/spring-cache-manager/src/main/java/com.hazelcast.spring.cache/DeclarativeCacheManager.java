@@ -8,8 +8,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 
 public class DeclarativeCacheManager {
 
-    public static void main(String[] args) throws Exception{
-
+    public static void main(String[] args) throws Exception {
         Config config = new Config();
         config.getGroupConfig().setName("grp");
         config.getGroupConfig().setPassword("grp-pass");
@@ -19,19 +18,18 @@ public class DeclarativeCacheManager {
 
         Hazelcast.newHazelcastInstance(config);
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-        IDummyBean dummy = (IDummyBean)context.getBean("dummyBean");
+        IDummyBean dummy = (IDummyBean) context.getBean("dummyBean");
 
         System.out.println("#######  BEGIN #######");
         System.out.println("####### first call to getName method #######");
         String city = dummy.getCity();
-        System.out.println("city:" + city);
+        System.out.println("city: " + city);
         System.out.println("####### second call to getName method  #######");
         city = dummy.getCity();
-        System.out.println("city:"+ city);
+        System.out.println("city: " + city);
         System.out.println("#######  END #######");
         Thread.sleep(2);
         HazelcastClient.shutdownAll();
         Hazelcast.shutdownAll();
-
     }
 }

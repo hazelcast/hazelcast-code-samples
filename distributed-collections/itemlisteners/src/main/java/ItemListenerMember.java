@@ -1,6 +1,11 @@
-import com.hazelcast.core.*;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ICollection;
+import com.hazelcast.core.ItemEvent;
+import com.hazelcast.core.ItemListener;
 
 public class ItemListenerMember {
+
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         ICollection<String> queue = hz.getQueue("queue");

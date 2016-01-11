@@ -14,20 +14,21 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
 
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.4.xsd"
-           xmlns="http://www.hazelcast.com/schema/config"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <group>
         <name>cache</name>
         <password>dev-pass</password>
     </group>
+
     <!-- request trial key at http://hazelcast.com/hazelcast-enterprise-trial/ -->
     <license-key>YOUR_ENTERPRISE_KEY</license-key>
 
     <!-- management center is disabled by default -->
-    <management-center enabled="false" update-interval="3">http://localhost:8080/mancenter/
-    </management-center>
+    <management-center enabled="false" update-interval="3">http://localhost:8080/mancenter/</management-center>
 
     <network>
         <port auto-increment="true" port-count="100">5701</port>
@@ -61,5 +62,4 @@
     <native-memory allocator-type="POOLED" enabled="true">
         <size unit="GIGABYTES" value="3"/>
     </native-memory>
-
 </hazelcast>

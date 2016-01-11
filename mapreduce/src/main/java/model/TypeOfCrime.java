@@ -17,12 +17,13 @@
 package model;
 
 public enum TypeOfCrime {
+
     ViolentCrime("Violent Crime"),
     PropertyCrime("Property Crime");
 
     private final String value;
 
-    private TypeOfCrime(String value) {
+    TypeOfCrime(String value) {
         this.value = value;
     }
 

@@ -26,13 +26,10 @@ import model.Person;
 import tutorials.impl.StateBasedMapper;
 import tutorials.impl.ToStringPrettyfier;
 
-public class Tutorial2
-        implements Tutorial {
+public class Tutorial2 implements Tutorial {
 
     @Override
-    public void execute(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    public void execute(HazelcastInstance hazelcastInstance) throws Exception {
         JobTracker jobTracker = hazelcastInstance.getJobTracker("default");
 
         IList<Person> list = hazelcastInstance.getList("persons");
@@ -40,10 +37,10 @@ public class Tutorial2
 
         Job<String, Person> job = jobTracker.newJob(source);
 
-        // Find all people grouped by state
+        // find all people grouped by state
         // ICompletableFuture future = job.mapper(new StateBasedMapper()).submit();
 
-        // Find all people for the given state
+        // find all people for the given state
         ICompletableFuture future = job.mapper(new StateBasedMapper("CA")).submit();
 
         System.out.println(ToStringPrettyfier.toString(future.get()));

@@ -23,8 +23,8 @@ import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
 
-public class Person
-        implements DataSerializable, PartitionAware<String> {
+@SuppressWarnings("unused")
+public class Person implements DataSerializable, PartitionAware<String> {
 
     private String firstName;
     private String lastName;
@@ -136,9 +136,7 @@ public class Person
     }
 
     @Override
-    public void writeData(ObjectDataOutput out)
-            throws IOException {
-
+    public void writeData(ObjectDataOutput out) throws IOException {
         out.writeUTF(firstName);
         out.writeUTF(lastName);
         out.writeUTF(companyName);
@@ -154,9 +152,7 @@ public class Person
     }
 
     @Override
-    public void readData(ObjectDataInput in)
-            throws IOException {
-
+    public void readData(ObjectDataInput in) throws IOException {
         firstName = in.readUTF();
         lastName = in.readUTF();
         companyName = in.readUTF();
@@ -178,19 +174,19 @@ public class Person
 
     @Override
     public String toString() {
-        return "Person{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", county='" + county + '\'' +
-                ", state='" + state + '\'' +
-                ", zip=" + zip +
-                ", phone1='" + phone1 + '\'' +
-                ", phone2='" + phone2 + '\'' +
-                ", email='" + email + '\'' +
-                ", web='" + web + '\'' +
-                '}';
+        return "Person{"
+                + "firstName='" + firstName + '\''
+                + ", lastName='" + lastName + '\''
+                + ", companyName='" + companyName + '\''
+                + ", address='" + address + '\''
+                + ", city='" + city + '\''
+                + ", county='" + county + '\''
+                + ", state='" + state + '\''
+                + ", zip=" + zip
+                + ", phone1='" + phone1 + '\''
+                + ", phone2='" + phone2 + '\''
+                + ", email='" + email + '\''
+                + ", web='" + web + '\''
+                + '}';
     }
 }

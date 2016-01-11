@@ -26,13 +26,10 @@ import model.Person;
 import tutorials.impl.PersonMapper;
 import tutorials.impl.ToStringPrettyfier;
 
-public class Tutorial1
-        implements Tutorial {
+public class Tutorial1 implements Tutorial {
 
     @Override
-    public void execute(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    public void execute(HazelcastInstance hazelcastInstance) throws Exception {
         JobTracker jobTracker = hazelcastInstance.getJobTracker("default");
 
         IList<Person> list = hazelcastInstance.getList("persons");
@@ -40,7 +37,7 @@ public class Tutorial1
 
         Job<String, Person> job = jobTracker.newJob(source);
 
-        // Find all people named James
+        // find all people named James
         ICompletableFuture future = job.mapper(new PersonMapper("James")).submit();
 
         System.out.println(ToStringPrettyfier.toString(future.get()));

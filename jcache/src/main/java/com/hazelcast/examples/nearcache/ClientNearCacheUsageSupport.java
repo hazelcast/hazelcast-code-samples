@@ -18,22 +18,23 @@ import javax.cache.spi.CachingProvider;
 import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public abstract class ClientNearCacheUsageSupport {
 
     protected static final String DEFAULT_CACHE_NAME = "ClientCache";
 
-    protected final InMemoryFormat DEFAULT_IN_MEMORY_FORMAT;
+    protected final InMemoryFormat inMemoryFormat;
 
     protected HazelcastInstance serverInstance;
     protected List<HazelcastInstance> clients = new LinkedList<HazelcastInstance>();
 
     protected ClientNearCacheUsageSupport() {
-        DEFAULT_IN_MEMORY_FORMAT = InMemoryFormat.BINARY;
+        inMemoryFormat = InMemoryFormat.BINARY;
         init();
     }
 
     protected ClientNearCacheUsageSupport(InMemoryFormat defaultInMemoryFormat) {
-        DEFAULT_IN_MEMORY_FORMAT = defaultInMemoryFormat;
+        inMemoryFormat = defaultInMemoryFormat;
         init();
     }
 
@@ -67,11 +68,11 @@ public abstract class ClientNearCacheUsageSupport {
     }
 
     protected CacheConfig createCacheConfig() {
-        return createCacheConfig(DEFAULT_CACHE_NAME, DEFAULT_IN_MEMORY_FORMAT);
+        return createCacheConfig(DEFAULT_CACHE_NAME, inMemoryFormat);
     }
 
     protected CacheConfig createCacheConfig(String cacheName) {
-        return createCacheConfig(cacheName, DEFAULT_IN_MEMORY_FORMAT);
+        return createCacheConfig(cacheName, inMemoryFormat);
     }
 
     protected CacheConfig createCacheConfig(InMemoryFormat inMemoryFormat) {
@@ -85,11 +86,11 @@ public abstract class ClientNearCacheUsageSupport {
     }
 
     protected NearCacheConfig createNearCacheConfig() {
-        return createNearCacheConfig(DEFAULT_CACHE_NAME, DEFAULT_IN_MEMORY_FORMAT);
+        return createNearCacheConfig(DEFAULT_CACHE_NAME, inMemoryFormat);
     }
 
     protected NearCacheConfig createNearCacheConfig(String cacheName) {
-        return createNearCacheConfig(cacheName, DEFAULT_IN_MEMORY_FORMAT);
+        return createNearCacheConfig(cacheName, inMemoryFormat);
     }
 
     protected NearCacheConfig createNearCacheConfig(InMemoryFormat inMemoryFormat) {
@@ -132,5 +133,4 @@ public abstract class ClientNearCacheUsageSupport {
     protected String generateValueFromKey(Integer key) {
         return "Value-" + key;
     }
-
 }

@@ -27,5 +27,4 @@ public class ProgrammaticCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy
     public static void main(String[] args) {
         new ProgrammaticCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy().run();
     }
-
 }

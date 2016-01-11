@@ -6,6 +6,7 @@
     <artifactId>learning-basics</artifactId>
     <name>Learning Basics</name>
     <groupId>com.hazelcast.samples.basics</groupId>
+
     <description>
         All the code samples for the learning basics chapter
     </description>
@@ -16,6 +17,12 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <modules>
         <module>configure-programmatic</module>
@@ -35,5 +42,4 @@
             <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
-
 </project>

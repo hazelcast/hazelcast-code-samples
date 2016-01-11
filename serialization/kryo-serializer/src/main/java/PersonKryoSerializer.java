@@ -10,8 +10,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class PersonKryoSerializer implements StreamSerializer<Person> {
-    //Kryo instance is not threadsafe, but expensive, so that is why it is placed in a threadlocal.
-    private static final ThreadLocal<Kryo> kryoThreadLocal = new ThreadLocal<Kryo>() {
+
+    // Kryo instance is not threadsafe, but expensive, so that is why it is placed in a ThreadLocal.
+    private static final ThreadLocal<Kryo> KRYO_THREAD_LOCAL = new ThreadLocal<Kryo>() {
         @Override
         protected Kryo initialValue() {
             Kryo kryo = new Kryo();
@@ -25,7 +26,7 @@ public class PersonKryoSerializer implements StreamSerializer<Person> {
     }
 
     public void write(ObjectDataOutput objectDataOutput, Person product) throws IOException {
-        Kryo kryo = kryoThreadLocal.get();
+        Kryo kryo = KRYO_THREAD_LOCAL.get();
 
         Output output = new Output((OutputStream) objectDataOutput);
         kryo.writeObject(output, product);
@@ -35,11 +36,10 @@ public class PersonKryoSerializer implements StreamSerializer<Person> {
     public Person read(ObjectDataInput objectDataInput) throws IOException {
         InputStream in = (InputStream) objectDataInput;
         Input input = new Input(in);
-        Kryo kryo = kryoThreadLocal.get();
+        Kryo kryo = KRYO_THREAD_LOCAL.get();
         return kryo.readObject(input, Person.class);
     }
 
     public void destroy() {
     }
 }
-

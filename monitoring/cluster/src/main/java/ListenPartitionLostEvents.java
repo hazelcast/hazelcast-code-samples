@@ -22,10 +22,11 @@ import com.hazelcast.partition.PartitionLostListener;
 public class ListenPartitionLostEvents {
 
     public static void main(String[] args) {
-        final HazelcastInstance instance1 = HazelcastInstanceFactory.newHazelcastInstance(null);
-        final HazelcastInstance instance2 = HazelcastInstanceFactory.newHazelcastInstance(null);
+        HazelcastInstance instance1 = HazelcastInstanceFactory.newHazelcastInstance(null);
+        HazelcastInstance instance2 = HazelcastInstanceFactory.newHazelcastInstance(null);
 
-        instance1.getMap("map1").put(0, 0); // for initializing partitions
+        // initialize partitions
+        instance1.getMap("map1").put(0, 0);
 
         instance1.getPartitionService().addPartitionLostListener(new PartitionLostListener() {
             @Override
@@ -36,5 +37,4 @@ public class ListenPartitionLostEvents {
 
         instance2.getLifecycleService().terminate();
     }
-
 }

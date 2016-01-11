@@ -30,7 +30,6 @@ import java.io.FilenameFilter;
 public class XATransaction {
 
     public static void main(String[] args) throws Exception {
-
         cleanAtomikosLogs();
 
         HazelcastInstance instance = Hazelcast.newHazelcastInstance();
@@ -50,20 +49,18 @@ public class XATransaction {
 
         IMap<Object, Object> m = instance.getMap("map");
         Object val = m.get("key");
-        System.out.println("value:" + val);
+        System.out.println("value: " + val);
+
         cleanAtomikosLogs();
-        System.exit(0);
+        Hazelcast.shutdownAll();
     }
 
-    public static void cleanAtomikosLogs() {
+    private static void cleanAtomikosLogs() {
         try {
             File currentDir = new File(".");
             final File[] tmLogs = currentDir.listFiles(new FilenameFilter() {
                 public boolean accept(File dir, String name) {
-                    if (name.endsWith(".epoch") || name.startsWith("tmlog")) {
-                        return true;
-                    }
-                    return false;
+                    return name.endsWith(".epoch") || name.startsWith("tmlog");
                 }
             });
             for (File tmLog : tmLogs) {

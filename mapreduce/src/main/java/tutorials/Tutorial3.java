@@ -26,13 +26,10 @@ import model.Person;
 import tutorials.impl.StateBasedCountMapper;
 import tutorials.impl.ToStringPrettyfier;
 
-public class Tutorial3
-        implements Tutorial {
+public class Tutorial3 implements Tutorial {
 
     @Override
-    public void execute(HazelcastInstance hazelcastInstance)
-            throws Exception {
-
+    public void execute(HazelcastInstance hazelcastInstance) throws Exception {
         JobTracker jobTracker = hazelcastInstance.getJobTracker("default");
 
         IList<Person> list = hazelcastInstance.getList("persons");
@@ -40,13 +37,13 @@ public class Tutorial3
 
         Job<String, Person> job = jobTracker.newJob(source);
 
-        // Collect all people by state
+        // collect all people by state
         ICompletableFuture future = job.mapper(new StateBasedCountMapper()).submit();
 
-        // Count people by state
+        // count people by state
         // ICompletableFuture future = job.mapper(new StateBasedCountMapper()).reducer(new CountReducerFactory()).submit();
 
-        // Same as above but with precalculation per node
+        // same as above but with precalculation per node
         // ICompletableFuture future = job.mapper(new StateBasedCountMapper()).combiner(new CountCombinerFactory())
         //                                .reducer(new CountReducerFactory()).submit();
 

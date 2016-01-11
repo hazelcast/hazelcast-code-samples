@@ -4,7 +4,6 @@ import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
 import javax.cache.expiry.ExpiryPolicy;
 import javax.cache.expiry.ModifiedExpiryPolicy;
-
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,7 +19,7 @@ public class HiDensityCacheTTLUsage extends HiDensityCacheUsageSupport {
         init();
 
         try {
-            ICache cache = createCache("MyCacheForTTLUsage");
+            ICache<String, String> cache = createCache("MyCacheForTTLUsage");
 
             // ====================================================================== //
 
@@ -33,7 +32,8 @@ public class HiDensityCacheTTLUsage extends HiDensityCacheUsageSupport {
 
             System.out.println("Wait 1.5 seconds ...");
 
-            Thread.sleep(1500); // Wait 1.5 seconds (0.5 second threshold)
+            // wait 1.5 seconds (0.5 second threshold)
+            Thread.sleep(1500);
 
             System.out.println("Get value with key \"key1\": " + cache.get("key"));
 
@@ -46,7 +46,7 @@ public class HiDensityCacheTTLUsage extends HiDensityCacheUsageSupport {
             cache.put("key", "value1", new CreatedExpiryPolicy(Duration.ZERO));
             System.out.println("Put value \"value1\" with key \"key\" and with zero expiry duration");
 
-            // Should not be there because expire duration is "0"
+            // should not be there because expire duration is "0"
 
             System.out.println("Get value with key \"key1\": " + cache.get("key"));
 
@@ -63,7 +63,8 @@ public class HiDensityCacheTTLUsage extends HiDensityCacheUsageSupport {
 
             System.out.println("Size of cache: " + cache.size());
 
-            Thread.sleep(10000); // Wait 10 seconds or more, doesn't matter. Because expire duration is "ETERNAL"
+            // wait 10 seconds or more, doesn't matter, because expire duration is "ETERNAL"
+            // Thread.sleep(10000);
 
             System.out.println("Get value with key \"key1\": " + cache.get("key"));
 
@@ -78,5 +79,4 @@ public class HiDensityCacheTTLUsage extends HiDensityCacheUsageSupport {
             destroy();
         }
     }
-
 }

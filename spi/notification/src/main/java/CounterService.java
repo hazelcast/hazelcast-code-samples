@@ -1,13 +1,14 @@
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.partition.MigrationEndpoint;
 import com.hazelcast.partition.MigrationType;
-import com.hazelcast.spi.*;
 
 import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService, MigrationAwareService {
-    public final static String NAME = "CounterService";
+
+    public static final String NAME = "CounterService";
+
     Container[] containers;
     private NodeEngine nodeEngine;
 
@@ -15,8 +16,9 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     public void init(NodeEngine nodeEngine, Properties properties) {
         this.nodeEngine = nodeEngine;
         containers = new Container[nodeEngine.getPartitionService().getPartitionCount()];
-        for (int k = 0; k < containers.length; k++)
-            containers[k] = new Container();
+        for (int i = 0; i < containers.length; i++) {
+            containers[i] = new Container();
+        }
     }
 
     @Override
@@ -40,11 +42,15 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
 
     @Override
     public Operation prepareMigrationOperation(MigrationServiceEvent e) {
-        if (e.getReplicaIndex() > 1) return null;
+        if (e.getReplicaIndex() > 1) {
+            return null;
+        }
 
         Container container = containers[e.getPartitionId()];
         Map<String, Integer> migrationData = container.toMigrationData();
-        if (migrationData.isEmpty()) return null;
+        if (migrationData.isEmpty()) {
+            return null;
+        }
         return new CounterMigrationOperation(migrationData);
     }
 
@@ -58,8 +64,9 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
 
     @Override
     public void rollbackMigration(MigrationServiceEvent e) {
-        if (e.getMigrationEndpoint() == MigrationEndpoint.DESTINATION)
+        if (e.getMigrationEndpoint() == MigrationEndpoint.DESTINATION) {
             containers[e.getPartitionId()].clear();
+        }
     }
 
     @Override

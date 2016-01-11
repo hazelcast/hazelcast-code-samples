@@ -9,33 +9,30 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserCacheLoader
-        implements CacheLoader<Integer, User>, Serializable {
+public class UserCacheLoader implements CacheLoader<Integer, User>, Serializable {
 
     private final UserDao userDao;
 
     public UserCacheLoader(UserDao userDao) {
-        // Store the dao instance created externally
+        // store the dao instance created externally
         this.userDao = userDao;
     }
 
     @Override
     public User load(Integer key) throws CacheLoaderException {
-        // Just call through into the dao
+        // just call through into the dao
         return userDao.findUserById(key);
     }
 
     @Override
-    public Map<Integer, User> loadAll(Iterable<? extends Integer> keys)
-            throws CacheLoaderException {
-
-        // Create the resulting map
+    public Map<Integer, User> loadAll(Iterable<? extends Integer> keys) throws CacheLoaderException {
+        // create the resulting map
         Map<Integer, User> loaded = new HashMap<Integer, User>();
-        // For every key in the given set of keys
+        // for every key in the given set of keys
         for (Integer key : keys) {
-            // Try to retrieve the user
+            // try to retrieve the user
             User user = userDao.findUserById(key);
-            // If user is not found do not add the key to the result set
+            // if user is not found do not add the key to the result set
             if (user != null) {
                 loaded.put(key, user);
             }

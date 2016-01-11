@@ -6,8 +6,18 @@
     <artifactId>mapstore</artifactId>
     <name>DistributedMap - MapStore</name>
 
-    <description>
-    </description>
+    <parent>
+        <groupId>com.hazelcast.samples.distributed-map</groupId>
+        <artifactId>distributed-map</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -21,12 +31,4 @@
             <version>4.3.7.Final</version>
         </dependency>
     </dependencies>
-
-    <parent>
-        <groupId>com.hazelcast.samples.distributed-map</groupId>
-        <artifactId>distributed-map</artifactId>
-        <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-
 </project>

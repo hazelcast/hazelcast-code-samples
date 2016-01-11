@@ -17,28 +17,49 @@
 package com.hazelcast.demo;
 
 import com.hazelcast.config.Config;
-import com.hazelcast.core.*;
+import com.hazelcast.core.EntryAdapter;
+import com.hazelcast.core.EntryEvent;
+import com.hazelcast.core.EntryListener;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.core.IQueue;
+import com.hazelcast.core.ITopic;
+import com.hazelcast.core.Message;
+import com.hazelcast.core.MessageListener;
 import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.internal.monitors.HealthMonitorLevel;
 import com.hazelcast.query.SqlPredicate;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 /**
  * A test of queues, topics, Maps, AtomicInteger etc.
  */
-public class AllTest {
+@SuppressWarnings("checkstyle:methodcount")
+public final class AllTest {
 
     private static final int ONE_SECOND = 1000;
     private static final int STATS_SECONDS = 10;
     private static final int SIZE = 10000;
-    final Logger logger = Logger.getLogger("All-test");
-    final HazelcastInstance hazelcast;
-    private volatile boolean running = true;
+
+    private static final Logger LOGGER = Logger.getLogger("All-test");
+
+    private final HazelcastInstance hazelcast;
     private final int nThreads;
     private final List<Runnable> operations = new ArrayList<Runnable>();
     private final ExecutorService ex;
@@ -46,8 +67,9 @@ public class AllTest {
     private final AtomicInteger messagesReceived = new AtomicInteger(0);
     private final AtomicInteger messagesSend = new AtomicInteger(0);
 
+    private volatile boolean running = true;
 
-    AllTest(int nThreads) {
+    private AllTest(int nThreads) {
         this.nThreads = nThreads;
         ex = Executors.newFixedThreadPool(nThreads);
         Config config = new Config();
@@ -65,6 +87,7 @@ public class AllTest {
 
     /**
      * Starts the test
+     *
      * @param args the number of threads to start
      */
     public static void main(String[] args) {
@@ -78,8 +101,7 @@ public class AllTest {
                     try {
                         //noinspection BusyWait
                         Thread.sleep(STATS_SECONDS * ONE_SECOND);
-                        System.out.println("cluster SIZE:"
-                                + allTest.hazelcast.getCluster().getMembers().size());
+                        System.out.println("cluster size: " + allTest.hazelcast.getCluster().getMembers().size());
                         allTest.mapStats();
                         allTest.qStats();
                         allTest.topicStats();
@@ -97,7 +119,7 @@ public class AllTest {
 
     private void log(Object message) {
         if (message != null) {
-            logger.info(message.toString());
+            LOGGER.info(message.toString());
         }
     }
 
@@ -106,10 +128,9 @@ public class AllTest {
     }
 
     private void topicStats() {
-        log("Topic Messages Sent : " + messagesSend.getAndSet(0) / STATS_SECONDS + "::: Messages Received: " + messagesReceived
-                .getAndSet(0) / STATS_SECONDS);
+        log("Topic Messages Sent: " + messagesSend.getAndSet(0) / STATS_SECONDS
+                + "::: Messages Received: " + messagesReceived.getAndSet(0) / STATS_SECONDS);
     }
-
 
     private void addOperation(List<Runnable> operations, Runnable runnable, int priority) {
         for (int i = 0; i < priority; i++) {
@@ -138,12 +159,14 @@ public class AllTest {
     /**
      * An example customer class
      */
+    @SuppressWarnings("unused")
     public static class Customer implements Serializable {
+
         private int year;
         private String name;
         private byte[] field = new byte[100];
 
-        public Customer(int i, String s) {
+        Customer(int i, String s) {
             this.year = i;
             this.name = s;
         }
@@ -167,19 +190,20 @@ public class AllTest {
         return operations;
     }
 
+    @SuppressWarnings("checkstyle:methodlength")
     private List<Runnable> loadQOperations() {
         List<Runnable> operations = new ArrayList<Runnable>();
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
-                q.offer(new byte[100]);
+                IQueue queue = hazelcast.getQueue("myQ");
+                queue.offer(new byte[100]);
             }
         }, 10);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
+                IQueue queue = hazelcast.getQueue("myQ");
                 try {
-                    q.offer(new byte[100], 10, TimeUnit.MILLISECONDS);
+                    queue.offer(new byte[100], 10, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -187,51 +211,51 @@ public class AllTest {
         }, 10);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
-                q.contains(new byte[100]);
+                IQueue queue = hazelcast.getQueue("myQ");
+                queue.contains(new byte[100]);
             }
         }, 1);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
-                q.isEmpty();
+                IQueue queue = hazelcast.getQueue("myQ");
+                queue.isEmpty();
             }
         }, 1);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
-                q.size();
+                IQueue queue = hazelcast.getQueue("myQ");
+                queue.size();
             }
         }, 1);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
-                q.remove(new byte[100]);
+                IQueue queue = hazelcast.getQueue("myQ");
+                queue.remove(new byte[100]);
             }
         }, 1);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
-                q.remainingCapacity();
+                IQueue queue = hazelcast.getQueue("myQ");
+                queue.remainingCapacity();
             }
         }, 1);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
-                q.poll();
+                IQueue queue = hazelcast.getQueue("myQ");
+                queue.poll();
             }
         }, 10);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
-                q.add(new byte[100]);
+                IQueue queue = hazelcast.getQueue("myQ");
+                queue.add(new byte[100]);
             }
         }, 10);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
+                IQueue queue = hazelcast.getQueue("myQ");
                 try {
-                    q.take();
+                    queue.take();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -239,24 +263,25 @@ public class AllTest {
         }, 10);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
+                IQueue queue = hazelcast.getQueue("myQ");
                 List list = new ArrayList();
                 for (int i = 0; i < 10; i++) {
                     list.add(new byte[100]);
                 }
-                q.addAll(list);
+                queue.addAll(list);
             }
         }, 1);
         addOperation(operations, new Runnable() {
             public void run() {
-                IQueue q = hazelcast.getQueue("myQ");
+                IQueue queue = hazelcast.getQueue("myQ");
                 List list = new ArrayList();
-                q.drainTo(list);
+                queue.drainTo(list);
             }
         }, 1);
         return operations;
     }
 
+    @SuppressWarnings("checkstyle:methodlength")
     private List<Runnable> loadMapOperations() {
         ArrayList<Runnable> operations = new ArrayList<Runnable>();
         addOperation(operations, new Runnable() {

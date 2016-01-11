@@ -28,24 +28,21 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractDataReader<T>
-        implements DataReader<T> {
+abstract class AbstractDataReader<T> implements DataReader<T> {
 
-    protected static final CellProcessor INT = new ParseInt();
-    protected static final CellProcessor NOT_NULL = new NotNull();
+    static final CellProcessor INT = new ParseInt();
+    static final CellProcessor NOT_NULL = new NotNull();
 
     private final CellProcessor[] cellProcessors;
     private final Class<T> type;
 
-    public AbstractDataReader(CellProcessor[] cellProcessors, Class<T> type) {
+    AbstractDataReader(CellProcessor[] cellProcessors, Class<T> type) {
         this.cellProcessors = cellProcessors;
         this.type = type;
     }
 
     @Override
-    public List<T> read(InputStream is)
-            throws Exception {
-
+    public List<T> read(InputStream is) throws Exception {
         List<T> elements = new ArrayList<T>();
         ICsvBeanReader reader = new CsvBeanReader(new InputStreamReader(is), CsvPreference.EXCEL_PREFERENCE);
         try {
@@ -74,8 +71,7 @@ public abstract class AbstractDataReader<T>
         char[] chars = header.toCharArray();
 
         boolean nextUpperCase = false;
-        for (int i = 0; i < chars.length; i++) {
-            char c = chars[i];
+        for (char c : chars) {
             if (Character.isWhitespace(c) || c == '_') {
                 nextUpperCase = true;
                 continue;

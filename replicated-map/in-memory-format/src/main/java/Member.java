@@ -7,9 +7,9 @@ import java.io.Serializable;
 public class Member {
 
     public static void main(String[] args) {
-        HazelcastInstance instance = Hazelcast.newHazelcastInstance();
-        ReplicatedMap binaryMap = instance.getReplicatedMap("binaryMap");
-        ReplicatedMap objectMap = instance.getReplicatedMap("objectMap");
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        ReplicatedMap<String, Person> binaryMap = hz.getReplicatedMap("binaryMap");
+        ReplicatedMap<String, Person> objectMap = hz.getReplicatedMap("objectMap");
 
         Person person = new Person();
         binaryMap.put("peter", person);
@@ -20,10 +20,9 @@ public class Member {
         System.out.println(person == objectMap.get("peter"));
         System.out.println(objectMap.get("peter") == objectMap.get("peter"));
 
-        instance.shutdown();
+        hz.shutdown();
     }
 
     public static class Person implements Serializable {
-
     }
 }

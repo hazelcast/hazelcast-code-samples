@@ -39,7 +39,8 @@ public class DeclarativeConfigurationTest {
         System.out.println("writer factory: " + cacheConfig.getCacheWriterFactory());
         System.out.println("expiry policy factory: " + cacheConfig.getExpiryPolicyFactory());
 
-        Iterable<CacheEntryListenerConfiguration> cacheEntryListenerConfigurations = cacheConfig.getCacheEntryListenerConfigurations();
+        Iterable<CacheEntryListenerConfiguration> cacheEntryListenerConfigurations
+                = cacheConfig.getCacheEntryListenerConfigurations();
         for (CacheEntryListenerConfiguration cacheEntryListenerConfiguration : cacheEntryListenerConfigurations) {
             System.out.println("listener factory: " + cacheEntryListenerConfiguration.getCacheEntryListenerFactory());
         }
@@ -53,7 +54,6 @@ public class DeclarativeConfigurationTest {
         System.out.println("max-size: " + evictionConfig.getSize());
         System.out.println("max-size-policy: " + evictionConfig.getMaximumSizePolicy());
         System.out.println("eviction-policy: " + evictionConfig.getEvictionPolicy());
-
 
         System.exit(0);
     }

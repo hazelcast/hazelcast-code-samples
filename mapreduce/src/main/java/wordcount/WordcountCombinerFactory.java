@@ -19,16 +19,14 @@ package wordcount;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
 
-public class WordcountCombinerFactory
-        implements CombinerFactory<String, Integer, Integer> {
+public class WordcountCombinerFactory implements CombinerFactory<String, Integer, Integer> {
 
     @Override
     public Combiner<Integer, Integer> newCombiner(String key) {
         return new WordcountCombiner();
     }
 
-    private static class WordcountCombiner
-            extends Combiner<Integer, Integer> {
+    private static class WordcountCombiner extends Combiner<Integer, Integer> {
 
         private int count;
 

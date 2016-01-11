@@ -8,7 +8,7 @@ import com.hazelcast.quorum.QuorumException;
 
 public class ClusterQuorum {
 
-    public static final String NAME = "AT_LEAST_TWO_NODES";
+    private static final String NAME = "AT_LEAST_TWO_NODES";
 
     public static void main(String[] args) {
         QuorumConfig quorumConfig = new QuorumConfig();

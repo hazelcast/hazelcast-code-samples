@@ -27,5 +27,4 @@ public class ProgrammaticCacheSplitBrainSampleWithLatestAccessCacheMergePolicy
     public static void main(String[] args) {
         new ProgrammaticCacheSplitBrainSampleWithLatestAccessCacheMergePolicy().run();
     }
-
 }

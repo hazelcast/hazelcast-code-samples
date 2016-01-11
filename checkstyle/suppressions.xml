@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <!-- General -->
+    <suppress checks="JavadocMethod" files=".*"/>
+    <suppress checks="JavadocType" files=".*"/>
+    <suppress checks="JavadocMethod" files=".*"/>
+    <suppress checks="JavadocVariable" files=".*"/>
+    <suppress checks="JavadocPackage" files=".*"/>
+
+    <!-- Suppress duplicate checking of copyright notice -->
+    <suppress checks="StrictDuplicateCode" files="\.java" lines="1-15"/>
+
+    <!-- Suppress some checks for JUnit tests -->
+    <suppress checks="MethodName" files="Test\.java$"/>
+    <suppress checks="TypeName" files="Test\.java$"/>
+    <suppress checks="JUnitTestCase" files="Test\.java$"/>
+    <suppress checks="ExplicitInitialization" files="Test\.java$"/>
+</suppressions>

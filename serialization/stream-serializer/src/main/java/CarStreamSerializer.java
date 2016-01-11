@@ -8,7 +8,7 @@ public class CarStreamSerializer implements StreamSerializer<Car> {
 
     @Override
     public int getTypeId() {
-        return MySerializationConstants.CAR_TYPE;
+        return MySerializationConstants.CAR_TYPE.getId();
     }
 
     @Override
@@ -28,4 +28,3 @@ public class CarStreamSerializer implements StreamSerializer<Car> {
     public void destroy() {
     }
 }
-

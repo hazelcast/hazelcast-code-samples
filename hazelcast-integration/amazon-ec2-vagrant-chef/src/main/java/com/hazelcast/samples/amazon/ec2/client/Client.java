@@ -15,8 +15,7 @@ import com.hazelcast.core.IMap;
  */
 public class Client {
 
-    public static void main(String args[]){
-
+    public static void main(String[] args) {
         ClientConfig clientConfig = new ClientConfig();
         ClientNetworkConfig clientNetworkConfig = new ClientNetworkConfig();
         ClientAwsConfig awsConfig = new ClientAwsConfig();
@@ -36,8 +35,6 @@ public class Client {
 
         // Now do something...
         IMap<Object, Object> testMap = hazelcastClientInstance.getMap("test");
-        testMap.put("testKey","testValue");
-
+        testMap.put("testKey", "testValue");
     }
-
 }

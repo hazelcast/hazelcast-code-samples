@@ -1,6 +1,5 @@
 package com.hazelcast.spring.jcache;
 
-import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.CacheSimpleConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
@@ -17,12 +16,10 @@ import javax.cache.spi.CachingProvider;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by vikgamov on 11/18/15.
- */
 @Configuration
 @EnableCaching
-public class AppConfig {
+@SuppressWarnings("unused")
+class AppConfig {
 
     @Bean
     // we want to have Hazelcast member started before client JCache provider

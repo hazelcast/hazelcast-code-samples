@@ -6,14 +6,17 @@ import com.hazelcast.spi.PartitionAwareOperation;
 import java.io.IOException;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 class IncOperation extends AbstractOperation implements PartitionAwareOperation {
+
     private String objectId;
-    private int amount, returnValue;
+    private int amount;
+    private int returnValue;
 
     public IncOperation() {
     }
 
-    public IncOperation(String objectId, int amount) {
+    IncOperation(String objectId, int amount) {
         this.amount = amount;
         this.objectId = objectId;
     }

@@ -35,15 +35,15 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  */
 public abstract class AbstractCacheSplitBrainSample {
 
-    private static final int ASSERT_EVENTUALLY_TIMEOUT = 120;
-    private static final Field originalField;
-
     protected static final String BASE_CACHE_NAME = "my-cache";
+
+    private static final int ASSERT_EVENTUALLY_TIMEOUT = 120;
+    private static final Field ORIGINAL_FIELD;
 
     static {
         try {
-            originalField = HazelcastInstanceProxy.class.getDeclaredField("original");
-            originalField.setAccessible(true);
+            ORIGINAL_FIELD = HazelcastInstanceProxy.class.getDeclaredField("original");
+            ORIGINAL_FIELD.setAccessible(true);
         } catch (Throwable t) {
             throw new IllegalStateException("Unable to get `original` field in `HazelcastInstanceProxy`!", t);
         }
@@ -64,9 +64,7 @@ public abstract class AbstractCacheSplitBrainSample {
     }
 
     protected static void assertEquals(String message, Object expected, Object actual) {
-        if (equalsRegardingNull(expected, actual)) {
-            return;
-        } else {
+        if (!equalsRegardingNull(expected, actual)) {
             failNotEquals(message, expected, actual);
         }
     }
@@ -75,7 +73,6 @@ public abstract class AbstractCacheSplitBrainSample {
         if (expected == null) {
             return actual == null;
         }
-
         return isEquals(expected, actual);
     }
 
@@ -167,15 +164,15 @@ public abstract class AbstractCacheSplitBrainSample {
             boolean completed = latch.await(ASSERT_EVENTUALLY_TIMEOUT, TimeUnit.SECONDS);
             if (message == null) {
                 assertTrue(String.format("CountDownLatch failed to complete within %d seconds , count left: %d",
-                                            ASSERT_EVENTUALLY_TIMEOUT,
-                                            latch.getCount()),
-                           completed);
+                        ASSERT_EVENTUALLY_TIMEOUT,
+                        latch.getCount()),
+                        completed);
             } else {
                 assertTrue(String.format("%s, failed to complete within %d seconds , count left: %d",
-                                            message,
-                                            ASSERT_EVENTUALLY_TIMEOUT,
-                                            latch.getCount()),
-                           completed);
+                        message,
+                        ASSERT_EVENTUALLY_TIMEOUT,
+                        latch.getCount()),
+                        completed);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -188,7 +185,7 @@ public abstract class AbstractCacheSplitBrainSample {
             // we are going to check 5 times a second
             long iterations = timeoutSeconds * 5;
             int sleepMillis = 200;
-            for (int k = 0; k < iterations; k++) {
+            for (int i = 0; i < iterations; i++) {
                 try {
                     try {
                         task.run();
@@ -216,7 +213,7 @@ public abstract class AbstractCacheSplitBrainSample {
         HazelcastInstanceImpl impl = null;
         if (hz instanceof HazelcastInstanceProxy) {
             try {
-                impl = (HazelcastInstanceImpl) originalField.get(hz);
+                impl = (HazelcastInstanceImpl) ORIGINAL_FIELD.get(hz);
             } catch (Throwable t) {
                 throw new IllegalStateException("Unable to get value of `original` in `HazelcastInstanceProxy`!", t);
             }
@@ -305,7 +302,7 @@ public abstract class AbstractCacheSplitBrainSample {
         return cacheConfig;
     }
 
-    private static class SampleLifeCycleListener implements LifecycleListener {
+    private static final class SampleLifeCycleListener implements LifecycleListener {
 
         private final CountDownLatch latch;
 
@@ -319,10 +316,9 @@ public abstract class AbstractCacheSplitBrainSample {
                 latch.countDown();
             }
         }
-
     }
 
-    private static class SampleMemberShipListener implements MembershipListener {
+    private static final class SampleMemberShipListener implements MembershipListener {
 
         private final CountDownLatch latch;
 
@@ -342,9 +338,7 @@ public abstract class AbstractCacheSplitBrainSample {
 
         @Override
         public void memberAttributeChanged(MemberAttributeEvent memberAttributeEvent) {
-
         }
-
     }
 
     protected static CountDownLatch simulateSplitBrain(HazelcastInstance h1, HazelcastInstance h2) {
@@ -361,5 +355,4 @@ public abstract class AbstractCacheSplitBrainSample {
 
         return lifeCycleListener.latch;
     }
-
 }

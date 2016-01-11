@@ -2,7 +2,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Container {
-    private final Map<String, Integer> values = new HashMap();
+
+    private final Map<String, Integer> values = new HashMap<String, Integer>();
 
     int inc(String id, int amount) {
         Integer counter = values.get(id);
@@ -23,14 +24,14 @@ class Container {
     }
 
     Map<String, Integer> toMigrationData() {
-        return new HashMap(values);
+        return new HashMap<String, Integer>(values);
     }
 
-    public void init(String objectName) {
-        values.put(objectName,0);
+    void init(String objectName) {
+        values.put(objectName, 0);
     }
 
-    public void destroy(String objectName) {
+    void destroy(String objectName) {
         values.remove(objectName);
     }
 }

@@ -50,10 +50,10 @@ public class Tutorial5
 
         Job<String, Person> job = jobTracker.newJob(source);
 
-        ICompletableFuture<List<Map.Entry<String, Integer>>> future = //
-                job.mapper(new SalaryMapper()) //
-                        .combiner(new SalaryCombinerFactory()) //
-                        .reducer(new SalaryReducerFactory()) //
+        ICompletableFuture<List<Map.Entry<String, Integer>>> future =
+                job.mapper(new SalaryMapper())
+                        .combiner(new SalaryCombinerFactory())
+                        .reducer(new SalaryReducerFactory())
                         .submit(new SalaryCollator());
 
         // Intermediate result
@@ -65,9 +65,9 @@ public class Tutorial5
 
         Job<String, Crime> crimeJob = jobTracker.newJob(crimeSource);
 
-        ICompletableFuture<Map<CrimeCategory, Integer>> crimeFuture = //
-                crimeJob.mapper(new CrimeMapper(topSalary.getKey())) //
-                        .reducer(new CrimeReducerFactory()) //
+        ICompletableFuture<Map<CrimeCategory, Integer>> crimeFuture =
+                crimeJob.mapper(new CrimeMapper(topSalary.getKey()))
+                        .reducer(new CrimeReducerFactory())
                         .submit();
 
         System.out.println(ToStringPrettyfier.toString(crimeFuture.get()));

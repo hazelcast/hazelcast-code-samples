@@ -8,7 +8,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class ConfigurableCacheManager {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         Config config = new Config();
         config.getGroupConfig().setName("grp");
         config.getGroupConfig().setPassword("grp-pass");
@@ -16,7 +16,7 @@ public class ConfigurableCacheManager {
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().addMember("127.0.0.1:5701");
 
-        //cache is configured through the map with the same name
+        // cache is configured through the map with the same name
         MapConfig mapConfig = new MapConfig("city");
         mapConfig.setTimeToLiveSeconds(3);
         config.addMapConfig(mapConfig);
@@ -29,7 +29,7 @@ public class ConfigurableCacheManager {
         context.register(DummyBean.class);
         context.refresh();
 
-        IDummyBean dummy = (IDummyBean)context.getBean("dummyBean");
+        IDummyBean dummy = (IDummyBean) context.getBean("dummyBean");
 
         System.out.println("#######  BEGIN #######");
         System.out.println("####### first call to getName method #######");
@@ -38,14 +38,14 @@ public class ConfigurableCacheManager {
 
         System.out.println("####### second call to getName method  #######");
         city = dummy.getCity();
-        System.out.println("city:"+ city);
+        System.out.println("city: " + city);
 
         //Element is evicted after 3 seconds.
         Thread.sleep(3);
 
         System.out.println("####### third call to getName method after TTL seconds  #######");
         city = dummy.getCity();
-        System.out.println("city:"+ city);
+        System.out.println("city: " + city);
         System.out.println("#######  END #######");
 
         Thread.sleep(2);

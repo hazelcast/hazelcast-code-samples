@@ -18,7 +18,8 @@ public class TransactionalTaskMember {
                 return null;
             }
         });
+
         System.out.println("Finished");
-        System.exit(0);
+        Hazelcast.shutdownAll();
     }
 }

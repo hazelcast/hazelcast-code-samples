@@ -23,14 +23,13 @@ import com.hazelcast.spi.discovery.DiscoveryStrategy;
 import com.hazelcast.spi.discovery.DiscoveryStrategyFactory;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
-public class HostsDiscoveryStrategyFactory
-        implements DiscoveryStrategyFactory {
+import static java.util.Collections.singletonList;
 
-    private static final Collection<PropertyDefinition> PROPERTIES = Collections
-            .singletonList(HostsDiscoveryConfiguration.DOMAIN);
+public class HostsDiscoveryStrategyFactory implements DiscoveryStrategyFactory {
+
+    private static final Collection<PropertyDefinition> PROPERTIES = singletonList(HostsDiscoveryConfiguration.DOMAIN);
 
     @Override
     public Class<? extends DiscoveryStrategy> getDiscoveryStrategyType() {
@@ -40,7 +39,6 @@ public class HostsDiscoveryStrategyFactory
     @Override
     public DiscoveryStrategy newDiscoveryStrategy(DiscoveryNode discoveryNode, ILogger logger,
                                                   Map<String, Comparable> properties) {
-
         return new HostsDiscoveryStrategy(logger, properties);
     }
 

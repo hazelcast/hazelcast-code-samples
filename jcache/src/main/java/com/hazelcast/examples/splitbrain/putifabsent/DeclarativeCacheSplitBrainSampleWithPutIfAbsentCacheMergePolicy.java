@@ -24,5 +24,4 @@ public class DeclarativeCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy
     public static void main(String[] args) {
         new DeclarativeCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy().run();
     }
-
 }

@@ -6,9 +6,10 @@ import com.hazelcast.util.ExceptionUtil;
 import java.util.concurrent.Future;
 
 public class CounterProxy extends AbstractDistributedObject<CounterService> implements Counter {
+
     private final String name;
 
-    public CounterProxy(String name, NodeEngine nodeEngine, CounterService counterService) {
+    CounterProxy(String name, NodeEngine nodeEngine, CounterService counterService) {
         super(nodeEngine, counterService);
         this.name = name;
     }
@@ -31,7 +32,7 @@ public class CounterProxy extends AbstractDistributedObject<CounterService> impl
         InvocationBuilder builder = nodeEngine.getOperationService()
                 .createInvocationBuilder(CounterService.NAME, operation, partitionId);
         try {
-            final Future<Integer> future = builder.invoke();
+            Future<Integer> future = builder.invoke();
             return future.get();
         } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);

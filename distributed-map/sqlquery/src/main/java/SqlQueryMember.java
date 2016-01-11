@@ -16,6 +16,8 @@ public class SqlQueryMember {
         map.put("3", new Customer("roger", true, 20));
 
         Set<Customer> employees = (Set<Customer>) map.values(new SqlPredicate("active AND age < 30"));
-        System.out.println("Employees:" + employees);
+        System.out.println("Employees: " + employees);
+
+        Hazelcast.shutdownAll();
     }
 }

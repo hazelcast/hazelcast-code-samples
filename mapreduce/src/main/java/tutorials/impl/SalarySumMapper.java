@@ -20,8 +20,7 @@ import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 import model.SalaryYear;
 
-public class SalarySumMapper
-        implements Mapper<String, SalaryYear, String, Integer> {
+public class SalarySumMapper implements Mapper<String, SalaryYear, String, Integer> {
 
     @Override
     public void map(String key, SalaryYear value, Context<String, Integer> context) {

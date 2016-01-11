@@ -4,44 +4,50 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 
-import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-//If you want to create a really distributed test, start a few AdditionalMember instances.
+import static java.lang.String.format;
+
+// if you want to create a really distributed test, start a few AdditionalMember instances
 public class IndexBenchmark {
-    public final static int MAP_SIZE = 100000;
-    public final static int TIME_SECONDS = 60;
-    public final static int UPDATE_PERCENTAGE = 10;
-    private static final String[] forenames = new String[]{"Jacob", "Sophia", "Mason", "Isabella",
+
+    private static final int MAP_SIZE = 100000;
+    private static final int TIME_SECONDS = 60;
+    private static final int UPDATE_PERCENTAGE = 10;
+
+    private static final String[] FIRST_NAMES = new String[]{"Jacob", "Sophia", "Mason", "Isabella",
             "William", "Emma", "Jayden", "Olivia", "Noah", "Ava", "Michael", "Emily",
             "Ethan", "Abigail", "Alexander", "Madison", "Aiden", "Mia", "Daniel", "Chloe"};
-    private static final String[] surnames = new String[]{"Chaney","Webb","Strickland","Gregory",
-            "Salinas","Yang","Meyer","Nicholson","Liu","Andrade","Reynolds","Shannon","Pace",
-            "Finley","Forbes","Burnett","Rich","Mcknight","Ibarra","Parrish"};
+    private static final String[] LAST_NAMES = new String[]{"Chaney", "Webb", "Strickland", "Gregory",
+            "Salinas", "Yang", "Meyer", "Nicholson", "Liu", "Andrade", "Reynolds", "Shannon", "Pace",
+            "Finley", "Forbes", "Burnett", "Rich", "Mcknight", "Ibarra", "Parrish"};
+
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
 
         test(hz, true);
         test(hz, false);
+
+        Hazelcast.shutdownAll();
     }
 
-    public static void test(HazelcastInstance hz, boolean indexEnabled) {
-        IMap personMap = hz.getMap(indexEnabled ? "personsWithIndex" : "personsWithoutIndex");
+    private static void test(HazelcastInstance hz, boolean indexEnabled) {
+        IMap<String, Person> personMap = hz.getMap(indexEnabled ? "personsWithIndex" : "personsWithoutIndex");
 
         System.out.println("===============================================");
         System.out.println("Index enabled: " + indexEnabled);
 
-        System.out.println("Generating testdata");
+        System.out.println("Generating testdata...");
         Random random = new Random();
-        for (int k = 0; k < MAP_SIZE; k++) {
-            String forename = forenames[random.nextInt(forenames.length)];
-            String surname = surnames[random.nextInt(surnames.length)];
-            personMap.put("" + k, new Person(new Name(forename,surname)));
+        for (int i = 0; i < MAP_SIZE; i++) {
+            String forename = FIRST_NAMES[random.nextInt(FIRST_NAMES.length)];
+            String surname = LAST_NAMES[random.nextInt(LAST_NAMES.length)];
+            personMap.put("" + i, new Person(new Name(forename, surname)));
         }
-        System.out.println("Testdata generated");
+        System.out.println("Testdata generated!");
 
-        System.out.println("Starting benchmark");
+        System.out.println(format("Starting benchmark (%d seconds)...", TIME_SECONDS));
         long searchCount = 0;
         long updateCount = 0;
 
@@ -50,18 +56,18 @@ public class IndexBenchmark {
             int x = random.nextInt(100);
             if (x < UPDATE_PERCENTAGE) {
                 int id = random.nextInt(MAP_SIZE);
-                String forename = forenames[random.nextInt(forenames.length)];
-                String surname = surnames[random.nextInt(surnames.length)];
-                personMap.put("" + id, new Person(new Name(forename,surname)));
+                String forename = FIRST_NAMES[random.nextInt(FIRST_NAMES.length)];
+                String surname = LAST_NAMES[random.nextInt(LAST_NAMES.length)];
+                personMap.put("" + id, new Person(new Name(forename, surname)));
                 updateCount++;
             } else {
-                Predicate predicate = Predicates.equal("name.surname", surnames[random.nextInt(surnames.length)]);
+                Predicate predicate = Predicates.equal("name.surname", LAST_NAMES[random.nextInt(LAST_NAMES.length)]);
 
-                Collection values = personMap.values(predicate);
+                personMap.values(predicate);
                 searchCount++;
             }
         }
-        System.out.println("Benchmark complete");
+        System.out.println("Benchmark complete!");
 
         long totalCount = searchCount + updateCount;
         System.out.println("Index enabled: " + indexEnabled);
@@ -72,7 +78,7 @@ public class IndexBenchmark {
         System.out.println("Total searches: " + searchCount);
         System.out.println("Total updates: " + updateCount);
 
-        System.out.println("Performance : " + ((totalCount * 1d) / TIME_SECONDS) + " operations per second");
+        System.out.println(format("Performance: %.2f operations per second", ((totalCount * 1d) / TIME_SECONDS)));
         personMap.destroy();
     }
 }

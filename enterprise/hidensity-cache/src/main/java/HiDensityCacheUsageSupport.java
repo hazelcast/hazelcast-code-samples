@@ -7,7 +7,7 @@ import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.SerializationConfig;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.GroupProperties;
+import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.instance.HazelcastInstanceFactory;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
@@ -19,9 +19,9 @@ import javax.cache.spi.CachingProvider;
 /**
  * HiDensity cache usage example
  */
-public abstract class HiDensityCacheUsageSupport {
+abstract class HiDensityCacheUsageSupport {
 
-    protected static final String LICENSE_KEY;
+    private static final String LICENSE_KEY;
 
     /**
      * It is advised using native memory (off-heap) serialization
@@ -32,83 +32,75 @@ public abstract class HiDensityCacheUsageSupport {
      * It is not necessary but it is a good practice for Hi-Density cache usage.
      * "USE_NATIVE_MEMORY_SERIALIZATION" is "false" by default since there is no guarantee that
      * "sun.misc.Unsafe" is available. But if you sure that "sun.misc.Unsafe" is available
-     *  (by the way you can also check it by "com.hazelcast.nio.UnsafeHelper.UNSAFE_AVAILABLE"),
-     *  it is advised that set "USE_NATIVE_MEMORY_SERIALIZATION" to "true.
+     * (by the way you can also check it by "com.hazelcast.nio.UnsafeHelper.UNSAFE_AVAILABLE"),
+     * it is advised that set "USE_NATIVE_MEMORY_SERIALIZATION" to "true.
      *
-     *  Note: This field is not defined as final and can be updated in
-     *        any concrete implementation of "HiDensityCacheUsageSupport".
+     * Note: This field is not defined as final and can be updated in
+     * any concrete implementation of "HiDensityCacheUsageSupport".
      */
-    protected static boolean USE_NATIVE_MEMORY_SERIALIZATION = false;
+    @SuppressWarnings("checkstyle:explicitinitialization")
+    private static boolean useNativeMemorySerialization = false;
 
     static {
         // Pass your license key as system property like
         // "-Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>"
-        LICENSE_KEY = System.getProperty(GroupProperties.PROP_ENTERPRISE_LICENSE_KEY);
+        LICENSE_KEY = GroupProperty.ENTERPRISE_LICENSE_KEY.getSystemProperty();
     }
 
-    protected static HazelcastInstance instance;
-    protected static CachingProvider cachingProvider;
-    protected static CacheManager cacheManager;
+    private static HazelcastInstance instance;
+    private static CachingProvider cachingProvider;
+    private static CacheManager cacheManager;
 
-    protected static Config createConfig() {
-        return
-                new Config()
-                        .setLicenseKey(LICENSE_KEY)
-                        .setNativeMemoryConfig(createMemoryConfig())
-                        .setSerializationConfig(createSerializationConfig());
+    private static Config createConfig() {
+        return new Config()
+                .setLicenseKey(LICENSE_KEY)
+                .setNativeMemoryConfig(createMemoryConfig())
+                .setSerializationConfig(createSerializationConfig());
     }
 
-    protected static CacheConfig createCacheConfig(String cacheName) {
-        return
-                (CacheConfig) new CacheConfig()
-                        .setEvictionConfig(createEvictionConfig())
-                        .setInMemoryFormat(InMemoryFormat.NATIVE)
-                        .setName(cacheName)
-                        .setStatisticsEnabled(true);
+    private static CacheConfig createCacheConfig(String cacheName) {
+        return (CacheConfig) new CacheConfig()
+                .setEvictionConfig(createEvictionConfig())
+                .setInMemoryFormat(InMemoryFormat.NATIVE)
+                .setName(cacheName)
+                .setStatisticsEnabled(true);
     }
 
-    protected static EvictionConfig createEvictionConfig() {
-        return
-                new EvictionConfig()
-                        .setSize(90) // %90 percentage of native memory can be used
-                        .setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
+    private static EvictionConfig createEvictionConfig() {
+        return new EvictionConfig()
+                // %90 percentage of native memory can be used
+                .setSize(90)
+                .setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
     }
 
-    protected static NativeMemoryConfig createMemoryConfig() {
+    private static NativeMemoryConfig createMemoryConfig() {
         MemorySize memorySize = new MemorySize(512, MemoryUnit.MEGABYTES);
-        return
-                new NativeMemoryConfig()
-                        .setAllocatorType(NativeMemoryConfig.MemoryAllocatorType.POOLED)
-                        .setSize(memorySize)
-                        .setEnabled(true)
-                        .setMinBlockSize(16)
-                        .setPageSize(1 << 20);
+        return new NativeMemoryConfig()
+                .setAllocatorType(NativeMemoryConfig.MemoryAllocatorType.POOLED)
+                .setSize(memorySize)
+                .setEnabled(true)
+                .setMinBlockSize(16)
+                .setPageSize(1 << 20);
     }
 
-    protected static SerializationConfig createSerializationConfig() {
+    private static SerializationConfig createSerializationConfig() {
         SerializationConfig serializationConfig = new SerializationConfig();
-        if (USE_NATIVE_MEMORY_SERIALIZATION) {
-            serializationConfig =
-                    serializationConfig
-                            // Use native memory (off-heap) based storage for holding byte stream
-                            .setAllowUnsafe(true)
-                            // Use native byte order of JVM/OS to prevent extra byte order convertions
-                            .setUseNativeByteOrder(true);
+        if (useNativeMemorySerialization) {
+            serializationConfig = serializationConfig
+                    // use native memory (off-heap) based storage for holding byte stream
+                    .setAllowUnsafe(true)
+                    // use native byte order of JVM/OS to prevent extra byte order convertions
+                    .setUseNativeByteOrder(true);
         }
         return serializationConfig;
     }
 
-    protected static ICache createCache(String cacheName) {
-        Cache<Object, Object> cache =
-                cacheManager.createCache(cacheName, createCacheConfig(cacheName));
+    static ICache createCache(String cacheName) {
+        Cache<Object, Object> cache = cacheManager.createCache(cacheName, createCacheConfig(cacheName));
         return cache.unwrap(ICache.class);
     }
 
-    protected static HazelcastInstance createInstance(Config config) {
-        return HazelcastInstanceFactory.newHazelcastInstance(config);
-    }
-
-    protected static void init() {
+    static void init() {
         instance = createInstance(createConfig());
         cachingProvider =
                 HazelcastServerCachingProvider
@@ -116,7 +108,7 @@ public abstract class HiDensityCacheUsageSupport {
         cacheManager = cachingProvider.getCacheManager();
     }
 
-    protected static void destroy() {
+    static void destroy() {
         if (cacheManager != null) {
             Iterable<String> cacheNames = cacheManager.getCacheNames();
             for (String name : cacheNames) {
@@ -128,4 +120,7 @@ public abstract class HiDensityCacheUsageSupport {
         }
     }
 
+    private static HazelcastInstance createInstance(Config config) {
+        return HazelcastInstanceFactory.newHazelcastInstance(config);
+    }
 }

@@ -2,48 +2,54 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IMap;
-import com.hazelcast.mapreduce.*;
+import com.hazelcast.mapreduce.Context;
+import com.hazelcast.mapreduce.Job;
+import com.hazelcast.mapreduce.JobTracker;
+import com.hazelcast.mapreduce.KeyValueSource;
+import com.hazelcast.mapreduce.Mapper;
+import com.hazelcast.mapreduce.Reducer;
+import com.hazelcast.mapreduce.ReducerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A simple example that sums the numbers 1 to 100.
- * Created by gluck on 27/05/2014.
+ * A simple example that sums the numbers 1 to 10000.
  */
 public class BasicMapReduce {
 
-
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        try {
+            HazelcastInstance hz1 = Hazelcast.newHazelcastInstance();
+            Hazelcast.newHazelcastInstance();
+            Hazelcast.newHazelcastInstance();
 
-        final HazelcastInstance hz1 = Hazelcast.newHazelcastInstance();
-        final HazelcastInstance hz2 = Hazelcast.newHazelcastInstance();
-        final HazelcastInstance hz3 = Hazelcast.newHazelcastInstance();
+            // create a default map
+            IMap<Integer, Integer> m1 = hz1.getMap("default");
+            for (int i = 0; i < 10000; i++) {
+                m1.put(i, i);
+            }
 
-        //Create a default map.
-        IMap<Integer, Integer> m1 = hz1.getMap("default");
-        for (int i = 0; i < 10000; i++) {
-            m1.put(i, i);
+            // create a job tracker with default config
+            JobTracker tracker = hz1.getJobTracker("myJobTracker");
+
+            // using a built-in source from our IMap. This supplies key value pairs
+            KeyValueSource<Integer, Integer> kvs = KeyValueSource.fromMap(m1);
+
+            // create a new Job with our source
+            Job<Integer, Integer> job = tracker.newJob(kvs);
+
+            // configure the job
+            ICompletableFuture<Map<String, Integer>> myMapReduceFuture
+                    = job.mapper(new MyMapper()).reducer(new MyReducerFactory()).submit();
+
+            Map<String, Integer> result = myMapReduceFuture.get();
+
+            System.out.println("The sum of the numbers 1 to 10000 is: " + result.get("all_values"));
+        } finally {
+            Hazelcast.shutdownAll();
         }
-
-        //Create a job tracker with default config.
-        JobTracker tracker = hz1.getJobTracker("myJobTracker");
-
-        //Using a built-in source from our IMap. This supplies key value pairs.
-        KeyValueSource<Integer, Integer> kvs = KeyValueSource.fromMap(m1);
-
-        //Create a new Job with our source.
-        Job<Integer, Integer> job = tracker.newJob(kvs);
-
-        //Configure the job.
-        ICompletableFuture<Map<String, Integer>> myMapReduceFuture =
-                job.mapper(new MyMapper()).reducer(new MyReducerFactory())
-                        .submit();
-
-        Map<String, Integer> result = myMapReduceFuture.get();
-
-        System.out.println("The sum of the numbers 1 to 10,000 is: " + result.get("all_values"));
     }
 
     /**
@@ -51,9 +57,9 @@ public class BasicMapReduce {
      * <p/>
      * As I want to do a sum, I am going to accumulate all of these to one key called "all_values".
      * Unfortunately, this maps all to one node. If we were doing a classic group by, we would get
-     * paralellisation.
+     * parallelization.
      */
-    public static class MyMapper implements Mapper<Integer, Integer, String, Integer> {
+    private static class MyMapper implements Mapper<Integer, Integer, String, Integer> {
 
         @Override
         public void map(Integer key, Integer value, Context<String, Integer> context) {
@@ -64,8 +70,7 @@ public class BasicMapReduce {
     /**
      * Returns a Reducer. Multiple reducers run on one Node, therefore we must provide a factory.
      */
-    public static class MyReducerFactory implements ReducerFactory<String, Integer, Integer> {
-
+    private static class MyReducerFactory implements ReducerFactory<String, Integer, Integer> {
 
         @Override
         public Reducer<Integer, Integer> newReducer(String key) {
@@ -76,7 +81,7 @@ public class BasicMapReduce {
     /**
      * Reduces to a sum. One of these if created per key.
      */
-    public static class MyReducer extends Reducer<Integer, Integer> {
+    private static class MyReducer extends Reducer<Integer, Integer> {
 
         private AtomicInteger sum = new AtomicInteger(0);
 
@@ -90,6 +95,4 @@ public class BasicMapReduce {
             return sum.get();
         }
     }
-
-
 }

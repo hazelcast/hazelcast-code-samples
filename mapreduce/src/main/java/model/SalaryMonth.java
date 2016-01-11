@@ -22,8 +22,8 @@ import com.hazelcast.nio.serialization.DataSerializable;
 
 import java.io.IOException;
 
-public class SalaryMonth
-        implements DataSerializable {
+@SuppressWarnings("unused")
+public class SalaryMonth implements DataSerializable {
 
     private int month;
     private int salary;
@@ -45,26 +45,22 @@ public class SalaryMonth
     }
 
     @Override
-    public void writeData(ObjectDataOutput out)
-            throws IOException {
-
+    public void writeData(ObjectDataOutput out)            throws IOException {
         out.writeInt(month);
         out.writeInt(salary);
     }
 
     @Override
-    public void readData(ObjectDataInput in)
-            throws IOException {
-
+    public void readData(ObjectDataInput in)            throws IOException {
         month = in.readInt();
         salary = in.readInt();
     }
 
     @Override
     public String toString() {
-        return "SalaryMonth{" +
-                "month=" + month +
-                ", salary=" + salary +
-                '}';
+        return "SalaryMonth{"
+                + "month=" + month
+                + ", salary=" + salary
+                + '}';
     }
 }

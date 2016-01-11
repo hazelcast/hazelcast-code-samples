@@ -17,6 +17,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <main.basedir>${project.parent.basedir}</main.basedir>
+    </properties>
+
     <modules>
         <module>basic</module>
         <module>client-rest</module>
@@ -29,5 +33,4 @@
             <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
-
 </project>

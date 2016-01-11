@@ -6,7 +6,7 @@ public class ModifyMember {
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        IMap<String, String> map = hz.getMap("somemap");
+        IMap<String, String> map = hz.getMap("someMap");
         String key = "" + System.nanoTime();
         String value = "1";
         map.put(key, value);

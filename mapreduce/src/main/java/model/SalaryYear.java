@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalaryYear
-        implements DataSerializable {
+@SuppressWarnings("unused")
+public class SalaryYear implements DataSerializable {
 
     private String email;
     private int year;
@@ -64,9 +64,7 @@ public class SalaryYear
     }
 
     @Override
-    public void writeData(ObjectDataOutput out)
-            throws IOException {
-
+    public void writeData(ObjectDataOutput out) throws IOException {
         out.writeUTF(email);
         out.writeInt(year);
         out.writeInt(months.size());
@@ -76,9 +74,7 @@ public class SalaryYear
     }
 
     @Override
-    public void readData(ObjectDataInput in)
-            throws IOException {
-
+    public void readData(ObjectDataInput in) throws IOException {
         email = in.readUTF();
         year = in.readInt();
         int length = in.readInt();
@@ -92,10 +88,10 @@ public class SalaryYear
 
     @Override
     public String toString() {
-        return "SalaryYear{" +
-                "email='" + email + '\'' +
-                ", year=" + year +
-                ", months=" + months +
-                '}';
+        return "SalaryYear{"
+                + "email='" + email + '\''
+                + ", year=" + year
+                + ", months=" + months
+                + '}';
     }
 }

@@ -7,6 +7,7 @@ import com.hazelcast.core.PartitionService;
 import java.util.Map;
 
 public class DataLocalityMember {
+
     public static void main(String[] args) {
         Config config = new Config();
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
@@ -19,8 +20,8 @@ public class DataLocalityMember {
         long articleId = 300;
         Customer customer = new Customer(customerId);
         customerMap.put(customerId, customer);
-        OrderKey orderKey = new OrderKey(orderId, customer.id);
-        Order order = new Order(orderKey.orderId, customer.id, articleId);
+        OrderKey orderKey = new OrderKey(orderId, customer.getId());
+        Order order = new Order(orderKey.getOrderId(), customer.getId(), articleId);
         orderMap.put(orderKey, order);
 
         PartitionService pService = hz.getPartitionService();

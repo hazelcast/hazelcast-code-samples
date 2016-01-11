@@ -34,7 +34,7 @@ public class LoggingEntryListener implements CacheEntryCreatedListener,
         onEvent(iterable);
     }
 
-    void onEvent(Iterable iterable) throws CacheEntryListenerException {
+    private void onEvent(Iterable iterable) throws CacheEntryListenerException {
         for (Object o : iterable) {
             System.out.println(o);
         }

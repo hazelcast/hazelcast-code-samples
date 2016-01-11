@@ -5,10 +5,7 @@
 
     <artifactId>entry-listener</artifactId>
     <name>ReplicatedMap - EntryListener</name>
-
-    <description>
-        ReplicatedMap : EntryListener
-    </description>
+    <description>ReplicatedMap : EntryListener</description>
 
     <parent>
         <groupId>com.hazelcast.samples.replicated-map</groupId>
@@ -17,4 +14,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>

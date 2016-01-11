@@ -20,28 +20,28 @@ import model.State;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-public class StateDataReader
-        extends AbstractDataReader<State> {
+class StateDataReader extends AbstractDataReader<State> {
 
-    public StateDataReader() {
-        super(new CellProcessor[]{ //
-                                   INT, // id
-                                   NOT_NULL, // name
-                                   NOT_NULL, // abbreviation
-                                   NOT_NULL, // country
-                                   NOT_NULL, // type
-                                   INT, // sort
-                                   NOT_NULL, // status
-                                   NOT_NULL, // occupied
-                                   new Optional(), // notes
-                                   INT, // fips_state
-                                   NOT_NULL, // assoc_press
-                                   NOT_NULL, // standard_federal_region
-                                   INT, // census_region
-                                   NOT_NULL, // census_region_name
-                                   INT, // census_division
-                                   NOT_NULL, // census_devision_name
-                                   INT // circuit_court
+    @SuppressWarnings("checkstyle:trailingcomment")
+    StateDataReader() {
+        super(new CellProcessor[]{
+                INT, // id
+                NOT_NULL, // name
+                NOT_NULL, // abbreviation
+                NOT_NULL, // country
+                NOT_NULL, // type
+                INT, // sort
+                NOT_NULL, // status
+                NOT_NULL, // occupied
+                new Optional(), // notes
+                INT, // fips_state
+                NOT_NULL, // assoc_press
+                NOT_NULL, // standard_federal_region
+                INT, // census_region
+                NOT_NULL, // census_region_name
+                INT, // census_division
+                NOT_NULL, // census_devision_name
+                INT // circuit_court
         }, State.class);
     }
 }

@@ -8,14 +8,16 @@ import com.hazelcast.map.listener.MapPartitionLostListener;
 public class ListenMapPartitionLostEvents {
 
     public static void main(String[] args) {
-        final Config config = new Config();
-        config.getMapConfig("map0").setBackupCount(0); // might lose data if any node crashes
-        config.getMapConfig("map1").setBackupCount(1); // keeps its data if a single node crashes
+        Config config = new Config();
+        // might lose data if any node crashes
+        config.getMapConfig("map0").setBackupCount(0);
+        // keeps its data if a single node crashes
+        config.getMapConfig("map1").setBackupCount(1);
 
-        final HazelcastInstance instance1 = HazelcastInstanceFactory.newHazelcastInstance(config);
-        final HazelcastInstance instance2 = HazelcastInstanceFactory.newHazelcastInstance(config);
+        HazelcastInstance instance1 = HazelcastInstanceFactory.newHazelcastInstance(config);
+        HazelcastInstance instance2 = HazelcastInstanceFactory.newHazelcastInstance(config);
 
-        final IMap<Object, Object> map0 = instance1.getMap("map0");
+        IMap<Object, Object> map0 = instance1.getMap("map0");
         map0.put(0, 0);
 
         map0.addPartitionLostListener(new MapPartitionLostListener() {
@@ -25,7 +27,7 @@ public class ListenMapPartitionLostEvents {
             }
         });
 
-        final IMap<Object, Object> map1 = instance1.getMap("map1");
+        IMap<Object, Object> map1 = instance1.getMap("map1");
         map1.addPartitionLostListener(new MapPartitionLostListener() {
             @Override
             public void partitionLost(MapPartitionLostEvent event) {

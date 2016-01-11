@@ -6,54 +6,46 @@ import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.expiry.Duration;
 
-/**
- * Created by asim on 29.09.2014.
- */
-public class MultiClientBasicExample
-        extends AbstractApp{
-
+public class MultiClientBasicExample extends AbstractApp {
 
     public static void main(String[] args) throws InterruptedException {
-//        ClusterGroup server = new ClusterGroup();
-//        server.init();
+        //ClusterGroup server = new ClusterGroup();
+        //server.init();
 
         new MultiClientBasicExample().runApp();
 
-//        server.shutdown();
+        //server.shutdown();
     }
 
-    public void runApp()
-            throws InterruptedException {
-
-        //Force client be used as a provider
+    private void runApp() throws InterruptedException {
+        // force client be used as a provider
         clientSetup();
 
-        //first thin is we need to initialize the cache Managers for each cluster
-        final CacheManager cacheManager1 = initCacheManager(uri1);
-        final CacheManager cacheManager2 = initCacheManager(uri2);
+        // first thin is we need to initialize the cache Managers for each cluster
+        CacheManager cacheManager1 = initCacheManager(uri1);
+        CacheManager cacheManager2 = initCacheManager(uri2);
 
-        //create a cache with the provided name
-        final Cache<String, Integer> cacheAtCluster1 = initCache("theCache", cacheManager1);
+        // create a cache with the provided name
+        Cache<String, Integer> cacheAtCluster1 = initCache("theCache", cacheManager1);
 
-        final Cache<String, Integer> cacheAtCluster2 = initCache("theCache", cacheManager2, Duration.ETERNAL);
+        Cache<String, Integer> cacheAtCluster2 = initCache("theCache", cacheManager2, Duration.ETERNAL);
 
-        //lets populate the content
+        // populate the content
         populateCache(cacheAtCluster1);
         populateCache(cacheAtCluster2);
 
-        //so we print the content whatever we have
+        // print the content whatever we have
         printContent(cacheAtCluster1);
         printContent(cacheAtCluster2);
-        //lets wait for 10 sec to expire the content
+
+        // wait for 10 sec to expire the content
         sleepFor(10 * 1000);
 
-        //and print the content again, and see everything has expired and values are null
+        // print the content again, and see everything has expired and values are null
         printContent(cacheAtCluster1);
         printContent(cacheAtCluster2);
 
-        //lastly shutdown the cache manager
+        // shutdown the cache manager
         shutdown();
     }
-
-
 }

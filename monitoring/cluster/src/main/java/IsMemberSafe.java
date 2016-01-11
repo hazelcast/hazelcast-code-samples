@@ -20,7 +20,6 @@ import com.hazelcast.core.Member;
 
 public class IsMemberSafe {
 
-
     public static void main(String[] args) {
         HazelcastInstance node1 = Hazelcast.newHazelcastInstance();
         HazelcastInstance node2 = Hazelcast.newHazelcastInstance();

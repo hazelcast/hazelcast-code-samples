@@ -6,12 +6,8 @@
 
     <artifactId>cluster</artifactId>
     <name>Monitoring - Cluster/Member Safety Examples</name>
-    <groupId>com.hazelcast.samples.monitoring</groupId>
     <version>0.1-SNAPSHOT</version>
-
-    <description>
-        Code samples for testing cluster/member safety.
-    </description>
+    <description>Code samples for testing cluster/member safety.</description>
 
     <parent>
         <groupId>com.hazelcast.samples.monitoring</groupId>
@@ -20,5 +16,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>

@@ -14,7 +14,7 @@ import java.io.InputStream;
 /**
  * A simple test of a cache.
  */
-public class EnterpriseCacheTestServer {
+public final class EnterpriseCacheTestServer {
 
     private static final long STATS_SECONDS = 10;
 
@@ -52,8 +52,9 @@ public class EnterpriseCacheTestServer {
         boolean master = false;
         if (input != null && input.length > 0) {
             memory = input[0];
-            if(input.length > 1 && input[1].equals("master"))
+            if (input.length > 1 && input[1].equals("master")) {
                 master = true;
+            }
         }
 
         EnterpriseCacheTestServer test = new EnterpriseCacheTestServer(memory);
@@ -90,5 +91,4 @@ public class EnterpriseCacheTestServer {
         logger.info("Starting Test with ");
         logger.info("Memory: " + memorySize.toPrettyString());
     }
-
 }

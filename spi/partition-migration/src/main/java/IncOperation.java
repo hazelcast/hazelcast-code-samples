@@ -7,18 +7,20 @@ import com.hazelcast.spi.PartitionAwareOperation;
 
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 class IncOperation extends AbstractOperation implements PartitionAwareOperation, BackupAwareOperation {
+
     private String objectId;
-    private int amount, returnValue;
+    private int amount;
+    private int returnValue;
 
     public IncOperation() {
     }
 
-    public IncOperation(String objectId, int amount) {
+    IncOperation(String objectId, int amount) {
         this.amount = amount;
         this.objectId = objectId;
     }
-
 
     @Override
     public void run() throws Exception {
@@ -37,6 +39,7 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation,
     public Object getResponse() {
         return returnValue;
     }
+
     @Override
     public int getAsyncBackupCount() {
         return 0;

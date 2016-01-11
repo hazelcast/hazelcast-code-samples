@@ -16,8 +16,12 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    
+
     <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <jclouds.version>1.9.1</jclouds.version>
     </properties>
 
@@ -74,5 +78,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
