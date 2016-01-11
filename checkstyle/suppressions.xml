@@ -13,9 +13,4 @@
 
     <!-- Suppress duplicate checking of copyright notice -->
     <suppress checks="StrictDuplicateCode" files="\.java" lines="1-15"/>
-
-    <!-- Suppress some checks for JUnit tests -->
-    <suppress checks="MethodName" files="Test\.java$"/>
-    <suppress checks="TypeName" files="Test\.java$"/>
-    <suppress checks="JUnitTestCase" files="Test\.java$"/>
 </suppressions>
