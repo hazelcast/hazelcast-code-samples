@@ -51,6 +51,8 @@
         <module>amazon-ec2-vagrant-chef</module>
         <module>mongodb</module>
         <module>spring-jcache</module>
+        <module>springboot-caching</module>
+        <module>springboot-caching-jcache</module>
     </modules>
 
     <dependencies>
