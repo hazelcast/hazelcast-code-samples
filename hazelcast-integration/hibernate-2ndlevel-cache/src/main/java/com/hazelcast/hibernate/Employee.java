@@ -1,5 +1,8 @@
 package com.hazelcast.hibernate;
 
+/**
+ * @author Esref Ozturk <esrefozturk93@gmail.com>
+ */
 @SuppressWarnings("unused")
 public class Employee {
 

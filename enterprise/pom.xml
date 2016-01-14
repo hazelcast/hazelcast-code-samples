@@ -31,6 +31,8 @@
         <module>hd-memory-client-server</module>
         <module>continuous-query-cache</module>
         <module>client-ssl</module>
+        <module>hd-imap</module>
+        <module>hot-restart</module>
     </modules>
 
     <repositories>

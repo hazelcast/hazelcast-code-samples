@@ -1,33 +1,22 @@
 package com.hazelcast.hibernate;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.hibernate.instance.HazelcastAccessor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class ManageEmployee {
 
-    private static SessionFactory factory;
-
     @SuppressWarnings({"checkstyle:cyclomaticcomplexity", "checkstyle:methodlength"})
     public static void main(String[] args) throws InterruptedException {
-        HazelcastInstance hazelcastInstance = HazelcastAccessor.getHazelcastInstance(factory);
-
+        SessionFactory factory;
         try {
-            Configuration configuration = new Configuration();
-            configuration.configure();
-            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                    configuration.getProperties()).build();
-            factory = configuration.buildSessionFactory(serviceRegistry);
+            factory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable ex) {
-            System.err.println("Failed to create sessionFactory object." + ex);
+            System.err.println("Failed to create sessionFactory object: " + ex.getMessage());
             throw new ExceptionInInitializerError(ex);
         }
 
@@ -40,30 +29,31 @@ public class ManageEmployee {
         Transaction currentTx = tx1;
         int current = 1;
 
-        for (; ; ) {
+        while (true) {
             Thread.sleep(100);
-            System.out.print("[" + current + ". session]command: ");
+            System.out.print("[" + current + ". session] Enter command: ");
             String command = reader.nextLine();
             if (command.equals("list")) {
-                List<Employee> employees = currentSession.createQuery("FROM Employee").list();
-                for (Employee employee : employees) {
+                List employees = currentSession.createQuery("FROM Employee").list();
+                for (Object entry : employees) {
+                    Employee employee = (Employee) entry;
                     System.out.print("Id: " + employee.getId());
-                    System.out.print(" First Name: " + employee.getFirstName());
-                    System.out.print(" Last Name: " + employee.getLastName());
-                    System.out.println(" Salary: " + employee.getSalary());
+                    System.out.print(", first name: " + employee.getFirstName());
+                    System.out.print(", last name: " + employee.getLastName());
+                    System.out.println(", salary: " + employee.getSalary());
                 }
             } else if (command.equals("add")) {
                 System.out.print("Id: ");
                 int id = reader.nextInt();
                 reader.nextLine();
-                System.out.print("First Name: ");
-                String firstName = reader.nextLine();
-                System.out.print("Last Name: ");
-                String lastName = reader.nextLine();
+                System.out.print("First name: ");
+                String fname = reader.nextLine();
+                System.out.print("Last name: ");
+                String lname = reader.nextLine();
                 System.out.print("Salary: ");
                 int salary = reader.nextInt();
                 reader.nextLine();
-                Employee employee = new Employee(id, firstName, lastName, salary);
+                Employee employee = new Employee(id, fname, lname, salary);
                 currentSession.save(employee);
             } else if (command.equals("delete")) {
                 System.out.print("EmployeeID: ");
@@ -118,7 +108,7 @@ public class ManageEmployee {
                     current = 1;
                 }
             } else {
-                System.out.println("command not found. Use help menu");
+                System.out.println("Command not found. Use help.");
             }
         }
     }

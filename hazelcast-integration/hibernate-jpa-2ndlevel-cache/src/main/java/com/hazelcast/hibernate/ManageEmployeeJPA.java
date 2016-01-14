@@ -1,5 +1,6 @@
 package com.hazelcast.hibernate;
 
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.hibernate.instance.HazelcastAccessor;
@@ -25,13 +26,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * @author tgrl
+ */
 public class ManageEmployeeJPA {
 
-    private static final String FIRST_NAME = "John ";
-    private static final String LAST_NAME = "Dow ";
-    private static final int ENTRY_COUNT = 20;
-    private static final String SELECT_A_FROM_EMPLOYEE_A = "Select a from Employee a";
-
+    public static final String FIRST_NAME = "John ";
+    public static final String LAST_NAME = "Dow ";
+    public static final int ENTRY_COUNT = 20;
+    public static final String SELECT_A_FROM_EMPLOYEE_A = "Select a from Employee a";
     private static EntityManager em;
     private static Statistics statistics;
     private static HazelcastInstance hazelcast;
@@ -39,7 +42,8 @@ public class ManageEmployeeJPA {
     public static void main(String[] args) {
         init();
         populateDb();
-        processConsoleComand();
+        processConsoleCommand();
+        Hazelcast.shutdownAll();
     }
 
     private static void populateDb() {
@@ -78,7 +82,7 @@ public class ManageEmployeeJPA {
         }
     }
 
-    private static void processConsoleComand() {
+    private static void processConsoleCommand() {
         Scanner reader = new Scanner(System.in);
         while (true) {
             System.out.println("Command: ");
@@ -96,7 +100,6 @@ public class ManageEmployeeJPA {
                 String lname = reader.nextLine();
                 System.out.print("Salary: ");
                 int salary = reader.nextInt();
-
                 createEmployee(id, fname, lname, salary);
             } else if (command.equals("remove")) {
                 System.out.println("Key: ");
@@ -114,7 +117,6 @@ public class ManageEmployeeJPA {
                 int salary = reader.nextInt();
                 System.out.print("Key: ");
                 int key = reader.nextInt();
-
                 updateEmployee(id, fname, lname, salary, key);
             } else if (command.equals("show")) {
                 System.out.println("Key: ");
@@ -122,10 +124,11 @@ public class ManageEmployeeJPA {
                 showEmployee(id);
             } else if (command.equals("stats")) {
                 printStatistics();
+            } else if (command.endsWith("exit")) {
+                break;
             } else {
                 System.err.println("Command not found: " + command);
             }
-            reader.nextLine();
         }
     }
 
@@ -168,8 +171,7 @@ public class ManageEmployeeJPA {
         }
 
         String regionName = "com.hazelcast.hibernate.Employee";
-        SecondLevelCacheStatistics cacheStats = statistics.getSecondLevelCacheStatistics(
-                regionName);
+        SecondLevelCacheStatistics cacheStats = statistics.getSecondLevelCacheStatistics(regionName);
         if (cacheStats != null) {
             System.out.println("Hibernate.SecondLevelCacheStatistics stats for " + regionName);
             System.out.println(cacheStats);

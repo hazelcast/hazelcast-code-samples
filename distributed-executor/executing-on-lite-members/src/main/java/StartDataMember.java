@@ -10,7 +10,9 @@ public class StartDataMember {
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IExecutorService executor = hz.getExecutorService("executor");
+
         Future<Integer> future = executor.submit(new ComputationHeavyTask(), MemberSelectors.LITE_MEMBER_SELECTOR);
+
         System.out.println("Result: " + future.get());
     }
 }

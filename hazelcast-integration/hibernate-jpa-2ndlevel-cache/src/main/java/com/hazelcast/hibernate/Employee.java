@@ -6,9 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @author tgrl
+ */
 @Entity
 @Cacheable
-@Table(name = "EMPLOYEE")
+@Table(name = "employee")
 @SuppressWarnings("unused")
 public class Employee {
 

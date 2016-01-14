@@ -13,6 +13,7 @@ public class MasterMember {
         for (int i = 0; i < 10; i++) {
             map.put(UUID.randomUUID().toString(), "");
         }
+
         IExecutorService executor = hz.getExecutorService("executor");
         for (String key : map.keySet()) {
             executor.executeOnKeyOwner(new VerifyTask(key), key);

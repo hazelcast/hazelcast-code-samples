@@ -17,7 +17,7 @@ public class DeclarativeCacheSplitBrainSampleWithPassThroughCacheMergePolicy
     }
 
     @Override
-    protected Cache getCache(String cacheName, CacheManager cacheManager) {
+    protected Cache<String, Object> getCache(String cacheName, CacheManager cacheManager) {
         return cacheManager.getCache(cacheName);
     }
 

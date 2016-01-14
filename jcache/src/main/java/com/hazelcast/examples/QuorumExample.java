@@ -22,19 +22,21 @@ public class QuorumExample {
         // this creates a new node and joins the cluster creating a cluster with 2 nodes
         CacheManager cacheManager = Caching.getCachingProvider().getCacheManager();
 
+        // Quorum will succeed
         Cache<String, String> cache = cacheManager.getCache(CACHE_NAME);
-        cache.put("key", "value");
+        cache.put("key", "we have the quorum");
 
-        System.out.println("Quorum is satisfied and key/value put into the cache without problem");
+        System.out.println("Quorum is satisfied, so the following put will throw no exception");
 
-        System.out.println("Now killing one instance, and there won't be enough members for quorum presence");
+        System.out.println("Shutdown one instance, so there won't be enough members for quorum presence");
         instance1.getLifecycleService().shutdown();
 
-        System.out.println("Following put operation will fail");
+        // Quorum will fail
+        System.out.println("The following put operation will fail");
         try {
-            cache.put("key2", "value2");
-        } catch (Exception e) {
-            System.out.println("Put operation failed with exception -> " + e.getMessage());
+            cache.put("key2", "will not succeed");
+        } catch (Exception expected) {
+            System.out.println("Put operation failed with expected QuorumException: " + expected.getMessage());
         }
         Hazelcast.shutdownAll();
     }

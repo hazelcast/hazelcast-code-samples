@@ -16,6 +16,7 @@ public class MasterMember {
             map.put(UUID.randomUUID().toString(), 1);
         }
         IExecutorService executor = hz.getExecutorService("executor");
+
         Map<Member, Future<Integer>> result = executor.submitToAllMembers(new SumTask());
         int sum = 0;
         for (Future<Integer> future : result.values()) {

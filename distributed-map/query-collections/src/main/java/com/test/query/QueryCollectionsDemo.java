@@ -16,10 +16,12 @@ public class QueryCollectionsDemo {
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        IMap<String, Person> map = hz.getMap("map");
+        IMap<Integer, Person> map = hz.getMap("map");
 
-        map.put("1", new Person("peter", limb("left-hand"), limb("right-hand")));
-        map.put("2", new Person("hans", limb("left-leg"), limb("right-leg")));
+        map.put(1, new Person("Georg", limb("left-leg"), limb("right-leg")));
+        map.put(2, new Person("Peter", limb("left-hand"), limb("right-hand")));
+        map.put(3, new Person("Hans", limb("left-leg"), limb("right-leg")));
+        map.put(4, new Person("Stefanie", limb("left-arm"), limb("right-arm")));
 
         Set<Person> employees = (Set<Person>) map.values(new SqlPredicate("limbs[any].name == right-leg"));
         System.out.println("People: " + employees);
@@ -27,7 +29,7 @@ public class QueryCollectionsDemo {
         Hazelcast.shutdownAll();
     }
 
-    static final class Person implements Serializable {
+    public static final class Person implements Serializable {
 
         final String name;
         final List<Limb> limbs;
@@ -39,30 +41,20 @@ public class QueryCollectionsDemo {
 
         @Override
         public String toString() {
-            return "Person{"
-                    + "name='" + name + '\''
-                    + ", limbs=" + limbs
-                    + '}';
+            return "Person{name='" + name + "'}";
         }
     }
 
-    static final class Limb implements Serializable {
+    public static class Limb implements Serializable {
 
         final String name;
 
-        Limb(String name) {
+        public Limb(String name) {
             this.name = name;
         }
 
-        static Limb limb(String name) {
+        public static Limb limb(String name) {
             return new Limb(name);
-        }
-
-        @Override
-        public String toString() {
-            return "Limb{"
-                    + "name='" + name + '\''
-                    + '}';
         }
     }
 }
