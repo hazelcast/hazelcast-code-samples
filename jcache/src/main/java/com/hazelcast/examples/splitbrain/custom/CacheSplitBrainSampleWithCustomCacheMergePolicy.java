@@ -25,13 +25,14 @@ import java.util.concurrent.CountDownLatch;
  */
 abstract class CacheSplitBrainSampleWithCustomCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
+    private static final String CACHE_NAME = BASE_CACHE_NAME + "-custom";
+
     protected abstract Config getConfig();
 
-    protected abstract Cache<String, Object> getCache(String cacheName, CacheManager cacheManager);
+    protected abstract Cache getCache(String cacheName, CacheManager cacheManager);
 
     protected void run() {
         try {
-            final String CACHE_NAME = BASE_CACHE_NAME + "-custom";
             Config config = getConfig();
             HazelcastInstance h1 = Hazelcast.newHazelcastInstance(config);
             HazelcastInstance h2 = Hazelcast.newHazelcastInstance(config);
@@ -47,13 +48,13 @@ abstract class CacheSplitBrainSampleWithCustomCacheMergePolicy extends AbstractC
             Cache<String, Object> cache1 = getCache(CACHE_NAME, cacheManager1);
             Cache<String, Object> cache2 = getCache(CACHE_NAME, cacheManager2);
 
-            // TODO We assume that until here and also while doing get/put, cluster is still splitted.
-            // This assumptions seems fragile due to time sensitivity.
+            // TODO We assume that until here and also while doing get/put, cluster is still split
+            // this assumptions seems fragile due to time sensitivity
 
             String key = generateKeyOwnedBy(h1);
             cache1.put(key, "value");
 
-            cache2.put(key, 1);
+            cache2.put(key, Integer.valueOf(1));
 
             assertOpenEventually(splitBrainCompletedLatch);
             assertClusterSizeEventually(2, h1);

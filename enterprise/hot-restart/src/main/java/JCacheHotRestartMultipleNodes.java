@@ -16,11 +16,11 @@ public class JCacheHotRestartMultipleNodes {
 
     private static final String LICENSE_KEY = "---- LICENSE KEY ----";
 
-    private static final String hotRestartRootDir = System.getProperty("java.io.tmpdir")
+    private static final String HOT_RESTART_ROOT_DIR = System.getProperty("java.io.tmpdir")
             + File.separatorChar + "hazelcast-hot-restart";
 
     public static void main(String[] args) {
-        IOUtil.delete(new File(hotRestartRootDir));
+        IOUtil.delete(new File(HOT_RESTART_ROOT_DIR));
 
         HazelcastInstance instance1 = newHazelcastInstance(5701);
         HazelcastInstance instance2 = newHazelcastInstance(5702);
@@ -64,7 +64,7 @@ public class JCacheHotRestartMultipleNodes {
                 .addMember("127.0.0.1:5702");
 
         HotRestartPersistenceConfig hotRestartConfig = config.getHotRestartPersistenceConfig();
-        hotRestartConfig.setEnabled(true).setBaseDir(new File(hotRestartRootDir));
+        hotRestartConfig.setEnabled(true).setBaseDir(new File(HOT_RESTART_ROOT_DIR));
 
         return Hazelcast.newHazelcastInstance(config);
     }

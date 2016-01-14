@@ -40,18 +40,18 @@ import static java.lang.System.out;
  * @author Viktor Gamov on 12/26/15.
  *         Twitter: @gamussa
  */
-
 @SpringBootApplication(scanBasePackages = "com.hazelcast.springboot.caching.BootifulClient")
 // disable Hazelcast Auto Configuration, and use JCache configuration for the client example
 @EnableAutoConfiguration(exclude = {HazelcastAutoConfiguration.class})
 @EnableCaching
+@SuppressWarnings("unused")
 public class BootifulClient {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder()
-            .sources(BootifulClient.class)
-            .profiles("client")
-            .run(args);
+                .sources(BootifulClient.class)
+                .profiles("client")
+                .run(args);
     }
 
     @Bean
@@ -65,7 +65,8 @@ public class BootifulClient {
         @Autowired
         IDummyBean dummy;
 
-        @Override public void run(String... strings) throws Exception {
+        @Override
+        public void run(String... strings) throws Exception {
 
             String logFormat = "%s call took %d millis with result: %s";
             long start1 = nanoTime();

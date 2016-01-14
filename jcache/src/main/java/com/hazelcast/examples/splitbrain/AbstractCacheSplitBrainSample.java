@@ -35,15 +35,15 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  */
 public abstract class AbstractCacheSplitBrainSample {
 
-    private static final int ASSERT_EVENTUALLY_TIMEOUT = 120;
-    private static final Field originalField;
-
     protected static final String BASE_CACHE_NAME = "my-cache";
+
+    private static final int ASSERT_EVENTUALLY_TIMEOUT = 120;
+    private static final Field ORIGINAL_FIELD;
 
     static {
         try {
-            originalField = HazelcastInstanceProxy.class.getDeclaredField("original");
-            originalField.setAccessible(true);
+            ORIGINAL_FIELD = HazelcastInstanceProxy.class.getDeclaredField("original");
+            ORIGINAL_FIELD.setAccessible(true);
         } catch (Throwable t) {
             throw new IllegalStateException("Unable to get `original` field in `HazelcastInstanceProxy`!", t);
         }
@@ -64,10 +64,9 @@ public abstract class AbstractCacheSplitBrainSample {
     }
 
     protected static void assertEquals(String message, Object expected, Object actual) {
-        if (equalsRegardingNull(expected, actual)) {
-            return;
+        if (!equalsRegardingNull(expected, actual)) {
+            failNotEquals(message, expected, actual);
         }
-        failNotEquals(message, expected, actual);
     }
 
     private static boolean equalsRegardingNull(Object expected, Object actual) {
@@ -93,8 +92,8 @@ public abstract class AbstractCacheSplitBrainSample {
         String expectedString = String.valueOf(expected);
         String actualString = String.valueOf(actual);
         if (expectedString.equals(actualString)) {
-            return formatted
-                    + "expected: " + formatClassAndValue(expected, expectedString)
+            return formatted + "expected: "
+                    + formatClassAndValue(expected, expectedString)
                     + " but was: " + formatClassAndValue(actual, actualString);
         } else {
             return formatted + "expected:<" + expectedString + "> but was:<" + actualString + ">";
@@ -138,17 +137,12 @@ public abstract class AbstractCacheSplitBrainSample {
     protected static void assertClusterSize(int expectedSize, HazelcastInstance instance) {
         int clusterSize = instance.getCluster().getMembers().size();
         if (expectedSize != clusterSize) {
-            Node node = getNode(instance);
-            if (node == null) {
-                throw new NullPointerException("node is null!");
-            }
-            ConnectionManager connectionManager = node.getConnectionManager();
+            ConnectionManager connectionManager = getNode(instance).getConnectionManager();
             int activeConnectionCount = connectionManager.getActiveConnectionCount();
-            throw new AssertionError(String.format(
-                    "Cluster size is not correct. Expected: %d Actual: %d ActiveConnectionCount: %d",
+            throw new AssertionError(String.format("Cluster size is not correct. Expected: %d Actual: %d %s",
                     expectedSize,
                     clusterSize,
-                    activeConnectionCount));
+                    "ActiveConnectionCount: " + activeConnectionCount));
         }
     }
 
@@ -169,12 +163,12 @@ public abstract class AbstractCacheSplitBrainSample {
         try {
             boolean completed = latch.await(ASSERT_EVENTUALLY_TIMEOUT, TimeUnit.SECONDS);
             if (message == null) {
-                assertTrue(String.format("CountDownLatch failed to complete within %d seconds, count left: %d",
+                assertTrue(String.format("CountDownLatch failed to complete within %d seconds , count left: %d",
                         ASSERT_EVENTUALLY_TIMEOUT,
                         latch.getCount()),
                         completed);
             } else {
-                assertTrue(String.format("%s, failed to complete within %d seconds, count left: %d",
+                assertTrue(String.format("%s, failed to complete within %d seconds , count left: %d",
                         message,
                         ASSERT_EVENTUALLY_TIMEOUT,
                         latch.getCount()),
@@ -191,7 +185,7 @@ public abstract class AbstractCacheSplitBrainSample {
             // we are going to check 5 times a second
             long iterations = timeoutSeconds * 5;
             int sleepMillis = 200;
-            for (int k = 0; k < iterations; k++) {
+            for (int i = 0; i < iterations; i++) {
                 try {
                     try {
                         task.run();
@@ -219,7 +213,7 @@ public abstract class AbstractCacheSplitBrainSample {
         HazelcastInstanceImpl impl = null;
         if (hz instanceof HazelcastInstanceProxy) {
             try {
-                impl = (HazelcastInstanceImpl) originalField.get(hz);
+                impl = (HazelcastInstanceImpl) ORIGINAL_FIELD.get(hz);
             } catch (Throwable t) {
                 throw new IllegalStateException("Unable to get value of `original` in `HazelcastInstanceProxy`!", t);
             }
@@ -272,9 +266,6 @@ public abstract class AbstractCacheSplitBrainSample {
         int memberCount = cluster.getMembers().size();
 
         Node node = getNode(instance);
-        if (node == null) {
-            throw new NullPointerException("node is null!");
-        }
         InternalPartitionService internalPartitionService = node.getPartitionService();
         int partitionCount = internalPartitionService.getPartitionCount();
 
@@ -293,7 +284,8 @@ public abstract class AbstractCacheSplitBrainSample {
 
     protected static Config newDeclarativeConfig() {
         try {
-            Config config = new XmlConfigBuilder("jcache/src/main/resources/hazelcast-splitbrain.xml").build();
+            Config config =
+                    new XmlConfigBuilder("jcache/src/main/resources/hazelcast-splitbrain.xml").build();
             config.setProperty(GroupProperty.MERGE_FIRST_RUN_DELAY_SECONDS, "5");
             config.setProperty(GroupProperty.MERGE_NEXT_RUN_DELAY_SECONDS, "3");
             config.getGroupConfig().setName(generateRandomString(10));
@@ -303,14 +295,14 @@ public abstract class AbstractCacheSplitBrainSample {
         }
     }
 
-    protected static CacheConfig<String, Object> newCacheConfig(String cacheName, String mergePolicy) {
-        CacheConfig<String, Object> cacheConfig = new CacheConfig<String, Object>();
+    protected static CacheConfig newCacheConfig(String cacheName, String mergePolicy) {
+        CacheConfig cacheConfig = new CacheConfig();
         cacheConfig.setName(cacheName);
         cacheConfig.setMergePolicy(mergePolicy);
         return cacheConfig;
     }
 
-    private static class SampleLifeCycleListener implements LifecycleListener {
+    private static final class SampleLifeCycleListener implements LifecycleListener {
 
         private final CountDownLatch latch;
 
@@ -326,7 +318,7 @@ public abstract class AbstractCacheSplitBrainSample {
         }
     }
 
-    private static class SampleMemberShipListener implements MembershipListener {
+    private static final class SampleMemberShipListener implements MembershipListener {
 
         private final CountDownLatch latch;
 
@@ -336,6 +328,7 @@ public abstract class AbstractCacheSplitBrainSample {
 
         @Override
         public void memberAdded(MembershipEvent membershipEvent) {
+
         }
 
         @Override

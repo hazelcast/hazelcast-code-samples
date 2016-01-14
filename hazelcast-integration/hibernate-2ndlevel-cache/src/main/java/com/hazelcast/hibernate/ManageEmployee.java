@@ -8,11 +8,9 @@ import org.hibernate.cfg.Configuration;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * @author Esref Ozturk <esrefozturk93@gmail.com>
- */
 public class ManageEmployee {
 
+    @SuppressWarnings({"checkstyle:cyclomaticcomplexity", "checkstyle:methodlength"})
     public static void main(String[] args) throws InterruptedException {
         SessionFactory factory;
         try {

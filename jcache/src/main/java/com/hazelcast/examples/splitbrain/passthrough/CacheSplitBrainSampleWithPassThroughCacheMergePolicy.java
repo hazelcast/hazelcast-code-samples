@@ -24,13 +24,14 @@ import java.util.concurrent.CountDownLatch;
  */
 abstract class CacheSplitBrainSampleWithPassThroughCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
+    private static final String CACHE_NAME = BASE_CACHE_NAME + "-passthrough";
+
     protected abstract Config getConfig();
 
-    protected abstract Cache<String, Object> getCache(String cacheName, CacheManager cacheManager);
+    protected abstract Cache getCache(String cacheName, CacheManager cacheManager);
 
     protected void run() {
         try {
-            final String CACHE_NAME = BASE_CACHE_NAME + "-passthrough";
             Config config = getConfig();
             HazelcastInstance h1 = Hazelcast.newHazelcastInstance(config);
             HazelcastInstance h2 = Hazelcast.newHazelcastInstance(config);
@@ -43,8 +44,8 @@ abstract class CacheSplitBrainSampleWithPassThroughCacheMergePolicy extends Abst
             CacheManager cacheManager1 = cachingProvider1.getCacheManager();
             CacheManager cacheManager2 = cachingProvider2.getCacheManager();
 
-            Cache<String, Object> cache1 = getCache(CACHE_NAME, cacheManager1);
-            Cache<String, Object> cache2 = getCache(CACHE_NAME, cacheManager2);
+            Cache<String, String> cache1 = getCache(CACHE_NAME, cacheManager1);
+            Cache<String, String> cache2 = getCache(CACHE_NAME, cacheManager2);
 
             String key = generateKeyOwnedBy(h1);
             cache1.put(key, "value");
@@ -55,10 +56,11 @@ abstract class CacheSplitBrainSampleWithPassThroughCacheMergePolicy extends Abst
             assertClusterSizeEventually(2, h1);
             assertClusterSizeEventually(2, h2);
 
-            Cache<String, Object> cacheTest = cacheManager2.getCache(CACHE_NAME);
+            Cache<String, String> cacheTest = cacheManager2.getCache(CACHE_NAME);
             assertEquals("passThroughValue", cacheTest.get(key));
         } finally {
             HazelcastInstanceFactory.shutdownAll();
         }
     }
+
 }

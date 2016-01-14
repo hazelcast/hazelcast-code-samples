@@ -11,7 +11,7 @@ import java.util.Properties;
  */
 public class CreateTable {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
         } catch (Exception e) {

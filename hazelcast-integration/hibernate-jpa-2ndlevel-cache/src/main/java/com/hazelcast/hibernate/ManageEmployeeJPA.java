@@ -180,8 +180,8 @@ public class ManageEmployeeJPA {
         }
     }
 
-    private static void createEmployee(int id, String first_name, String last_name, int salary) {
-        Employee emp = new Employee(id, first_name, last_name, salary);
+    private static void createEmployee(int id, String firstName, String lastName, int salary) {
+        Employee emp = new Employee(id, firstName, lastName, salary);
         em.getTransaction().begin();
         em.persist(emp);
         em.getTransaction().commit();
@@ -213,12 +213,12 @@ public class ManageEmployeeJPA {
         System.out.println("Salary: " + employee.getSalary());
     }
 
-    private static void updateEmployee(int id, String first_name, String last_name, int salary, int key) {
+    private static void updateEmployee(int id, String firstName, String lastName, int salary, int key) {
         Employee employee = em.find(Employee.class, key);
         em.getTransaction().begin();
         employee.setId(id);
-        employee.setFirstName(first_name);
-        employee.setLastName(last_name);
+        employee.setFirstName(firstName);
+        employee.setLastName(lastName);
         employee.setSalary(salary);
         em.getTransaction().commit();
     }

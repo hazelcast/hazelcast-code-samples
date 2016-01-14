@@ -15,11 +15,11 @@ public class JCacheHotRestart {
 
     private static final String LICENSE_KEY = "---- LICENSE KEY ----";
 
-    private static final String hotRestartRootDir = System.getProperty("java.io.tmpdir")
+    private static final String HOT_RESTART_ROOT_DIR = System.getProperty("java.io.tmpdir")
             + File.separatorChar + "hazelcast-hot-restart";
 
     public static void main(String[] args) {
-        IOUtil.delete(new File(hotRestartRootDir));
+        IOUtil.delete(new File(HOT_RESTART_ROOT_DIR));
 
         Config config = new Config();
         config.setLicenseKey(LICENSE_KEY);
@@ -30,7 +30,7 @@ public class JCacheHotRestart {
         join.getTcpIpConfig().setEnabled(true).clear().addMember("127.0.0.1");
 
         HotRestartPersistenceConfig hotRestartConfig = config.getHotRestartPersistenceConfig();
-        hotRestartConfig.setEnabled(true).setBaseDir(new File(hotRestartRootDir));
+        hotRestartConfig.setEnabled(true).setBaseDir(new File(HOT_RESTART_ROOT_DIR));
 
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
 

@@ -29,7 +29,7 @@ public class QueryCollectionsDemo {
         Hazelcast.shutdownAll();
     }
 
-    public static class Person implements Serializable {
+    public static final class Person implements Serializable {
 
         final String name;
         final List<Limb> limbs;

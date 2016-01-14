@@ -21,6 +21,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+
+    <artifactId>springboot-caching-jcache</artifactId>
+    <name>Spring Boot: Hazelcast via Spring JCache</name>
+    <description>Spring Boot Hazelcast Integration Example via Spring JCache</description>
 
     <parent>
         <groupId>com.hazelcast.samples</groupId>
@@ -28,10 +33,11 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>springboot-caching-jcache</artifactId>
-    <packaging>jar</packaging>
-    <name>Spring Boot: Hazelcast via Spring JCache</name>
-    <description>Spring Boot Hazelcast Integration Example via Spring JCache</description>
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -44,6 +50,7 @@
             <version>1.0.0</version>
         </dependency>
     </dependencies>
+
     <!-- adding SpringBoot BOM -->
     <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html#using-boot-maven-without-a-parent-->
     <dependencyManagement>
@@ -57,6 +64,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
@@ -69,5 +77,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
