@@ -76,9 +76,6 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
 
         List<String> assignments = new ArrayList<String>();
         for (String line : lines) {
-            if (line.isEmpty()) {
-                continue;
-            }
             // example:
             // 192.168.0.1   host1.cluster.local
             if (matchesDomain(line)) {
@@ -125,6 +122,9 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
     }
 
     private boolean matchesDomain(String line) {
+        if (line.isEmpty()) {
+            return false;
+        }
         String hostname = sliceHostname(line);
         return hostname.endsWith("." + siteDomain);
     }
@@ -132,7 +132,7 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
     private String sliceAddress(String assignment) {
         String[] tokens = assignment.split("\\p{javaSpaceChar}+");
         if (tokens.length < 1) {
-            throw new RuntimeException("Could not find ip address");
+            throw new RuntimeException("Could not find ip address in " + assignment);
         }
         return tokens[0];
     }
@@ -140,7 +140,7 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
     private static String sliceHostname(String assignment) {
         String[] tokens = assignment.split("(\\p{javaSpaceChar}+|\t+)+");
         if (tokens.length < 2) {
-            throw new RuntimeException("Could not find hostname");
+            throw new RuntimeException("Could not find hostname in " + assignment);
         }
         return tokens[1];
     }
