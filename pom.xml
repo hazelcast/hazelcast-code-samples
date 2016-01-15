@@ -16,7 +16,7 @@
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <hazelcast.version>3.6-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.6</hazelcast.version>
 
         <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
     </properties>
