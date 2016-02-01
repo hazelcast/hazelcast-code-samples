@@ -5,7 +5,6 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.examples.splitbrain.AbstractCacheSplitBrainSample;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
@@ -59,7 +58,7 @@ abstract class CacheSplitBrainSampleWithPassThroughCacheMergePolicy extends Abst
             Cache<String, String> cacheTest = cacheManager2.getCache(CACHE_NAME);
             assertEquals("passThroughValue", cacheTest.get(key));
         } finally {
-            HazelcastInstanceFactory.shutdownAll();
+            Hazelcast.shutdownAll();
         }
     }
 

@@ -5,7 +5,6 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.examples.splitbrain.AbstractCacheSplitBrainSample;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
@@ -72,7 +71,7 @@ abstract class CacheSplitBrainSampleWithHigherHitsCacheMergePolicy extends Abstr
             assertEquals("higherHitsValue", cacheTest.get("key1"));
             assertEquals("higherHitsValue2", cacheTest.get("key2"));
         } finally {
-            HazelcastInstanceFactory.shutdownAll();
+            Hazelcast.shutdownAll();
         }
     }
 

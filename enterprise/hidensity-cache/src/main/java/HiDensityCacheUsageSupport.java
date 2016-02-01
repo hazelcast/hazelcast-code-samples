@@ -6,9 +6,9 @@ import com.hazelcast.config.EvictionConfig;
 import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.SerializationConfig;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.instance.GroupProperty;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
 
@@ -120,6 +120,6 @@ abstract class HiDensityCacheUsageSupport {
     }
 
     private static HazelcastInstance createInstance(Config config) {
-        return HazelcastInstanceFactory.newHazelcastInstance(config);
+        return Hazelcast.newHazelcastInstance(config);
     }
 }
