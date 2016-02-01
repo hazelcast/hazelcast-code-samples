@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 import com.hazelcast.partition.PartitionLostEvent;
 import com.hazelcast.partition.PartitionLostListener;
 
 public class ListenPartitionLostEvents {
 
     public static void main(String[] args) {
-        HazelcastInstance instance1 = HazelcastInstanceFactory.newHazelcastInstance(null);
-        HazelcastInstance instance2 = HazelcastInstanceFactory.newHazelcastInstance(null);
+        HazelcastInstance instance1 = Hazelcast.newHazelcastInstance(null);
+        HazelcastInstance instance2 = Hazelcast.newHazelcastInstance(null);
 
         // initialize partitions
         instance1.getMap("map1").put(0, 0);
