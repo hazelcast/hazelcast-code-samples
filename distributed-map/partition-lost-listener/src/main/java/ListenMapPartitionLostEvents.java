@@ -1,7 +1,7 @@
 import com.hazelcast.config.Config;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 import com.hazelcast.map.MapPartitionLostEvent;
 import com.hazelcast.map.listener.MapPartitionLostListener;
 
@@ -14,8 +14,8 @@ public class ListenMapPartitionLostEvents {
         // keeps its data if a single node crashes
         config.getMapConfig("map1").setBackupCount(1);
 
-        HazelcastInstance instance1 = HazelcastInstanceFactory.newHazelcastInstance(config);
-        HazelcastInstance instance2 = HazelcastInstanceFactory.newHazelcastInstance(config);
+        HazelcastInstance instance1 = Hazelcast.newHazelcastInstance(config);
+        HazelcastInstance instance2 = Hazelcast.newHazelcastInstance(config);
 
         IMap<Object, Object> map0 = instance1.getMap("map0");
         map0.put(0, 0);
