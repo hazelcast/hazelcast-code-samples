@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.hazelcast.com/schema/spring
+		http://www.hazelcast.com/schema/spring/hazelcast-spring-3.7.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.hazelcast.spring"/>
+
+    <hz:hazelcast id="instance">
+        <hz:config>
+            <hz:spring-aware/>
+            <hz:group name="grp" password="pass"/>
+            <hz:network port="5701" port-auto-increment="false">
+                <hz:join>
+                    <hz:multicast enabled="false"/>
+                    <hz:tcp-ip enabled="true">
+                        <hz:member>127.0.0.1:5701</hz:member>
+                    </hz:tcp-ip>
+                </hz:join>
+            </hz:network>
+        </hz:config>
+    </hz:hazelcast>
+
+    <bean id="dummyBean" class="com.hazelcast.spring.springaware.DummyBean"/>
+</beans>
