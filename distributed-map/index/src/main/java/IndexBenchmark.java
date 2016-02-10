@@ -16,12 +16,14 @@ public class IndexBenchmark {
     private static final int TIME_SECONDS = 60;
     private static final int UPDATE_PERCENTAGE = 10;
 
-    private static final String[] FIRST_NAMES = new String[]{"Jacob", "Sophia", "Mason", "Isabella",
-            "William", "Emma", "Jayden", "Olivia", "Noah", "Ava", "Michael", "Emily",
-            "Ethan", "Abigail", "Alexander", "Madison", "Aiden", "Mia", "Daniel", "Chloe"};
-    private static final String[] LAST_NAMES = new String[]{"Chaney", "Webb", "Strickland", "Gregory",
-            "Salinas", "Yang", "Meyer", "Nicholson", "Liu", "Andrade", "Reynolds", "Shannon", "Pace",
-            "Finley", "Forbes", "Burnett", "Rich", "Mcknight", "Ibarra", "Parrish"};
+    private static final String[] FIRST_NAMES = new String[]{
+            "Jacob", "Sophia", "Mason", "Isabella", "William", "Emma", "Jayden", "Olivia", "Noah", "Ava",
+            "Michael", "Emily", "Ethan", "Abigail", "Alexander", "Madison", "Aiden", "Mia", "Daniel", "Chloe",
+    };
+    private static final String[] LAST_NAMES = new String[]{
+            "Chaney", "Webb", "Strickland", "Gregory", "Salinas", "Yang", "Meyer", "Nicholson", "Liu", "Andrade",
+            "Reynolds", "Shannon", "Pace", "Finley", "Forbes", "Burnett", "Rich", "Mcknight", "Ibarra", "Parrish",
+    };
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();

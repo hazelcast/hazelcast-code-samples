@@ -35,7 +35,7 @@ class PersonDataReader extends AbstractDataReader<Person> {
                 NOT_NULL, // phone1
                 NOT_NULL, // phone2
                 NOT_NULL, // email
-                NOT_NULL // web
+                NOT_NULL, // web
         }, Person.class);
     }
 }

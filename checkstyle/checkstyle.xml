@@ -45,7 +45,7 @@
     <!-- Enable suppression of file contents using //CHECKSTYLE:[ON|OFF] comments -->
     <module name="SuppressionCommentFilter"/>
 
-    <!-- Enable suppression of file contents using @SuppressWarnings annotation -->
+    <!-- Enable the suppression annotation @SuppressWarnings("checkstyle:lowercasecheckname"} -->
     <module name="SuppressWarningsFilter"/>
 
     <!-- Checks that a package-info.java file exists for each package.     -->
@@ -92,26 +92,23 @@
         <!-- Activate comment suppression filters -->
         <module name="FileContentsHolder"/>
 
+        <!-- Needed for SuppressWarningsFilter to work -->
         <module name="SuppressWarningsHolder"/>
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
-        <!-- All types should have JavaDoc -->
-
-        <!-- Only some methods, on public APIs we agreed to JavaDoc. TODO figure out how to do that -->
+        <!-- Only for methods on public APIs we agreed to have JavaDoc. -->
+        <!-- TODO: figure out how to do that -->
         <!--<module name="JavadocMethod">-->
         <!--<property name="scope" value="public"/>-->
         <!--<property name="allowMissingParamTags" value="true"/>-->
         <!--</module>-->
-
         <module name="JavadocType">
             <property name="scope" value="public"/>
         </module>
-
         <module name="JavadocVariable">
             <property name="scope" value="public"/>
         </module>
-
         <module name="JavadocStyle">
             <property name="checkFirstSentence" value="false"/>
             <property name="checkHtml" value="false"/>
@@ -135,8 +132,8 @@
         <!-- Checks for imports                              -->
         <!-- See http://checkstyle.sf.net/config_import.html -->
         <module name="AvoidStarImport"/>
-        <module name="IllegalImport"/>
         <!-- defaults to sun.* packages -->
+        <module name="IllegalImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports">
             <property name="processJavadoc" value="true"/>
@@ -210,11 +207,10 @@
 
         <!-- Checks for common coding problems               -->
         <!-- See http://checkstyle.sf.net/config_coding.html -->
-        <!-- Coding Problems -->
-        <!--<module name="ArrayTrailingComma"/>-->
+        <module name="ArrayTrailingComma"/>
         <module name="CovariantEquals"/>
         <module name="DeclarationOrder"/>
-        <!--<module name="ExplicitInitialization"/>-->
+        <module name="ExplicitInitialization"/>
         <module name="DefaultComesLast"/>
         <module name="FallThrough"/>
         <module name="MultipleVariableDeclarations"/>
@@ -271,7 +267,6 @@
 
         <!-- Checks for class design                         -->
         <!-- See http://checkstyle.sf.net/config_design.html -->
-        <!-- module name="DesignForExtension"/ -->
         <module name="FinalClass"/>
         <!--
         <module name="HideUtilityClassConstructor"/>
@@ -287,7 +282,7 @@
             <property name="max" value="4"/>
         </module>
         <module name="ClassDataAbstractionCoupling">
-            <property name="max" value="20"/>
+            <property name="max" value="15"/>
         </module>
         <module name="ClassFanOutComplexity">
             <property name="max" value="40"/>
@@ -304,5 +299,14 @@
         <!-- See http://checkstyle.sf.net/config_misc.html -->
         <module name="ArrayTypeStyle"/>
         <module name="UpperEll"/>
+
+        <!-- Check for usage of UuidUtil instead of UUID -->
+        <!--
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="(import static java\.util\.UUID\.randomUUID|UUID\.randomUUID\(\))"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="message" value="Please use UuidUtil.buildRandomUUID() instead of UUID.randomUUID()!"/>
+        </module>
+        -->
     </module>
 </module>

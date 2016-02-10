@@ -38,6 +38,7 @@ abstract class HiDensityCacheUsageSupport {
      * Note: This field is not defined as final and can be updated in
      * any concrete implementation of "HiDensityCacheUsageSupport".
      */
+    @SuppressWarnings("checkstyle:explicitinitialization")
     private static boolean useNativeMemorySerialization = false;
 
     static {

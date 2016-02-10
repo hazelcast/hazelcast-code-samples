@@ -10,8 +10,7 @@ import java.io.Serializable;
 import java.util.concurrent.Callable;
 
 @SpringAware
-public class SomeTask
-        implements Callable<String>, ApplicationContextAware, Serializable {
+public class SomeTask implements Callable<String>, ApplicationContextAware, Serializable {
 
     private transient ApplicationContext context;
 
@@ -22,7 +21,7 @@ public class SomeTask
         return dummyBean.getCity();
     }
 
-    public void setApplicationContext( ApplicationContext applicationContext )
+    public void setApplicationContext(ApplicationContext applicationContext)
             throws BeansException {
         context = applicationContext;
     }

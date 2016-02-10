@@ -34,7 +34,7 @@ class CrimeDataReader extends AbstractDataReader<Crime> {
                 new TypeOfCrimeCellProcessor(), // type of crime
                 new CrimeCategoryCellProcessor(), // crime
                 INT, // year
-                INT // count
+                INT, // count
         }, Crime.class);
     }
 

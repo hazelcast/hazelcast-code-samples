@@ -41,7 +41,7 @@ class StateDataReader extends AbstractDataReader<State> {
                 NOT_NULL, // census_region_name
                 INT, // census_division
                 NOT_NULL, // census_devision_name
-                INT // circuit_court
+                INT, // circuit_court
         }, State.class);
     }
 }
