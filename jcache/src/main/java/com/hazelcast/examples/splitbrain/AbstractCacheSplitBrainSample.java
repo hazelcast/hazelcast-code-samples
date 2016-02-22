@@ -18,7 +18,7 @@ import com.hazelcast.instance.HazelcastInstanceImpl;
 import com.hazelcast.instance.HazelcastInstanceProxy;
 import com.hazelcast.instance.Node;
 import com.hazelcast.nio.ConnectionManager;
-import com.hazelcast.partition.InternalPartitionService;
+import com.hazelcast.internal.partition.InternalPartitionService;
 import com.hazelcast.util.ExceptionUtil;
 
 import java.io.FileNotFoundException;
@@ -266,6 +266,7 @@ public abstract class AbstractCacheSplitBrainSample {
         int memberCount = cluster.getMembers().size();
 
         Node node = getNode(instance);
+
         InternalPartitionService internalPartitionService = node.getPartitionService();
         int partitionCount = internalPartitionService.getPartitionCount();
 
