@@ -18,7 +18,6 @@ import javax.cache.spi.CachingProvider;
 import java.util.LinkedList;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public abstract class ClientNearCacheUsageSupport {
 
     protected static final String DEFAULT_CACHE_NAME = "ClientCache";
@@ -115,15 +114,59 @@ public abstract class ClientNearCacheUsageSupport {
         return createCacheWithNearCache(DEFAULT_CACHE_NAME, createNearCacheConfig(inMemoryFormat));
     }
 
+    protected <K, V> ICache<K, V> createCacheWithNearCache(NearCacheConfig nearCacheConfig) {
+        return createCacheWithNearCache(DEFAULT_CACHE_NAME, nearCacheConfig);
+    }
+
     protected <K, V> ICache<K, V> createCacheWithNearCache(String cacheName, NearCacheConfig nearCacheConfig) {
+        CacheConfig<K, V> cacheConfig = createCacheConfig(nearCacheConfig.getInMemoryFormat());
+        return createCacheWithNearCache(cacheName, cacheConfig, nearCacheConfig);
+    }
+
+    protected <K, V> ICache<K, V> createCacheWithNearCache(CacheConfig<K, V> cacheConfig,
+                                                           NearCacheConfig nearCacheConfig) {
+        return createCacheWithNearCache(DEFAULT_CACHE_NAME, cacheConfig, nearCacheConfig);
+    }
+
+    protected <K, V> ICache<K, V> createCacheWithNearCache(String cacheName, CacheConfig<K, V> cacheConfig,
+                                                           NearCacheConfig nearCacheConfig) {
         ClientConfig clientConfig = createClientConfig();
         clientConfig.addNearCacheConfig(nearCacheConfig);
         HazelcastClientProxy client = (HazelcastClientProxy) HazelcastClient.newHazelcastClient(clientConfig);
         CachingProvider provider = HazelcastClientCachingProvider.createCachingProvider(client);
         HazelcastClientCacheManager cacheManager = (HazelcastClientCacheManager) provider.getCacheManager();
 
-        CacheConfig<K, V> cacheConfig = createCacheConfig(nearCacheConfig.getInMemoryFormat());
         ICache<K, V> cache = cacheManager.createCache(cacheName, cacheConfig);
+
+        clients.add(client);
+
+        return cache;
+    }
+
+    protected <K, V> ICache<K, V> getCacheWithNearCache() {
+        return getCacheWithNearCache(DEFAULT_CACHE_NAME, createNearCacheConfig());
+    }
+
+    protected <K, V> ICache<K, V> getCacheWithNearCache(String cacheName) {
+        return getCacheWithNearCache(cacheName, createNearCacheConfig(cacheName));
+    }
+
+    protected <K, V> ICache<K, V> getCacheWithNearCache(InMemoryFormat inMemoryFormat) {
+        return getCacheWithNearCache(DEFAULT_CACHE_NAME, createNearCacheConfig(inMemoryFormat));
+    }
+
+    protected <K, V> ICache<K, V> getCacheWithNearCache(NearCacheConfig nearCacheConfig) {
+        return getCacheWithNearCache(DEFAULT_CACHE_NAME, nearCacheConfig);
+    }
+
+    protected <K, V> ICache<K, V> getCacheWithNearCache(String cacheName, NearCacheConfig nearCacheConfig) {
+        ClientConfig clientConfig = createClientConfig();
+        clientConfig.addNearCacheConfig(nearCacheConfig);
+        HazelcastClientProxy client = (HazelcastClientProxy) HazelcastClient.newHazelcastClient(clientConfig);
+        CachingProvider provider = HazelcastClientCachingProvider.createCachingProvider(client);
+        HazelcastClientCacheManager cacheManager = (HazelcastClientCacheManager) provider.getCacheManager();
+
+        ICache<K, V> cache = cacheManager.getCache(cacheName);
 
         clients.add(client);
 
@@ -133,4 +176,13 @@ public abstract class ClientNearCacheUsageSupport {
     protected String generateValueFromKey(Integer key) {
         return "Value-" + key;
     }
+
+    protected void sleep(long delay) {
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
