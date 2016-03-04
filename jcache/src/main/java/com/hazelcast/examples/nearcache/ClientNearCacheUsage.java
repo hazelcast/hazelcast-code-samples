@@ -14,8 +14,8 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
         NearCacheConfig nearCacheConfig = createNearCacheConfig();
         nearCacheConfig.setInvalidateOnChange(true);
 
-        ICache<Integer, String> clientCache1 = createCacheWithNearCache();
-        ICache<Integer, String> clientCache2 = createCacheWithNearCache();
+        ICache<Integer, String> clientCache1 = createCacheWithNearCache(nearCacheConfig);
+        ICache<Integer, String> clientCache2 = getCacheWithNearCache();
 
         // put records to cache through client-1
         putRecordsToCacheOnClient1(clientCache1);
@@ -114,14 +114,6 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
         System.out.println("Get invalidated records from near-cache finished in " + elapsed + " milliseconds");
-    }
-
-    private static void sleep(long delay) {
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void main(String[] args) {
