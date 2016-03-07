@@ -131,14 +131,6 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
         System.out.println("Memory usage on client-2: " + clientCacheContext2.memoryManager.getMemoryStats());
     }
 
-    private static void sleep(long delay) {
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
         ClientHiDensityNearCacheUsage clientHiDensityNearCacheUsage = new ClientHiDensityNearCacheUsage();
         clientHiDensityNearCacheUsage.run();
