@@ -21,11 +21,11 @@ import java.util.Iterator;
  */
 public class CacheIteratorUsage {
 
-    private static boolean IS_CLIENT = false;
+    private static boolean isClient;
 
     public static void main(String[] args) {
         CachingProvider cachingProvider;
-        if (IS_CLIENT) {
+        if (isClient) {
             Hazelcast.newHazelcastInstance(createConfig());
             HazelcastInstance hazelcastClient = HazelcastClient.newHazelcastClient(createClientConfig());
             cachingProvider = HazelcastClientCachingProvider.createCachingProvider(hazelcastClient);
@@ -63,7 +63,7 @@ public class CacheIteratorUsage {
             if (cachingProvider != null) {
                 cachingProvider.close();
             }
-            if (IS_CLIENT) {
+            if (isClient) {
                 Hazelcast.shutdownAll();
             }
         }

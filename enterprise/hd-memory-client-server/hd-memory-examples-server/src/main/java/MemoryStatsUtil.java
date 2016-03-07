@@ -3,7 +3,7 @@ import com.hazelcast.instance.HazelcastInstanceImpl;
 import com.hazelcast.instance.HazelcastInstanceProxy;
 import com.hazelcast.instance.Node;
 import com.hazelcast.memory.DefaultMemoryStats;
-import com.hazelcast.memory.MemoryManager;
+import com.hazelcast.memory.HazelcastMemoryManager;
 import com.hazelcast.memory.MemoryStats;
 import com.hazelcast.nio.serialization.EnterpriseSerializationService;
 import com.hazelcast.util.ExceptionUtil;
@@ -18,7 +18,7 @@ class MemoryStatsUtil {
         if (node != null) {
             EnterpriseSerializationService serializationService =
                     (EnterpriseSerializationService) node.getSerializationService();
-            MemoryManager memoryManager = serializationService.getMemoryManager();
+            HazelcastMemoryManager memoryManager = serializationService.getMemoryManager();
             return memoryManager.getMemoryStats();
         } else {
             return new DefaultMemoryStats();

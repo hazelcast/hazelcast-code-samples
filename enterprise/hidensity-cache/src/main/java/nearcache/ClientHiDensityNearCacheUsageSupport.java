@@ -14,7 +14,7 @@ import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.NearCacheConfig;
 import com.hazelcast.examples.nearcache.ClientNearCacheUsageSupport;
 import com.hazelcast.instance.GroupProperty;
-import com.hazelcast.memory.MemoryManager;
+import com.hazelcast.memory.HazelcastMemoryManager;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
 import com.hazelcast.nio.serialization.EnterpriseSerializationService;
@@ -82,9 +82,9 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
     class HiDensityNearCacheSupportContext<K, V> {
 
         final ICache<K, V> cache;
-        final MemoryManager memoryManager;
+        final HazelcastMemoryManager memoryManager;
 
-        HiDensityNearCacheSupportContext(ICache<K, V> cache, MemoryManager memoryManager) {
+        HiDensityNearCacheSupportContext(ICache<K, V> cache, HazelcastMemoryManager memoryManager) {
             this.cache = cache;
             this.memoryManager = memoryManager;
         }

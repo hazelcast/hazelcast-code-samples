@@ -13,4 +13,6 @@
 
     <!-- Suppress duplicate checking of copyright notice -->
     <suppress checks="StrictDuplicateCode" files="\.java" lines="1-15"/>
+
+    <suppress checks="NPathComplexity" files="com/hazelcast/examples/iterator/CacheIteratorUsage"/>
 </suppressions>
