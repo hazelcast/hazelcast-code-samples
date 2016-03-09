@@ -13,7 +13,6 @@ import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.NearCacheConfig;
 import com.hazelcast.examples.nearcache.ClientNearCacheUsageSupport;
-import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.memory.HazelcastMemoryManager;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
@@ -25,7 +24,7 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
 
     // Pass your license key as system property like
     // "-Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>"
-    private static final String LICENSE_KEY = GroupProperty.ENTERPRISE_LICENSE_KEY.getSystemProperty();
+    private static final String LICENSE_KEY = System.getProperty("hazelcast.enterprise.license.key");
 
     private static final MemorySize SERVER_NATIVE_MEMORY_SIZE = new MemorySize(256, MemoryUnit.MEGABYTES);
     private static final MemorySize CLIENT_NATIVE_MEMORY_SIZE = new MemorySize(128, MemoryUnit.MEGABYTES);

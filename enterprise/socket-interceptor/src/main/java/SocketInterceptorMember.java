@@ -1,7 +1,6 @@
 import com.hazelcast.config.Config;
 import com.hazelcast.config.SocketInterceptorConfig;
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.nio.MemberSocketInterceptor;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class SocketInterceptorMember {
     private static Config createConfig(String licenceKey) {
         Config config = new Config();
         config.setLicenseKey(licenceKey);
-        config.setProperty(GroupProperty.WAIT_SECONDS_BEFORE_JOIN, "0");
+        config.setProperty("hazelcast.wait.seconds.before.join", "0");
 
         SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
         interceptorConfig.setEnabled(true).setClassName(MySocketInterceptor.class.getName());

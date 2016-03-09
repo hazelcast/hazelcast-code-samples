@@ -2,7 +2,6 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.instance.GroupProperty;
 
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
@@ -25,7 +24,7 @@ public class ConnectToJMXBeans {
 
         // starting a Hazelcast member
         Config config = new Config();
-        config.setProperty(GroupProperty.ENABLE_JMX, "true");
+        config.setProperty("hazelcast.jmx", "true");
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
 
         // create and populate a distributed map

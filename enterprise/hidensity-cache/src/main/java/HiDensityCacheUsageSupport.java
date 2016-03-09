@@ -8,7 +8,6 @@ import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.SerializationConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
 
@@ -44,7 +43,7 @@ abstract class HiDensityCacheUsageSupport {
     static {
         // Pass your license key as system property like
         // "-Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>"
-        LICENSE_KEY = GroupProperty.ENTERPRISE_LICENSE_KEY.getSystemProperty();
+        LICENSE_KEY = System.getProperty("hazelcast.enterprise.license.key");
     }
 
     private static HazelcastInstance instance;

@@ -1,12 +1,11 @@
 import com.hazelcast.cluster.ClusterState;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.GroupProperty;
 
 public class ClusterFrozenState {
 
     public static void main(String[] args) {
-        System.setProperty(GroupProperty.PHONE_HOME_ENABLED.getName(), "false");
+        System.setProperty("hazelcast.phone.home.enabled", "false");
 
         HazelcastInstance instance1 = Hazelcast.newHazelcastInstance();
         HazelcastInstance instance2 = Hazelcast.newHazelcastInstance();

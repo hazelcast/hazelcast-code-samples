@@ -27,7 +27,6 @@ import com.hazelcast.core.IQueue;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
-import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.internal.monitors.HealthMonitorLevel;
 import com.hazelcast.query.SqlPredicate;
 
@@ -73,8 +72,8 @@ public final class AllTest {
         this.nThreads = nThreads;
         ex = Executors.newFixedThreadPool(nThreads);
         Config config = new Config();
-        config.setProperty(GroupProperty.HEALTH_MONITORING_LEVEL.toString(), HealthMonitorLevel.NOISY.toString());
-        config.setProperty(GroupProperty.HEALTH_MONITORING_DELAY_SECONDS.toString(), Integer.toString(STATS_SECONDS));
+        config.setProperty("hazelcast.health.monitoring.level", HealthMonitorLevel.NOISY.toString());
+        config.setProperty("hazelcast.health.monitoring.delay.seconds", Integer.toString(STATS_SECONDS));
         hazelcast = Hazelcast.newHazelcastInstance(config);
         List<Runnable> mapOperations = loadMapOperations();
         List<Runnable> qOperations = loadQOperations();

@@ -6,7 +6,6 @@ import com.hazelcast.config.SecurityInterceptorConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.security.Credentials;
 import com.hazelcast.security.Parameters;
 import com.hazelcast.security.SecurityInterceptor;
@@ -74,7 +73,7 @@ public class MapSecurityInterceptor {
     private static Config createConfig(String licenceKey) {
         Config config = new Config();
         config.setLicenseKey(licenceKey);
-        config.setProperty(GroupProperty.WAIT_SECONDS_BEFORE_JOIN, "0");
+        config.setProperty("hazelcast.wait.seconds.before.join", "0");
         SecurityInterceptorConfig securityInterceptorConfig = new SecurityInterceptorConfig();
         securityInterceptorConfig.setClassName(MySecurityInterceptor.class.getName());
         SecurityConfig securityConfig = config.getSecurityConfig();

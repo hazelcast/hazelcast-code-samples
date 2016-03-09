@@ -13,12 +13,11 @@ import com.hazelcast.core.MembershipEvent;
 import com.hazelcast.core.MembershipListener;
 import com.hazelcast.core.Partition;
 import com.hazelcast.core.PartitionService;
-import com.hazelcast.instance.GroupProperty;
 import com.hazelcast.instance.HazelcastInstanceImpl;
 import com.hazelcast.instance.HazelcastInstanceProxy;
 import com.hazelcast.instance.Node;
-import com.hazelcast.nio.ConnectionManager;
 import com.hazelcast.internal.partition.InternalPartitionService;
+import com.hazelcast.nio.ConnectionManager;
 import com.hazelcast.util.ExceptionUtil;
 
 import java.io.FileNotFoundException;
@@ -277,8 +276,8 @@ public abstract class AbstractCacheSplitBrainSample {
 
     protected static Config newProgrammaticConfig() {
         Config config = new Config();
-        config.setProperty(GroupProperty.MERGE_FIRST_RUN_DELAY_SECONDS, "5");
-        config.setProperty(GroupProperty.MERGE_NEXT_RUN_DELAY_SECONDS, "3");
+        config.setProperty("hazelcast.merge.first.run.delay.seconds", "5");
+        config.setProperty("hazelcast.merge.next.run.delay.seconds", "3");
         config.getGroupConfig().setName(generateRandomString(10));
         return config;
     }
@@ -287,8 +286,8 @@ public abstract class AbstractCacheSplitBrainSample {
         try {
             Config config =
                     new XmlConfigBuilder("jcache/src/main/resources/hazelcast-splitbrain.xml").build();
-            config.setProperty(GroupProperty.MERGE_FIRST_RUN_DELAY_SECONDS, "5");
-            config.setProperty(GroupProperty.MERGE_NEXT_RUN_DELAY_SECONDS, "3");
+            config.setProperty("hazelcast.merge.first.run.delay.seconds", "5");
+            config.setProperty("hazelcast.merge.next.run.delay.seconds", "3");
             config.getGroupConfig().setName(generateRandomString(10));
             return config;
         } catch (FileNotFoundException e) {
