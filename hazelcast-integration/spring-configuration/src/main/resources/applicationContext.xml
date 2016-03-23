@@ -1,12 +1,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xmlns:hz="https://hazelcast.com/schema/spring"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation=
                "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
               http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
               http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-              http://www.hazelcast.com/schema/spring http://www.hazelcast.com/schema/spring/hazelcast-spring.xsd">
+              https://hazelcast.com/schema/spring https://hazelcast.com/schema/spring/hazelcast-spring.xsd">
 
     <context:component-scan base-package="com.hazelcast.springconfiguration.annotated"/>
 
