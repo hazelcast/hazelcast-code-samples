@@ -8,12 +8,13 @@ import com.hazelcast.cache.wanreplication.filter.SampleCacheWanEventFilter;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.WanAcknowledgeType;
+import com.hazelcast.config.WanPublisherConfig;
 import com.hazelcast.config.WanReplicationConfig;
 import com.hazelcast.config.WanReplicationRef;
-import com.hazelcast.config.WanTargetClusterConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.enterprise.wan.replication.WanNoDelayReplication;
+import com.hazelcast.enterprise.wan.replication.WanReplicationProperties;
 
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
@@ -21,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
@@ -113,12 +115,16 @@ public class EnterpriseCacheWanReplicationClusterA {
         WanReplicationConfig wanReplicationConfig = new WanReplicationConfig();
         wanReplicationConfig.setName("AtoB");
 
-        WanTargetClusterConfig targetConfigClusterB = new WanTargetClusterConfig();
-        targetConfigClusterB.addEndpoint("127.0.0.1:5702").setReplicationImpl(WanNoDelayReplication.class.getName());
-        targetConfigClusterB.setGroupName("clusterB").setGroupPassword("clusterB-pass");
+        WanPublisherConfig publisherConfigClusterB = new WanPublisherConfig();
+        publisherConfigClusterB.setClassName(WanNoDelayReplication.class.getName());
+        publisherConfigClusterB.setGroupName("clusterB");
+        Map<String, Comparable> props = publisherConfigClusterB.getProperties();
+        props.put(WanReplicationProperties.ENDPOINTS.key(), "127.0.0.1:5702");
+        props.put(WanReplicationProperties.GROUP_PASSWORD.key(), "clusterB-pass");
+
         // setting acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE
-        targetConfigClusterB.setAcknowledgeType(WanAcknowledgeType.ACK_ON_OPERATION_COMPLETE);
-        wanReplicationConfig.addTargetClusterConfig(targetConfigClusterB);
+        props.put(WanReplicationProperties.ACK_TYPE.key(), WanAcknowledgeType.ACK_ON_OPERATION_COMPLETE.name());
+        wanReplicationConfig.addWanPublisherConfig(publisherConfigClusterB);
 
         config.addWanReplicationConfig(wanReplicationConfig);
 
