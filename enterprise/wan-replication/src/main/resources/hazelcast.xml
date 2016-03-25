@@ -1,6 +1,6 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.7.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <group>
@@ -20,15 +20,16 @@
     </network>
 
     <wan-replication name="AtoB">
-        <target-cluster group-name="clusterB" group-password="clusterB-pass">
-            <replication-impl>com.hazelcast.enterprise.wan.replication.WanNoDelayReplication</replication-impl>
-            <end-points>
-                <address>127.0.0.1:5702</address>
-            </end-points>
-            <!-- Acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE  -->
-            <acknowledge-type>ACK_ON_OPERATION_COMPLETE</acknowledge-type>
-            <!-- <acknowledge-type>ACK_ON_TRANSMIT</acknowledge-type> -->
-        </target-cluster>
+        <wan-publisher group-name="clusterB">
+            <class-name>com.hazelcast.enterprise.wan.replication.WanNoDelayReplication</class-name>
+            <properties>
+                <property name="group.password">clusterB-pass</property>
+                <property name="endpoints">127.0.0.1:5702</property>
+                <!-- Acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE  -->
+                <property name="ack.type">ACK_ON_OPERATION_COMPLETE</property>
+                <!-- <property name="ack.type">ACK_ON_TRANSMIT</property> -->
+            </properties>
+        </wan-publisher>
     </wan-replication>
     <map name="default">
         <wan-replication-ref name="AtoB">
