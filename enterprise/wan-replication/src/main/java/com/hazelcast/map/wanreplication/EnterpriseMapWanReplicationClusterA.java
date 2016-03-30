@@ -43,7 +43,7 @@ public class EnterpriseMapWanReplicationClusterA {
                 key = command.split(" ")[1];
                 int start = new Random().nextInt();
                 for (int i = start; i < start + Integer.parseInt(key); i++) {
-                    map.put(i, i);
+                    map.put(Integer.toString(i), i);
                 }
             }
         }
