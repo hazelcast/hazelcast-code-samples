@@ -79,7 +79,7 @@ public class EnterpriseCacheWanReplicationClusterA {
                 key = command.split(" ")[1];
                 int start = new Random().nextInt();
                 for (int i = start; i < start + Integer.parseInt(key); i++) {
-                    cache.put(i, i);
+                    cache.put(Integer.toString(i), i);
                 }
             }
         }
