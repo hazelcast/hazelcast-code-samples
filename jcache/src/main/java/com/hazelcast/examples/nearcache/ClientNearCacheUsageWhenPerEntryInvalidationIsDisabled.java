@@ -3,7 +3,8 @@ package com.hazelcast.examples.nearcache;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.NearCacheConfig;
-import com.hazelcast.internal.properties.GroupProperty;
+import com.hazelcast.spi.properties.GroupProperty;
+
 import java.util.concurrent.TimeUnit;
 
 /**
