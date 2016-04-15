@@ -70,17 +70,20 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     @Override
     public void commitMigration(PartitionMigrationEvent event) {
         if (event.getMigrationEndpoint() == MigrationEndpoint.SOURCE) {
-            Container container = containers[event.getPartitionId()];
-            container.clear();
+            int newReplicaIndex = event.getNewReplicaIndex();
+            if (newReplicaIndex == -1 || newReplicaIndex > 1) {
+                clearPartitionReplica(event.getPartitionId());
+            }
         }
-        // TODO
     }
 
     @Override
     public void rollbackMigration(PartitionMigrationEvent event) {
         if (event.getMigrationEndpoint() == MigrationEndpoint.DESTINATION) {
-            Container container = containers[event.getPartitionId()];
-            container.clear();
+            int currentReplicaIndex = event.getCurrentReplicaIndex();
+            if (currentReplicaIndex == -1 || currentReplicaIndex > 1) {
+                clearPartitionReplica(event.getPartitionId());
+            }
         }
     }
 
