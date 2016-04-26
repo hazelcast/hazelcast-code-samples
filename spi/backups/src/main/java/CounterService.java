@@ -51,7 +51,6 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
         //no-op
     }
 
-    @Override
     public void clearPartitionReplica(int partitionId) {
         Container container = containers[partitionId];
         container.clear();
