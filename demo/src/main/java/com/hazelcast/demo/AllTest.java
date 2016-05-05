@@ -27,7 +27,7 @@ import com.hazelcast.core.IQueue;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
-import com.hazelcast.internal.monitors.HealthMonitorLevel;
+import com.hazelcast.internal.diagnostics.HealthMonitorLevel;
 import com.hazelcast.query.SqlPredicate;
 
 import java.io.Serializable;
