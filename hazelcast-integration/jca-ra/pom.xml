@@ -49,13 +49,13 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-jca</artifactId>
-            <version>${hazelcast.version}</version>
+            <version>${hazelcast.ra.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-jca-rar</artifactId>
-            <version>${hazelcast.version}</version>
+            <version>${hazelcast.ra.version}</version>
             <type>rar</type>
         </dependency>
         <dependency>
