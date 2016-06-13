@@ -16,3 +16,5 @@
 	Implementation of spring and hibernate 2nd level cache integration of hazelcast as customer managing application.
 - <h3>manager-based-session-replication</h3>
 	Implementation of tomcat/jetty session replication integration of hazelcast.
+- <h3>spark</h3>
+	Implementation of Spark Connector for Hazelcast.
