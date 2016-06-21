@@ -35,12 +35,12 @@ public class QueryCollectionsPortableDemo {
         Hazelcast.shutdownAll();
     }
 
-    static final class PersonPortable implements Portable {
+    private static final class PersonPortable implements Portable {
 
-        public static final int CLASS_ID = 1000;
+        static final int CLASS_ID = 1000;
 
         String name;
-        Portable limbs[];
+        Portable[] limbs;
 
         PersonPortable() {
         }
@@ -78,20 +78,20 @@ public class QueryCollectionsPortableDemo {
         }
     }
 
-    public static class LimbPortable implements Portable {
+    static class LimbPortable implements Portable {
 
-        public static final int CLASS_ID = 1001;
+        static final int CLASS_ID = 1001;
 
         String name;
 
-        public LimbPortable() {
+        LimbPortable() {
         }
 
-        public LimbPortable(String name) {
+        LimbPortable(String name) {
             this.name = name;
         }
 
-        public static LimbPortable limb(String name) {
+        static LimbPortable limb(String name) {
             return new LimbPortable(name);
         }
 
@@ -116,10 +116,9 @@ public class QueryCollectionsPortableDemo {
         }
     }
 
+    private static final class PersonPortableFactory implements PortableFactory {
 
-    public static final class PersonPortableFactory implements PortableFactory {
-
-        public static final int FACTORY_ID = 1000;
+        static final int FACTORY_ID = 1000;
 
         @Override
         public Portable create(int i) {
@@ -131,5 +130,4 @@ public class QueryCollectionsPortableDemo {
             throw new IllegalArgumentException("Unsupported type " + i);
         }
     }
-
 }

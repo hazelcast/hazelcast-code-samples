@@ -229,8 +229,8 @@ public abstract class AbstractCacheSplitBrainSample {
         Node n1 = getNode(h1);
         Node n2 = getNode(h2);
         if (n1 != null && n2 != null) {
-            n1.clusterService.removeAddress(n2.address,null);
-            n2.clusterService.removeAddress(n1.address,null);
+            n1.clusterService.removeAddress(n2.address, null);
+            n2.clusterService.removeAddress(n1.address, null);
         }
     }
 

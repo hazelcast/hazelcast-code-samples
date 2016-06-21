@@ -8,10 +8,10 @@ import java.io.IOException;
 
 public class Person implements Portable {
 
-    public static final int CLASS_ID = 1000;
+    static final int CLASS_ID = 1000;
 
-    String name;
-    Portable limbs[];
+    private String name;
+    private Portable[] limbs;
 
     Person() {
     }
@@ -47,5 +47,4 @@ public class Person implements Portable {
         name = in.readUTF("name");
         limbs = in.readPortableArray("limbs");
     }
-
 }

@@ -17,19 +17,17 @@ import javax.cache.spi.CachingProvider;
  */
 public class JCacheThroughHazelcastInstanceExample {
 
-    public static void main(String[] args) {
-        final String BASE_CACHE_NAME = "MyCache";
+    private static final String BASE_CACHE_NAME = "MyCache";
 
-        Config config = new Config()
-                            .addCacheConfig(createCacheSimpleConfig(BASE_CACHE_NAME + "_1"));
+    public static void main(String[] args) {
+        Config config = new Config().addCacheConfig(createCacheSimpleConfig(BASE_CACHE_NAME + "_1"));
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         CachingProvider cachingProvider = HazelcastServerCachingProvider.createCachingProvider(instance);
         CacheManager cacheManager = cachingProvider.getCacheManager();
 
         ICache cache1 = instance.getCache(BASE_CACHE_NAME + "_1");
 
-        ICache cache2a = (ICache) cacheManager.createCache(BASE_CACHE_NAME + "_2",
-                                                           new CacheConfig(BASE_CACHE_NAME + "_2"));
+        ICache cache2a = (ICache) cacheManager.createCache(BASE_CACHE_NAME + "_2", new CacheConfig(BASE_CACHE_NAME + "_2"));
         ICache cache2b = instance.getCache(BASE_CACHE_NAME + "_2");
 
         System.out.println("cache2a (through CacheManager) == cache2b (through HazelcastInstance): " + (cache2a == cache2b));
@@ -49,8 +47,6 @@ public class JCacheThroughHazelcastInstanceExample {
     }
 
     private static CacheSimpleConfig createCacheSimpleConfig(String cacheName) {
-        return new CacheSimpleConfig()
-                        .setName(cacheName);
+        return new CacheSimpleConfig().setName(cacheName);
     }
-
 }

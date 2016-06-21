@@ -45,15 +45,15 @@ public class QueryCollectionsDemo {
         }
     }
 
-    public static class Limb implements Serializable {
+    static class Limb implements Serializable {
 
         final String name;
 
-        public Limb(String name) {
+        Limb(String name) {
             this.name = name;
         }
 
-        public static Limb limb(String name) {
+        static Limb limb(String name) {
             return new Limb(name);
         }
     }

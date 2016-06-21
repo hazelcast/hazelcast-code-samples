@@ -66,16 +66,16 @@ public class MapCustomEvictionPolicy {
             }
         }, false);
 
-        // wait some more time to receive evicted-events.
+        // wait some more time to receive evicted-events
         parkNanos(SECONDS.toNanos(5));
 
         for (int i = 0; i < 15000; i++) {
             map.put(i, i);
         }
 
-        String msg = "IMap uses sampling based eviction. After eviction is completed, we are expecting " +
-                "number of evicted-odd-keys should be greater than number of evicted-even-keys" +
-                "\nNumber of evicted-odd-keys = %d, number of evicted-even-keys = %d";
+        String msg = "IMap uses sampling based eviction. After eviction is completed, we are expecting "
+                + "number of evicted-odd-keys should be greater than number of evicted-even-keys"
+                + "\nNumber of evicted-odd-keys = %d, number of evicted-even-keys = %d";
         out.println(format(msg, oddKeys.size(), evenKeys.size()));
 
         instance.shutdown();
