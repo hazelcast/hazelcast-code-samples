@@ -1,0 +1,22 @@
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.6.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <properties>
+        <property name="hazelcast.discovery.enabled">true</property>
+    </properties>
+
+    <network>
+        <port>6001</port>
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="false" />
+            <aws enabled="false"/>
+            <discovery-strategies>
+                <discovery-strategy enabled="true" class="com.hazelcast.spi.discovery.multicast.MulticastDiscoveryStrategy">
+                </discovery-strategy>
+            </discovery-strategies>
+        </join>
+    </network>
+
+</hazelcast>

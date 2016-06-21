@@ -26,6 +26,7 @@
     <modules>
         <module>port</module>
         <module>multicast</module>
+        <module>multicast-plugin</module>
         <module>tcpip</module>
         <module>aws</module>
         <module>groups</module>
