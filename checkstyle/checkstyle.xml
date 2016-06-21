@@ -131,7 +131,9 @@
 
         <!-- Checks for imports                              -->
         <!-- See http://checkstyle.sf.net/config_import.html -->
-        <module name="AvoidStarImport"/>
+        <module name="AvoidStarImport">
+            <property name="excludes" value="java.awt,javax.swing"/>
+        </module>
         <!-- defaults to sun.* packages -->
         <module name="IllegalImport"/>
         <module name="RedundantImport"/>
@@ -244,10 +246,6 @@
         <!--
         <module name="PackageDeclaration"/>
         -->
-        <module name="RedundantThrows">
-            <property name="severity" value="warning"/>
-            <property name="allowUnchecked" value="true"/>
-        </module>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
