@@ -2,12 +2,14 @@ package com.hazelcast.examples.nearcache;
 
 import com.hazelcast.cache.ICache;
 import com.hazelcast.config.NearCacheConfig;
+import com.hazelcast.spi.properties.GroupProperty;
 
 import java.util.concurrent.TimeUnit;
 
 public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
 
     private static final int RECORD_COUNT = 1000;
+    private static final int BATCH_FREQUENCY_MILISECONDS = Integer.parseInt(GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue()) * 1000;
     private static final boolean VERBOSE = Boolean.getBoolean("com.hazelcast.examples.jcache.nearcache.verbose");
 
     public void run() {
@@ -30,7 +32,7 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
         updateRecordsInCacheOnClient1(clientCache1);
 
         // wait a little for invalidation events
-        sleep(5000);
+        sleep(BATCH_FREQUENCY_MILISECONDS + 5000);
 
         // gets invalidated records from near-cache on client-2
         getInvalidatedRecordsFromNearCacheOnClient2(clientCache2);
