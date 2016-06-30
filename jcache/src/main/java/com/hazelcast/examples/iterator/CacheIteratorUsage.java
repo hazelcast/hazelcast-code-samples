@@ -21,7 +21,7 @@ import java.util.Iterator;
  */
 public class CacheIteratorUsage {
 
-    private static boolean isClient;
+    private static boolean isClient = Boolean.getBoolean("com.hazelcast.examples.jcache.iterator.isClient");
 
     public static void main(String[] args) {
         CachingProvider cachingProvider;
