@@ -1,0 +1,38 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+              http://www.hazelcast.com/schema/spring http://www.hazelcast.com/schema/spring/hazelcast-spring-3.7.xsd
+              http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       ">
+
+    <hz:hazelcast id="instance">
+        <hz:config>
+            <hz:group name="grp" password="grp-pass"/>
+            <hz:network port="5701" port-auto-increment="true">
+                <hz:join>
+                    <hz:multicast enabled="false"/>
+                    <hz:tcp-ip enabled="true">
+                        <hz:member>127.0.0.1:5701</hz:member>
+                    </hz:tcp-ip>
+                </hz:join>
+            </hz:network>
+        </hz:config>
+    </hz:hazelcast>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="transactionManager" class="com.hazelcast.spring.transaction.HazelcastTransactionManager">
+        <constructor-arg ref="instance"/>
+    </bean>
+
+    <bean id="transactionalContext" class="com.hazelcast.spring.transaction.ManagedTransactionalTaskContext">
+        <constructor-arg ref="transactionManager"/>
+    </bean>
+
+    <bean id="transactionalService" class="com.hazelcast.spring.transaction.ServiceWithTransactionalMethod">
+        <property name="transactionalTaskContext" ref="transactionalContext"/>
+    </bean>
+</beans>
