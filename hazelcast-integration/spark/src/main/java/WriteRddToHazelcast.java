@@ -28,7 +28,7 @@ public class WriteRddToHazelcast {
         SparkConf sparkConf = new SparkConf()
                 .setMaster("local[2]")
                 .setAppName("Write RDD To Hazelcast")
-                .set("hazelcast.server.address", "127.0.0.1:5701")
+                .set("hazelcast.server.addresses", "127.0.0.1:5701")
                 .set("spark.driver.host", "127.0.0.1");
 
         JavaSparkContext ctx = new JavaSparkContext(sparkConf);

@@ -8,7 +8,6 @@
     <artifactId>spark</artifactId>
     <name>Spark Connector Example</name>
 
-    <groupId>com.hazelcast.samples</groupId>
     <version>0.1-SNAPSHOT</version>
 
 

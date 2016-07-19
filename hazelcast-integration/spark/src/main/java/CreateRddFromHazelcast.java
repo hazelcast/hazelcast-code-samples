@@ -1,8 +1,8 @@
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.spark.connector.HazelcastJavaRDD;
 import com.hazelcast.spark.connector.HazelcastSparkContext;
+import com.hazelcast.spark.connector.rdd.HazelcastJavaRDD;
 import domain.User;
 import java.util.Arrays;
 import java.util.Random;
@@ -19,7 +19,7 @@ public class CreateRddFromHazelcast {
         SparkConf conf = new SparkConf()
                 .setMaster("local[2]")
                 .setAppName("Create RDD From Hazelcast")
-                .set("hazelcast.server.address", "127.0.0.1:5701")
+                .set("hazelcast.server.addresses", "127.0.0.1:5701")
                 .set("spark.driver.host", "127.0.0.1");
 
         JavaSparkContext sparkContext = new JavaSparkContext(conf);
@@ -27,12 +27,12 @@ public class CreateRddFromHazelcast {
         HazelcastJavaRDD<String, User> usersRdd = hazelcastSparkContext.fromHazelcastMap("users");
 
         Double averageAge = usersRdd.flatMapToDouble(new DoubleFlatMapFunction<Tuple2<String, User>>() {
-                                                   @Override
-                                                   public Iterable<Double> call(Tuple2<String, User> entry) throws Exception {
-                                                       return Arrays.asList((double) entry._2().getAge());
-                                                   }
-                                               }
-                                            ).mean();
+                                                         @Override
+                                                         public Iterable<Double> call(Tuple2<String, User> entry) throws Exception {
+                                                             return Arrays.asList((double) entry._2().getAge());
+                                                         }
+                                                     }
+        ).mean();
         System.out.println("Average user age = " + averageAge);
     }
 

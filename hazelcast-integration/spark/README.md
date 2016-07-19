@@ -5,6 +5,16 @@ This repository contains two examples, which are :
 -   Word Count Example, reads a file from filesystem, counts the number of occurrences of each word with Apache Spark and saves the results to a Hazelcast map.
 -   Average age example, reads the user records from a Hazelcast map, then calculates the average age of users with Apache Spark.
 
+## Building the project
+
+To build the project, run the command below:
+
+```
+mvn clean package
+```
+
+## Running the Example
+
 To run examples you've need to have a running Hazelcast cluster. To start a Hazelcast instance just run the command below.
 
 ```
