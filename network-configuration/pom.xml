@@ -35,6 +35,7 @@
         <module>ssl</module>
         <module>firewall</module>
         <module>jclouds</module>
+        <module>jclouds-partitiongroup</module>
     </modules>
 
     <dependencies>
