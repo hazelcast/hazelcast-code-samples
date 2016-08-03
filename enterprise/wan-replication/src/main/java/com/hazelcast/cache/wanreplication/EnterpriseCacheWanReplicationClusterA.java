@@ -13,7 +13,7 @@ import com.hazelcast.config.WanReplicationConfig;
 import com.hazelcast.config.WanReplicationRef;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.enterprise.wan.replication.WanNoDelayReplication;
+import com.hazelcast.enterprise.wan.replication.WanBatchReplication;
 import com.hazelcast.enterprise.wan.replication.WanReplicationProperties;
 
 import javax.cache.Caching;
@@ -117,7 +117,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         wanReplicationConfig.setName("AtoB");
 
         WanPublisherConfig publisherConfigClusterB = new WanPublisherConfig();
-        publisherConfigClusterB.setClassName(WanNoDelayReplication.class.getName());
+        publisherConfigClusterB.setClassName(WanBatchReplication.class.getName());
         publisherConfigClusterB.setGroupName("clusterB");
         Map<String, Comparable> props = publisherConfigClusterB.getProperties();
         props.put(WanReplicationProperties.ENDPOINTS.key(), "127.0.0.1:5702");
