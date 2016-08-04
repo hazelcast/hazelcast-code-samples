@@ -21,7 +21,7 @@
 
     <wan-replication name="AtoB">
         <wan-publisher group-name="clusterB">
-            <class-name>com.hazelcast.enterprise.wan.replication.WanNoDelayReplication</class-name>
+            <class-name>com.hazelcast.enterprise.wan.replication.WanBatchReplication</class-name>
             <properties>
                 <property name="group.password">clusterB-pass</property>
                 <property name="endpoints">127.0.0.1:5702</property>
