@@ -1,6 +1,5 @@
 import com.hazelcast.config.ClasspathXmlConfig;
 import com.hazelcast.config.Config;
-import com.hazelcast.config.PartitionGroupConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
@@ -13,7 +12,7 @@ public class Member {
         Hazelcast.newHazelcastInstance(cfg);
         Hazelcast.newHazelcastInstance(cfg);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(cfg);
-        Map map = hz.getMap("example");
+        Map<Double, Integer> map = hz.getMap("example");
         for (int i = 0; i < 30000; i++) {
             if (i % 1000 == 0) {
                 System.out.println("Adding " + i + "th element to map");
