@@ -3,6 +3,7 @@ package com.hazelcast.spring.transaction;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.util.EmptyStatement;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -21,6 +22,7 @@ public class TransactionManagerExample {
         try {
             service.transactionalPutWithException("key2", "value2");
         } catch (RuntimeException ex) {
+            EmptyStatement.ignore(ex);
         }
         System.out.println("Map contains \"key2\" : " + testMap.containsKey("key2"));
         System.out.println("#######  END #######");
