@@ -17,21 +17,21 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <modules>
+        <module>backups</module>
+        <module>container</module>
+        <module>discovery</module>
+        <module>getting-started</module>
+        <!-- module>notification</module -->
+        <module>partition-migration</module>
+        <module>proxy</module>
+    </modules>
+
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <modules>
-        <module>getting-started</module>
-        <module>proxy</module>
-        <module>container</module>
-        <module>partition-migration</module>
-        <module>backups</module>
-        <!-- module>notification</module -->
-        <module>discovery</module>
-    </modules>
 
     <dependencies>
         <dependency>

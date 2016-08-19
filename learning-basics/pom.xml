@@ -25,14 +25,14 @@
     </properties>
 
     <modules>
+        <module>configure-logging</module>
         <module>configure-programmatic</module>
         <module>configure-xml</module>
-        <module>wildcard-configuration</module>
-        <module>multiple-hazelcast-instances</module>
-        <module>loading-instances</module>
-        <module>unique-names</module>
         <module>destroying-instances</module>
-        <module>configure-logging</module>
+        <module>loading-instances</module>
+        <module>multiple-hazelcast-instances</module>
+        <module>unique-names</module>
+        <module>wildcard-configuration</module>
     </modules>
 
     <dependencies>

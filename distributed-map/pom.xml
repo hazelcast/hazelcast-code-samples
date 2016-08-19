@@ -24,28 +24,28 @@
     </properties>
 
     <modules>
-        <module>basics</module>
         <module>aggregations</module>
-        <module>custom-attributes</module>
         <module>backup</module>
-        <module>hashcode-and-equals</module>
-        <module>criteria-api</module>
-        <module>sqlquery</module>
-        <module>index</module>
-        <module>in-memory-format</module>
-        <module>locking</module>
-        <module>multi-map</module>
-        <module>mapstore</module>
-        <module>data-locality</module>
-        <module>near-cache</module>
-        <module>eviction</module>
-        <module>entry-processor</module>
-        <module>entry-listener</module>
-        <module>partition-lost-listener</module>
+        <module>basics</module>
         <module>continuous-query</module>
-        <module>query-collections</module>
+        <module>criteria-api</module>
+        <module>custom-attributes</module>
+        <module>data-locality</module>
+        <module>entry-listener</module>
+        <module>entry-processor</module>
+        <module>eviction</module>
+        <module>hashcode-and-equals</module>
+        <module>in-memory-format</module>
+        <module>index</module>
+        <module>locking</module>
         <module>map-interceptor</module>
+        <module>mapstore</module>
+        <module>multi-map</module>
+        <module>near-cache</module>
         <module>paging-predicate</module>
+        <module>partition-lost-listener</module>
+        <module>query-collections</module>
+        <module>sqlquery</module>
     </modules>
 
     <dependencies>

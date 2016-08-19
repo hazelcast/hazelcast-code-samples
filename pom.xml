@@ -34,29 +34,29 @@
     </repositories>
 
     <modules>
-        <module>learning-basics</module>
-        <module>distributed-primitives</module>
-        <module>distributed-collections</module>
-        <module>distributed-map</module>
-        <module>distributed-executor</module>
-        <module>distributed-topic</module>
-        <module>cluster-quorum</module>
         <module>clients</module>
-        <module>mapreduce</module>
-        <module>network-configuration</module>
-        <module>transactions</module>
-        <module>serialization</module>
-        <module>spi</module>
-        <module>performance</module>
+        <module>cluster</module>
+        <module>cluster-quorum</module>
         <module>demo</module>
-        <module>hazelcast-integration</module>
-        <module>monitoring</module>
-        <module>replicated-map</module>
+        <module>distributed-collections</module>
+        <module>distributed-executor</module>
+        <module>distributed-map</module>
+        <module>distributed-primitives</module>
+        <module>distributed-topic</module>
         <module>enterprise</module>
+        <module>hazelcast-integration</module>
         <module>jcache</module>
         <module>jmx</module>
+        <module>learning-basics</module>
+        <module>mapreduce</module>
+        <module>monitoring</module>
+        <module>network-configuration</module>
         <module>osgi</module>
-        <module>cluster</module>
+        <module>performance</module>
+        <module>replicated-map</module>
+        <module>serialization</module>
+        <module>spi</module>
+        <module>transactions</module>
     </modules>
 
     <build>

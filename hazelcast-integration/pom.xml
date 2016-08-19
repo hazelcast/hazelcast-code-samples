@@ -38,23 +38,23 @@
     </properties>
 
     <modules>
+        <module>amazon-ec2-vagrant-chef</module>
         <module>filter-based-session-replication</module>
         <module>hibernate-2ndlevel-cache</module>
+        <module>hibernate-jpa-2ndlevel-cache</module>
         <module>jca-ra</module>
+        <module>manager-based-session-replication</module>
+        <module>mongodb</module>
         <module>spring-cache-manager</module>
         <module>spring-configuration</module>
         <module>spring-data-integration</module>
         <module>spring-hibernate-2ndlevel-cache</module>
-        <module>manager-based-session-replication</module>
-        <module>spring-security</module>
-        <module>hibernate-jpa-2ndlevel-cache</module>
-        <module>amazon-ec2-vagrant-chef</module>
-        <module>mongodb</module>
         <module>spring-jcache</module>
+        <module>spring-security</module>
+        <module>spring-transaction-manager</module>
+        <module>springaware-annotation</module>
         <module>springboot-caching</module>
         <module>springboot-caching-jcache</module>
-        <module>springaware-annotation</module>
-        <module>spring-transaction-manager</module>
     </modules>
 
     <dependencies>

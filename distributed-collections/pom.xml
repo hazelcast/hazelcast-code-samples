@@ -26,11 +26,11 @@
     <modules>
         <module>blockingqueue</module>
         <module>boundedblockingqueue</module>
-        <module>queuestore</module>
-        <module>list</module>
-        <module>set</module>
         <module>itemlisteners</module>
+        <module>list</module>
+        <module>queuestore</module>
         <module>ringbuffer</module>
+        <module>set</module>
     </modules>
 
     <dependencies>

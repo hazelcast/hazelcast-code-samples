@@ -26,8 +26,8 @@
 
     <modules>
         <module>basics</module>
-        <module>in-memory-format</module>
         <module>entry-listener</module>
+        <module>in-memory-format</module>
     </modules>
 
     <dependencies>

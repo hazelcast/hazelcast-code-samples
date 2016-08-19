@@ -29,8 +29,8 @@
         <module>externalizable</module>
         <module>global-serializer</module>
         <module>hazelcast-instance-aware</module>
-        <module>kryo-serializer</module>
         <module>identified-data-serializable</module>
+        <module>kryo-serializer</module>
         <module>managed-context</module>
         <module>portable</module>
         <module>serializable</module>

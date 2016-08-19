@@ -27,10 +27,10 @@
         <module>atomiclong</module>
         <module>atomiclong-functions</module>
         <module>atomicreference</module>
-        <module>idgenerator</module>
-        <module>lock</module>
         <module>condition</module>
         <module>countdownlatch</module>
+        <module>idgenerator</module>
+        <module>lock</module>
         <module>semaphore</module>
     </modules>
 

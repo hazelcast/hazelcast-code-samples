@@ -25,14 +25,14 @@
 
     <modules>
         <module>basic-executor</module>
-        <module>scale-up</module>
-        <module>scale-out</module>
-        <module>executing-on-specific-member</module>
-        <module>executing-on-key-owner</module>
         <module>executing-on-all-members</module>
+        <module>executing-on-key-owner</module>
         <module>executing-on-lite-members</module>
-        <module>futures</module>
+        <module>executing-on-specific-member</module>
         <module>execution-callback</module>
+        <module>futures</module>
+        <module>scale-out</module>
+        <module>scale-up</module>
     </modules>
 
     <dependencies>

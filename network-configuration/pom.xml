@@ -24,18 +24,18 @@
     </properties>
 
     <modules>
-        <module>port</module>
-        <module>multicast</module>
-        <module>multicast-plugin</module>
-        <module>tcpip</module>
         <module>aws</module>
-        <module>groups</module>
-        <module>partitiongroup</module>
-        <module>symmetric-encryption</module>
-        <module>ssl</module>
         <module>firewall</module>
+        <module>groups</module>
         <module>jclouds</module>
         <module>jclouds-partitiongroup</module>
+        <module>multicast</module>
+        <module>multicast-plugin</module>
+        <module>partitiongroup</module>
+        <module>port</module>
+        <module>ssl</module>
+        <module>symmetric-encryption</module>
+        <module>tcpip</module>
     </modules>
 
     <dependencies>
