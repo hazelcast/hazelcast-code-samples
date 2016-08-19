@@ -1,12 +1,12 @@
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
-import com.hazelcast.spi.AbstractOperation;
+import com.hazelcast.spi.Operation;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CounterMigrationOperation extends AbstractOperation {
+public class CounterMigrationOperation extends Operation {
 
     Map<String, Integer> migrationData;
 

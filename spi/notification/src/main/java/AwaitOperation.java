@@ -1,10 +1,10 @@
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
-import com.hazelcast.spi.AbstractOperation;
+import com.hazelcast.spi.Operation;
 
 import java.io.IOException;
 
-public class AwaitOperation extends AbstractOperation {
+public class AwaitOperation extends Operation {
     private String objectId;
     private int amount;
 

@@ -1,6 +1,5 @@
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
-import com.hazelcast.spi.AbstractOperation;
 import com.hazelcast.spi.BackupAwareOperation;
 import com.hazelcast.spi.Operation;
 import com.hazelcast.spi.PartitionAwareOperation;
@@ -8,7 +7,7 @@ import com.hazelcast.spi.PartitionAwareOperation;
 import java.io.IOException;
 
 @SuppressWarnings("unused")
-class IncOperation extends AbstractOperation implements PartitionAwareOperation, BackupAwareOperation {
+class IncOperation extends Operation implements PartitionAwareOperation, BackupAwareOperation {
 
     private String objectId;
     private int amount;
@@ -28,11 +27,6 @@ class IncOperation extends AbstractOperation implements PartitionAwareOperation,
         System.out.println("Executing " + objectId + ".inc() on: " + getNodeEngine().getThisAddress());
         Container c = service.containers[getPartitionId()];
         returnValue = c.inc(objectId, amount);
-    }
-
-    @Override
-    public boolean returnsResponse() {
-        return true;
     }
 
     @Override
