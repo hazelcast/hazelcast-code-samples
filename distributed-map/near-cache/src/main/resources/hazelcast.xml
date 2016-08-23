@@ -3,14 +3,21 @@
                                http://www.hazelcast.com/schema/config/hazelcast-config-3.6.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
-    <map name="articles">
+    <map name="articlesObject">
         <near-cache>
-            <max-size>5000</max-size>
-            <time-to-live-seconds>60</time-to-live-seconds>
-            <eviction-policy>NONE</eviction-policy>
-            <invalidate-on-change>false</invalidate-on-change>
             <in-memory-format>OBJECT</in-memory-format>
             <cache-local-entries>true</cache-local-entries>
+            <invalidate-on-change>false</invalidate-on-change>
+            <eviction-policy>NONE</eviction-policy>
+        </near-cache>
+    </map>
+
+    <map name="articlesBinary">
+        <near-cache>
+            <in-memory-format>BINARY</in-memory-format>
+            <invalidate-on-change>false</invalidate-on-change>
+            <cache-local-entries>true</cache-local-entries>
+            <eviction-policy>NONE</eviction-policy>
         </near-cache>
     </map>
 </hazelcast>
