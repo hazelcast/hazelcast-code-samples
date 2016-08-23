@@ -18,30 +18,27 @@ import javax.cache.spi.CachingProvider;
 import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public abstract class ClientNearCacheUsageSupport {
 
     protected static final String DEFAULT_CACHE_NAME = "ClientCache";
 
-    protected final InMemoryFormat inMemoryFormat;
+    protected final List<HazelcastInstance> clients = new LinkedList<HazelcastInstance>();
 
-    protected HazelcastInstance serverInstance;
-    protected List<HazelcastInstance> clients = new LinkedList<HazelcastInstance>();
+    private final InMemoryFormat inMemoryFormat;
+    private final HazelcastInstance serverInstance;
 
     protected ClientNearCacheUsageSupport() {
         inMemoryFormat = InMemoryFormat.BINARY;
-        init();
+        serverInstance = Hazelcast.newHazelcastInstance(createConfig());
     }
 
     protected ClientNearCacheUsageSupport(InMemoryFormat defaultInMemoryFormat) {
         inMemoryFormat = defaultInMemoryFormat;
-        init();
-    }
-
-    protected void init() {
         serverInstance = Hazelcast.newHazelcastInstance(createConfig());
     }
 
-    public void shutdown() {
+    protected void shutdown() {
         for (HazelcastInstance client : clients) {
             client.shutdown();
         }
@@ -66,20 +63,20 @@ public abstract class ClientNearCacheUsageSupport {
         return clientConfig;
     }
 
-    protected CacheConfig createCacheConfig() {
+    protected <K, V> CacheConfig<K, V> createCacheConfig() {
         return createCacheConfig(DEFAULT_CACHE_NAME, inMemoryFormat);
     }
 
-    protected CacheConfig createCacheConfig(String cacheName) {
+    protected <K, V> CacheConfig<K, V> createCacheConfig(String cacheName) {
         return createCacheConfig(cacheName, inMemoryFormat);
     }
 
-    protected CacheConfig createCacheConfig(InMemoryFormat inMemoryFormat) {
+    protected <K, V> CacheConfig<K, V> createCacheConfig(InMemoryFormat inMemoryFormat) {
         return createCacheConfig(DEFAULT_CACHE_NAME, inMemoryFormat);
     }
 
-    protected CacheConfig createCacheConfig(String cacheName, InMemoryFormat inMemoryFormat) {
-        return new CacheConfig()
+    protected <K, V> CacheConfig<K, V> createCacheConfig(String cacheName, InMemoryFormat inMemoryFormat) {
+        return new CacheConfig<K, V>()
                 .setName(DEFAULT_CACHE_NAME)
                 .setInMemoryFormat(inMemoryFormat);
     }
@@ -123,8 +120,7 @@ public abstract class ClientNearCacheUsageSupport {
         return createCacheWithNearCache(cacheName, cacheConfig, nearCacheConfig);
     }
 
-    protected <K, V> ICache<K, V> createCacheWithNearCache(CacheConfig<K, V> cacheConfig,
-                                                           NearCacheConfig nearCacheConfig) {
+    protected <K, V> ICache<K, V> createCacheWithNearCache(CacheConfig<K, V> cacheConfig, NearCacheConfig nearCacheConfig) {
         return createCacheWithNearCache(DEFAULT_CACHE_NAME, cacheConfig, nearCacheConfig);
     }
 
@@ -184,5 +180,4 @@ public abstract class ClientNearCacheUsageSupport {
             e.printStackTrace();
         }
     }
-
 }

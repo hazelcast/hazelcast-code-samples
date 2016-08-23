@@ -20,10 +20,11 @@ import com.hazelcast.nio.serialization.EnterpriseSerializationService;
 
 import javax.cache.spi.CachingProvider;
 
+@SuppressWarnings("unused")
 abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsageSupport {
 
-    // Pass your license key as system property like
-    // "-Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>"
+    // pass your license key as system property like:
+    // -Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>
     private static final String LICENSE_KEY = System.getProperty("hazelcast.enterprise.license.key");
 
     private static final MemorySize SERVER_NATIVE_MEMORY_SIZE = new MemorySize(256, MemoryUnit.MEGABYTES);
@@ -54,9 +55,9 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
     }
 
     @Override
-    protected CacheConfig createCacheConfig(String cacheName, InMemoryFormat inMemoryFormat) {
+    protected <K, V> CacheConfig<K, V> createCacheConfig(String cacheName, InMemoryFormat inMemoryFormat) {
         inMemoryFormat = InMemoryFormat.NATIVE;
-        CacheConfig cacheConfig = super.createCacheConfig(cacheName, inMemoryFormat);
+        CacheConfig<K, V> cacheConfig = super.createCacheConfig(cacheName, inMemoryFormat);
         if (inMemoryFormat == InMemoryFormat.NATIVE) {
             EvictionConfig evictionConfig = new EvictionConfig();
             evictionConfig.setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
@@ -76,18 +77,6 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
             nearCacheConfig.setEvictionConfig(evictionConfig);
         }
         return nearCacheConfig;
-    }
-
-    class HiDensityNearCacheSupportContext<K, V> {
-
-        final ICache<K, V> cache;
-        final HazelcastMemoryManager memoryManager;
-
-        HiDensityNearCacheSupportContext(ICache<K, V> cache, HazelcastMemoryManager memoryManager) {
-            this.cache = cache;
-            this.memoryManager = memoryManager;
-        }
-
     }
 
     <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache() {
@@ -119,6 +108,17 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
         EnterpriseSerializationService enterpriseSerializationService =
                 (EnterpriseSerializationService) client.getSerializationService();
 
-        return new HiDensityNearCacheSupportContext(cache, enterpriseSerializationService.getMemoryManager());
+        return new HiDensityNearCacheSupportContext<K, V>(cache, enterpriseSerializationService.getMemoryManager());
+    }
+
+    class HiDensityNearCacheSupportContext<K, V> {
+
+        final ICache<K, V> cache;
+        final HazelcastMemoryManager memoryManager;
+
+        HiDensityNearCacheSupportContext(ICache<K, V> cache, HazelcastMemoryManager memoryManager) {
+            this.cache = cache;
+            this.memoryManager = memoryManager;
+        }
     }
 }

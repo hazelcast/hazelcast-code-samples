@@ -3,7 +3,7 @@ import com.hazelcast.cache.ICache;
 import java.util.concurrent.Future;
 
 /**
- * HiDensity cache Put/Get/Remove usage example
+ * HiDensity cache put/get/remove usage example.
  */
 public class HiDensityCachePutGetReplaceRemoveClearUsage extends HiDensityCacheUsageSupport {
 

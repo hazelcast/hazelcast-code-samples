@@ -26,13 +26,13 @@ public class ServerHDNearCache {
             map.put("key-" + i, "value-" + i);
         }
 
-        // first `get` puts remote entry into near-cache
+        // first get() populates the Near cache with the remote entry
         for (int i = 0; i < 1000; i++) {
             map.get("key-" + i);
         }
 
         long ownedEntryCount = map.getLocalMapStats().getNearCacheStats().getOwnedEntryCount();
-        System.out.println("Near cache includes " + ownedEntryCount + " entries");
+        System.out.println("Near Cache includes " + ownedEntryCount + " entries");
 
         node.shutdown();
     }

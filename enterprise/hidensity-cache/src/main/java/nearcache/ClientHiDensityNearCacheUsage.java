@@ -19,10 +19,10 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
         // put records to cache through client-1
         putRecordsToCacheOnClient1(clientCacheContext1, clientCacheContext2);
 
-        // gets records from cache through client-2
+        // get records from cache through client-2
         getRecordsFromCacheOnClient2(clientCacheContext1, clientCacheContext2);
 
-        // gets records from near-cache on client-2
+        // get records from Near Cache on client-2
         getRecordsFromNearCacheOnClient2(clientCacheContext1, clientCacheContext2);
 
         // update records at cache through client-1
@@ -31,7 +31,7 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
         // wait a little for invalidation events
         sleep(5000);
 
-        // gets invalidated records from near-cache on client-2
+        // get invalidated records from Near Cache on client-2
         getInvalidatedRecordsFromNearCacheOnClient2(clientCacheContext1, clientCacheContext2);
 
         shutdown();
@@ -55,6 +55,8 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
                                               HiDensityNearCacheSupportContext<Integer, String> clientCacheContext2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // these get() calls populate the Near Cache, so at the next calls,
+            // the values will be taken from local Near Cache without any remote access
             String actualValue = clientCacheContext2.cache.get(i);
             String expectedValue = generateValueFromKey(i);
             assert actualValue.equals(expectedValue)
@@ -62,8 +64,6 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
             if (VERBOSE) {
                 System.out.println("Get key=" + i + ", value=" + actualValue + " from Hi-Density cache through client-2");
             }
-            // anymore, this record is put to also near-cache,
-            // at next calls, they will be taken from local near-cache without any remote access
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
         System.out.println("Get records from Hi-Density cache finished in " + elapsed + " milliseconds");
@@ -75,18 +75,18 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
                                                   HiDensityNearCacheSupportContext<Integer, String> clientCacheContext2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // since this record has been put to Near Cache before,
+            // it is taken from the local Near Cache without any remote access
             String actualValue = clientCacheContext2.cache.get(i);
             String expectedValue = generateValueFromKey(i);
             assert actualValue.equals(expectedValue)
                     : "Taken value from cache must be " + expectedValue + " but it is " + actualValue;
             if (VERBOSE) {
-                System.out.println("Get key=" + i + ", value=" + actualValue + " from Hi-Density near-cache on client-2");
+                System.out.println("Get key=" + i + ", value=" + actualValue + " from Hi-Density Near Cache on client-2");
             }
-            // since this record has been put to near-cache at previous,
-            // it is taken from near-cache without any remote access
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-        System.out.println("Get records from near-cache finished in " + elapsed + " milliseconds");
+        System.out.println("Get records from Near Cache finished in " + elapsed + " milliseconds");
         System.out.println("Memory usage on client-1: " + clientCacheContext1.memoryManager.getMemoryStats());
         System.out.println("Memory usage on client-2: " + clientCacheContext2.memoryManager.getMemoryStats());
     }
@@ -110,6 +110,9 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
             HiDensityNearCacheSupportContext<Integer, String> clientCacheContext2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // these record have been invalidated at Near Cache on client-2,
+            // because client-1 has updated the records and invalidation events are sent to client-2,
+            // so the records have been taken from the remote cache (not the local Near Cache) through client-2
             String actualValue = clientCacheContext2.cache.get(i);
             String expectedValue = generateValueFromKey(i);
             try {
@@ -121,12 +124,9 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
             if (VERBOSE) {
                 System.out.println("Get key=" + i + ", value=" + actualValue + " from cache through client-2 after invalidation");
             }
-            // this record has been invalidated at near-cache on client-2
-            // since client-1 has updated the record and invalidation events are sent to client-2,
-            // so this record has been taken from cache (not near-cache) through client-2
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-        System.out.println("Get invalidated records from near-cache finished in " + elapsed + " milliseconds");
+        System.out.println("Get invalidated records from Near Cache finished in " + elapsed + " milliseconds");
         System.out.println("Memory usage on client-1: " + clientCacheContext1.memoryManager.getMemoryStats());
         System.out.println("Memory usage on client-2: " + clientCacheContext2.memoryManager.getMemoryStats());
     }

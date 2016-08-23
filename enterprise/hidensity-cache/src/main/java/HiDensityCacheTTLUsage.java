@@ -7,7 +7,7 @@ import javax.cache.expiry.ModifiedExpiryPolicy;
 import java.util.concurrent.TimeUnit;
 
 /**
- * HiDensity cache TTL usage example
+ * HiDensity cache TTL usage example.
  */
 public class HiDensityCacheTTLUsage extends HiDensityCacheUsageSupport {
 
