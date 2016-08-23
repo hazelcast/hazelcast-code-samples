@@ -1,7 +1,6 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.monitor.NearCacheStats;
 
 public class NearCacheWithEvictionPolicy extends NearCacheSupport {
 
@@ -37,11 +36,5 @@ public class NearCacheWithEvictionPolicy extends NearCacheSupport {
         printNearCacheStats(map, "The second get(101) call is served from the Near Cache");
 
         Hazelcast.shutdownAll();
-    }
-
-    private static void printNearCacheStats(IMap<Integer, Article> map, String message) {
-        NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
-        System.out.printf("%s (%d entries, %d hits, %d misses)%n",
-                message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses());
     }
 }

@@ -30,4 +30,14 @@
             <max-size>100</max-size>
         </near-cache>
     </map>
+
+    <map name="articlesTTL">
+        <near-cache>
+            <in-memory-format>OBJECT</in-memory-format>
+            <cache-local-entries>true</cache-local-entries>
+            <invalidate-on-change>false</invalidate-on-change>
+            <eviction-policy>NONE</eviction-policy>
+            <time-to-live-seconds>1</time-to-live-seconds>
+        </near-cache>
+    </map>
 </hazelcast>

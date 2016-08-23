@@ -14,6 +14,12 @@ abstract class NearCacheSupport {
                 stats.getHits());
     }
 
+    static void printNearCacheStats(IMap<Integer, Article> map, String message) {
+        NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
+        System.out.printf("%s (%d entries, %d hits, %d misses)%n",
+                message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses());
+    }
+
     static void waitForNearCacheEntryCount(IMap<Integer, Article> map, int targetSize) {
         long ownedEntries;
         do {
