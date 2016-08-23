@@ -50,4 +50,13 @@
             <max-idle-seconds>1</max-idle-seconds>
         </near-cache>
     </map>
+
+    <map name="articlesInvalidation">
+        <near-cache>
+            <in-memory-format>OBJECT</in-memory-format>
+            <cache-local-entries>false</cache-local-entries>
+            <invalidate-on-change>true</invalidate-on-change>
+            <eviction-policy>NONE</eviction-policy>
+        </near-cache>
+    </map>
 </hazelcast>
