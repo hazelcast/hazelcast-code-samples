@@ -15,9 +15,19 @@
     <map name="articlesBinary">
         <near-cache>
             <in-memory-format>BINARY</in-memory-format>
-            <invalidate-on-change>false</invalidate-on-change>
             <cache-local-entries>true</cache-local-entries>
+            <invalidate-on-change>false</invalidate-on-change>
             <eviction-policy>NONE</eviction-policy>
+        </near-cache>
+    </map>
+
+    <map name="articlesEvictionPolicy">
+        <near-cache>
+            <in-memory-format>OBJECT</in-memory-format>
+            <cache-local-entries>true</cache-local-entries>
+            <invalidate-on-change>false</invalidate-on-change>
+            <eviction-policy>LRU</eviction-policy>
+            <max-size>100</max-size>
         </near-cache>
     </map>
 </hazelcast>
