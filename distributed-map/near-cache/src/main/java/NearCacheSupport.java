@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import static com.hazelcast.spi.properties.GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
 import static java.lang.Integer.parseInt;
 
-abstract class NearCacheSupport {
+public abstract class NearCacheSupport {
 
     private static final int INVALIDATION_DELAY_SECONDS
             = 2 * parseInt(CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue());
@@ -33,7 +33,7 @@ abstract class NearCacheSupport {
         }
     }
 
-    static void printNearCacheStats(IMap<?, Article> map) {
+    public static void printNearCacheStats(IMap<?, Article> map) {
         NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
 
         System.out.printf("The Near Cache contains %d entries.%n", stats.getOwnedEntryCount());
@@ -44,13 +44,13 @@ abstract class NearCacheSupport {
                 stats.getHits());
     }
 
-    static void printNearCacheStats(IMap<?, Article> map, String message) {
+    public static void printNearCacheStats(IMap<?, Article> map, String message) {
         NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
         System.out.printf("%s (%d entries, %d hits, %d misses)%n",
                 message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses());
     }
 
-    static void waitForNearCacheEntryCount(IMap<?, Article> map, int targetSize) {
+    public static void waitForNearCacheEntryCount(IMap<?, Article> map, int targetSize) {
         long ownedEntries;
         do {
             NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
@@ -58,7 +58,7 @@ abstract class NearCacheSupport {
         } while (ownedEntries > targetSize);
     }
 
-    static void waitForInvalidationEvents() {
+    public static void waitForInvalidationEvents() {
         try {
             TimeUnit.SECONDS.sleep(INVALIDATION_DELAY_SECONDS);
         } catch (InterruptedException ignored) {
@@ -66,7 +66,7 @@ abstract class NearCacheSupport {
         }
     }
 
-    static String generateKeyOwnedBy(HazelcastInstance instance) {
+    public static String generateKeyOwnedBy(HazelcastInstance instance) {
         Cluster cluster = instance.getCluster();
         checkPartitionCountGreaterOrEqualMemberCount(instance);
 
