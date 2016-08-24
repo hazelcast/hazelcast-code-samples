@@ -4,18 +4,35 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-
     <artifactId>spark</artifactId>
     <name>Spark Connector Example</name>
-
-    <version>0.1-SNAPSHOT</version>
-
 
     <parent>
         <groupId>com.hazelcast.samples</groupId>
         <artifactId>hazelcast-integration</artifactId>
         <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <hazelcast-spark.version>0.2-SNAPSHOT</hazelcast-spark.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>snapshot-repository</id>
+            <name>Maven2 Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
@@ -35,7 +52,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spark</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>${hazelcast-spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -43,5 +60,4 @@
             <version>1.6.1</version>
         </dependency>
     </dependencies>
-
 </project>

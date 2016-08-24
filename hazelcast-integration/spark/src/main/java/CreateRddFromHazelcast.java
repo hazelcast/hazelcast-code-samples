@@ -4,12 +4,14 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.spark.connector.HazelcastSparkContext;
 import com.hazelcast.spark.connector.rdd.HazelcastJavaRDD;
 import domain.User;
-import java.util.Arrays;
-import java.util.Random;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.DoubleFlatMapFunction;
 import scala.Tuple2;
+
+import java.util.Random;
+
+import static java.util.Collections.singletonList;
 
 public class CreateRddFromHazelcast {
 
@@ -28,8 +30,9 @@ public class CreateRddFromHazelcast {
 
         Double averageAge = usersRdd.flatMapToDouble(new DoubleFlatMapFunction<Tuple2<String, User>>() {
                                                          @Override
-                                                         public Iterable<Double> call(Tuple2<String, User> entry) throws Exception {
-                                                             return Arrays.asList((double) entry._2().getAge());
+                                                         public Iterable<Double> call(Tuple2<String, User> entry)
+                                                                 throws Exception {
+                                                             return singletonList((double) entry._2().getAge());
                                                          }
                                                      }
         ).mean();

@@ -1,10 +1,6 @@
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.regex.Pattern;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -14,12 +10,18 @@ import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import static com.hazelcast.spark.connector.HazelcastJavaPairRDDFunctions.javaPairRddFunctions;
 
 /**
  * Spark WordCount example writing results to a Hazelcast Map.
  */
 public class WriteRddToHazelcast {
+
     private static final Pattern SPACE = Pattern.compile(" ");
     private static final String INPUT_RESOURCE_NAME = "article";
 
@@ -55,9 +57,8 @@ public class WriteRddToHazelcast {
             }
         });
 
-        //write counts to the hazelcast map.
+        // write counts to the Hazelcast map
         javaPairRddFunctions(counts).saveToHazelcastMap("counts");
-
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient();
         IMap<Object, Object> countsMap = client.getMap("counts");
@@ -74,5 +75,4 @@ public class WriteRddToHazelcast {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         return new File(classLoader.getResource(INPUT_RESOURCE_NAME).getFile());
     }
-
 }

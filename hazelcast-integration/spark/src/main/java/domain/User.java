@@ -2,7 +2,9 @@ package domain;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class User implements Serializable {
+
     private String name;
     private int age;
     private double salary;
@@ -39,10 +41,10 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", salary=" + salary +
-                '}';
+        return "User{"
+                + "name='" + name + '\''
+                + ", age=" + age
+                + ", salary=" + salary
+                + '}';
     }
 }
