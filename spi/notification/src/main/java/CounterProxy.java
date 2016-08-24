@@ -1,4 +1,3 @@
-import com.hazelcast.spi.Invocation;
 import com.hazelcast.spi.InvocationBuilder;
 import com.hazelcast.spi.NodeEngine;
 import com.hazelcast.util.ExceptionUtil;
@@ -6,17 +5,23 @@ import com.hazelcast.util.ExceptionUtil;
 import java.util.concurrent.Future;
 
 public class CounterProxy implements Counter {
+
     private final NodeEngine nodeEngine;
     private final String objectId;
 
-    public CounterProxy(String objectId, NodeEngine nodeEngine) {
+    CounterProxy(String objectId, NodeEngine nodeEngine) {
         this.nodeEngine = nodeEngine;
         this.objectId = objectId;
     }
 
     @Override
-    public Object getId() {
-        return objectId;
+    public String getPartitionKey() {
+        return null;
+    }
+
+    @Override
+    public String getServiceName() {
+        return CounterService.NAME;
     }
 
     @Override
@@ -31,8 +36,7 @@ public class CounterProxy implements Counter {
         InvocationBuilder builder = nodeEngine.getOperationService()
                 .createInvocationBuilder(CounterService.NAME, operation, partitionId);
         try {
-            Invocation invocation = builder.build();
-            final Future future = invocation.invoke();
+            Future future = builder.invoke();
             future.get();
         } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);
@@ -46,8 +50,7 @@ public class CounterProxy implements Counter {
         InvocationBuilder builder = nodeEngine.getOperationService()
                 .createInvocationBuilder(CounterService.NAME, operation, partitionId);
         try {
-            Invocation invocation = builder.build();
-            final Future<Integer> future = invocation.invoke();
+            Future<Integer> future = builder.invoke();
             return future.get();
         } catch (Exception e) {
             throw ExceptionUtil.rethrow(e);

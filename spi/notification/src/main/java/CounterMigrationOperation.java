@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CounterMigrationOperation extends Operation {
+class CounterMigrationOperation extends Operation {
 
-    Map<String, Integer> migrationData;
+    private Map<String, Integer> migrationData;
 
+    @SuppressWarnings("unused")
     public CounterMigrationOperation() {
     }
 
-    public CounterMigrationOperation(Map<String, Integer> migrationData) {
+    CounterMigrationOperation(Map<String, Integer> migrationData) {
         this.migrationData = migrationData;
     }
 
@@ -29,7 +30,7 @@ public class CounterMigrationOperation extends Operation {
     @Override
     protected void readInternal(ObjectDataInput in) throws IOException {
         int size = in.readInt();
-        migrationData = new HashMap<>();
+        migrationData = new HashMap<String, Integer>();
         for (int i = 0; i < size; i++) {
             migrationData.put(in.readUTF(), in.readInt());
         }

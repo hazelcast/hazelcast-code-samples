@@ -4,16 +4,27 @@ import com.hazelcast.spi.Operation;
 
 import java.io.IOException;
 
-public class AwaitOperation extends Operation {
+class AwaitOperation extends Operation {
+
     private String objectId;
     private int amount;
 
+    @SuppressWarnings("unused")
     public AwaitOperation() {
     }
 
-    public AwaitOperation(String objectId, int amount) {
+    AwaitOperation(String objectId, int amount) {
         this.amount = amount;
         this.objectId = objectId;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Executing " + objectId + ".await() on: " + getNodeEngine().getThisAddress());
+
+        CounterService service = getService();
+        Container container = service.containers[getPartitionId()];
+        container.await(objectId, amount);
     }
 
     @Override
@@ -28,12 +39,5 @@ public class AwaitOperation extends Operation {
         super.readInternal(in);
         objectId = in.readUTF();
         amount = in.readInt();
-    }
-
-    @Override
-    public void run() throws Exception {
-        CounterService service = getService();
-        Container c = service.containers[getPartitionId()];
-        c.await(objectId, amount);
     }
 }

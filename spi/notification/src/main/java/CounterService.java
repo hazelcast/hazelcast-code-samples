@@ -1,13 +1,19 @@
 import com.hazelcast.core.DistributedObject;
-import com.hazelcast.partition.MigrationEndpoint;
-import com.hazelcast.partition.MigrationType;
+import com.hazelcast.spi.ManagedService;
+import com.hazelcast.spi.MigrationAwareService;
+import com.hazelcast.spi.NodeEngine;
+import com.hazelcast.spi.Operation;
+import com.hazelcast.spi.PartitionMigrationEvent;
+import com.hazelcast.spi.PartitionReplicationEvent;
+import com.hazelcast.spi.RemoteService;
+import com.hazelcast.spi.partition.MigrationEndpoint;
 
 import java.util.Map;
 import java.util.Properties;
 
 public class CounterService implements ManagedService, RemoteService, MigrationAwareService {
 
-    public static final String NAME = "CounterService";
+    static final String NAME = "CounterService";
 
     Container[] containers;
     private NodeEngine nodeEngine;
@@ -22,26 +28,24 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public void shutdown() {
+    public void shutdown(boolean b) {
     }
 
     @Override
-    public DistributedObject createDistributedObject(Object objectId) {
-        return new CounterProxy(String.valueOf(objectId), nodeEngine);
+    public DistributedObject createDistributedObject(String objectId) {
+        return new CounterProxy(objectId, nodeEngine);
     }
 
     @Override
-    public String getServiceName() {
-        return NAME;
+    public void destroyDistributedObject(String s) {
     }
 
     @Override
-    public void beforeMigration(MigrationServiceEvent e) {
-        //no-op
+    public void beforeMigration(PartitionMigrationEvent partitionMigrationEvent) {
     }
 
     @Override
-    public Operation prepareMigrationOperation(MigrationServiceEvent e) {
+    public Operation prepareReplicationOperation(PartitionReplicationEvent e) {
         if (e.getReplicaIndex() > 1) {
             return null;
         }
@@ -55,27 +59,17 @@ public class CounterService implements ManagedService, RemoteService, MigrationA
     }
 
     @Override
-    public void commitMigration(MigrationServiceEvent e) {
-        if (e.getMigrationEndpoint() == MigrationEndpoint.SOURCE
-                && e.getMigrationType() == MigrationType.MOVE) {
+    public void commitMigration(PartitionMigrationEvent e) {
+        if (e.getMigrationEndpoint() == MigrationEndpoint.SOURCE) {
             containers[e.getPartitionId()].clear();
         }
     }
 
     @Override
-    public void rollbackMigration(MigrationServiceEvent e) {
+    public void rollbackMigration(PartitionMigrationEvent e) {
         if (e.getMigrationEndpoint() == MigrationEndpoint.DESTINATION) {
             containers[e.getPartitionId()].clear();
         }
-    }
-
-    @Override
-    public DistributedObject createDistributedObjectForClient(Object objectId) {
-        return null;
-    }
-
-    @Override
-    public void destroyDistributedObject(Object objectId) {
     }
 
     @Override

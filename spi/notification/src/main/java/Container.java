@@ -3,8 +3,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 class Container {
-    final ConcurrentMap<String, Integer> counterMap = new ConcurrentHashMap<>();
+
+    private final ConcurrentMap<String, Integer> counterMap = new ConcurrentHashMap<String, Integer>();
 
     int inc(String id, int amount) {
         Integer counter = counterMap.get(id);
@@ -16,6 +19,18 @@ class Container {
         return counter;
     }
 
+    void await(String id, int amount) {
+        try {
+            Integer counter = counterMap.get(id);
+            while (counter == null || counter < amount) {
+                MILLISECONDS.sleep(10);
+                counter = counterMap.get(id);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     void clear() {
         counterMap.clear();
     }
@@ -25,10 +40,6 @@ class Container {
     }
 
     Map<String, Integer> toMigrationData() {
-        return new HashMap<>(counterMap);
-    }
-
-    void await(String objectId, int amount) {
-        //To change body of created methods use File | Settings | File Templates.
+        return new HashMap<String, Integer>(counterMap);
     }
 }

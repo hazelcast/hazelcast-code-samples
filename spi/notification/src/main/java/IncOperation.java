@@ -1,49 +1,32 @@
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.spi.BackupAwareOperation;
-import com.hazelcast.spi.KeyBasedOperation;
 import com.hazelcast.spi.Operation;
 
 import java.io.IOException;
 
-class IncOperation extends Operation implements KeyBasedOperation, BackupAwareOperation {
+class IncOperation extends Operation implements BackupAwareOperation {
 
     private String objectId;
-    private int amount, returnValue;
+    private int amount;
+    private int returnValue;
 
+    @SuppressWarnings("unused")
     public IncOperation() {
     }
 
-    public IncOperation(String objectId, int amount) {
+    IncOperation(String objectId, int amount) {
         this.amount = amount;
         this.objectId = objectId;
     }
 
     @Override
-    protected void writeInternal(ObjectDataOutput out) throws IOException {
-        super.writeInternal(out);
-        out.writeUTF(objectId);
-        out.writeInt(amount);
-    }
-
-    @Override
-    protected void readInternal(ObjectDataInput in) throws IOException {
-        super.readInternal(in);
-        objectId = in.readUTF();
-        amount = in.readInt();
-    }
-
-    @Override
-    public void run() throws Exception {
-        CounterService service = getService();
+    public void run() {
         System.out.println("Executing " + objectId + ".inc() on: " + getNodeEngine().getThisAddress());
-        Container c = service.containers[getPartitionId()];
-        returnValue = c.inc(objectId, amount);
-    }
 
-    @Override
-    public int getKeyHash() {
-        return ("CounterService" + objectId).hashCode();
+        CounterService service = getService();
+        Container container = service.containers[getPartitionId()];
+        returnValue = container.inc(objectId, amount);
     }
 
     @Override
@@ -69,5 +52,19 @@ class IncOperation extends Operation implements KeyBasedOperation, BackupAwareOp
     @Override
     public Object getResponse() {
         return returnValue;
+    }
+
+    @Override
+    protected void writeInternal(ObjectDataOutput out) throws IOException {
+        super.writeInternal(out);
+        out.writeUTF(objectId);
+        out.writeInt(amount);
+    }
+
+    @Override
+    protected void readInternal(ObjectDataInput in) throws IOException {
+        super.readInternal(in);
+        objectId = in.readUTF();
+        amount = in.readInt();
     }
 }
