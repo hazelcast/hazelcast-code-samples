@@ -6,13 +6,15 @@ import com.hazelcast.config.NearCacheConfig;
 import java.util.concurrent.TimeUnit;
 
 import static com.hazelcast.spi.properties.GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
+import static java.lang.Boolean.getBoolean;
+import static java.lang.Integer.parseInt;
 
 public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
 
     private static final int RECORD_COUNT = 1000;
     private static final int BATCH_FREQUENCY_MILLISECONDS
-            = Integer.parseInt(CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue()) * 1000;
-    private static final boolean VERBOSE = Boolean.getBoolean("com.hazelcast.examples.jcache.nearcache.verbose");
+            = parseInt(CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue()) * 1000;
+    private static final boolean VERBOSE = getBoolean("com.hazelcast.examples.jcache.nearcache.verbose");
 
     public void run() {
         NearCacheConfig nearCacheConfig = createNearCacheConfig();
@@ -21,22 +23,22 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
         ICache<Integer, String> clientCache1 = createCacheWithNearCache(nearCacheConfig);
         ICache<Integer, String> clientCache2 = getCacheWithNearCache();
 
-        // put records to cache through client-1
+        // put records to remote cache through client-1
         putRecordsToCacheOnClient1(clientCache1);
 
-        // gets records from cache through client-2
+        // get records from remote cache through client-2
         getRecordsFromCacheOnClient2(clientCache2);
 
-        // gets records from near-cache on client-2
+        // get records from Near Cache on client-2
         getRecordsFromNearCacheOnClient2(clientCache2);
 
-        // update records at cache through client-1
+        // update records in remote cache through client-1
         updateRecordsInCacheOnClient1(clientCache1);
 
         // wait a little for invalidation events
         sleep(BATCH_FREQUENCY_MILLISECONDS + 5000);
 
-        // gets invalidated records from near-cache on client-2
+        // get invalidated records from remote cache on client-2
         getInvalidatedRecordsFromNearCacheOnClient2(clientCache2);
 
         shutdown();
@@ -56,6 +58,8 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
     private void getRecordsFromCacheOnClient2(ICache<Integer, String> clientCache2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // these get() calls populate the Near Cache, so at the next calls,
+            // the values will be taken from local Near Cache without any remote access
             String actualValue = clientCache2.get(i);
             String expectedValue = generateValueFromKey(i);
             assert actualValue.equals(expectedValue) : "Taken value from cache must be " + expectedValue
@@ -63,8 +67,6 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
             if (VERBOSE) {
                 System.out.println("Get key=" + i + ", value=" + actualValue + " from cache through client-2");
             }
-            // anymore, this record is put to also near-cache,
-            // at next calls, they will be taken from local near-cache without any remote access
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
         System.out.println("Get records from cache finished in " + elapsed + " milliseconds");
@@ -73,18 +75,18 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
     private void getRecordsFromNearCacheOnClient2(ICache<Integer, String> clientCache2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // since this record has been put to Near Cache before,
+            // it is taken from the local Near Cache without any remote access
             String actualValue = clientCache2.get(i);
             String expectedValue = generateValueFromKey(i);
             assert actualValue.equals(expectedValue)
                     : "Taken value from cache must be " + expectedValue + " but it is " + actualValue;
             if (VERBOSE) {
-                System.out.println("Get key=" + i + ", value=" + actualValue + " from near-cache on client-2");
+                System.out.println("Get key=" + i + ", value=" + actualValue + " from Near Cache on client-2");
             }
-            // since this record has been put to near-cache at previous,
-            // it is taken from near-cache without any remote access.
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-        System.out.println("Get records from near-cache finished in " + elapsed + " milliseconds");
+        System.out.println("Get records from Near Cache finished in " + elapsed + " milliseconds");
     }
 
     private void updateRecordsInCacheOnClient1(ICache<Integer, String> clientCache1) {
@@ -101,6 +103,9 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
     private void getInvalidatedRecordsFromNearCacheOnClient2(ICache<Integer, String> clientCache2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // these record have been invalidated at Near Cache on client-2,
+            // because client-1 has updated the records and invalidation events are sent to client-2,
+            // so the records have been taken from the remote cache (not the local Near Cache) through client-2
             String actualValue = clientCache2.get(i);
             String expectedValue = generateValueFromKey(i);
             try {
@@ -112,12 +117,9 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
             if (VERBOSE) {
                 System.out.println("Get key=" + i + ", value=" + actualValue + " from cache through client-2 after invalidation");
             }
-            // this record has been invalidated at near-cache on client-2
-            // since client-1 has updated the record and invalidation events are sent to client-2,
-            // so this record has been taken from cache (not near-cache) through client-2
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-        System.out.println("Get invalidated records from near-cache finished in " + elapsed + " milliseconds");
+        System.out.println("Get invalidated records from Near Cache finished in " + elapsed + " milliseconds");
     }
 
     public static void main(String[] args) {

@@ -16,7 +16,7 @@ import javax.cache.CacheManager;
 import javax.cache.spi.CachingProvider;
 
 /**
- * HiDensity cache usage example
+ * Support class for HiDensity cache usage examples.
  */
 abstract class HiDensityCacheUsageSupport {
 
@@ -41,13 +41,12 @@ abstract class HiDensityCacheUsageSupport {
     private static boolean useNativeMemorySerialization = false;
 
     static {
-        // Pass your license key as system property like
-        // "-Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>"
+        // Pass your license key as system property like:
+        // -Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>
         LICENSE_KEY = System.getProperty("hazelcast.enterprise.license.key");
     }
 
     private static HazelcastInstance instance;
-    private static CachingProvider cachingProvider;
     private static CacheManager cacheManager;
 
     private static Config createConfig() {
@@ -101,9 +100,7 @@ abstract class HiDensityCacheUsageSupport {
 
     static void init() {
         instance = createInstance(createConfig());
-        cachingProvider =
-                HazelcastServerCachingProvider
-                        .createCachingProvider(instance);
+        CachingProvider cachingProvider = HazelcastServerCachingProvider.createCachingProvider(instance);
         cacheManager = cachingProvider.getCacheManager();
     }
 

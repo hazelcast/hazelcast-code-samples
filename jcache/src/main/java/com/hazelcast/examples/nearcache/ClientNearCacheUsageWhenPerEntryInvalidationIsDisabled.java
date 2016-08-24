@@ -8,7 +8,7 @@ import com.hazelcast.spi.properties.GroupProperty;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Code sample to demonstrate near-cache behaviour when per entry invalidation is disabled.
+ * Code sample to demonstrate Near Cache behaviour when per entry invalidation is disabled.
  */
 public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends ClientNearCacheUsageSupport {
 
@@ -21,42 +21,39 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
         NearCacheConfig nearCacheConfig = createNearCacheConfig();
         nearCacheConfig.setInvalidateOnChange(true);
 
-        CacheConfig cacheConfig = createCacheConfig();
+        CacheConfig<Integer, String> cacheConfig = createCacheConfig();
         cacheConfig.setDisablePerEntryInvalidationEvents(true);
 
         ICache<Integer, String> clientCache1 = createCacheWithNearCache(cacheConfig, nearCacheConfig);
         ICache<Integer, String> clientCache2 = getCacheWithNearCache(nearCacheConfig);
 
-        // Put records to cache through client-1.
+        // put records to remote cache through client-1
         putRecordsToCacheOnClient1(clientCache1);
 
-        // Get records from cache through client-2.
+        // get records from remote cache through client-2
         getRecordsFromCacheOnClient2(clientCache2);
 
-        // Get records from near-cache on client-2.
+        // get records from Near Cache on client-2
         getRecordsFromNearCacheOnClient2(clientCache2);
 
-        // Update records at cache through client-1.
+        // update records in remote cache through client-1
         updateRecordsInCacheOnClient1(clientCache1);
 
-        // Wait some time and if there are invalidation events to be sent in batch.
-        // We assume that they should be flushed, received and processed in this time window already.
+        // wait a little for invalidation events to be sent in batch
         sleep(2 * INVALIDATION_EVENT_FLUSH_FREQ_MSECS);
 
-        // Get old records from near-cache on client-2 because we have disabled per entry invalidation event.
+        // get old records from Near Cache on client-2 (because we have disabled per entry invalidation event)
         getStillOldRecordsFromNearCacheOnClient2(clientCache2);
 
-        // Clear cache through client-1.
+        // clear cache through client-1
         clientCache1.clear();
 
-        // Wait some time and if there are invalidation events to be sent in batch.
-        // We assume that they should be flushed, received and processed in this time window already.
+        // wait a little for invalidation events to be sent in batch
         sleep(2 * INVALIDATION_EVENT_FLUSH_FREQ_MSECS);
 
-        // Try to get record and can't find any record,
-        // since all records are invalidated from near-cache on client-2 due to clear on client-1.
-        // Because clear is full-flush operation and it triggers invalidation
-        // even though per entry invalidation event is disabled.
+        // try to get records from Near Cache and can't find any, since they are invalidated from Near Cache on client-2
+        // due to clear() on client-1, because it's a full-flush operation and triggers invalidation even though
+        // per entry invalidation event is disabled
         cantFindAnyRecordFromNearCacheOnClient2(clientCache2);
 
         shutdown();
@@ -76,6 +73,8 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
     private void getRecordsFromCacheOnClient2(ICache<Integer, String> clientCache2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // these get() calls populate the Near Cache, so at the next calls,
+            // the values will be taken from local Near Cache without any remote access
             String actualValue = clientCache2.get(i);
             String expectedValue = generateValueFromKey(i);
             assert actualValue.equals(expectedValue) : "Taken value from cache must be " + expectedValue
@@ -83,8 +82,6 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
             if (VERBOSE) {
                 System.out.println("Get key=" + i + ", value=" + actualValue + " from cache through client-2");
             }
-            // Anymore, this record is put to also near-cache,
-            // at next calls, they will be taken from local near-cache without any remote access.
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
         System.out.println("Get records from cache finished in " + elapsed + " milliseconds");
@@ -93,18 +90,18 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
     private void getRecordsFromNearCacheOnClient2(ICache<Integer, String> clientCache2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // since this record has been put to Near Cache before,
+            // it is taken from the local Near Cache without any remote access
             String actualValue = clientCache2.get(i);
             String expectedValue = generateValueFromKey(i);
             assert actualValue.equals(expectedValue)
-                    : "Taken value from near-cache must be " + expectedValue + " but it is " + actualValue;
+                    : "Taken value from Near Cache must be " + expectedValue + " but it is " + actualValue;
             if (VERBOSE) {
-                System.out.println("Get key=" + i + ", value=" + actualValue + " from near-cache on client-2");
+                System.out.println("Get key=" + i + ", value=" + actualValue + " from Near Cache on client-2");
             }
-            // Since this record has been put to near-cache at previous,
-            // it is taken from near-cache without any remote access.
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-        System.out.println("Get records from near-cache finished in " + elapsed + " milliseconds");
+        System.out.println("Get records from Near Cache finished in " + elapsed + " milliseconds");
     }
 
     private void updateRecordsInCacheOnClient1(ICache<Integer, String> clientCache1) {
@@ -121,23 +118,21 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
     private void getStillOldRecordsFromNearCacheOnClient2(ICache<Integer, String> clientCache2) {
         long started = System.nanoTime();
         for (int i = 0; i < RECORD_COUNT; i++) {
+            // these records have not been invalidated in the Near Cache on client-2,
+            // because client-1 has updated the records and per entry invalidation event is disabled,
+            // so invalidation events are not sent to client-2 (so this record has still its old value)
             String actualValue = clientCache2.get(i);
             String expectedValue = generateValueFromKey(i);
             assert actualValue.equals(expectedValue)
-                    : "Taken value from near-cache must not be updated value " + actualValue
-                    + " but old value " + expectedValue
+                    : "Taken value from Near Cache must not be updated value " + actualValue + " but old value " + expectedValue
                     + ". Because it must not be invalidated disabled per entry invalidation.";
             if (VERBOSE) {
                 System.out.println("Get key=" + i + ", old value=" + actualValue
-                        + " from near-cache through client-2 after update");
+                        + " from Near Cache through client-2 after update");
             }
-            // This record has not been invalidated at near-cache on client-2.
-            // Client-1 has updated the record and since per entry invalidation event is disabled,
-            // invalidation events are not sent to client-2.
-            // So this record has still its old value.
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-        System.out.println("Get old records from near-cache after update finished in " + elapsed + " milliseconds");
+        System.out.println("Get old records from Near Cache after update finished in " + elapsed + " milliseconds");
     }
 
     private void cantFindAnyRecordFromNearCacheOnClient2(ICache<Integer, String> clientCache2) {
@@ -145,15 +140,14 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
         for (int i = 0; i < RECORD_COUNT; i++) {
             String value = clientCache2.get(i);
             assert value == null
-                    : "Taken value from near-cache must not be there but it is " + value
+                    : "Taken value from Near Cache must not be there but it is " + value
                     + ". Because it must be invalidated due to clear on cache!";
             if (VERBOSE && value != null) {
-                System.out.println("Get key=" + i + ", value=" + value
-                        + " from near-cache through client-2 after clear");
+                System.out.println("Get key=" + i + ", value=" + value + " from Near Cache through client-2 after clear()");
             }
         }
         long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-        System.out.println("Get records from near-cache after clear finished in " + elapsed + " milliseconds");
+        System.out.println("Get records from Near Cache after clear() finished in " + elapsed + " milliseconds");
     }
 
     public static void main(String[] args) {
@@ -161,5 +155,4 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
                 = new ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled();
         clientNearCacheUsage.run();
     }
-
 }

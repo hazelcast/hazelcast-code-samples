@@ -4,7 +4,7 @@ import javax.cache.Cache;
 import java.util.Iterator;
 
 /**
- * HiDensity cache Iterator usage example
+ * HiDensity cache {@link Iterator} usage example.
  */
 public class HiDensityCacheIteratorUsage extends HiDensityCacheUsageSupport {
 

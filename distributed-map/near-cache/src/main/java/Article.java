@@ -1,10 +1,11 @@
 import java.io.Serializable;
 
-public final class Article implements Serializable {
+@SuppressWarnings("unused")
+final class Article implements Serializable {
 
     private final String name;
 
-    public Article(String name) {
+    Article(String name) {
         this.name = name;
     }
 

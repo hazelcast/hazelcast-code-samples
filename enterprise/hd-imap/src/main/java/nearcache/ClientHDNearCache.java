@@ -32,7 +32,7 @@ public class ClientHDNearCache {
             map.put("key-" + i, "value-" + i);
         }
 
-        // first `get` puts remote entry into near-cache
+        // first get() populates the Near cache with the remote entry
         for (int i = 0; i < 1000; i++) {
             map.get("key-" + i);
         }
