@@ -6,7 +6,6 @@
 
     <artifactId>cluster-quorum</artifactId>
     <name>Cluster Quorum</name>
-    <version>0.1-SNAPSHOT</version>
 
     <parent>
         <groupId>com.hazelcast.samples</groupId>

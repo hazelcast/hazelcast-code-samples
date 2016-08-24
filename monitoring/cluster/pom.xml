@@ -6,7 +6,6 @@
 
     <artifactId>cluster</artifactId>
     <name>Monitoring - Cluster/Member Safety Examples</name>
-    <version>0.1-SNAPSHOT</version>
     <description>Code samples for testing cluster/member safety.</description>
 
     <parent>
