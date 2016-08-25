@@ -45,6 +45,7 @@
         <module>distributed-topic</module>
         <module>enterprise</module>
         <module>hazelcast-integration</module>
+        <module>helper</module>
         <module>jcache</module>
         <module>jmx</module>
         <module>learning-basics</module>

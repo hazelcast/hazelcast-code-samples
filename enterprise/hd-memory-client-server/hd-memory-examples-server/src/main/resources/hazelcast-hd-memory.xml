@@ -24,9 +24,6 @@
         <password>dev-pass</password>
     </group>
 
-    <!-- request trial key at http://hazelcast.com/hazelcast-enterprise-trial/ -->
-    <license-key>YOUR_ENTERPRISE_KEY</license-key>
-
     <!-- management center is disabled by default -->
     <management-center enabled="false" update-interval="3">http://localhost:8080/mancenter/</management-center>
 

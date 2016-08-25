@@ -4,6 +4,10 @@ import com.hazelcast.config.NearCacheConfig;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
 public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsageSupport {
 
     private static final int RECORD_COUNT = 1000;

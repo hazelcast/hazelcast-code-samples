@@ -11,8 +11,13 @@ import com.hazelcast.memory.MemoryUnit;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * A simple test of a cache.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
  */
 public final class EnterpriseCacheTestServer {
 
@@ -34,15 +39,16 @@ public final class EnterpriseCacheTestServer {
         this.memorySize = MemorySize.parse(memory, MemoryUnit.GIGABYTES);
 
         InputStream configInputStream = EnterpriseCacheTestServer.class.getResourceAsStream("/hazelcast-hd-memory.xml");
-        Config cfg = new XmlConfigBuilder(configInputStream).build();
+        Config config = new XmlConfigBuilder(configInputStream).build();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
 
-        NativeMemoryConfig memoryConfig = cfg.getNativeMemoryConfig();
+        NativeMemoryConfig memoryConfig = config.getNativeMemoryConfig();
         if (!memoryConfig.isEnabled()) {
             memoryConfig.setSize(memorySize).setEnabled(true);
             memoryConfig.setAllocatorType(NativeMemoryConfig.MemoryAllocatorType.POOLED);
         }
 
-        instance = Hazelcast.newHazelcastInstance(cfg);
+        instance = Hazelcast.newHazelcastInstance(config);
         memoryStats = MemoryStatsUtil.getMemoryStats(instance);
         logger = instance.getLoggingService().getLogger(EnterpriseCacheTestServer.class);
     }

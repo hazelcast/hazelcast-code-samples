@@ -15,12 +15,12 @@ import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.spi.CachingProvider;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * Support class for HiDensity cache usage examples.
  */
 abstract class HiDensityCacheUsageSupport {
-
-    private static final String LICENSE_KEY;
 
     /**
      * It is advised using native memory (off-heap) serialization
@@ -40,18 +40,12 @@ abstract class HiDensityCacheUsageSupport {
     @SuppressWarnings("checkstyle:explicitinitialization")
     private static boolean useNativeMemorySerialization = false;
 
-    static {
-        // Pass your license key as system property like:
-        // -Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>
-        LICENSE_KEY = System.getProperty("hazelcast.enterprise.license.key");
-    }
-
     private static HazelcastInstance instance;
     private static CacheManager cacheManager;
 
     private static Config createConfig() {
         return new Config()
-                .setLicenseKey(LICENSE_KEY)
+                .setLicenseKey(ENTERPRISE_LICENSE_KEY)
                 .setNativeMemoryConfig(createMemoryConfig())
                 .setSerializationConfig(createSerializationConfig());
     }

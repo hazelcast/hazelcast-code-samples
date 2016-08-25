@@ -11,11 +11,15 @@ import com.hazelcast.memory.MemoryUnit;
 
 import java.util.Map;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static com.hazelcast.config.MaxSizeConfig.MaxSizePolicy.PER_NODE;
 
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
 public class HDEviction {
 
-    private static final String LICENSE_KEY = "";
     private static final int MAX_ENTRY_COUNT = 1000;
 
     public static void main(String[] args) {
@@ -52,9 +56,7 @@ public class HDEviction {
         Config config = new Config();
         config.addMapConfig(mapConfig);
         config.setNativeMemoryConfig(memoryConfig);
-        if (!LICENSE_KEY.isEmpty()) {
-            config.setLicenseKey(LICENSE_KEY);
-        }
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
 
         return config;
     }

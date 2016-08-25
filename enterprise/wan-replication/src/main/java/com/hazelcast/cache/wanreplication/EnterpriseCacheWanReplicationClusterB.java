@@ -18,9 +18,13 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
 
-public class EnterpriseCacheWanReplicationClusterB {
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
-    private static final String LICENSE_KEY = "YOUR_LICENSE_KEY";
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
+public class EnterpriseCacheWanReplicationClusterB {
 
     private static HazelcastInstance clusterB;
 
@@ -95,8 +99,9 @@ public class EnterpriseCacheWanReplicationClusterB {
     }
 
     private Config getConfigClusterB() {
-        final Config config = new Config();
-        config.setLicenseKey(LICENSE_KEY).getGroupConfig().setName("clusterB").setPassword("clusterB-pass");
+        Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+        config.getGroupConfig().setName("clusterB").setPassword("clusterB-pass");
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5702");
         config.setInstanceName("clusterB");

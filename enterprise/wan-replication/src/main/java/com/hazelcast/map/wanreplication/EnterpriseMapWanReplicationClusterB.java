@@ -7,9 +7,13 @@ import com.hazelcast.core.IMap;
 
 import java.util.Scanner;
 
-public class EnterpriseMapWanReplicationClusterB {
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
-    private static final String LICENSE_KEY = "YOUR_LICENSE_KEY";
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
+public class EnterpriseMapWanReplicationClusterB {
 
     private static HazelcastInstance clusterB;
 
@@ -55,7 +59,8 @@ public class EnterpriseMapWanReplicationClusterB {
 
     private static Config getConfigClusterB() {
         Config config = new Config();
-        config.setLicenseKey(LICENSE_KEY).getGroupConfig().setName("clusterB").setPassword("clusterB-pass");
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+        config.getGroupConfig().setName("clusterB").setPassword("clusterB-pass");
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5702");
         return config;

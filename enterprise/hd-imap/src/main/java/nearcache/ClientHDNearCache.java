@@ -11,14 +11,17 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.memory.MemorySize;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static com.hazelcast.config.EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE;
 import static com.hazelcast.config.InMemoryFormat.NATIVE;
 import static com.hazelcast.config.NativeMemoryConfig.MemoryAllocatorType.STANDARD;
 import static com.hazelcast.memory.MemoryUnit.MEGABYTES;
 
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
 public class ClientHDNearCache {
-
-    private static final String LICENSE_KEY = "";
 
     public static void main(String[] args) {
         // start server
@@ -44,11 +47,9 @@ public class ClientHDNearCache {
         server.shutdown();
     }
 
-    public static Config newConfig() {
+    private static Config newConfig() {
         Config config = new Config();
-        if (!LICENSE_KEY.isEmpty()) {
-            config.setLicenseKey(LICENSE_KEY);
-        }
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
 
         return config;
     }
@@ -71,9 +72,7 @@ public class ClientHDNearCache {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.setNativeMemoryConfig(memoryConfig);
         clientConfig.addNearCacheConfig(nearCacheConfig);
-        if (!LICENSE_KEY.isEmpty()) {
-            clientConfig.setLicenseKey(LICENSE_KEY);
-        }
+        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
 
         return clientConfig;
     }

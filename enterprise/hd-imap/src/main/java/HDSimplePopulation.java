@@ -9,9 +9,13 @@ import com.hazelcast.memory.MemoryUnit;
 
 import java.util.Map;
 
-public class HDSimplePopulation {
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
-    private static final String LICENSE_KEY = "";
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
+public class HDSimplePopulation {
 
     public static void main(String[] args) {
         HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(newConfig());
@@ -40,9 +44,7 @@ public class HDSimplePopulation {
         Config config = new Config();
         config.addMapConfig(mapConfig);
         config.setNativeMemoryConfig(memoryConfig);
-        if (!LICENSE_KEY.isEmpty()) {
-            config.setLicenseKey(LICENSE_KEY);
-        }
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
 
         return config;
     }

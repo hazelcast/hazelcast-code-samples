@@ -1,5 +1,6 @@
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.config.Config;
 import com.hazelcast.config.QueryCacheConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -11,9 +12,14 @@ import com.hazelcast.query.Predicate;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This example demonstrates the usage of a continuous-query-cache (CQC) from Hazelcast client.
  * Also in this example you can see how a CQC is configured from client side.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
  */
 public class ClientServer {
 
@@ -21,14 +27,19 @@ public class ClientServer {
         String mapName = "mapName";
         String cacheName = "cqc";
 
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
+        Hazelcast.newHazelcastInstance(config);
 
         QueryCacheConfig queryCacheConfig = new QueryCacheConfig(cacheName);
         queryCacheConfig.getPredicateConfig().setImplementation(new OddKeysPredicate());
 
         ClientConfig clientConfig = new ClientConfig();
+        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         clientConfig.addQueryCacheConfig(mapName, queryCacheConfig);
+
         HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
 
         IEnterpriseMap<Integer, Integer> clientMap = (IEnterpriseMap) client.getMap(mapName);
@@ -62,7 +73,6 @@ public class ClientServer {
             Hazelcast.shutdownAll();
         }
     }
-
 
     private static class OddKeysPredicate implements Predicate<Integer, Integer> {
 
