@@ -1,3 +1,4 @@
+import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IEnterpriseMap;
@@ -6,14 +7,22 @@ import com.hazelcast.query.SqlPredicate;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This example demonstrates the simple usage of a continuous-query-cache feature in a peer-to-peer application.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
  */
 public class Peer2Peer {
 
     public static void main(String[] args) {
-        HazelcastInstance node = Hazelcast.newHazelcastInstance();
-        Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+
+        HazelcastInstance node = Hazelcast.newHazelcastInstance(config);
+        Hazelcast.newHazelcastInstance(config);
 
         IEnterpriseMap<Integer, String> map = (IEnterpriseMap) node.getMap("test");
         QueryCache<Integer, String> cache = map.getQueryCache("myCache", new SqlPredicate("__key > 3 and __key < 84"), true);

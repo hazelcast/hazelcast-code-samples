@@ -9,24 +9,27 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Properties;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * Socket interceptor used for authentication to clients
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
  */
 public class SocketInterceptorClient {
 
     public static void main(String[] args) {
-        // enter your licenceKey below
-        String licenceKey = "---- LICENCE KEY ----";
-        Config config = createConfig(licenceKey);
+        Config config = createConfig();
         Hazelcast.newHazelcastInstance(config);
 
         ClientConfig clientConfig = createClientConfig();
         HazelcastClient.newHazelcastClient(clientConfig);
     }
 
-    private static Config createConfig(String licenceKey) {
+    private static Config createConfig() {
         Config config = new Config();
-        config.setLicenseKey(licenceKey);
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.setProperty("hazelcast.wait.seconds.before.join", "0");
 
         SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
@@ -38,13 +41,17 @@ public class SocketInterceptorClient {
 
     private static ClientConfig createClientConfig() {
         ClientConfig clientConfig = new ClientConfig();
+        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
         interceptorConfig.setEnabled(true).setClassName(MySocketInterceptor.class.getName());
         clientConfig.getNetworkConfig().setSocketInterceptorConfig(interceptorConfig);
         return clientConfig;
     }
 
-    private static class MySocketInterceptor implements MemberSocketInterceptor {
+    /**
+     * This class needs to be public, so it can be accessed via Hazelcast.
+     */
+    public static class MySocketInterceptor implements MemberSocketInterceptor {
 
         public MySocketInterceptor() {
         }

@@ -4,6 +4,9 @@ import java.util.concurrent.Future;
 
 /**
  * HiDensity cache put/get/remove usage example.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
  */
 public class HiDensityCachePutGetReplaceRemoveClearUsage extends HiDensityCacheUsageSupport {
 

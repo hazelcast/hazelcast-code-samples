@@ -12,9 +12,13 @@ import javax.cache.Cache;
 import javax.cache.spi.CachingProvider;
 import java.io.File;
 
-public class JCacheHotRestartMultipleNodes {
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
-    private static final String LICENSE_KEY = "---- LICENSE KEY ----";
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
+public class JCacheHotRestartMultipleNodes {
 
     private static final String HOT_RESTART_ROOT_DIR = System.getProperty("java.io.tmpdir")
             + File.separatorChar + "hazelcast-hot-restart";
@@ -54,7 +58,7 @@ public class JCacheHotRestartMultipleNodes {
 
     private static HazelcastInstance newHazelcastInstance(int port) {
         Config config = new Config();
-        config.setLicenseKey(LICENSE_KEY);
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
 
         config.getNetworkConfig().setPort(port).setPortAutoIncrement(false);
         JoinConfig join = config.getNetworkConfig().getJoin();

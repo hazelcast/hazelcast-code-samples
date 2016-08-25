@@ -27,9 +27,13 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
 
-public class EnterpriseCacheWanReplicationClusterA {
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
-    private static final String LICENSE_KEY = "YOUR_LICENSE_KEY";
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
+public class EnterpriseCacheWanReplicationClusterA {
 
     private static HazelcastInstance clusterA;
 
@@ -107,7 +111,8 @@ public class EnterpriseCacheWanReplicationClusterA {
 
     private Config getConfigClusterA() {
         Config config = new Config();
-        config.setLicenseKey(LICENSE_KEY).getGroupConfig().setName("clusterA").setPassword("clusterA-pass");
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+        config.getGroupConfig().setName("clusterA").setPassword("clusterA-pass");
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5701");
         config.setInstanceName("clusterA");
@@ -131,7 +136,7 @@ public class EnterpriseCacheWanReplicationClusterA {
 
         WanReplicationRef wanReplicationRef = new WanReplicationRef();
         wanReplicationRef.setName("AtoB");
-        config.setLicenseKey(LICENSE_KEY);
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         wanReplicationRef.setMergePolicy(HigherHitsCacheMergePolicy.class.getName());
         wanReplicationRef.addFilter(SampleCacheWanEventFilter.class.getName());
         config.getCacheConfig("default").setWanReplicationRef(wanReplicationRef);

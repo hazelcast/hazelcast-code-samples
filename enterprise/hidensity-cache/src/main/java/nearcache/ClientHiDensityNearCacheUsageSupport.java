@@ -20,12 +20,10 @@ import com.hazelcast.nio.serialization.EnterpriseSerializationService;
 
 import javax.cache.spi.CachingProvider;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 @SuppressWarnings("unused")
 abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsageSupport {
-
-    // pass your license key as system property like:
-    // -Dhazelcast.enterprise.license.key=<YOUR_LICENCE_KEY_HERE>
-    private static final String LICENSE_KEY = System.getProperty("hazelcast.enterprise.license.key");
 
     private static final MemorySize SERVER_NATIVE_MEMORY_SIZE = new MemorySize(256, MemoryUnit.MEGABYTES);
     private static final MemorySize CLIENT_NATIVE_MEMORY_SIZE = new MemorySize(128, MemoryUnit.MEGABYTES);
@@ -34,23 +32,29 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
         super(InMemoryFormat.NATIVE);
     }
 
+    @Override
     protected Config createConfig() {
         Config config = super.createConfig();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+
         NativeMemoryConfig nativeMemoryConfig = new NativeMemoryConfig()
                 .setSize(SERVER_NATIVE_MEMORY_SIZE)
                 .setEnabled(true);
         config.setNativeMemoryConfig(nativeMemoryConfig);
-        config.setLicenseKey(LICENSE_KEY);
+
         return config;
     }
 
+    @Override
     protected ClientConfig createClientConfig() {
         ClientConfig clientConfig = super.createClientConfig();
+        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+
         NativeMemoryConfig nativeMemoryConfig = new NativeMemoryConfig()
                 .setSize(CLIENT_NATIVE_MEMORY_SIZE)
                 .setEnabled(true);
         clientConfig.setNativeMemoryConfig(nativeMemoryConfig);
-        clientConfig.setLicenseKey(LICENSE_KEY);
+
         return clientConfig;
     }
 

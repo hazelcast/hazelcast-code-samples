@@ -1,4 +1,5 @@
 import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.PermissionConfig;
 import com.hazelcast.config.SecurityConfig;
@@ -13,8 +14,13 @@ import com.hazelcast.util.EmptyStatement;
 
 import java.security.AccessControlException;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
- * SecurityInterceptor for filtering individual methods
+ * SecurityInterceptor for filtering individual methods.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
  */
 public class MapSecurityInterceptor {
 
@@ -30,12 +36,13 @@ public class MapSecurityInterceptor {
     private static final String DENIED_METHOD = "replace";
 
     public static void main(String[] args) {
-        // enter your licenceKey below
-        String licenceKey = "---- LICENCE KEY ----";
-        Config config = createConfig(licenceKey);
+        Config config = createConfig();
         Hazelcast.newHazelcastInstance(config);
 
-        HazelcastInstance client = HazelcastClient.newHazelcastClient();
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+
+        HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
         IMap<Object, Object> acceptedMap = client.getMap(ACCEPTED_MAP_NAME);
         IMap<Object, Object> deniedMap = client.getMap(DENIED_MAP_NAME);
 
@@ -68,12 +75,16 @@ public class MapSecurityInterceptor {
         } catch (Exception expected) {
             EmptyStatement.ignore(expected);
         }
+
+        HazelcastClient.shutdownAll();
+        Hazelcast.shutdownAll();
     }
 
-    private static Config createConfig(String licenceKey) {
+    private static Config createConfig() {
         Config config = new Config();
-        config.setLicenseKey(licenceKey);
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.setProperty("hazelcast.wait.seconds.before.join", "0");
+
         SecurityInterceptorConfig securityInterceptorConfig = new SecurityInterceptorConfig();
         securityInterceptorConfig.setClassName(MySecurityInterceptor.class.getName());
         SecurityConfig securityConfig = config.getSecurityConfig();

@@ -22,6 +22,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
 public final class EnterpriseCacheTestClient {
 
     private static final String NAMESPACE = "test";
@@ -53,6 +59,7 @@ public final class EnterpriseCacheTestClient {
                                       int valueMin, int valueMax, long duration) throws IOException {
         InputStream configInputStream = EnterpriseCacheTestClient.class.getResourceAsStream("/hazelcast-client-hd-memory.xml");
         ClientConfig clientConfig = new XmlClientConfigBuilder(configInputStream).build();
+        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
 
         this.instance = HazelcastClient.newHazelcastClient(clientConfig);
         this.cacheManager = HazelcastClientCachingProvider.createCachingProvider(instance).getCacheManager();

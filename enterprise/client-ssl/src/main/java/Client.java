@@ -6,21 +6,25 @@ import com.hazelcast.core.HazelcastInstance;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
+/**
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ */
 public class Client {
 
     public static void main(String[] args) throws Exception {
-        ClientConfig clientConfig = new ClientConfig();
-
-        // please set your enterprise license key to make the sample work
-        clientConfig.setLicenseKey("YOUR_ENTERPRISE_LICENSE_KEY");
-
-        clientConfig.getNetworkConfig().addAddress("127.0.0.1");
         SSLConfig sslConfig = new SSLConfig();
         sslConfig.setEnabled(true);
         sslConfig.setFactoryClassName("com.hazelcast.nio.ssl.BasicSSLContextFactory");
         sslConfig.setProperty("keyStore", new File("enterprise/client-ssl/hazelcast.ks").getAbsolutePath());
         sslConfig.setProperty("keyStorePassword", "password");
         sslConfig.setProperty("javax.net.ssl.trustStore", new File("enterprise/client-ssl/hazelcast.ts").getAbsolutePath());
+
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
+        clientConfig.getNetworkConfig().addAddress("127.0.0.1");
         clientConfig.getNetworkConfig().setSSLConfig(sslConfig);
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);

@@ -8,6 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * HiDensity cache TTL usage example.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
  */
 public class HiDensityCacheTTLUsage extends HiDensityCacheUsageSupport {
 

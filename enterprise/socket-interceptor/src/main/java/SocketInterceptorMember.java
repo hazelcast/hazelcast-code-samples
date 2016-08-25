@@ -7,16 +7,19 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Properties;
 
+import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
- * Socket interceptor used for authentication to newly joining member
+ * Socket interceptor used for authentication to newly joining member.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
  */
 public class SocketInterceptorMember {
 
     public static void main(String[] args) {
-        // enter your licenceKey below
-        String licenceKey = "---- LICENCE KEY ----";
-        Config config1 = createConfig(licenceKey);
-        Config config2 = createConfig(licenceKey);
+        Config config1 = createConfig();
+        Config config2 = createConfig();
 
         // each member will be given an id via SocketInterceptorConfig property
         config1.getNetworkConfig().getSocketInterceptorConfig().setProperty("member-id", "firstMember");
@@ -26,9 +29,9 @@ public class SocketInterceptorMember {
         Hazelcast.newHazelcastInstance(config2);
     }
 
-    private static Config createConfig(String licenceKey) {
+    private static Config createConfig() {
         Config config = new Config();
-        config.setLicenseKey(licenceKey);
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.setProperty("hazelcast.wait.seconds.before.join", "0");
 
         SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
