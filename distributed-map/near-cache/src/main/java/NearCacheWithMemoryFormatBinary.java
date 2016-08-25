@@ -1,13 +1,12 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 
-import java.util.Map;
-
-public class Main {
+public class NearCacheWithMemoryFormatBinary extends NearCacheSupport {
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        Map<Long, Article> map = hz.getMap("articles");
+        IMap<Long, Article> map = hz.getMap("articlesBinary");
 
         Article article = new Article("foo");
         map.put(1L, article);
@@ -18,8 +17,11 @@ public class Main {
         Article secondGet = map.get(1L);
         Article thirdGet = map.get(1L);
 
-        System.out.println("The first and second article instance will be different: " + (firstGet == secondGet));
-        System.out.println("The second and third article instance will be the same: " + (secondGet == thirdGet));
+        printNearCacheStats(map);
+
+        System.out.println("Since we use in-memory format BINARY, the article instances from the Near Cache will be different.");
+        System.out.println("Compare first and second article instance: " + (firstGet == secondGet));
+        System.out.println("Compare second and third article instance: " + (secondGet == thirdGet));
 
         Hazelcast.shutdownAll();
     }
