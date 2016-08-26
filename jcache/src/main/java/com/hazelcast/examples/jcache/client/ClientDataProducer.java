@@ -9,6 +9,8 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+
 /**
  * This app will randomly produce and populate the clusters
  */
@@ -49,10 +51,7 @@ public class ClientDataProducer extends AbstractApp {
             public void run() {
                 while (!Thread.interrupted()) {
                     cacheAtCluster.put(UUID.randomUUID().toString(), random.nextInt());
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (!sleepMillis(100)) {
                         return;
                     }
                 }

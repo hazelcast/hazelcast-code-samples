@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static com.hazelcast.examples.helper.HazelcastUtils.getNode;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Utils class for common methods.
@@ -105,18 +105,20 @@ public final class CommonUtils {
 
     public static void sleepSeconds(int seconds) {
         try {
-            TimeUnit.SECONDS.sleep(seconds);
+            SECONDS.sleep(seconds);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
 
-    public static void sleepMillis(int millis) {
+    public static boolean sleepMillis(int millis) {
         try {
-            TimeUnit.MILLISECONDS.sleep(millis);
+            MILLISECONDS.sleep(millis);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            return false;
         }
+        return true;
     }
 
     public static void sleepAtLeastMillis(long sleepFor) {
@@ -167,7 +169,7 @@ public final class CommonUtils {
 
     public static void assertOpenEventually(String message, CountDownLatch latch) {
         try {
-            boolean completed = latch.await(ASSERT_EVENTUALLY_TIMEOUT, TimeUnit.SECONDS);
+            boolean completed = latch.await(ASSERT_EVENTUALLY_TIMEOUT, SECONDS);
             if (message == null) {
                 assertTrue(String.format("CountDownLatch failed to complete within %d seconds , count left: %d",
                         ASSERT_EVENTUALLY_TIMEOUT,

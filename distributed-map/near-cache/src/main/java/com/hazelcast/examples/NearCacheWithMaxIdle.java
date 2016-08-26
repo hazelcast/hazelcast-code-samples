@@ -3,11 +3,12 @@ package com.hazelcast.examples;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
-import java.util.concurrent.TimeUnit;
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 
 public class NearCacheWithMaxIdle extends NearCacheSupport {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         HazelcastInstance hz = initCluster();
         IMap<Integer, Article> map = hz.getMap("articlesMaxIdle");
 
@@ -20,11 +21,11 @@ public class NearCacheWithMaxIdle extends NearCacheSupport {
         // with this short sleep time, the Near Cache entry should not expire
         for (int i = 0; i < 20; i++) {
             map.get(1);
-            TimeUnit.MILLISECONDS.sleep(100);
+            sleepMillis(100);
         }
         printNearCacheStats(map, "We have called get(1) every 100 ms, so the Near cache entry could not expire");
 
-        TimeUnit.SECONDS.sleep(2);
+        sleepSeconds(2);
         System.out.println("We've waited for max-idle-seconds, so the Near Cache entry is expired.");
 
         map.get(1);

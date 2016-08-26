@@ -6,9 +6,8 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.monitor.NearCacheStats;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.hazelcast.core.Hazelcast.newHazelcastInstance;
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 import static com.hazelcast.spi.properties.GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
 import static java.lang.Integer.parseInt;
 
@@ -64,10 +63,6 @@ abstract class NearCacheSupport {
     }
 
     protected static void waitForInvalidationEvents() {
-        try {
-            TimeUnit.SECONDS.sleep(INVALIDATION_DELAY_SECONDS);
-        } catch (InterruptedException ignored) {
-            Thread.currentThread().interrupt();
-        }
+        sleepSeconds(INVALIDATION_DELAY_SECONDS);
     }
 }

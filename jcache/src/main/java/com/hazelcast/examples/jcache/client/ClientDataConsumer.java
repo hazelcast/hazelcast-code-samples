@@ -7,6 +7,8 @@ import javax.cache.Cache;
 import javax.cache.CacheManager;
 import java.util.Iterator;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+
 /**
  * This will try to iterate over cache values and remove them
  */
@@ -54,10 +56,7 @@ public class ClientDataConsumer extends AbstractApp {
                             // do something with entry, save to db etc.
                         }
                     }
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (!sleepMillis(1000)) {
                         return;
                     }
                 }
@@ -72,10 +71,7 @@ public class ClientDataConsumer extends AbstractApp {
             public void run() {
                 while (!Thread.interrupted()) {
                     System.out.println("Cache: " + alias + " size:" + icache.size());
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (!sleepMillis(2000)) {
                         return;
                     }
                 }

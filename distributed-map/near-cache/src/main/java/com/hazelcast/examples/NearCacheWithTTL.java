@@ -3,11 +3,11 @@ package com.hazelcast.examples;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
-import java.util.concurrent.TimeUnit;
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 
 public class NearCacheWithTTL extends NearCacheSupport {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         HazelcastInstance hz = initCluster();
         IMap<Integer, Article> map = hz.getMap("articlesTTL");
 
@@ -20,7 +20,7 @@ public class NearCacheWithTTL extends NearCacheSupport {
         map.get(1);
         printNearCacheStats(map, "The second get(1) call is served from the Near Cache");
 
-        TimeUnit.SECONDS.sleep(2);
+        sleepSeconds(2);
         System.out.println("We've waited for the time-to-live-seconds, so the Near Cache entry is expired.");
 
         map.get(1);
