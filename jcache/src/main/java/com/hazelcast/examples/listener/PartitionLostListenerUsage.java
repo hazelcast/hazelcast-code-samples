@@ -17,7 +17,7 @@ import static com.hazelcast.cache.impl.HazelcastServerCachingProvider.createCach
 
 public class PartitionLostListenerUsage {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
 
         final CountDownLatch latch = new CountDownLatch(1);
 

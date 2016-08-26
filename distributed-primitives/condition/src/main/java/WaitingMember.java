@@ -6,7 +6,7 @@ import com.hazelcast.core.ILock;
 
 public class WaitingMember {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IAtomicLong counter = hz.getAtomicLong("counter");
         ILock lock = hz.getLock("lock");

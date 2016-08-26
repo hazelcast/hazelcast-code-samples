@@ -17,7 +17,7 @@ public class SubscribedMember {
             LOGGER, "listeners", null, 10, 10000
     );
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         ITopic<Date> topic = hz.getTopic("topic");
         topic.addMessageListener(new MessageListenerImpl("topic"));

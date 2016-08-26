@@ -7,6 +7,7 @@ import com.hazelcast.core.IMap;
 
 import java.util.Scanner;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
@@ -17,15 +18,15 @@ public class EnterpriseMapWanReplicationClusterB {
 
     private static HazelcastInstance clusterB;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         initClusters();
         waitUntilClusterSafe();
         Scanner reader = new Scanner(System.in);
         IMap map = clusterB.getMap("default");
         System.out.println("Cluster is ready now.");
         System.out.println("write \"help\" for the command lists:");
-        for (; ; ) {
-            Thread.sleep(100);
+        while (true) {
+            sleepMillis(100);
             System.out.println("Command:");
             String command = reader.nextLine();
             if (command.equals("help")) {
@@ -47,9 +48,9 @@ public class EnterpriseMapWanReplicationClusterB {
                 + "2) size\n");
     }
 
-    private static void waitUntilClusterSafe() throws InterruptedException {
+    private static void waitUntilClusterSafe() {
         while (!clusterB.getPartitionService().isClusterSafe()) {
-            Thread.sleep(100);
+            sleepMillis(100);
         }
     }
 

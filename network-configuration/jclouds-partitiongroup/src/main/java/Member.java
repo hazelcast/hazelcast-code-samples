@@ -5,9 +5,11 @@ import com.hazelcast.core.HazelcastInstance;
 
 import java.util.Map;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+
 public class Member {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Config cfg = new ClasspathXmlConfig("hazelcast.xml");
         Hazelcast.newHazelcastInstance(cfg);
         Hazelcast.newHazelcastInstance(cfg);
@@ -20,7 +22,7 @@ public class Member {
             map.put(Math.random(), i);
         }
         while (true) {
-            Thread.sleep(500);
+            sleepMillis(500);
             System.out.println(hz.getPartitionService().isClusterSafe());
             System.out.println(hz.getMap("example").size());
         }

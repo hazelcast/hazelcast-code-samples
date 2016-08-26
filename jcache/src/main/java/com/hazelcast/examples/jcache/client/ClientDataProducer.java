@@ -18,7 +18,7 @@ public class ClientDataProducer extends AbstractApp {
 
     private final Random random = new Random();
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         //ClusterGroup server = new ClusterGroup();
         //server.init();
 
@@ -27,7 +27,7 @@ public class ClientDataProducer extends AbstractApp {
         //server.shutdown();
     }
 
-    private void runApp() throws InterruptedException {
+    private void runApp() {
         // force client be used as a provider
         clientSetup();
 

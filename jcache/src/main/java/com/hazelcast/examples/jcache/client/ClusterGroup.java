@@ -9,7 +9,7 @@ import com.hazelcast.examples.AbstractApp;
  */
 public class ClusterGroup extends AbstractApp {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         ClusterGroup app = new ClusterGroup();
         app.runApp();
     }
@@ -35,7 +35,7 @@ public class ClusterGroup extends AbstractApp {
         Hazelcast.newHazelcastInstance(config2);
     }
 
-    private void runApp() throws InterruptedException {
+    private void runApp() {
         init();
     }
 

@@ -2,9 +2,11 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IAtomicLong;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+
 public class RacyMember {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IAtomicLong number1 = hz.getAtomicLong("number1");
         IAtomicLong number2 = hz.getAtomicLong("number2");
@@ -16,7 +18,7 @@ public class RacyMember {
             }
             if (i % 2 == 0) {
                 long n1 = number1.get();
-                Thread.sleep(100);
+                sleepMillis(100);
                 long n2 = number2.get();
                 if (n1 - n2 != 0) {
                     System.out.println("Difference detected!");

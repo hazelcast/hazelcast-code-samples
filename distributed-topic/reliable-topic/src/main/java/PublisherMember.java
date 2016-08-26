@@ -4,9 +4,11 @@ import com.hazelcast.core.ITopic;
 
 import java.util.Random;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+
 public class PublisherMember {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         Random random = new Random();
 
@@ -20,7 +22,7 @@ public class PublisherMember {
             System.out.println("Written: " + messageId);
 
             // add a bit of randomization
-            Thread.sleep(random.nextInt(100));
+            sleepMillis(random.nextInt(100));
         }
     }
 }

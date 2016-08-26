@@ -40,5 +40,11 @@
             <artifactId>hazelcast-all</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast.samples</groupId>
+            <artifactId>helper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

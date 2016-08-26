@@ -9,12 +9,14 @@ import javax.cache.Caching;
 import javax.cache.configuration.CacheEntryListenerConfiguration;
 import javax.cache.spi.CachingProvider;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+
 /**
  * This example shows how to configure listener for cache declaratively
  */
 public class EntryListenerTest {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         System.setProperty("hazelcast.config", "classpath:hazelcast-declarative-listener-test.xml");
         System.setProperty("hazelcast.jcache.provider.type", "server");
 
@@ -43,7 +45,7 @@ public class EntryListenerTest {
 
         // entry will expire after 1 sec
         cache.put("key", "value2", new HazelcastExpiryPolicy(1000, Long.MAX_VALUE, Long.MAX_VALUE));
-        Thread.sleep(2000);
+        sleepSeconds(2);
         System.out.println("value should be null: " + cache.get("key"));
 
         System.exit(0);

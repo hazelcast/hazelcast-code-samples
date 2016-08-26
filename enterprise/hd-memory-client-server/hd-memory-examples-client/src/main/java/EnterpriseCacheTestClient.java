@@ -131,7 +131,7 @@ public final class EnterpriseCacheTestClient {
         test.start();
     }
 
-    private void start() throws InterruptedException {
+    private void start() {
         printVariables();
         startPrintStats();
         run();

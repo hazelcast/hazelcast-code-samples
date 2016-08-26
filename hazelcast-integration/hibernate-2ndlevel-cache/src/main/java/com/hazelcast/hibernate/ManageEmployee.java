@@ -8,10 +8,12 @@ import org.hibernate.cfg.Configuration;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+
 public class ManageEmployee {
 
     @SuppressWarnings({"checkstyle:cyclomaticcomplexity", "checkstyle:methodlength"})
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         SessionFactory factory;
         try {
             factory = new Configuration().configure().buildSessionFactory();
@@ -30,7 +32,7 @@ public class ManageEmployee {
         int current = 1;
 
         while (true) {
-            Thread.sleep(100);
+            sleepMillis(100);
             System.out.print("[" + current + ". session] Enter command: ");
             String command = reader.nextLine();
             if (command.equals("list")) {

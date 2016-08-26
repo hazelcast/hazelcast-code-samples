@@ -6,7 +6,7 @@ import com.hazelcast.core.MessageListener;
 
 public class SubscribedMember {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         ITopic<Long> topic = hz.getReliableTopic("sometopic");
         topic.addMessageListener(new MessageListenerImpl());

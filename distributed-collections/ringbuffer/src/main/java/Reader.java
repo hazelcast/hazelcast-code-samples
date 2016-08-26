@@ -4,7 +4,7 @@ import com.hazelcast.ringbuffer.Ringbuffer;
 
 public class Reader {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
 
         Ringbuffer<Long> rb = hz.getRingbuffer("rb");

@@ -5,10 +5,10 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
@@ -19,15 +19,15 @@ public class EnterpriseMapWanReplicationClusterA {
 
     private static HazelcastInstance clusterA;
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) {
         initClusters();
         waitUntilClusterSafe();
         Scanner reader = new Scanner(System.in);
         IMap<Object, Object> map = clusterA.getMap("default");
         System.out.println("Cluster is ready now.");
         System.out.println("write \"help\" for the command lists:");
-        for (; ; ) {
-            Thread.sleep(100);
+        while (true) {
+            sleepMillis(100);
             System.out.println("Command:");
             String command = reader.nextLine();
             if (command.equals("help")) {
@@ -65,9 +65,9 @@ public class EnterpriseMapWanReplicationClusterA {
                 + "4) putmany [number]\n");
     }
 
-    private static void waitUntilClusterSafe() throws InterruptedException {
+    private static void waitUntilClusterSafe() {
         while (!clusterA.getPartitionService().isClusterSafe()) {
-            Thread.sleep(100);
+            sleepMillis(100);
         }
     }
 

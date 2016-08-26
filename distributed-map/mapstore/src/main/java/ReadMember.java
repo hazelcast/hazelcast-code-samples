@@ -5,7 +5,7 @@ import data.Person;
 
 public class ReadMember {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IMap<Long, Person> personMap = hz.getMap("personMap");
         Person p = personMap.get(1L);

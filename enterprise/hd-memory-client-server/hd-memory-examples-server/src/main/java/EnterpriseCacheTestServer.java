@@ -8,7 +8,6 @@ import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryStats;
 import com.hazelcast.memory.MemoryUnit;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
@@ -35,7 +34,7 @@ public final class EnterpriseCacheTestServer {
         System.setProperty("hazelcast.multicast.group", "224.33.55.79");
     }
 
-    private EnterpriseCacheTestServer(String memory) throws IOException {
+    private EnterpriseCacheTestServer(String memory) {
         this.memorySize = MemorySize.parse(memory, MemoryUnit.GIGABYTES);
 
         InputStream configInputStream = EnterpriseCacheTestServer.class.getResourceAsStream("/hazelcast-hd-memory.xml");
@@ -53,7 +52,7 @@ public final class EnterpriseCacheTestServer {
         logger = instance.getLoggingService().getLogger(EnterpriseCacheTestServer.class);
     }
 
-    public static void main(String[] input) throws Exception {
+    public static void main(String[] input) {
         String memory = "3";
         boolean master = false;
         if (input != null && input.length > 0) {
@@ -67,7 +66,7 @@ public final class EnterpriseCacheTestServer {
         test.start();
     }
 
-    private void start() throws InterruptedException {
+    private void start() {
         printVariables();
         startPrintStats();
     }

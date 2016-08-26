@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
@@ -64,8 +65,8 @@ public class EnterpriseCacheWanReplicationClusterA {
 
         System.out.println("Cluster is ready now.");
         System.out.println("write \"help\" for the command lists:");
-        for (; ; ) {
-            Thread.sleep(100);
+        while (true) {
+            sleepMillis(100);
             System.out.println("Command:");
             String command = reader.nextLine();
             if (command.equals("help")) {
@@ -99,9 +100,9 @@ public class EnterpriseCacheWanReplicationClusterA {
                 + "3) putmany [number]\n");
     }
 
-    private void waitUntilClusterSafe() throws InterruptedException {
+    private void waitUntilClusterSafe() {
         while (!clusterA.getPartitionService().isClusterSafe()) {
-            Thread.sleep(100);
+            sleepMillis(100);
         }
     }
 

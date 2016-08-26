@@ -5,7 +5,7 @@ import data.Person;
 
 public class WriteMember {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IMap<Long, Person> personMap = hz.getMap("personMap");
         personMap.put(1L, new Person(1L, "Peter"));

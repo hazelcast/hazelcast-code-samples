@@ -9,7 +9,7 @@ import static com.hazelcast.spring.jcache.DummyBeanTest.doInvocation;
 
 public class SpringJCacheXMLConfig {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 
         doInvocation(context);

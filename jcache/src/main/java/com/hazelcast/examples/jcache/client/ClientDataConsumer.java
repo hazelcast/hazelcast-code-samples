@@ -14,7 +14,7 @@ import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
  */
 public class ClientDataConsumer extends AbstractApp {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         //ClusterGroup server = new ClusterGroup();
         //server.init();
 
@@ -22,7 +22,7 @@ public class ClientDataConsumer extends AbstractApp {
         //server.shutdown();
     }
 
-    private void runApp() throws InterruptedException {
+    private void runApp() {
         // force client be used as a provider
         clientSetup();
 

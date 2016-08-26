@@ -94,7 +94,7 @@ public final class SimpleCacheTest {
     /**
      * Expects the Management Center to be running.
      */
-    public static void main(String[] input) throws InterruptedException {
+    public static void main(String[] input) {
         int threadCount = 400;
         int entryCount = 10 * 1000;
         int valueSize = 1000;
@@ -129,7 +129,7 @@ public final class SimpleCacheTest {
         test.start();
     }
 
-    private void start() throws InterruptedException {
+    private void start() {
         printVariables();
         ExecutorService es = Executors.newFixedThreadPool(threadCount);
         startPrintStats();
