@@ -12,7 +12,7 @@ public class NearCacheWithEvictionPolicy extends NearCacheSupport {
         IMap<Integer, Article> map = client.getMap("articlesEvictionPolicy");
 
         for (int i = 1; i <= 100; i++) {
-            map.put(1, new Article("foo" + i));
+            map.put(i, new Article("foo" + i));
         }
         printNearCacheStats(map, "The put(1..100, article) calls have no effect on the empty Near Cache");
 
