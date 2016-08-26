@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.hazelcast.codesamples.helper;
+package com.hazelcast.examples.helper;
 
 import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import static com.hazelcast.examples.helper.CommonUtils.closeQuietly;
 
 /**
  * Utils class to get the Hazelcast Enterprise license key for code samples.
@@ -35,11 +36,14 @@ import java.io.InputStreamReader;
  *
  * You can request a trial key at http://hazelcast.com/hazelcast-enterprise-trial
  */
-public class LicenseUtils {
+public final class LicenseUtils {
 
     public static final String ENTERPRISE_LICENSE_KEY = initLicenseKey();
 
     private static final int READ_BUFFER_SIZE = 8192;
+
+    private LicenseUtils() {
+    }
 
     private static String initLicenseKey() {
         String licenseKey = System.getProperty("hazelcast.enterprise.license.key");
@@ -81,17 +85,6 @@ public class LicenseUtils {
             closeQuietly(reader);
             closeQuietly(streamReader);
             closeQuietly(stream);
-        }
-    }
-
-    @SuppressWarnings("checkstyle:emptyblock")
-    private static void closeQuietly(Closeable closeable) {
-        if (closeable == null) {
-            return;
-        }
-        try {
-            closeable.close();
-        } catch (IOException ignore) {
         }
     }
 }

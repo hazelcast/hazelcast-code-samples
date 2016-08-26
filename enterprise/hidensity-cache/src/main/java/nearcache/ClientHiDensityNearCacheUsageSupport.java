@@ -20,7 +20,7 @@ import com.hazelcast.nio.serialization.EnterpriseSerializationService;
 
 import javax.cache.spi.CachingProvider;
 
-import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 @SuppressWarnings("unused")
 abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsageSupport {

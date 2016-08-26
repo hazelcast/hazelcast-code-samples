@@ -13,6 +13,11 @@ import javax.cache.CacheManager;
 import javax.cache.spi.CachingProvider;
 import java.util.concurrent.CountDownLatch;
 
+import static com.hazelcast.examples.helper.CommonUtils.assertClusterSizeEventually;
+import static com.hazelcast.examples.helper.CommonUtils.assertOpenEventually;
+import static com.hazelcast.examples.helper.CommonUtils.assertTrue;
+import static com.hazelcast.examples.helper.HazelcastUtils.generateKeyOwnedBy;
+
 /**
  * <p>
  * Base class for jcache split-brain sample based on `custom cache merge policy.

@@ -7,13 +7,13 @@ import com.hazelcast.query.SqlPredicate;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
  * This example demonstrates the simple usage of a continuous-query-cache feature in a peer-to-peer application.
  *
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
- * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class Peer2Peer {
 

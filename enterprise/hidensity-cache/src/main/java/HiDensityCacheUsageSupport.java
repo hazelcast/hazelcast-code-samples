@@ -15,7 +15,7 @@ import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.spi.CachingProvider;
 
-import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
  * Support class for HiDensity cache usage examples.

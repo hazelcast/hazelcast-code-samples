@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
- * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsageSupport {
 

@@ -7,11 +7,11 @@ import com.hazelcast.core.IMap;
 
 import java.util.Scanner;
 
-import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
- * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class EnterpriseMapWanReplicationClusterB {
 

@@ -1,13 +1,12 @@
-import com.hazelcast.util.EmptyStatement;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+
+import static com.hazelcast.examples.helper.CommonUtils.closeQuietly;
 
 /**
  * Hazelcast REST client.
@@ -44,16 +43,6 @@ public class RestClient {
         } finally {
             closeQuietly(objectInputStream);
             closeQuietly(byteArrayInputStream);
-        }
-    }
-
-    private static void closeQuietly(Closeable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException ignored) {
-                EmptyStatement.ignore(ignored);
-            }
         }
     }
 }

@@ -12,14 +12,14 @@ import com.hazelcast.query.Predicate;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.hazelcast.codesamples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
  * This example demonstrates the usage of a continuous-query-cache (CQC) from Hazelcast client.
  * Also in this example you can see how a CQC is configured from client side.
  *
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
- * Please have a look at {@link com.hazelcast.codesamples.helper.LicenseUtils} for details.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class ClientServer {
 

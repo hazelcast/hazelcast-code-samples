@@ -11,6 +11,11 @@ import javax.cache.CacheManager;
 import javax.cache.spi.CachingProvider;
 import java.util.concurrent.CountDownLatch;
 
+import static com.hazelcast.examples.helper.CommonUtils.assertClusterSizeEventually;
+import static com.hazelcast.examples.helper.CommonUtils.assertEquals;
+import static com.hazelcast.examples.helper.CommonUtils.assertOpenEventually;
+import static com.hazelcast.examples.helper.CommonUtils.sleepAtLeastMillis;
+
 /**
  * <p>
  * Base class for jcache split-brain sample based on `LATEST_ACCESS` cache merge policy.
