@@ -1,5 +1,5 @@
-import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.Hazelcast;
+package com.hazelcast.examples;
+
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
@@ -8,14 +8,11 @@ import java.util.concurrent.TimeUnit;
 public class NearCacheWithTTL extends NearCacheSupport {
 
     public static void main(String[] args) throws Exception {
-        HazelcastInstance member = Hazelcast.newHazelcastInstance();
-        HazelcastInstance client = HazelcastClient.newHazelcastClient();
+        HazelcastInstance hz = initCluster();
+        IMap<Integer, Article> map = hz.getMap("articlesTTL");
 
-        IMap<Integer, Article> map = member.getMap("articlesTTL");
         map.put(1, new Article("foo"));
-
-        map = client.getMap("articlesTTL");
-        printNearCacheStats(map, "The put(1, article) call on the member has no effect on the Client Near Cache");
+        printNearCacheStats(map, "The put(1, article) call has no effect on the empty Near Cache");
 
         map.get(1);
         printNearCacheStats(map, "The first get(1) call populates the Near Cache");
@@ -29,7 +26,6 @@ public class NearCacheWithTTL extends NearCacheSupport {
         map.get(1);
         printNearCacheStats(map, "The third get(1) call is fetching the value again from the map");
 
-        HazelcastClient.shutdownAll();
-        Hazelcast.shutdownAll();
+        shutdown();
     }
 }

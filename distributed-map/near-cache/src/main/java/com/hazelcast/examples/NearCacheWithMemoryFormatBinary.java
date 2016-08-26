@@ -1,19 +1,16 @@
-import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.Hazelcast;
+package com.hazelcast.examples;
+
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 public class NearCacheWithMemoryFormatBinary extends NearCacheSupport {
 
     public static void main(String[] args) {
-        HazelcastInstance member = Hazelcast.newHazelcastInstance();
-        HazelcastInstance client = HazelcastClient.newHazelcastClient();
+        HazelcastInstance hz = initCluster();
+        IMap<Integer, Article> map = hz.getMap("articlesBinary");
 
-        IMap<Integer, Article> map = member.getMap("articlesBinary");
         Article article = new Article("foo");
         map.put(1, article);
-
-        map = client.getMap("articlesBinary");
 
         // the first get() will populate the Near Cache
         Article firstGet = map.get(1);
@@ -27,7 +24,6 @@ public class NearCacheWithMemoryFormatBinary extends NearCacheSupport {
         System.out.println("Compare first and second article instance: " + (firstGet == secondGet));
         System.out.println("Compare second and third article instance: " + (secondGet == thirdGet));
 
-        HazelcastClient.shutdownAll();
-        Hazelcast.shutdownAll();
+        shutdown();
     }
 }

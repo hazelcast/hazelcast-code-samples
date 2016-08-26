@@ -1,4 +1,5 @@
-import com.hazelcast.core.Hazelcast;
+package com.hazelcast.examples;
+
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
@@ -7,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 public class NearCacheWithMaxIdle extends NearCacheSupport {
 
     public static void main(String[] args) throws Exception {
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        HazelcastInstance hz = initCluster();
         IMap<Integer, Article> map = hz.getMap("articlesMaxIdle");
 
         map.put(1, new Article("foo"));
@@ -29,6 +30,6 @@ public class NearCacheWithMaxIdle extends NearCacheSupport {
         map.get(1);
         printNearCacheStats(map, "The next get(1) call is fetching the value again from the map");
 
-        Hazelcast.shutdownAll();
+        shutdown();
     }
 }

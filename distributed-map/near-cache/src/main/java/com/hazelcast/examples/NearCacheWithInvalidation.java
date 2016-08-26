@@ -1,17 +1,16 @@
-import com.hazelcast.core.Hazelcast;
+package com.hazelcast.examples;
+
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 public class NearCacheWithInvalidation extends NearCacheSupport {
 
     public static void main(String[] args) {
-        HazelcastInstance hz1 = Hazelcast.newHazelcastInstance();
-        HazelcastInstance hz2 = Hazelcast.newHazelcastInstance();
+        HazelcastInstance[] instances = initCluster(2);
+        IMap<String, Article> map1 = instances[0].getMap("articlesInvalidation");
+        IMap<String, Article> map2 = instances[1].getMap("articlesInvalidation");
 
-        IMap<String, Article> map1 = hz1.getMap("articlesInvalidation");
-        IMap<String, Article> map2 = hz2.getMap("articlesInvalidation");
-
-        String key = generateKeyOwnedBy(hz2);
+        String key = generateKeyOwnedBy(serverInstance);
 
         map2.put(key, new Article("foo"));
         printNearCacheStats(map1, "The map2.put(key, new Article(\"foo\")) call has no effect on the Near Cache of map1");
@@ -28,6 +27,6 @@ public class NearCacheWithInvalidation extends NearCacheSupport {
         map1.get(key);
         printNearCacheStats(map1, "The next map1.get(key) call populates the Near Cache again");
 
-        Hazelcast.shutdownAll();
+        shutdown();
     }
 }

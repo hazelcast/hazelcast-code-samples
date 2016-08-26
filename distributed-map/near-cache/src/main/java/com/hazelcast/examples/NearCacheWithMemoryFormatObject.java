@@ -1,11 +1,12 @@
-import com.hazelcast.core.Hazelcast;
+package com.hazelcast.examples;
+
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 public class NearCacheWithMemoryFormatObject extends NearCacheSupport {
 
     public static void main(String[] args) {
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        HazelcastInstance hz = initCluster();
         IMap<Integer, Article> map = hz.getMap("articlesObject");
 
         Article article = new Article("foo");
@@ -23,6 +24,6 @@ public class NearCacheWithMemoryFormatObject extends NearCacheSupport {
         System.out.println("Compare first and second article instance: " + (firstGet == secondGet));
         System.out.println("Compare second and third article instance: " + (secondGet == thirdGet));
 
-        Hazelcast.shutdownAll();
+        shutdown();
     }
 }

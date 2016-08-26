@@ -1,4 +1,8 @@
+package com.hazelcast.examples;
+
+import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.Cluster;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.Member;
@@ -14,10 +18,11 @@ import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.core.Hazelcast.newHazelcastInstance;
 import static com.hazelcast.spi.properties.GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
 import static java.lang.Integer.parseInt;
 
-public abstract class NearCacheSupport {
+abstract class NearCacheSupport {
 
     private static final int INVALIDATION_DELAY_SECONDS
             = 2 * parseInt(CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue());
@@ -33,7 +38,28 @@ public abstract class NearCacheSupport {
         }
     }
 
-    public static void printNearCacheStats(IMap<Integer, Article> map) {
+    protected static HazelcastInstance serverInstance;
+
+    protected static HazelcastInstance initCluster() {
+        serverInstance = Hazelcast.newHazelcastInstance();
+        return serverInstance;
+    }
+
+    protected static HazelcastInstance[] initCluster(int clusterSize) {
+        HazelcastInstance[] instances = new HazelcastInstance[clusterSize];
+        for (int i = 0; i < clusterSize; i++) {
+            instances[i] = newHazelcastInstance();
+            serverInstance = instances[i];
+        }
+        return instances;
+    }
+
+    protected static void shutdown() {
+        HazelcastClient.shutdownAll();
+        Hazelcast.shutdownAll();
+    }
+
+    protected static void printNearCacheStats(IMap<Integer, Article> map) {
         NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
 
         System.out.printf("The Near Cache contains %d entries.%n", stats.getOwnedEntryCount());
@@ -44,13 +70,13 @@ public abstract class NearCacheSupport {
                 stats.getHits());
     }
 
-    public static void printNearCacheStats(IMap<?, Article> map, String message) {
+    protected static void printNearCacheStats(IMap<?, Article> map, String message) {
         NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
         System.out.printf("%s (%d entries, %d hits, %d misses)%n",
                 message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses());
     }
 
-    public static void waitForNearCacheEntryCount(IMap<?, Article> map, int targetSize) {
+    protected static void waitForNearCacheEntryCount(IMap<?, Article> map, int targetSize) {
         long ownedEntries;
         do {
             NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
@@ -58,7 +84,7 @@ public abstract class NearCacheSupport {
         } while (ownedEntries > targetSize);
     }
 
-    public static void waitForInvalidationEvents() {
+    protected static void waitForInvalidationEvents() {
         try {
             TimeUnit.SECONDS.sleep(INVALIDATION_DELAY_SECONDS);
         } catch (InterruptedException ignored) {
@@ -66,7 +92,7 @@ public abstract class NearCacheSupport {
         }
     }
 
-    public static String generateKeyOwnedBy(HazelcastInstance instance) {
+    protected static String generateKeyOwnedBy(HazelcastInstance instance) {
         Cluster cluster = instance.getCluster();
         checkPartitionCountGreaterOrEqualMemberCount(instance);
 

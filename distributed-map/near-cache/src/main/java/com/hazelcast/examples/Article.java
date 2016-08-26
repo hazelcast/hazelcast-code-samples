@@ -1,7 +1,9 @@
+package com.hazelcast.examples;
+
 import java.io.Serializable;
 
 @SuppressWarnings("unused")
-public final class Article implements Serializable {
+final class Article implements Serializable {
 
     private final String name;
 
