@@ -5,16 +5,18 @@ import com.hazelcast.examples.AbstractApp;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+
 /**
  * Simple Client cache example
  */
 public class SingleClientBasicExample extends AbstractApp {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         new SingleClientBasicExample().runApp();
     }
 
-    private void runApp() throws InterruptedException {
+    private void runApp() {
         // force client be used as a provider
         clientSetup();
 
@@ -31,7 +33,7 @@ public class SingleClientBasicExample extends AbstractApp {
         printContent(cache);
 
         // wait for 10 sec to expire the content
-        sleepFor(10 * 1000);
+        sleepSeconds(10);
 
         // print the content again, and see everything has expired and values are null
         printContent(cache);

@@ -5,6 +5,7 @@ import com.hazelcast.config.NearCacheConfig;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
 import static com.hazelcast.spi.properties.GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
 import static java.lang.Boolean.getBoolean;
 import static java.lang.Integer.parseInt;
@@ -36,7 +37,7 @@ public class ClientNearCacheUsage extends ClientNearCacheUsageSupport {
         updateRecordsInCacheOnClient1(clientCache1);
 
         // wait a little for invalidation events
-        sleep(BATCH_FREQUENCY_MILLISECONDS + 5000);
+        sleepMillis(BATCH_FREQUENCY_MILLISECONDS + 5000);
 
         // get invalidated records from remote cache on client-2
         getInvalidatedRecordsFromNearCacheOnClient2(clientCache2);

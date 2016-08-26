@@ -6,9 +6,11 @@ import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.expiry.Duration;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+
 public class MultiClientBasicExample extends AbstractApp {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         //ClusterGroup server = new ClusterGroup();
         //server.init();
 
@@ -17,7 +19,7 @@ public class MultiClientBasicExample extends AbstractApp {
         //server.shutdown();
     }
 
-    private void runApp() throws InterruptedException {
+    private void runApp() {
         // force client be used as a provider
         clientSetup();
 
@@ -39,7 +41,7 @@ public class MultiClientBasicExample extends AbstractApp {
         printContent(cacheAtCluster2);
 
         // wait for 10 sec to expire the content
-        sleepFor(10 * 1000);
+        sleepSeconds(10);
 
         // print the content again, and see everything has expired and values are null
         printContent(cacheAtCluster1);

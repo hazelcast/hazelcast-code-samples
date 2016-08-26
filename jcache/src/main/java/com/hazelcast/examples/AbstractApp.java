@@ -130,10 +130,6 @@ public class AbstractApp {
         System.out.println("============================================================");
     }
 
-    protected void sleepFor(long duration) throws InterruptedException {
-        Thread.sleep(duration);
-    }
-
     protected void clientSetup() {
         System.setProperty("hazelcast.jcache.provider.type", "client");
     }

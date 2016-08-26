@@ -10,8 +10,8 @@ import com.hazelcast.map.QueryCache;
 import com.hazelcast.query.Predicate;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
@@ -79,14 +79,6 @@ public class ClientServer {
         @Override
         public boolean apply(Map.Entry<Integer, Integer> entry) {
             return entry.getKey() % 2 != 0;
-        }
-    }
-
-    private static void sleepSeconds(int seconds) {
-        try {
-            TimeUnit.SECONDS.sleep(seconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 }

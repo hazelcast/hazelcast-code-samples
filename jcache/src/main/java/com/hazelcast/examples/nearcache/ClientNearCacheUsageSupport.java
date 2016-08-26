@@ -172,12 +172,4 @@ public abstract class ClientNearCacheUsageSupport {
     protected String generateValueFromKey(Integer key) {
         return "Value-" + key;
     }
-
-    protected void sleep(long delay) {
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }

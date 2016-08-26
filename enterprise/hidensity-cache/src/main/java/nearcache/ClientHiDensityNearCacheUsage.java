@@ -4,6 +4,8 @@ import com.hazelcast.config.NearCacheConfig;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+
 /**
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
  * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
@@ -33,7 +35,7 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
         updateRecordsInCacheOnClient1(clientCacheContext1, clientCacheContext2);
 
         // wait a little for invalidation events
-        sleep(5000);
+        sleepSeconds(5);
 
         // get invalidated records from Near Cache on client-2
         getInvalidatedRecordsFromNearCacheOnClient2(clientCacheContext1, clientCacheContext2);

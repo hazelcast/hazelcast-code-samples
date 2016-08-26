@@ -3,13 +3,15 @@ package com.hazelcast.examples;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+
 public class ExpiringCachesWithIterator extends AbstractApp {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         new ExpiringCachesWithIterator().runApp();
     }
 
-    private void runApp() throws InterruptedException {
+    private void runApp() {
         // initialize the CacheManager
         CacheManager cacheManager = initCacheManager();
 
@@ -23,7 +25,7 @@ public class ExpiringCachesWithIterator extends AbstractApp {
         printContent(cache);
 
         // wait for 10 sec to expire the content
-        sleepFor(10 * 1000);
+        sleepSeconds(10);
 
         // print the content again and see everything has expired and we have no values
         printContentWithIterator(cache);

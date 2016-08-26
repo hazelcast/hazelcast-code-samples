@@ -103,6 +103,14 @@ public final class CommonUtils {
         return className + "<" + valueString + ">";
     }
 
+    public static void sleepSeconds(int seconds) {
+        try {
+            TimeUnit.SECONDS.sleep(seconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     public static void sleepMillis(int millis) {
         try {
             TimeUnit.MILLISECONDS.sleep(millis);

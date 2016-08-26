@@ -5,8 +5,7 @@ import com.hazelcast.core.IEnterpriseMap;
 import com.hazelcast.map.QueryCache;
 import com.hazelcast.query.SqlPredicate;
 
-import java.util.concurrent.TimeUnit;
-
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
@@ -53,14 +52,6 @@ public class Peer2Peer {
             System.out.println("All expected values are in cache and they equal to the values in underlying map");
         } finally {
             node.shutdown();
-        }
-    }
-
-    private static void sleepSeconds(int seconds) {
-        try {
-            TimeUnit.SECONDS.sleep(seconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 }

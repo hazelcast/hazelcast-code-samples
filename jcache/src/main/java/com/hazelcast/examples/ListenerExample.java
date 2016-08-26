@@ -6,6 +6,8 @@ import javax.cache.configuration.CacheEntryListenerConfiguration;
 import javax.cache.configuration.FactoryBuilder;
 import javax.cache.configuration.MutableCacheEntryListenerConfiguration;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+
 /**
  * Listener example.
  *
@@ -14,7 +16,7 @@ import javax.cache.configuration.MutableCacheEntryListenerConfiguration;
  */
 public class ListenerExample extends AbstractApp {
 
-    private void runApp() throws InterruptedException {
+    private void runApp() {
         // initialize the CacheManager
         final CacheManager cacheManager = initCacheManager();
 
@@ -28,7 +30,7 @@ public class ListenerExample extends AbstractApp {
         triggerEvents(cache);
 
         // wait for 5 sec to make sure every event has fired
-        sleepFor(5000);
+        sleepSeconds(5);
 
         // shutdown the CacheManager
         shutdown();
@@ -46,7 +48,7 @@ public class ListenerExample extends AbstractApp {
         cache.registerCacheEntryListener(conf);
     }
 
-    private void triggerEvents(Cache<String, Integer> cache) throws InterruptedException {
+    private void triggerEvents(Cache<String, Integer> cache) {
         // this will fire create event
         cache.put("theKey", 66);
 
@@ -61,13 +63,13 @@ public class ListenerExample extends AbstractApp {
         cache.get("theKey");
 
         // wait for 10 sec to expire the content
-        Thread.sleep(10 * 1000);
+        sleepSeconds(10);
 
         // will force to expire if we access it and fire expire event
         cache.get("theKey");
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         new ListenerExample().runApp();
     }
 }

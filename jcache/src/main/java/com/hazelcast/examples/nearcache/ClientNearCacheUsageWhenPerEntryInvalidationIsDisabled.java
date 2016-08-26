@@ -7,6 +7,8 @@ import com.hazelcast.spi.properties.GroupProperty;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+
 /**
  * Code sample to demonstrate Near Cache behaviour when per entry invalidation is disabled.
  */
@@ -40,7 +42,7 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
         updateRecordsInCacheOnClient1(clientCache1);
 
         // wait a little for invalidation events to be sent in batch
-        sleep(2 * INVALIDATION_EVENT_FLUSH_FREQ_MSECS);
+        sleepMillis(2 * INVALIDATION_EVENT_FLUSH_FREQ_MSECS);
 
         // get old records from Near Cache on client-2 (because we have disabled per entry invalidation event)
         getStillOldRecordsFromNearCacheOnClient2(clientCache2);
@@ -49,7 +51,7 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
         clientCache1.clear();
 
         // wait a little for invalidation events to be sent in batch
-        sleep(2 * INVALIDATION_EVENT_FLUSH_FREQ_MSECS);
+        sleepMillis(2 * INVALIDATION_EVENT_FLUSH_FREQ_MSECS);
 
         // try to get records from Near Cache and can't find any, since they are invalidated from Near Cache on client-2
         // due to clear() on client-1, because it's a full-flush operation and triggers invalidation even though
