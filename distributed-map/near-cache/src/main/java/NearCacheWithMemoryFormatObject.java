@@ -6,16 +6,16 @@ public class NearCacheWithMemoryFormatObject extends NearCacheSupport {
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        IMap<Long, Article> map = hz.getMap("articlesObject");
+        IMap<Integer, Article> map = hz.getMap("articlesObject");
 
         Article article = new Article("foo");
-        map.put(1L, article);
+        map.put(1, article);
 
         // the first get() will populate the Near Cache
-        Article firstGet = map.get(1L);
+        Article firstGet = map.get(1);
         // the second and third get() will be served from the Near Cache
-        Article secondGet = map.get(1L);
-        Article thirdGet = map.get(1L);
+        Article secondGet = map.get(1);
+        Article thirdGet = map.get(1);
 
         printNearCacheStats(map);
 
