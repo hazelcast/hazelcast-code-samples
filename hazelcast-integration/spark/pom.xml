@@ -11,7 +11,6 @@
         <groupId>com.hazelcast.samples</groupId>
         <artifactId>hazelcast-integration</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>
@@ -21,18 +20,6 @@
 
         <hazelcast-spark.version>0.2-SNAPSHOT</hazelcast-spark.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>snapshot-repository</id>
-            <name>Maven2 Snapshot Repository</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
