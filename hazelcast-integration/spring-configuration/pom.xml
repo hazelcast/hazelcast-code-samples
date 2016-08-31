@@ -8,7 +8,7 @@
 
     <artifactId>HazelcastSpring</artifactId>
     <groupId>HazelcastSpring</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <name>Hazelcast Spring Configuration Example</name>
     <url>http://hazelcast.org/</url>
 
