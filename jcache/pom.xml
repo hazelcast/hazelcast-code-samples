@@ -37,6 +37,12 @@
             <artifactId>cache-api</artifactId>
             <version>${jsr107.api.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast.samples.distributed-map</groupId>
+            <artifactId>near-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.hazelcast.samples</groupId>
             <artifactId>helper</artifactId>

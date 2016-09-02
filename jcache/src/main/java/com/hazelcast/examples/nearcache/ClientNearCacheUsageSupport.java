@@ -1,6 +1,7 @@
 package com.hazelcast.examples.nearcache;
 
 import com.hazelcast.cache.ICache;
+import com.hazelcast.cache.impl.nearcache.NearCache;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.cache.impl.HazelcastClientCacheManager;
 import com.hazelcast.client.cache.impl.HazelcastClientCachingProvider;
@@ -8,20 +9,32 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.impl.HazelcastClientProxy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.EvictionConfig;
+import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.JoinConfig;
 import com.hazelcast.config.NearCacheConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.examples.Article;
+import com.hazelcast.monitor.NearCacheStats;
 
 import javax.cache.spi.CachingProvider;
 import java.util.LinkedList;
 import java.util.List;
 
-@SuppressWarnings("unused")
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+import static com.hazelcast.spi.properties.GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
+import static java.lang.Integer.parseInt;
+
+@SuppressWarnings({"checkstyle:methodcount", "unused"})
 public abstract class ClientNearCacheUsageSupport {
 
     protected static final String DEFAULT_CACHE_NAME = "ClientCache";
+
+    private static final int EXPIRATION_TASK_DELAY_SECONDS = 2 * NearCache.DEFAULT_EXPIRATION_TASK_DELAY_IN_SECONDS;
+    private static final int INVALIDATION_DELAY_SECONDS
+            = 2 * parseInt(CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue());
 
     protected final List<HazelcastInstance> clients = new LinkedList<HazelcastInstance>();
 
@@ -46,6 +59,10 @@ public abstract class ClientNearCacheUsageSupport {
         if (serverInstance != null) {
             serverInstance.shutdown();
         }
+    }
+
+    protected HazelcastInstance getServerInstance() {
+        return serverInstance;
     }
 
     protected Config createConfig() {
@@ -79,6 +96,14 @@ public abstract class ClientNearCacheUsageSupport {
         return new CacheConfig<K, V>()
                 .setName(DEFAULT_CACHE_NAME)
                 .setInMemoryFormat(inMemoryFormat);
+    }
+
+    protected EvictionConfig createEvictionConfigWithEntryCountPolicy(int size) {
+        EvictionConfig evictionConfig = new EvictionConfig();
+        evictionConfig.setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.ENTRY_COUNT);
+        evictionConfig.setSize(size);
+        evictionConfig.setEvictionPolicy(EvictionPolicy.LRU);
+        return evictionConfig;
     }
 
     protected NearCacheConfig createNearCacheConfig() {
@@ -171,5 +196,30 @@ public abstract class ClientNearCacheUsageSupport {
 
     protected String generateValueFromKey(Integer key) {
         return "Value-" + key;
+    }
+
+    protected static void printNearCacheStats(ICache<Integer, Article> cache) {
+        NearCacheStats stats = cache.getLocalCacheStatistics().getNearCacheStatistics();
+
+        System.out.printf("The Near Cache contains %d entries.%n", stats.getOwnedEntryCount());
+        System.out.printf("The first article instance was retrieved from the remote instance (Near Cache misses: %d).%n",
+                stats.getMisses());
+        System.out.printf(
+                "The second and third article instance were retrieved from the local Near Cache (Near Cache hits: %d).%n",
+                stats.getHits());
+    }
+
+    protected static void printNearCacheStats(ICache<?, ?> cache, String message) {
+        NearCacheStats stats = cache.getLocalCacheStatistics().getNearCacheStatistics();
+        System.out.printf("%s (%d entries, %d hits, %d misses)%n",
+                message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses());
+    }
+
+    protected static void waitForExpirationTask(int expireTimeoutSeconds) {
+        sleepSeconds(EXPIRATION_TASK_DELAY_SECONDS + expireTimeoutSeconds);
+    }
+
+    protected static void waitForInvalidationEvents() {
+        sleepSeconds(INVALIDATION_DELAY_SECONDS);
     }
 }
