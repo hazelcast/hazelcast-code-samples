@@ -17,6 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <hazelcast.version>3.8-SNAPSHOT</hazelcast.version>
+        <hazelcast-jclouds.version>3.7</hazelcast-jclouds.version>
 
         <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
     </properties>
