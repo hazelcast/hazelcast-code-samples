@@ -1,0 +1,6 @@
+# Override the default Tomcat port of 8080 to "0", meaning
+# pick any available port.
+# This is necessary to be able to run multiple copies of the
+# application on the same machine.
+server:
+  port: 0
