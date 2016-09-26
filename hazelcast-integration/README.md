@@ -18,3 +18,5 @@
 	Implementation of tomcat/jetty session replication integration of hazelcast.
 - <h3>spark</h3>
 	Implementation of Spark Connector for Hazelcast.
+- <h3>springboot-http</h3>
+	Spring Boot style HTTP session replication, using embedded web container in standalone Jar.

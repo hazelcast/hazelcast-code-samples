@@ -55,6 +55,7 @@
         <module>springaware-annotation</module>
         <module>springboot-caching</module>
         <module>springboot-caching-jcache</module>
+	<module>springboot-http</module>
     </modules>
 
     <dependencies>
