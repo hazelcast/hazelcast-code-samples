@@ -26,7 +26,7 @@ The session object contains a few standard fields such as the session id, the cr
 
 So, the HTTP Session underpins the user experience of being logged in, and revenue that they generate while logged in.
 
-Because of this, you need to protect the HTTP Session from being lost, due to a hardware fault for example. The rest of this post will show you how to do this, using follow-along sample code on Github, as [springboot-http](http://www.github.com/hazelcast/hazelcast-code-samples/hazelcast-integration/springboot-http).
+Because of this, you need to protect the HTTP Session from being lost, due to a hardware fault for example. The rest of this post will show you how to do this, using follow-along sample code on Github, as [springboot-http](https://github.com/hazelcast/hazelcast-code-samples/tree/master/hazelcast-integration/springboot-http).
 
 ## With Spring, without XML
 Intentionally the application here is minimal, as it’s trying to demonstrate the concepts rather than the detail. Spring does most of the framework, and in this example there isn't really any business logic.
