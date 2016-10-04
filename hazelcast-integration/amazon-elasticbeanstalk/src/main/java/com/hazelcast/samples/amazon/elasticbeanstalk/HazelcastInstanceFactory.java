@@ -18,8 +18,8 @@
 
 package com.hazelcast.samples.amazon.elasticbeanstalk;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeTagsRequest;
@@ -46,7 +46,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.core.io.Resource;
-import org.springframework.util.StringUtils;
 
 /**
  * @author László Csontos
@@ -54,17 +53,14 @@ import org.springframework.util.StringUtils;
 public class HazelcastInstanceFactory extends AbstractFactoryBean<HazelcastInstance> {
 
     public static final String ELASTICBEANSTALK_ENVIRONMENT_NAME = "elasticbeanstalk:environment-name";
+    public static final String ELASTICBEANSTALK_EC2_ROLE_NAME = "aws-elasticbeanstalk-ec2-role";
     public static final String HAZELCAST_ENVIRONMENT_NAME = "hazelcast.environment.name";
     public static final String HAZELCAST_ENVIRONMENT_PASSWORD = "hazelcast.environment.password";
-    public static final String HAZELCAST_AWS_ACCESS_KEY = "hazelcast.aws.access-key";
-    public static final String HAZELCAST_AWS_SECRET_KEY = "hazelcast.aws.secret-key";
+    public static final String HAZELCAST_AWS_IAM_ROLE = "hazelcast.aws.iam-role";
     public static final String HAZELCAST_AWS_REGION = "hazelcast.aws.region";
     public static final String HAZELCAST_LOGGING_TYPE = "hazelcast.logging.type";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HazelcastInstanceFactory.class);
-
-    private final String accessKeyId;
-    private final String secretKey;
 
     private AmazonEC2 amazonEC2;
     private boolean localOnly;
@@ -78,15 +74,11 @@ public class HazelcastInstanceFactory extends AbstractFactoryBean<HazelcastInsta
     @Autowired
     private SpringManagedContext springManagedContext;
 
-    public HazelcastInstanceFactory(String accessKeyId, String secretKey) {
-        this.accessKeyId = accessKeyId;
-        this.secretKey = secretKey;
-
-        if (StringUtils.hasText(accessKeyId) && StringUtils.hasText(secretKey)) {
-            AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretKey);
-            amazonEC2 = new AmazonEC2Client(credentials);
-        } else {
-            LOGGER.warn("AWS access or secret key are empty, local cluster configuration will be used.");
+    public HazelcastInstanceFactory() {
+        try {
+            amazonEC2 = new AmazonEC2Client(new InstanceProfileCredentialsProvider());
+        } catch (AmazonClientException ace) {
+            LOGGER.error("Couldn't authenticate with AWS; local cluster configuration will be used.", ace);
         }
     }
 
@@ -177,8 +169,7 @@ public class HazelcastInstanceFactory extends AbstractFactoryBean<HazelcastInsta
         Properties properties = new Properties();
         properties.setProperty(HAZELCAST_ENVIRONMENT_NAME, environmentName);
         properties.setProperty(HAZELCAST_ENVIRONMENT_PASSWORD, environmentPassword);
-        properties.setProperty(HAZELCAST_AWS_ACCESS_KEY, accessKeyId);
-        properties.setProperty(HAZELCAST_AWS_SECRET_KEY, secretKey);
+        properties.setProperty(HAZELCAST_AWS_IAM_ROLE, ELASTICBEANSTALK_EC2_ROLE_NAME);
         properties.setProperty(HAZELCAST_AWS_REGION, instanceInfo.getRegion());
 
         return properties;

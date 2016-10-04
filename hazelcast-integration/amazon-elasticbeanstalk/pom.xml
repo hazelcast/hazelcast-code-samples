@@ -39,7 +39,7 @@
 
         <!-- customize applicationId here if there was a collision when checking with beanstalk:check-availability -->
         <applicationId>1</applicationId>
-        <applicationName>${project.artifactId}-${applicationId}</applicationName>
+        <applicationName>hazelcast-${project.artifactId}-${applicationId}</applicationName>
 
         <!-- needed for beanstalk-maven-plugin -->
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
@@ -49,6 +49,7 @@
         <beanstalk.environmentAwsSecretKey>${env.AWS_SECRET_KEY}</beanstalk.environmentAwsSecretKey>
         <beanstalk.environmentName>${applicationName}</beanstalk.environmentName>
         <beanstalk.environmentRef>${applicationName}.elasticbeanstalk.com</beanstalk.environmentRef>
+        <beanstalk.iamInstanceProfile>aws-elasticbeanstalk-ec2-role</beanstalk.iamInstanceProfile>
         <beanstalk.instanceType>m1.small</beanstalk.instanceType>
         <beanstalk.jvmXms>512m</beanstalk.jvmXms>
         <beanstalk.jvmXmx>512m</beanstalk.jvmXmx>
@@ -122,7 +123,7 @@
                 <artifactId>beanstalk-maven-plugin</artifactId>
                 <version>1.5.0</version>
                 <configuration>
-                    <s3Bucket>beanstalk-maven-plugin</s3Bucket>
+                    <s3Bucket>${env.AWS_EB_S3_BUCKET_NAME}</s3Bucket>
                     <s3Key>${project.artifactId}/${project.build.finalName}-${maven.build.timestamp}.war</s3Key>
                 </configuration>
             </plugin>

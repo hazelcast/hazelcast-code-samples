@@ -26,32 +26,41 @@ You can try Amazon Elasticbeanstalk by running through the following exercise [G
 
 2. Create a new user [here](https://console.aws.amazon.com/iam/home?#users) and add it to the previously create group
 
-3. Setup credentials for the beanstalk-maven-plugin as described [here](http://beanstalker.ingenieux.com.br/beanstalk-maven-plugin/security.html)
+3. Add permissions to the Default Instance Profile
+
+* Select role [aws-elasticbeanstalk-ec2-role](https://console.aws.amazon.com/iam/home?#roles/aws-elasticbeanstalk-ec2-role)
+* Attach [AmazonEC2ReadOnlyAccess](https://console.aws.amazon.com/iam/home?#policies/arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess) to it.
+
+4. Setup credentials for the beanstalk-maven-plugin as described [here](http://beanstalker.ingenieux.com.br/beanstalk-maven-plugin/security.html)
 
     ```
     $ export AWS_ACCESS_KEY_ID="<your aws access key>"
     $ export AWS_SECRET_KEY="<your aws secret key>"
     ```
 
-4. Create bucket `beanstalk-maven-plugin` on [Amazon S3](https://console.aws.amazon.com/s3/home)
+5. Create bucket `beanstalk-maven-plugin` on [Amazon S3](https://console.aws.amazon.com/s3/home)
 
-5. Check if the your chosen CNAME is available for your deployment
+    ```
+    $ export AWS_EB_S3_BUCKET_NAME="<your S3 bucket for beanstalk-maven-plugin>"
+    ```
+
+6. Check if the your chosen CNAME is available for your deployment
 
     ```
     mvn beanstalk:check-availability -DapplicationId=N
     ```
 
-6. If `amazon-elasticbeanstalk-N.us-east-1.elasticbeanstalk.com` is taken, try to increase `N` until you find an available CNAME.
+7. If `amazon-elasticbeanstalk-N.us-east-1.elasticbeanstalk.com` is taken, try to increase `N` until you find an available CNAME.
 
-7. Upload the bundle to the previously created S3 bucket and deploy the app to Elasticbeanstalk (this may take a while)
+8. Upload the bundle to the previously created S3 bucket and deploy the app to Elasticbeanstalk (this may take a while)
 
     ```
     mvn beanstalk:upload-source-bundle beanstalk:create-application-version beanstalk:create-environment -DapplicationId=N
     ```
 
-8. Go to [Security Groups](https://console.aws.amazon.com/ec2/v2/home#SecurityGroups:sort=groupName) on the EC2 management console and modify the one which was created for your environment. Add two rules: one for accepting HTTP connection from anywhere and another one for accepting all TCP traffic from 10.0.0.0/8. This latter is needed to make the nodes be to communicate to other.
+9. Go to [Security Groups](https://console.aws.amazon.com/ec2/v2/home#SecurityGroups:sort=groupName) on the EC2 management console and modify the one which was created for your environment. Add two rules: one for accepting HTTP connection from anywhere and another one for accepting all TCP traffic from 10.0.0.0/8 or 172.16.0.0/12 depending on your VPC settings. This latter is needed to make the nodes be to communicate to other.
 
-9. Find the two nodes of the newly created Elasticbeanstalk environment
+10. Find the two nodes of the newly created Elasticbeanstalk environment
 
     ```
     mvn beanstalk:dump-instances -DapplicationId=N

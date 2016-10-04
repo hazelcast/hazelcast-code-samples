@@ -23,9 +23,6 @@
 
     <bean id="springManagedContext" class="com.hazelcast.spring.context.SpringManagedContext" />
 
-    <bean id="hazelcastInstance" class="com.hazelcast.samples.amazon.elasticbeanstalk.HazelcastInstanceFactory">
-        <constructor-arg type="java.lang.String" value="${AWS_ACCESS_KEY_ID:#{null}}"/>
-        <constructor-arg type="java.lang.String" value="${AWS_SECRET_KEY:#{null}}"/>
-    </bean>
+    <bean id="hazelcastInstance" class="com.hazelcast.samples.amazon.elasticbeanstalk.HazelcastInstanceFactory" />
 
 </beans>

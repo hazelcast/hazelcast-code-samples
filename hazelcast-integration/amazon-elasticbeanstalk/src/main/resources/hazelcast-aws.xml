@@ -30,8 +30,7 @@
             <multicast enabled="false"/>
             <tcp-ip enabled="false"/>
             <aws enabled="true">
-                <access-key>${hazelcast.aws.access-key}</access-key>
-                <secret-key>${hazelcast.aws.secret-key}</secret-key>
+                <iam-role>${hazelcast.aws.iam-role}</iam-role>
                 <region>${hazelcast.aws.region}</region>
                 <tag-key>elasticbeanstalk:environment-name</tag-key>
                 <tag-value>${hazelcast.environment.name}</tag-value>
