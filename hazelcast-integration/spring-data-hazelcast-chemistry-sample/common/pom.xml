@@ -12,4 +12,9 @@
     <name>Spring Data Hazelcast Chemistry ${project.artifactId} (${project.packaging})</name>
     <description>Code shared by client and server</description>
 
+	<properties>
+		<!-- needed for checkstyle/findbugs -->
+		<main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 </project>
