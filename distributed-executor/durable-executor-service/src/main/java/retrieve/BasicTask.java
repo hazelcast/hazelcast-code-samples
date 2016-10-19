@@ -19,12 +19,11 @@ package retrieve;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
-
 public class BasicTask implements Callable, Serializable {
 
     private final String msg;
 
-    public BasicTask(String msg) {
+    BasicTask(String msg) {
         this.msg = msg;
     }
 

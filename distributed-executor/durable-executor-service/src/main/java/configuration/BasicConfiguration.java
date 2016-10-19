@@ -1,4 +1,4 @@
-package configuration;/*
+/*
  * Copyright (c) 2008-2016, Hazelcast, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,28 +14,27 @@ package configuration;/*
  * limitations under the License.
  */
 
+package configuration;
+
 import com.hazelcast.config.Config;
-import com.hazelcast.config.DurableExecutorConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.durableexecutor.DurableExecutorService;
 import com.hazelcast.durableexecutor.DurableExecutorServiceFuture;
 
-import java.util.concurrent.ExecutionException;
-
 public class BasicConfiguration {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         Config config = new Config();
-        DurableExecutorConfig durableExecutorConfig = config.getDurableExecutorConfig("exec");
-        durableExecutorConfig.setCapacity(200);
-        durableExecutorConfig.setDurability(2);
-        durableExecutorConfig.setPoolSize(8);
+        config.getDurableExecutorConfig("exec")
+                .setCapacity(200)
+                .setDurability(2)
+                .setPoolSize(8);
+
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         DurableExecutorService executorService = instance.getDurableExecutorService("exec");
 
         DurableExecutorServiceFuture<?> durableExecutor = executorService.submit(new EchoTask("DurableExecutor"));
         durableExecutor.get();
-
     }
 }

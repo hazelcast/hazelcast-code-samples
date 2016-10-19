@@ -2,20 +2,18 @@ package configuration;
 
 import java.io.Serializable;
 
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+
 public class EchoTask implements Runnable, Serializable {
 
     private final String msg;
 
-    public EchoTask(String msg) {
+    EchoTask(String msg) {
         this.msg = msg;
     }
 
     public void run() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        sleepSeconds(5);
 
         System.out.println("Echo: " + msg);
     }

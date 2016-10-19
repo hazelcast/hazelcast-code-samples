@@ -1,4 +1,4 @@
-package retrieve;/*
+/*
  * Copyright (c) 2008-2016, Hazelcast, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,19 @@ package retrieve;/*
  * limitations under the License.
  */
 
+package retrieve;
+
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.durableexecutor.DurableExecutorService;
 import com.hazelcast.durableexecutor.DurableExecutorServiceFuture;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class RetrieveLostTask {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         Hazelcast.newHazelcastInstance();
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient();
@@ -33,7 +34,6 @@ public class RetrieveLostTask {
         DurableExecutorServiceFuture future = executorService.submit(new BasicTask("DurableExecutor"));
         long taskId = future.getTaskId();
         client.shutdown();
-
 
         HazelcastInstance newClient = HazelcastClient.newHazelcastClient();
         DurableExecutorService newExecutorService = newClient.getDurableExecutorService("exec");
