@@ -24,6 +24,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import java.io.Serializable;
 import java.util.Random;
 
+@SuppressWarnings("unchecked")
 public class HazelcastDataTypes {
 
     private static final Random RANDOM = new Random();
@@ -58,7 +59,7 @@ public class HazelcastDataTypes {
         System.out.println("### Map Execution Started... ###");
         int key = RANDOM.nextInt(100);
         int value = RANDOM.nextInt(100);
-        IMap<Integer, Integer> map = (IMap<Integer, Integer>) context.getBean("map");
+        IMap<Integer, Integer> map = (IMap<Integer, Integer>) context.getBean("map", IMap.class);
         map.put(key, value);
         System.out.println("A random pair is added to map.");
         System.out.println("Added value: " + map.get(key) + "\n");
@@ -68,7 +69,7 @@ public class HazelcastDataTypes {
         System.out.println("### MultiMap Execution Started... ###");
         int key = RANDOM.nextInt(100);
         int value = RANDOM.nextInt(100);
-        MultiMap<Integer, Integer> multimap = (MultiMap<Integer, Integer>) context.getBean("multiMap");
+        MultiMap<Integer, Integer> multimap = (MultiMap<Integer, Integer>) context.getBean("multiMap", MultiMap.class);
         multimap.put(key, value);
         System.out.println("A random pair is added to multiMap.");
         System.out.println("Added value: " + multimap.get(key) + "\n");
@@ -78,7 +79,8 @@ public class HazelcastDataTypes {
         System.out.println("### ReplicatedMap Execution Started... ###");
         int key = RANDOM.nextInt(100);
         int value = RANDOM.nextInt(100);
-        ReplicatedMap<Integer, Integer> replicatedMap = (ReplicatedMap<Integer, Integer>) context.getBean("replicatedMap");
+        ReplicatedMap<Integer, Integer> replicatedMap = (ReplicatedMap<Integer, Integer>) context
+                .getBean("replicatedMap", ReplicatedMap.class);
         replicatedMap.put(key, value);
         System.out.println("A random pair is added to replicatedMap.");
         System.out.println("Added value: " + replicatedMap.get(key) + "\n");
@@ -87,7 +89,7 @@ public class HazelcastDataTypes {
     private static void executeQueue() {
         System.out.println("### Queue Execution Started... ###");
         int key = RANDOM.nextInt(100);
-        IQueue<Integer> queue = (IQueue<Integer>) context.getBean("queue");
+        IQueue<Integer> queue = (IQueue<Integer>) context.getBean("queue", IQueue.class);
         queue.add(key);
         System.out.println("A random integer is added to queue.");
         System.out.println("Added element: " + queue.poll() + "\n");
@@ -95,7 +97,7 @@ public class HazelcastDataTypes {
 
     private static void executeTopic() {
         System.out.println("### Topic Execution Started... ###");
-        ITopic<String> topic = (ITopic<String>) context.getBean("topic");
+        ITopic<String> topic = (ITopic<String>) context.getBean("topic", ITopic.class);
         topic.addMessageListener(new MessageListener<String>() {
             @Override
             public void onMessage(Message<String> message) {
@@ -108,7 +110,7 @@ public class HazelcastDataTypes {
     private static void executeSet() {
         System.out.println("### Set Execution Started... ###");
         int key = RANDOM.nextInt(100);
-        ISet<Integer> set = (ISet<Integer>) context.getBean("set");
+        ISet<Integer> set = (ISet<Integer>) context.getBean("set", ISet.class);
         set.add(key);
         System.out.println("A random integer is added to set.");
         System.out.println("Added element: " + set.iterator().next() + "\n");
@@ -117,7 +119,7 @@ public class HazelcastDataTypes {
     private static void executeList() {
         System.out.println("### List Execution Started... ###");
         int key = RANDOM.nextInt(100);
-        IList<Integer> list = (IList<Integer>) context.getBean("list");
+        IList<Integer> list = (IList<Integer>) context.getBean("list", IList.class);
         list.add(key);
         System.out.println("A random integer is added to list.");
         System.out.println("Added element: " + list.iterator().next() + "\n");
@@ -125,14 +127,14 @@ public class HazelcastDataTypes {
 
     private static void executeExecutorService() {
         System.out.println("### ExecutorService Execution Started... ###");
-        IExecutorService executorService = (IExecutorService) context.getBean("executorService");
+        IExecutorService executorService = context.getBean("executorService", IExecutorService.class);
         executorService.execute(new EchoTask("hello"));
         executorService.shutdown();
     }
 
     private static void executeIdGenerator() {
         System.out.println("### IdGenerator Execution Started... ###");
-        IdGenerator idgenerator = (IdGenerator) context.getBean("idGenerator");
+        IdGenerator idgenerator = context.getBean("idGenerator", IdGenerator.class);
         idgenerator.init(100L);
         System.out.println("IdGenerator is initialized with 100.");
         System.out.println("NewId: " + idgenerator.newId() + "\n");
@@ -140,7 +142,7 @@ public class HazelcastDataTypes {
 
     private static void executeAtomicLong() {
         System.out.println("### AtomicLong Execution Started... ###");
-        IAtomicLong atomicLong = (IAtomicLong) context.getBean("atomicLong");
+        IAtomicLong atomicLong = context.getBean("atomicLong", IAtomicLong.class);
         atomicLong.set(100L);
         System.out.println("AtomicLong is set to 100.");
         System.out.println("AtomicLong: " + atomicLong.get() + "\n");
@@ -148,14 +150,15 @@ public class HazelcastDataTypes {
 
     private static void executeAtomicReference() {
         System.out.println("### AtomicReference Execution Started... ###");
-        IAtomicReference<String> atomicReference = (IAtomicReference<String>) context.getBean("atomicReference");
+        IAtomicReference<String> atomicReference = (IAtomicReference<String>) context
+                .getBean("atomicReference", IAtomicReference.class);
         atomicReference.set("Executing AtomicReference");
         System.out.println(atomicReference.get() + "\n");
     }
 
     private static void executeCountDownLatch() {
         System.out.println("### CountDownLatch Execution Started... ###");
-        ICountDownLatch countDownLatch = (ICountDownLatch) context.getBean("countDownLatch");
+        ICountDownLatch countDownLatch = context.getBean("countDownLatch", ICountDownLatch.class);
         countDownLatch.trySetCount(10);
         System.out.println("Count is set to 10.");
         countDownLatch.countDown();
@@ -165,7 +168,7 @@ public class HazelcastDataTypes {
 
     private static void executeSemaphore() {
         System.out.println("### Semaphore Execution Started... ###");
-        ISemaphore semaphore = (ISemaphore) context.getBean("semaphore");
+        ISemaphore semaphore = context.getBean("semaphore", ISemaphore.class);
         semaphore.init(5);
         System.out.println("Semaphore initialized with 5.");
         try {
@@ -182,7 +185,7 @@ public class HazelcastDataTypes {
 
     private static void executeLock() {
         System.out.println("### Lock Execution Started... ###");
-        ILock lock = (ILock) context.getBean("lock");
+        ILock lock = context.getBean("lock", ILock.class);
         lock.lock();
         System.out.println("lock() call...");
         System.out.println("is locked by current thread? :" + lock.isLockedByCurrentThread());
