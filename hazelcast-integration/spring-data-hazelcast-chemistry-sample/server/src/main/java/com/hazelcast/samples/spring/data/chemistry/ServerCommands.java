@@ -1,127 +1,112 @@
 package com.hazelcast.samples.spring.data.chemistry;
 
 import com.hazelcast.samples.spring.data.chemistry.service.ChemistryService;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
- *<P>Define commands to manipulate the test data from the command line.
- *</P>
+ * Define commands to manipulate the test data from the command line.
  */
 @Component
 public class ServerCommands implements CommandMarker {
 
-	@Resource
-	private ChemistryService chemistyService;
+    @Resource
+    private ChemistryService chemistyService;
 
     /**
-     *<P>List all test data present in the cluster.
-     *</P>
-     *<P><B><I>Usage</I></B></P>
-     *<UL>
-     * <LI><B>list</B>
-     * </LI>
-     *</UL>
+     * List all test data present in the cluster.
+     *
+     * <b>iI>Usage</i></b>
+     * <ul>
+     * <li><b>list</b></li>
+     * </ul>
      *
      * @return A string displayed in the shell
      */
     @CliCommand(value = "count",
-				help = "Count the Chemistry test data in the cluster")
+            help = "Count the Chemistry test data in the cluster")
     public String count() {
-    	Map<String,Long> items = this.chemistyService.count();
- 
-     	return items.toString();
+        Map<String, Long> items = this.chemistyService.count();
+
+        return items.toString();
     }
 
     /**
-     *<P>List all test data present in the cluster.
-     *</P>
-     *<P><B><I>Usage</I></B></P>
-     *<UL>
-     * <LI><B>list</B>
-     * </LI>
-     *</UL>
+     * List all test data present in the cluster.
+     *
+     * <b><i>Usage</i></b>
+     * <ul>
+     * <li><b>list</b></li>
+     * </ul>
      *
      * @return A string displayed in the shell
      */
     @CliCommand(value = "list",
-				help = "Display the Chemistry test data in the cluster")
+            help = "Display the Chemistry test data in the cluster")
     public String list() {
-    	Map<String,Set<Integer>> elements = this.chemistyService.neutrons();
- 
-    	String result = elements.entrySet().stream()
-		.map(Object::toString)
-        .collect(Collectors.joining(", ", "[", "]"));
+        Map<String, Set<Integer>> elements = this.chemistyService.neutrons();
 
-     	return result;
+        return elements.entrySet().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", ", "[", "]"));
     }
-        
+
     /**
-     *<P>Insert the predefined test data in {@link example.springdata.keyvalue.chemistry.utils.PeriodicTable} into the cluster.
-     *</P>
-     *<P><B><I>Usage</I></B></P>
-     *<UL>
-     * <LI><B>load</B>
-     * </LI>
-     *</UL>
+     * Insert the predefined test data in {@link example.springdata.keyvalue.chemistry.utils.PeriodicTable} into the cluster.
+     *
+     * <b><i>Usage</i></b>
+     * <ul>
+     * <li><b>load</b></li>
+     * </ul>
      *
      * @return A string displayed in the shell
      */
     @CliCommand(value = "load",
-				help = "Insert Chemistry test data into the cluster")
+            help = "Insert Chemistry test data into the cluster")
     public String load() {
-    	int count = this.chemistyService.load();
-    	
-    	String result = String.format("[%d row%s]", count, (count!=1 ?"s" :""));
-    	
-    	return result;
+        int count = this.chemistyService.load();
+
+        return String.format("[%d row%s]", count, (count != 1 ? "s" : ""));
     }
 
     /**
-     *<P>Remove data from the cluster.
-     *</P>
-     *<P><B><I>Usage</I></B></P>
-     *<UL>
-     * <LI><B>unload</B>
-     * <P>Unload isotopes only</P>
-     * </LI>
-     * <LI><B>unload --isotope</B>
-     * <P>Unload elements and isotopes</P>
-     * </LI>
-     * <LI><B>unload --isotope true</B>
-     * <P>Unload isotopes only</P>
-     * </LI>
-     * <LI><B>unload --isotope false</B>
-     * <P>Unload elements and isotopes</P>
-     * </LI>
-     *</UL>
+     * Remove data from the cluster.
+     *
+     * <b><i>Usage</i></b>
+     * <ul>
+     * <li><b>unload</b>
+     * Unload isotopes only</li>
+     * <li><b>unload --isotope</b>
+     * Unload elements and isotopes</li>
+     * <li><b>unload --isotope true</b>
+     * Unload isotopes only</li>
+     * <li><b>unload --isotope false</b>
+     * Unload elements and isotopes</li>
+     * </ul>
      *
      * @return A string displayed in the shell
      */
     @CliCommand(value = "unload",
-    			help = "Remove Chemistry test data from the cluster")
+            help = "Remove Chemistry test data from the cluster")
     public String unload(
-    			@CliOption(key={"isotope"}
-    						,mandatory = false
-    						,help="Optionally '--isotope true' or '--isotope false' to only unload isotopes"
-    						,specifiedDefaultValue="false"
-    						,unspecifiedDefaultValue="true"
-    						) 
-    			final boolean onlyIsotopes
-    		) {
+            @CliOption(key = {"isotope"}
+                    , mandatory = false
+                    , help = "Optionally '--isotope true' or '--isotope false' to only unload isotopes"
+                    , specifiedDefaultValue = "false"
+                    , unspecifiedDefaultValue = "true"
+            )
+            final boolean onlyIsotopes
+    ) {
 
-    	this.chemistyService.unload(onlyIsotopes);
-    	
-    	return "Deleted isotopes" + (onlyIsotopes ? "" : " and elements");
+        this.chemistyService.unload(onlyIsotopes);
+
+        return "Deleted isotopes" + (onlyIsotopes ? "" : " and elements");
     }
-
 }
