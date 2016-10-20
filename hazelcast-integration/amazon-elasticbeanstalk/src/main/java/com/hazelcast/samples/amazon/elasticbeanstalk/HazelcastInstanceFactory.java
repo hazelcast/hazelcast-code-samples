@@ -26,26 +26,23 @@ import com.amazonaws.services.ec2.model.DescribeTagsRequest;
 import com.amazonaws.services.ec2.model.DescribeTagsResult;
 import com.amazonaws.services.ec2.model.Filter;
 import com.amazonaws.util.EC2MetadataUtils;
-
 import com.hazelcast.config.Config;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.spring.context.SpringManagedContext;
 import com.hazelcast.util.MD5Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.AbstractFactoryBean;
+import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.AbstractFactoryBean;
-import org.springframework.core.io.Resource;
 
 /**
  * @author László Csontos
@@ -120,8 +117,7 @@ public class HazelcastInstanceFactory extends AbstractFactoryBean<HazelcastInsta
                 awsProperties = getAwsProperties();
             } catch (RuntimeException re) {
                 shutdownAmazonEC2();
-                LOGGER.error(
-                        "Auto-detecting cluster membership has failed; falling back to local configuration.", re);
+                LOGGER.error("Auto-detecting cluster membership has failed; falling back to local configuration.", re);
             }
         }
 
@@ -141,7 +137,7 @@ public class HazelcastInstanceFactory extends AbstractFactoryBean<HazelcastInsta
 
         // EB sets the environment ID and name as the elasticbeanstalk:environment-id and
         // elasticbeanstalk:environment-name EC2 tags on all of the parts of an EB app environment: load balancer,
-        // EC2 instances, security groups, etc. Surprisingly, EC2 tags aren’t available to instances through the
+        // EC2 instances, security groups, etc. Surprisingly, EC2 tags aren't available to instances through the
         // instance metadata interface, but they are available through the normal AWS API’s DescribeTags call.
         Collection<Filter> filters = new ArrayList<Filter>();
         filters.add(new Filter("resource-type").withValues("instance"));
@@ -153,14 +149,8 @@ public class HazelcastInstanceFactory extends AbstractFactoryBean<HazelcastInsta
         DescribeTagsResult describeTagsResult = amazonEC2.describeTags(describeTagsRequest);
 
         if (describeTagsResult == null || describeTagsResult.getTags().isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("No tag ");
-            sb.append(ELASTICBEANSTALK_ENVIRONMENT_NAME);
-            sb.append(" found for instance ");
-            sb.append(instanceId);
-            sb.append(".");
-
-            throw new IllegalStateException(sb.toString());
+            throw new IllegalStateException("No tag " + ELASTICBEANSTALK_ENVIRONMENT_NAME + " found for instance "
+                    + instanceId + ".");
         }
 
         String environmentName = describeTagsResult.getTags().get(0).getValue();
@@ -182,5 +172,4 @@ public class HazelcastInstanceFactory extends AbstractFactoryBean<HazelcastInsta
         amazonEC2.shutdown();
         amazonEC2 = null;
     }
-
 }

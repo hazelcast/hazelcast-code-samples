@@ -18,8 +18,6 @@
 
 package com.hazelcast.samples.amazon.elasticbeanstalk;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -66,12 +64,11 @@ public class Entry {
         }
 
         Entry entry = (Entry) obj;
-        return Objects.equals(entry.key, key);
+        return (key != null && key.equals(entry.key));
     }
 
     @Override
     public int hashCode() {
         return key.hashCode();
     }
-
 }

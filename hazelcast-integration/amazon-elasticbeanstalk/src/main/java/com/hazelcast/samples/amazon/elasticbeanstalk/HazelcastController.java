@@ -101,5 +101,4 @@ public class HazelcastController implements InitializingBean {
     private ResponseEntity<Entry> createResponseEntity(String key, String value) {
         return new ResponseEntity<Entry>(new Entry(key, value), OK);
     }
-
 }
