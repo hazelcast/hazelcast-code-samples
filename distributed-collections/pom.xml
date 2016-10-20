@@ -29,6 +29,7 @@
         <module>itemlisteners</module>
         <module>list</module>
         <module>queuestore</module>
+        <module>ringbufferstore</module>
         <module>ringbuffer</module>
         <module>set</module>
     </modules>
