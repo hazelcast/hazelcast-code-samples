@@ -1,0 +1,19 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.8.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <ringbuffer name="object-ringbuffer-xml">
+        <in-memory-format>OBJECT</in-memory-format>
+        <ringbuffer-store enabled="true">
+            <class-name>TheRingbufferObjectStore</class-name>
+        </ringbuffer-store>
+    </ringbuffer>
+
+    <ringbuffer name="binary-ringbuffer-xml">
+        <in-memory-format>BINARY</in-memory-format>
+        <ringbuffer-store enabled="true">
+            <class-name>TheRingbufferBinaryStore</class-name>
+        </ringbuffer-store>
+    </ringbuffer>
+</hazelcast>
