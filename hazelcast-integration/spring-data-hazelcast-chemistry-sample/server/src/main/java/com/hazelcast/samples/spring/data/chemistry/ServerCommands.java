@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Define commands to manipulate the test data from the command line.
@@ -23,15 +22,14 @@ public class ServerCommands implements CommandMarker {
     /**
      * List all test data present in the cluster.
      *
-     * <b>iI>Usage</i></b>
+     * <b><i>Usage</i></b>
      * <ul>
      * <li><b>list</b></li>
      * </ul>
      *
      * @return A string displayed in the shell
      */
-    @CliCommand(value = "count",
-            help = "Count the Chemistry test data in the cluster")
+    @CliCommand(value = "count", help = "Count the Chemistry test data in the cluster")
     public String count() {
         Map<String, Long> items = this.chemistyService.count();
 
@@ -48,14 +46,11 @@ public class ServerCommands implements CommandMarker {
      *
      * @return A string displayed in the shell
      */
-    @CliCommand(value = "list",
-            help = "Display the Chemistry test data in the cluster")
+    @CliCommand(value = "list", help = "Display the Chemistry test data in the cluster")
     public String list() {
         Map<String, Set<Integer>> elements = this.chemistyService.neutrons();
 
-        return elements.entrySet().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", ", "[", "]"));
+        return elements.entrySet().toString();
     }
 
     /**
@@ -68,8 +63,7 @@ public class ServerCommands implements CommandMarker {
      *
      * @return A string displayed in the shell
      */
-    @CliCommand(value = "load",
-            help = "Insert Chemistry test data into the cluster")
+    @CliCommand(value = "load", help = "Insert Chemistry test data into the cluster")
     public String load() {
         int count = this.chemistyService.load();
 
@@ -93,8 +87,7 @@ public class ServerCommands implements CommandMarker {
      *
      * @return A string displayed in the shell
      */
-    @CliCommand(value = "unload",
-            help = "Remove Chemistry test data from the cluster")
+    @CliCommand(value = "unload", help = "Remove Chemistry test data from the cluster")
     public String unload(
             @CliOption(key = {"isotope"}
                     , mandatory = false
