@@ -48,7 +48,6 @@
         <module>mongodb</module>
         <module>spring-cache-manager</module>
         <module>spring-configuration</module>
-        <module>spring-data-hazelcast-chemistry-sample</module>
         <module>spring-data-integration</module>
         <module>spring-hibernate-2ndlevel-cache</module>
         <module>spring-jcache</module>
@@ -57,7 +56,7 @@
         <module>springaware-annotation</module>
         <module>springboot-caching</module>
         <module>springboot-caching-jcache</module>
-	<module>springboot-http</module>
+        <module>springboot-http</module>
     </modules>
 
     <dependencies>
