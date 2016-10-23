@@ -46,8 +46,10 @@
         <module>jca-ra</module>
         <module>manager-based-session-replication</module>
         <module>mongodb</module>
+        <module>spark</module>
         <module>spring-cache-manager</module>
         <module>spring-configuration</module>
+        <module>spring-data-hazelcast-chemistry-sample</module>
         <module>spring-data-integration</module>
         <module>spring-hibernate-2ndlevel-cache</module>
         <module>spring-jcache</module>
