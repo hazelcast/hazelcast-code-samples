@@ -10,6 +10,8 @@
 	Implementation of spring cache provider integration of hazelcast as client-server application.
 - <h3>spring-configuration</h3>
 	Implementation of spring framework integration of hazelcast.
+- <h3>spring-data-hazelcast-chemistry-sample</h3>
+	Spring Data client-server example, based on the periodic table.
 - <h3>spring-data-integration</h3>
 	Implementation of spring data integration of hazelcast.
 - <h3>spring-hibernate-2ndlevel-cache</h3>
