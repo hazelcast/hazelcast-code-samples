@@ -10,7 +10,6 @@
 
     <groupId>com.hazelcast.samples.spring.data.chemistry</groupId>
     <artifactId>spring-data-hazelcast-chemistry-sample</artifactId>
-    <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Spring Data Hazelcast Chemistry Parent (${project.packaging})</name>
