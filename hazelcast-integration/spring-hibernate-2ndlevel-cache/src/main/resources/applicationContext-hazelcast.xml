@@ -28,6 +28,4 @@
             </hz:map>
         </hz:config>
     </hz:hazelcast>
-
-    <hz:hibernate-region-factory id="regionFactory" instance-ref="instance"/>
 </beans>
