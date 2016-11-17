@@ -30,7 +30,7 @@ public class NearCacheWithEvictionPolicy extends NearCacheClientSupport {
         map.get(101);
         printNearCacheStats(map, "The first get(101) call triggers the eviction and population of the Near Cache");
 
-        waitForNearCacheEntryCount(map, 90);
+        waitForNearCacheEvictionCount(map, 1);
         printNearCacheStats(map, "The Near Cache has been evicted");
 
         map.get(101);

@@ -50,16 +50,18 @@ abstract class NearCacheSupport {
 
     protected static void printNearCacheStats(IMap<?, Article> map, String message) {
         NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
-        System.out.printf("%s (%d entries, %d hits, %d misses)%n",
-                message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses());
+        System.out.printf("%s (%d entries, %d hits, %d misses, %d evictions, %d expirations)%n",
+                message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses(),
+                stats.getEvictions(), stats.getExpirations());
     }
 
-    protected static void waitForNearCacheEntryCount(IMap<?, Article> map, int targetSize) {
-        long ownedEntries;
+    @SuppressWarnings("SameParameterValue")
+    protected static void waitForNearCacheEvictionCount(IMap<?, Article> map, int expectedEvictionCount) {
+        long evictionCount;
         do {
             NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
-            ownedEntries = stats.getOwnedEntryCount();
-        } while (ownedEntries > targetSize);
+            evictionCount = stats.getEvictions();
+        } while (evictionCount > expectedEvictionCount);
     }
 
     protected static void waitForInvalidationEvents() {

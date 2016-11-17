@@ -1,7 +1,6 @@
 package com.hazelcast.examples.nearcache;
 
 import com.hazelcast.cache.ICache;
-import com.hazelcast.cache.impl.nearcache.NearCache;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.cache.impl.HazelcastClientCacheManager;
 import com.hazelcast.client.cache.impl.HazelcastClientCachingProvider;
@@ -17,6 +16,7 @@ import com.hazelcast.config.NearCacheConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.examples.Article;
+import com.hazelcast.internal.nearcache.NearCache;
 import com.hazelcast.monitor.NearCacheStats;
 
 import javax.cache.spi.CachingProvider;
@@ -211,8 +211,9 @@ public abstract class ClientNearCacheUsageSupport {
 
     protected static void printNearCacheStats(ICache<?, ?> cache, String message) {
         NearCacheStats stats = cache.getLocalCacheStatistics().getNearCacheStatistics();
-        System.out.printf("%s (%d entries, %d hits, %d misses)%n",
-                message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses());
+        System.out.printf("%s (%d entries, %d hits, %d misses, %d evictions, %d expirations)%n",
+                message, stats.getOwnedEntryCount(), stats.getHits(), stats.getMisses(),
+                stats.getEvictions(), stats.getExpirations());
     }
 
     protected static void waitForExpirationTask(int expireTimeoutSeconds) {
