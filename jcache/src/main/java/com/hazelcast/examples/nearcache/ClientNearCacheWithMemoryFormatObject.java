@@ -12,11 +12,11 @@ public class ClientNearCacheWithMemoryFormatObject extends ClientNearCacheUsageS
     private static final int RECORD_COUNT = 100;
 
     public void run() {
-        NearCacheConfig nearCacheConfig = createNearCacheConfig();
-        nearCacheConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
-        nearCacheConfig.setCacheLocalEntries(true);
-        nearCacheConfig.setInvalidateOnChange(false);
-        nearCacheConfig.setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
+        NearCacheConfig nearCacheConfig = createNearCacheConfig()
+                .setInMemoryFormat(InMemoryFormat.OBJECT)
+                .setCacheLocalEntries(true)
+                .setInvalidateOnChange(false)
+                .setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
 
         ICache<Integer, Article> cache = createCacheWithNearCache(nearCacheConfig);
 

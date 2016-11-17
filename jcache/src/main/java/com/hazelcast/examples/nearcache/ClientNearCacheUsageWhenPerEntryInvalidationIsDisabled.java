@@ -3,11 +3,12 @@ package com.hazelcast.examples.nearcache;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.NearCacheConfig;
-import com.hazelcast.spi.properties.GroupProperty;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+import static com.hazelcast.spi.properties.GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
+import static java.lang.Integer.parseInt;
 
 /**
  * Code sample to demonstrate Near Cache behaviour when per entry invalidation is disabled.
@@ -16,12 +17,12 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
 
     private static final int RECORD_COUNT = 1000;
     private static final boolean VERBOSE = Boolean.getBoolean("com.hazelcast.examples.jcache.nearcache.verbose");
-    private static final int INVALIDATION_EVENT_FLUSH_FREQ_MSECS =
-            1000 * Integer.parseInt(GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue());
+    private static final int INVALIDATION_EVENT_FLUSH_FREQ_SECONDS
+            = parseInt(CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue());
 
     public void run() {
-        NearCacheConfig nearCacheConfig = createNearCacheConfig();
-        nearCacheConfig.setInvalidateOnChange(true);
+        NearCacheConfig nearCacheConfig = createNearCacheConfig()
+                .setInvalidateOnChange(true);
 
         CacheConfig<Integer, String> cacheConfig = createCacheConfig();
         cacheConfig.setDisablePerEntryInvalidationEvents(true);
@@ -42,7 +43,7 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
         updateRecordsInCacheOnClient1(clientCache1);
 
         // wait a little for invalidation events to be sent in batch
-        sleepMillis(2 * INVALIDATION_EVENT_FLUSH_FREQ_MSECS);
+        sleepSeconds(2 * INVALIDATION_EVENT_FLUSH_FREQ_SECONDS);
 
         // get old records from Near Cache on client-2 (because we have disabled per entry invalidation event)
         getStillOldRecordsFromNearCacheOnClient2(clientCache2);
@@ -51,7 +52,7 @@ public class ClientNearCacheUsageWhenPerEntryInvalidationIsDisabled extends Clie
         clientCache1.clear();
 
         // wait a little for invalidation events to be sent in batch
-        sleepMillis(2 * INVALIDATION_EVENT_FLUSH_FREQ_MSECS);
+        sleepSeconds(2 * INVALIDATION_EVENT_FLUSH_FREQ_SECONDS);
 
         // try to get records from Near Cache and can't find any, since they are invalidated from Near Cache on client-2
         // due to clear() on client-1, because it's a full-flush operation and triggers invalidation even though

@@ -15,12 +15,12 @@ public class ClientNearCacheWithMaxIdle extends ClientNearCacheUsageSupport {
     private static final int MAX_IDLE_SECONDS = 1;
 
     public void run() {
-        NearCacheConfig nearCacheConfig = createNearCacheConfig();
-        nearCacheConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
-        nearCacheConfig.setCacheLocalEntries(true);
-        nearCacheConfig.setInvalidateOnChange(false);
-        nearCacheConfig.setMaxIdleSeconds(MAX_IDLE_SECONDS);
-        nearCacheConfig.setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
+        NearCacheConfig nearCacheConfig = createNearCacheConfig()
+                .setInMemoryFormat(InMemoryFormat.OBJECT)
+                .setCacheLocalEntries(true)
+                .setInvalidateOnChange(false)
+                .setMaxIdleSeconds(MAX_IDLE_SECONDS)
+                .setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
 
         ICache<Integer, Article> cache = createCacheWithNearCache(nearCacheConfig);
 

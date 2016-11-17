@@ -16,11 +16,13 @@ public class ClientHiDensityNearCacheUsage extends ClientHiDensityNearCacheUsage
     private static final boolean VERBOSE = Boolean.getBoolean("com.hazelcast.examples.hdjcache.hdnearcache.verbose");
 
     private void run() {
-        NearCacheConfig nearCacheConfig = createNearCacheConfig();
-        nearCacheConfig.setInvalidateOnChange(true);
+        NearCacheConfig nearCacheConfig = createNearCacheConfig()
+                .setInvalidateOnChange(true);
 
-        HiDensityNearCacheSupportContext<Integer, String> clientCacheContext1 = createHiDensityCacheWithHiDensityNearCache();
-        HiDensityNearCacheSupportContext<Integer, String> clientCacheContext2 = createHiDensityCacheWithHiDensityNearCache();
+        HiDensityNearCacheSupportContext<Integer, String> clientCacheContext1
+                = createHiDensityCacheWithHiDensityNearCache(nearCacheConfig);
+        HiDensityNearCacheSupportContext<Integer, String> clientCacheContext2
+                = createHiDensityCacheWithHiDensityNearCache(nearCacheConfig);
 
         // put records to cache through client-1
         putRecordsToCacheOnClient1(clientCacheContext1, clientCacheContext2);

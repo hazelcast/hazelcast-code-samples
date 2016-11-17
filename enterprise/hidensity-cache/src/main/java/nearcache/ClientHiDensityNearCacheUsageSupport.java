@@ -9,6 +9,7 @@ import com.hazelcast.client.impl.HazelcastClientProxy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.EvictionConfig;
+import com.hazelcast.config.EvictionConfig.MaxSizePolicy;
 import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.NearCacheConfig;
@@ -34,50 +35,44 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
 
     @Override
     protected Config createConfig() {
-        Config config = super.createConfig();
-        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-
         NativeMemoryConfig nativeMemoryConfig = new NativeMemoryConfig()
                 .setSize(SERVER_NATIVE_MEMORY_SIZE)
                 .setEnabled(true);
-        config.setNativeMemoryConfig(nativeMemoryConfig);
 
-        return config;
+        return super.createConfig()
+                .setLicenseKey(ENTERPRISE_LICENSE_KEY)
+                .setNativeMemoryConfig(nativeMemoryConfig);
     }
 
     @Override
     protected ClientConfig createClientConfig() {
-        ClientConfig clientConfig = super.createClientConfig();
-        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-
         NativeMemoryConfig nativeMemoryConfig = new NativeMemoryConfig()
                 .setSize(CLIENT_NATIVE_MEMORY_SIZE)
                 .setEnabled(true);
-        clientConfig.setNativeMemoryConfig(nativeMemoryConfig);
 
-        return clientConfig;
+        return super.createClientConfig()
+                .setLicenseKey(ENTERPRISE_LICENSE_KEY)
+                .setNativeMemoryConfig(nativeMemoryConfig);
     }
 
     @Override
     protected <K, V> CacheConfig<K, V> createCacheConfig(String cacheName, InMemoryFormat inMemoryFormat) {
-        inMemoryFormat = InMemoryFormat.NATIVE;
+        EvictionConfig evictionConfig = new EvictionConfig()
+                .setMaximumSizePolicy(MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE)
+                .setSize(99);
+
         CacheConfig<K, V> cacheConfig = super.createCacheConfig(cacheName, inMemoryFormat);
-        if (inMemoryFormat == InMemoryFormat.NATIVE) {
-            EvictionConfig evictionConfig = new EvictionConfig();
-            evictionConfig.setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
-            evictionConfig.setSize(99);
-            cacheConfig.setEvictionConfig(evictionConfig);
-        }
+        cacheConfig.setEvictionConfig(evictionConfig);
         return cacheConfig;
     }
 
     @Override
     protected NearCacheConfig createNearCacheConfig(String cacheName, InMemoryFormat inMemoryFormat) {
         NearCacheConfig nearCacheConfig = super.createNearCacheConfig(cacheName, inMemoryFormat);
-        EvictionConfig evictionConfig = new EvictionConfig();
         if (inMemoryFormat == InMemoryFormat.NATIVE) {
-            evictionConfig.setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE);
-            evictionConfig.setSize(99);
+            EvictionConfig evictionConfig = new EvictionConfig()
+                    .setMaximumSizePolicy(MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE)
+                    .setSize(99);
             nearCacheConfig.setEvictionConfig(evictionConfig);
         }
         return nearCacheConfig;
@@ -91,15 +86,19 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
         return createHiDensityCacheWithHiDensityNearCache(cacheName, createNearCacheConfig(cacheName));
     }
 
-    <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(
-            InMemoryFormat inMemoryFormat) {
+    <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(InMemoryFormat inMemoryFormat) {
         return createHiDensityCacheWithHiDensityNearCache(DEFAULT_CACHE_NAME, createNearCacheConfig(inMemoryFormat));
+    }
+
+    <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(NearCacheConfig nearCacheConfig) {
+        return createHiDensityCacheWithHiDensityNearCache(DEFAULT_CACHE_NAME, nearCacheConfig);
     }
 
     <K, V> HiDensityNearCacheSupportContext<K, V> createHiDensityCacheWithHiDensityNearCache(String cacheName,
                                                                                              NearCacheConfig nearCacheConfig) {
-        ClientConfig clientConfig = createClientConfig();
-        clientConfig.addNearCacheConfig(nearCacheConfig);
+        ClientConfig clientConfig = createClientConfig()
+                .addNearCacheConfig(nearCacheConfig);
+
         HazelcastClientProxy client = (HazelcastClientProxy) HazelcastClient.newHazelcastClient(clientConfig);
         CachingProvider provider = HazelcastClientCachingProvider.createCachingProvider(client);
         HazelcastClientCacheManager cacheManager = (HazelcastClientCacheManager) provider.getCacheManager();

@@ -12,10 +12,10 @@ public class ClientNearCacheWithEviction extends ClientNearCacheUsageSupport {
     private static final int RECORD_COUNT = 100;
 
     public void run() {
-        NearCacheConfig nearCacheConfig = createNearCacheConfig();
-        nearCacheConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
-        nearCacheConfig.setInvalidateOnChange(false);
-        nearCacheConfig.setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT));
+        NearCacheConfig nearCacheConfig = createNearCacheConfig()
+                .setInMemoryFormat(InMemoryFormat.OBJECT)
+                .setInvalidateOnChange(false)
+                .setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT));
 
         ICache<Integer, Article> cache = createCacheWithNearCache(nearCacheConfig);
 

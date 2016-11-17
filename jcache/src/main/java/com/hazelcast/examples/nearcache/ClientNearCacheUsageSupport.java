@@ -67,10 +67,12 @@ public abstract class ClientNearCacheUsageSupport {
 
     protected Config createConfig() {
         Config config = new Config();
+
         JoinConfig joinConfig = config.getNetworkConfig().getJoin();
         joinConfig.getAwsConfig().setEnabled(false);
         joinConfig.getMulticastConfig().setEnabled(false);
         joinConfig.getTcpIpConfig().setEnabled(false);
+
         return config;
     }
 
@@ -99,11 +101,10 @@ public abstract class ClientNearCacheUsageSupport {
     }
 
     protected EvictionConfig createEvictionConfigWithEntryCountPolicy(int size) {
-        EvictionConfig evictionConfig = new EvictionConfig();
-        evictionConfig.setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.ENTRY_COUNT);
-        evictionConfig.setSize(size);
-        evictionConfig.setEvictionPolicy(EvictionPolicy.LRU);
-        return evictionConfig;
+        return new EvictionConfig()
+                .setEvictionPolicy(EvictionPolicy.LRU)
+                .setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.ENTRY_COUNT)
+                .setSize(size);
     }
 
     protected NearCacheConfig createNearCacheConfig() {

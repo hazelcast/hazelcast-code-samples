@@ -14,11 +14,11 @@ public class ClientNearCacheWithLocalUpdatePolicy extends ClientNearCacheUsageSu
     private static final int RECORD_COUNT = 100;
 
     public void run() {
-        NearCacheConfig nearCacheConfig = createNearCacheConfig();
-        nearCacheConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
-        nearCacheConfig.setInvalidateOnChange(false);
-        nearCacheConfig.setLocalUpdatePolicy(NearCacheConfig.LocalUpdatePolicy.CACHE);
-        nearCacheConfig.setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
+        NearCacheConfig nearCacheConfig = createNearCacheConfig()
+                .setInMemoryFormat(InMemoryFormat.OBJECT)
+                .setInvalidateOnChange(false)
+                .setLocalUpdatePolicy(NearCacheConfig.LocalUpdatePolicy.CACHE)
+                .setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
 
         ICache<String, Article> cache1 = createCacheWithNearCache(nearCacheConfig);
         ICache<String, Article> cache2 = createCacheWithNearCache(nearCacheConfig);

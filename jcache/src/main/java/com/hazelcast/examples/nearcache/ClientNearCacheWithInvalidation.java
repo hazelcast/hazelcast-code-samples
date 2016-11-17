@@ -14,10 +14,10 @@ public class ClientNearCacheWithInvalidation extends ClientNearCacheUsageSupport
     private static final int RECORD_COUNT = 100;
 
     public void run() {
-        NearCacheConfig nearCacheConfig = createNearCacheConfig();
-        nearCacheConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
-        nearCacheConfig.setInvalidateOnChange(true);
-        nearCacheConfig.setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
+        NearCacheConfig nearCacheConfig = createNearCacheConfig()
+                .setInMemoryFormat(InMemoryFormat.OBJECT)
+                .setInvalidateOnChange(true)
+                .setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
 
         ICache<String, Article> cache1 = createCacheWithNearCache(nearCacheConfig);
         ICache<String, Article> cache2 = createCacheWithNearCache(nearCacheConfig);
