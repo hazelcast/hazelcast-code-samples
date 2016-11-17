@@ -25,6 +25,7 @@
 
     <modules>
         <module>aggregations</module>
+
         <module>backup</module>
         <module>basics</module>
         <module>continuous-query</module>
@@ -46,6 +47,8 @@
         <module>partition-lost-listener</module>
         <module>query-collections</module>
         <module>sqlquery</module>
+        <module>fast-aggregations</module>
+        <module>projections</module>
     </modules>
 
     <dependencies>
