@@ -23,39 +23,38 @@
     <near-cache name="articlesObject">
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
-        <eviction-policy>NONE</eviction-policy>
+        <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
     </near-cache>
 
     <near-cache name="articlesBinary">
         <in-memory-format>BINARY</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
-        <eviction-policy>NONE</eviction-policy>
+        <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
     </near-cache>
 
     <near-cache name="articlesEvictionPolicy">
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
-        <eviction-policy>LRU</eviction-policy>
-        <max-size>100</max-size>
+        <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="100"/>
     </near-cache>
 
     <near-cache name="articlesTTL">
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
-        <eviction-policy>NONE</eviction-policy>
         <time-to-live-seconds>1</time-to-live-seconds>
+        <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
     </near-cache>
 
     <near-cache name="articlesMaxIdle">
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
-        <eviction-policy>NONE</eviction-policy>
         <max-idle-seconds>1</max-idle-seconds>
+        <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
     </near-cache>
 
     <near-cache name="articlesInvalidation">
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>true</invalidate-on-change>
-        <eviction-policy>NONE</eviction-policy>
+        <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
     </near-cache>
 </hazelcast-client>
