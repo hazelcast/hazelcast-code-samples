@@ -40,5 +40,8 @@ public class RetrieveLostTask {
         Future<Object> retrieveResultFuture = newExecutorService.retrieveResult(taskId);
         Object result = retrieveResultFuture.get();
         System.out.println("Result: " + result);
+
+        HazelcastClient.shutdownAll();
+        Hazelcast.shutdownAll();
     }
 }

@@ -36,5 +36,7 @@ public class BasicConfiguration {
 
         DurableExecutorServiceFuture<?> durableExecutor = executorService.submit(new EchoTask("DurableExecutor"));
         durableExecutor.get();
+
+        Hazelcast.shutdownAll();
     }
 }
