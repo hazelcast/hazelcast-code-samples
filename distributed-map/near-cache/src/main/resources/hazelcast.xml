@@ -8,7 +8,7 @@
             <in-memory-format>OBJECT</in-memory-format>
             <cache-local-entries>true</cache-local-entries>
             <invalidate-on-change>false</invalidate-on-change>
-            <eviction-policy>NONE</eviction-policy>
+            <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
         </near-cache>
     </map>
 
@@ -17,7 +17,7 @@
             <in-memory-format>BINARY</in-memory-format>
             <cache-local-entries>true</cache-local-entries>
             <invalidate-on-change>false</invalidate-on-change>
-            <eviction-policy>NONE</eviction-policy>
+            <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
         </near-cache>
     </map>
 
@@ -26,8 +26,7 @@
             <in-memory-format>OBJECT</in-memory-format>
             <cache-local-entries>true</cache-local-entries>
             <invalidate-on-change>false</invalidate-on-change>
-            <eviction-policy>LRU</eviction-policy>
-            <max-size>100</max-size>
+            <eviction eviction-policy="LRU" max-size-policy="ENTRY_COUNT" size="100"/>
         </near-cache>
     </map>
 
@@ -36,8 +35,8 @@
             <in-memory-format>OBJECT</in-memory-format>
             <cache-local-entries>true</cache-local-entries>
             <invalidate-on-change>false</invalidate-on-change>
-            <eviction-policy>NONE</eviction-policy>
             <time-to-live-seconds>1</time-to-live-seconds>
+            <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
         </near-cache>
     </map>
 
@@ -46,8 +45,8 @@
             <in-memory-format>OBJECT</in-memory-format>
             <cache-local-entries>true</cache-local-entries>
             <invalidate-on-change>false</invalidate-on-change>
-            <eviction-policy>NONE</eviction-policy>
             <max-idle-seconds>1</max-idle-seconds>
+            <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
         </near-cache>
     </map>
 
@@ -56,7 +55,7 @@
             <in-memory-format>OBJECT</in-memory-format>
             <cache-local-entries>false</cache-local-entries>
             <invalidate-on-change>true</invalidate-on-change>
-            <eviction-policy>NONE</eviction-policy>
+            <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
         </near-cache>
     </map>
 </hazelcast>
