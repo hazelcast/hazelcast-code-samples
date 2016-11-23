@@ -25,5 +25,7 @@ public class MasterMember {
             System.err.println("A timeout occurred!");
             future.cancel(true);
         }
+
+        Hazelcast.shutdownAll();
     }
 }
