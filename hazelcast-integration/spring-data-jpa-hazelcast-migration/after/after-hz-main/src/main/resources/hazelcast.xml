@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.7.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+           
+    <!-- Use port 5701 and upwards on this machine one for cluster members -->       
+           
+    <network>
+        <port auto-increment="true">5701</port>
+
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="true">
+                <interface>127.0.0.1</interface>
+            </tcp-ip>
+        </join>
+    </network>
+    
+    <map name="com.hazelcast.samples.spring.data.migration.Noun">
+		<map-store enabled="true" initial-mode="EAGER">
+        	<class-name>com.hazelcast.samples.spring.data.migration.MyNounLoader</class-name>
+        </map-store>    
+    </map>
+    
+    <map name="com.hazelcast.samples.spring.data.migration.Verb">
+		<map-store enabled="true" initial-mode="EAGER">
+        	<class-name>com.hazelcast.samples.spring.data.migration.MyVerbLoader</class-name>
+        </map-store>    
+    </map>
+
+</hazelcast>

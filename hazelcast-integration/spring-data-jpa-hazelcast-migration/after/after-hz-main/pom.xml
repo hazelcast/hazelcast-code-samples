@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hazelcast.samples.spring.data.migration</groupId>
+        <artifactId>spring-data-jpa-hazelcast-migration</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>after-hz-main</artifactId>
+
+    <name>Spring Data migration from JPA to Hazelcast (${project.description} : ${project.packaging})</name>
+    <description>&quot;After&quot; HZ main</description>
+
+    <dependencies>
+    	<dependency>
+    		<groupId>${project.groupId}</groupId>
+    		<artifactId>after-jpa-service</artifactId>
+    		<version>${project.version}</version>
+    	</dependency>
+
+		<dependency>
+        	<groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+    	</dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                	<execution>
+                		<goals>
+                			<goal>repackage</goal>
+                		</goals>
+                	</execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
