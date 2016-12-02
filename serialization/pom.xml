@@ -24,6 +24,7 @@
     </properties>
 
     <modules>
+        <module>avro-serializer</module>
         <module>bytearray-serializer</module>
         <module>data-serializable</module>
         <module>externalizable</module>
