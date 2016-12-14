@@ -29,6 +29,8 @@ The application is language translation, English to Spanish.
 
 If you put in "_hello world_" you should get back "_hola al mundo_".
 
+Code is available [here](https://github.com/hazelcast/hazelcast-code-samples/tree/master/hazelcast-integration).
+
 ## Project Structure
 The code is structured as a multi-module Maven project. We'll take a very brief look at this now before going into the architecture, then return to it after.
 
@@ -579,3 +581,7 @@ If the application follows standard coding, then introducing Hazelcast as a dist
 If Hazelcase is introduced there are immediate benefits of scaling and resilience.
 
 Reducing the number and kind of queries hitting the database would enable the database to be replaced with a cheaper alternative or run on lower grade hardware.
+
+## Resources
+Code is available [here](https://github.com/hazelcast/hazelcast-code-samples/tree/master/hazelcast-integration).
+
