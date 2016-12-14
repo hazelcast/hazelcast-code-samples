@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hazelcast.samples.spring.data.migration</groupId>
+        <artifactId>spring-data-jpa-hazelcast-migration</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>after</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Spring Data JPA to Hazelcast (${project.description})</name>
+    <description>&quot;After&quot;</description>
+
+    <modules>
+    	<module>after-domain</module>
+    	<module>after-jpa-repository</module>
+    	<module>after-jpa-service</module>
+    	<module>after-kv-repository</module>
+    	<module>after-kv-service</module>
+    	<module>after-hz-main</module>
+    	<module>after-main</module>
+    </modules>
+
+</project>
