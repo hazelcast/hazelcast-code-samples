@@ -12,7 +12,7 @@
     <artifactId>spring-data-jpa-hazelcast-migration</artifactId>
     <packaging>pom</packaging>
 
-    <name>Spring Data migration from JPA to Hazelcast (${project.packaging})</name>
+    <name>Spring Data JPA to Hazelcast</name>
     <description>Project POM</description>
 
     <properties>

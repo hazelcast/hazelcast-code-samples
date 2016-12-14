@@ -11,7 +11,7 @@
 
     <artifactId>after-hz-main</artifactId>
 
-    <name>Spring Data migration from JPA to Hazelcast (${project.description} : ${project.packaging})</name>
+    <name>Spring Data JPA to Hazelcast (${project.description})</name>
     <description>&quot;After&quot; HZ main</description>
 
     <dependencies>

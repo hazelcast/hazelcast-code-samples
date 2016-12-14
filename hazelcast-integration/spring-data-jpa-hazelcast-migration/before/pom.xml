@@ -11,8 +11,8 @@
     <artifactId>before</artifactId>
     <packaging>pom</packaging>
 
-    <name>Spring Data migration from JPA to Hazelcast (${project.description} : ${project.packaging})</name>
-    <description>&quot;Before&quot; pom</description>
+    <name>Spring Data JPA to Hazelcast (${project.description})</name>
+    <description>&quot;Before&quot;</description>
 
     <modules>
     	<module>before-domain</module>

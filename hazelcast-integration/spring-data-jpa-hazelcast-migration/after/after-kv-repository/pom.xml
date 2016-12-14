@@ -11,8 +11,8 @@
 
     <artifactId>after-kv-repository</artifactId>
 
-    <name>Spring Data migration from JPA to Hazelcast (${project.description} : ${project.packaging})</name>
-    <description>&quot;After&quot; KV repository</description>
+    <name>Spring Data JPA to Hazelcast (${project.description})</name>
+    <description>&quot;After&quot; KV repo</description>
 
     <dependencies>
     	<dependency>

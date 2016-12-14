@@ -11,8 +11,8 @@
 
     <artifactId>before-jpa-repository</artifactId>
 
-    <name>Spring Data migration from JPA to Hazelcast (${project.description} : ${project.packaging})</name>
-    <description>&quot;Before&quot; JPA repository</description>
+    <name>Spring Data JPA to Hazelcast (${project.description})</name>
+    <description>&quot;Before&quot; JPA repo</description>
 
     <dependencies>
     	<dependency>
