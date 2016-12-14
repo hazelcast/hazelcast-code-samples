@@ -64,8 +64,14 @@ This is the database, provided here as a standalone module so you don't have to 
 ### Shared
 Some shared objects for the `before` and `after` modules, for logging and debugging.
 
-### \*\*Note\*\*
+### \*\*Notes\*\*
 You can build everything from the top level. As this uses Spring Boot, you need to run Maven as far as the *package* phase, so a command such as `mvn install` would be simplest.
+
+The domain objects and elsewhere use the [Lombok](https://projectlombok.org) utility to generate getters, setters. Maven is happy enough with Lombok, but
+if Lombok isn't part of your IDE classpath, then the IDE will not know that these are generated and complain that
+the code is faulty. You need to add Lombok to the IDE classpath to make these messages go away, see  [`Running Lombok`](https://projectlombok.org/features).
+
+Although Hazelcast doesn't depend on Java 8, some of the Spring Data dependencies do, so you need to use a Java 8 JDK to build.
 
 ## Before - Architecture
 Refer to the following diagram:
