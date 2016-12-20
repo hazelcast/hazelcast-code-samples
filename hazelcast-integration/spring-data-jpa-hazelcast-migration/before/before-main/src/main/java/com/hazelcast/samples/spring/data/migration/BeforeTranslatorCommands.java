@@ -7,36 +7,31 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 /**
- * <P>Make the translation available to a command line.</P>
- * <P>Usage:</P>
- * <P>
- *  {@code translate --text "hello world"}
- * </P>
+ * Make the translation available to a command line.
+ *
+ * Usage:
+ * {@code translate --text "hello world"}
  */
 @Component
 public class BeforeTranslatorCommands implements CommandMarker {
 
-	@Autowired
-	private TranslationService translationService;
-    
-	/**
-	 * <P>This is just</P>
-	 * <P>{@code public String translate(String input)}</P>
-	 * <P>somewhat cluttered by Spring Shell's annotations.
-	 * </P>
-	 * 
-	 * @param input A string of text, hopefully English
-	 * @return A string of text, definitely Spanish, hopefully correct
-	 */
+    @Autowired
+    private TranslationService translationService;
+
+    /**
+     * This is just {@code public String translate(String input)} somewhat cluttered by Spring Shell's annotations.
+     *
+     * @param input A string of text, hopefully English
+     * @return A string of text, definitely Spanish, hopefully correct
+     */
     @CliCommand(value = "translate", help = "Translate a line of text from English into Spanish")
     public String translate(
-    		@CliOption(help="eg translate --text \"hello world\"", mandatory=true, key="text")
-    		String input) {
-    	try {
-    		return this.translationService.englishToSpanish(input);
-    	} catch (Exception exception) {
-    		return exception.getMessage();
-    	}
+            @CliOption(help = "eg translate --text \"hello world\"", mandatory = true, key = "text")
+                    String input) {
+        try {
+            return this.translationService.englishToSpanish(input);
+        } catch (Exception exception) {
+            return exception.getMessage();
+        }
     }
-
 }
