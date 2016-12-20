@@ -7,41 +7,35 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 /**
- * <P>Make the translation available to a command line.</P>
- * <P>Usage:</P>
- * <P>
- *  {@code translate --text "hello world"}
- * </P>
- * <P><U><B>MIGRATION PATH</B></U></P>
- * <OL>
- * <LI>No changes, continue to use the {@code @Service}.
- * </LI>
- * </OL>
+ * Make the translation available to a command line.
+ *
+ * Usage:
+ * {@code translate --text "hello world"}
+ * <u><b>MIGRATION PATH</b></u>
+ * <ol>
+ * <li>No changes, continue to use the {@code @Service}.</li>
+ * </ol>
  */
 @Component
 public class AfterTranslatorCommands implements CommandMarker {
 
-	@Autowired
-	private TranslationService translationService;
-    
-	/**
-	 * <P>This is just</P>
-	 * <P>{@code public String translate(String input)}</P>
-	 * <P>somewhat cluttered by Spring Shell's annotations.
-	 * </P>
-	 * 
-	 * @param input A string of text, hopefully English
-	 * @return A string of text, definitely Spanish, hopefully correct
-	 */
+    @Autowired
+    private TranslationService translationService;
+
+    /**
+     * This is just {@code public String translate(String input)} somewhat cluttered by Spring Shell's annotations.
+     *
+     * @param input A string of text, hopefully English
+     * @return A string of text, definitely Spanish, hopefully correct
+     */
     @CliCommand(value = "translate", help = "Translate a line of text from English into Spanish")
     public String translate(
-    		@CliOption(help="eg translate --text \"hello world\"", mandatory=true, key="text")
-    		String input) {
-    	try {
-    		return this.translationService.englishToSpanish(input);
-    	} catch (Exception exception) {
-    		return exception.getMessage();
-    	}
+            @CliOption(help = "eg translate --text \"hello world\"", mandatory = true, key = "text")
+                    String input) {
+        try {
+            return this.translationService.englishToSpanish(input);
+        } catch (Exception exception) {
+            return exception.getMessage();
+        }
     }
-
 }

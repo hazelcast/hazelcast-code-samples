@@ -1,12 +1,6 @@
 package com.hazelcast.samples.spring.data.migration;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
-
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,69 +10,73 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
+
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
- * <P>Test the {@link DatabaseService}, that provides database operations
- * to Hazelcast.
- * </P>
- * <P><U><B>MIGRATION PATH</B></U></P>
- * <OL>
- * <LI>Add this test class.
- * </LI>
- * </OL>
+ * Test the {@link DatabaseService}, that provides database operations to Hazelcast.
+ *
+ * <u><b>MIGRATION PATH</b></u>
+ * <ol>
+ * <li>Add this test class.</li>
+ * </ol>
  */
 @ComponentScan
 @EnableAutoConfiguration
 @RunWith(SpringRunner.class)
 @Slf4j
-@SpringBootTest(classes={DatabaseServiceTest.class})
+@SpringBootTest(classes = {DatabaseServiceTest.class})
 @Sql("classpath:testdata.sql")
 public class DatabaseServiceTest {
-		
-	@Autowired
-	private DatabaseService databaseService;
 
-	@Test
-	public void findNoun() {
-		Noun noun = this.databaseService.findNoun(1);
+    @Autowired
+    private DatabaseService databaseService;
 
-		log.info("findNoun(), {}", noun);
+    @Test
+    public void findNoun() {
+        Noun noun = this.databaseService.findNoun(1);
 
-		assertThat(noun, not(nullValue()));
-	}
+        log.info("findNoun(), {}", noun);
 
-	@Test
-	public void findVerb() {
-		Verb verb = this.databaseService.findVerb(9);
+        assertThat(noun, not(nullValue()));
+    }
 
-		log.info("findVerb(), {}", verb);
+    @Test
+    public void findVerb() {
+        Verb verb = this.databaseService.findVerb(9);
 
-		assertThat(verb, not(nullValue()));
-	}
+        log.info("findVerb(), {}", verb);
 
-	@Test
-	public void findNounIds() {
-		Iterator<Integer> iterator = this.databaseService.findNounIds().iterator();
+        assertThat(verb, not(nullValue()));
+    }
 
-		Set<Integer> results = new TreeSet<>();
-		while (iterator.hasNext()) {
-			results.add(iterator.next());
-		}
-		
-		assertThat(results, hasItems(1, 2));
-	}
+    @Test
+    public void findNounIds() {
+        Iterator<Integer> iterator = this.databaseService.findNounIds().iterator();
 
-	@Test
-	public void findVerbIds() {
-		Iterator<Integer> iterator = this.databaseService.findVerbIds().iterator();
+        Set<Integer> results = new TreeSet<>();
+        while (iterator.hasNext()) {
+            results.add(iterator.next());
+        }
 
-		Set<Integer> results = new TreeSet<>();
-		while (iterator.hasNext()) {
-			results.add(iterator.next());
-		}
-		
-		assertThat(results, hasItems(9, 10));
-	}
+        assertThat(results, hasItems(1, 2));
+    }
 
+    @Test
+    public void findVerbIds() {
+        Iterator<Integer> iterator = this.databaseService.findVerbIds().iterator();
+
+        Set<Integer> results = new TreeSet<>();
+        while (iterator.hasNext()) {
+            results.add(iterator.next());
+        }
+
+        assertThat(results, hasItems(9, 10));
+    }
 }

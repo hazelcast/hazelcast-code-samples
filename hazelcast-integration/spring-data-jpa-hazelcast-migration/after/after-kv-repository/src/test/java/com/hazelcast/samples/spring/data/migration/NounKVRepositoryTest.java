@@ -1,55 +1,54 @@
 package com.hazelcast.samples.spring.data.migration;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.hazelcast.repository.config.EnableHazelcastRepositories;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
- * <P>Test CRUD and query operations against Hazelcast.
- * </P>
- * <P><U><B>MIGRATION PATH</B></U></P>
- * <OL>
- * <LI>Add this test class.
- * </LI>
- * </OL>
+ * Test CRUD and query operations against Hazelcast.
+ *
+ * <u><b>MIGRATION PATH</b></u>
+ * <ol>
+ * <li>Add this test class.</li>
+ * </ol>
  */
 @Configuration
 @EnableHazelcastRepositories
-@Import(value=HazelcastTestInstance.class)
+@Import(value = HazelcastTestInstance.class)
 @Slf4j
 public class NounKVRepositoryTest extends AbstractNounRepositoryTest {
 
-	@Autowired
-	private NounKVRepository nounKVRepository;
+    @Autowired
+    private NounKVRepository nounKVRepository;
 
-	@Before
-	public void setUp() {
-		super.setUp(this.nounKVRepository, log);
-	}
-	
-	@Test
-	public void query() {
-		this.nounKVRepository.save(cat);
-		
-		Noun cat2 = this.nounKVRepository.findByEnglish("cat");
-		log.info("query(), read {}", cat2);
-		
-		assertThat(cat2, not(nullValue()));
-		assertThat(cat2, equalTo(cat));
-		
-		this.nounKVRepository.deleteAll();
+    @Before
+    public void setUp() {
+        super.setUp(this.nounKVRepository, log);
+    }
 
-		Noun cat3 = this.nounKVRepository.findByEnglish("cat");
+    @Test
+    public void query() {
+        this.nounKVRepository.save(cat);
 
-		assertThat(cat3, nullValue());
-	}
+        Noun cat2 = this.nounKVRepository.findByEnglish("cat");
+        log.info("query(), read {}", cat2);
+
+        assertThat(cat2, not(nullValue()));
+        assertThat(cat2, equalTo(cat));
+
+        this.nounKVRepository.deleteAll();
+
+        Noun cat3 = this.nounKVRepository.findByEnglish("cat");
+
+        assertThat(cat3, nullValue());
+    }
 }

@@ -6,27 +6,25 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.shell.Bootstrap;
 
 /**
- * <P>Run the translater much as before, using the command line to invoke
- * the translation service.
- * </P>
- * <P>Use <A HREF="https://projects.spring.io/spring-shell">Spring Shell</A>
+ * Run the translater much as before, using the command line to invoke the translation service.
+ *
+ * Use <a href="https://projects.spring.io/spring-shell">Spring Shell</a>
  * for command line handling as it's more appropriate than
- * <A HREF="http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-remote-shell.html">CRaSH</A>
+ * <a href="http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-remote-shell.html">CRaSH</a>
  * although not as nicely integrated yet.
- * </P>
- * @see <A HREF="https://github.com/spring-projects/spring-shell/issues/34">
- * 	https://github.com/spring-projects/spring-shell/issues/34</A> 
- * <P><U><B>MIGRATION PATH</B></U></P>
- * <OL>
- * <LI>Duplicate this class from JPA repository, or move to a central module.
- * </LI>
- * </OL>
+ *
+ * @see <a href="https://github.com/spring-projects/spring-shell/issues/34">
+ * https://github.com/spring-projects/spring-shell/issues/34</a>
+ *
+ * <u><b>MIGRATION PATH</b></u>
+ * <ol>
+ * <li>Duplicate this class from JPA repository, or move to a central module.</li>
+ * </ol>
  */
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 public class AfterTranslator {
 
     public static void main(String[] args) throws Exception {
-    	Bootstrap.main(args);
+        Bootstrap.main(args);
     }
-
 }
