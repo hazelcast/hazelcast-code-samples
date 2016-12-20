@@ -27,10 +27,10 @@
     </properties>
 
     <modules>
-    	<module>shared</module>
-    	<module>database</module>
-    	<module>before</module>
-    	<module>after</module>
+        <module>shared</module>
+        <module>database</module>
+        <module>before</module>
+        <module>after</module>
     </modules>
 
     <dependencies>
@@ -38,7 +38,7 @@
             <groupId>com.hazelcast</groupId>
             <artifactId>spring-data-hazelcast</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -48,26 +48,26 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
 
-	   	<dependency>
-        	<groupId>org.springframework.shell</groupId>
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
             <artifactId>spring-shell</artifactId>
             <version>${spring-shell.version}</version>
         </dependency>
 
-	<!-- <scope>test</scope> -->        
+        <!-- <scope>test</scope> -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <scope>test</scope>
         </dependency>
-        
-	<!-- <scope>test</scope> -->        
+
+        <!-- <scope>test</scope> -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -88,7 +88,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            
+
             <dependency>
                 <groupId>com.hazelcast</groupId>
                 <artifactId>hazelcast-client</artifactId>
