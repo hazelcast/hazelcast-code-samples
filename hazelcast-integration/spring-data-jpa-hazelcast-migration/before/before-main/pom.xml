@@ -15,19 +15,22 @@
     <description>&quot;Before&quot; main</description>
 
     <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-    	<dependency>
-    		<groupId>${project.groupId}</groupId>
-    		<artifactId>before-jpa-service</artifactId>
-    		<version>${project.version}</version>
-    	</dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>before-jpa-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-		<dependency>
-        	<groupId>org.hsqldb</groupId>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-    	</dependency>
+        </dependency>
     </dependencies>
 
     <build>
@@ -37,11 +40,11 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <executions>
-                	<execution>
-                		<goals>
-                			<goal>repackage</goal>
-                		</goals>
-                	</execution>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

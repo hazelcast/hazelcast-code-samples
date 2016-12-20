@@ -14,11 +14,17 @@
     <name>Spring Data JPA to Hazelcast (${project.description})</name>
     <description>&quot;After&quot; KV service</description>
 
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <dependencies>
-    	<dependency>
-    		<groupId>${project.groupId}</groupId>
-    		<artifactId>after-kv-repository</artifactId>
-    		<version>${project.version}</version>
-    	</dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>after-kv-repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

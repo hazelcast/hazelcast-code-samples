@@ -15,13 +15,16 @@
     <description>&quot;After&quot; domain</description>
 
     <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-    	<dependency>
-    		<groupId>${project.groupId}</groupId>
-    		<artifactId>shared</artifactId>
-    		<version>${project.version}</version>
-    	</dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
