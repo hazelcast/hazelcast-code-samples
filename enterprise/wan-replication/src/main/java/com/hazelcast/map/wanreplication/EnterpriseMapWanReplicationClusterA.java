@@ -1,6 +1,5 @@
 package com.hazelcast.map.wanreplication;
 
-import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -9,7 +8,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
-import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
@@ -72,9 +70,6 @@ public class EnterpriseMapWanReplicationClusterA {
     }
 
     private static void initClusters() {
-        Config config = new Config();
-        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-
-        clusterA = Hazelcast.newHazelcastInstance(config);
+        clusterA = Hazelcast.newHazelcastInstance();
     }
 }
