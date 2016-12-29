@@ -25,7 +25,6 @@
 
     <modules>
         <module>client-ssl</module>
-        <module>continuous-query-cache</module>
         <module>hd-imap</module>
         <module>hd-memory-client-server</module>
         <module>hidensity-cache</module>

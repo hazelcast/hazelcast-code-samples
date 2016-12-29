@@ -1,10 +1,8 @@
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
-import com.hazelcast.config.Config;
 import com.hazelcast.config.QueryCacheConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IEnterpriseMap;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.QueryCache;
 import com.hazelcast.query.Predicate;
@@ -12,14 +10,10 @@ import com.hazelcast.query.Predicate;
 import java.util.Map;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
-import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
  * This example demonstrates the usage of a continuous-query-cache (CQC) from Hazelcast client.
  * Also in this example you can see how a CQC is configured from client side.
- *
- * You have to set your Hazelcast Enterprise license key to make this code sample work.
- * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class ClientServer {
 
@@ -27,22 +21,18 @@ public class ClientServer {
         String mapName = "mapName";
         String cacheName = "cqc";
 
-        Config config = new Config();
-        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
-        Hazelcast.newHazelcastInstance(config);
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        Hazelcast.newHazelcastInstance();
 
         QueryCacheConfig queryCacheConfig = new QueryCacheConfig(cacheName);
         queryCacheConfig.getPredicateConfig().setImplementation(new OddKeysPredicate());
 
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         clientConfig.addQueryCacheConfig(mapName, queryCacheConfig);
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
 
-        IEnterpriseMap<Integer, Integer> clientMap = (IEnterpriseMap) client.getMap(mapName);
+        IMap<Integer, Integer> clientMap = client.getMap(mapName);
         QueryCache<Integer, Integer> cache = clientMap.getQueryCache(cacheName);
 
         IMap<Integer, Integer> serverMap = hz.getMap(mapName);

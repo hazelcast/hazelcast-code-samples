@@ -28,6 +28,7 @@
         <module>backup</module>
         <module>basics</module>
         <module>continuous-query</module>
+        <module>continuous-query-cache</module>
         <module>criteria-api</module>
         <module>custom-attributes</module>
         <module>data-locality</module>
