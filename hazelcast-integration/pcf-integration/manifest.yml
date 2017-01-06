@@ -1,0 +1,6 @@
+---
+applications:
+- name: hazelcast-pcf-integration-test-app
+  memory: 512M
+  instances: 1
+  path: target/pcf-integration-0.1-SNAPSHOT.jar
