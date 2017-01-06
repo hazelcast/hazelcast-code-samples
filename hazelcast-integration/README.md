@@ -24,3 +24,5 @@
 	Implementation of Spark Connector for Hazelcast.
 - <h3>springboot-http</h3>
 	Spring Boot style HTTP session replication, using embedded web container in standalone Jar.
+- <h3>pcf-integration</h3>
+    A Spring Boot application that uses Hazelcast Client to communicate with a Hazelcast Cluster that is deployed on a PCF installation using [Hazelcast for PCF](https://network.pivotal.io/hazelcast).

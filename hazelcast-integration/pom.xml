@@ -57,6 +57,7 @@
         <module>springboot-caching</module>
         <module>springboot-caching-jcache</module>
         <module>springboot-http</module>
+        <module>pcf-integration</module>
     </modules>
 
     <dependencies>
