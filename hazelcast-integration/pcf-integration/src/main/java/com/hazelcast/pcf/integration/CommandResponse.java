@@ -1,5 +1,6 @@
 package com.hazelcast.pcf.integration;
 
+@SuppressWarnings("unused")
 public class CommandResponse {
 
     private final String response;

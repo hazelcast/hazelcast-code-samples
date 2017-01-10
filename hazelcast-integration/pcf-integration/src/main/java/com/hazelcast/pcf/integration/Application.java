@@ -30,17 +30,17 @@ public class Application {
             return;
         }
         BasicJsonParser parser = new BasicJsonParser();
-        Map<String, Object> map = parser.parseMap(servicesJson);
-        List hazelcast = (List) map.get("hazelcast");
-        Map m = (Map) hazelcast.get(0);
-        Map credentials = (Map) m.get("credentials");
-        String group_name = (String) credentials.get("group_name");
-        String group_password = (String) credentials.get("group_pass");
+        Map<String, Object> json = parser.parseMap(servicesJson);
+        List hazelcast = (List) json.get("hazelcast");
+        Map map = (Map) hazelcast.get(0);
+        Map credentials = (Map) map.get("credentials");
+        String groupName = (String) credentials.get("group_name");
+        String groupPassword = (String) credentials.get("group_pass");
         List<String> members = (List<String>) credentials.get("members");
 
         clientConfig = new ClientConfig();
         GroupConfig groupConfig = clientConfig.getGroupConfig();
-        groupConfig.setName(group_name).setPassword(group_password);
+        groupConfig.setName(groupName).setPassword(groupPassword);
         ClientNetworkConfig networkConfig = clientConfig.getNetworkConfig();
         for (String member : members) {
             networkConfig.addAddress(member.replace('"', ' ').trim());

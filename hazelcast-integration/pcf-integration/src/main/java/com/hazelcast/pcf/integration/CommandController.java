@@ -57,5 +57,4 @@ public class CommandController {
         map.clear();
         return new CommandResponse("Map cleared");
     }
-
 }
