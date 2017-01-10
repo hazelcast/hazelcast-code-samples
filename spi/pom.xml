@@ -22,7 +22,7 @@
         <module>container</module>
         <module>discovery</module>
         <module>getting-started</module>
-        <!--<module>notification</module>-->
+        <module>notification</module>
         <module>partition-migration</module>
         <module>proxy</module>
     </modules>

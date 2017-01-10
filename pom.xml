@@ -16,9 +16,13 @@
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <jdk.version>1.6</jdk.version>
+        <jdk.integration.version>1.8</jdk.integration.version>
+
         <hazelcast.version>3.8-SNAPSHOT</hazelcast.version>
         <hazelcast-jclouds.version>3.7</hazelcast-jclouds.version>
 
+        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
     </properties>
 
@@ -66,10 +70,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>${maven.compiler.plugin.version}</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
