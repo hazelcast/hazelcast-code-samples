@@ -46,9 +46,13 @@
         <module>jca-ra</module>
         <module>manager-based-session-replication</module>
         <module>mongodb</module>
+        <module>pcf-integration</module>
+        <module>spark</module>
         <module>spring-cache-manager</module>
         <module>spring-configuration</module>
+        <module>spring-data-hazelcast-chemistry-sample</module>
         <module>spring-data-integration</module>
+        <module>spring-data-jpa-hazelcast-migration</module>
         <module>spring-hibernate-2ndlevel-cache</module>
         <module>spring-jcache</module>
         <module>spring-security</module>
@@ -57,7 +61,6 @@
         <module>springboot-caching</module>
         <module>springboot-caching-jcache</module>
         <module>springboot-http</module>
-        <module>pcf-integration</module>
     </modules>
 
     <dependencies>
