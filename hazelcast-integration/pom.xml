@@ -47,12 +47,18 @@
         <module>manager-based-session-replication</module>
         <module>mongodb</module>
         <module>pcf-integration</module>
+        <!-- required JDK > 6, do not enable
         <module>spark</module>
+        -->
         <module>spring-cache-manager</module>
         <module>spring-configuration</module>
+        <!-- required JDK > 6, do not enable
         <module>spring-data-hazelcast-chemistry-sample</module>
+        -->
         <module>spring-data-integration</module>
+        <!-- required JDK > 6, do not enable
         <module>spring-data-jpa-hazelcast-migration</module>
+         -->
         <module>spring-hibernate-2ndlevel-cache</module>
         <module>spring-jcache</module>
         <module>spring-security</module>
