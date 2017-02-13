@@ -36,7 +36,7 @@
             <merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
             <!-- Filters are optional -->
             <filters>
-                <filter-impl>com.hazelcast.map.wanreplication.filter.SampleMapWanEventFilter</filter-impl>
+                <filter-impl>com.hazelcast.wan.batch.map.filter.SampleMapWanEventFilter</filter-impl>
             </filters>
         </wan-replication-ref>
     </map>

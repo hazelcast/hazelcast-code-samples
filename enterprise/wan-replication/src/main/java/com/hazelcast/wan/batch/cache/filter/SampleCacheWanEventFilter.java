@@ -1,4 +1,4 @@
-package com.hazelcast.cache.wanreplication.filter;
+package com.hazelcast.wan.batch.cache.filter;
 
 import com.hazelcast.cache.CacheEntryView;
 import com.hazelcast.cache.wan.filter.CacheWanEventFilter;

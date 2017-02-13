@@ -1,20 +1,12 @@
-package com.hazelcast.cache.wanreplication;
+package com.hazelcast.wan.batch.cache;
 
 import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.AbstractHazelcastCacheManager;
-import com.hazelcast.cache.merge.HigherHitsCacheMergePolicy;
-import com.hazelcast.cache.wanreplication.filter.SampleCacheWanEventFilter;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
-import com.hazelcast.config.WanAcknowledgeType;
-import com.hazelcast.config.WanPublisherConfig;
-import com.hazelcast.config.WanReplicationConfig;
-import com.hazelcast.config.WanReplicationRef;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.enterprise.wan.replication.WanBatchReplication;
-import com.hazelcast.enterprise.wan.replication.WanReplicationProperties;
 
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
@@ -22,7 +14,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
@@ -32,16 +23,15 @@ import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
- * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
+ * See README for details.
  */
-public class EnterpriseCacheWanReplicationClusterA {
+public class EnterpriseCacheWanReplicationClusterB {
 
-    private static HazelcastInstance clusterA;
+    private static HazelcastInstance clusterB;
 
     public static void main(String[] args) throws Exception {
         System.setProperty("hazelcast.jcache.provider.type", "server");
-
-        new EnterpriseCacheWanReplicationClusterA().start();
+        new EnterpriseCacheWanReplicationClusterB().start();
     }
 
     private void start() throws Exception {
@@ -50,7 +40,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         Scanner reader = new Scanner(System.in);
 
         CachingProvider provider = Caching.getCachingProvider();
-        Properties properties = HazelcastCachingProvider.propertiesByInstanceName(clusterA.getConfig().getInstanceName());
+        Properties properties = HazelcastCachingProvider.propertiesByInstanceName(clusterB.getConfig().getInstanceName());
         URI cacheManagerName;
         try {
             cacheManagerName = new URI("my-cache-manager");
@@ -59,9 +49,9 @@ public class EnterpriseCacheWanReplicationClusterA {
             throw new RuntimeException();
         }
         AbstractHazelcastCacheManager manager = (AbstractHazelcastCacheManager) provider.getCacheManager(cacheManagerName,
-                clusterA.getConfig().getClassLoader(), properties);
-        CacheConfig config = new CacheConfig(clusterA.getConfig().getCacheConfig("default"));
-        ICache<Object, Object> cache = manager.getOrCreateCache("default", config);
+                clusterB.getConfig().getClassLoader(), properties);
+        CacheConfig cacheConfig = new CacheConfig(clusterB.getConfig().getCacheConfig("default"));
+        ICache<Object, Object> cache = manager.getOrCreateCache("default", cacheConfig);
 
         System.out.println("Cluster is ready now.");
         System.out.println("write \"help\" for the command lists:");
@@ -86,8 +76,7 @@ public class EnterpriseCacheWanReplicationClusterA {
                 key = command.split(" ")[1];
                 int start = new Random().nextInt();
                 for (int i = start; i < start + Integer.parseInt(key); i++) {
-                    String kv = Integer.toString(i);
-                    cache.put(kv, kv);
+                    cache.put(i, i);
                 }
             }
         }
@@ -101,46 +90,24 @@ public class EnterpriseCacheWanReplicationClusterA {
     }
 
     private void waitUntilClusterSafe() {
-        while (!clusterA.getPartitionService().isClusterSafe()) {
+        while (!clusterB.getPartitionService().isClusterSafe()) {
             sleepMillis(100);
         }
     }
 
     private void initClusters() {
-        clusterA = Hazelcast.newHazelcastInstance(getConfigClusterA());
+        clusterB = Hazelcast.newHazelcastInstance(getConfigClusterB());
     }
 
-    private Config getConfigClusterA() {
+    private Config getConfigClusterB() {
         Config config = new Config();
         config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-        config.getGroupConfig().setName("clusterA").setPassword("clusterA-pass");
+        config.getGroupConfig().setName("clusterB").setPassword("clusterB-pass");
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
-        config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5701");
-        config.setInstanceName("clusterA");
-        config.getNetworkConfig().setPort(5701);
+        config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5702");
+        config.setInstanceName("clusterB");
+        config.getNetworkConfig().setPort(5702);
         config.setClassLoader(createCacheManagerClassLoader());
-        WanReplicationConfig wanReplicationConfig = new WanReplicationConfig();
-        wanReplicationConfig.setName("AtoB");
-
-        WanPublisherConfig publisherConfigClusterB = new WanPublisherConfig();
-        publisherConfigClusterB.setClassName(WanBatchReplication.class.getName());
-        publisherConfigClusterB.setGroupName("clusterB");
-        Map<String, Comparable> props = publisherConfigClusterB.getProperties();
-        props.put(WanReplicationProperties.ENDPOINTS.key(), "127.0.0.1:5702");
-        props.put(WanReplicationProperties.GROUP_PASSWORD.key(), "clusterB-pass");
-
-        // setting acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE
-        props.put(WanReplicationProperties.ACK_TYPE.key(), WanAcknowledgeType.ACK_ON_OPERATION_COMPLETE.name());
-        wanReplicationConfig.addWanPublisherConfig(publisherConfigClusterB);
-
-        config.addWanReplicationConfig(wanReplicationConfig);
-
-        WanReplicationRef wanReplicationRef = new WanReplicationRef();
-        wanReplicationRef.setName("AtoB");
-        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-        wanReplicationRef.setMergePolicy(HigherHitsCacheMergePolicy.class.getName());
-        wanReplicationRef.addFilter(SampleCacheWanEventFilter.class.getName());
-        config.getCacheConfig("default").setWanReplicationRef(wanReplicationRef);
 
         return config;
     }

@@ -1,4 +1,4 @@
-package com.hazelcast.map.wanreplication.filter;
+package com.hazelcast.wan.batch.map.filter;
 
 import com.hazelcast.core.EntryView;
 import com.hazelcast.enterprise.wan.WanFilterEventType;
