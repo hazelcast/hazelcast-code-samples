@@ -27,6 +27,7 @@
         <module>atomiclong</module>
         <module>atomiclong-functions</module>
         <module>atomicreference</module>
+        <module>cardinalityestimator</module>
         <module>condition</module>
         <module>countdownlatch</module>
         <module>idgenerator</module>
