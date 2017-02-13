@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static java.lang.String.format;
+import static com.hazelcast.nio.IOUtil.closeResource;
 
 public class Member {
 
@@ -17,22 +17,19 @@ public class Member {
         InputStreamReader isr = new InputStreamReader(Member.class.getResourceAsStream("visitors.txt"));
         BufferedReader br = new BufferedReader(isr);
         try {
-
-            for(String visitor; (visitor = br.readLine()) != null; ) {
+            String visitor = br.readLine();
+            while (visitor != null) {
                 visitorsEstimator.add(visitor);
+                visitor = br.readLine();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            closeResource(br);
+            closeResource(isr);
         }
 
-        System.out.println(format("Estimated unique visitors seen so far %s", visitorsEstimator.estimate()));
+        System.out.printf("Estimated unique visitors seen so far: %d%n", visitorsEstimator.estimate());
 
         Hazelcast.shutdownAll();
     }
