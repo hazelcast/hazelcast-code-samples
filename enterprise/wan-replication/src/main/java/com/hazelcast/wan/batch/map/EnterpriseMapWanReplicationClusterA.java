@@ -1,4 +1,4 @@
-package com.hazelcast.map.wanreplication;
+package com.hazelcast.wan.batch.map;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -11,7 +11,7 @@ import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
 
 /**
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
- * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
+ * See README for details.
  */
 public class EnterpriseMapWanReplicationClusterA {
 

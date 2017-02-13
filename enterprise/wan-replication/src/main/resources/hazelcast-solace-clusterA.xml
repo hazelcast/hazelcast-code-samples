@@ -1,0 +1,65 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.7.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <group>
+        <name>clusterA</name>
+        <password>clusterA-pass</password>
+    </group>
+    <license-key>YOUR_LICENSE_KEY</license-key>
+
+    <network>
+        <port>5701</port>
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="true">
+                <member>127.0.0.1:5701</member>
+            </tcp-ip>
+        </join>
+    </network>
+
+    <wan-replication name="AtoB">
+        <wan-publisher group-name="clusterB">
+            <class-name>com.hazelcast.enterprise.wan.solace.SolaceWanPublisher</class-name>
+            <properties>
+                <!-- IP:PORT of solace host -->
+                <property name="host">192.168.2.68</property>
+                <!-- Solace VPN name, optional  -->
+                <!-- <property name="vpn.name">YOUR_VPN_NAME</property> -->
+
+                <property name="username">admin</property>
+
+                <!-- password is optional -->
+                <!-- <property name="password">YOUR_PASSWORD</property> -->
+
+                <!-- Base topic name to use while publishing events to Solace appliance.
+                     This is an optional property. If not defined, members will publish to topics
+                     in "T/hz/[cluster-group-name]/partitionId" format.
+                     When defined, [topic.base.name]/partitionId format will be used. -->
+                <!-- <property name="topic.base.name"></property> -->
+
+                <!-- This property is only valid if {@link #INITIAL_QUEUE_MAPPING_ENABLED} property is
+                 set to true and defines the queue to be used in topic-to-queue mapping.
+                 Default queue name is "Q/hz/[cluster-group-name]. -->
+                <property name="queue.name">Q/hz/clusterA</property>
+
+                <!--
+                 Decides if a default topic-to-queue mapping should be done on publisher side.
+
+                 When enabled, it tries to provise a queue (name is defined by {@link #QUEUE_NAME}) and all topics that are generated
+                 by this instance is mapped to this queue.
+
+                 When disabled, This mapping must be done manually by users.
+
+                 Topic-to-queue mapping is enabled by default. -->
+                <!-- <property name="initial.queue.mapping.enabled"></property> -->
+            </properties>
+        </wan-publisher>
+    </wan-replication>
+    <map name="default">
+        <wan-replication-ref name="AtoB">
+            <merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+        </wan-replication-ref>
+    </map>
+</hazelcast>
