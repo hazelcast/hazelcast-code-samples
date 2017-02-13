@@ -1,0 +1,17 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.8.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+    <quorum enabled="true" name="twoNodeQuorum">
+        <quorum-size>2</quorum-size>
+        <quorum-type>READ_WRITE</quorum-type>
+    </quorum>
+
+    <queue name="queueWithQuorum">
+        <quorum-ref>twoNodeQuorum</quorum-ref>
+    </queue>
+
+    <lock name="lockWithQuorum">
+        <quorum-ref>twoNodeQuorum</quorum-ref>
+    </lock>
+</hazelcast>

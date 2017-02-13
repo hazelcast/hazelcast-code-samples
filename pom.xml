@@ -41,6 +41,7 @@
     <modules>
         <module>clients</module>
         <module>cluster-quorum</module>
+        <module>cluster-quorum-xml</module>
         <module>cluster-state</module>
         <module>demo</module>
         <module>distributed-collections</module>
