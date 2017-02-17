@@ -36,6 +36,10 @@
                 <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
+        <repository>
+            <id>backup-repo</id>
+            <url>http://repo2.maven.org/maven2/</url>
+        </repository>
     </repositories>
 
     <modules>
