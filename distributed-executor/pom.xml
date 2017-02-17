@@ -26,6 +26,12 @@
     <modules>
         <module>basic-executor</module>
         <module>durable-executor-service</module>
+        <module>scheduling-on-key-owner-durable</module>
+        <module>scheduling-on-specific-member</module>
+        <module>scheduling-named-task</module>
+        <module>scheduling-stateful-task</module>
+        <module>scheduled-executor-retrieve-lost-future</module>
+        <module>scheduled-executor-retrieve-all-tasks</module>
         <module>executing-on-all-members</module>
         <module>executing-on-key-owner</module>
         <module>executing-on-lite-members</module>
