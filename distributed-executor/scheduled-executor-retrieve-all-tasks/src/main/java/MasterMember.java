@@ -30,8 +30,8 @@ public class MasterMember {
         HazelcastInstance instance = Hazelcast.newHazelcastInstance();
 
         IScheduledExecutorService scheduler = instance.getScheduledExecutorService("scheduler");
-        scheduler.scheduleOnAllMembers(new BasicTask("Member Task"), 0, TimeUnit.SECONDS);
-        scheduler.schedule(new BasicTask("Other Task"), 0, TimeUnit.SECONDS);
+        scheduler.scheduleOnAllMembers(new EchoTask("Member Task"), 0, TimeUnit.SECONDS);
+        scheduler.schedule(new EchoTask("Other Task"), 0, TimeUnit.SECONDS);
 
         int totalTasksCount = 0;
         for (Map.Entry<Member, List<IScheduledFuture<Object>>> entry : scheduler.getAllScheduledFutures().entrySet()) {

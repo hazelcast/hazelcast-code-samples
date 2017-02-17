@@ -17,11 +17,12 @@
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
-public class BasicTask implements Callable, Serializable {
+public class EchoTask
+        implements Callable, Serializable {
 
     private final String msg;
 
-    public BasicTask(String msg) {
+    public EchoTask(String msg) {
         this.msg = msg;
     }
 

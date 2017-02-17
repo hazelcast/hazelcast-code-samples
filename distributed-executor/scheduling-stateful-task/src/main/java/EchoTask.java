@@ -14,19 +14,36 @@
  * limitations under the License.
  */
 
-import java.io.Serializable;
-import java.util.concurrent.Callable;
+import com.hazelcast.scheduledexecutor.StatefulTask;
 
-public class BasicTask implements Callable, Serializable {
+import java.io.Serializable;
+import java.util.Map;
+
+public class EchoTask
+        implements Runnable, StatefulTask<String, Integer>, Serializable {
+
+    private static final String COUNTER_KEY = "Counter";
 
     private final String msg;
 
-    public BasicTask(String msg) {
+    private transient int counter;
+
+    public EchoTask(String msg) {
         this.msg = msg;
     }
 
     @Override
-    public Object call() throws Exception {
-        return msg;
+    public void run() {
+        System.out.println("Running: " + msg + " with count: " + counter);
+    }
+
+    @Override
+    public void save(Map<String, Integer> map) {
+        map.put(COUNTER_KEY, ++counter);
+    }
+
+    @Override
+    public void load(Map<String, Integer> map) {
+        counter = map.containsKey(COUNTER_KEY) ? map.get(COUNTER_KEY) : 0;
     }
 }

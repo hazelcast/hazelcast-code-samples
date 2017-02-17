@@ -30,7 +30,7 @@ public class MasterMember {
 
         IScheduledExecutorService scheduler = instance.getScheduledExecutorService("scheduler");
         IScheduledFuture future = scheduler.schedule(named("MyTask",
-                new BasicTask("foobar")), 5, TimeUnit.SECONDS);
+                new EchoTask("foobar")), 5, TimeUnit.SECONDS);
 
         Object result = future.get();
         System.out.println(future.getHandler().getTaskName() + " result: " + result);

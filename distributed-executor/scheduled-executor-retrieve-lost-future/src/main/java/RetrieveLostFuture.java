@@ -30,7 +30,7 @@ public class RetrieveLostFuture {
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient();
         IScheduledExecutorService scheduler = client.getScheduledExecutorService("scheduler");
-        IScheduledFuture future = scheduler.schedule(new BasicTask("My Task"), 5, TimeUnit.SECONDS);
+        IScheduledFuture future = scheduler.schedule(new EchoTask("My Task"), 5, TimeUnit.SECONDS);
 
         ScheduledTaskHandler handler = future.getHandler();
 
