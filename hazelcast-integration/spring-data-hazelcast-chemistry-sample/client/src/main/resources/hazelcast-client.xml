@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hazelcast-client xsi:schemaLocation="http://www.hazelcast.com/schema/client-config http://www.hazelcast.com/schema/config/hazelcast-client-config-3.8.xsd"
-           xmlns="http://www.hazelcast.com/schema/client-config"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<hazelcast-client
+        xsi:schemaLocation="http://www.hazelcast.com/schema/client-config http://www.hazelcast.com/schema/config/hazelcast-client-config-3.9.xsd"
+        xmlns="http://www.hazelcast.com/schema/client-config"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <network>
         <cluster-members>
@@ -9,4 +10,4 @@
         </cluster-members>
     </network>
 
-</hazelcast-client>   
+</hazelcast-client>
