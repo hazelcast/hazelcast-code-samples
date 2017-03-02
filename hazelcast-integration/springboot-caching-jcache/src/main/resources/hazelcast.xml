@@ -22,6 +22,8 @@
         xmlns="http://www.hazelcast.com/schema/config"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+	<instance-name>my-cluster</instance-name>
+
     <group>
         <name>bootifulcluster</name>
         <password>bootiful-pass</password>
