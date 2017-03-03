@@ -11,7 +11,7 @@ Running a singleton isn't wrong or unknown - a cluster of one. You get all the b
 memory speed, querying, multi-threaded execution and don't have to worry about network transmission.
 But you can't get the benefits of scaling or resilience to failure with just a singleton.
 
-So, more usually you run multiple instances in a team. If you run 10 instances and your usage grows by 10%, you can just add an 11^th^ instance. It can be as simple as that.
+So, more usually you run multiple instances in a team. If you run 10 instances and your usage grows by 10%, you can just add an 11<sup>th</sup> instance. It can be as simple as that.
 
 But, of course, there are complications. And for the purpose of this example, two to focus on.
 
