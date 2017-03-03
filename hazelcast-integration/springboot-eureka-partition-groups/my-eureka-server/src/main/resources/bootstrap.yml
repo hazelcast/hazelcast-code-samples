@@ -1,0 +1,25 @@
+eureka: 
+  instance:
+    # Network card to use
+    hostname: localhost
+    metadataMap:
+      # Allocate host:port pairs to zones.
+      hazelcastZone:
+        localhost.8081: odd
+        localhost.8082: even
+        localhost.8083: odd
+        localhost.8084: even
+        localhost.8085: odd
+        localhost.8086: even
+        localhost.8087: odd
+        localhost.8088: even
+        localhost.8089: odd
+        localhost.8090: even
+  client:
+    registerWithEureka: true
+    # Client doesn't cache registry
+    fetchRegistry: false
+
+# Standard port for Eureka
+server:
+  port: 8761

@@ -1,0 +1,11 @@
+eureka:
+  client:
+    # Don't need to record Hazelcast client with Eureka
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+      
+# Zero means any Tomcat port available, so no port clash
+server:
+  port: 0
+
