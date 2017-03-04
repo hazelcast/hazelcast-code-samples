@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 /**
  * <P>
- * Run with "{@code java -jar eureka-server-0.1-SNAPSHOT.jar}"
+ * Run with "{@code java -jar my-eureka-server-0.1-SNAPSHOT.jar}"
  * </P>
  * <P>
  * Eureka server will be available from

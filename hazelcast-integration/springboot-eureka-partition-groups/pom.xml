@@ -22,7 +22,7 @@
 	</properties>
 	
     <modules>
-    	<module>eureka-server</module>
+    	<module>my-eureka-server</module>
     </modules>
 
     <dependencies>
