@@ -12,10 +12,54 @@
     <artifactId>springboot-eureka-partition-groups</artifactId>
     <packaging>pom</packaging>
 
-    <name>Partition Groups with Eureka</name>
+    <name>Spring Boot: Partition Groups with Eureka</name>
     <description>Project POM</description>
 
+	<properties>
+		<java.version>1.8</java.version>
+        <spring-boot.version>1.5.2.RELEASE</spring-boot.version>
+        <spring-cloud.version>Camden.SR5</spring-cloud.version>
+	</properties>
+	
     <modules>
+    	<module>eureka-server</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-client</artifactId>
+                <version>${hazelcast.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            
+            <dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-parent</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>${spring-cloud.version}</version>
+			</dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
