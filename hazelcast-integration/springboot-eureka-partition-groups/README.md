@@ -49,7 +49,7 @@ For Hazelcast IMDG, what this means is that you don't keep only one copy of valu
 records in the cluster.
 
 If you've configured for two copies, you only have data safety if a mishap isn't going
-to impact them both. What this means here is you want the data placement algorithm to
+to impact them both. You want the data placement algorithm to
 choose two instances in the cluster that won't fail together.
 
 This is easy to ask for, but depends on some factors which the IMDG has no visibility of.
@@ -63,8 +63,7 @@ records when the best choice depends on factors that are hidden.
 ### The Problems Summarised
 We have two problems to solve:
 
-1. IMDG instances need to be told which machines host other instances, but we don't know the
-machine names in advance.
+1. IMDG can't be pre-configured for hosts that are built at run-time.
 
 2. Data mirror copies need to be placed on machines that won't fail together.
 
