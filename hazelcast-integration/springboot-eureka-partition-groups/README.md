@@ -70,7 +70,11 @@ We have two problems to solve:
 
 ## The Solution
 
-### DNS aliases
+### Problem 1 - IMDG can't be pre-configured to specify hosts that are built at run-time
+
+- [ ] Add text
+
+#### DNS aliases
 As an aside, DNS aliases is another way to solve problem 1.
 
 IMDG instance __A__ could refer to the machine that hosts IMDG instance __B__ with
@@ -80,5 +84,7 @@ and flush the DNS.
 
 It would work, though might not be popular to update the DNS frequently.
 
+### Problem 2 - Data mirror copies need to be placed on machines that won't fail together
 
+- [ ] Add text
 
