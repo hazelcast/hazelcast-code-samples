@@ -9,19 +9,23 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  * Run with "{@code java -jar my-eureka-server-0.1-SNAPSHOT.jar}"
  * </P>
  * <P>
+ * The annotation {@code @EnableEurekaServer} does all the work, turning this process into a
+ * Eureka server.
+ * </P>
+ * <P>
  * Eureka server will be available from
  * <a href="http://localhost:8761/">http://localhost:8761/</a>
  * </P>
  * <P>
- * Eureka should really be clustered.
+ * Eureka server should really be clustered.
  * </P>
  */
 @SpringBootApplication
 @EnableEurekaServer
-public class EurekaServer {
+public class MyEurekaServer {
 
         public static void main(String[] args) {
-                SpringApplication.run(EurekaServer.class, args);
+                SpringApplication.run(MyEurekaServer.class, args);
         }
         
 }

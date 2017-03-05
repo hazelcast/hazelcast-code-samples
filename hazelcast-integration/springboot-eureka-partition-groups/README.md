@@ -71,5 +71,15 @@ machine names in advance.
 
 ## The Solution
 
+### DNS aliases
+As an aside, DNS aliases is another way to solve problem 1.
+
+IMDG instance __A__ could refer to the machine that hosts IMDG instance __B__ with
+a name such as _imdg\_instance\_b_ host. When that machine is known, we just add an
+entry to the DNS matching that floating name to the IP address actually being used
+and flush the DNS.
+
+It would work, though might not be popular to update the DNS frequently.
+
 
 

@@ -1,0 +1,3 @@
+# Pick a random port, as this client is just transient
+server:
+  port: 0

@@ -7,7 +7,7 @@ eureka:
     # Network card to use
     hostname: localhost
   client:
-    # Don't care to record clients
+    # Don't record itself
     registerWithEureka: false
     # Client doesn't cache registry
     fetchRegistry: false
