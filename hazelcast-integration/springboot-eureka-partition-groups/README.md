@@ -63,7 +63,7 @@ records when the best choice depends on factors that are hidden.
 ### The Problems Summarised
 We have two problems to solve:
 
-1. IMDG can't be pre-configured for hosts that are built at run-time.
+1. IMDG can't be pre-configured to specify hosts that are built at run-time.
 
 2. Data mirror copies need to be placed on machines that won't fail together.
 
