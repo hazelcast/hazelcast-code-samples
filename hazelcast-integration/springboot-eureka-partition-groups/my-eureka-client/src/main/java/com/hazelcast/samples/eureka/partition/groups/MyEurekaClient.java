@@ -37,16 +37,15 @@ public class MyEurekaClient implements CommandLineRunner {
 	@Autowired
 	DiscoveryClient discoveryClient;
 
-	// FIXME; Set in Yaml or make a constant?
-	String springApplicationName = "HAZELCAST-DEV";
-
 	@Override
 	public void run(String... arg0) throws Exception {
+		System.out.println("");
 		System.out.format("--------------------------------------------------------------------------------%n");
 
-		System.out.format("\tSee http://localhost:8761/eureka/apps/%s%n", springApplicationName);
+		System.out.format("\tSee http://localhost:8761/eureka/apps/%s%n", 
+				Constants.CLUSTER_NAME);
 
-		List<ServiceInstance> serviceInstances = this.discoveryClient.getInstances(springApplicationName);
+		List<ServiceInstance> serviceInstances = this.discoveryClient.getInstances(Constants.CLUSTER_NAME);
 
 		for (int i = 0; i < serviceInstances.size(); i++) {
 			ServiceInstance serviceInstance = serviceInstances.get(i);
@@ -73,5 +72,6 @@ public class MyEurekaClient implements CommandLineRunner {
 		System.out.format("\t[%d instance%s]%n", serviceInstances.size(), (serviceInstances.size() == 1 ? "" : "s"));
 
 		System.out.format("--------------------------------------------------------------------------------%n");
+		System.out.println("");
 	}
 }
