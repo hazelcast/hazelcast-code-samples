@@ -1,0 +1,12 @@
+
+# COMMENTS
+
+# Set Tomcat port, so can run two Hazelcast on same host but known ports
+server.port: ${my.web.port}
+
+# Can also set up metadata to save here as well as in bootstrap.yml
+eureka:
+  instance:
+    metadataMap:
+      copenhagenAirport: ${my.copenhagen.airport}
+      myFlightTime: ${my.flight.time}

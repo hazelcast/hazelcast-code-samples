@@ -18,7 +18,7 @@ import com.hazelcast.spi.discovery.integration.DiscoveryServiceProvider;
 public class MyConfiguration {
 
 	/**
-	 * <P>Create a Hazelcast configuration object that differs from
+	 * <P>Create a Hazelcast configuration object for a server that differs from
 	 * the default in three ways.
 	 * </P>
 	 * <OL>

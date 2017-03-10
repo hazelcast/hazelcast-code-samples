@@ -1,3 +1,6 @@
+
+# COMMENTS
+
 # Standard port for Eureka
 server:
   port: 8761
