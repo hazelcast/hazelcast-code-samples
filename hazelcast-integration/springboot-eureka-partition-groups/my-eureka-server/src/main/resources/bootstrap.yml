@@ -1,11 +1,4 @@
-
-# COMMENTS
-
-# Standard port for Eureka
-server:
-  port: 8761
-
-eureka:
+eureka: 
   instance:
     # Network card to use
     hostname: localhost
@@ -14,3 +7,9 @@ eureka:
     registerWithEureka: false
     # Client doesn't cache registry
     fetchRegistry: false
+
+# Standard port for Eureka
+server:
+  port: 8761
+
+    
