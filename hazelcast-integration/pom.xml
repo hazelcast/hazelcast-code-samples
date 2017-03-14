@@ -47,6 +47,7 @@
         <module>jca-ra</module>
         <module>manager-based-session-replication</module>
         <module>mongodb</module>
+        <module>ocp-demo</module>
         <module>pcf-integration</module>
         <module>spark</module>
         <module>spring-cache-manager</module>
