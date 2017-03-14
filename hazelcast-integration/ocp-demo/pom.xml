@@ -5,6 +5,8 @@
 
 	<artifactId>ocp-demo</artifactId>
 	<name>ocp-demo</name>
+	<packaging>jar</packaging>
+
 
 	<parent>
 		<artifactId>hazelcast-integration</artifactId>
@@ -87,6 +89,13 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>${spring.boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
 			</plugin>
             <plugin>
                 <groupId>io.fabric8</groupId>

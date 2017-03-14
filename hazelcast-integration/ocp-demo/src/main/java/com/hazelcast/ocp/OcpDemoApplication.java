@@ -1,4 +1,4 @@
-package com.hazelcast;
+package com.hazelcast.ocp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
