@@ -42,7 +42,7 @@
    
    ```docker login -a admin -p <your token> <route-to-registry>```
    
-   During ```login``` if you will probably get SSL handshake error, if you do please add your route to docker insecure
+   During ```login``` you will probably get SSL handshake error, if you do please add your route to docker insecure
    registry list.
    
    ```docker tag samples\ocp-demo:<version> <route-to-registry>\<your-namespace>\ocp-demo```
