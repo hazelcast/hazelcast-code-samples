@@ -13,7 +13,7 @@ import org.springframework.context.annotation.*;
 import java.io.InputStream;
 
 @Configuration
-@Profile("production")
+@Profile("k8s")
 @Slf4j
 public class KubernetesConfig {
 

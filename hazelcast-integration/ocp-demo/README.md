@@ -18,11 +18,11 @@
    OCP sample uses [fabric8](https://fabric8.io/) maven plugin to build Docker image, Fabric8 requires 
    3.3.x or higher maven version, therefore make sure that you have proper maven version installed on your machine.
    
-   Compile and build image for OCP sample with below command on project root:
+   Compile and build snapshot jar file for OCP sample with below command on project root:
    ```
    mvn clean install
    ```
-   Traverse to ocp-demo directory under hazelcast-integration, and execute below command:
+   Traverse to ocp-demo directory under hazelcast-integration, and execute below command to build docker image:
    
    ```
    mvn fabric8:build
