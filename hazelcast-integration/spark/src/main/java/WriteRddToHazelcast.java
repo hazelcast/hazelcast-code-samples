@@ -12,6 +12,7 @@ import scala.Tuple2;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -38,8 +39,8 @@ public class WriteRddToHazelcast {
 
         JavaRDD<String> words = lines.flatMap(new FlatMapFunction<String, String>() {
             @Override
-            public Iterable<String> call(String s) {
-                return Arrays.asList(SPACE.split(s));
+            public Iterator<String> call(String s) {
+                return Arrays.asList(SPACE.split(s)).iterator();
             }
         });
 
