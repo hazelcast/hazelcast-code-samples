@@ -153,7 +153,7 @@ public class OffloadableEntryProcessorDemo {
      * be offloaded, however, the EntryProcessor will not wait for the lock to be acquired, since the EP will not
      * do any modifications.
      *
-     * If the EntryProcessor implements ReadOnly and modifies the entry it is processing a NoModificationAllowedException
+     * If the EntryProcessor implements ReadOnly and modifies the entry it is processing a UnsupportedOperationException
      * will be thrown.
      *
      * The optimization applies to the following methods only:
