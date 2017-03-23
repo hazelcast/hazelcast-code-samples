@@ -26,7 +26,7 @@ public class MyDiscoveryServiceProvider implements DiscoveryServiceProvider {
 	 * </P>
 	 * 
 	 * @param not_used Ignored as we only return the existing object.
-	 * @return The object injected by Spring
+	 * @return The object {@code @Autowired} by Spring
 	 */
 	@Override
 	public DiscoveryService newDiscoveryService(DiscoveryServiceSettings not_used) {
