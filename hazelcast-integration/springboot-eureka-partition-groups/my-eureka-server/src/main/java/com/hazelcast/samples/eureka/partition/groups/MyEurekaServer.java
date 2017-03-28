@@ -9,8 +9,8 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  * Run with "{@code java -jar my-eureka-server-0.1-SNAPSHOT.jar}"
  * </P>
  * <P>
- * The annotation {@code @EnableEurekaServer} does all the work, turning this process into a
- * Eureka server.
+ * The annotation {@code @EnableEurekaServer} does all the work, turning this
+ * process into a Eureka server.
  * </P>
  * <P>
  * Eureka server will be available from
@@ -24,8 +24,12 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 @EnableEurekaServer
 public class MyEurekaServer {
 
-        public static void main(String[] args) {
-                SpringApplication.run(MyEurekaServer.class, args);
-        }
-        
+	static {
+		System.setProperty("spring.application.name", Constants.CLUSTER_NAME);
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(MyEurekaServer.class, args);
+	}
+
 }

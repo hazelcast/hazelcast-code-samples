@@ -23,12 +23,10 @@
 	</properties>
 
 	<modules>
-		<!-- Eureka Server does not depend on the rest of the example code -->
-		<module>my-eureka-server</module>
-
 		<module>common</module>
 
 		<!-- All modules below depend on common module but not on each other -->
+		<module>my-eureka-server</module>
 		<module>my-eureka-client</module>
 		<module>my-hazelcast-server</module>
 <!-- 

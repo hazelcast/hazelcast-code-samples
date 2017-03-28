@@ -2,14 +2,16 @@ eureka:
   instance:
     # Network card to use
     hostname: localhost
+    metadataMap:
+      # Odd numbered ports are one group, even another.
+      partitionGroups:
+        group1: 1,3,5,7,9
+        group2: 0,2,4,6,8
   client:
-    # Don't record itself
-    registerWithEureka: false
+    registerWithEureka: true
     # Client doesn't cache registry
     fetchRegistry: false
 
 # Standard port for Eureka
 server:
   port: 8761
-
-    

@@ -16,6 +16,17 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter</artifactId>
 		</dependency>
@@ -35,6 +46,8 @@
 				<executions>
 					<execution>
 						<goals>
+							<!-- build-info for spring-boot-starter-actuator -->
+							<goal>build-info</goal>
 							<goal>repackage</goal>
 						</goals>
 					</execution>

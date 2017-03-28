@@ -11,18 +11,18 @@ import java.util.Collections;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 
 /**FIXME TIDY TIDY TIDY!!
  * 
  */
 
-//FIXME Build info doesn't appear in a browser ??!?!?
 @SpringBootApplication
 @EnableDiscoveryClient
 public class MyHazelcastServer {
 
 	static {
-		
 		//FIXME
 		System.setProperty("spring.application.name", Constants.CLUSTER_NAME);
 		
@@ -30,16 +30,12 @@ public class MyHazelcastServer {
 		 * <P>Pick ports for {@code bootstrap.yml}
 		 * </P> 
 		 */
-		System.setProperty("my.web.port", String.valueOf(getNextPort(8080)));
+		String s = String.valueOf(getNextPort(8088));
+		System.setProperty("my.web.port", s);
+		System.setProperty("server.port", s);
 		System.setProperty("my.hazelcast.port", String.valueOf(getNextPort(5701)));
 		System.setProperty("my.hazelcast.host", findHostRemoteIp());
-		
-		// START : Meta Data extra
-		System.setProperty("my.copenhagen.airport", "<terminal id=2/>");
-		System.setProperty("my.flight.time", "{hours : \"17\", minutes \"20\"}");
-		// -Dhazelcast.zone=zone1
-		// System.setProperty("hazelcast.zone", "zone1");
-		// END : Meta Data extra
+		System.setProperty("my.hazelcast.zone", "zone1");
 	}
 
 	/**
@@ -48,7 +44,17 @@ public class MyHazelcastServer {
 	 * @param args
 	 */
     public static void main(String[] args) {
-        SpringApplication.run(MyHazelcastServer.class, args);
+    	ApplicationContext applicationContext =
+    			SpringApplication.run(MyHazelcastServer.class, args);
+
+    	Environment environment =
+    			applicationContext.getBean(Environment.class);
+    	
+    	//XXX
+    	System.out.println("XXX PORT " + environment.getProperty("local.server.port"));
+    	System.out.println("XXX PORT " + environment.getProperty("local.server.port"));
+    	System.out.println("XXX PORT " + environment.getProperty("local.server.port"));
+    	System.out.println("XXX PORT " + environment.getProperty("local.server.port"));
     }
 
     /**
