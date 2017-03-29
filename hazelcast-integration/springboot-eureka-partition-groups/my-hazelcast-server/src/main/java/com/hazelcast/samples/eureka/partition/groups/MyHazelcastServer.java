@@ -11,50 +11,45 @@ import java.util.Collections;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
 
-/**FIXME TIDY TIDY TIDY!!
- * 
+/**
+ * <P>Create a Hazelcast instance that can be one of many running on the
+ * same host.
+ * </P>
+ * <P>To run multiple on the same host means avoiding a port clash,
+ * and normally we would let Hazelcast pick any unassigned port for
+ * this. However, to give greater control, we find available ports
+ * before the {@code main()} method starts, so that we can register
+ * them with Eureka.
+ * </P>
  */
-
 @SpringBootApplication
 @EnableDiscoveryClient
 public class MyHazelcastServer {
 
 	static {
-		//FIXME
 		System.setProperty("spring.application.name", Constants.CLUSTER_NAME);
 		
 		/**
 		 * <P>Pick ports for {@code bootstrap.yml}
 		 * </P> 
 		 */
-		String s = String.valueOf(getNextPort(8088));
+		String s = String.valueOf(getNextPort(8081));
 		System.setProperty("my.web.port", s);
 		System.setProperty("server.port", s);
 		System.setProperty("my.hazelcast.port", String.valueOf(getNextPort(5701)));
 		System.setProperty("my.hazelcast.host", findHostRemoteIp());
-		System.setProperty("my.hazelcast.zone", "zone1");
 	}
 
 	/**
-	 * XXX
+	 * <P>Start this process as a Spring application, which will start
+	 * up a {@code HazelcastInstance} using the above properties.
+	 * </P>
 	 * 
 	 * @param args
 	 */
     public static void main(String[] args) {
-    	ApplicationContext applicationContext =
-    			SpringApplication.run(MyHazelcastServer.class, args);
-
-    	Environment environment =
-    			applicationContext.getBean(Environment.class);
-    	
-    	//XXX
-    	System.out.println("XXX PORT " + environment.getProperty("local.server.port"));
-    	System.out.println("XXX PORT " + environment.getProperty("local.server.port"));
-    	System.out.println("XXX PORT " + environment.getProperty("local.server.port"));
-    	System.out.println("XXX PORT " + environment.getProperty("local.server.port"));
+		SpringApplication.run(MyHazelcastServer.class, args);
     }
 
     /**
