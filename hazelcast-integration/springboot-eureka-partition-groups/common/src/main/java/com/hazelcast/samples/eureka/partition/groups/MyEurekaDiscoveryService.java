@@ -28,8 +28,7 @@ import static com.hazelcast.spi.partitiongroup.PartitionGroupMetaData.PARTITION_
  * <OL>
  * <LI>{@link #discoverLocalMetadata}
  * <P>Called first, this method obtains the partition grouping data already stored in
- * Eureka by {@code my-eureka-server}. 
- * If this instance is a server and therefore storing
+ * Eureka by {@code my-eureka-server}. If this instance is a server and therefore storing
  * partitions, it needs this information to determine which partitions it can take.
  * </P>
  * <LI>{@link #discoverNodes}
@@ -55,19 +54,16 @@ public class MyEurekaDiscoveryService implements DiscoveryService {
      * <P>If we are a client we don't host partitions so can skip this.
      * </P>
      * <P><B>NOTE: <I>METHOD:</I></B> The method for setting the partition
-     * group is to check the port of this instance against the ports in the
-     * metadata. The metadata has group 1 as "{@code 1,3,5,7,9}" and group
-     * 2 as "{@code 0,2,4,6,8}". If this processing is using an even numbered
-     * port is selects group 2 and an odd numbered port it selects group 1.
-     * It doesn't reallt matter, it's just an example. What matters is that
-     * the group information is provided externally, even if there is local
-     * derivation.
+     * group is that the metadata lists a host & port pairing with the
+     * zone each should use. The zone is explicitly specified by
+     * external configuration.
      * </P>
      * 
      * @return A map with one entry, the partition group for this host.
      */
     @Override
     public Map<String, Object> discoverLocalMetadata() {
+    	String YML_SEPARATOR = ".";
         HashMap<String, Object> result = new HashMap<>();
 
         /* The metadata is only for partition groups, so we don't need this if we are
@@ -80,38 +76,36 @@ public class MyEurekaDiscoveryService implements DiscoveryService {
 		log.info("\n--------------------------------------------------------------------------------");
 		log.info("discoverLocalMetadata(): Hazelcast lookup to Eureka : start");
 
-		// Find the last digit of the port this process is using.
+		// Find the web port this process is using.
 		String port = String.valueOf(this.discoveryClient.getLocalServiceInstance().getPort());
-		String lastPortDigit = port.substring(port.length() - 1);
-		
-		
+		// Since this is a one machine example, we know which machine we are on. 
+		String hostPort = "localhost" + YML_SEPARATOR + port;
+				
 		this.discoveryClient.getInstances(Constants.CLUSTER_NAME).forEach(
 				(ServiceInstance serviceInstance) -> {
 
-					String partitionGroup1 = serviceInstance.getMetadata().get("partitionGroups.group1");
-					String partitionGroup2 = serviceInstance.getMetadata().get("partitionGroups.group2");
+					String zone = 
+							serviceInstance.getMetadata().get(
+									Constants.HAZELCAST_ZONE_METADATA_KEY + YML_SEPARATOR + hostPort);
 
-					if (partitionGroup1!=null && partitionGroup2!=null) {
-						
-						/* If this last digit for this instance matches group 1, then we're in
-						 * group 1 and otherwise group 2.
-						 * We are expecting group 1 to be the odd digits - 1,3,5,7,9 - and
-						 * group 2 to be the even digits - 0.2,4,6,8.
-						 */
-						if(Arrays.stream(partitionGroup1.split(","))
-							.anyMatch(s -> s.endsWith(lastPortDigit))) {
-							result.put(PARTITION_GROUP_ZONE, "group1");
-						} else {
-							result.put(PARTITION_GROUP_ZONE, "group2");
-						}
+					if (zone!=null) {
+						log.error("discoverLocalMetadata(): found zone '{}' for '{}'",
+								zone, hostPort);
+						result.put(PARTITION_GROUP_ZONE, zone);
 					}
 					
 				});
 
-		log.info("discoverLocalMetadata(): Hazelcast lookup to Eureka : end : result = {}", result);
+		log.info("discoverLocalMetadata(): Hazelcast lookup to Eureka : end");
 		log.info("\n--------------------------------------------------------------------------------");
-		
-		return result;
+
+		// No match will cause problems
+		if (result.isEmpty()) {
+			String message = String.format("discoverLocalMetadata(): found no zone for '%s'", hostPort);
+			throw new RuntimeException(message);
+		} else {
+			return result;
+		}
     }
     
     /**

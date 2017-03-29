@@ -15,7 +15,6 @@ public class Constants {
 	public static final String	CLUSTER_NAME
 									= "eurekast".toUpperCase();
 	
-	
 	/**
 	 * <P>Zone information is stored in Eureka as key/value
 	 * pairs.
@@ -42,5 +41,15 @@ public class Constants {
     public static final String 	HAZELCAST_ZONE_METADATA_KEY
     								= "hazelcastZone";
 
-	
+
+    /**
+     * <P>To prove that zones provide data safety, we will need
+     * to kill some nodes to see if data is lost or not.
+     * </P>
+     * <P>To show this properly we need a map protected from
+     * loss and one exposed to it, and these need names.
+     * </P>
+     */
+    public static final String  MAP_NAME_SAFE = CLUSTER_NAME.toLowerCase() + "_safe";
+    public static final String  MAP_NAME_UNSAFE = CLUSTER_NAME.toLowerCase() + "_unsafe";
 }

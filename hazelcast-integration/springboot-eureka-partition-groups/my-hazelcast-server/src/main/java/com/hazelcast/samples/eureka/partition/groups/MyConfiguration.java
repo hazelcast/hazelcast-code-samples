@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.JoinConfig;
+import com.hazelcast.config.MapConfig;
 import com.hazelcast.spi.discovery.integration.DiscoveryServiceProvider;
 
 /**
@@ -19,7 +20,7 @@ public class MyConfiguration {
 
 	/**
 	 * <P>Create a Hazelcast configuration object for a server that differs from
-	 * the default in three ways.
+	 * the default in four ways.
 	 * </P>
 	 * <OL>
 	 * <LI><B>Name</B> 
@@ -39,6 +40,11 @@ public class MyConfiguration {
 	 * in where to place data master and data backup copies with external
 	 * meta-data (which we get from {@code Eureka}.</P>
 	 * </LI>
+	 * <LI><B>Map Config</B>
+	 * <P>Configure maps for safety (ie. have backups) or where safety isn't
+	 * required (ie. have no backups). Backups get placed in a different zone
+	 * from the original.
+	 * </P>
 	 * </OL>
 	 * 
 	 * @param discoveryServiceProvider A {@link MyDiscoveryServiceProvider} instance.
@@ -70,6 +76,13 @@ public class MyConfiguration {
 			.setEnabled(true)
 			.setGroupType(ZONE_AWARE);
 
+		// Maps
+		
+		config.getMapConfigs()
+			.put(Constants.MAP_NAME_SAFE, new MapConfig(Constants.MAP_NAME_SAFE).setBackupCount(1));
+		config.getMapConfigs()
+			.put(Constants.MAP_NAME_UNSAFE, new MapConfig(Constants.MAP_NAME_UNSAFE).setBackupCount(0));
+		
 		return config;
 	}
 }

@@ -1,7 +1,0 @@
-# Zero means any Tomcat port available, so no port clash
-server.port: 0
-
-# Cluster group
-spring:
-  application:
-    name: Hazelcast-DEV

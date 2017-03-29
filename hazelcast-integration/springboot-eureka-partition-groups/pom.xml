@@ -29,9 +29,7 @@
 		<module>my-eureka-server</module>
 		<module>my-eureka-client</module>
 		<module>my-hazelcast-server</module>
-<!-- 
 		<module>my-hazelcast-client</module>
- -->
 	</modules>
 
 	<dependencies>
