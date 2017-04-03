@@ -1,14 +1,14 @@
 package com.hazelcast.ocp.rest;
 
 import com.hazelcast.ocp.command.MapService;
+import com.hazelcast.ocp.entryprocessor.Position;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/maps")
+@Slf4j
 public class MapOperations {
 
     @Autowired
@@ -18,6 +18,18 @@ public class MapOperations {
     public int randomPut(@PathVariable("count") String count){
         final int keyCount = Integer.valueOf(count);
         return service.insert(keyCount);
+    }
+
+    @RequestMapping("/random/position/{count}")
+    public int randomPositions(@PathVariable("count") String count){
+        final int keyCount = Integer.valueOf(count);
+
+        return service.insertPositions(keyCount);
+    }
+
+    @PostMapping("/entry/processor/distance")
+    public long processDistances(@RequestBody Position position){
+        return service.processDistances(position);
     }
 
     @RequestMapping("/stats")

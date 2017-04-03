@@ -23,19 +23,45 @@
                 <h3 class="panel-title">Data Operations</h3>
             </div>
             <div class="panel-body">
-                <button type="button" class="btn btn-default btn-primary" onclick="autoPilot();">Auto Pilot</button>
-
                 <div class="col-lg-6">
+
                     <div class="input-group">
                         <input id="random-count" type="number" class="form-control" placeholder="Count..." min="1" max="10000"/>
                         <span class="input-group-btn">
                             <button class="btn btn-default btn-primary" type="button" onclick="random();">Random!</button>
+                            <button type="button" class="btn btn-default btn-primary" onclick="autoPilot();">Auto Pilot</button>
                         </span>
                     </div><!-- /input-group -->
                 </div><!-- /.col-lg-6 -->
             </div>
         </div>
 
+        <!-- Entry Processor-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Entry Processor</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <input id="random-positions" type="number" class="form-control" placeholder="Count..." min="1" max="10000"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-primary" type="button" onclick="randomPositions();">Random Positions!</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+                <p></p>
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <input id="latitude" type="number" class="form-control" placeholder="Latitude..." min="-90" max="90"/>
+                        <input id="longitude" type="number" class="form-control" placeholder="Longitude..." min="-180" max="180"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-primary" type="button" onclick="executeOnEntryProcessor();">Execute On Entry Processor!</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </div>
+        </div>
 
         <!-- Evictions -->
         <div class="panel panel-default">
@@ -56,6 +82,9 @@
                 <button class="btn btn-primary btn-info" type="button">
                     Size <span id="map-stat" class="badge">0</span>
                 </button>
+                <button class="btn btn-primary btn-info" type="button">
+                    Processed Entries <span id="processed-entry" class="badge">0</span>
+                </button>
             </div>
         </div>
     </div>
@@ -71,6 +100,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Error Notifications -->
+    <script src="/assets/js/notify.min.js"></script>
     <!-- Statistics worker-->
     <script src="/assets/js/stats.js"></script>
 </body>

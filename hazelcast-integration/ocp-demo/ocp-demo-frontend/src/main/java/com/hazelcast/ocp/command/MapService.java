@@ -1,6 +1,8 @@
 package com.hazelcast.ocp.command;
 
 
+import com.hazelcast.ocp.entryprocessor.Position;
+
 public interface MapService {
 
     /**
@@ -25,4 +27,15 @@ public interface MapService {
      * removes all elements from underlying distributed {@link com.hazelcast.core.IMap} implementation
      */
     void clear();
+
+    /**
+     * randomly inserts {@link Position} instances to underlying {@link com.hazelcast.core.IMap}
+     */
+    int insertPositions(int keyCount);
+
+    /**
+     * Calculates distances that are inserted with {@link MapService::insertPositions} against a random point
+     * to demonstrate {@link com.hazelcast.map.EntryProcessor} semantics.
+     */
+    long processDistances(Position position);
 }
