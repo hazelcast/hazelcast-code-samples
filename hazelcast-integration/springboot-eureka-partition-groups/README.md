@@ -16,6 +16,7 @@ advance.
 For this example, we will use a single host as this might be all you have access to.
 
 ## The Problem
+
 Hazelcast IMDG is normally run as a *clustered* application, meaning several process
 instances join together to form a group. This group shares the load of data hosting
 and data processing.
@@ -31,6 +32,7 @@ instances and usage grows by 10%, you can just add an 11<sup>th</sup> instance. 
 But, of course, there are complications. And for the purpose of this example, two to focus on.
 
 ### Problem 1 - Discovery
+
 If you run more than one process and want them to join together, they need to know how to
 find each other.
 
@@ -55,6 +57,7 @@ don't know this yourself.
 - [ ] Add diagram
 
 ### Problem 2 - Data Safety
+
 Data has varying value to a business, and the most valuable you don't want to lose. It
 may be time-consuming or impossible to regenerate.
 
@@ -78,20 +81,35 @@ records when the best choice depends on factors that are hidden.
 - [ ] Add diagram
 
 ### The Problems Summarised
+
 We have two problems to solve:
 
-1. IMDG can't be pre-configured to specify hosts that are built at run-time.
+1. IMDG can't be pre-configured to specify hosts that are built at runtime.
 
 2. Data mirror copies need to be placed on machines that won't fail together.
 
 ## The Solution
+
 Eureka provides our solution!
 
-### Solution to Problem 1 - IMDG can't be pre-configured to specify hosts that are built at run-time
+### Solution to Problem 1 - IMDG can't be pre-configured to specify hosts that are built at runtime
 
-- [ ] Add text
+Eureka is a writeable registry. 
+
+It is realistic to pre-configure the location of Eureka, as this is not a dynamic
+component. An environment, such a Production, might have a Eureka service but 
+this will be a constant in the environment. It will not move about, and will be
+started before everything else.
+
+So, when an Hazelcast IMDG process starts it can know the location of the Eureka register,
+look in this registry to see which IMDG processes have already recorded their presence in
+this registry, and record itself in the registry for the subsequent IMDG processes to
+note.
+
+- [ ] Add diagram
 
 #### DNS aliases
+
 As an aside, DNS aliases is another way to solve problem 1.
 
 IMDG instance __A__ could refer to the machine that hosts IMDG instance __B__ with
@@ -101,11 +119,40 @@ and flush the DNS.
 
 It would work, though might not be popular to update the DNS frequently.
 
+#### It is realistic to pre-configure the location of Eureka
+
+Is it ?
+
+Much of the nature of this problem hinges on what it is realistic to expect to
+be fixed and what is not.
+
+In a cloud environment it's not particularly contentious to say that it's difficult
+to know all of the Hazelcast hosts in advance. Hazelcast IMDG is scalable, so the
+number can go up and down. This certainly makes it impossible to know them all.
+If the group size is unknown it's not surprising that make cloud systems will
+not allocate host names until the last minute.
+
+Eureka plays a different role in an environment, as it's more of a support service
+and has no need to be scalable. So the number of hosts for Eureka usually won't
+vary.Again though, this does not guarantee that any of these hosts will be
+allocated until the Eureka service is started.
+
+The difference is with timing.
+
+The Eureka service must start before the Hazelcast service as Eureka provides
+a service to Hazelcast. So even if the Eureka hosts aren't known before
+Eureka starts, they are known after Eureka starts and this is before
+Hazelcast starts.
+
 ### Solution to Problem 2 - Data mirror copies need to be placed on machines that won't fail together
 
-- [ ] Add text
+
+
+
+- [ ] Add diagram
 
 ## The Solution In Action
+
 So let's see how it's done.
 
 We have named the solution *Eurekast*, as a portmanteau of _Eureka_ and _Hazelcast_.
@@ -129,6 +176,7 @@ Apart from the `common` module, the main four modules are all Spring Boot execut
 using configuration specified in their `bootstrap.yml` files.
 
 ### `common`
+
 This module contains common code used by all the others.
 
 The important class here is `MyEurekaDiscovery` which does the hard work of finding things in Eureka.
@@ -136,6 +184,7 @@ There are only really two methods in here that do anything useful, which we shal
 they get invoked.
 
 ### `my-eureka-server`
+
 This module creates a single Eureka server, and stores some configuration in it for Hazelcast
 to find.
 
@@ -144,6 +193,7 @@ in the same way as multiple Hazelcast IMDG servers are clustered here. This woul
 useful first step in productionizing this example.
 
 ### `my-eureka-client`
+
 This is an optional diagnostics module, you can ignore it if you like.
 
 What this module does is connect to the Eureka server and log the _Eurekast_ data stored
@@ -153,6 +203,7 @@ This is useful for debugging. If the Hazelcast server can't find what it needs i
 server, how else will you know which one is wrong.
 
 ### `my-hazelcast-server`
+
 As you might guess, this module is for a Hazelcast server.
 
 In this example, we'll run several copies of this same module, to see how they obtain
@@ -160,6 +211,7 @@ what they need from the Eureka server, and form a cluster with a controlled leve
 data safety.
 
 ### `my-hazelcast-client`
+
 This module is a Hazelcast client that connects to the Hazelcast server(s).
 
 It uses the Eureka server to find the location of the Hazelcast servers to connect
@@ -169,6 +221,7 @@ Seeing what data is stored in the Hazelcast servers will prove the data has
 been safely stored when we come to kill some Hazelcast servers.
 
 ## Checkpoint 1 - Discovery Service
+
 Hazelcast IMDG is a scalable resilient cluster of processes. You can start and stop processes
 to adjust to capacity. Every process in the cluster is updated when a process joins or leaves,
 so always knows the cluster member list.
@@ -177,7 +230,7 @@ The need for a discovery service is for that initial connection. All you need do
 find another process that is in the cluster, and it can inform you of the full list.
 
 In general terms all the discovery service has to do is itemize some of the processes
-that in the cluster, it doesn't matter if it's not a complete list as you'll et the
+that in the cluster, it doesn't matter if it's not a complete list as you'll get the
 rest once you join.
 
 The method signature for discovery is just this:
@@ -193,10 +246,12 @@ Normally this is built from `hazelcast.xml` file using a static list.
 All that's different here is we're doing it dynamically.
 
 ## Checkpoint 2 - Data Safety & Partition Groups
+
 At this point, it's worth a quick recap on what is really meant by data safety
 and partition groups.
 
 ### Data Safety
+
 Data safety in Hazelcast IMDG is **configurable**.
 
 Data is "_safe_" if you have more copies than you might lose.
@@ -220,12 +275,14 @@ Another way to look on it is if you're expecting more than one or two machines t
 bought some bad hardware. More of this hardware wouldn't be a good idea.
 
 #### RAID
+
 The astute reader will have spotted that this is exactly the same as disk mirroring.
 
 Disks are not infallible. You mirror disk data onto multiple disks for the exact same
 reason, to cope with some but not all failing.
 
 ### Partition Groups
+
 When machines failing is mentioned above, the implication is for unrelated failure.
 
 Machine A fails but there's another copy of the data on Machine B so we're good.
@@ -271,6 +328,7 @@ This means cabinet 1 can fail, removing two machines from the four in the
 cluster but not losing both copies of that data record.
 
 #### Caveats
+
 Of course, there are other concerns to remember.
 
 For a start, it's not just about data storage you have also to remember data
@@ -284,6 +342,7 @@ someone in the future might move a machine from cabinet to cabinet,
 and not adequately communicate this.
 
 ## Build
+
 Obviously you need to build the example before we can run it.
 
 The example uses Spring Boot for forming executable _jar_ files.
@@ -292,6 +351,7 @@ It's easiest to use `mvn install` from the top level to build everything, as thi
 repackaging phases happen. If you know what you're doing you can run it from an IDE.
 
 ## Running The Solution
+
 Reading the code is one thing, the proof comes from trying it.
 
 So what we are looking to show here is:
@@ -325,12 +385,14 @@ though you will need to refresh the URL.
 - [ ] Add text - screenshot 2
 
 #### The code : `my-eureka-server` => `MyEurekaServer.java`
+
 There is very little to the code, as Spring Boot and Spring Cloud provides the required functionality.
 
 All we do is use the `@EnableEurekaServer` annotation to make this process into a Eureka server, and set
 a system property for the `bootstrap.yml` file.
 
 #### The code : `my-eureka-server` => `bootstrap.yml`
+
 This is the config file used by the Eureka server, and should be largely self-explanatory apart from this:
 
 ```
@@ -369,6 +431,7 @@ specification to be output, which proves it is stored in the Eureka server.
 - [ ] Add text - screenshot 3
 
 #### The code : `my-eureka-client` => `MyEurekaClient.java`
+
 There is some code here which is worth a glance at, as it's similar to how the Hazelcast
 discovery service interrogates Eureka.
 
@@ -380,17 +443,33 @@ and list what data is stored in the application. This data is just a list of _ke
 both strings.
 
 #### The code : `my-eureka-client` => `bootstrap.yml`
+
 Again the `bootstrap.yml` file gives the configuration, here really just the address of the Eureka server.
 
 ### 3. Start a first Hazelcast Server
 
 - [ ] Add text - screenshot 3
 
+#### The code : `my-hazelcast-server` => `MyConfiguration.java`
+
+#### The code : `my-hazelcast-server` => `MyHazelcastServer.java`
+
+#### The code : `my-hazelcast-server` => `bootstrap.yml`
+
+#### The code : `my-hazelcast-server` => `TestDataLoader.java`
+
 ### 4. Run Eureka Client
 
 - [ ] Add text - screenshot 3
 
 ### 5. Browse Eureka Server
+
+Refresh your browser on the Eureka server's URL http://localhost:8761 
+
+The *Application* section of the page will list the *EUREKAST* application but should now have two clickable
+links for the instances of that application.
+
+Click the newest one added, and you should see the build information for the Hazelcast server just started.
 
 - [ ] Add text - screenshot 3
 
@@ -400,23 +479,69 @@ Again the `bootstrap.yml` file gives the configuration, here really just the add
 
 ### 7. Browse Eureka Server again
 
-- [ ] Add text - screenshot 3
+Refresh your browser on the URL http://localhost:8761 
+
+Now you should see three clickable links for the *EUREKAST* application in the *Application* section.
+
+Two of these are for the Hazelcast servers started in steps 4 and 6. The other is for the partition group
+information logged prior at start up in the Eureka server.
 
 ### 8. Start a third Hazelcast Server
+
+Repeat step 6 to start a third Hazelcast server which wil stay running.
+
+As before, it will list the servers it finds in Eureka, and this time two will be already known.
+
+As it has an odd numbered port, it should declare it is using the `"odd"` partition group.
+
+Once it completes startup, you will see the usual Hazelcast message about there being three
+members in the cluster.
 
 - [ ] Add text - screenshot 3
 
 ### 9. Start a fourth Hazelcast Server
 
+Repeat step 8 to start one more Hazelcast server, which again should stay running.
+
+Start-up messages should be as you expect, with the declared partition group for this process being
+`"even"`.
+
+#### Checkpoint 3
+
+At this point in the process there are 4 Hazelcast IMDG server processes running in a cluster.
+
+Two have the `"odd"` partition group.
+
+Two have the `"even"` partition group.
+
 - [ ] Add text - screenshot 3
 
-### 10. Run Eureka Client _(optional)_
+### 10. Run Eureka Client
+
+For one last time, run the Eureka client. This will start up, log what it finds in Eureka, then shut down.
+
+```
+java -jar my-eureka-client/target/my-eureka-client-0.1-SNAPSHOT.jar
+```
+
+In addition to the partition group from before, we should see that each of the 4 Hazelcast IMDG server
+processes have recorded their presence in Eureka.
+
+At this point we don't intend to start any more Hazelcast servers, so the partition group specification
+is no longer needed in Eureka. But we do want to start Hazelcast clients to connect to the Hazelcast
+servers, and clients must find servers in the same way as servers find servers.
 
 - [ ] Add text - screenshot 3
 
 ### 11. Run Hazelcast Client
 
 - [ ] Add text - screenshot 3
+
+#### The code : `my-hazelcast-client` => `MyConfiguration.java`
+
+#### The code : `my-hazelcast-client` => `MyHazelcastClient.java`
+
+#### The code : `my-hazelcast-client` => `bootstrap.yml`
 
 ### 12. Kill a Hazelcast Server
 
@@ -443,10 +568,12 @@ Again the `bootstrap.yml` file gives the configuration, here really just the add
 - [ ] Add text - screenshot 3
 
 ## Changes For The Cloud
+
 Mostly this example is good to go, but it has been adjusted slightly to run on a single machine.
 There are two main adjustments.
 
 ### Ports
+
 Best practice is to run a single JVM per host, which for Hazelcast servers gives the highest
 degree of isolation from failures and gives a good assurance that access to machine resources
 such as CPUs won't fluctuate due to the activity of other processes.
@@ -461,6 +588,7 @@ so sets the web port in a series from _8081_ (ie. _8081_, _8082_, _8083_...) and
 in a series from _5701_ (ie. _5701_, _5702_, _5703_...). This coding can be removed.
 
 ### Partition Group
+
 The partition group configuration in the Eureka server is purely for demonstration purposes,
 picking whether the port is odd or even to determine which group a server belongs to.
 
@@ -473,12 +601,14 @@ This needs replaced in the `bootstrap.yml` file of `my-eureka-server` with whate
 are appropriate to your environment.
 
 ## Other Improvements
+
 We've mentioned more than once that the Eureka server should be clustered.
 
 Another improvement would be to inject the partition groups into Eureka, from a Eureka client,
 rather than pre-load them.
 
 ## Summary
+
 Pragmatic issues in your execution environment may make it unrealistic to pre-configure
 all the environment settings you might need.
 
