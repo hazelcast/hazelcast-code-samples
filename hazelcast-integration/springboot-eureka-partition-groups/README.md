@@ -153,10 +153,59 @@ This is useful for debugging. If the Hazelcast server can't find what it needs i
 server, how else will you know which one is wrong.
 
 ### `my-hazelcast-server`
+As you might guess, this module is for a Hazelcast server.
+
+In this example, we'll run several copies of this same module, to see how they obtain
+what they need from the Eureka server, and form a cluster with a controlled level of
+data safety.
+
+### `my-hazelcast-client`
+This module is a Hazelcast client that connects to the Hazelcast server(s).
+
+It uses the Eureka server to find the location of the Hazelcast servers to connect
+to, but also displays the data stored in the Hazelcast servers.
+
+Seeing what data is stored in the Hazelcast servers will prove the data has
+been safely stored when we come to kill some Hazelcast servers.
+
+## Checkpoint 1 - Discovery Service
 
 - [ ] Add text
 
-### `my-hazelcast-client`
+## Checkpoint 2 - Data Safety & Partition Groups
+At this point, it's worth a quick recap on what is really meant by data safety
+and partition groups.
+
+### Data Safety
+Data safety in Hazelcast IMDG is **configurable**.
+
+Data is "_safe_" if you have more copies than you might lose.
+
+If you have Hazelcast in the default configuration, "`<backup-count>1</backup-count>`", then
+map data has two copies, there is a master and one backup slave. You can lose *one* copy
+and still have another copy left. 
+
+If you've configured Hazelcast for a higher configuration, such as "`<backup-count>2</backup-count>`", then
+map data has three copies, a master and two backup slaves. Here you can lose *two* copies and
+still have one copy left.
+
+So what this boils down to is data is safe in the cluster if you don't lose all the copies.
+If you do lose all the copies in Hazelcast, and have no other copies elsewhere (eg. in an RDBMS)
+then it's gone for good. For most but not all data this would be a problem.
+
+The naive answer is just to increase the number of copies, but this has cost in terms of storage
+and performance.
+
+Another way to look on it is if you're expecting more than one or two machines to fail, you've
+bought some bad hardware. More of this hardware wouldn't be a good idea.
+
+#### RAID
+The astute reader will have spotted that this is exactly the same as disk mirroring.
+
+Disks are not infallible. You mirror disk data onto multiple disks for the exact same
+reason, to cope with some but not all failure.
+
+### Partition Groups
 
 - [ ] Add text
 
@@ -196,6 +245,3 @@ used, the location of this must be preset or injected by the execution environme
 
 Very little code is needed, especially if you have Spring Boot and Spring Cloud
 to help.
-
-
-- [ ] Add text
