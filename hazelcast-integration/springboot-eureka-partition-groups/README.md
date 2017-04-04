@@ -280,7 +280,16 @@ traffic ?
 
 And you need to be very aware of infrastructure moves. Data safety here
 comes from knowledge of the physical aspects of machine set-up, but
-someone in the future might move a machine from cabinet to cabinet.
+someone in the future might move a machine from cabinet to cabinet,
+and not adequately communicate this.
+
+## Build
+Obviously you need to build the example before we can run it.
+
+The example uses Spring Boot for forming executable _jar_ files.
+
+It's easiest to use `mvn install` from the top level to build everything, as this makes sure all the Spring Boot
+repackaging phases happen. If you know what you're doing you can run it from an IDE.
 
 ## Running The Solution
 Reading the code is one thing, the proof comes from trying it.
@@ -290,17 +299,9 @@ So what we are looking to show here is:
 2. Hazelcast instances use Eureka to determine which Hazelcast instances should host which data copies.
 3. Killing some Hazelcast instances need not cause data loss, a cluster can be as resilient as you want.
 
-### Build
-Obviously you need to build the example before we can run it.
-
-The example uses Spring Boot for forming executable _jar_ files.
-
-It's easiest to use `mvn install` from the top level to build everything, as this makes sure all the Spring Boot
-repackaging phases happen. If you know what you're doing you can run it from an IDE.
-
 ### 1. Start Eureka Server
 
-The first proper step is to start the Eureka server, which will start and stay running.
+The first step is to start the Eureka server, which will start and stay running.
 
 ```
 java -jar my-eureka-server/target/my-eureka-server-0.1-SNAPSHOT.jar
@@ -353,7 +354,7 @@ If we start another Hazelcast server on `localhost` on port `8083` it is also in
 
 Using **odd** and **even** as group names is just arbitrary, we could have used **hi** and **low**.
 
-### 2. Run Eureka Client _(optional)_
+### 2. Run Eureka Client
 
 At this point, you should run the Eureka test client, which should start, connect to the Eureka
 server, log what it finds, then shut down.
@@ -383,36 +384,99 @@ Again the `bootstrap.yml` file gives the configuration, here really just the add
 
 ### 3. Start a first Hazelcast Server
 
-### 4. Run Eureka Client _(optional)_
+- [ ] Add text - screenshot 3
 
-### 5. Start a first Hazelcast Server
+### 4. Run Eureka Client
 
-### 6. Start a first Hazelcast Server
+- [ ] Add text - screenshot 3
 
-### 7. Start a first Hazelcast Server
+### 5. Browse Eureka Server
 
-### 8. Run Eureka Client _(optional)_
+- [ ] Add text - screenshot 3
 
-### 9. Run Hazelcast Client
+### 6. Start a second Hazelcast Server
 
-### 10. Kill a Hazelcast Server
+- [ ] Add text - screenshot 3
+
+### 7. Browse Eureka Server again
+
+- [ ] Add text - screenshot 3
+
+### 8. Start a third Hazelcast Server
+
+- [ ] Add text - screenshot 3
+
+### 9. Start a fourth Hazelcast Server
+
+- [ ] Add text - screenshot 3
+
+### 10. Run Eureka Client _(optional)_
+
+- [ ] Add text - screenshot 3
 
 ### 11. Run Hazelcast Client
 
-### 12. Kill another specific Hazelcast Server
+- [ ] Add text - screenshot 3
 
-### 13. Run Hazelcast Client
+### 12. Kill a Hazelcast Server
 
-### 14. Kill yet another Hazelcast Server
+- [ ] Add text - screenshot 3
 
+### 13. Run Hazelcast Client again
+
+- [ ] Add text - screenshot 3
+
+### 14. Kill another specific Hazelcast Server
+
+- [ ] Add text - screenshot 3
+
+### 15. Run Hazelcast Client yet again
+
+- [ ] Add text - screenshot 3
+
+### 16. Kill yet another Hazelcast Server
+
+- [ ] Add text - screenshot 3
+
+### 17. Run Hazelcast Client one last time
+
+- [ ] Add text - screenshot 3
 
 ## Changes For The Cloud
+Mostly this example is good to go, but it has been adjusted slightly to run on a single machine.
+There are two main adjustments.
 
-- [ ] Add text
+### Ports
+Best practice is to run a single JVM per host, which for Hazelcast servers gives the highest
+degree of isolation from failures and gives a good assurance that access to machine resources
+such as CPUs won't fluctuate due to the activity of other processes.
+
+When you do this, as the only process on the host, you can preset the port.
+
+So, for real you would want every Hazelcast server to use port 8080 for web traffic and 5701
+for Hazelcast traffic for instance.
+
+In `MyHazelcastServer`, it has to accommodate all servers running on the same host, and
+so sets the web port in a series from _8081_ (ie. _8081_, _8082_, _8083_...) and the Hazelcast port
+in a series from _5701_ (ie. _5701_, _5702_, _5703_...). This coding can be removed.
+
+### Partition Group
+The partition group configuration in the Eureka server is purely for demonstration purposes,
+picking whether the port is odd or even to determine which group a server belongs to.
+
+This should be replaced with whatever grouping information you have.
+
+For example, this might be a group of servers on one floor of a building as one group,
+and the servers on another floor as another group.
+
+This needs replaced in the `bootstrap.yml` file of `my-eureka-server` with whatever values
+are appropriate to your environment.
 
 ## Other Improvements
+We've mentioned more than once that the Eureka server should be clustered.
 
-- [ ] Add text
+Another improvement would be to inject the partition groups into Eureka, from a Eureka client,
+rather than pre-load them.
 
 ## Summary
 Pragmatic issues in your execution environment may make it unrealistic to pre-configure
