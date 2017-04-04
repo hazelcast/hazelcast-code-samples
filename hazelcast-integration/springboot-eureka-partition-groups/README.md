@@ -169,8 +169,28 @@ Seeing what data is stored in the Hazelcast servers will prove the data has
 been safely stored when we come to kill some Hazelcast servers.
 
 ## Checkpoint 1 - Discovery Service
+Hazelcast IMDG is a scalable resilient cluster of processes. You can start and stop processes
+to adjust to capacity. Every process in the cluster is updated when a process joins or leaves,
+so always knows the cluster member list.
 
-- [ ] Add text
+The need for a discovery service is for that initial connection. All you need do is
+find another process that is in the cluster, and it can inform you of the full list.
+
+In general terms all the discovery service has to do is itemize some of the processes
+that in the cluster, it doesn't matter if it's not a complete list as you'll et the
+rest once you join.
+
+The method signature for discovery is just this:
+
+```
+public Iterable<DiscoveryNode> discoverNodes()
+```
+
+All that is required is to return a list of `host`:`port` pairs to find one to use
+for that initial connection.
+
+Normally this is built from `hazelcast.xml` file using a static list.
+All that's different here is we're doing it dynamically.
 
 ## Checkpoint 2 - Data Safety & Partition Groups
 At this point, it's worth a quick recap on what is really meant by data safety
