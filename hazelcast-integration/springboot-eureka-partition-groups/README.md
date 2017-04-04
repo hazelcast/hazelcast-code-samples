@@ -381,6 +381,31 @@ both strings.
 #### The code : `my-eureka-client` => `bootstrap.yml`
 Again the `bootstrap.yml` file gives the configuration, here really just the address of the Eureka server.
 
+### 3. Start a first Hazelcast Server
+
+### 4. Run Eureka Client _(optional)_
+
+### 5. Start a first Hazelcast Server
+
+### 6. Start a first Hazelcast Server
+
+### 7. Start a first Hazelcast Server
+
+### 8. Run Eureka Client _(optional)_
+
+### 9. Run Hazelcast Client
+
+### 10. Kill a Hazelcast Server
+
+### 11. Run Hazelcast Client
+
+### 12. Kill another specific Hazelcast Server
+
+### 13. Run Hazelcast Client
+
+### 14. Kill yet another Hazelcast Server
+
+
 ## Changes For The Cloud
 
 - [ ] Add text
@@ -397,11 +422,13 @@ This isn't a blocker. All you need do is run some sort of configuration service
 somewhere, and Hazelcast can pick up this configuration at runtime from the
 configuration service.
 
-In this example, the configuration service is Eureka, but others exist such as
-Consol and Zookeeper.
+In this example, the configuration service is Eureka as it's Java based, but others exist
+such as Consol and Zookeeper.
 
 Ultimately, something somewhere must be preordained. If a configuration service is
 used, the location of this must be preset or injected by the execution environment.
+The configuration service needs to be clustered, as if it's not available everything
+else is dependent.
 
 Very little code is needed, especially if you have Spring Boot and Spring Cloud
 to help.
