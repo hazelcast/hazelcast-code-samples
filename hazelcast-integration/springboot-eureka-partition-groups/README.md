@@ -298,23 +298,30 @@ The example uses Spring Boot for forming executable _jar_ files.
 It's easiest to use `mvn install` from the top level to build everything, as this makes sure all the Spring Boot
 repackaging phases happen. If you know what you're doing you can run it from an IDE.
 
-### Start Eureka
+### 1. Start Eureka Server
 
-The first proper step is to start the Eureka server.
+The first proper step is to start the Eureka server, which will start and stay running.
 
 ```
 java -jar my-eureka-server/target/my-eureka-server-0.1-SNAPSHOT.jar
 ```
 
-This will produce a lot of output from all the embedded services.
+This will produce a lot of output from all the embedded services, but once started
+you should see messages like the below:
 
-- [ ] Add text - screenshot
-- [ ] Add text - only one instance
-- [ ] Add text - only URL
+- [ ] Add text - screenshot 1
 
-Once this Eureka server is started, leave it running for the duration.
+Once this Eureka server is started, leave it running for the duration. Remember here we only
+run one Eureka server and for real you would run multiple clustered together.
 
-At any point, you can do to http://localhost:8761 to see what Eureka has recorded.
+At any point, you can go to http://localhost:8761 to see what Eureka has recorded.
+
+You should see a line in the *Application* section for the *EUREKAST* application.
+At the right of this line is a list of clickable URLs for the components of this
+application, and this will go up and down as Hazelcast servers join and leave,
+though you will need to refresh the URL.
+
+- [ ] Add text - screenshot 2
 
 #### The code : `my-eureka-server` => `MyEurekaServer.java`
 There is very little to the code, as Spring Boot and Spring Cloud provides the required functionality.
@@ -341,10 +348,38 @@ This is the config file used by the Eureka server, and should be largely self-ex
 
 These settings allocate groups to Hazelcast servers that may be started.
 
-Meaning, if we start a Hazelcast server on `localhost` on port `8081` it's group label is **odd**.
+Meaning, if we start a Hazelcast server on `localhost` on port `8081` its group label is **odd**.
 If we start another Hazelcast server on `localhost` on port `8083` it is also in group **odd**.
 
 Using **odd** and **even** as group names is just arbitrary, we could have used **hi** and **low**.
+
+### 2. Run Eureka Client _(optional)_
+
+At this point, you should run the Eureka test client, which should start, connect to the Eureka
+server, log what it finds, then shut down.
+
+```
+java -jar my-eureka-client/target/my-eureka-client-0.1-SNAPSHOT.jar
+```
+
+Again there will be a lot of output, but what you're looking for here is partition group
+specification to be output, which proves it is stored in the Eureka server.
+
+- [ ] Add text - screenshot 3
+
+#### The code : `my-eureka-client` => `MyEurekaClient.java`
+There is some code here which is worth a glance at, as it's similar to how the Hazelcast
+discovery service interrogates Eureka.
+
+We use Spring to instantiate a `DiscoveryClient`, which is effect is a Eureka client that has
+already connected to the Eureka server.
+
+With this `DiscoveryClient`, what we retrieve is the **EUREKAST** application information,
+and list what data is stored in the application. This data is just a list of _key-value_ pairs
+both strings.
+
+#### The code : `my-eureka-client` => `bootstrap.yml`
+Again the `bootstrap.yml` file gives the configuration, here really just the address of the Eureka server.
 
 ## Changes For The Cloud
 
