@@ -288,11 +288,63 @@ Reading the code is one thing, the proof comes from trying it.
 So what we are looking to show here is:
 1. Hazelcast instances use Eureka to obtain the location of other Hazelcast instances
 2. Hazelcast instances use Eureka to determine which Hazelcast instances should host which data copies.
-3. Killing some Hazelcast instances need not cause data loss, a cluster can be resilient.
+3. Killing some Hazelcast instances need not cause data loss, a cluster can be as resilient as you want.
+
+### Build
+Obviously you need to build the example before we can run it.
+
+The example uses Spring Boot for forming executable _jar_ files.
+
+It's easiest to use `mvn install` from the top level to build everything, as this makes sure all the Spring Boot
+repackaging phases happen. If you know what you're doing you can run it from an IDE.
 
 ### Start Eureka
 
-- [ ] Add text
+The first proper step is to start the Eureka server.
+
+```
+java -jar my-eureka-server/target/my-eureka-server-0.1-SNAPSHOT.jar
+```
+
+This will produce a lot of output from all the embedded services.
+
+- [ ] Add text - screenshot
+- [ ] Add text - only one instance
+- [ ] Add text - only URL
+
+Once this Eureka server is started, leave it running for the duration.
+
+At any point, you can do to http://localhost:8761 to see what Eureka has recorded.
+
+#### The code : `my-eureka-server` => `MyEurekaServer.java`
+There is very little to the code, as Spring Boot and Spring Cloud provides the required functionality.
+
+All we do is use the `@EnableEurekaServer` annotation to make this process into a Eureka server, and set
+a system property for the `bootstrap.yml` file.
+
+#### The code : `my-eureka-server` => `bootstrap.yml`
+This is the config file used by the Eureka server, and should be largely self-explanatory apart from this:
+
+```
+      hazelcastZone:
+        localhost.8081: odd
+        localhost.8082: even
+        localhost.8083: odd
+        localhost.8084: even
+        localhost.8085: odd
+        localhost.8086: even
+        localhost.8087: odd
+        localhost.8088: even
+        localhost.8089: odd
+        localhost.8090: even
+```
+
+These settings allocate groups to Hazelcast servers that may be started.
+
+Meaning, if we start a Hazelcast server on `localhost` on port `8081` it's group label is **odd**.
+If we start another Hazelcast server on `localhost` on port `8083` it is also in group **odd**.
+
+Using **odd** and **even** as group names is just arbitrary, we could have used **hi** and **low**.
 
 ## Changes For The Cloud
 
