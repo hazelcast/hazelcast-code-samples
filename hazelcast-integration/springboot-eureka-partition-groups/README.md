@@ -203,11 +203,64 @@ bought some bad hardware. More of this hardware wouldn't be a good idea.
 The astute reader will have spotted that this is exactly the same as disk mirroring.
 
 Disks are not infallible. You mirror disk data onto multiple disks for the exact same
-reason, to cope with some but not all failure.
+reason, to cope with some but not all failing.
 
 ### Partition Groups
+When machines failing is mentioned above, the implication is for unrelated failure.
 
-- [ ] Add text
+Machine A fails but there's another copy of the data on Machine B so we're good.
+
+The problem might come if a single event takes out both Machine A and Machine B,
+for example if they are in the same cabinet and this catches fire.
+
+So it's not always sufficient to have more than one copy of the data in the
+Hazelcast cluster, the copies must be kept apart to protect from such issues
+and that's where *Partition Groups* comes in.
+
+Hazelcast IMDG runs in a JVM, so only has access to what the JVM can tell it.
+It can know the IP addresses of which hosts support a cluster, but can't
+know which of these are in the same cabinet, share a power supply, or
+any such information. 
+
+So you have to tell it, job done.
+
+It's actually very easy. All you need do s come up with a list of
+labels for the groups, and associate hosts with each. Then Hazelcast
+has all the information it needs.
+
+So, for example, imagine four hosts in two cabinets.
+
+```
++-------------+---------+
+|    Host     | Cabinet |
+| 12.34.56.11 |    1    |
+| 12.34.56.22 |    1    |
+| 12.34.56.33 |    2    |
+| 12.34.56.44 |    2    |
++-------------+---------+
+```
+
+The partition groups could be "`1`" and "`2`". As simple as that.
+
+If Hazelcast IMDG stores the master copy of a data record on host `12.34.56.11`
+then that's in group `1`. So the backup copy of that data record doesn't go
+to a group `1` host. The backup copy goes to `12.34.56.33` or `12.34.56.44`
+but not to `12.34.56.22`
+
+This means cabinet 1 can fail, removing two machines from the four in the
+cluster but not losing both copies of that data record.
+
+#### Caveats
+Of course, there are other concerns to remember.
+
+For a start, it's not just about data storage you have also to remember data
+processing. If you lose a cabinet as in the above example, you lose 2 of the
+4 JVMs in the cluster, so will the remaining 2 be able to support the
+traffic ?
+
+And you need to be very aware of infrastructure moves. Data safety here
+comes from knowledge of the physical aspects of machine set-up, but
+someone in the future might move a machine from cabinet to cabinet.
 
 ## Running The Solution
 Reading the code is one thing, the proof comes from trying it.
