@@ -44,14 +44,15 @@ to cite them. IMDG instance __A__ tries to find IMDG instance __B__ on machine
 _123.456.789.012_  because that machine address is specified in a config file somewhere.
 It's a simple and easy solution, and in many cases all you need.
 
-The problem comes on cloud and/or virtualised environments. If virtual machines are
+The problem comes on cloud and/or virtualised environments. If machines are
 allocated when needed, you are unlikely to know their hostnames or IP addresses in
 advance, so cannot name them in a config file.
 
-Problem 1 is that you can't tell one instance the location of another instance if you
+*Problem 1* is that you can't tell one instance the location of another instance if you
 don't know this yourself.
 
 ![Image of two processes unable to find each other][Problem1] 
+- [ ] Add diagram
 
 ### Problem 2 - Data Safety
 Data has varying value to a business, and the most valuable you don't want to lose. It
@@ -70,10 +71,11 @@ cluster that won't fail together.
 This is easy to ask for, but depends on some factors which the IMDG has no visibility of.
 For example, which machines share a power supply.
 
-So problem 2 is to find a way for the IMDG to select which instances host which data
+*Problem 2* is to find a way for the IMDG to select which instances host which data
 records when the best choice depends on factors that are hidden.
 
 ![Image of three processes unable to decide where to place data][Problem2] 
+- [ ] Add diagram
 
 ### The Problems Summarised
 We have two problems to solve:
@@ -123,7 +125,7 @@ In this example, the project structure is 5 modules:
 We shall describe each module individually before we do the follow-along example of their
 usage.
 
-Apart from the `common` module, the main four are all Spring Boot executable *jar* files,
+Apart from the `common` module, the main four modules are all Spring Boot executable *jar* files,
 using configuration specified in their `bootstrap.yml` files.
 
 ### `common`
@@ -134,10 +136,23 @@ There are only really two methods in here that do anything useful, which we shal
 they get invoked.
 
 ### `my-eureka-server`
+This module creates a single Eureka server, and stores some configuration in it for Hazelcast
+to find.
 
-- [ ] Add text
+Ordinarily you would run multiple Eureka servers clustered together rather than just one,
+in the same way as multiple Hazelcast IMDG servers are clustered here. This would be a
+useful first step in productionizing this example.
 
 ### `my-eureka-client`
+This is an optional diagnostics module, you can ignore it if you like.
+
+What this module does is connect to the Eureka server and log the _Eurekast_ data stored
+in it.
+
+This is useful for debugging. If the Hazelcast server can't find what it needs in the Eureka
+server, how else will you know which one is wrong.
+
+### `my-hazelcast-server`
 
 - [ ] Add text
 
@@ -145,13 +160,13 @@ they get invoked.
 
 - [ ] Add text
 
-### `my-hazelcast-server`
-
-- [ ] Add text
-
 ## Running The Solution
+Reading the code is one thing, the proof comes from trying it.
 
-- [ ] Add text
+So what we are looking to show here is:
+1. Hazelcast instances use Eureka to obtain the location of other Hazelcast instances
+2. Hazelcast instances use Eureka to determine which Hazelcast instances should host which data copies.
+3. Killing some Hazelcast instances need not cause data loss, a cluster can be resilient.
 
 ### Start Eureka
 
@@ -166,5 +181,21 @@ they get invoked.
 - [ ] Add text
 
 ## Summary
+Pragmatic issues in your execution environment may make it unrealistic to pre-configure
+all the environment settings you might need.
+
+This isn't a blocker. All you need do is run some sort of configuration service
+somewhere, and Hazelcast can pick up this configuration at runtime from the
+configuration service.
+
+In this example, the configuration service is Eureka, but others exist such as
+Consol and Zookeeper.
+
+Ultimately, something somewhere must be preordained. If a configuration service is
+used, the location of this must be preset or injected by the execution environment.
+
+Very little code is needed, especially if you have Spring Boot and Spring Cloud
+to help.
+
 
 - [ ] Add text
