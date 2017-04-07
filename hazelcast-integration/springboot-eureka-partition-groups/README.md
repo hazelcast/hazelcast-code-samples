@@ -506,10 +506,82 @@ It's time to look at the server's code to see how this is achieved.
 
 #### The code : `my-hazelcast-server` => `MyConfiguration.java`
 
-XXX TODO
+This sets up the configuration for the Hazelcast IMDG server, with three
+tweaks.
 
+1. Discovery
+
+Normally the way for IMDG processes to find each other is specified with
+the `network` section in the `hazelcast.xml` file.
+
+Here it's all Java, and we have selected instead a discovery plugin to
+do the work.
+
+Spring Boot will inject a `DiscoveryServiceProvider` bean, which is
+set up in the `common` module.
+
+2. Zones
+
+The IMDG instance is configured to use discovery zones, meaning we will
+supply information to mark servers are related (in the same zone) or
+unrelated (in different zones).
+
+Zones here is just the nomenclature, but it could correspond with the
+zones of a cloud provider, such as _USA North-East_ and _USA North-West_.
+
+3. Map configuration
+
+We need to **prove** that the zones actually work.
+
+So we provide the configuration for two maps.
+
+The __safe__ map has backups, so it reasonably insulated from JVM failure.
+
+The __unsafe__ map has no backups, so is not insulated from JVM failure.
+
+#### The code : `common` => `MyEurekaDiscoveryService.java`
+
+In the `common` module the `MyDiscoveryServiceProvider` always returns
+the Spring <pre>@Bean</pre> for the `MyEurekaDiscoveryService` class.
+
+This class does all the hard work in this example so is worth a very
+close look, but it only has two methods that do anything.
+
+1. `discoverLocalMetadata`
+
+This method is called first at start-up, to query the Eureka service
+for data that applies to the cluster as a whole.
+
+For this example, the only cluster wide data stored is the data storage
+zones.
+
+As we've noted above, servers with odd numbered ports go in the _odd_ zone
+and those with even numbered ports in the _even_ zone.
+
+So in effect, we have defined **two** storage zones. If a data record is
+placed in one storage zone, it's backup should not go the same zone. Three
+or four zones might be a better idea than two, but two is enough to provide
+another zone whether backups could go.
+
+2. `discoverNodes`
+
+This method is called second at start-up, to see what IMDG servers are
+known to Eureka.
+
+In a traditional setup, the `hazelcast.xml` file lists the IMDG servers
+in the cluster. So the addresses of some servers are preset.
+
+Here instead we do not preset any IMDG server addresses, and instead get
+the known servers from what is currently recorded in Eureka.
 
 #### The code : `my-hazelcast-server` => `MyHazelcastServer.java`
+
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
 
 #### The code : `my-hazelcast-server` => `bootstrap.yml`
 
