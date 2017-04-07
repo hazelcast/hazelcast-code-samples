@@ -542,7 +542,7 @@ The "__unsafe__" map has no backups, so is not insulated from JVM failure.
 #### The code : `common` => `MyEurekaDiscoveryService.java`
 
 In the `common` module the `MyDiscoveryServiceProvider` always returns
-the Spring <pre>@Bean</pre> for the `MyEurekaDiscoveryService` class.
+the Spring `@Bean` for the `MyEurekaDiscoveryService` class.
 
 This class does all the hard work in this example so is worth a very
 close look, but it only has two methods that do anything.
