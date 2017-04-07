@@ -3,6 +3,25 @@
 [Diagram1]: src/site/markdown/images/diagram1.png "Image diagram1.png"
 [Diagram2]: src/site/markdown/images/diagram2.png "Image diagram2.png"
 [Screenshot1]: src/site/markdown/images/screenshot1.png "Image screenshot1.png"
+[Screenshot2]: src/site/markdown/images/screenshot2.png "Image screenshot2.png"
+[Screenshot3]: src/site/markdown/images/screenshot3.png "Image screenshot3.png"
+[Screenshot4]: src/site/markdown/images/screenshot4.png "Image screenshot4.png"
+[Screenshot5]: src/site/markdown/images/screenshot5.png "Image screenshot5.png"
+[Screenshot6]: src/site/markdown/images/screenshot6.png "Image screenshot6.png"
+[Screenshot7]: src/site/markdown/images/screenshot7.png "Image screenshot7.png"
+[Screenshot8]: src/site/markdown/images/screenshot8.png "Image screenshot8.png"
+[Screenshot9]: src/site/markdown/images/screenshot9.png "Image screenshot9.png"
+[Screenshot10]: src/site/markdown/images/screenshot10.png "Image screenshot10.png"
+[Screenshot11]: src/site/markdown/images/screenshot11.png "Image screenshot11.png"
+[Screenshot12]: src/site/markdown/images/screenshot12.png "Image screenshot12.png"
+[Screenshot13]: src/site/markdown/images/screenshot13.png "Image screenshot13.png"
+[Screenshot14]: src/site/markdown/images/screenshot14.png "Image screenshot14.png"
+[Screenshot15]: src/site/markdown/images/screenshot15.png "Image screenshot15.png"
+[Screenshot16]: src/site/markdown/images/screenshot16.png "Image screenshot16.png"
+[Screenshot17]: src/site/markdown/images/screenshot17.png "Image screenshot17.png"
+[Screenshot18]: src/site/markdown/images/screenshot18.png "Image screenshot18.png"
+[Screenshot19]: src/site/markdown/images/screenshot19.png "Image screenshot19.png"
+[Screenshot20]: src/site/markdown/images/screenshot20.png "Image screenshot20.png"
 
 In this example we'll look at using Netflix's [Eureka](https://github.com/Netflix/eureka)
 as a both a mechanism for process discovery in the cloud and as a way to specify data
@@ -277,9 +296,9 @@ reason, to cope with some but not all failing.
 
 When machines failing is mentioned above, the implication is for unrelated failure.
 
-Machine A fails but there's another copy of the data on Machine B so we're good.
+Machine __A__ fails but there's another copy of the data on Machine __B__ so we're good.
 
-The problem might come if a single event takes out both Machine A and Machine B,
+The problem might come if a single event takes out both Machine __A__ and Machine __B__,
 for example if they are in the same cabinet and this catches fire.
 
 So it's not always sufficient to have more than one copy of the data in the
@@ -293,7 +312,7 @@ any such information.
 
 So you have to tell it, job done.
 
-It's actually very easy. All you need do s come up with a list of
+It's actually very easy. All you need do is come up with a list of
 labels for the groups, and associate hosts with each. Then Hazelcast
 has all the information it needs.
 
@@ -302,21 +321,21 @@ So, for example, imagine four hosts in two cabinets.
 ```
 +-------------+---------+
 |    Host     | Cabinet |
-| 12.34.56.11 |    1    |
-| 12.34.56.22 |    1    |
-| 12.34.56.33 |    2    |
-| 12.34.56.44 |    2    |
+| 12.34.56.11 |    l    |
+| 12.34.56.22 |    l    |
+| 12.34.56.33 |    r    |
+| 12.34.56.44 |    r    |
 +-------------+---------+
 ```
 
-The partition groups could be "`1`" and "`2`". As simple as that.
+The partition groups could be "`l`" for left and "`r`" for right. As simple as that.
 
 If Hazelcast IMDG stores the master copy of a data record on host `12.34.56.11`
-then that's in group `1`. So the backup copy of that data record doesn't go
-to a group `1` host. The backup copy goes to `12.34.56.33` or `12.34.56.44`
+then that's in group `l`. So the backup copy of that data record doesn't go
+to a group `l` host. The backup copy goes to `12.34.56.33` or `12.34.56.44`
 but not to `12.34.56.22`
 
-This means cabinet 1 can fail, removing two machines from the four in the
+This means cabinet "l" can fail, removing two machines from the four in the
 cluster but not losing both copies of that data record.
 
 #### Caveats
@@ -335,12 +354,11 @@ and not adequately communicate this.
 
 ## Build
 
-Obviously you need to build the example before we can run it.
-
 The example uses Spring Boot for forming executable _jar_ files.
 
 It's easiest to use `mvn install` from the top level to build everything, as this makes sure all the Spring Boot
-repackaging phases happen. If you know what you're doing you can run it from an IDE.
+repackaging phases happen. You can run it from an IDE as well, depending on the IDE, but we'll just use the
+command line.
 
 ## Running The Solution
 
@@ -361,6 +379,10 @@ java -jar my-eureka-server/target/my-eureka-server-0.1-SNAPSHOT.jar
 
 This will produce a lot of output from all the embedded services, but once started
 you should see messages like the below:
+
+```
+
+```
 
 ![Image of Eureka server console output][Screenshot1] 
 
@@ -440,6 +462,10 @@ Again the `bootstrap.yml` file gives the configuration, here really just the add
 
 ### 3. Start a first Hazelcast Server
 
+```
+java -jar my-hazelcast-server/target/my-hazelcast-server-0.1-SNAPSHOT.jar
+```
+
 - [ ] Add text - screenshot 3
 
 ![Image of Eureka client console output][Screenshot3] 
@@ -514,10 +540,6 @@ Two have the `"even"` partition group.
 
 For one last time, run the Eureka client. This will start up, log what it finds in Eureka, then shut down.
 
-```
-java -jar my-eureka-client/target/my-eureka-client-0.1-SNAPSHOT.jar
-```
-
 In addition to the partition group from before, we should see that each of the 4 Hazelcast IMDG server
 processes have recorded their presence in Eureka.
 
@@ -528,6 +550,10 @@ servers, and clients must find servers in the same way as servers find servers.
 - [ ] Add text - screenshot 3
 
 ### 11. Run Hazelcast Client
+
+```
+java -jar my-hazelcast-client/target/my-hazelcast-client-0.1-SNAPSHOT.jar
+```
 
 - [ ] Add text - screenshot 3
 
