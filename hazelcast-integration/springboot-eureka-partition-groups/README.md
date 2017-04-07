@@ -380,17 +380,15 @@ java -jar my-eureka-server/target/my-eureka-server-0.1-SNAPSHOT.jar
 This will produce a lot of output from all the embedded services, but once started
 you should see messages like the below:
 
-```
-
-```
-
 ![Image of Eureka server console output][Screenshot1] 
+
+It's the _HTTP 204_ status code you're looking for. This means it's good but no output.
 
 Once this Eureka server is started, leave it running for the duration. Remember here we only
 run one Eureka server and for real you would run multiple clustered together.
 
 At any point, you can go to http://localhost:8761 to see what Eureka has recorded.
-
+Try this now.
 You should see a line in the *Application* section for the *EUREKAST* application.
 At the right of this line is a list of clickable URLs for the components of this
 application, and this will go up and down as Hazelcast servers join and leave,
@@ -462,13 +460,16 @@ Again the `bootstrap.yml` file gives the configuration, here really just the add
 
 ### 3. Start a first Hazelcast Server
 
+All the modules are standalone executable _jar_ files, so starting the first of the Hazelcast
+servers is easy enough.
+
 ```
 java -jar my-hazelcast-server/target/my-hazelcast-server-0.1-SNAPSHOT.jar
 ```
 
-- [ ] Add text - screenshot 3
+![Image of Hazelcast server partition group][Screenshot4] 
 
-![Image of Eureka client console output][Screenshot3] 
+![Image of Hazelcast server discovery][Screenshot5] 
 
 #### The code : `my-hazelcast-server` => `MyConfiguration.java`
 
@@ -480,7 +481,35 @@ java -jar my-hazelcast-server/target/my-hazelcast-server-0.1-SNAPSHOT.jar
 
 ### 4. Run Eureka Client
 
-- [ ] Add text - screenshot 3
+![Image of what][Screenshot6] 
+
+![Image of what][Screenshot7] 
+
+![Image of what][Screenshot8] 
+
+![Image of what][Screenshot9] 
+
+![Image of what][Screenshot10] 
+
+![Image of what][Screenshot11] 
+
+![Image of what][Screenshot12] 
+
+![Image of what][Screenshot13] 
+
+![Image of what][Screenshot14] 
+
+![Image of what][Screenshot15] 
+
+![Image of what][Screenshot16] 
+
+![Image of what][Screenshot17] 
+
+![Image of what][Screenshot18] 
+
+![Image of what][Screenshot19] 
+
+![Image of what][Screenshot20] 
 
 ### 5. Browse Eureka Server
 
