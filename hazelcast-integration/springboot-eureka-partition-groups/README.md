@@ -1,7 +1,6 @@
 # Partition Groups with Eureka
 
 [Diagram1]: src/site/markdown/images/diagram1.png "Image diagram1.png"
-[Diagram2]: src/site/markdown/images/diagram2.png "Image diagram2.png"
 [Screenshot1]: src/site/markdown/images/screenshot1.png "Image screenshot1.png"
 [Screenshot2]: src/site/markdown/images/screenshot2.png "Image screenshot2.png"
 [Screenshot3]: src/site/markdown/images/screenshot3.png "Image screenshot3.png"
@@ -120,8 +119,6 @@ look in this registry to see which IMDG processes have already recorded their pr
 this registry, and record itself in the registry for the subsequent IMDG processes to
 note.
 
-![Image of processes connecting to central Eureka registry][Diagram1] 
-
 #### DNS aliases
 
 As an aside, DNS aliases is another way to solve problem 1.
@@ -160,7 +157,30 @@ Hazelcast starts.
 
 ### Solution to Problem 2 - Data mirror copies need to be placed on machines that won't fail together
 
-![Image of processes on machines that only appear to be independent][Diagram2] 
+Normally what Hazelcast IMDG has access to is the IP addresses for the JVMs.
+
+As per this diagram, imagine there are four JVMs, one per host machine.
+
+![Image of processes on machines that only appear to be independent][Diagram1] 
+
+The host machines have IPs _10.20.30.10_, _10.20.30.20_, _10.20.30.30_ and _10.20.30.40_.
+But of the four machines there are only two power supply units (PSUs).
+
+So if a data record is placed on _10.20.30.10_, then placing the backup copy on
+_10.20.30.20_ woud mean both copies would be lost if the PSU on the left failed.
+
+If the data record goes on JVM _1_ on the leftmost, IP _10.20.30.10_, then
+JVM _2_ is not a great place to put the backup of that data record. Though
+we should note it is still better than no backup at all! 
+
+Hazelcast IMDG normally only has access to the machine's IP addresses, and
+there's not much to compare _10.20.30.20_ with _10.20.30.30_ when picking one.
+
+The solution is to guide Hazelcast, by indicating which machines are related
+by the underlying infrastructure, such as power supplies.
+
+Of course, power supplies are just an example. But at some point something is
+shared, whether it is cables, cabinets, power supplies or even buildings.
 
 ## The Solution In Action
 
@@ -486,7 +506,7 @@ It's time to look at the server's code to see how this is achieved.
 
 #### The code : `my-hazelcast-server` => `MyConfiguration.java`
 
-
+XXX TODO
 
 
 #### The code : `my-hazelcast-server` => `MyHazelcastServer.java`
