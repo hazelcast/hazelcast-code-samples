@@ -1,7 +1,8 @@
 # Partition Groups with Eureka
 
-[Problem1]: src/site/markdown/images/problem1.png "Image problem1.png"
-[Problem2]: src/site/markdown/images/problem2.png "Image problem2.png"
+[Diagram1]: src/site/markdown/images/diagram1.png "Image diagram1.png"
+[Diagram2]: src/site/markdown/images/diagram2.png "Image diagram2.png"
+[Screenshot1]: src/site/markdown/images/screenshot1.png "Image screenshot1.png"
 
 In this example we'll look at using Netflix's [Eureka](https://github.com/Netflix/eureka)
 as a both a mechanism for process discovery in the cloud and as a way to specify data
@@ -53,9 +54,6 @@ advance, so cannot name them in a config file.
 *Problem 1* is that you can't tell one instance the location of another instance if you
 don't know this yourself.
 
-![Image of two processes unable to find each other][Problem1] 
-- [ ] Add diagram
-
 ### Problem 2 - Data Safety
 
 Data has varying value to a business, and the most valuable you don't want to lose. It
@@ -77,9 +75,6 @@ For example, which machines share a power supply.
 *Problem 2* is to find a way for the IMDG to select which instances host which data
 records when the best choice depends on factors that are hidden.
 
-![Image of three processes unable to decide where to place data][Problem2] 
-- [ ] Add diagram
-
 ### The Problems Summarised
 
 We have two problems to solve:
@@ -97,16 +92,16 @@ Eureka provides our solution!
 Eureka is a writeable registry. 
 
 It is realistic to pre-configure the location of Eureka, as this is not a dynamic
-component. An environment, such a Production, might have a Eureka service but 
+component. An environment, such as Production, might have a Eureka service but 
 this will be a constant in the environment. It will not move about, and will be
 started before everything else.
 
-So, when an Hazelcast IMDG process starts it can know the location of the Eureka register,
+So, when an Hazelcast IMDG process starts it can know the location of the Eureka registry,
 look in this registry to see which IMDG processes have already recorded their presence in
 this registry, and record itself in the registry for the subsequent IMDG processes to
 note.
 
-- [ ] Add diagram
+![Image of processes connecting to central Eureka registry][Diagram1] 
 
 #### DNS aliases
 
@@ -146,10 +141,7 @@ Hazelcast starts.
 
 ### Solution to Problem 2 - Data mirror copies need to be placed on machines that won't fail together
 
-
-
-
-- [ ] Add diagram
+![Image of processes on machines that only appear to be independent][Diagram2] 
 
 ## The Solution In Action
 
@@ -370,7 +362,7 @@ java -jar my-eureka-server/target/my-eureka-server-0.1-SNAPSHOT.jar
 This will produce a lot of output from all the embedded services, but once started
 you should see messages like the below:
 
-- [ ] Add text - screenshot 1
+![Image of Eureka server console output][Screenshot1] 
 
 Once this Eureka server is started, leave it running for the duration. Remember here we only
 run one Eureka server and for real you would run multiple clustered together.
@@ -382,7 +374,7 @@ At the right of this line is a list of clickable URLs for the components of this
 application, and this will go up and down as Hazelcast servers join and leave,
 though you will need to refresh the URL.
 
-- [ ] Add text - screenshot 2
+![Image of Eureka server on a web browser][Screenshot2] 
 
 #### The code : `my-eureka-server` => `MyEurekaServer.java`
 
@@ -428,7 +420,7 @@ java -jar my-eureka-client/target/my-eureka-client-0.1-SNAPSHOT.jar
 Again there will be a lot of output, but what you're looking for here is partition group
 specification to be output, which proves it is stored in the Eureka server.
 
-- [ ] Add text - screenshot 3
+![Image of Eureka client console output][Screenshot3] 
 
 #### The code : `my-eureka-client` => `MyEurekaClient.java`
 
@@ -449,6 +441,8 @@ Again the `bootstrap.yml` file gives the configuration, here really just the add
 ### 3. Start a first Hazelcast Server
 
 - [ ] Add text - screenshot 3
+
+![Image of Eureka client console output][Screenshot3] 
 
 #### The code : `my-hazelcast-server` => `MyConfiguration.java`
 
@@ -622,7 +616,7 @@ such as Consol and Zookeeper.
 Ultimately, something somewhere must be preordained. If a configuration service is
 used, the location of this must be preset or injected by the execution environment.
 The configuration service needs to be clustered, as if it's not available everything
-else is dependent.
+else that is dependent upon is in trouble.
 
 Very little code is needed, especially if you have Spring Boot and Spring Cloud
 to help.
