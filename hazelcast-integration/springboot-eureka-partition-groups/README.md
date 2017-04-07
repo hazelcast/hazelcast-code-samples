@@ -535,9 +535,9 @@ We need to **prove** that the zones actually work.
 
 So we provide the configuration for two maps.
 
-The __safe__ map has backups, so it reasonably insulated from JVM failure.
+The "__safe__" map has backups, so it reasonably insulated from JVM failure.
 
-The __unsafe__ map has no backups, so is not insulated from JVM failure.
+The "__unsafe__" map has no backups, so is not insulated from JVM failure.
 
 #### The code : `common` => `MyEurekaDiscoveryService.java`
 
