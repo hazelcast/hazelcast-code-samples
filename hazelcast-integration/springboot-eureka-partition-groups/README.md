@@ -576,16 +576,39 @@ the known servers from what is currently recorded in Eureka.
 
 #### The code : `my-hazelcast-server` => `MyHazelcastServer.java`
 
-TODO
-TODO
-TODO
-TODO
-TODO
-TODO
+Normally, the `main()` class in a Spring Boot process does nothing.
+
+In this case, we set up some system properties, purely as a convenience
+to running multiple Hazelcast IMDG server processes on the same machine.
+
+To reiterate, it's generally best not to do this. One machine per JVM is
+better as being the only process running on the host their share of the
+CPUs is confirmed. You might run multiple JVMs per host if budgets are
+tight. Here we run multiple JVMs per host as we do not know how many
+hosts are available so are aiming for one host for the entire cluster.
+
+To allow us to run multiple IMDG servers on the same cluster we have
+to avoid port clashes. Fixed ports, as we would normally prefer won't
+work for mutiple JVMs on the same hardware. Random ports, where we
+let Spring pick any port it can find would do, but it's trickier for
+testing. So what we do is systematically look for unused ports in a
+sequence.
+
+All of which is a rather wordy way to confirm that the port for web
+traffic used is 8081 if this is available, then it tries 8082, then
+it tries 8083.
 
 #### The code : `my-hazelcast-server` => `bootstrap.yml`
 
+TODO
+
 #### The code : `my-hazelcast-server` => `TestDataLoader.java`
+
+TODO
+
+#### Reminder : Eureka sequence is query then register
+
+TODO
 
 ### 4. Run Eureka Client
 
