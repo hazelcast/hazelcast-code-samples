@@ -467,11 +467,27 @@ servers is easy enough.
 java -jar my-hazelcast-server/target/my-hazelcast-server-0.1-SNAPSHOT.jar
 ```
 
+There are two things to look out for here, showing how the Hazelcast IMDG server
+has connected to the Eurkea server and found the configuration data stored there.
+
+The first output is for the partition groups. This is the 1<sup>st</sup> Hazelcast
+IMDG server to start so we are expecting to see that it has been assigned the odd
+numbered partition group zone.
+
 ![Image of Hazelcast server partition group][Screenshot4] 
+
+The second output is for server discovery. As this is the 1<sup>st</sup> Hazelcast
+IMDG server to start, no other servers should exist in the cluster group, so there
+should be no servers already registered in Eureka.
 
 ![Image of Hazelcast server discovery][Screenshot5] 
 
+It's time to look at the server's code to see how this is achieved.
+
 #### The code : `my-hazelcast-server` => `MyConfiguration.java`
+
+
+
 
 #### The code : `my-hazelcast-server` => `MyHazelcastServer.java`
 
