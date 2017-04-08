@@ -535,9 +535,9 @@ We need to **prove** that the zones actually work.
 
 So we provide the configuration for two maps.
 
-The "__safe__" map has backups, so it reasonably insulated from JVM failure.
+The "__eurekast_safe__" map has backups, so it reasonably insulated from JVM failure.
 
-The "__unsafe__" map has no backups, so is not insulated from JVM failure.
+The "__eurekast_unsafe__" map has no backups, so is not insulated from JVM failure.
 
 #### The code : `common` => `MyEurekaDiscoveryService.java`
 
@@ -612,10 +612,10 @@ These are set in `MyHazelcastServer.java`.
 
 A last piece of coding injects some test data into the cluster.
 
-Here we do it from the Hazelcast server. If the maps "__safe__"
-and "__unsafe__" are empty, we put some data in them.
+Here we do it from the Hazelcast server. If the maps "__eurekast_safe__"
+and "__eurekast_unsafe__" are empty, we put some data in them.
 
-The maps "__safe__" and "__unsafe__" are 
+The maps "__eurekast_safe__" and "__eurekast_unsafe__" are 
 [IMap](http://docs.hazelcast.org/docs/3.8/javadoc/com/hazelcast/core/IMap.html),
 meaning they are split into sections and those sections spread across
 the available servers. The default is for 271 such sections, named _partitions_,
@@ -728,7 +728,7 @@ the usual cluster group information showing the group now has four.
 
 ![Image of fourth Hazelcast server showing group and other servers][Screenshot14] 
 
-#### Checkpoint 3
+#### Checkpoint 3 - Cluster Members
 
 At this point in the process there are 4 Hazelcast IMDG server processes running in a cluster.
 
@@ -773,36 +773,91 @@ it can do some useful work.
 For the purposes of this example, useful work means to count and display
 the number of data record entries in the maps.
 
-The counts for "__safe__" and "__unsafe__" maps should be 271, for the data
+The counts for "__eurekast_safe__" and "__eurekast_unsafe__" maps should be 271, for the data
 created by the first Hazelcast server that started in step 3.
 
 ![Image of Hazelcast client counting map content][Screenshot17] 
 
-Although one of the maps is named "__unsafe__" to reflect it's lower
+Although one of the maps is named "__eurekast_unsafe__" to reflect it's lower
 data safety setup, it's not going to lose any data just because
 of that configuration. Something has happen to make a cluster server go
 offline quickly before there's a chance of data loss.
 
 #### The code : `my-hazelcast-client` => `MyConfiguration.java`
 
-- [ ] Add text
+The client configuration is much simpler, as the client does no
+data storage it doesn't have to care about data safety and
+partition group zones.
+
+All really that is different from normal is discovery.
+
+We provide the client's configuration with a discovery service
+provisioning mechanism.
+
+This is the `MyDiscoveryServiceProvider` class from the `common`
+module, which always returns a Spring bean `MyEurekaDiscoveryService`.
+
+In other words, the Hazelcast client finds the Hazelcast servers
+using the same mechanism as the Hazelcast servers find the Hazelcast
+servers.
 
 #### The code : `my-hazelcast-client` => `MyHazelcastClient.java`
 
-- [ ] Add text
+The entry point to the code is fairly easy, normal Spring
+Boot coding to launch Spring plus a bit of Hazelcast map
+access to display the map sizes.
+
+Again, we activate `@EnableDiscoveryClient` so that Spring Cloud
+will provide all the necessary connectivity to the Eureka
+server for us.
 
 #### The code : `my-hazelcast-client` => `bootstrap.yml`
 
-- [ ] Add text
+The configuration here is simpler than the Hazelcast
+servers.
 
+We don't need to record with Eureka that Hazelcast clients
+are running, so we turn off `registerWithEureka`.
+
+And we don't care which HTTP port the client uses, so this
+is set to 0 and one will be picked at random. Which port
+is picked is listed in the start-up log messages.
+
+### Checkpoint 4 - Disaster
+
+What we're trying to simulate here are faults in the system,
+such as hardware failure or a JVM crash. We don't really
+care the cause, but we want it to be something instant, so
+the cluster has no chance to take preventative steps.
+
+On a Unix system a command such as `kill -9 1234` should
+do the trick. On Windows, `taskkill /f /pid 1234`.
+
+This is a really useful exercise to understand how your
+cluster will behave when unplanned events occur.
+You need to know when you should worry and when you
+shouldn't.
+
+What we're going to do is kill off processes in
+one of the groups.
 
 ### 12. Kill a Hazelcast Server
 
-- [ ] Add text
+Kill off the first Hazelcast server that was started,
+the one running on web port 8081 and Hazelcast port 5701.
+
+The survivors will notice it gone, and mention this in
+their logs.
 
 ### 13. Run Hazelcast Client again
 
+At this point the cluster has reduced to three processes.
+
+Run the Hazelcast client to summarise the map content.
+
 ![Image of Hazelcast client counting map content again][Screenshot18] 
+
+
 
 ### 14. Kill another specific Hazelcast Server
 
