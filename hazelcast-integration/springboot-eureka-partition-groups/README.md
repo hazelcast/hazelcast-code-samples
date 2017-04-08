@@ -857,23 +857,71 @@ Run the Hazelcast client to summarise the map content.
 
 ![Image of Hazelcast client counting map content again][Screenshot18] 
 
+What you should see is that the "__eurekast_safe__" map has survived
+this event unscathed. There are still 271 entries.
 
+What you should see is that the "__eurekast_unsafe__" map has lost
+some data. In the screenshot only 201 entries remain, so 70 have
+gone.
+
+You should expect to lost about a quarter of the unsafe (no backup)
+data. Four servers, one is killed.
+
+The exact number lost will depend on how the map partitions have been
+allocated to the servers. This is not random, but difficult to predict.
 
 ### 14. Kill another specific Hazelcast Server
 
-- [ ] Add text
+Kill off the third Hazelcast server that was started,
+the one running on web port 8083 and Hazelcast port 5703.
+
+What we're trying to simulate here is problems in the `_odd_` zone.
+
+#### Checkpoint 5 - Bonus
+
+There are two servers in the `_odd_` zone and we have killed them
+off one at a time.
+
+Why not repeat the steps, but kill off the first and third server
+at the same time, see what happens.
 
 ### 15. Run Hazelcast Client yet again
 
+Run the Hazelcast client again to see the map counts.
+
 ![Image of Hazelcast client counting map content for the third time][Screenshot19] 
+
+The "__eurekast_safe__" map is still fine, all 271 entries are there.
+We have lost both the `odd` zone servers but the other copy of the data was
+in the `even` zone servers, so no data has been lost.
+
+With two servers gone, the "__eurekast_unsafe__" map will be about half the
+original size. Here it shows 149, you should have a roughly similar number.
 
 ### 16. Kill yet another Hazelcast Server
 
-- [ ] Add text
+At this point, the cluster is half size. We've lost all (both) the `odd`
+servers but haven't lost any of the map data configured with data safety
+enabled.
+
+Now kill one of the remaining two servers, one of the `even` servers.
+
+It isn't really realistic to lost 75% of the servers and expect to keep
+running, but we're doing it here to see what happens.
+
+The reason it isn't realistic is that in a production system, there
+would be a reason to run four servers, and it might be that four are
+needed to service all the connected clients. Perhaps three or two
+would cope with the workload intended for four, but it's a big
+ask for one server.
 
 ### 17. Run Hazelcast Client one last time
 
-![Image of Hazelcast client counting map content for the final time][Screenshot19] 
+Run the Hazelcast client yet again to count the maps.
+
+![Image of Hazelcast client counting map content for the final time][Screenshot20] 
+
+
 
 Surprised ?
 
