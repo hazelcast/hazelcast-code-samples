@@ -934,7 +934,7 @@ zone available it's better than nothing. Here it has saved us.
 
 Surprised 2 ?
 
-The "__eurekast_unsafe__" has dropped from 149 to 145 by the loss of the most recent server.
+The "__eurekast_unsafe__" has dropped from 149 to 145 by the most recent loss of a server.
 We've lost 75% of the hosts but not 75% of the data, and that's because it's the partitions
 that are spread across the hosts.
 
