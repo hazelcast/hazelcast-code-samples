@@ -619,13 +619,13 @@ The maps "__safe__" and "__unsafe__" are
 [IMap](http://docs.hazelcast.org/docs/3.8/javadoc/com/hazelcast/core/IMap.html),
 meaning they are split into sections and those sections spread across
 the available servers. The default is for 271 such sections, named _partitions_,
-so we create 271 entries to try to put one entry into each.
+so we create 271 entries to try to put one data record entry into each.
 
 #### Reminder : Eureka sequence is query then register
 
 A final point to note on the Hazelcast server is that the Eureka
 connectivity is provided by Spring with a discovery client bean,
-activited in the main program with the `@EnableDiscoveryClient`
+activated in the main program with the `@EnableDiscoveryClient`
 annotation.
 
 This is used to read the Eureka server as this process starts, then
@@ -633,35 +633,19 @@ register this process with Eureka once it is fully started.
 
 ### 4. Run Eureka Client
 
-![Image of what][Screenshot6] 
+Supposedly the Hazelcast IMDG server that has just started has registered
+with Eureka.
 
-![Image of what][Screenshot7] 
+Run the Eureka client to check.
 
-![Image of what][Screenshot8] 
+In addition to the partition group specification seen in step 2, there
+should now also be recorded the host and port of the Hazelcast IMDG
+server just started.
 
-![Image of what][Screenshot9] 
+![Image of Eureka client showing Hazelcast server host and port][Screenshot6] 
 
-![Image of what][Screenshot10] 
-
-![Image of what][Screenshot11] 
-
-![Image of what][Screenshot12] 
-
-![Image of what][Screenshot13] 
-
-![Image of what][Screenshot14] 
-
-![Image of what][Screenshot15] 
-
-![Image of what][Screenshot16] 
-
-![Image of what][Screenshot17] 
-
-![Image of what][Screenshot18] 
-
-![Image of what][Screenshot19] 
-
-![Image of what][Screenshot20] 
+In this example the host is _192.168.1.156_ and the port _5701_. Unless
+you've changed the code, you should have the same port.
 
 ### 5. Browse Eureka Server
 
@@ -670,13 +654,43 @@ Refresh your browser on the Eureka server's URL http://localhost:8761
 The *Application* section of the page will list the *EUREKAST* application but should now have two clickable
 links for the instances of that application.
 
+![Image of Eureka server browser window showing application instances][Screenshot7] 
+
 Click the newest one added, and you should see the build information for the Hazelcast server just started.
 
-- [ ] Add text - screenshot 3
+![Image of the build timestamp for the Hazelcast server][Screenshot8] 
+
+This build information is added by Spring Boot Actuator into the _jar_ file, and is a useful
+way to confirm what is deployed.
 
 ### 6. Start a second Hazelcast Server
 
-- [ ] Add text - screenshot 3
+Repeat step 3, to start another Hazelcast IMDG server that will stay running.
+
+The first thing to look for in the log output is the selected zone for partitioned
+data. Here the web port is _8082_ so the zone is _even_. The first server started
+was in zone _odd_.
+
+![Image of second Hazelcast server zone][Screenshot9] 
+
+The second thing to look for is what information is found in Eureka for existing
+Hazelcast servers.
+
+Here what we see is that the second Hazelcast server obtains the location of
+the first Hazelcast server from Eureka.
+
+This is the magic step! The second IMDG server has __discovered__ the first,
+and now knows where to try to communicate with.
+
+![Image of second Hazelcast server finding location of first][Screenshot10] 
+
+Now that the second IMDG server knows the location of the first, it will
+try to join with it. This should be successful, it's the same _jar_ file
+for both with the same name/password coded.
+
+So we should see a cluster listed with two members.
+
+![Image of Hazelcast group listing two][Screenshot11] 
 
 ### 7. Browse Eureka Server again
 
@@ -699,6 +713,23 @@ Once it completes startup, you will see the usual Hazelcast message about there 
 members in the cluster.
 
 - [ ] Add text - screenshot 3
+![Image of what][Screenshot12] 
+
+![Image of what][Screenshot13] 
+
+![Image of what][Screenshot14] 
+
+![Image of what][Screenshot15] 
+
+![Image of what][Screenshot16] 
+
+![Image of what][Screenshot17] 
+
+![Image of what][Screenshot18] 
+
+![Image of what][Screenshot19] 
+
+![Image of what][Screenshot20] 
 
 ### 9. Start a fourth Hazelcast Server
 
