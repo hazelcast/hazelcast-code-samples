@@ -514,7 +514,7 @@ tweaks.
 Normally the way for IMDG processes to find each other is specified with
 the `network` section in the `hazelcast.xml` file.
 
-Here it's all Java, and we have selected instead a discovery plugin to
+Here it's all Java, and we have selected instead a discovery plug-in to
 do the work.
 
 Spring Boot will inject a `DiscoveryServiceProvider` bean, which is
@@ -576,7 +576,7 @@ the known servers from what is currently recorded in Eureka.
 
 #### The code : `my-hazelcast-server` => `MyHazelcastServer.java`
 
-Normally, the `main()` class in a Spring Boot process does nothing.
+Normally, the `main()` class in a Spring Boot process does almost nothing.
 
 In this case, we set up some system properties, purely as a convenience
 to running multiple Hazelcast IMDG server processes on the same machine.
@@ -589,7 +589,7 @@ hosts are available so are aiming for one host for the entire cluster.
 
 To allow us to run multiple IMDG servers on the same cluster we have
 to avoid port clashes. Fixed ports, as we would normally prefer won't
-work for mutiple JVMs on the same hardware. Random ports, where we
+work for multiple JVMs on the same hardware. Random ports, where we
 let Spring pick any port it can find would do, but it's trickier for
 testing. So what we do is systematically look for unused ports in a
 sequence.
@@ -600,15 +600,36 @@ it tries 8083.
 
 #### The code : `my-hazelcast-server` => `bootstrap.yml`
 
-TODO
+The `bootstrap.yml` file controls the Eureka access, mainly that
+when this process connects to Eureka it registers itself with
+some meta-data.
+
+The meta-data is the host and (Hazelcast) port for this instance.
+
+These are set in `MyHazelcastServer.java`.
 
 #### The code : `my-hazelcast-server` => `TestDataLoader.java`
 
-TODO
+A last piece of coding injects some test data into the cluster.
+
+Here we do it from the Hazelcast server. If the maps "__safe__"
+and "__unsafe__" are empty, we put some data in them.
+
+The maps "__safe__" and "__unsafe__" are 
+[IMap](http://docs.hazelcast.org/docs/3.8/javadoc/com/hazelcast/core/IMap.html),
+meaning they are split into sections and those sections spread across
+the available servers. The default is for 271 such sections, named _partitions_,
+so we create 271 entries to try to put one entry into each.
 
 #### Reminder : Eureka sequence is query then register
 
-TODO
+A final point to note on the Hazelcast server is that the Eureka
+connectivity is provided by Spring with a discovery client bean,
+activited in the main program with the `@EnableDiscoveryClient`
+annotation.
+
+This is used to read the Eureka server as this process starts, then
+register this process with Eureka once it is fully started.
 
 ### 4. Run Eureka Client
 
