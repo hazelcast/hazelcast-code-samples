@@ -698,55 +698,48 @@ Refresh your browser on the URL http://localhost:8761
 
 Now you should see three clickable links for the *EUREKAST* application in the *Application* section.
 
-Two of these are for the Hazelcast servers started in steps 4 and 6. The other is for the partition group
-information logged prior at start up in the Eureka server.
+Two of these are for the Hazelcast servers started in steps 3 and 6. The other is for the partition group
+specification set at start up in the Eureka server.
+
+![Image of Eureka server browser showing three instances][Screenshot12] 
 
 ### 8. Start a third Hazelcast Server
 
-Repeat step 6 to start a third Hazelcast server which wil stay running.
+Repeat step 6 to start a third Hazelcast server which will stay running.
 
 As before, it will list the servers it finds in Eureka, and this time two will be already known.
 
-As it has an odd numbered port, it should declare it is using the `"odd"` partition group.
+At the top of this screenshot you'll see the port `8083` so the group is `odd`.
+Towards the bottom of the same screenshot you'll see it has then obtained the
+locations of the two previous Hazelcast servers, `192.168.1.156:5701` and `192.168.1.156:5702`.
+
+![Image of third Hazelcast server showing group and other servers][Screenshot13] 
 
 Once it completes startup, you will see the usual Hazelcast message about there being three
 members in the cluster.
-
-- [ ] Add text - screenshot 3
-![Image of what][Screenshot12] 
-
-![Image of what][Screenshot13] 
-
-![Image of what][Screenshot14] 
-
-![Image of what][Screenshot15] 
-
-![Image of what][Screenshot16] 
-
-![Image of what][Screenshot17] 
-
-![Image of what][Screenshot18] 
-
-![Image of what][Screenshot19] 
-
-![Image of what][Screenshot20] 
 
 ### 9. Start a fourth Hazelcast Server
 
 Repeat step 8 to start one more Hazelcast server, which again should stay running.
 
 Start-up messages should be as you expect, with the declared partition group for this process being
-`"even"`.
+`"even"`, three previous server process locations found in Eureka, and finally
+the usual cluster group information showing the group now has four.
+
+![Image of fourth Hazelcast server showing group and other servers][Screenshot14] 
 
 #### Checkpoint 3
 
 At this point in the process there are 4 Hazelcast IMDG server processes running in a cluster.
 
-Two have the `"odd"` partition group.
+Two have the `"odd"` partition group, the first and third started.
 
-Two have the `"even"` partition group.
+Two have the `"even"` partition group, the second and fourth started.
 
-- [ ] Add text - screenshot 3
+We're going to kill some of them off shortly, so you need to know the process ids of
+each. Exactly how will depending on your operating system, but since they were
+started in sequence probably the first IMDG has the lowest number the second IMDG
+the next lowest number and so on.
 
 ### 10. Run Eureka Client
 
@@ -755,49 +748,81 @@ For one last time, run the Eureka client. This will start up, log what it finds 
 In addition to the partition group from before, we should see that each of the 4 Hazelcast IMDG server
 processes have recorded their presence in Eureka.
 
+![Image of Eureka client showing registered Hazelcast servers][Screenshot15] 
+
 At this point we don't intend to start any more Hazelcast servers, so the partition group specification
 is no longer needed in Eureka. But we do want to start Hazelcast clients to connect to the Hazelcast
 servers, and clients must find servers in the same way as servers find servers.
 
-- [ ] Add text - screenshot 3
-
 ### 11. Run Hazelcast Client
+Now the Hazelcast IMDG grid is up and running, we can run a Hazelcast client
+to connect to it.
 
 ```
 java -jar my-hazelcast-client/target/my-hazelcast-client-0.1-SNAPSHOT.jar
 ```
 
-- [ ] Add text - screenshot 3
+The client needs to find the Hazelcast servers, and it gets their
+location from Eureka.
+
+![Image of Hazelcast client discovering Hazelcast servers][Screenshot16] 
+
+Now that the client has found and connected to the Hazelcast servers,
+it can do some useful work.
+
+For the purposes of this example, useful work means to count and display
+the number of data record entries in the maps.
+
+The counts for "__safe__" and "__unsafe__" maps should be 271, for the data
+created by the first Hazelcast server that started in step 3.
+
+![Image of Hazelcast client counting map content][Screenshot17] 
+
+Although one of the maps is named "__unsafe__" to reflect it's lower
+data safety setup, it's not going to lose any data just because
+of that configuration. Something has happen to make a cluster server go
+offline quickly before there's a chance of data loss.
 
 #### The code : `my-hazelcast-client` => `MyConfiguration.java`
 
+- [ ] Add text
+
 #### The code : `my-hazelcast-client` => `MyHazelcastClient.java`
+
+- [ ] Add text
 
 #### The code : `my-hazelcast-client` => `bootstrap.yml`
 
+- [ ] Add text
+
+
 ### 12. Kill a Hazelcast Server
 
-- [ ] Add text - screenshot 3
+- [ ] Add text
 
 ### 13. Run Hazelcast Client again
 
-- [ ] Add text - screenshot 3
+![Image of Hazelcast client counting map content again][Screenshot18] 
 
 ### 14. Kill another specific Hazelcast Server
 
-- [ ] Add text - screenshot 3
+- [ ] Add text
 
 ### 15. Run Hazelcast Client yet again
 
-- [ ] Add text - screenshot 3
+![Image of Hazelcast client counting map content for the third time][Screenshot19] 
 
 ### 16. Kill yet another Hazelcast Server
 
-- [ ] Add text - screenshot 3
+- [ ] Add text
 
 ### 17. Run Hazelcast Client one last time
 
-- [ ] Add text - screenshot 3
+![Image of Hazelcast client counting map content for the final time][Screenshot19] 
+
+Surprised ?
+
+- [ ] Mention Mancenter
 
 ## Changes For The Cloud
 
