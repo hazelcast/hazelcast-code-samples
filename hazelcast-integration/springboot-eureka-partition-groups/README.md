@@ -921,11 +921,29 @@ Run the Hazelcast client yet again to count the maps.
 
 ![Image of Hazelcast client counting map content for the final time][Screenshot20] 
 
-
+The "__eurekast_unsafe__" has lost even more data as we'd expect, but there are still all 271 entries in the "__eurekast_safe__".
 
 Surprised ?
 
-- [ ] Mention Mancenter
+The partition group dictates that Hazelcast puts the backups in a different zone from the master.
+That's fine and preserved our data across the loss of both `odd` servers.
+
+Now there are only `even` servers the backups have moved to servers in the **same** zone. 
+That's not as good as using the different zone we wanted, but if there isn't a different
+zone available it's better than nothing. Here it has saved us.
+
+Surprised 2 ?
+
+The "__eurekast_unsafe__" has dropped from 149 to 145 by the loss of the most recent server.
+We've lost 75% of the hosts but not 75% of the data, and that's because it's the partitions
+that are spread across the hosts.
+
+## Hazelcasts Mancenter
+
+We've configured for data safety and use a client to show how data is lost or retained
+depending on the configuration.
+
+If you've the Hazelcast Mancenter, then this is much simpler to follow on the GUI.
 
 ## Changes For The Cloud
 
