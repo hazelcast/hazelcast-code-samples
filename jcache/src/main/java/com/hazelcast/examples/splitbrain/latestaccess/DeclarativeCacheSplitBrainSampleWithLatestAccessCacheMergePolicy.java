@@ -9,7 +9,7 @@ import javax.cache.CacheManager;
  * Declaratively (XML) configured version of `LATEST_ACCESS` cache merge policy based jcache split-brain sample.
  */
 public class DeclarativeCacheSplitBrainSampleWithLatestAccessCacheMergePolicy
-        extends CacheSplitBrainSampleWithLatestAccessCacheMergePolicy {
+        extends AbstractCacheSplitBrainSampleWithLatestAccessCacheMergePolicy {
 
     @Override
     protected Config getConfig() {

@@ -9,6 +9,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.DoubleFlatMapFunction;
 import scala.Tuple2;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import static java.util.Collections.singletonList;
@@ -28,13 +29,14 @@ public class CreateRddFromHazelcast {
         HazelcastSparkContext hazelcastSparkContext = new HazelcastSparkContext(sparkContext);
         HazelcastJavaRDD<String, User> usersRdd = hazelcastSparkContext.fromHazelcastMap("users");
 
-        Double averageAge = usersRdd.flatMapToDouble(new DoubleFlatMapFunction<Tuple2<String, User>>() {
-                                                         @Override
-                                                         public Iterable<Double> call(Tuple2<String, User> entry)
-                                                                 throws Exception {
-                                                             return singletonList((double) entry._2().getAge());
-                                                         }
-                                                     }
+        Double averageAge = usersRdd.flatMapToDouble(
+                new DoubleFlatMapFunction<Tuple2<String, User>>() {
+                    @Override
+                    public Iterator<Double> call(Tuple2<String, User> entry)
+                         throws Exception {
+                     return singletonList((double) entry._2().getAge()).iterator();
+                    }
+                }
         ).mean();
         System.out.println("Average user age = " + averageAge);
     }
