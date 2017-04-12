@@ -16,15 +16,11 @@ import static com.hazelcast.examples.helper.CommonUtils.assertEquals;
 import static com.hazelcast.examples.helper.CommonUtils.assertOpenEventually;
 
 /**
- * <p>
  * Base class for jcache split-brain sample based on `PUT_IF_ABSENT` cache merge policy.
- * </p>
  *
- * <p>
  * `PASS_THROUGH` cache merge policy merges cache entry from source to destination directly.
- * </p>
  */
-abstract class CacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy extends AbstractCacheSplitBrainSample {
+abstract class AbstractCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
     private static final String CACHE_NAME = BASE_CACHE_NAME + "-putifabsent";
 
@@ -49,7 +45,7 @@ abstract class CacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy extends Abst
             Cache<String, String> cache1 = getCache(CACHE_NAME, cacheManager1);
             Cache<String, String> cache2 = getCache(CACHE_NAME, cacheManager2);
 
-            // TODO We assume that until here and also while doing get/put, cluster is still split
+            // TODO: we assume that until here and also while doing get/put, cluster is still split
             // this assumptions seems fragile due to time sensitivity
 
             cache1.put("key1", "PutIfAbsentValue1");

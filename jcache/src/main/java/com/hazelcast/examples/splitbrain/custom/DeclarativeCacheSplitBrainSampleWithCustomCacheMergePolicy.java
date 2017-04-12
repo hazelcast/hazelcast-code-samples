@@ -9,7 +9,7 @@ import javax.cache.CacheManager;
  * Declaratively (XML) configured version of custom cache merge policy based jcache split-brain sample.
  */
 public class DeclarativeCacheSplitBrainSampleWithCustomCacheMergePolicy
-        extends CacheSplitBrainSampleWithCustomCacheMergePolicy {
+        extends AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy {
 
     @Override
     protected Config getConfig() {
