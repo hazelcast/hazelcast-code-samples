@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>war</packaging>
+
+    <groupId>com.hazelcast</groupId>
+    <artifactId>dynacache-client</artifactId>
+    <name>Hazelcast Dynacache Integration Example</name>
+    <description>Hazelcast integration example for WebSphere Liberty Dynacache</description>
+
+    <parent>
+        <groupId>com.hazelcast.samples</groupId>
+        <artifactId>hazelcast-integration</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.websphere.appserver.api</groupId>
+            <artifactId>com.ibm.websphere.appserver.api.basics</artifactId>
+            <version>1.2.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.tools.target</groupId>
+            <artifactId>was-liberty</artifactId>
+            <version>8.5.x.6</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <packagingExcludes>
+                            WEB-INF/lib/hazelcast-all-*.jar,
+                            WEB-INF/lib/helper-*.jar
+                        </packagingExcludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>wasdev</id>
+            <url>http://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/maven/repository/</url>
+        </repository>
+    </repositories>
+</project>

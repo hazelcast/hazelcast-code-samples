@@ -11,7 +11,7 @@ import javax.cache.CacheManager;
  * Programmatically configured version of `LATEST_ACCESS` cache merge policy based jcache split-brain sample.
  */
 public class ProgrammaticCacheSplitBrainSampleWithLatestAccessCacheMergePolicy
-        extends CacheSplitBrainSampleWithLatestAccessCacheMergePolicy {
+        extends AbstractCacheSplitBrainSampleWithLatestAccessCacheMergePolicy {
 
     @Override
     protected Config getConfig() {
