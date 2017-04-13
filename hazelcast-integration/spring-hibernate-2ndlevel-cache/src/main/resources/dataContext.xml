@@ -19,7 +19,6 @@
     <!-- Session Factory Declaration -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean" scope="singleton">
         <property name="dataSource" ref="dataSource"/>
-        <property name="cacheRegionFactory" ref="regionFactory"/>
         <property name="mappingResources">
             <list>
                 <value>Customer.hbm.xml</value>
@@ -29,6 +28,8 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.cache.region.factory_class">com.hazelcast.hibernate.HazelcastCacheRegionFactory</prop>
+                <prop key="hibernate.cache.hazelcast.instance_name">${hz.instance.name}</prop>
             </props>
         </property>
     </bean>

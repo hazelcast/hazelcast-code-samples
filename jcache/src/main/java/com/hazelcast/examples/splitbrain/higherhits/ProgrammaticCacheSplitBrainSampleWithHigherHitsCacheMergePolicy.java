@@ -11,7 +11,7 @@ import javax.cache.CacheManager;
  * Programmatically configured version of `HIGHER_HITS` cache merge policy based jcache split-brain sample.
  */
 public class ProgrammaticCacheSplitBrainSampleWithHigherHitsCacheMergePolicy
-        extends CacheSplitBrainSampleWithHigherHitsCacheMergePolicy {
+        extends AbstractCacheSplitBrainSampleWithHigherHitsCacheMergePolicy {
 
     @Override
     protected Config getConfig() {

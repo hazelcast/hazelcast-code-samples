@@ -19,15 +19,11 @@ import static com.hazelcast.examples.helper.CommonUtils.assertTrue;
 import static com.hazelcast.examples.helper.HazelcastUtils.generateKeyOwnedBy;
 
 /**
- * <p>
  * Base class for jcache split-brain sample based on `custom cache merge policy.
- * </p>
  *
- * <p>
  * Custom cache merge policy implements {@link com.hazelcast.cache.CacheMergePolicy} and handles its own logic.
- * </p>
  */
-abstract class CacheSplitBrainSampleWithCustomCacheMergePolicy extends AbstractCacheSplitBrainSample {
+abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
     private static final String CACHE_NAME = BASE_CACHE_NAME + "-custom";
 
@@ -52,7 +48,7 @@ abstract class CacheSplitBrainSampleWithCustomCacheMergePolicy extends AbstractC
             Cache<String, Object> cache1 = getCache(CACHE_NAME, cacheManager1);
             Cache<String, Object> cache2 = getCache(CACHE_NAME, cacheManager2);
 
-            // TODO We assume that until here and also while doing get/put, cluster is still split
+            // TODO: we assume that until here and also while doing get/put, cluster is still split
             // this assumptions seems fragile due to time sensitivity
 
             String key = generateKeyOwnedBy(h1);

@@ -27,18 +27,6 @@ public abstract class AbstractCacheSplitBrainSample {
 
     protected static final String BASE_CACHE_NAME = "my-cache";
 
-    protected static void closeConnectionBetween(HazelcastInstance h1, HazelcastInstance h2) {
-        if (h1 == null || h2 == null) {
-            return;
-        }
-        Node n1 = getNode(h1);
-        Node n2 = getNode(h2);
-        if (n1 != null && n2 != null) {
-            n1.clusterService.removeAddress(n2.address, null);
-            n2.clusterService.removeAddress(n1.address, null);
-        }
-    }
-
     protected static Config newProgrammaticConfig() {
         Config config = new Config();
         config.setProperty("hazelcast.merge.first.run.delay.seconds", "5");
@@ -49,8 +37,7 @@ public abstract class AbstractCacheSplitBrainSample {
 
     protected static Config newDeclarativeConfig() {
         try {
-            Config config =
-                    new XmlConfigBuilder("jcache/src/main/resources/hazelcast-splitbrain.xml").build();
+            Config config = new XmlConfigBuilder("jcache/src/main/resources/hazelcast-splitbrain.xml").build();
             config.setProperty("hazelcast.merge.first.run.delay.seconds", "5");
             config.setProperty("hazelcast.merge.next.run.delay.seconds", "3");
             config.getGroupConfig().setName(generateRandomString(10));
@@ -93,7 +80,6 @@ public abstract class AbstractCacheSplitBrainSample {
 
         @Override
         public void memberAdded(MembershipEvent membershipEvent) {
-
         }
 
         @Override
@@ -119,5 +105,17 @@ public abstract class AbstractCacheSplitBrainSample {
         assertClusterSizeEventually(1, h2);
 
         return lifeCycleListener.latch;
+    }
+
+    private static void closeConnectionBetween(HazelcastInstance h1, HazelcastInstance h2) {
+        if (h1 == null || h2 == null) {
+            return;
+        }
+        Node n1 = getNode(h1);
+        Node n2 = getNode(h2);
+        if (n1 != null && n2 != null) {
+            n1.clusterService.suspectMember(n2.address, null, true);
+            n2.clusterService.suspectMember(n1.address, null, true);
+        }
     }
 }

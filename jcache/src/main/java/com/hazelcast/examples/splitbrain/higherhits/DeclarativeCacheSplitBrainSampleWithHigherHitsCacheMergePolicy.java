@@ -9,7 +9,7 @@ import javax.cache.CacheManager;
  * Declaratively (XML) configured version of `HIGHER_HITS` cache merge policy based jcache split-brain sample.
  */
 public class DeclarativeCacheSplitBrainSampleWithHigherHitsCacheMergePolicy
-        extends CacheSplitBrainSampleWithHigherHitsCacheMergePolicy {
+        extends AbstractCacheSplitBrainSampleWithHigherHitsCacheMergePolicy {
 
     @Override
     protected Config getConfig() {

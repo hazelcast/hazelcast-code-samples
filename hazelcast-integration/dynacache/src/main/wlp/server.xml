@@ -1,0 +1,23 @@
+<server>
+
+    <featureManager>
+        <feature>servlet-3.1</feature>
+        <feature>distributedMap-1.0</feature>
+        <feature>webCache-1.0</feature>
+        <!-- hazelcast-dynacache depends on this -->
+        <feature>javaee-7.0</feature>
+        <feature>hazelcast-dynacache</feature>
+    </featureManager>
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="9080">
+        <tcpOptions soReuseAddr="true"/>
+    </httpEndpoint>
+
+    <application name="servlet" context-root="/servlet" location="${appLocation}" type="war"/>
+
+    <logging traceSpecification="com.hazelcast.*=finest=enabled"  traceFileName="trace.log"
+             maxFileSize="20"  maxFiles="20" traceFormat="BASIC" />
+
+</server>

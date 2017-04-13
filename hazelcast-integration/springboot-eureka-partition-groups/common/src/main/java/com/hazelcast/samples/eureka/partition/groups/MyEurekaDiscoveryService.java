@@ -89,7 +89,7 @@ public class MyEurekaDiscoveryService implements DiscoveryService {
 									Constants.HAZELCAST_ZONE_METADATA_KEY + YML_SEPARATOR + hostPort);
 
 					if (zone!=null) {
-						log.error("discoverLocalMetadata(): found zone '{}' for '{}'",
+						log.info("discoverLocalMetadata(): found zone '{}' for '{}'",
 								zone, hostPort);
 						result.put(PARTITION_GROUP_ZONE, zone);
 					}

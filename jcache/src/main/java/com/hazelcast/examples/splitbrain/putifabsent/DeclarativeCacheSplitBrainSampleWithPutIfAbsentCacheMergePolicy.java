@@ -9,7 +9,7 @@ import javax.cache.CacheManager;
  * Declaratively (XML) configured version of `PUT_IF_ABSENT` cache merge policy based jcache split-brain sample.
  */
 public class DeclarativeCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy
-        extends CacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy {
+        extends AbstractCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy {
 
     @Override
     protected Config getConfig() {

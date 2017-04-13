@@ -16,16 +16,12 @@ import static com.hazelcast.examples.helper.CommonUtils.assertEquals;
 import static com.hazelcast.examples.helper.CommonUtils.assertOpenEventually;
 
 /**
- * <p>
  * Base class for jcache split-brain sample based on `HIGHER_HITS` cache merge policy.
- * </p>
  *
- * <p>
  * `HIGHER_HITS` cache merge policy merges cache entry from source to destination cache
  * if source entry has more hits than the destination one.
- * </p>
  */
-abstract class CacheSplitBrainSampleWithHigherHitsCacheMergePolicy extends AbstractCacheSplitBrainSample {
+abstract class AbstractCacheSplitBrainSampleWithHigherHitsCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
     private static final String CACHE_NAME = BASE_CACHE_NAME + "-higherhits";
 
@@ -50,20 +46,20 @@ abstract class CacheSplitBrainSampleWithHigherHitsCacheMergePolicy extends Abstr
             Cache<String, String> cache1 = getCache(CACHE_NAME, cacheManager1);
             Cache<String, String> cache2 = getCache(CACHE_NAME, cacheManager2);
 
-            // TODO We assume that until here and also while doing get/put, cluster is still split
+            // TODO: we assume that until here and also while doing get/put, cluster is still split
             // this assumptions seems fragile due to time sensitivity
 
             cache1.put("key1", "higherHitsValue");
             cache1.put("key2", "value2");
 
-            // Increase hits number
+            // increase hits number
             assertEquals("higherHitsValue", cache1.get("key1"));
             assertEquals("higherHitsValue", cache1.get("key1"));
 
             cache2.put("key1", "value1");
             cache2.put("key2", "higherHitsValue2");
 
-            // Increase hits number
+            // increase hits number
             assertEquals("higherHitsValue2", cache2.get("key2"));
             assertEquals("higherHitsValue2", cache2.get("key2"));
 
@@ -78,5 +74,4 @@ abstract class CacheSplitBrainSampleWithHigherHitsCacheMergePolicy extends Abstr
             Hazelcast.shutdownAll();
         }
     }
-
 }

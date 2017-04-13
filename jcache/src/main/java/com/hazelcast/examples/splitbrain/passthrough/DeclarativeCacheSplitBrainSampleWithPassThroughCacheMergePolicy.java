@@ -9,7 +9,7 @@ import javax.cache.CacheManager;
  * Declaratively (XML) configured version of `PASS_THROUGH` cache merge policy based jcache split-brain sample.
  */
 public class DeclarativeCacheSplitBrainSampleWithPassThroughCacheMergePolicy
-        extends CacheSplitBrainSampleWithPassThroughCacheMergePolicy {
+        extends AbstractCacheSplitBrainSampleWithPassThroughCacheMergePolicy {
 
     @Override
     protected Config getConfig() {
