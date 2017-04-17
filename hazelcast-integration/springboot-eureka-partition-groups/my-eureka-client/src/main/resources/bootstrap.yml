@@ -1,0 +1,12 @@
+eureka: 
+  client:
+    # Clients don't need to record themselves as running
+    registerWithEureka: false
+    serviceUrl:
+      # Eureka server address
+      defaultZone: http://localhost:8761/eureka/
+
+# Pick a random port, as this client is just transient
+server:
+  port: 0
+      

@@ -6,6 +6,8 @@
 	Implementation of hibernate 2nd level cache integration of hazelcast as employee managing application.
 - <h3>jca-ra</h3>
 	Implementation of jca resource adapter integration of hazelcast.
+- <h3>pcf-integration</h3>
+    A Spring Boot application that uses Hazelcast Client to communicate with a Hazelcast Cluster that is deployed on a PCF installation using [Hazelcast for PCF](https://network.pivotal.io/hazelcast).
 - <h3>spring-cache-manager</h3>
 	Implementation of spring cache provider integration of hazelcast as client-server application.
 - <h3>spring-configuration</h3>
@@ -24,5 +26,6 @@
 	Implementation of Spark Connector for Hazelcast.
 - <h3>springboot-http</h3>
 	Spring Boot style HTTP session replication, using embedded web container in standalone Jar.
-- <h3>pcf-integration</h3>
-    A Spring Boot application that uses Hazelcast Client to communicate with a Hazelcast Cluster that is deployed on a PCF installation using [Hazelcast for PCF](https://network.pivotal.io/hazelcast).
+- <h3>springboot-eureka-partition-groups</h3>
+	Discovery using Eureka as a node registry, and also to configure data safety via partition groups
+    
