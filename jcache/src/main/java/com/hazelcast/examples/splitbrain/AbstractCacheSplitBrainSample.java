@@ -114,8 +114,8 @@ public abstract class AbstractCacheSplitBrainSample {
         Node n1 = getNode(h1);
         Node n2 = getNode(h2);
         if (n1 != null && n2 != null) {
-            n1.clusterService.suspectMember(n2.address, null, true);
-            n2.clusterService.suspectMember(n1.address, null, true);
+            n1.clusterService.suspectMember(n2.getLocalMember(), null, true);
+            n2.clusterService.suspectMember(n1.getLocalMember(), null, true);
         }
     }
 }
