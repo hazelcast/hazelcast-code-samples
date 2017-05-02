@@ -191,7 +191,7 @@ We have named the solution *Eurekast*, as a portmanteau of _Eureka_ and _Hazelca
 In this example, the project structure is 5 modules:
 
 ```
-├── common/
+├── my-eureka-common/
 ├── my-eureka-server/
 ├── my-eureka-client/
 ├── my-hazelcast-server/
@@ -203,10 +203,10 @@ In this example, the project structure is 5 modules:
 We shall describe each module individually before we do the follow-along example of their
 usage.
 
-Apart from the `common` module, the main four modules are all Spring Boot executable *jar* files,
+Apart from the `my-eureka-common` module, the main four modules are all Spring Boot executable *jar* files,
 using configuration specified in their `bootstrap.yml` files.
 
-### `common`
+### `my-eureka-common`
 
 This module contains common code used by all the others.
 
@@ -518,7 +518,7 @@ Here it's all Java, and we have selected instead a discovery plug-in to
 do the work.
 
 Spring Boot will inject a `DiscoveryServiceProvider` bean, which is
-set up in the `common` module.
+set up in the `my-eureka-common` module.
 
 2. Zones
 
@@ -539,9 +539,9 @@ The "__eurekast_safe__" map has backups, so it reasonably insulated from JVM fai
 
 The "__eurekast_unsafe__" map has no backups, so is not insulated from JVM failure.
 
-#### The code : `common` => `MyEurekaDiscoveryService.java`
+#### The code : `my-eureka-common` => `MyEurekaDiscoveryService.java`
 
-In the `common` module the `MyDiscoveryServiceProvider` always returns
+In the `my-eureka-common` module the `MyDiscoveryServiceProvider` always returns
 the Spring `@Bean` for the `MyEurekaDiscoveryService` class.
 
 This class does all the hard work in this example so is worth a very
@@ -794,7 +794,7 @@ All really that is different from normal is discovery.
 We provide the client's configuration with a discovery service
 provisioning mechanism.
 
-This is the `MyDiscoveryServiceProvider` class from the `common`
+This is the `MyDiscoveryServiceProvider` class from the `my-eureka-common`
 module, which always returns a Spring bean `MyEurekaDiscoveryService`.
 
 In other words, the Hazelcast client finds the Hazelcast servers

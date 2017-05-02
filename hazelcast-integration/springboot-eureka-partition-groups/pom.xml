@@ -1,77 +1,81 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<artifactId>hazelcast-integration</artifactId>
-		<groupId>com.hazelcast.samples</groupId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <artifactId>hazelcast-integration</artifactId>
+        <groupId>com.hazelcast.samples</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
-	<groupId>com.hazelcast.samples.eureka.partition.groups</groupId>
-	<artifactId>springboot-eureka-partition-groups</artifactId>
-	<packaging>pom</packaging>
+    <groupId>com.hazelcast.samples.eureka.partition.groups</groupId>
+    <artifactId>springboot-eureka-partition-groups</artifactId>
+    <packaging>pom</packaging>
 
-	<name>Partition Groups with Eureka</name>
-	<description>Project POM</description>
+    <name>Partition Groups with Eureka</name>
+    <description>Project POM</description>
 
-	<properties>
-		<hazelcast.version>3.8</hazelcast.version>
-		<java.version>1.8</java.version>
-		<spring-boot.version>1.5.2.RELEASE</spring-boot.version>
-		<spring-cloud.version>Camden.SR5</spring-cloud.version>
-	</properties>
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-	<modules>
-		<module>common</module>
+        <hazelcast.version>3.8</hazelcast.version>
+        <java.version>1.8</java.version>
+        <spring-boot.version>1.5.2.RELEASE</spring-boot.version>
+        <spring-cloud.version>Camden.SR5</spring-cloud.version>
+    </properties>
 
-		<!-- All modules below depend on common module but not on each other -->
-		<module>my-eureka-server</module>
-		<module>my-eureka-client</module>
-		<module>my-hazelcast-server</module>
-		<module>my-hazelcast-client</module>
-	</modules>
+    <modules>
+        <module>my-eureka-common</module>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast</artifactId>
-		</dependency>
+        <!-- All modules below depend on the my-eureka-common module but not on each other -->
+        <module>my-eureka-server</module>
+        <module>my-eureka-client</module>
+        <module>my-hazelcast-server</module>
+        <module>my-hazelcast-client</module>
+    </modules>
 
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.hazelcast</groupId>
-				<artifactId>hazelcast-client</artifactId>
-				<version>${hazelcast.version}</version>
-			</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
 
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-parent</artifactId>
-				<type>pom</type>
-				<scope>import</scope>
-				<version>${spring-boot.version}</version>
-			</dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-client</artifactId>
+                <version>${hazelcast.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-parent</artifactId>
-				<type>pom</type>
-				<scope>import</scope>
-				<version>${spring-cloud.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-parent</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
