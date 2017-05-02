@@ -13,9 +13,7 @@ import java.util.Date;
 public class SubscribedMember {
 
     private static final ILogger LOGGER = Logger.getLogger(SubscribedMember.class);
-    private static final StripedExecutor EXECUTOR = new StripedExecutor(
-            LOGGER, "listeners", null, 10, 10000
-    );
+    private static final StripedExecutor EXECUTOR = new StripedExecutor(LOGGER, "listeners", 10, 10000);
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
