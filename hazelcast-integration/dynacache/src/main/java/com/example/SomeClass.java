@@ -2,6 +2,7 @@ package com.example;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class SomeClass implements Serializable {
 
     public static final long serialVersionUID = 424242424233L;
@@ -27,9 +28,9 @@ public class SomeClass implements Serializable {
 
     @Override
     public String toString() {
-        return "SomeClass{" +
-                "field1='" + field1 + '\'' +
-                ", field2='" + field2 + '\'' +
-                '}';
+        return "SomeClass{"
+                + "field1='" + field1 + '\''
+                + ", field2='" + field2 + '\''
+                + '}';
     }
 }
