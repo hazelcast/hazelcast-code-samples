@@ -66,7 +66,8 @@ public class FastAggregationsDemo {
         Predicate<String, Employee> companyPredicate = new CompanyPredicate("Hazelcast");
 
         // execute the aggregation and print the result
-        double avgSalary = employees.aggregate(Aggregators.<Map.Entry<String, Employee>>integerAvg("salaryPerMonth"), companyPredicate);
+        double avgSalary = employees
+                .aggregate(Aggregators.<Map.Entry<String, Employee>>integerAvg("salaryPerMonth"), companyPredicate);
         System.out.println("Hazelcast average salary: " + avgSalary);
         System.out.println("\n");
     }

@@ -1,5 +1,4 @@
 import com.hazelcast.aggregation.Aggregator;
-import com.hazelcast.aggregation.impl.IntegerAverageAggregator;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
