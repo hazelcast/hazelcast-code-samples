@@ -1,4 +1,3 @@
-import com.hazelcast.core.ExecutionCallback;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -22,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @see IMap#executeOnKey(Object, EntryProcessor)
  * @see IMap#submitToKey(Object, EntryProcessor)
- * @see IMap#submitToKey(Object, EntryProcessor, ExecutionCallback)
+ * @see IMap#submitToKey(Object, EntryProcessor, com.hazelcast.core.ExecutionCallback)
  */
 public class OffloadableEntryProcessorDemo {
 
@@ -49,7 +48,6 @@ public class OffloadableEntryProcessorDemo {
         // EntryProcessor.process() will run on partition thread
         partitionThread = (String) employees.executeOnKey("John", new OrdinaryEntryProcessor());
         assertTrue(partitionThread.contains("partition-operation.thread"));
-
 
         Hazelcast.shutdownAll();
     }
@@ -80,7 +78,7 @@ public class OffloadableEntryProcessorDemo {
      *
      * @see IMap#executeOnKey(Object, EntryProcessor)
      * @see IMap#submitToKey(Object, EntryProcessor)
-     * @see IMap#submitToKey(Object, EntryProcessor, ExecutionCallback)
+     * @see IMap#submitToKey(Object, EntryProcessor, com.hazelcast.core.ExecutionCallback)
      */
     private static class OffloadableEntryProcessor extends AbstractEntryProcessor<String, Employee>
             implements Offloadable {
@@ -122,7 +120,7 @@ public class OffloadableEntryProcessorDemo {
      *
      * @see IMap#executeOnKey(Object, EntryProcessor)
      * @see IMap#submitToKey(Object, EntryProcessor)
-     * @see IMap#submitToKey(Object, EntryProcessor, ExecutionCallback)
+     * @see IMap#submitToKey(Object, EntryProcessor, com.hazelcast.core.ExecutionCallback)
      */
     private static class OffloadableReadOnlyEntryProcessor implements EntryProcessor<String, Employee>,
             Offloadable, ReadOnly {
@@ -163,7 +161,7 @@ public class OffloadableEntryProcessorDemo {
      *
      * @see IMap#executeOnKey(Object, EntryProcessor)
      * @see IMap#submitToKey(Object, EntryProcessor)
-     * @see IMap#submitToKey(Object, EntryProcessor, ExecutionCallback)
+     * @see IMap#submitToKey(Object, EntryProcessor, com.hazelcast.core.ExecutionCallback)
      */
     private static class ReadOnlyEntryProcessor implements EntryProcessor<String, Employee>,
             ReadOnly {
