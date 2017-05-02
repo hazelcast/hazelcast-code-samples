@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>my-eureka-common</artifactId>
             <version>${project.version}</version>
         </dependency>
 
