@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+        <Appenders>
+    	    <Console name="ConsoleAllRed" target="SYSTEM_OUT">
+                        <PatternLayout pattern="%red{%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n}"/>
+	        </Console>
+    	    <Console name="ConsoleMostlyRed" target="SYSTEM_OUT">
+                        <PatternLayout pattern="%red{%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}} - %cyan{%msg%n}"/>
+	        </Console>
+        </Appenders>
+
+        <Loggers>
+            <Logger name="com.hazelcast.samples.tricolor" level="info" additivity="false">
+                <AppenderRef ref="ConsoleAllRed"/>
+        	</Logger>
+	        <Root level="error">
+    			<AppenderRef ref="ConsoleMostlyRed"/>
+        	</Root>
+        </Loggers>
+</Configuration>
