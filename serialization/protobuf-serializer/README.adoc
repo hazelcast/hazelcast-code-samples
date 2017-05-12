@@ -1,0 +1,57 @@
+= Google ProtoBuf with Hazelcat Example
+Viktor Gamov <viktor@hazelcast.com>, © 2017 Hazelcast, Inc.
+2017-05-17
+:revdate: 2017-05-17 8:34:42 -0600
+:linkattrs:
+:ast: &ast;
+:y: &#10003;
+:n: &#10008;
+:y: icon:check-sign[role="green"]
+:n: icon:check-minus[role="red"]
+:c: icon:file-text-alt[role="blue"]
+:toc: auto
+:toc-placement: auto
+:toc-position: right
+:toc-title: Table of content
+:toclevels: 3
+:idprefix:
+:idseparator: -
+:sectanchors:
+:icons: font
+:source-highlighter: highlight.js
+:highlightjs-theme: idea
+:experimental:
+
+This sample project demonstrates integration Google Protobuf framework with Hazelcast serialization.
+
+toc::[]
+
+== Project layout
+
+----
+.
+├── README.adoc
+├── generate-source.sh
+├── pom.xml
+├── runMember.sh
+├── src
+│   └── main
+│       ├── java           # <1>
+│       ├── protobuf       # <2>
+│       └── resources      # <3>
+└── target
+    ├── generated-sources
+    ├── lib
+    │   ├── hazelcast-all-3.9-SNAPSHOT.jar
+    │   └── protobuf-java-2.6.1.jar
+    └── protobuf-serializer-0.1-SNAPSHOT.jar
+----
+<1> Java sources: Hazelcast member, custom serializers
+<2> Protobuf sources: `Person.proto`
+<3> Application resources: `hazelcast.xml`, etc
+
+== How to run
+
+- run `generate-sources.sh` to compile `.proto` located in `src/main/protonuf` to java classes in `target/generated-sources` folder
+- run `runMember.sh` to start instance of Hazelcast member and execute some sample queries. 
+This demonstrates how to save protobuf serialized objects in Hazelcast and how Hazelcast can deserialize it for queries.
