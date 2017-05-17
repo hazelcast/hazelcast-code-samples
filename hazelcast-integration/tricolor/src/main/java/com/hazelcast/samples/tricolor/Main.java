@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
  * <p>
  * Here we do this so they can have different loggers, using
  * different colours. This might be a thing you do to make
- * testing client-server operations easies for humans to interpret
+ * testing client-server operations easier for humans to interpret
  * the results.
  * <p>
  * Another use might be to test different versions, you could
