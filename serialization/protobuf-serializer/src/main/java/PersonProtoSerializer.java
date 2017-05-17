@@ -12,6 +12,7 @@ import java.io.IOException;
  *         Twitter: @gamussa
  */
 public class PersonProtoSerializer implements StreamSerializer<PersonProtos.Person> {
+
     @Override
     public void write(ObjectDataOutput out, PersonProtos.Person person) throws IOException {
         out.writeByteArray(person.toByteArray());
@@ -29,6 +30,5 @@ public class PersonProtoSerializer implements StreamSerializer<PersonProtos.Pers
 
     @Override
     public void destroy() {
-
     }
 }

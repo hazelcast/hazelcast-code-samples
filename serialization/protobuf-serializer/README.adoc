@@ -52,6 +52,6 @@ toc::[]
 
 == How to run
 
-- run `generate-sources.sh` to compile `.proto` located in `src/main/protonuf` to java classes in `target/generated-sources` folder
+- run `generate-sources.sh` to compile `.proto` located in `src/main/protobuf` to java classes in `target/generated-sources` folder
 - run `runMember.sh` to start instance of Hazelcast member and execute some sample queries. 
 This demonstrates how to save protobuf serialized objects in Hazelcast and how Hazelcast can deserialize it for queries.

@@ -1,6 +1,5 @@
 import com.hazelcast.config.Config;
 import com.hazelcast.config.SerializerConfig;
-import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.SqlPredicate;
@@ -16,20 +15,21 @@ import static com.hazelcast.serialization.PersonProtos.Person;
  *         Twitter: @gamussa
  */
 public class Member {
+
     public static void main(String[] args) {
-        Config config = new Config();
-
         // configure hazelcast serializers to use provided serializer for protobuf
-        final SerializerConfig personProtoSerializerConfig = new SerializerConfig();
-        personProtoSerializerConfig.setTypeClass(Person.class);
-        personProtoSerializerConfig.setImplementation(new PersonProtoSerializer());
-        config.getSerializationConfig().addSerializerConfig(personProtoSerializerConfig);
-        // end serialization config
+        SerializerConfig personProtoSerializerConfig = new SerializerConfig()
+                .setTypeClass(Person.class)
+                .setImplementation(new PersonProtoSerializer());
 
-        // uncomment following line if you wish to use xml config instead of programmatic
-        //Config config = new XmlConfigBuilder().build();
-        final HazelcastInstance hazelcastInstance = newHazelcastInstance(config);
-        final IMap<Integer, Person> personsMap = hazelcastInstance.getMap("person");
+        Config config = new Config();
+        config.getSerializationConfig().addSerializerConfig(personProtoSerializerConfig);
+
+        // uncomment the following line if you wish to use XML config instead of programmatic configuration
+        // config = new com.hazelcast.config.XmlConfigBuilder().build();
+
+        HazelcastInstance hazelcastInstance = newHazelcastInstance(config);
+        IMap<Integer, Person> personsMap = hazelcastInstance.getMap("person");
         populate(personsMap);
 
         // test member-side serialization
@@ -41,9 +41,10 @@ public class Member {
     }
 
     private static void populate(IMap<Integer, Person> personsMap) {
-        final Person person1 = Person.newBuilder().setId(1).setEmail("dude@hazelcast.com").setName("Dude").build();
-        final Person person2 = Person.newBuilder().setId(2).setEmail("sales@hazelcast.com").setName("John Appleseed").build();
-        final Person person3 = Person.newBuilder().setId(3).setEmail("support@hazelcast.com").setName("John Support").build();
+        Person person1 = Person.newBuilder().setId(1).setEmail("dude@hazelcast.com").setName("Dude").build();
+        Person person2 = Person.newBuilder().setId(2).setEmail("sales@hazelcast.com").setName("John Appleseed").build();
+        Person person3 = Person.newBuilder().setId(3).setEmail("support@hazelcast.com").setName("John Support").build();
+
         personsMap.set(person1.getId(), person1);
         personsMap.set(person2.getId(), person2);
         personsMap.set(person3.getId(), person3);
