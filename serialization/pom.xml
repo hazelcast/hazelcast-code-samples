@@ -33,6 +33,7 @@
         <module>kryo-serializer</module>
         <module>managed-context</module>
         <module>portable</module>
+        <module>protobuf-serializer</module>
         <module>serializable</module>
         <module>stream-serializer</module>
         <module>user-context</module>
