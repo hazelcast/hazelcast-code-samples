@@ -1,0 +1,37 @@
+version: '2'
+services:
+  # client app far jar image (client code and dependencies)
+  hazelcast-client:
+    image: hazelcast_client_app
+    depends_on:
+        - hazelcast
+    volumes:
+        - ../resources:/configFolder
+    environment:
+        - JAVA_OPTS=-Dhazelcast.client.config=/configFolder/hazelcast-client.xml -Dhazelcast.member.address=hazelcast -Dgroup.name=hz-compose -Dgroup.password=s3crEt
+
+  # hazelcast imdg
+  hazelcast:
+    image: hazelcast/hazelcast
+    volumes:
+        - ../resources:/configFolder
+    environment:
+        - JAVA_OPTS=-Dhazelcast.config=/configFolder/hazelcast.xml -Dhazelcast.mancenter.url=http://mancenter:8080/mancenter -Dgroup.name=hz-compose -Dgroup.password=s3crEt
+#        ports:
+#            - 5701:5701
+    links:
+        - "management-center:mancenter"
+
+  #management center
+  management-center:
+    image: hazelcast/management-center
+    # persisting mancenter users db folder to local disk
+    volumes:
+        - ~/mancenter3.8:/mancenter-3.8
+    environment:
+        - MANCENTER_DATA=/mancenter-3.8
+        # enable REST interface on management center
+        # http://docs.hazelcast.org/docs/latest-development/manual/html/Management/Clustered_REST_via_Management_Center.html
+        - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
+    ports:
+        - 8080:8080

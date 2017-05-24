@@ -41,6 +41,7 @@
         <module>amazon-ec2-vagrant-chef</module>
         <module>amazon-elasticbeanstalk</module>
         <module>dynacache</module>
+        <module>docker-compose</module>
         <module>filter-based-session-replication</module>
         <module>hibernate-2ndlevel-cache</module>
         <module>hibernate-jpa-2ndlevel-cache</module>
