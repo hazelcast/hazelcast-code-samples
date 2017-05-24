@@ -1,0 +1,216 @@
+= How To Scale Hazelcast Cluster with Docker Compose
+Viktor Gamov
+2017-06-08 13:11
+:imagesdir: ../images
+:icons:
+:keywords:
+:toc:
+ifndef::awestruct[]
+:awestruct-layout: post
+:awestruct-tags: []
+:idprefix:
+:idseparator: -
+:awestruct-draft: false
+endif::awestruct[]
+
+image:IMDG_orange_logo_square.png[align="center"]  
+image:Compose.png[align="center",width=20%]
+
+.TL;DR
+During webinar about «Distributed Caching for you next Node.js project» footnote:[https://hazelcast.com/resources/distributed-caching-next-node-js-project/] I was asked if we provide examples of running Hazelcast with Compose or Swarm.
+Now you have it!
+Full source code published in `hazelcast/hazelcast-code-samples` repository footnote:[https://github.com/hazelcast/hazelcast-code-samples/hazelcast-integration/docker-compose]
+
+toc::[]
+
+NOTE: **Disclaimer:** It's not an introduction to `docker-compose`. 
+To learn basic steps of `docker-compose`, please, refer to official `docker-compose` «getting started guide» footnote:[https://docs.docker.com/compose/gettingstarted/]
+
+== Into
+
+From the perspective of containerization and cloud deployment, Hazelcast IMDG is a perfect candidate.
+
+- Elastically Scalable
++
+just add more servers, and they form the cluster automatically and contribute their memory to the «shared memory».
+- Performs at in-memory transaction speeds
++
+- Highly Available 
++
+can deploy in backup pairs or https://hazelcast.com/products/wan-replication/[even WAN replicated]
+- Fault Tolerant
++
+no single point of failure
+- https://hazelcast.org/plugins/?type=cloud-deployment[Ready for Cloud]
+
+.Matrix Reloaded, 2003 footnote:[http://www.imdb.com/title/tt0234215/]
+image::scale_out_asmith.png[align="center"]
+
+I've been working with few clients footnote:[https://hazelcast.com/services/consulting/] who have embraced containerization of their IMDG deployments.
+And in this blog post, I explore how to use Docker Compose to scale Hazelcast IMDG cluster. 
+Additionally, I will use  https://hazelcast.com/products/management-center/[Management Center] monitor IMDG cluster state.
+
+== Getting Docker images
+
+In this demonstration, I will be using official Hazelcast IMDG Docker images.
+My demo application will contain three components:
+
+- Hazelcast IMDG cluster
+- Hazelcast Management Center
+- Client Application
+
+I will build docker image for my client app that will read and write to the Hazelcast IMDG cluster.
+
+=== Official stuff 
+
+You can find https://hub.docker.com/u/hazelcast/[officially supported images] in Docker Hub.
+I will be using:
+
+- https://hub.docker.com/r/hazelcast/hazelcast/[hazelcast/hazelcast] - OSS bits of Hazelcast
+- https://hub.docker.com/r/hazelcast/management-center/[hazelcast/management-center] - Management Center `.war` (free with 2 Hazelcast nodes)
+
+=== Client app
+
+A client app is a simple hazelcast client 
+
+[source,java]
+----
+public class MyClient {
+    public static void main(String[] args) throws InterruptedException {
+        
+        ClientConfig clientConfig = new XmlClientConfigBuilder().build();   // <1>
+        final HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig); // <2>
+
+        System.out.println(clientConfig.toString());
+
+        IQueue<String> queue = client.getQueue("queue");
+        queue.put("Hello!");    // <3>
+        System.out.println("Message sent by Hazelcast Client!");
+
+        HazelcastClient.shutdownAll();
+    }
+}
+----
+<1> configured with `hazelcast-client.xml`
+<2> connects to the cluster
+<3> sends message to the IQueue
+
+=== Building client app Docker image
+
+In this example, to build docker image from «fat» jar, I use Spotify's `docker-maven-plugin` footnote:[https://github.com/spotify/docker-maven-plugin].
+
+.Maven snippet for generation fat jar and build a Docker image
+[source,xml]
+----
+<plugins>
+    <plugin>
+        <!--1-->
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+            <archive>
+                <manifest>
+                    <mainClass>MyClient</mainClass>
+                </manifest>
+            </archive>
+            <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+        </configuration>
+        <executions>
+            <execution>
+                <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                <phase>package</phase> <!-- bind to the packaging phase -->
+                <goals>
+                    <goal>single</goal>
+                </goals>
+            </execution>
+        </executions>
+    </plugin>
+    <plugin>
+        <!--2-->
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>${docker-maven-plugin.version}</version>
+        <configuration>
+            <imageName>hazelcast_client_app</imageName>
+            <dockerDirectory>src/main/docker</dockerDirectory>
+            <resources>
+                <resource>
+                    <targetPath>/</targetPath>
+                    <directory>${project.build.directory}</directory>
+                    <include>${project.build.finalName}-jar-with-dependencies.jar</include>
+                </resource>
+            </resources>
+        </configuration>
+    </plugin>
+</plugins>
+----
+<1> builds fat jar to be deployed as docker image
+<2> builds docker image with Hazelcast client app and dependencies
+
+== Enter Docker Compose 
+
+Docker Compose allows you to define a multi-container application with all of its dependencies in a single file, then spin your application and dependencies up in a single command.
+Navigate to directory `hazelcast-code-samples/hazelcast-integration/docker-compose/src/main/docker` and run the command.
+
+.Start the cluster, a client, and management center containers
+[source,bash]
+----
+docker-compose -f hazelcast.yml up -d
+----
+
+The `docker-compose` command will pull the images from Docker Hub and then link them together based on the information inside the `docker-compose.yml` (`hazelcast.yml` in out case) file. 
+This will create ports, links between containers, and configure applications as required. 
+After the command completes we can now view the status of our cluster with command `docker-compose ps`.
+
+== Scaling
+
+The fun part comes with scaling.
+Let's scale out our Hazelcast IMDG cluster to 2 nodes
+
+.docker-compose command for scaling Hazelcast cluster
+----
+docker-compose scale hazelcast=5
+----
+
+With a command `docker-compose ps` you see which containers are running now.
+
+[source,sh]
+----
+❯ docker-compose -f src/main/docker/hazelcast.yml ps
+           Name                         Command               State            Ports
+---------------------------------------------------------------------------------------------
+docker_hazelcast-client_1    /bin/sh -c echo "The appli ...   Exit 0
+docker_hazelcast_1           ./server.sh                      Up       5701/tcp
+docker_hazelcast_2           ./server.sh                      Up       5701/tcp
+docker_hazelcast_3           ./server.sh                      Up       5701/tcp
+docker_hazelcast_4           ./server.sh                      Up       5701/tcp
+docker_hazelcast_5           ./server.sh                      Up       5701/tcp
+docker_management-center_1   /bin/sh -c ./start.sh            Up       0.0.0.0:8080->8080/tcp
+----
+
+If you open Management Center URL[http://localhost:8080/mancenter] you should see that cluster consists of 5 nodes now.
+
+.Management Center web app displays IMDG cluster of 5 nodes
+image::mancenter_1.png[]
+
+WARNING: If at this point you get a message from Management Center to enter the license, you can request a trial key from here footnote:[https://hazelcast.com/hazelcast-enterprise-download/trial/]
+
+Also, I can use `curl` command to get cluster status and the list of members.
+
+.Query cluster status using Management Center
+----
+❯ curl http://localhost:8080/mancenter/rest/clusters/hz-compose/members
+["172.18.0.3:5701","172.18.0.4:5701","172.18.0.5:5701","172.18.0.6:5701","172.18.0.7:5701"]
+----
+
+You can shutdown those application stack (IMDG cluster, Management center, Hazelcast client Java application) with single command
+
+----
+docker-compose -f src/main/docker/hazelcast.yml down
+----
+
+== What's next?
+
+In my future posts, I will explore other tools that allow you to deploy, scale and orchestrate your Hazelcast IMDG cluster with different tools like Swarm, Kubernetes, Mesos.
+If you have questions or suggestions, feel free to comment below.
