@@ -1,7 +1,7 @@
 = How To Scale Hazelcast Cluster with Docker Compose
 Viktor Gamov
 2017-06-08 13:11
-:imagesdir: ../images
+:imagesdir: images
 :icons:
 :keywords:
 :toc:
