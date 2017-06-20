@@ -72,14 +72,6 @@
         </init-param>
 
         <!--
-            Do you want to use an existing HazelcastInstance?
-            Default is null.
-        -->
-        <init-param>
-            <param-name>instance-name</param-name>
-            <param-value>default</param-value>
-        </init-param>
-        <!--
             Do you want to connect as a client to an existing cluster?
             Default is false.
         -->
