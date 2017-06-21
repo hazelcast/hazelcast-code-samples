@@ -1,9 +1,9 @@
 <h2>ABOUT</h2>
 This project is prepared to serve as a sample application for Hazelcast, the leading open source in-memory data grid . Here, Hazelcast's use case is HTTP Session Replication. 
 
-There are two different ways to run this sample application. You can run the sample application with `docker-compose. You can also manually configure a load balancer connected with two Tomcat or Jetty server to run the application.
+There are two different ways to run this sample application. You can run the sample application with `docker-compose`. You can also manually configure a load balancer connected with two Tomcat or Jetty server to run the application.
 
-<h2>Manual Setup<h2>
+<h2>Manual Setup</h2>
 
 <h3>Requirements</h3>
 You should have installed Tomcat or Jetty and Apache Maven on your system. There are other requirements already in this repo.
@@ -21,13 +21,13 @@ http://tomcat.apache.org/connectors-doc/generic_howto/quick.html
 
 <h3>Tomcat Deployment</h3>
 * `cp target/session-replication.war $CATALINA_HOME/webapps/` - Copy war to Tomcat
-* Browse to `http://localhost:8080/session-replication/hazelcast`
+* Browse to `http://localhost:8080/session-replication/hazelcast
 
 <h3>Jetty Deployment</h3>
-* `cp target/session-replication.war $JETTY_HOME/webapps/` - Copy war to Jetty
+* `cp target/session-replication.war $JETTY_HOME/webapps/ - Copy war to Jetty
 * Browse to `http://localhost:8080/session-replication/hazelcast`
 
-<h2>How to Run Sample Application in Docker Environment<h2>
+<h2>How to Run Sample Application in Docker Environment</h2>
 
 You should have installed `Docker` on your system.
 
