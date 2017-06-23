@@ -1,0 +1,30 @@
+portal:
+  image: nginx
+  ports:
+   - "8080:80"
+  volumes:
+   - ../docker-compose-p2p-manager-based-session-replication/default.conf:/etc/nginx/conf.d/default.conf
+  links:
+   - tomcatServerOne:tomcat1
+   - tomcatServerTwo:tomcat2
+tomcatServerOne:
+  image: tomcat:7-jre8
+  ports:
+   - "8080"
+  volumes:
+   - ../target/example.war:/usr/local/tomcat/webapps/example.war
+   - ../docker-compose-p2p-manager-based-session-replication/hazelcast-tomcat7-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat7-sessionmanager-1.1.1.jar
+   - ../docker-compose-p2p-manager-based-session-replication/hazelcast-all-3.8.2.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.2.jar
+   - ../docker-compose-p2p-manager-based-session-replication/server.xml:/usr/local/tomcat/conf/server.xml
+   - ../docker-compose-p2p-manager-based-session-replication/context.xml:/usr/local/tomcat/conf/context.xml
+
+tomcatServerTwo:
+  image: tomcat:7-jre8
+  ports:
+   - "8080"
+  volumes:
+   - ../target/example.war:/usr/local/tomcat/webapps/example.war
+   - ../docker-compose-p2p-manager-based-session-replication/hazelcast-tomcat7-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat7-sessionmanager-1.1.1.jar
+   - ../docker-compose-p2p-manager-based-session-replication/hazelcast-all-3.8.2.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.2.jar
+   - ../docker-compose-p2p-manager-based-session-replication/server.xml:/usr/local/tomcat/conf/server.xml
+   - ../docker-compose-p2p-manager-based-session-replication/context.xml:/usr/local/tomcat/conf/context.xml
