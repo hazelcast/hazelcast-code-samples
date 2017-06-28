@@ -4,7 +4,7 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <network>
       <cluster-members>
-        <address>172.19.0.2</address>
+        <address>${hazelcast.member.address}</address>
       </cluster-members>
     </network>
 </hazelcast-client>

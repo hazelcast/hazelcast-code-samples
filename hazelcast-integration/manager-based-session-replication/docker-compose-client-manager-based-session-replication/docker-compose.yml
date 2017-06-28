@@ -9,19 +9,12 @@
     links:
      - tomcatServerOne:tomcat1
      - tomcatServerTwo:tomcat2
-    networks:
-       testnet:
-        ipv4_address: 172.19.0.4
   hazelcast:
     image: hazelcast/hazelcast
     ports:
      - "5701"
-    networks:
-       testnet:
-        ipv4_address: 172.19.0.2
-
   tomcatServerOne:
-    image: tomcat:7-jre8
+    image: tomcat:8.5-jre8
     depends_on:
      - hazelcast
     ports:
@@ -30,14 +23,13 @@
      - ../docker-compose-client-manager-based-session-replication/server.xml:/usr/local/tomcat/conf/server.xml
      - ../docker-compose-client-manager-based-session-replication/context.xml:/usr/local/tomcat/conf/context.xml
      - ../target/example.war:/usr/local/tomcat/webapps/example.war
-     - ../docker-compose-client-manager-based-session-replication/hazelcast-tomcat7-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat7-sessionmanager-1.1.1.jar
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-tomcat85-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat85-sessionmanager-1.1.1.jar
      - ../docker-compose-client-manager-based-session-replication/hazelcast-all-3.8.2.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.2.jar
      - ../docker-compose-client-manager-based-session-replication/hazelcast-client.xml:/usr/local/tomcat/lib/hazelcast-client.xml
-    networks:
-       testnet:
-        ipv4_address: 172.19.0.5
+    environment:
+     - JAVA_OPTS=-Dhazelcast.client.config=/usr/local/tomcat/lib/hazelcast-client.xml -Dhazelcast.member.address=hazelcast
   tomcatServerTwo:
-    image: tomcat:7-jre8
+    image: tomcat:8.5-jre8
     depends_on:
      - hazelcast
     ports:
@@ -46,16 +38,8 @@
      - ../docker-compose-client-manager-based-session-replication/server.xml:/usr/local/tomcat/conf/server.xml
      - ../docker-compose-client-manager-based-session-replication/context.xml:/usr/local/tomcat/conf/context.xml
      - ../target/example.war:/usr/local/tomcat/webapps/example.war
-     - ../docker-compose-client-manager-based-session-replication/hazelcast-tomcat7-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat7-sessionmanager-1.1.1.jar
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-tomcat85-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat85-sessionmanager-1.1.1.jar
      - ../docker-compose-client-manager-based-session-replication/hazelcast-all-3.8.2.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.2.jar
      - ../docker-compose-client-manager-based-session-replication/hazelcast-client.xml:/usr/local/tomcat/lib/hazelcast-client.xml
-    networks:
-       testnet:
-        ipv4_address: 172.19.0.3
- networks:
-  testnet:
-    driver: bridge
-    ipam:
-      config:
-      - subnet: 172.19.0.0/16
-
+    environment:
+     - JAVA_OPTS=-Dhazelcast.client.config=/usr/local/tomcat/lib/hazelcast-client.xml -Dhazelcast.member.address=hazelcast
