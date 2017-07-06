@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_3.dtd">
+	
+ <Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <Ref name="Server" id="Server">
+      <Call id="hazelcastIdMgr" name="getSessionIdManager"/>
+           </Ref>    
+           <Set name="sessionHandler">
+               <New class="org.eclipse.jetty.server.session.SessionHandler">
+                   <Arg>
+                       <New id="hazelMgr" class="com.hazelcast.session.HazelcastSessionManager">
+                           <Set name="sessionIdManager">
+                               <Ref id="hazelcastIdMgr"/>
+                           </Set>
+                       </New>
+                   </Arg>
+               </New>
+           </Set>
+
+<Set name="contextPath">/example</Set>
+<Set name="war"><Property name="jetty.webapps" default="."/>/example.war</Set>
+<Set name="extractWAR">true</Set>
+
+
+</Configure>

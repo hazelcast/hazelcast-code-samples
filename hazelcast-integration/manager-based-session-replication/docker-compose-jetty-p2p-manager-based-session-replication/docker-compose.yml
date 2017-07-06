@@ -1,0 +1,35 @@
+version: '2.1'
+services:
+  portal:
+    image: nginx
+    ports:
+     - "8080:80"
+    volumes:
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+     - jettyServerOne:jetty1
+     - jettyServerTwo:jetty2
+  jettyServerOne:
+    image: jetty:9.3.20-jre8
+    ports:
+     - "8080"
+    volumes:
+     - ../target/example.war:/var/lib/jetty/webapps/example.war
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/jetty-nosql-9.3.2.v20150730.jar:/usr/local/jetty/lib/ext/jetty-nosql-9.3.2.v20150730.jar
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/hazelcast.xml:/usr/local/jetty/etc/hazelcast.xml
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/hazelcast-jetty9-sessionmanager-1.0.2.jar:/usr/local/jetty/lib/ext/hazelcast-jetty9-sessionmanager-1.0.2.jar
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/hazelcast-all-3.8.3.jar:/usr/local/jetty/lib/ext/hazelcast-all-3.8.3.jar
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/jetty.xml:/usr/local/jetty/etc/jetty.xml
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/example.xml:/var/lib/jetty/webapps/example.xml
+  jettyServerTwo:
+    image: jetty:9.3.20-jre8
+    ports:
+     - "8080"
+    volumes:
+     - ../target/example.war:/var/lib/jetty/webapps/example.war
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/jetty-nosql-9.3.2.v20150730.jar:/usr/local/jetty/lib/ext/jetty-nosql-9.3.2.v20150730.jar
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/hazelcast.xml:/usr/local/jetty/etc/hazelcast.xml
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/hazelcast-jetty9-sessionmanager-1.0.2.jar:/usr/local/jetty/lib/ext/hazelcast-jetty9-sessionmanager-1.0.2.jar
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/hazelcast-all-3.8.3.jar:/usr/local/jetty/lib/ext/hazelcast-all-3.8.3.jar
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/jetty.xml:/usr/local/jetty/etc/jetty.xml
+     - ../docker-compose-jetty-p2p-manager-based-session-replication/example.xml:/var/lib/jetty/webapps/example.xml
