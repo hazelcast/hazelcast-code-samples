@@ -1,0 +1,45 @@
+ version: '2.1'
+ services:
+  portal:  
+    image: nginx
+    ports:
+     - "8080:80"
+    volumes:
+     - ../docker-compose-client-manager-based-session-replication/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+     - tomcatServerOne:tomcat1
+     - tomcatServerTwo:tomcat2
+  hazelcast:
+    image: hazelcast/hazelcast
+    ports:
+     - "5701"
+  tomcatServerOne:
+    image: tomcat:8.5-jre8
+    depends_on:
+     - hazelcast
+    ports:
+     - "8080"
+    volumes:
+     - ../docker-compose-client-manager-based-session-replication/server.xml:/usr/local/tomcat/conf/server.xml
+     - ../docker-compose-client-manager-based-session-replication/context.xml:/usr/local/tomcat/conf/context.xml
+     - ../target/example.war:/usr/local/tomcat/webapps/example.war
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-tomcat85-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat85-sessionmanager-1.1.1.jar
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-all-3.8.3.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.3.jar
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-client.xml:/usr/local/tomcat/lib/hazelcast-client.xml
+    environment:
+     - JAVA_OPTS=-Dhazelcast.client.config=/usr/local/tomcat/lib/hazelcast-client.xml -Dhazelcast.member.address=hazelcast
+  tomcatServerTwo:
+    image: tomcat:8.5-jre8
+    depends_on:
+     - hazelcast
+    ports:
+     - "8080"
+    volumes:
+     - ../docker-compose-client-manager-based-session-replication/server.xml:/usr/local/tomcat/conf/server.xml
+     - ../docker-compose-client-manager-based-session-replication/context.xml:/usr/local/tomcat/conf/context.xml
+     - ../target/example.war:/usr/local/tomcat/webapps/example.war
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-tomcat85-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat85-sessionmanager-1.1.1.jar
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-all-3.8.3.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.3.jar
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-client.xml:/usr/local/tomcat/lib/hazelcast-client.xml
+    environment:
+     - JAVA_OPTS=-Dhazelcast.client.config=/usr/local/tomcat/lib/hazelcast-client.xml -Dhazelcast.member.address=hazelcast
