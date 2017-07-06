@@ -24,7 +24,7 @@
      - ../docker-compose-client-manager-based-session-replication/context.xml:/usr/local/tomcat/conf/context.xml
      - ../target/example.war:/usr/local/tomcat/webapps/example.war
      - ../docker-compose-client-manager-based-session-replication/hazelcast-tomcat85-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat85-sessionmanager-1.1.1.jar
-     - ../docker-compose-client-manager-based-session-replication/hazelcast-all-3.8.2.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.2.jar
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-all-3.8.3.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.3.jar
      - ../docker-compose-client-manager-based-session-replication/hazelcast-client.xml:/usr/local/tomcat/lib/hazelcast-client.xml
     environment:
      - JAVA_OPTS=-Dhazelcast.client.config=/usr/local/tomcat/lib/hazelcast-client.xml -Dhazelcast.member.address=hazelcast
@@ -39,7 +39,7 @@
      - ../docker-compose-client-manager-based-session-replication/context.xml:/usr/local/tomcat/conf/context.xml
      - ../target/example.war:/usr/local/tomcat/webapps/example.war
      - ../docker-compose-client-manager-based-session-replication/hazelcast-tomcat85-sessionmanager-1.1.1.jar:/usr/local/tomcat/lib/hazelcast-tomcat85-sessionmanager-1.1.1.jar
-     - ../docker-compose-client-manager-based-session-replication/hazelcast-all-3.8.2.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.2.jar
+     - ../docker-compose-client-manager-based-session-replication/hazelcast-all-3.8.3.jar:/usr/local/tomcat/lib/hazelcast-all-3.8.3.jar
      - ../docker-compose-client-manager-based-session-replication/hazelcast-client.xml:/usr/local/tomcat/lib/hazelcast-client.xml
     environment:
      - JAVA_OPTS=-Dhazelcast.client.config=/usr/local/tomcat/lib/hazelcast-client.xml -Dhazelcast.member.address=hazelcast
