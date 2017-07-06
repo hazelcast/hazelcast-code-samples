@@ -1,0 +1,23 @@
+portal:
+  image: nginx
+  ports:
+   - "8080:80"
+  volumes:
+   - ../jetty-filter-based-session-replication/default.conf:/etc/nginx/conf.d/default.conf
+  links:
+   - jettyServerOne:jetty1
+   - jettyServerTwo:jetty2
+jettyServerOne:
+  image: jetty:9.3.20-jre8
+  ports:
+   - "8080"
+  volumes:
+   - ../target/session-replication.war:/var/lib/jetty/webapps/session-replication.war
+
+jettyServerTwo:
+  image: jetty:9.3.20-jre8
+  ports:
+   - "8080"
+  volumes:
+   - ../target/session-replication.war:/var/lib/jetty/webapps/session-replication.war
+
