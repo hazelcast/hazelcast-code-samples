@@ -1,0 +1,17 @@
+version: '2.1'
+services:
+ openldap:
+    image: bilaldemirci/openldap
+    ports:
+     - 389:389
+ management-center:
+    image: hazelcast/management-center
+    volumes: 
+     - ../ldap-docker/security.properties:/data/security.properties
+     - ../ldap-docker/ldap.properties:/data/ldap.properties
+    depends_on:
+     - openldap 
+    ports:
+     - 8080:8080
+    links:
+     - "openldap:ldapIP"
