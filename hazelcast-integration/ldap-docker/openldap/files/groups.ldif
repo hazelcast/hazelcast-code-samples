@@ -1,0 +1,42 @@
+dn: dc=hazelcast,dc=org
+dc: hazelcast
+objectClass: dcObject
+objectClass: organizationalUnit
+ou: hazelcast
+
+dn: ou=UserGroups,dc=hazelcast,dc=org
+objectClass: organizationalUnit
+objectClass: top
+ou: UserGroups
+
+dn: ou=Users,dc=hazelcast,dc=org
+objectClass: organizationalUnit
+objectClass: top
+ou: Users
+
+dn: cn=theReadonlyGroup,ou=UserGroups,dc=hazelcast,dc=org
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: theReadonlyGroup
+uniqueMember: cn=Hasan Celik,ou=Users,dc=hazelcast,dc=org
+uniqueMember: cn=Bilal Yasar,ou=Users,dc=hazelcast,dc=org
+
+dn: cn=theMetricsonlyGroup,ou=UserGroups,dc=hazelcast,dc=org
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: theMetricsonlyGroup
+uniqueMember: cn=Metric Guy,ou=Users,dc=hazelcast,dc=org
+
+dn: cn=theUserGroup,ou=UserGroups,dc=hazelcast,dc=org
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: theUseronlyGroup
+uniqueMember: cn=Mesut Celik,ou=Users,dc=hazelcast,dc=org
+uniqueMember: cn=Emrah Kocaman,ou=Users,dc=hazelcast,dc=org
+
+dn: cn=theAdminGroup,ou=UserGroups,dc=hazelcast,dc=org
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: theAdminGroup
+uniqueMember: cn=Emre Aydin,ou=Users,dc=hazelcast,dc=org
+uniqueMember: cn=Mesut Celik,ou=Users,dc=hazelcast,dc=org

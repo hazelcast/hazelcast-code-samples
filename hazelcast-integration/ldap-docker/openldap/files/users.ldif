@@ -1,0 +1,74 @@
+dn: cn=Emre Aydin,ou=Users,dc=hazelcast,dc=org
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: top
+cn: Emre Aydin
+sn: Emre
+uid: emre
+userpassword: password
+mail: emre@hazelcast.com
+
+dn: cn=Mesut Celik,ou=Users,dc=hazelcast,dc=org
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: top
+cn: Mesut Celik
+sn: Mesut
+uid: mesut
+userpassword: password
+mail: mesut@hazelcast.com
+
+dn: cn=Emrah Kocaman,ou=Users,dc=hazelcast,dc=org
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: top
+cn: Emrah Kocaman
+sn: Emrah
+uid: emrah
+userpassword: password
+mail: emrah@hazelcast.com
+
+dn: cn=Hasan Celik,ou=Users,dc=hazelcast,dc=org
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: top
+cn: Hasan Celik
+sn: Hasan
+uid: hasan
+userpassword: password
+mail: hasan@hazelcast.com
+
+dn: cn=Bilal Yasar,ou=Users,dc=hazelcast,dc=org
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: top
+cn: Bilal Yasar
+sn: Bilal
+uid: bilal
+userpassword: password
+mail: bilal@hazelcast.com
+
+dn: cn=Guest user,ou=Users,dc=hazelcast,dc=org
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: top
+cn: Guest user
+sn: Guest
+uid: guest
+userpassword: password
+
+dn: cn=Metric Guy,ou=Users,dc=hazelcast,dc=org
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: top
+cn: Metric Guy
+sn: MetricGuy
+uid: metricguy
+userpassword: password
