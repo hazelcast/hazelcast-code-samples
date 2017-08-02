@@ -2,12 +2,13 @@ package com.hazelcast.examples;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.monitor.NearCacheStats;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 
-public class NearCacheWithTTL extends NearCacheClientSupport {
+public class ClientNearCacheWithTTL extends NearCacheClientSupport {
 
-    public static void main(String[] args) {
+    public NearCacheStats run() {
         HazelcastInstance hz = initCluster();
         IMap<Integer, Article> map = hz.getMap("articlesTTL");
 
@@ -26,6 +27,12 @@ public class NearCacheWithTTL extends NearCacheClientSupport {
         map.get(1);
         printNearCacheStats(map, "The third get(1) call is fetching the value again from the map");
 
+        NearCacheStats finalCacheStats = map.getLocalMapStats().getNearCacheStats();
+        return finalCacheStats;
+    }
+
+    public static void main(String[] args) {
+        new ClientNearCacheWithTTL().run();
         shutdown();
     }
 }

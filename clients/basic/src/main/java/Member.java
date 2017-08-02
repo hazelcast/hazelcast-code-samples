@@ -5,13 +5,25 @@ import java.util.concurrent.BlockingQueue;
 
 public class Member {
 
-    public static void main(String[] args) throws Exception {
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        System.out.println("Hazelcast Member instance is running!");
+    private HazelcastInstance hz;
 
+    public Member() {
+        hz = Hazelcast.newHazelcastInstance();
+        System.out.println("Hazelcast Member instance is running!");
+    }
+
+    public String take() throws Exception {
         BlockingQueue<String> queue = hz.getQueue("queue");
-        for (; ; ) {
-            System.out.println(queue.take());
-        }
+
+        System.out.println("Waiting for an entry be put in.");
+        String taken = queue.take();
+        System.out.println(taken);
+
+        return taken;
+    }
+
+    public static void main(String[] args) throws Exception {
+        new Member().take();
+        Hazelcast.shutdownAll();
     }
 }
