@@ -14,3 +14,4 @@ mydatabase*
 bin/
 hibernateDB
 springHibernateDB
+osgi/felix-cache/

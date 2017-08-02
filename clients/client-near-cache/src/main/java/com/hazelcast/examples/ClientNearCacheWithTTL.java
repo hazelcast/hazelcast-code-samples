@@ -5,7 +5,7 @@ import com.hazelcast.core.IMap;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 
-public class NearCacheWithTTL extends NearCacheClientSupport {
+public class ClientNearCacheWithTTL extends NearCacheClientSupport {
 
     public static void main(String[] args) {
         HazelcastInstance hz = initCluster();

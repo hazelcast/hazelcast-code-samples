@@ -3,7 +3,7 @@ package com.hazelcast.examples;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
-public class NearCacheWithMemoryFormatObject extends NearCacheClientSupport {
+public class ClientNearCacheWithMemoryFormatObject extends NearCacheClientSupport {
 
     public static void main(String[] args) {
         HazelcastInstance hz = initCluster();

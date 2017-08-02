@@ -10,13 +10,14 @@ import java.io.File;
 import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
 import static com.hazelcast.nio.IOUtil.deleteQuietly;
 
-public class NearCacheWithPreloader extends NearCacheClientSupport {
+public class ClientNearCacheWithPreloader extends NearCacheClientSupport {
 
     private static final int MAP_SIZE = 10000;
 
     public static void main(String[] args) {
-        File storeFile = new File("articlesPreloader.store").getAbsoluteFile();
+        File storeFile = new File("articlesPreloader").getAbsoluteFile();
         deleteQuietly(storeFile);
+        storeFile.mkdir();
 
         HazelcastInstance hz = initCluster();
         IMap<Integer, Article> map = hz.getMap("articlesPreloader");
@@ -30,7 +31,7 @@ public class NearCacheWithPreloader extends NearCacheClientSupport {
 
         // wait for the persistence of the Near Cache keys
         NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
-        while (stats.getPersistenceCount() < 1 && stats.getLastPersistenceKeyCount() != MAP_SIZE) {
+        while (stats.getLastPersistenceKeyCount() != MAP_SIZE) {
             sleepMillis(500);
         }
         System.out.println("The Near Cache keys have been persisted: " + stats);

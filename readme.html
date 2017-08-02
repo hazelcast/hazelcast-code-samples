@@ -98,31 +98,39 @@
 
     <p>The folder <strong>/code-samples</strong> in your package contains an extensive collection of code samples which you can
         use to learn how to use Hazelcast features. From distributed primitives to Service Provider Interface (SPI), you can see
-        Hazelcast in action readily. It includes the following folders:</p>
+        Hazelcast in action readily.</p>
 
+    <h2>How to run</h2>
+
+    <p>If the sample has a README file, follow the instructions. A lot of samples have shell scripts like "start.sh", "start-member.sh" or "start-client.sh", use them to run the sample. If none of
+        the previous options apply, use <i>java -cp target/classes:target/lib/* &lt;fully qualified name of the main class&gt;</i> to run the sample.</p>
+
+
+    <h2>Included folders</h2>
 
     <ul class="included">
 
         <li><strong>/clients</strong> &mdash; Includes sample code that shows how to create a Hazelcast client, put a message on a
-            queue by this client and receive that message by a Hazelcast node.
+            queue by this client and receive that message by a Hazelcast node. Further how to set up client's near cache, deploy user code to member, communicate via REST or populate client statistics to member.
         </li>
 
-        <li><strong>/demo</strong> &mdash; You can start multiple nodes and operate usual map operations using the code samples
-            here.
-        </li>
+        <li><strong>/cluster-quorum</strong> &mdash; setting up cluster quorum programatically</li>
+        <li><strong>/cluster-quorum-xml</strong> &mdash; setting up cluster quorum via XML configuration</li>
+        <li><strong>/cluster-state</strong> &mdash; managing cluster state to frozen, passive and shutdown.</li>
+        <li><strong>/demo</strong> &mdash; You can start multiple nodes and operate usual map operations using the code samples here.</li>
 
-        <li><strong>/distributed-collections</strong> &mdash; Includes Distributed Queue, Set and List code samples.</li>
-        <li><strong>/distributed-executor</strong> &mdash; You can create a task and execute it in a node, in multiple nodes or in
-            the whole cluster using the code samples here.
+        <li><strong>/distributed-collections</strong> &mdash; Includes Distributed Queue, Bounded Queue, Listeners, Set, List, Queue store, Ringbuffer and Ringbuffer store code samples.</li>
+        <li><strong>/distributed-executor</strong> &mdash; examples of distributed task execution e.g. executing on all member, just key owner, only lite nodes only, on specific member. Also examples
+            of usage of futures and scheduled executions.
         </li>
         <li><strong>/distributed-map</strong> &mdash; An extensive code samples folder that includes many features of the
             Hazelcast distributed map in action.
         </li>
         <li><strong>/distributed-primitives</strong> &mdash; Includes Distributed AtomicLong, AtomicReference, CountDownLatch,
-            IdGenerator and Lock code samples.
+            IdGenerator, CardinalityEstimator, Condition, Semaphore and Lock code samples.
         </li>
         <li><strong>/distributed-topic</strong> &mdash; Code samples to see publish/subscriber messaging model.</li>
-        <li><strong>/enterprise</strong> &mdash; Includes socket and security interceptor code samples.</li>
+        <li><strong>/enterprise</strong> &mdash; Includes socket and security interceptor, HD store and hot restart code samples.</li>
         <li><strong>/hazelcast-integration</strong> &mdash; Code samples to show how you can integrate Hazelcast with Hibernate
             2nd Level Cache and Spring. It also includes code samples for web session replication and resource adapter
             implementation.
@@ -130,8 +138,10 @@
         <li><strong>/jcache</strong> &mdash; An extensive code samples folder for operations including creating a cache and
             writing entries to it, creating listeners and clients.
         </li>
+        <li><strong>/jmx</strong> &mdash; example of connecting to Hazelcast member via JMX.
+        </li>
         <li><strong>/learning-basics</strong> &mdash; Code samples to show some Hazelcast basics like creating, configuring and
-            destroying Hazelcast instances, and Hazelcast configuration.
+            destroying Hazelcast instances, configuring logging and Hazelcast configuration.
         </li>
         <li><strong>/mapreduce</strong> &mdash; Includes tutorials and a sample word count application.</li>
         <li><strong>/monitoring</strong> &mdash; Includes code samples that show how to check if a Hazelcast cluster is safe to be
@@ -140,13 +150,12 @@
         <li><strong>/network-configuration</strong> &mdash; Shows what options Hazelcast configuration has regarding to network
             (e.g. partition grouping, multicast, ports, outbound ports, etc.)
         </li>
-        <li><strong>/performance</strong> &mdash; Includes code samples that show how Hazelcast uses data affinity.</li>
         <li><strong>/replicated-map</strong> &mdash; Code samples to show how to get a replicated map and create an entry
             listener.
         </li>
         <li><strong>/serialization</strong> &mdash; Includes code samples that implement various serialization interfaces like
             DataSerializable, IdentifiedDataSerializable, Externalizable and Portable. It also has code samples to show how to
-            plug a custom serializer using StreamSerializer and ByteArraySerializer interfaces.
+            plug a custom serializer using StreamSerializer and ByteArraySerializer interfaces and usage of Kryo and Protobuf serializers.
         </li>
         <li><strong>/spi</strong> &mdash; Includes code samples that create a simple counter application using Hazelcast’s Service
             Provider Interface (SPI).

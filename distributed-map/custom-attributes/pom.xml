@@ -9,7 +9,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>custom-attributes</artifactId>
-    <packaging>pom</packaging>
     <name>DistributedMap - Custom Attributes</name>
     <description>DistributedMap - Custom Attributes Examples</description>
 

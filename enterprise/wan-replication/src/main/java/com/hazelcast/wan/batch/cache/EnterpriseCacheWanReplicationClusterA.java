@@ -4,7 +4,6 @@ import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.AbstractHazelcastCacheManager;
 import com.hazelcast.cache.merge.HigherHitsCacheMergePolicy;
-import com.hazelcast.wan.batch.cache.filter.SampleCacheWanEventFilter;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.WanAcknowledgeType;
@@ -15,6 +14,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.enterprise.wan.replication.WanBatchReplication;
 import com.hazelcast.enterprise.wan.replication.WanReplicationProperties;
+import com.hazelcast.wan.batch.cache.filter.SampleCacheWanEventFilter;
 
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;

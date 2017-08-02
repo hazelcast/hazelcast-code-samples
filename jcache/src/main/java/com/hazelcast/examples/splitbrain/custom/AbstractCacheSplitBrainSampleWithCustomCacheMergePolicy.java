@@ -63,6 +63,7 @@ abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends A
             Cache<String, Object> cacheTest = cacheManager2.getCache(CACHE_NAME);
             Object value = cacheTest.get(key);
             assertTrue("Value with key `" + key + "` should be there!", value != null);
+            System.out.println("============ " + value);
             assertTrue("Value with key `" + key + "` should be Integer!", value instanceof Integer);
         } finally {
             Hazelcast.shutdownAll();

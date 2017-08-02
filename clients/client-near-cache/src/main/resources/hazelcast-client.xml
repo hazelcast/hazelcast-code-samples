@@ -62,7 +62,7 @@
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
         <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
-        <preloader enabled="true" filename="articlesPreloader.store"
+        <preloader enabled="true" directory="articlesPreloader"
                    store-initial-delay-seconds="5" store-interval-seconds="60"/>
     </near-cache>
 </hazelcast-client>

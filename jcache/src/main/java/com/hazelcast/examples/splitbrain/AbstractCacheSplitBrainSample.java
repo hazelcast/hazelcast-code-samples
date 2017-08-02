@@ -37,7 +37,7 @@ public abstract class AbstractCacheSplitBrainSample {
 
     protected static Config newDeclarativeConfig() {
         try {
-            Config config = new XmlConfigBuilder("jcache/src/main/resources/hazelcast-splitbrain.xml").build();
+            Config config = new XmlConfigBuilder("src/main/resources/hazelcast-splitbrain.xml").build();
             config.setProperty("hazelcast.merge.first.run.delay.seconds", "5");
             config.setProperty("hazelcast.merge.next.run.delay.seconds", "3");
             config.getGroupConfig().setName(generateRandomString(10));

@@ -19,7 +19,6 @@ public class TransactionalMember {
 
         try {
             map.put("1", "1");
-            Thread.sleep(TimeUnit.SECONDS.toMillis(20));
             map.put("2", "2");
             txCxt.commitTransaction();
         } catch (RuntimeException t) {

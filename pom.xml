@@ -63,7 +63,6 @@
         <module>monitoring</module>
         <module>network-configuration</module>
         <module>osgi</module>
-        <module>performance</module>
         <module>replicated-map</module>
         <module>serialization</module>
         <module>spi</module>
