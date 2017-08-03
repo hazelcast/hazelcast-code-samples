@@ -2,10 +2,11 @@ package com.hazelcast.examples;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.monitor.NearCacheStats;
 
-public class NearCacheWithEvictionPolicy extends NearCacheClientSupport {
+public class ClientNearCacheWithEvictionPolicy extends NearCacheClientSupport {
 
-    public static void main(String[] args) {
+    public NearCacheStats run() {
         HazelcastInstance hz = initCluster();
         IMap<Integer, Article> map = hz.getMap("articlesEvictionPolicy");
 
@@ -36,6 +37,12 @@ public class NearCacheWithEvictionPolicy extends NearCacheClientSupport {
         map.get(101);
         printNearCacheStats(map, "The second get(101) call is served from the Near Cache");
 
+        NearCacheStats finalCacheStats = map.getLocalMapStats().getNearCacheStats();
+        return finalCacheStats;
+    }
+
+    public static void main(String[] args) {
+        new ClientNearCacheWithEvictionPolicy().run();
         shutdown();
     }
 }

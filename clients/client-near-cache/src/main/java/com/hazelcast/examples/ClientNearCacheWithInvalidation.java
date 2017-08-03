@@ -2,12 +2,13 @@ package com.hazelcast.examples;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.monitor.NearCacheStats;
 
 import static com.hazelcast.examples.helper.HazelcastUtils.generateKeyOwnedBy;
 
-public class NearCacheWithInvalidation extends NearCacheClientSupport {
+public class ClientNearCacheWithInvalidation extends NearCacheClientSupport {
 
-    public static void main(String[] args) {
+    public NearCacheStats run() {
         HazelcastInstance[] instances = initCluster(2);
         IMap<String, Article> map1 = instances[0].getMap("articlesInvalidation");
         IMap<String, Article> map2 = instances[1].getMap("articlesInvalidation");
@@ -29,6 +30,12 @@ public class NearCacheWithInvalidation extends NearCacheClientSupport {
         map1.get(key);
         printNearCacheStats(map1, "The next map1.get(key) call populates the Near Cache again");
 
+        NearCacheStats finalCacheStats = map1.getLocalMapStats().getNearCacheStats();
+        return finalCacheStats;
+    }
+
+    public static void main(String[] args) {
+        new ClientNearCacheWithInvalidation().run();
         shutdown();
     }
 }

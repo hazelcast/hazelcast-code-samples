@@ -3,11 +3,11 @@ package com.hazelcast.examples;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
-public class NearCacheWithMemoryFormatBinary extends NearCacheClientSupport {
+public class ClientNearCacheWithMemoryFormatObject extends NearCacheClientSupport {
 
-    public static void main(String[] args) {
+    public boolean run() {
         HazelcastInstance hz = initCluster();
-        IMap<Integer, Article> map = hz.getMap("articlesBinary");
+        IMap<Integer, Article> map = hz.getMap("articlesObject");
 
         Article article = new Article("foo");
         map.put(1, article);
@@ -20,10 +20,15 @@ public class NearCacheWithMemoryFormatBinary extends NearCacheClientSupport {
 
         printNearCacheStats(map);
 
-        System.out.println("Since we use in-memory format BINARY, the article instances from the Near Cache will be different.");
+        System.out.println("Since we use in-memory format OBJECT, the article instances from the Near Cache will be identical.");
         System.out.println("Compare first and second article instance: " + (firstGet == secondGet));
         System.out.println("Compare second and third article instance: " + (secondGet == thirdGet));
 
+        return (firstGet == secondGet && secondGet == thirdGet);
+    }
+
+    public static void main(String[] args) {
+        new ClientNearCacheWithMemoryFormatObject().run();
         shutdown();
     }
 }
