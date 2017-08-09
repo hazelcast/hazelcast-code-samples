@@ -4,7 +4,10 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import static com.hazelcast.examples.helper.CommonUtils.closeQuietly;
 
@@ -35,7 +38,7 @@ public class RestClient {
         ByteArrayInputStream byteArrayInputStream = null;
         ObjectInputStream objectInputStream = null;
         try {
-            byteArrayInputStream = new ByteArrayInputStream(entity);
+            byteArrayInputStream = new ByteArrayInputStream(entity, 8, entity.length);
             objectInputStream = new ObjectInputStream(byteArrayInputStream);
 
             Person person = (Person) objectInputStream.readObject();
@@ -43,6 +46,22 @@ public class RestClient {
         } finally {
             closeQuietly(objectInputStream);
             closeQuietly(byteArrayInputStream);
+        }
+    }
+
+    private static String doGet(String url) throws IOException {
+        HttpURLConnection httpUrlConnection = (HttpURLConnection) (new URL(url)).openConnection();
+        try {
+            InputStream inputStream = httpUrlConnection.getInputStream();
+            StringBuilder builder = new StringBuilder();
+            byte[] buffer = new byte[1024];
+            int readBytes;
+            while ((readBytes = inputStream.read(buffer)) > -1) {
+                builder.append(new String(buffer, 0, readBytes));
+            }
+            return builder.toString();
+        } finally {
+            httpUrlConnection.disconnect();
         }
     }
 }

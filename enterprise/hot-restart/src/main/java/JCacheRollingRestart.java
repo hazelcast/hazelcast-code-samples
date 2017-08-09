@@ -23,8 +23,9 @@ public class JCacheRollingRestart {
     private static final String HOT_RESTART_ROOT_DIR = System.getProperty("java.io.tmpdir")
             + File.separatorChar + "hazelcast-hot-restart";
 
-    public static void main(String[] args) {
-        IOUtil.delete(new File(HOT_RESTART_ROOT_DIR));
+    public static void main(String[] args) throws InterruptedException {
+        IOUtil.delete(new File(HOT_RESTART_ROOT_DIR + "5701"));
+        IOUtil.delete(new File(HOT_RESTART_ROOT_DIR + "5702"));
 
         HazelcastInstance instance1 = newHazelcastInstance(5701);
         HazelcastInstance instance2 = newHazelcastInstance(5702);
@@ -37,6 +38,8 @@ public class JCacheRollingRestart {
         instance2.getCluster().changeClusterState(ClusterState.PASSIVE);
 
         instance1.shutdown();
+        Thread.sleep(5000L);
+
         instance1 = newHazelcastInstance(5701);
 
         instance1.getCluster().changeClusterState(ClusterState.ACTIVE);
@@ -59,7 +62,7 @@ public class JCacheRollingRestart {
                 .addMember("127.0.0.1:5702");
 
         HotRestartPersistenceConfig hotRestartConfig = config.getHotRestartPersistenceConfig();
-        hotRestartConfig.setEnabled(true).setBaseDir(new File(HOT_RESTART_ROOT_DIR));
+        hotRestartConfig.setEnabled(true).setBaseDir(new File(HOT_RESTART_ROOT_DIR + port));
 
         return Hazelcast.newHazelcastInstance(config);
     }

@@ -15,11 +15,13 @@
  */
 
 import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 public class ClientStatisticsExample {
     public static void main(String[] args) {
+        HazelcastInstance server = Hazelcast.newHazelcastInstance();
         HazelcastInstance client = HazelcastClient.newHazelcastClient();
 
         IMap<Integer, Integer> map = client.getMap("articlesObject");
@@ -34,8 +36,9 @@ public class ClientStatisticsExample {
             e.printStackTrace();
         }
 
-        // Statistics is now populated at the member side
+        // Statistics is now populated at the member side, so you can see it e.g. in Management Center.
 
-        client.shutdown();
+        HazelcastClient.shutdownAll();
+        Hazelcast.shutdownAll();
     }
 }

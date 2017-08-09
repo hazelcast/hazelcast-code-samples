@@ -1,15 +1,15 @@
 package com.hazelcast.samples.spring.data.migration;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * <P>Test CRUD and query operations against a JPA database.

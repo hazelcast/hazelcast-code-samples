@@ -4,7 +4,6 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.query.EntryObject;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.PredicateBuilder;
-import com.hazelcast.query.Predicates;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +12,7 @@ import static com.hazelcast.query.Predicates.and;
 import static com.hazelcast.query.Predicates.equal;
 import static com.hazelcast.query.Predicates.not;
 import static com.hazelcast.query.Predicates.or;
+
 
 @SuppressWarnings("unused")
 public class PredicateMember {
@@ -32,12 +32,6 @@ public class PredicateMember {
         personMap.put("5", new Person("Rob", true, 60));
         personMap.put("6", new Person("Jane", false, 43));
 
-        Set<Person> set = hz.getSet("foo");
-        Person p = new Person("Peter", true, 37);
-        set.add(p);
-        Person p1 = set.iterator().next();
-        Person p2 = set.iterator().next();
-
         System.out.println("Get with name Peter");
         for (Person person : getWithName("Peter")) {
             System.out.println(person);
@@ -53,10 +47,8 @@ public class PredicateMember {
             System.out.println(person);
         }
 
-        System.out.println("Find name Peter and age 37");
-        for (Person person : getWithNameAndAge("Peter", 37)) {
-            System.out.println(person);
-        }
+        System.out.println("Find name Peter and age 37, which doesn't exist");
+        System.out.println("Did we find it? " + (getWithNameAndAge("Peter", 37).size() != 0));
     }
 
     private Set<Person> getWithNameNaive(String name) {
@@ -76,7 +68,7 @@ public class PredicateMember {
     }
 
     private Set<Person> getWithName(String name) {
-        Predicate predicate = Predicates.equal("name", name);
+        Predicate predicate = equal("name", name);
         return (Set<Person>) personMap.values(predicate);
     }
 

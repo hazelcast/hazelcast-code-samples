@@ -24,7 +24,8 @@ public class JCacheHotRestartMultipleNodes {
             + File.separatorChar + "hazelcast-hot-restart";
 
     public static void main(String[] args) {
-        IOUtil.delete(new File(HOT_RESTART_ROOT_DIR));
+        IOUtil.delete(new File(HOT_RESTART_ROOT_DIR + "5701"));
+        IOUtil.delete(new File(HOT_RESTART_ROOT_DIR + "5702"));
 
         HazelcastInstance instance1 = newHazelcastInstance(5701);
         HazelcastInstance instance2 = newHazelcastInstance(5702);
@@ -68,7 +69,7 @@ public class JCacheHotRestartMultipleNodes {
                 .addMember("127.0.0.1:5702");
 
         HotRestartPersistenceConfig hotRestartConfig = config.getHotRestartPersistenceConfig();
-        hotRestartConfig.setEnabled(true).setBaseDir(new File(HOT_RESTART_ROOT_DIR));
+        hotRestartConfig.setEnabled(true).setBaseDir(new File(HOT_RESTART_ROOT_DIR + port));
 
         return Hazelcast.newHazelcastInstance(config);
     }

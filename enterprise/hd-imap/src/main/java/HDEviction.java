@@ -11,8 +11,8 @@ import com.hazelcast.memory.MemoryUnit;
 
 import java.util.Map;
 
-import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static com.hazelcast.config.MaxSizeConfig.MaxSizePolicy.PER_NODE;
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
  * You have to set your Hazelcast Enterprise license key to make this code sample work.

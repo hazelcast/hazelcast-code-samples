@@ -5,6 +5,8 @@
 
     <network>
         <join>
+            <multicast enabled="false" />
+            <tcp-ip enabled="false"/>
             <aws enabled="true">
                 <access-key>my-access-key</access-key>
                 <secret-key>my-secret-key</secret-key>

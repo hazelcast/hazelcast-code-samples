@@ -5,7 +5,7 @@ import com.hazelcast.core.IMap;
 
 import static com.hazelcast.examples.helper.HazelcastUtils.generateKeyOwnedBy;
 
-public class NearCacheWithInvalidation extends NearCacheClientSupport {
+public class ClientNearCacheWithInvalidation extends NearCacheClientSupport {
 
     public static void main(String[] args) {
         HazelcastInstance[] instances = initCluster(2);

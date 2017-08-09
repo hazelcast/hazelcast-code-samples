@@ -20,7 +20,6 @@ package com.hazelcast.samples.amazon.elasticbeanstalk;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

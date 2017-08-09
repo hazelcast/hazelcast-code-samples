@@ -4,8 +4,6 @@ import com.hazelcast.client.config.XmlClientConfigBuilder;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 
-import java.util.concurrent.BlockingQueue;
-
 /**
  * Simple Hazelcast client application
  *

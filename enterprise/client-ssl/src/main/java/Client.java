@@ -18,9 +18,9 @@ public class Client {
         SSLConfig sslConfig = new SSLConfig();
         sslConfig.setEnabled(true);
         sslConfig.setFactoryClassName("com.hazelcast.nio.ssl.BasicSSLContextFactory");
-        sslConfig.setProperty("keyStore", new File("enterprise/client-ssl/hazelcast.ks").getAbsolutePath());
+        sslConfig.setProperty("keyStore", new File("hazelcast.ks").getAbsolutePath());
         sslConfig.setProperty("keyStorePassword", "password");
-        sslConfig.setProperty("javax.net.ssl.trustStore", new File("enterprise/client-ssl/hazelcast.ts").getAbsolutePath());
+        sslConfig.setProperty("javax.net.ssl.trustStore", new File("hazelcast.ts").getAbsolutePath());
 
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);

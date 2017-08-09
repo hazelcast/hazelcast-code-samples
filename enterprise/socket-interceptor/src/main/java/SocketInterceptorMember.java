@@ -41,7 +41,7 @@ public class SocketInterceptorMember {
         return config;
     }
 
-    private static class MySocketInterceptor implements MemberSocketInterceptor {
+    public static class MySocketInterceptor implements MemberSocketInterceptor {
 
         private String memberId;
 

@@ -6,7 +6,7 @@ import com.hazelcast.quorum.QuorumException;
 
 public class ClusterQuorum {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         final HazelcastInstance instance1 = Hazelcast.newHazelcastInstance();
         final HazelcastInstance instance2 = Hazelcast.newHazelcastInstance();
         final IQueue<String> queue = instance1.getQueue("queueWithQuorum");
@@ -27,6 +27,8 @@ public class ClusterQuorum {
         // Quorum will fail
         System.out.println("Shutdown one instance, so there won't be enough members for quorum presence");
         instance2.getLifecycleService().shutdown();
+        // wait for a moment to detect that cluster fell apart
+        Thread.sleep(1000);
 
         System.out.println("The following queue and lock operations will fail");
         try {

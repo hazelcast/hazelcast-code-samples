@@ -10,7 +10,7 @@ public class ClusterQuorum {
 
     private static final String NAME = "AT_LEAST_TWO_NODES";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         QuorumConfig quorumConfig = new QuorumConfig();
         quorumConfig.setName(NAME).setEnabled(true).setSize(2);
 
@@ -36,6 +36,8 @@ public class ClusterQuorum {
         // Quorum will fail
         System.out.println("Shutdown one instance, so there won't be enough members for quorum presence");
         instance2.getLifecycleService().shutdown();
+        // wait for a moment to detect that cluster fell apart
+        Thread.sleep(1000);
 
         System.out.println("The following put operation will fail");
         try {

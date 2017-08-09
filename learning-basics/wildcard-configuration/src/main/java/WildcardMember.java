@@ -11,8 +11,10 @@ public class WildcardMember {
         Map<String, String> map2 = hz.getMap("testmap2");
 
         map1.put("foo", "foo");
+        map2.put("foo", "foo");
         for (; ; ) {
             System.out.println("size:" + map1.size());
+            System.out.println("size2:" + map2.size());
             Thread.sleep(1000);
         }
     }

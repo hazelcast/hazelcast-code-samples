@@ -11,10 +11,10 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.memory.MemorySize;
 
-import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static com.hazelcast.config.EvictionConfig.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE;
 import static com.hazelcast.config.InMemoryFormat.NATIVE;
 import static com.hazelcast.config.NativeMemoryConfig.MemoryAllocatorType.STANDARD;
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static com.hazelcast.memory.MemoryUnit.MEGABYTES;
 
 /**
@@ -66,7 +66,6 @@ public class ClientHDNearCache {
         evictionConfig.setSize(90);
         nearCacheConfig.setInMemoryFormat(NATIVE);
         nearCacheConfig.setInvalidateOnChange(true);
-        nearCacheConfig.setCacheLocalEntries(true);
         nearCacheConfig.setName(mapName);
 
         ClientConfig clientConfig = new ClientConfig();

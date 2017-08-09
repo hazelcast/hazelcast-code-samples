@@ -5,7 +5,7 @@ Client user code deployment code sample consist of two different mvn projects. T
 cd usercodedeployment-member; 
 mvn exec:java -Dexec.mainClass="Member";
 
-2. Run hazelcast client with user code deployment enabled. Client will first initilize the map with entries that have 0 as values. Then it will deploy and run IncrementingEntryProcessor on all entries. All values of map should be incremented to 1. 
+2. Run hazelcast client with user code deployment enabled. Client will first initialize the map with entries that have 0 as values. Then it will deploy and run IncrementingEntryProcessor on all entries. All values of map should be incremented to 1.
 
 cd usercodedeployment-client; 
 mvn compile exec:exec;
