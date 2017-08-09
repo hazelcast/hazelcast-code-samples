@@ -27,7 +27,5 @@ public class Client {
         for (int i = 0; i < keyCount; i++) {
             System.out.println(map.get(i));
         }
-
     }
-
 }
