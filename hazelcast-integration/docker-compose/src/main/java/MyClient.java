@@ -8,9 +8,10 @@ import com.hazelcast.core.IQueue;
  * Simple Hazelcast client application
  *
  * @author Viktor Gamov on 5/23/17.
- *         Twitter: @gamussa
+ * Twitter: @gamussa
  */
 public class MyClient {
+
     public static void main(String[] args) throws InterruptedException {
 
         ClientConfig clientConfig = new XmlClientConfigBuilder().build();
