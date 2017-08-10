@@ -1,8 +1,9 @@
 import com.hazelcast.cluster.ClusterState;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 
-public class ClusterFrozenState {
+public class ClusterNoMigrationState {
 
     public static void main(String[] args) {
         System.setProperty("hazelcast.phone.home.enabled", "false");
