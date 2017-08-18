@@ -26,7 +26,7 @@
     </properties>
 
     <modules>
-        <module>cluster</module>
+        <module>cluster-safety</module>
     </modules>
 
     <dependencies>
