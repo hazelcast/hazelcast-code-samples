@@ -44,6 +44,7 @@
 
     <modules>
         <module>clients</module>
+        <module>cluster</module>
         <module>cluster-quorum</module>
         <module>cluster-quorum-xml</module>
         <module>cluster-state</module>
