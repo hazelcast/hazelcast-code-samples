@@ -29,6 +29,7 @@
         <module>client-statistics</module>
         <module>user-code-deployment</module>
         <module>client-labels</module>
+        <module>client-connection-strategy</module>
     </modules>
 
     <dependencies>
