@@ -1,0 +1,24 @@
+<hazelcast-client xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
+                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.9.xsd"
+                  xmlns="http://www.hazelcast.com/schema/client-config">
+
+    <properties>
+        <property name="hazelcast.discovery.enabled">true</property>
+    </properties>
+
+    <network>
+        <discovery-strategies>
+            <discovery-strategy enabled="true"
+                                class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy">
+
+                <properties>
+                    <!--"Headless" (without a cluster IP) Services are also assigned a DNS A record for a name of the form my-svc.my-namespace.svc.cluster.local. Unlike normal Services, this resolves to the set of IPs of the pods selected by the Service. Clients are expected to consume the set or else use standard round-robin selection from the set.-->
+                    <!--https://github.com/kubernetes/kubernetes/tree/v1.0.6/cluster/addons/dns-->
+                    <property name="service-dns">hz.default.svc.cluster.local</property>
+                    <property name="service-dns-timeout">10</property>
+                </properties>
+            </discovery-strategy>
+        </discovery-strategies>
+    </network>
+</hazelcast-client>

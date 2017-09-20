@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Hazelcast Cluster - OCP Demo</title>
+    <!-- Bootstrap -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/css/sticky-footer.css" rel="stylesheet" type="text/css"/>
+
+</head>
+<body onload="stats()">
+    <!-- Begin page content -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Hazelcast Cluster on OCP Demo</h1>
+        </div>
+
+        <!-- Warnings -->
+
+        <!-- Operations -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Data Operations</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-lg-6">
+
+                    <div class="input-group">
+                        <input id="random-count" type="number" class="form-control" placeholder="Count..." min="1" max="10000"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-primary" type="button" onclick="random();">Random!</button>
+                            <button type="button" class="btn btn-default btn-primary" onclick="autoPilot();">Auto Pilot</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </div>
+        </div>
+
+        <!-- Entry Processor-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Entry Processor</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <input id="random-positions" type="number" class="form-control" placeholder="Count..." min="1" max="10000"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-primary" type="button" onclick="randomPositions();">Random Positions!</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+                <p></p>
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <input id="latitude" type="number" class="form-control" placeholder="Latitude..." min="-90" max="90"/>
+                        <input id="longitude" type="number" class="form-control" placeholder="Longitude..." min="-180" max="180"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-primary" type="button" onclick="executeOnEntryProcessor();">Execute On Entry Processor!</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </div>
+        </div>
+
+        <!-- Evictions -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Evictions</h3>
+            </div>
+            <div class="panel-body">
+                <button type="button" class="btn btn-default btn-danger" onclick="clearAll();">Clear All</button>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Statistics</h3>
+            </div>
+            <div class="panel-body">
+                <button class="btn btn-primary btn-info" type="button">
+                    Size <span id="map-stat" class="badge">0</span>
+                </button>
+                <button class="btn btn-primary btn-info" type="button">
+                    Processed Entries <span id="processed-entry" class="badge">0</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">© 2017 Hazelcast</p>
+        </div>
+    </footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Error Notifications -->
+    <script src="/assets/js/notify.min.js"></script>
+    <!-- Statistics worker-->
+    <script src="/assets/js/stats.js"></script>
+</body>
+</html>
