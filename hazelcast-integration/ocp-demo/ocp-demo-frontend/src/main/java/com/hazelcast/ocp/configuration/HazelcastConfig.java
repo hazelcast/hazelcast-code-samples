@@ -18,7 +18,7 @@ public class HazelcastConfig {
 
     @Bean
     @Scope(value = "prototype")
-    public HazelcastInstance hazelcastInstance(){
+    public HazelcastInstance hazelcastInstance() {
 
         ClientConfig config = new ClientConfig();
         config.getNetworkConfig().addAddress(ip);

@@ -7,7 +7,7 @@ import com.hazelcast.map.AbstractEntryProcessor;
 
 import java.util.Map;
 
-public class DistanceProcessor extends AbstractEntryProcessor<String, Position>{
+public class DistanceProcessor extends AbstractEntryProcessor<String, Position> {
 
     private final Position poi;
 
@@ -15,11 +15,10 @@ public class DistanceProcessor extends AbstractEntryProcessor<String, Position>{
         this.poi = center;
     }
 
-
     private double distance(Position p1, Position p2) {
         double theta = p1.getLongitude() - p2.getLongitude();
-        double dist = Math.sin(deg2rad(p1.getLatitude())) * Math.sin(deg2rad(p2.getLatitude())) +
-                Math.cos(deg2rad(p1.getLatitude())) * Math.cos(deg2rad(p2.getLatitude())) * Math.cos(deg2rad(theta));
+        double dist = Math.sin(deg2rad(p1.getLatitude())) * Math.sin(deg2rad(p2.getLatitude()))
+                + Math.cos(deg2rad(p1.getLatitude())) * Math.cos(deg2rad(p2.getLatitude())) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
@@ -44,7 +43,6 @@ public class DistanceProcessor extends AbstractEntryProcessor<String, Position>{
 
         return value;
     }
-
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();

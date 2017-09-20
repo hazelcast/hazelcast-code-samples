@@ -1,20 +1,20 @@
 package com.hazelcast.ocp.command;
 
-
 import com.hazelcast.ocp.entryprocessor.Position;
 
 public interface MapService {
 
     /**
      * Randomly insert key value pairs to {@link com.hazelcast.core.IMap}
+     *
      * @param count number of elements to put
      * @return new map size after put operation
      */
     int insert(int count);
 
     /**
-     * @implNote currently only returns map size
      * @return statistical data regarding map.
+     * @implNote currently only returns map size
      */
     int stats();
 

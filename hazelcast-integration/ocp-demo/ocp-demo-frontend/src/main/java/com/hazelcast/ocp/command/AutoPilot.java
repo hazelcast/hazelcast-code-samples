@@ -18,6 +18,7 @@ import java.util.stream.IntStream;
 @Builder
 @Slf4j
 class AutoPilot {
+
     private int readCount;
     private int insertCount;
     private int poolSize;
@@ -40,7 +41,7 @@ class AutoPilot {
                     .map(f -> {
                         try {
                             return f.get();
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             log.error(e.getMessage(), e);
                             throw new IllegalStateException(e);
                         }
@@ -48,7 +49,6 @@ class AutoPilot {
                     .forEach(it -> log.info("Map Size = {}", it));
 
             executorService.shutdown();
-
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
             throw new IllegalStateException(e);
@@ -56,7 +56,6 @@ class AutoPilot {
     }
 
     private void initialize() {
-
         executorService = Executors.newFixedThreadPool(poolSize);
 
         List<Callable<Integer>> inserts = IntStream.range(0, insertCount)
@@ -70,7 +69,7 @@ class AutoPilot {
                 .collect(Collectors.toList());
 
         List<Callable<Integer>> reads = IntStream.range(0, readCount).boxed()
-                .map(it -> (Callable<Integer>)() ->{
+                .map(it -> (Callable<Integer>) () -> {
                     String key = RandomStringUtils.randomAlphanumeric(42);
                     String value = map.get(key);
                     log.info("randomly get value : {} size: {}", value, map.size());
@@ -83,7 +82,5 @@ class AutoPilot {
         callables.addAll(inserts);
 
         Collections.shuffle(callables);
-
     }
-
 }

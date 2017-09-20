@@ -1,6 +1,5 @@
 package com.hazelcast.ocp.command;
 
-
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.ocp.entryprocessor.DistanceProcessor;
@@ -16,28 +15,25 @@ import java.util.stream.Stream;
 
 @Service
 @Slf4j
-public class DefaultMapService implements MapService{
+public class DefaultMapService implements MapService {
 
     private static final String MAP_NAME = "MapService";
     private static final String GPS = "GpsService";
-
 
     @Autowired
     private HazelcastInstance client;
 
     @Override
     public int insert(int count) {
-
         IMap<String, String> map = client.getMap(MAP_NAME);
 
-        IntStream.range(0, count).forEach(it ->{
+        IntStream.range(0, count).forEach(it -> {
             String key = RandomStringUtils.randomAlphanumeric(42);
             String value = RandomStringUtils.randomAlphabetic(42);
             map.put(key, value);
         });
 
         return map.size();
-
     }
 
     @Override
@@ -48,8 +44,7 @@ public class DefaultMapService implements MapService{
     }
 
     @Override
-    public void runAutoPilot(){
-
+    public void runAutoPilot() {
         AutoPilot autoPilot = AutoPilot
                 .builder()
                 .map(client.getMap(MAP_NAME))

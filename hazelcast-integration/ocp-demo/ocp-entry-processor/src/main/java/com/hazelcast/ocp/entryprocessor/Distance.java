@@ -2,7 +2,8 @@ package com.hazelcast.ocp.entryprocessor;
 
 import java.io.Serializable;
 
-public class Distance implements Serializable{
+public class Distance implements Serializable {
+
     private Position reference;
     private double distance;
 

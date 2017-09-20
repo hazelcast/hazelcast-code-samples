@@ -12,14 +12,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @ComponentScan(basePackages = "com.hazelcast.ocp")
 public class OcpDemoApplication extends WebMvcConfigurerAdapter {
 
-	public static void main(String[] args) {
-		SpringApplication.run(OcpDemoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(OcpDemoApplication.class, args);
+    }
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/assets/**")
-				.addResourceLocations("classpath:/assets/");
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/assets/**")
+                .addResourceLocations("classpath:/assets/");
 
-	}
+    }
 }
