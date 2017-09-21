@@ -84,7 +84,7 @@ From the top-level project, run `mvn install` and this should build the `pom`, `
 As Spring Boot is used, it is necessary to run at least as far as a packaging phase to build the executable jars.
 
 ### Start servers
-In a command window, start the executable server Jar file using `java -jar server/target/server-0.0.1-SNAPSHOT.jar`.
+In a command window, start the executable server Jar file using `java -jar server/target/server-0.1-SNAPSHOT.jar`.
 You need to run at least one of these, but two is a better number to demonstrate resilience.
 
 #### Server commands
@@ -92,7 +92,7 @@ The server starts a Spring Shell with Hazelcast, so you can control it with simp
 The main commands of interest are `help`, `load`, `list` and `quit`.
 
 ### Start client
-In a command window, start the executable client Jar file using `java -jar client/target/client-0.0.1-SNAPSHOT.jar`.
+In a command window, start the executable client Jar file using `java -jar client/target/client-0.1-SNAPSHOT.jar`.
 This starts a client process that should connect to the servers, and respond to web requests.
 
 ### URLs
