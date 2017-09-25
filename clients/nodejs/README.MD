@@ -80,9 +80,11 @@ ExampleApp.js
     32. });
    ```
    
-    ### Code Walkthrough
-    **Line No   Description 
-
+   
+ ### Code Walkthrough
+ 
+ **Line No   Description 
+```
 1. Import Client Class
 2. Import Config Class (hazelcast-client\lib\Config.js 5 Function to create configuration
 7.Provide the Network config i.e. the details of the cluster to connect to. 10 Assign a NEW instance of NearCacheConfig element to local variable ‘orgsNearCacheConfig’
@@ -94,7 +96,7 @@ ExampleApp.js
 18.Print the Configuration to Console Connecting to and Using Cluster
 23.Get Hazelcast Client Instance 24 Get Distributed Map 'my-distributed-map'
 25.Add listener and use the ‘promise’ feature of nodejs to sequentially add and update values in map
-
+```
 ## Code Output
 The near cache element of the configuration that is printed out when you run the code is as below 
 ```
