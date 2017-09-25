@@ -8,6 +8,7 @@ Applications within your service layer be it Java,NodeJs,C# etc can cache object
 Before we go futher into near cache implementation we need to set up a NodeJs client for Hazelcast. Hazelcast has a nodejs module/package called 'hazelcast-client' which can be added as a dependency and used to communicate with hazelcast cluster from a NodeJs application. The package can be installed as below ...
    ####  npm install hazelcast-client
 The module can be added as a dependancy in the package.json file as below 
+```
 {
 "dependencies": {
 "hazelcast-client": "0.6.1",
@@ -18,6 +19,7 @@ The module can be added as a dependancy in the package.json file as below
 "test": "echo \"Warn: no test specified\" && exit 1",
 }
 }
+```
 ########Package.json
 Now we are ready to use hazelcast in the Nodejs application.
 
@@ -25,6 +27,7 @@ Now we are ready to use hazelcast in the Nodejs application.
 The near cache is configured in nodejs application using the NearCacheConfig attribute of the Config class in Hazelcast-client node js module.
 
 **The definition of NearCacheConfig is as below :
+```
 var NearCacheConfig = (function () {
       function NearCacheConfig() {
       this.name = 'default';
@@ -36,12 +39,13 @@ var NearCacheConfig = (function () {
       this.evictionMaxSize = Number.MAX_SAFE_INTEGER;
       this.evictionSamplingCount = 8;
       this.evictionSamplingPoolSize = 16;
-   }**
-   
+   }
+  ``` 
 For more details on these configuration element please visit documentation **[page] (http://docs.hazelcast.org/docs/latest-development/manual/html/Performance/Near_Cache/Hazelcast_Data_Structures_with_Near_Cache_Support.html)
 
 ### NodeJs Code Sample with Near Cache
 ExampleApp.js
+```
     1. const HazelcastClient = require('hazelcast-client').Client;
     2. const Config = require('hazelcast-client').Config;
     3. let listener = require('./listener');
@@ -74,7 +78,8 @@ ExampleApp.js
     30. .then(() => map.remove('key'))
     31. ;
     32. });
-    
+   ```
+   
     ### Code Walkthrough
     **Line No   Description 
 
@@ -92,6 +97,7 @@ ExampleApp.js
 
 ## Code Output
 The near cache element of the configuration that is printed out when you run the code is as below 
+```
 "nearCacheConfigs": {
     "my-distributed-map": {
     "name": "my-distributed-map",
@@ -105,8 +111,10 @@ The near cache element of the configuration that is printed out when you run the
     "evictionSamplingPoolSize": 16
     }
 }
+```
 
 The output of the program is as below 
+```
 [DefaultLogger] INFO at ClusterService: Members received.
 [ Member {
 address: Address { host: 'XXX.XXX.X.XX', port: 5701, type: 4 },
@@ -116,7 +124,7 @@ attributes: {} } ]
 [DefaultLogger] INFO at HazelcastClient: Client started
 added key: key, old value: undefined, new value: value
 removed key: key, old value: somevalue, new value: undefined
-
+```
 ## HAZELCAST NODE JS CLIENT RESOURCES
 API Documentation & API : http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/
 API Reference for Config Module : http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/modules/_config_.html
