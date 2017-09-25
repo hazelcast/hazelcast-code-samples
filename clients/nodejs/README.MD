@@ -20,13 +20,14 @@ The module can be added as a dependancy in the package.json file as below
 }
 }
 ```
-########Package.json
+**Package.json
+
 Now we are ready to use hazelcast in the Nodejs application.
 
 ### SPECIFYING NEARCACHE CONFIG IN NODEJS APP
 The near cache is configured in nodejs application using the NearCacheConfig attribute of the Config class in Hazelcast-client node js module.
 
-**The definition of NearCacheConfig is as below :
+The definition of NearCacheConfig is as below :
 ```
 var NearCacheConfig = (function () {
       function NearCacheConfig() {
@@ -41,7 +42,7 @@ var NearCacheConfig = (function () {
       this.evictionSamplingPoolSize = 16;
    }
   ``` 
-For more details on these configuration element please visit documentation **[page] (http://docs.hazelcast.org/docs/latest-development/manual/html/Performance/Near_Cache/Hazelcast_Data_Structures_with_Near_Cache_Support.html)
+For more details on these configuration element please visit documentation at http://docs.hazelcast.org/docs/latest-development/manual/html/Performance/Near_Cache/Hazelcast_Data_Structures_with_Near_Cache_Support.html
 
 ### NodeJs Code Sample with Near Cache
 ExampleApp.js
@@ -82,20 +83,23 @@ ExampleApp.js
    
    
  ### Code Walkthrough
- 
- **Line No   Description 
+
 ```
 1. Import Client Class
-2. Import Config Class (hazelcast-client\lib\Config.js 5 Function to create configuration
-7.Provide the Network config i.e. the details of the cluster to connect to. 10 Assign a NEW instance of NearCacheConfig element to local variable ‘orgsNearCacheConfig’
-11.Set NearCacheConfig element ‘invalidateOnChange’ 12 Set NearCacheConfig element ‘Name’ (Map Name)
-14.Create an array of NearCacheConfig element ‘ncConfigs’ 15 Assign the nearCacheConfig as the first element in ncConfigs
+2. Import Config Class (hazelcast-client\lib\Config.js 
+5. Function to create configuration
+7.Provide the Network config i.e. the details of the cluster to connect to. 
+10. Assign a NEW instance of NearCacheConfig element to local variable ‘orgsNearCacheConfig’
+11.Set NearCacheConfig element ‘invalidateOnChange’ 
+12. Set NearCacheConfig element ‘Name’ (Map Name)
+14.Create an array of NearCacheConfig element ‘ncConfigs’ 
+15. Assign the nearCacheConfig as the first element in ncConfigs
 
 **Repeat the process to create more NearCache Configs 16 Set the array ncConfigs to config.nearCacheConfigs
 
 18.Print the Configuration to Console Connecting to and Using Cluster
 23.Get Hazelcast Client Instance 24 Get Distributed Map 'my-distributed-map'
-25.Add listener and use the ‘promise’ feature of nodejs to sequentially add and update values in map
+25 - 31. Add listener and use the ‘promise’ feature of nodejs to sequentially add and update values in map
 ```
 ## Code Output
 The near cache element of the configuration that is printed out when you run the code is as below 
