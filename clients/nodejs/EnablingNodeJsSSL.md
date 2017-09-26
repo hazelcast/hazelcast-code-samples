@@ -2,7 +2,7 @@
 Hazelcast NodeJs client package supports certificate based authentication and encryption. This article looks at how to enable certificate based authentication and encryption for NodeJS hazelcast client. For continuity it is recommended to go through the previous blog on how to get started with NodeJs Hazelcast client  [Link to previous blog]. 
 
 ### SSL Options
-Same the NearCacheConfig which was dicussed in the previous article, SSLOption is also an configuration variable in the Config object which can populated to set the parameters. The SSLOption attributes available are as below 
+Same as the NearCacheConfig which was dicussed in the previous article, SSLOption is also a configuration variable in the Config object which can be set with the required parameters. The SSLOption attributes are as below 
 
 1. ca : CA name which is used to authorize the certificate OR a Buffers of trusted certificates in PEM format
 2. pfx : PFX or PKCS12 file containing private keys, certificates and CA cert of the client
@@ -10,7 +10,7 @@ Same the NearCacheConfig which was dicussed in the previous article, SSLOption i
 4. passphrase : password for 'private key' OR 'pfx'
 5. cert : client certificate in PEM format
 6. servername : Server Name Indication
-7. rejectUnautharized : If True, then the certificate is verified againts CA and on verification failure error is raised. Self signed certificate will cause error in most cases . Setting the value to false however does not effect encrytion of the connection.
+7. rejectUnautharized : If True, then the certificate is verified againts CA and on verification failure error is raised. Self signed certificate will cause error in most cases . Setting the value to false ignores the validation however does not effect encrytion.
 
 ### Creating Certificates for the example
 The certificates and keys for server and client can be created as follows 
@@ -102,10 +102,10 @@ config.networkConfig.sslOptions={rejectUnauthorized: true,
 	                                   servername:'Hazelcast101'
                                        };
 ```
-The certificate that is being used in the example is self-signed 'rejectUnauthorized' when set to true will generally reject self signed certificate. In this case it is only working because the certificate is configured as a CA trusted certificate .
+The certificate that is being used in the example is self-signed 'rejectUnauthorized' when set to true will generally reject self signed certificate. In this case, it is only working because the certificate is configured as a CA trusted certificate .
 ### Working with Self Signed certificates
 
-The below configuration will result in error as the certificate is self-signed because nodeJs will consider it as unauthorized by a CA. 
+The below configuration will result in error as the certificate is self-signed. This is because nodeJs will consider it as unauthorized by a CA. 
 ```
 config.networkConfig.sslOptions={rejectUnauthorized: true,
 	                                   cert : fs.readFileSync(__dirname+'/ssl101/hazelcastssl.101.pem'),
@@ -121,7 +121,7 @@ config.networkConfig.sslOptions={rejectUnauthorized: true,
     at TLSWrap.ssl.onhandshakedone (_tls_wrap.js:440:38) code: 'DEPTH_ZERO_SELF_SIGNED_CERT' }
                                    
 ```
-To override the above validation the rejecUnauthorized flat will have to be set to 'false'
+To override the above validation the rejecUnauthorized flat will have to be set to 'false' and the above configuration will work fine. However this is not recommended as the application will be exposed to attacks.
 
 ## HAZELCAST NODE JS CLIENT RESOURCES
 API Documentation & API :[Click Here](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/)
