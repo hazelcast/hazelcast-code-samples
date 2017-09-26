@@ -10,14 +10,14 @@ Before we go futher into near cache implementation we need to set up a NodeJs cl
 The module can be added as a dependancy in the package.json file as below 
 ```
 {
-"dependencies": {
-"hazelcast-client": "0.6.1",
-"express": "^4.14.0",
-"superagent": "^2.3.0"
-},
-"scripts": {
-"test": "echo \"Warn: no test specified\" && exit 1",
-}
+  "dependencies": {
+     "hazelcast-client": "0.6.1",
+     "express": "^4.14.0",
+     "superagent": "^2.3.0"
+   },
+   "scripts": {
+     "test": "echo \"Warn: no test specified\" && exit 1",
+   }
 }
 ```
 **Package.json
@@ -52,33 +52,33 @@ ExampleApp.js
     3. let listener = require('./listener');
     4. //Configuration
     5. let initConfig = (nearCache) => {
-    6. let config = new Config.ClientConfig();
-    7. config.networkConfig.addresses = [{host: '127.0.0.1', port: '5701'}];
+    6.     let config = new Config.ClientConfig();
+    7.     config.networkConfig.addresses = [{host: '127.0.0.1', port: '5701'}];
     8. // NearCache Configuration
-    9. if (nearCache) {
-    10. let orgsNearCacheConfig = new Config.NearCacheConfig();
-    11. orgsNearCacheConfig.invalidateOnChange = true;
-    12. orgsNearCacheConfig.name = 'my-distributed-map';
-    13. // Specify multiple NearCache configs
-    14. let ncConfigs = {};
-    15. ncConfigs[orgsNearCacheConfig.name] = orgsNearCacheConfig;
-    16. config.nearCacheConfigs = ncConfigs;
-    17. }
-    18. process.stdout.write((JSON.stringify(config, null, 2)));
-    19. return config;
-    20. //end config
-    21. };
+    9.     if (nearCache) {
+    10.       let orgsNearCacheConfig = new Config.NearCacheConfig();
+    11.       orgsNearCacheConfig.invalidateOnChange = true;
+    12.       orgsNearCacheConfig.name = 'my-distributed-map';
+    13.       // Specify multiple NearCache configs
+    14.       let ncConfigs = {};
+    15.       ncConfigs[orgsNearCacheConfig.name] = orgsNearCacheConfig;
+    16.       config.nearCacheConfigs = ncConfigs;
+    17.    }
+    18.   process.stdout.write((JSON.stringify(config, null, 2)));
+    19.   return config;
+    20.   //end config
+    21.  };
     22. //Connect to Hazelcast Cluster
     23. HazelcastClient.newHazelcastClient(initConfig(true)).then((client) => {
-    24. let map = client.getMap('my-distributed-map');
-    25. map.addEntryListener(listener, undefined, true)
-    26. .then(() => map.put('key', 'value'))
-    27. .then(() => map.get('key'))
-    28. .then(() => map.putIfAbsent('somekey', 'somevalue'))
-    29. .then(() => map.replace('key', 'somevalue', 'newvalue'))
-    30. .then(() => map.remove('key'))
-    31. ;
-    32. });
+    24.    let map = client.getMap('my-distributed-map');
+    25.    map.addEntryListener(listener, undefined, true)
+    26.       .then(() => map.put('key', 'value'))
+    27.       .then(() => map.get('key'))
+    28.       .then(() => map.putIfAbsent('somekey', 'somevalue'))
+    29.       .then(() => map.replace('key', 'somevalue', 'newvalue'))
+    30.       .then(() => map.remove('key'))
+    31.    ;
+    32.    });
    ```
    
    
@@ -123,13 +123,15 @@ The output of the program is as below
 ```
 [DefaultLogger] INFO at ClusterService: Members received.
 [ Member {
-address: Address { host: 'XXX.XXX.X.XX', port: 5701, type: 4 },
-uuid: '86a4edca-9ae3-402b-abad-2c76d672e091',
-isLiteMember: false,
-attributes: {} } ]
+   address: Address { host: 'XXX.XXX.X.XX', port: 5701, type: 4 },
+   uuid: '86a4edca-9ae3-402b-abad-2c76d672e091',
+   isLiteMember: false,
+   attributes: {} } ]
 [DefaultLogger] INFO at HazelcastClient: Client started
+
 added key: key, old value: undefined, new value: value
 removed key: key, old value: somevalue, new value: undefined
+
 ```
 ## HAZELCAST NODE JS CLIENT RESOURCES
 API Documentation & API : http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/
