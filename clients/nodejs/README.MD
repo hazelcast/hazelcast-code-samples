@@ -11,7 +11,7 @@ The module can be added as a dependancy in the package.json file as below
 ```
 {
   "dependencies": {
-     "hazelcast-client": "0.6.1",
+     "hazelcast-client": "0.6.1", // Check link in resources section for latest version
      "express": "^4.14.0",
      "superagent": "^2.3.0"
    },
@@ -134,6 +134,6 @@ removed key: key, old value: somevalue, new value: undefined
 
 ```
 ## HAZELCAST NODE JS CLIENT RESOURCES
-API Documentation & API : http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/
+API Documentation & API :[Click Here] (http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/)
 API Reference for Config Module : http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/modules/_config_.html
 API Reference for the NearCacheConfig Element : http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/classes/_config_.nearcacheconfig.html
