@@ -135,5 +135,7 @@ removed key: key, old value: somevalue, new value: undefined
 ```
 ## HAZELCAST NODE JS CLIENT RESOURCES
 API Documentation & API :[Click Here](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/)
+
 API Reference for Config Module :[Click Here](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/modules/_config_.html)
+
 API Reference for the NearCacheConfig Element : [Click Here](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/classes/_config_.nearcacheconfig.html)
