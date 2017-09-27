@@ -14,6 +14,11 @@
     <name>Near-Cache: Fraud Detection Client abstract base</name>
     <description>Hazelcast Client base, for near-cache on/off</description>
 
+	<properties>
+		<build.timestamp>${maven.build.timestamp}</build.timestamp>
+		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+	</properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -27,4 +32,13 @@
         </dependency>
     </dependencies>
 
+	<build>
+		<resources>
+			<resource>
+				<!-- Replace timestamp in "application.properties" file -->
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+	</build>
 </project>

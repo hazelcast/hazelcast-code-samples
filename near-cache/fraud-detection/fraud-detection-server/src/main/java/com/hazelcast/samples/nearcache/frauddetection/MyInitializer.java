@@ -63,7 +63,7 @@ public class MyInitializer implements CommandLineRunner {
 				Airport airport = new Airport();
 				
 				airport.setCode(airportData[0].toString());
-				airport.setDecription(airportData[1].toString());
+				airport.setDescription(airportData[1].toString());
 				airport.setLatitude(Double.parseDouble(airportData[2].toString()));
 				airport.setLongitude(Double.parseDouble(airportData[3].toString()));
 				

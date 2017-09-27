@@ -21,7 +21,7 @@ import lombok.Data;
 public class Airport implements Serializable {
 
 	private String code;
-	private String decription;
+	private String description;
 	private double latitude;
 	private double longitude;
 	
