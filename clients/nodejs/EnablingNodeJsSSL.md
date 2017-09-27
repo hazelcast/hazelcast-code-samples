@@ -1,4 +1,4 @@
-## Enabling SSL/TLS for NodeJS Hazelcast Client
+# Enabling SSL/TLS for NodeJS Hazelcast Client
 Hazelcast NodeJs client package supports certificate based authentication and encryption. This article looks at how to enable certificate based authentication and encryption for NodeJS hazelcast client. For continuity it is recommended to go through the previous blog on how to get started with NodeJs Hazelcast client  [Link to previous blog]. 
 
 ### SSL Options
@@ -14,11 +14,16 @@ Same as the NearCacheConfig which was dicussed in the previous article, SSLOptio
 
 ### Creating Certificates for the example
 The certificates and keys for server and client can be created as follows 
-1.  Generate private key  > openssl genrsa 1024 OR 2048 > hazelcastssl.101.key
-2. create a certificate signing request > openssl req -new -key ./hazelcastssl.101.key > ./hazelcastssl.101.csr
-3. create a self signed certificae for client apps > openssl x509 -in hazelcastssl.101.csr -out hazelcastssl.101.cert -req -signkey hazelcastssl.101.key -days 3600
-4. create a Keystore for certificate and Keys > openssl pkcs12 -export -in hazelcastssl.101.cert -inkey hazelcastssl.101.key -out hazelcastssl.101.p12
-5. convert cert file to PEM format for nodejs > openssl x509 -in hazelcastssl.101.cert -outform PEM -out hazelcastssl.101.pem
+1.  Generate private key  
+``` > openssl genrsa 1024 OR 2048 > hazelcastssl.101.key ```
+2. create a certificate signing request
+``` > openssl req -new -key ./hazelcastssl.101.key > ./hazelcastssl.101.csr ```
+3. create a self signed certificae for client apps 
+``` > openssl x509 -in hazelcastssl.101.csr -out hazelcastssl.101.cert -req -signkey hazelcastssl.101.key -days 3600 ```
+4. create a Keystore for certificate and Keys 
+```> openssl pkcs12 -export -in hazelcastssl.101.cert -inkey hazelcastssl.101.key -out hazelcastssl.101.p12```
+5. convert cert file to PEM format for nodejs 
+```> openssl x509 -in hazelcastssl.101.cert -outform PEM -out hazelcastssl.101.pem ```
  
 Now you have all the required resource to set up secure connection between Nodejs client and hazelcast server.
 
