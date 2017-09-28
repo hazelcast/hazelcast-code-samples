@@ -30,6 +30,8 @@ public class After implements CommandLineRunner {
 	@Autowired
 	private Before before;
 	@Autowired
+	private FraudService fraudService;
+	@Autowired
 	private HazelcastInstance hazelcastInstance;
 
 	@Override
@@ -49,7 +51,9 @@ public class After implements CommandLineRunner {
 		System.out.printf("=== Map : '%s'%n", airportsMap.getName());
 
 		System.out.printf("===  Calls............. : '%d'%n",
-				FraudService.NUMBER_OF_TEST_ITERATIONS);
+				this.fraudService.getCalls());
+		System.out.printf("===  Alerts............ : '%d'%n",
+				this.fraudService.getAlerts());
 
 		if (airportsMapNearCacheStats!=null) {
 			System.out.printf("===  Near-cache hits... : '%d'%n",

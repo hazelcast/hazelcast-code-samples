@@ -38,8 +38,7 @@
 	  == ========================================================== ==
 	 -->
     <near-cache name="airports">
-    		<max-size>10</max-size>
-        <eviction eviction-policy="LFU" max-size-policy="ENTRY_COUNT"/>
+        <eviction eviction-policy="LFU" max-size-policy="ENTRY_COUNT" size="10"/>
     </near-cache>
 
 </hazelcast-client>
