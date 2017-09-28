@@ -168,8 +168,17 @@ module.
 
 This is a module for a client *with* a near-cache.
 
-It is almost identical to `fraud-detection-client-without`, except that it's `hazelcast-client.xml` specifies
-a near-cache for the "_airports_" map.
+It is almost identical to `fraud-detection-client-without`, except that it's `hazelcast-client.xml` specifies a near-cache.
+
+These are the lines that are added:
+
+```
+<near-cache name="airports">
+ <eviction eviction-policy="LFU" max-size-policy="ENTRY_COUNT" size="10"/>
+</near-cache>
+```
+
+A near-cache is defined on the "_airports_" map. It keeps the most frequently used 10 entries.
 
 ### Running the example
 
