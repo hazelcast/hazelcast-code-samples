@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hazelcast.samples.nearcache</groupId>
+        <artifactId>fraud-detection</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>fraud-detection-client-common</artifactId>
+
+    <name>Near-Cache: Fraud Detection Client abstract base</name>
+    <description>Hazelcast Client base, for near-cache on/off</description>
+
+	<properties>
+		<build.timestamp>${maven.build.timestamp}</build.timestamp>
+		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+	</properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>fraud-detection-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-client</artifactId>
+        </dependency>
+    </dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<!-- Replace timestamp in "application.properties" file -->
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+	</build>
+</project>
