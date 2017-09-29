@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast-client xsi:schemaLocation="http://www.hazelcast.com/schema/client-config hazelcast-client-config-3.9.xsd"
+           xmlns="http://www.hazelcast.com/schema/client-config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<!-- This is the configuration for a client without a near-cache.
+	  == ========================================================== ==
+	  == All we need specify is the connectivity to the grid, and   ==
+	  == allow everything else to default. Maps don't need to named ==
+	  == and will merely be proxies onto the real storage on the    ==
+	  == Hazelcast grid.
+	  == ========================================================== ==
+	  -->
+
+	<!-- How to find the servers -->        
+    <network>
+        <cluster-members>
+                <address>127.0.0.1:5701</address>
+        </cluster-members>
+    </network>
+    
+</hazelcast-client>

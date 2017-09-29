@@ -62,6 +62,7 @@
         <module>learning-basics</module>
         <module>mapreduce</module>
         <module>monitoring</module>
+        <module>near-cache</module>
         <module>network-configuration</module>
         <module>osgi</module>
         <module>replicated-map</module>
