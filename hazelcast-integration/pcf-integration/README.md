@@ -12,7 +12,7 @@ This application uses Hazelcast Client to connect to a Hazelcast cluster thats d
 
 1) Download Hazelcast for PCF from [Pivotal Network](https://network.pivotal.io/)
 
-2) Install Hazelcast for PCF to your PCF setup. You can refer to Hazelcast for PCF [documentation](https://docs.pivotal.io/hazelcast-for-pcf/) for detailed installation instructions.
+2) Install Hazelcast for PCF to your PCF setup. You can refer to Hazelcast for PCF [documentation](https://docs.pivotal.io/partners/hazelcast/) for detailed installation instructions.
 
 3) Check your Hazelcast installation using `cf marketplace` command. You should see "hazelcast" as a service after installation.
 
