@@ -20,7 +20,6 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <hazelcast.version>3.9-SNAPSHOT</hazelcast.version>
         <java.version>8</java.version>
         <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
     </properties>
