@@ -2,17 +2,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>fraud-detection-server</artifactId>
+    <name>Near Cache: Fraud Detection Server</name>
+    <description>Hazelcast Server</description>
+
     <parent>
         <groupId>com.hazelcast.samples.nearcache</groupId>
         <artifactId>fraud-detection</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>fraud-detection-server</artifactId>
-
-    <name>Near-Cache: Fraud Detection Server</name>
-    <description>Hazelcast Server</description>
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -23,8 +28,8 @@
     </dependencies>
 
     <build>
-    		<finalName>${project.artifactId}</finalName>
-    		
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

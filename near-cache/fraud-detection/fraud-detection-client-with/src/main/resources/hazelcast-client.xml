@@ -1,44 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hazelcast-client xsi:schemaLocation="http://www.hazelcast.com/schema/client-config hazelcast-client-config-3.9.xsd"
-           xmlns="http://www.hazelcast.com/schema/client-config"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        
-	<!-- This is the configuration for a client with a near-cache.
-	  == ========================================================== ==
-	  == There is the usual connectivity to the grid specified in   ==
-	  == the network section, and a near-cache configuration added  ==
-	  == for each map that needs it. Here, only the airports map.   ==
-	  == ========================================================== ==
-	  -->
+                  xmlns="http://www.hazelcast.com/schema/client-config"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-	<!-- How to find the servers -->        
+    <!-- This is the configuration for a client with a Near Cache.
+      == ========================================================== ==
+      == There is the usual connectivity to the grid specified in   ==
+      == the network section, and a Near Cache configuration added  ==
+      == for each map that needs it. Here, only the airports map.   ==
+      == ========================================================== ==
+      -->
+
+    <!-- How to find the servers -->
     <network>
         <cluster-members>
-                <address>127.0.0.1:5701</address>
+            <address>127.0.0.1:5701</address>
         </cluster-members>
     </network>
 
-	<!-- A near-cache for the airports map 
-	  == ========================================================== ==
-      ==  A near-cache has a number of configuration parameters that==
+    <!-- A Near Cache for the airports map
+      == ========================================================== ==
+      == A Near Cache has a number of configuration parameters that ==
       == allow you to tune the performance. Check the documentation ==
       == for the full list and their functionality.                 ==
-      ==  Here we go with constraining the near-cache to ten entries==
+      ==  Here we go with constraining the Near Cache to ten entries==
       == so we don't have to worry about running out of memory on   ==
       == the client (as typically the servers have more entries     ==
       == than a single client can accommodate). We discard the      ==
       == least frequently used, rather than the least recently used,==
       == to maintain the most beneficial entries on the client.     ==
-      ==  When using a near-cache, typically there is a balance to  ==
+      ==  When using a Near Cache, typically there is a balance to  ==
       == be found. For example 10% of records may contribute to 99% ==
-      == of data access. If the near-cache holds 9% it's not big    ==
+      == of data access. If the Near Cache holds 9% it's not big    ==
       == enough to be optimal, and if it holds 11% it's oversized   ==
       == and this could affect garbage collection for little extra  ==
       == benefit.                                                   ==
-	  == ========================================================== ==
-	 -->
+      == ========================================================== ==
+     -->
     <near-cache name="airports">
         <eviction eviction-policy="LFU" max-size-policy="ENTRY_COUNT" size="10"/>
     </near-cache>
-
 </hazelcast-client>

@@ -2,22 +2,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>fraud-detection-client-common</artifactId>
+    <name>Nea -Cache: Fraud Detection Client abstract base</name>
+    <description>Hazelcast Client base, for Near Cache on/off</description>
+
     <parent>
         <groupId>com.hazelcast.samples.nearcache</groupId>
         <artifactId>fraud-detection</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>fraud-detection-client-common</artifactId>
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <name>Near-Cache: Fraud Detection Client abstract base</name>
-    <description>Hazelcast Client base, for near-cache on/off</description>
-
-	<properties>
-		<build.timestamp>${maven.build.timestamp}</build.timestamp>
-		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-	</properties>
+        <build.timestamp>${maven.build.timestamp}</build.timestamp>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -32,13 +35,13 @@
         </dependency>
     </dependencies>
 
-	<build>
-		<resources>
-			<resource>
-				<!-- Replace timestamp in "application.properties" file -->
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
-	</build>
+    <build>
+        <resources>
+            <resource>
+                <!-- Replace timestamp in "application.properties" file -->
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
 </project>
