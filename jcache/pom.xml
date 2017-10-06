@@ -40,7 +40,7 @@
 
         <dependency>
             <groupId>com.hazelcast.samples.distributed-map</groupId>
-            <artifactId>near-cache</artifactId>
+            <artifactId>nearcache</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

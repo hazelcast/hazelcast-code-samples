@@ -43,7 +43,7 @@
         <module>map-interceptor</module>
         <module>mapstore</module>
         <module>multi-map</module>
-        <module>near-cache</module>
+        <module>nearcache</module>
         <module>paging-predicate</module>
         <module>partition-lost-listener</module>
         <module>query-collections</module>
