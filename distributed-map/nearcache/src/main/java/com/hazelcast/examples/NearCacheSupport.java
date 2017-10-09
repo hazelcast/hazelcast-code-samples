@@ -37,7 +37,7 @@ abstract class NearCacheSupport {
         Hazelcast.shutdownAll();
     }
 
-    protected static void printNearCacheStats(IMap<Integer, Article> map) {
+    protected static void printNearCacheStats(IMap<?, Article> map) {
         NearCacheStats stats = map.getLocalMapStats().getNearCacheStats();
 
         System.out.printf("The Near Cache contains %d entries.%n", stats.getOwnedEntryCount());
