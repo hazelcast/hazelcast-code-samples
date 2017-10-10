@@ -20,6 +20,13 @@
                                http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.9.xsd"
                   xmlns="http://www.hazelcast.com/schema/client-config">
 
+    <near-cache name="articlesSerializedKeys">
+        <in-memory-format>OBJECT</in-memory-format>
+        <serialize-keys>true</serialize-keys>
+        <invalidate-on-change>false</invalidate-on-change>
+        <eviction eviction-policy="NONE" max-size-policy="ENTRY_COUNT"/>
+    </near-cache>
+    
     <near-cache name="articlesObject">
         <in-memory-format>OBJECT</in-memory-format>
         <invalidate-on-change>false</invalidate-on-change>
