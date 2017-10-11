@@ -33,6 +33,7 @@
         <module>multiple-hazelcast-instances</module>
         <module>unique-names</module>
         <module>wildcard-configuration</module>
+        <module>configure-datastructures-at-runtime</module>
     </modules>
 
     <dependencies>
