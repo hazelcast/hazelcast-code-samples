@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.concurrent.Callable;
 
 public class EchoTask
-        implements Callable, Serializable {
+        implements Callable<String>, Serializable {
 
     private final String msg;
 
@@ -27,7 +27,7 @@ public class EchoTask
     }
 
     @Override
-    public Object call() throws Exception {
+    public String call() throws Exception {
         return msg;
     }
 }
