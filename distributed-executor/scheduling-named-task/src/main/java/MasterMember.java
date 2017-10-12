@@ -29,7 +29,7 @@ public class MasterMember {
         HazelcastInstance instance = Hazelcast.newHazelcastInstance();
 
         IScheduledExecutorService scheduler = instance.getScheduledExecutorService("scheduler");
-        IScheduledFuture future = scheduler.schedule(named("MyTask",
+        IScheduledFuture<String> future = scheduler.schedule(named("MyTask",
                 new EchoTask("foobar")), 5, TimeUnit.SECONDS);
 
         Object result = future.get();

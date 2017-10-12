@@ -27,7 +27,7 @@ public class MasterMember {
         HazelcastInstance instance = Hazelcast.newHazelcastInstance();
 
         IScheduledExecutorService scheduler = instance.getScheduledExecutorService("scheduler");
-        IScheduledFuture future = scheduler.scheduleOnMember(new EchoTask("My Task"),
+        IScheduledFuture<String> future = scheduler.scheduleOnMember(new EchoTask("My Task"),
                 instance.getCluster().getLocalMember(), 5, TimeUnit.SECONDS);
 
         Object result = future.get();

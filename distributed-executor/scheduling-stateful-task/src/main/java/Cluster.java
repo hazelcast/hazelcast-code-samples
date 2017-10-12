@@ -35,7 +35,7 @@ public class Cluster {
         String key = generateKeyOwnedBy(taskOwner);
 
         IScheduledExecutorService scheduler = instances[0].getScheduledExecutorService("scheduler");
-        IScheduledFuture future = scheduler.scheduleOnKeyOwnerAtFixedRate(new EchoTask("My Task"),
+        IScheduledFuture<?> future = scheduler.scheduleOnKeyOwnerAtFixedRate(new EchoTask("My Task"),
                 key, 0, 5, TimeUnit.SECONDS);
 
         // Wait for a couple of run cycles

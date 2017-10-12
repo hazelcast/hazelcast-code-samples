@@ -33,7 +33,7 @@ public class Cluster {
 
         String key = generateKeyOwnedBy(instances[1]);
         IScheduledExecutorService scheduler = instances[0].getScheduledExecutorService("scheduler");
-        IScheduledFuture future = scheduler.scheduleOnKeyOwner(new EchoTask("My Task"), key, 5, TimeUnit.SECONDS);
+        IScheduledFuture<String> future = scheduler.scheduleOnKeyOwner(new EchoTask("My Task"), key, 5, TimeUnit.SECONDS);
 
         instances[1].getLifecycleService().terminate();
 

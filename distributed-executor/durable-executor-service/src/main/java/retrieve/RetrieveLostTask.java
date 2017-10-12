@@ -31,7 +31,7 @@ public class RetrieveLostTask {
 
         HazelcastInstance client = HazelcastClient.newHazelcastClient();
         DurableExecutorService executorService = client.getDurableExecutorService("exec");
-        DurableExecutorServiceFuture future = executorService.submit(new BasicTask("DurableExecutor"));
+        DurableExecutorServiceFuture<String> future = executorService.submit(new BasicTask("DurableExecutor"));
         long taskId = future.getTaskId();
         client.shutdown();
 

@@ -19,7 +19,7 @@ package retrieve;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
-public class BasicTask implements Callable, Serializable {
+public class BasicTask implements Callable<String>, Serializable {
 
     private final String msg;
 
@@ -28,7 +28,7 @@ public class BasicTask implements Callable, Serializable {
     }
 
     @Override
-    public Object call() throws Exception {
+    public String call() throws Exception {
         return msg;
     }
 }
