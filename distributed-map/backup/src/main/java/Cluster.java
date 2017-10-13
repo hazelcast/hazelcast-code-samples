@@ -1,13 +1,13 @@
-import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
-
-import java.lang.management.ManagementFactory;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.lang.management.ManagementFactory;
+
+import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+import static java.lang.String.format;
 
 public class Cluster {
 
@@ -38,18 +38,16 @@ public class Cluster {
     private static void printMapStatistics() {
         try {
             MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-            long ownedEntrieSum = 0;
-            long backupEntrieSum = 0;
-            for (ObjectName obj : mBeanServer.queryNames(null,
-                    ObjectName.getInstance("com.hazelcast:type=IMap,name=cities,*"))) {
-                ownedEntrieSum += (Long) mBeanServer.getAttribute(obj, "localOwnedEntryCount");
-                backupEntrieSum += (Long) mBeanServer.getAttribute(obj, "localBackupEntryCount");
+            long ownedEntriesSum = 0;
+            long backupEntriesSum = 0;
+            for (ObjectName obj : mBeanServer.queryNames(null, ObjectName.getInstance("com.hazelcast:type=IMap,name=cities,*"))) {
+                ownedEntriesSum += (Long) mBeanServer.getAttribute(obj, "localOwnedEntryCount");
+                backupEntriesSum += (Long) mBeanServer.getAttribute(obj, "localBackupEntryCount");
             }
-            System.out.println(String.format("Count of owned IMap entries across cluster: %d, backup entries: %d",
-                    ownedEntrieSum, backupEntrieSum));
+            System.out.println(format("Count of owned IMap entries across cluster: %d, backup entries: %d", ownedEntriesSum,
+                    backupEntriesSum));
         } catch (Exception e) {
             System.out.println("Getting Map statistics over JMX failed: " + e.getMessage());
         }
     }
-
 }
