@@ -10,7 +10,6 @@ import com.hazelcast.jet.Pipeline;
 import com.hazelcast.jet.Sinks;
 import com.hazelcast.jet.Sources;
 import com.hazelcast.jet.datamodel.Tuple2;
-import com.hazelcast.jet.datamodel.Tuple3;
 import com.hazelcast.jet.function.DistributedFunction;
 import com.hazelcast.samples.querying.domain.LifeValue;
 import com.hazelcast.samples.querying.domain.PersonKey;
@@ -39,7 +38,7 @@ import com.hazelcast.samples.querying.domain.PersonValue;
  *          |  IMap    |                |  IMap    |
  *          +----------+                +----------+
  *               |                            |
- *          
+ *               |                            |
  *          +----------+                +----------+
  *          |3 "Person"|                |4 "Deaths"|
  *          | to tuple |                | to tuple |
@@ -110,20 +109,19 @@ public class MyJoinPipeline {
 		ComputeStage<Tuple2<String, LocalDate>> stage4
 			= stage3.map(entry -> Tuple2.tuple2(entry.getKey(), entry.getValue()));
 
-		// 5 - join output from steps 2 and 4
-		//FIXME AND DIAGRAMS TODO
-		ComputeStage<Tuple3<String, LocalDate, LocalDate>> stage5
-			= stage2.hashJoin(stage4, null);
+		// 5 - join output from steps 2 and 4 using the clause provided (ie. on first name)
+		ComputeStage<Tuple2<Tuple2<String, LocalDate>, Tuple2<String, LocalDate>>> stage5
+			= stage2.hashJoin(stage4, MyJoinPipeline.getJoinClause());
 		
 		// 6 - create a map entry from step 5 output
 		ComputeStage<Entry<String, LifeValue>> stage6 =
 				stage5.map(trio -> {
 					// Key is field 0
-					String key = trio.f0();
+					String key = trio.f0().f0();
 					// Value is fields 1 & 2
 					LifeValue value = new LifeValue();
-					value.setDateOfBirth(trio.f1());
-					value.setDateOfDeath(trio.f2());
+					value.setDateOfBirth(trio.f0().f1());
+					value.setDateOfDeath(trio.f1().f1());
 					// Create a Map.Entry
 					return new SimpleImmutableEntry<>(key, value);
 		});
@@ -133,5 +131,40 @@ public class MyJoinPipeline {
 		
 		// Return the query execution plan
 		return pipeline;
+	}
+
+	
+	/**
+	 * <P>How to join a stream of "{@code tuple2(firstname,date-of-birth)}" 
+	 * with "{@code tuple2(firstname,date-of-death)}" to give
+	 * "{@code tuple2(tuple2(firstname,date-of-birth),date-of-death)}"
+	 * </P>
+	 * <P>What this means:
+	 * </P>
+	 * <PRE>
+	 * 	&lt;String, Tuple2&lt;String, LocalDate&gt;, Tuple2&lt;String, LocalDate&gt;, LocalDate&gt;
+	 * </PRE>
+	 * <OL>
+	 * <LI>The key being used for the join is a {@code String}</LI>
+	 * <LI>The first half of the join is a stream of {@code (String, LocalDate)}</LI>
+	 * <LI>The second half of the join is a stream of {@code (String, LocalDate)}</LI>
+	 * <LI>What is taken from the second stream to add to the first is a {@code (String, LocalDate)} pair</LI>
+	 * </OL>
+	 *  
+	 * @return Take a pair, make a new pair containing the old pair and one field
+	 */
+	private static JoinClause<String, Tuple2<String, LocalDate>, Tuple2<String, LocalDate>, Tuple2<String, LocalDate>>
+		getJoinClause() {
+
+		// Get the key to match from the first tuple pair
+		DistributedFunction<Tuple2<String, LocalDate>, String> leftKeyFn
+		= Tuple2::f0;
+		
+		// Get the key to match from the second tuple pair
+        DistributedFunction<Tuple2<String, LocalDate>, String> rightKeyFn
+		= Tuple2::f0;
+        
+        // Match on full key
+		return JoinClause.onKeys(leftKeyFn, rightKeyFn);
 	}
 }
