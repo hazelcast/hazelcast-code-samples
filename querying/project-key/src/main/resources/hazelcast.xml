@@ -13,4 +13,11 @@
         </join>
     </network>
 
+	<map name="life">
+		<attributes>
+			<!-- This class builds a field called "age" -->
+        		<attribute extractor="com.hazelcast.samples.querying.domain.LifeAgeValueExtractor">age</attribute>
+        </attributes>		
+	</map>
+	
 </hazelcast>

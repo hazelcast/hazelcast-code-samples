@@ -9,14 +9,19 @@ import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.stereotype.Component;
 
+import com.hazelcast.aggregation.Aggregators;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.Pipeline;
 import com.hazelcast.projection.Projection;
 import com.hazelcast.projection.Projections;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.SqlPredicate;
+import com.hazelcast.samples.querying.domain.LifeValue;
 import com.hazelcast.samples.querying.domain.PersonKey;
 import com.hazelcast.samples.querying.domain.PersonValue;
+import com.hazelcast.samples.querying.jet.MyJoinPipeline;
 
 /**
  * <P>Implement 4 extra commands for Spring Shell.
@@ -34,11 +39,17 @@ import com.hazelcast.samples.querying.domain.PersonValue;
  * certain fields from the key and the value to be returned.</P>
  * </LI>
  * <LI><B>join</B>
- * <P>XXX</P>
+ * <P>Join the birth and death maps to produce the life map.</P>
+ * </LI>
+ * <LI><B>list</B>
+ * <P>Display the map content.</P>
  * </LI>
  * <LI><B>location</B>
  * <P>Display the location of each entry. Which partition it is in
  * and which server JVM is hosting that partition.</P>
+ * </LI>
+ * <LI><B>longevity</B>
+ * <P>Find who lived the longest.</P>
  * </LI>
  * </OL>
  */
@@ -47,6 +58,8 @@ public class MyCommands implements CommandMarker {
 	
     @Autowired
     private HazelcastInstance hazelcastInstance;
+    @Autowired
+    private JetInstance jetInstance;
     
     /**
      * <P>Search <U>keys</U> but return <U>values</U>
@@ -143,21 +156,71 @@ public class MyCommands implements CommandMarker {
 
     
     /**
-     * XXX
+     * <P>Use a Jet pipeline to join two maps into a third.
+     * Essentially, materialising a view.
+     * </P>
      */
     @CliCommand(value = "join",
-			help = "Join one map with another")
+			help = "Join birth with death to produce life")
     public String join() {
 
 		IMap<PersonKey, PersonValue> personMap
 		= this.hazelcastInstance.getMap("person");
+		IMap<String, LifeValue> lifeMap
+		= this.hazelcastInstance.getMap("life");
 		
 		if (personMap.isEmpty()) {
 			return "Map is empty, run 'load' first";
 		}
 		
-    		//FIXME
-    		return "Not yet implemented";
+		// Remove old results
+		lifeMap.clear();
+
+		// Prepare the execution plan
+		Pipeline pipeline = MyJoinPipeline.build();
+		
+		// Run the join
+		System.out.println("Running : " + pipeline);
+		this.jetInstance.newJob(pipeline).join();
+		
+    		return "Done";
+    }
+
+    
+    /**
+     * <P>List the contents of the maps.
+     * </P>
+     */
+    @CliCommand(value = "list",
+			help = "List the contents of the maps")
+    public void list() {
+		IMap<PersonKey, PersonValue> personMap
+		= this.hazelcastInstance.getMap("person");
+		IMap<String, LifeValue> lifeMap
+		= this.hazelcastInstance.getMap("life");
+
+		if (personMap.isEmpty()) {
+			System.out.println("Map 'person' is empty, run 'load' first");
+		}
+		if (lifeMap.isEmpty()) {
+			System.out.println("Map 'life' is empty, run 'join' first");
+		}
+
+    		String[] mapNames = { "person", "deaths", "life" };
+
+    		for (String mapName : mapNames) {
+    			IMap<?,?> map = this.hazelcastInstance.getMap(mapName);
+    			
+    			System.out.printf("MAP : '%s'%n", mapName);
+    			
+    			for (Object key : map.keySet()) {
+        			System.out.printf("  => '%s' : '%s'%n", key, map.get(key));
+    			}
+    			
+    			System.out.printf("[%d row%s]%n",
+    				map.size(),
+    				(map.size()==1 ? "" : "s"));
+    		}
     }
 
     
@@ -177,6 +240,10 @@ public class MyCommands implements CommandMarker {
 
 		IMap<PersonKey, PersonValue> personMap
 		= this.hazelcastInstance.getMap("person");
+
+		if (personMap.isEmpty()) {
+			return "Map is empty, run 'load' first";
+		}
 		
 		Set<PersonKey> keySet = personMap.keySet();
 
@@ -189,6 +256,53 @@ public class MyCommands implements CommandMarker {
 		return String.format("[%d row%s]",
 				keySet.size(),
 				(keySet.size()==1 ? "" : "s"));
+    }
+
+
+    
+    /**
+     * <P>Use built-in aggregations to find the life
+     * record with the greatest age -- who lived the
+     * longest.
+     * </P>
+     * <P>This uses the "age" field, which is derived
+     * by {@link com.hazelcast.samples.querying.domain.LifeAgeValueExtractor LifeAgeValueExtractor}
+     * but acts as if it was a field in the 
+     * {@link com.hazelcast.samples.querying.domain.LifeValue LifeValue} object.
+     * </P>
+     */
+    @SuppressWarnings("rawtypes")
+	@CliCommand(value = "longevity",
+			help = "Who lived the longest")
+    public String longevity() {
+
+		IMap<String, LifeValue> lifeMap
+		= this.hazelcastInstance.getMap("life");
+
+		if (lifeMap.isEmpty()) {
+			return "Map is empty, run 'join' first";
+		}
+
+		// Find max age
+		int max = lifeMap.aggregate(Aggregators.integerMax("age"));
+		
+		System.out.printf("MAX AGE : '%d'%n", max);
+		
+		// Find those with that age
+		Predicate predicate = new SqlPredicate("age = " + max);
+
+		System.out.printf("PREDICATE : '%s'%n", predicate);
+		
+		Set<String> keySet = lifeMap.keySet(predicate);
+
+		keySet.forEach(key -> {
+			System.out.printf("  => '%s' : '%s'%n", key, lifeMap.get(key));
+		});
+
+		return String.format("[%d row%s]",
+				keySet.size(),
+				(keySet.size()==1 ? "" : "s"));
+		
     }
 
 }

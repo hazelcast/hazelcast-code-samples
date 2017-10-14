@@ -14,7 +14,9 @@ import com.hazelcast.samples.querying.domain.PersonKey;
 import com.hazelcast.samples.querying.domain.PersonValue;
 
 /**
- * XXX
+ * <P>Test data. Recording biths and deaths separately,
+ * since not everyone will have died!
+ * <P>
  */
 @Component
 public class TestDataLoader implements CommandMarker {
@@ -28,8 +30,10 @@ public class TestDataLoader implements CommandMarker {
     	
         IMap<PersonKey, PersonValue> personMap
         		= this.hazelcastInstance.getMap("person");
+        IMap<String, LocalDate> deathsMap
+		= this.hazelcastInstance.getMap("deaths");
         
-        Arrays.stream(TestData.PERSONS).forEach((Object[] datum) -> {
+        Arrays.stream(TestData.BIRTHS).forEach((Object[] datum) -> {
         		PersonKey personKey = new PersonKey();
         		personKey.setFirstName(datum[0].toString());
         		personKey.setLastName(datum[1].toString());
@@ -39,11 +43,22 @@ public class TestDataLoader implements CommandMarker {
         		
         		personMap.put(personKey, personValue);
         });
-        
-		return String.format("Loaded %d into '%s'", 
-				TestData.PERSONS.length,
-				personMap.getName());
 
+        Arrays.stream(TestData.DEATHS).forEach((Object[] datum) -> {
+        		String firstName = datum[0].toString();
+        		LocalDate dateOfDeath = LocalDate.parse(datum[1].toString());
+   
+        		deathsMap.put(firstName,  dateOfDeath);
+        });
+
+		return String.format("Loaded %d into '%s'", 
+				TestData.BIRTHS.length,
+				personMap.getName())
+				+
+			   String.format(", Loaded %d into '%s'", 
+				TestData.DEATHS.length,
+				deathsMap.getName())
+				;
 	}
 
 }
