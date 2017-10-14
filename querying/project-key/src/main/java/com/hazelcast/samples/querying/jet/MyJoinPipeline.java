@@ -78,7 +78,7 @@ import com.hazelcast.samples.querying.domain.PersonValue;
  * Create a tuple of the only two fields we want from the "{@code deaths}" map.</P></LI>
  * <LI><P><B>Join</B>
  * Join the output of stages 2 and 4 for matching key ({@code firstName}</P>
- * <P>The output of this stage is a triple of {@code String, LocalDate, LocalDate}
+ * <P>The output of this stage is a pair of {@code (String, LocalDate), (String, LocalDate)}
  * <P>
  * </LI>
  * <LI><P><B>Reformat</B>
