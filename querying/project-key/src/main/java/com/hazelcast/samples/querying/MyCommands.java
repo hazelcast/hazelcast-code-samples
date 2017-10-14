@@ -69,6 +69,10 @@ public class MyCommands implements CommandMarker {
 
     		IMap<PersonKey, PersonValue> personMap
     		= this.hazelcastInstance.getMap("person");
+    		
+    		if (personMap.isEmpty()) {
+    			return "Map is empty, run 'load' first";
+    		}
 
 		Predicate<PersonKey, PersonValue> predicate 
 		= new SqlPredicate("__key.lastName = 'Howard'");
@@ -110,6 +114,10 @@ public class MyCommands implements CommandMarker {
 
     		IMap<PersonKey, PersonValue> personMap
     		= this.hazelcastInstance.getMap("person");
+    		
+    		if (personMap.isEmpty()) {
+    			return "Map is empty, run 'load' first";
+    		}
 
     		Predicate<PersonKey, PersonValue> predicate 
     		= new SqlPredicate("__key.lastName = 'Howard'");
@@ -140,6 +148,14 @@ public class MyCommands implements CommandMarker {
     @CliCommand(value = "join",
 			help = "Join one map with another")
     public String join() {
+
+		IMap<PersonKey, PersonValue> personMap
+		= this.hazelcastInstance.getMap("person");
+		
+		if (personMap.isEmpty()) {
+			return "Map is empty, run 'load' first";
+		}
+		
     		//FIXME
     		return "Not yet implemented";
     }
