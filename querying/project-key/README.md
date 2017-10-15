@@ -340,7 +340,7 @@ in pairs of "_firstName_" and "_dateOfDeath_".
 * Step 5 has two input streams
   * ("_firstName_", "_dateOfBirth_")
   * ("_firstName_", "_dateOfDeath_")
-  * so the join is easy, and produces ("_firstName_", "_dateOfBirth_", "_dateOfBirth_")
+  * so the join is easy, and produces ("_firstName_", "_dateOfBirth_", "_dateOfDeath_")
 
 * Step 6 and 7 convert the output from step 5 into a map entry and store
 it in the `IMap` named "_life_".
@@ -355,7 +355,7 @@ However, the number of matches fits in memory by luck not design. If more rows o
 are added, at some point the number of results could be too great.
 
 This join happens to work, but it is not guaranteed that it won't result in an `OutOfMemoryError`
-in the future. 
+in the future if more data is added.
 
 ### Step 6 - List
 
