@@ -161,10 +161,10 @@ public class MyJoinPipeline {
 		= Tuple2::f0;
 		
 		// Get the key to match from the second tuple pair
-        DistributedFunction<Tuple2<String, LocalDate>, String> rightKeyFn
+       		DistributedFunction<Tuple2<String, LocalDate>, String> rightKeyFn
 		= Tuple2::f0;
         
-        // Match on full key
+        	// Match on full key
 		return JoinClause.onKeys(leftKeyFn, rightKeyFn);
 	}
 }
