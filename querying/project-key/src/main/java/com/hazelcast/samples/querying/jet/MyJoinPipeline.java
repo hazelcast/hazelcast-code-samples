@@ -11,9 +11,11 @@ import com.hazelcast.jet.Sinks;
 import com.hazelcast.jet.Sources;
 import com.hazelcast.jet.datamodel.Tuple2;
 import com.hazelcast.jet.function.DistributedFunction;
+import com.hazelcast.jet.function.DistributedFunctions;
 import com.hazelcast.samples.querying.domain.LifeValue;
 import com.hazelcast.samples.querying.domain.PersonKey;
 import com.hazelcast.samples.querying.domain.PersonValue;
+
 
 /**
  * <P>Construct a map by streaming and joining (in memory)
@@ -52,17 +54,23 @@ import com.hazelcast.samples.querying.domain.PersonValue;
  *                              |
  *                              |
  *                        +----------+
- *                        |6 Convert |
+ *                        |6 Filter  |
+ *                        | unmatched|
+ *                        +----------+
+ *                              |
+ *                              |
+ *                        +----------+
+ *                        |7 Convert |
  *                        | to Entry |
  *                        +----------+
  *                              |
  *                              |
  *                        +----------+
- *                        |7 "Life"  |
+ *                        |8 "Life"  |
  *                        |   IMap   |
  *                        +----------+
  * </PRE>
- * <P>There are seven parts to this joining pipeline, numbered in
+ * <P>There are eight parts to this joining pipeline, numbered in
  * the diagram above.
  * </P>
  * <OL>
@@ -81,6 +89,9 @@ import com.hazelcast.samples.querying.domain.PersonValue;
  * <P>The output of this stage is a pair of {@code (String, LocalDate), (String, LocalDate)}
  * <P>
  * </LI>
+ * <LI><P><B>Filter</B>
+ * Remove items from the join with only dates of birth, no dates of death.
+ * </P></LI>
  * <LI><P><B>Reformat</B>
  * Convert the output of the previous stage into a {@code String} key and
  * pair of {@code LocalDate} for value</P></LI>
@@ -100,7 +111,7 @@ public class MyJoinPipeline {
 		// 2 - simplify output from step 1, smaller to transmit
 		ComputeStage<Tuple2<String, LocalDate>> stage2
 			= stage1.map(entry -> Tuple2.tuple2(entry.getKey().getFirstName(), entry.getValue().getDateOfBirth()));
-
+		
 		// 3 - read another map
 		ComputeStage<Entry<String, LocalDate>> stage3
 			= pipeline.drawFrom(Sources.<String, LocalDate>readMap("deaths"));
@@ -109,62 +120,42 @@ public class MyJoinPipeline {
 		ComputeStage<Tuple2<String, LocalDate>> stage4
 			= stage3.map(entry -> Tuple2.tuple2(entry.getKey(), entry.getValue()));
 
-		// 5 - join output from steps 2 and 4 using the clause provided (ie. on first name)
-		ComputeStage<Tuple2<Tuple2<String, LocalDate>, Tuple2<String, LocalDate>>> stage5
-			= stage2.hashJoin(stage4, MyJoinPipeline.getJoinClause());
+		// 5a - [optional] wrap existing entryKey() distributed function with types
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		DistributedFunction<Tuple2<String, LocalDate>, String> firstName =
+				(DistributedFunction<Tuple2<String, LocalDate>, String>)
+				(DistributedFunction)
+				DistributedFunctions.entryKey();
 		
-		// 6 - create a map entry from step 5 output
-		ComputeStage<Entry<String, LifeValue>> stage6 =
-				stage5.map(trio -> {
-					// Key is field 0
+		// 5b - join output from steps 2 and 4 (Tuple2 are map entries) on key
+		ComputeStage<Tuple2<Tuple2<String, LocalDate>, LocalDate>> stage5 = 
+				stage2.hashJoin(stage4, JoinClause.joinMapEntries(firstName));
+
+		// 6 - filter out unjoined 
+		ComputeStage<Tuple2<Tuple2<String, LocalDate>, LocalDate>> stage6 =
+				stage5.filter(tuple2 -> tuple2.f1()!=null);
+		
+		// 7 - create a map entry from step 6 output
+		ComputeStage<Entry<String, LifeValue>> stage7 =
+				stage6.map(trio -> {
+					// Tuple2<Tuple2< key, date-of-birth>, date-of-death>
 					String key = trio.f0().f0();
-					// Value is fields 1 & 2
+					LocalDate dob = trio.f0().f1();
+					LocalDate dod = trio.f1();
+										
 					LifeValue value = new LifeValue();
-					value.setDateOfBirth(trio.f0().f1());
-					value.setDateOfDeath(trio.f1().f1());
+					value.setDateOfBirth(dob);
+					value.setDateOfDeath(dod);
+
 					// Create a Map.Entry
 					return new SimpleImmutableEntry<>(key, value);
 		});
 		
-		// 7 - save the map entry
-		stage6.drainTo(Sinks.writeMap("life"));
+		// 8 - save the map entry
+		stage7.drainTo(Sinks.writeMap("life"));
 		
 		// Return the query execution plan
 		return pipeline;
 	}
 
-	
-	/**
-	 * <P>How to join a stream of "{@code tuple2(firstname,date-of-birth)}" 
-	 * with "{@code tuple2(firstname,date-of-death)}" to give
-	 * "{@code tuple2(tuple2(firstname,date-of-birth),date-of-death)}"
-	 * </P>
-	 * <P>What this means:
-	 * </P>
-	 * <PRE>
-	 * 	&lt;String, Tuple2&lt;String, LocalDate&gt;, Tuple2&lt;String, LocalDate&gt;, LocalDate&gt;
-	 * </PRE>
-	 * <OL>
-	 * <LI>The key being used for the join is a {@code String}</LI>
-	 * <LI>The first half of the join is a stream of {@code (String, LocalDate)}</LI>
-	 * <LI>The second half of the join is a stream of {@code (String, LocalDate)}</LI>
-	 * <LI>What is taken from the second stream to add to the first is a {@code (String, LocalDate)} pair</LI>
-	 * </OL>
-	 *  
-	 * @return Take a pair, make a new pair containing the old pair and one field
-	 */
-	private static JoinClause<String, Tuple2<String, LocalDate>, Tuple2<String, LocalDate>, Tuple2<String, LocalDate>>
-		getJoinClause() {
-
-		// Get the key to match from the first tuple pair
-		DistributedFunction<Tuple2<String, LocalDate>, String> leftKeyFn
-		= Tuple2::f0;
-		
-		// Get the key to match from the second tuple pair
-       		DistributedFunction<Tuple2<String, LocalDate>, String> rightKeyFn
-		= Tuple2::f0;
-        
-        	// Match on full key
-		return JoinClause.onKeys(leftKeyFn, rightKeyFn);
-	}
 }
