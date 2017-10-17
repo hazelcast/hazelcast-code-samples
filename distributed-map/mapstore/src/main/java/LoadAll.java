@@ -33,31 +33,32 @@ import java.util.concurrent.ConcurrentMap;
 public class LoadAll {
 
     public static void main(String[] args) {
-        int numberOfEntriesToAdd = 1000;
         String mapName = LoadAll.class.getCanonicalName();
 
         Config config = createNewConfig(mapName);
-        HazelcastInstance node = Hazelcast.newHazelcastInstance(config);
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
+        IMap<Integer, Integer> map = hz.getMap(mapName);
 
-        IMap<Integer, Integer> map = node.getMap(mapName);
-
-        populateMap(map, numberOfEntriesToAdd);
-
-        System.out.printf("# Map store has %d elements\n", numberOfEntriesToAdd);
+        System.out.println("# Adding 5 elements to the map");
+        for (int i = 0; i < 5; i++) {
+            map.put(i, i);
+        }
 
         map.evictAll();
-
         System.out.printf("# After evictAll map size: %d\n", map.size());
 
         map.loadAll(true);
-
         System.out.printf("# After loadAll map size: %d\n", map.size());
-    }
 
-    private static void populateMap(IMap<Integer, Integer> map, int itemCount) {
-        for (int i = 0; i < itemCount; i++) {
-            map.put(i, i);
-        }
+        // stop the cluster
+        Hazelcast.shutdownAll();
+        // start newly the cluster
+        hz = Hazelcast.newHazelcastInstance(config);
+        map = hz.getMap(mapName);
+
+        System.out.printf("# After new cluster start - map size: %d\n", map.size());
+        // stop the cluster
+        Hazelcast.shutdownAll();
     }
 
     private static Config createNewConfig(String mapName) {
@@ -81,6 +82,7 @@ public class LoadAll {
 
         @Override
         public void store(Integer key, Integer value) {
+            System.out.println("SimpleStore - storing key: " + key);
             store.put(key, value);
         }
 
@@ -96,14 +98,20 @@ public class LoadAll {
 
         @Override
         public void delete(Integer key) {
+            System.out.println("SimpleStore - deleting key: " + key);
+            store.remove(key);
         }
 
         @Override
         public void deleteAll(Collection<Integer> keys) {
+            for (Integer key : keys) {
+                delete(key);
+            }
         }
 
         @Override
         public Integer load(Integer key) {
+            System.out.println("SimpleStore - loading value for key: " + key);
             return store.get(key);
         }
 
@@ -119,6 +127,7 @@ public class LoadAll {
 
         @Override
         public Set<Integer> loadAllKeys() {
+            System.out.println("SimpleStore - loading all keys");
             return store.keySet();
         }
     }
