@@ -154,7 +154,7 @@ pointless, if you have the full key then "`IMap.get(key)`" will always be
 faster as it doesn't have to search.
 
 Where key search is useful is comparison searches ("`__key > 1`")
-and wildcard searches ("`__key LIKE 1%`").
+and wildcard searches ("`__key LIKE "John%"`").
 
 ## Joins
 
@@ -165,7 +165,7 @@ the data is too voluminous to fit in one JVM, and is split into
 parts to spread the load of hosting.
 
 It is almost axiomatic that if the data has been split up because
-it is big, it cannot be joined becuase it is big.
+it is big, it cannot be joined because it is big.
 
 This is true in general, and so joins are not supported by Hazelcast
 IMDG. But it is possible in certain specific cases, as we'll see
@@ -281,7 +281,7 @@ This returns all the values in the "_person_" map that match the
 above predicate.
 
 As the values only contain the date of birth, this isn't wonderfully
-helpful. The output shows the data of birth but not the name.
+helpful. The output shows the date of birth but not the name.
 
 ### Step 3 - Key Query #2
 
