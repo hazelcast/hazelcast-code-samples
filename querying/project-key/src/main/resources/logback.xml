@@ -3,12 +3,12 @@
 
     <appender name="NORMAL" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %logger{1} - %msg %n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %thread %logger{1} - %msg %n</pattern>
         </encoder>
     </appender>
     <appender name="HIGHLIGHT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %white(%logger{1}) - %cyan(%msg) %n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %thread %white(%logger{1}) - %cyan(%msg) %n</pattern>
         </encoder>
     </appender>
 

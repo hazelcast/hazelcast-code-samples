@@ -329,7 +329,7 @@ that combining two or more maps won't fit in memory.
 
 This is where Jet lends a hand.
 
-A 7-step Jet pipeline is defined.
+An 8-step Jet pipeline is defined.
 
 * Steps 1 and 2 read from the `IMap` named "_person_" and reduce
 it down to just the fields needed, "_firstName_" and "_dateOfBirth_".
@@ -340,9 +340,12 @@ in pairs of "_firstName_" and "_dateOfDeath_".
 * Step 5 has two input streams
   * ("_firstName_", "_dateOfBirth_")
   * ("_firstName_", "_dateOfDeath_")
-  * so the join is easy, and produces ("_firstName_", "_dateOfBirth_", "_dateOfDeath_")
+  * so the join is easy, and produces (("_firstName_", "_dateOfBirth_"), "_dateOfDeath_")
 
-* Step 6 and 7 convert the output from step 5 into a map entry and store
+* Step 6 filters out results where the "_dateOfDeath_" is null. Step 5 tries
+to enrich step 2 stream with step 4 stream but there may not always be a match.
+
+* Step 7 and 8 convert the output from step 6 into a map entry and store
 it in the `IMap` named "_life_".
 
 **NB** 
