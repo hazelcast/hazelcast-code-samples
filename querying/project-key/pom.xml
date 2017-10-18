@@ -85,6 +85,18 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<repositories>
+	        <repository>
+            		<id>Hazelcast Public Snapshot Repository</id>
+            		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            		<snapshots>
+                		<enabled>true</enabled>
+                		<!-- Minutes -->
+                		<updatePolicy>interval:720</updatePolicy>
+            		</snapshots>
+       		</repository>
+	</repositories>	
+
 	<build>
 		<plugins>
 			<plugin>
