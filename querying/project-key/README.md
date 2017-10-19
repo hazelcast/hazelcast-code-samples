@@ -393,7 +393,7 @@ Then
 Set<String> keySet = lifeMap.keySet(new SqlPredicate("age = " + max));
 ```
 
-is run to find all the people that lived that long.
+is run to find all the people that lived for that long.
 
 ## Summary
 
