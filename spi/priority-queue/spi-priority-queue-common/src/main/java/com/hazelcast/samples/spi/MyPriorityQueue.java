@@ -20,7 +20,9 @@ public interface MyPriorityQueue<E> extends DistributedObject {
 
 	// Write if not full
 	public boolean offer(E e);
-	
+
 	// Read
 	public E poll();
+
+	public int size();
 }
