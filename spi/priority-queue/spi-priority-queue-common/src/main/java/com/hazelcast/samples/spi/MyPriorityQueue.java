@@ -12,12 +12,14 @@ import com.hazelcast.core.DistributedObject;
  * <p>Although we're going to create an implementation
  * of {@link java.util.concurrent.PriorityBlockingQueue PriorityBlockingQueue}
  * for the purposes of the example we keep it simple and
- * only implement one method to write to the queue and
+ * only specify one method to write to the queue and
  * one to read from it.
  * </p>
  */
 public interface MyPriorityQueue<E> extends DistributedObject {
 
+	public static final String SERVICE_NAME = "MyPriorityQueueService";
+	
 	// Write if not full
 	public boolean offer(E e);
 
