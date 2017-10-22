@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hazelcast.samples.spi</groupId>
-			<artifactId>spi-priority-queue-server-common</artifactId>
+			<artifactId>spi-priority-queue-common</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

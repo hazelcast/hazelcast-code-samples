@@ -13,10 +13,9 @@ import com.hazelcast.core.HazelcastInstance;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>A "<i>diagnostic</i>" server in the cluster. 
- * It doesn't do much more than the "<i>normal</i>" server,
- * except show how the priority queue can be accessed
- * from the server side.
+ * <P>A server in the cluster. It doesn't do anything
+ * with the data, except a passive inspection on the
+ * current distributed objects (won't create any).
  * </p>
  */
 @Slf4j
@@ -77,11 +76,15 @@ public class Application implements CommandLineRunner {
 			}
 		}
 		
-		log.info("---------------------------");
+		if (distributedObjects.size() > 0) {
+			log.info("---------------------------");
+		}
+		
 		log.info("[{} distributed object{}]", 
 				distributedObjects.size(),
 				(distributedObjects.size()==1 ? "": "s")
 				);
+		
 		log.info("---------------------------");
 		
 	}
