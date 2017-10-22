@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * <p>Spring will run Hazelcast as a server for us.
- * All the priority queue interaction happens from
- * the client.
+ * <p>A "<i>normal</i>" server in the cluster. You
+ * should start at least one of these first. It doesn't
+ * do anything except host the data.
  * </p>
  */
 @SpringBootApplication

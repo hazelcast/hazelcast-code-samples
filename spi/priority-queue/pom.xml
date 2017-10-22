@@ -26,7 +26,9 @@
 
     <modules>
     		<module>spi-priority-queue-common</module>
+    		<module>spi-priority-queue-server-common</module>
     		<module>spi-priority-queue-server</module>
+    		<module>spi-priority-queue-server2</module>
     		<module>spi-priority-queue-client-common</module>
     		<module>spi-priority-queue-client-producer</module>
     		<module>spi-priority-queue-client-consumer</module>

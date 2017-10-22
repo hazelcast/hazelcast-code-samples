@@ -8,33 +8,16 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>spi-priority-queue-server</artifactId>
+	<artifactId>spi-priority-queue-server-common</artifactId>
 
-    	<name>Priority Queue Server</name>
+    	<name>Priority Queue Server Common</name>
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.hazelcast.samples.spi</groupId>
-			<artifactId>spi-priority-queue-server-common</artifactId>
+			<artifactId>spi-priority-queue-common</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${spring-boot.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-	
+
 </project>

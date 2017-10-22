@@ -8,9 +8,9 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>spi-priority-queue-server</artifactId>
+	<artifactId>spi-priority-queue-server2</artifactId>
 
-    	<name>Priority Queue Server</name>
+    	<name>Priority Queue Server #2</name>
 	
 	<dependencies>
 		<dependency>
