@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IQueue;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,11 +48,10 @@ public class Application implements CommandLineRunner {
 	 * It only shows the ones currently present.
 	 * </p>
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void run(String... arg0) throws Exception {
 
-		log.info("---------------------------");
+		log.info("-----------------------");
 		
 		Collection<DistributedObject> distributedObjects
 			= this.hazelcastInstance.getDistributedObjects();
@@ -69,15 +69,22 @@ public class Application implements CommandLineRunner {
 
 			// If it's our queue, use one of the operations defined for it
 			if (distributedObjectServiceName.equals(MyPriorityQueue.SERVICE_NAME)) {
-				MyPriorityQueue<Order> myPriorityQueue
-					= (MyPriorityQueue<Order>) distributedObject;
+				MyPriorityQueue<?> myPriorityQueue
+					= (MyPriorityQueue<?>) distributedObject;
 
 				log.info(" -> queue size {}", myPriorityQueue.size());
+			}
+			
+			if (distributedObject instanceof IQueue) {
+				IQueue<?> iQueue
+					= (IQueue<?>) distributedObject;
+
+					log.info(" -> queue size {}", iQueue.size());
 			}
 		}
 		
 		if (distributedObjects.size() > 0) {
-			log.info("---------------------------");
+			log.info("-----------------------");
 		}
 		
 		log.info("[{} distributed object{}]", 
@@ -85,7 +92,7 @@ public class Application implements CommandLineRunner {
 				(distributedObjects.size()==1 ? "": "s")
 				);
 		
-		log.info("---------------------------");
+		log.info("-----------------------");
 		
 	}
 
