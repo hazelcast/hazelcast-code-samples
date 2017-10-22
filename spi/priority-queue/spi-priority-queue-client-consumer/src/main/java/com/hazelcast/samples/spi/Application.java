@@ -29,7 +29,13 @@ public class Application implements CommandLineRunner {
 	private HazelcastInstance hazelcastInstance;
 
 	/**
-	 * XXX
+	 * <p>Read the orders from the queue. The
+	 * {@link com.hazelcast.core.IQueue IQueue} has
+	 * items in the sequence they were added.
+	 * {@link MyPriorityQueue} applies a priority
+	 * ordering, so items of higher priority are
+	 * read first.
+	 * </p>
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
