@@ -1,6 +1,7 @@
 package com.hazelcast.samples.spi;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
@@ -13,6 +14,11 @@ import com.hazelcast.core.IQueue;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * <p>Three commands for testing - write data to the queues,
+ * read data from the queues, and list what is in the queues.
+ * </p>
+ */
 @Component
 @Slf4j
 public class CliCommands implements CommandMarker {
@@ -73,4 +79,76 @@ public class CliCommands implements CommandMarker {
 		
 		log.info("-----------------------");
 	}
+
+    
+    /**
+     * <p>Read data from the queues.
+     * </p>
+     */
+    @SuppressWarnings("unchecked")
+	@CliCommand(value = "read",
+			help = "Read orders from IQueue and MyPriorityQueue")
+    public void read() throws Exception {
+
+    		// Normal IQueue
+        IQueue<Day> vanilla = this.hazelcastInstance.getQueue("vanilla");
+
+        log.info("Queue '{}' has size {}",
+                        vanilla.getName(), vanilla.size());
+        
+        for (int i=0 ; !vanilla.isEmpty() ; i++) {
+                log.info("Item {} => {}", i, vanilla.poll());
+        }
+        
+        // MyPriorityQueue
+        DistributedObject distributedObject
+                = this.hazelcastInstance.getDistributedObject(MyPriorityQueue.SERVICE_NAME, "strawberry");
+        MyPriorityQueue<Order> strawberry = (MyPriorityQueue<Order>) distributedObject;
+
+        log.info("Queue '{}' has size {}",
+                        strawberry.getName(), strawberry.size());
+        
+        int max = strawberry.size();
+        for (int i=0 ; i<max ; i++) {
+                log.info("Item {} => {}", i, strawberry.poll());
+        }
+    }
+    
+    
+    /**
+     * <p>Write data to the queues, same data to both
+     * kinds.
+     * </p>
+     */
+    @SuppressWarnings("unchecked")
+	@CliCommand(value = "write",
+			help = "Write orders into IQueue and MyPriorityQueue")
+    public void write() throws Exception {
+    	
+        // Normal IQueue
+        List<Order> orders = TestData.createOrders();
+        
+        IQueue<Order> vanilla = this.hazelcastInstance.getQueue("vanilla");
+        for (int i=0 ; i<orders.size() ; i++) {
+        		Order order = orders.get(i);
+        		log.info("Item {} => {}", i, order);
+            vanilla.put(order);
+        }
+        log.info("Wrote {} into queue '{}', queue size now {}",
+                        orders.size(), vanilla.getName(), vanilla.size());
+
+        // A distributed object of MyPriorityQueue type
+        DistributedObject distributedObject
+                = this.hazelcastInstance.getDistributedObject(MyPriorityQueue.SERVICE_NAME, "strawberry");
+        MyPriorityQueue<Order> strawberry = (MyPriorityQueue<Order>) distributedObject;
+
+        for (int i=0 ; i<orders.size() ; i++) {
+    			Order order = orders.get(i);
+    			log.info("Item {} => {}", i, order);
+            strawberry.offer(order);
+        }
+        log.info("Wrote {} into queue '{}', queue size now {}",
+                        orders.size(), strawberry.getName(), strawberry.size());
+    }
+    	
 }
