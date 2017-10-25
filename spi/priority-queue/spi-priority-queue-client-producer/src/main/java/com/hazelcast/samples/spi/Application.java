@@ -47,6 +47,8 @@ public class Application implements CommandLineRunner {
 		for (Order order : orders) {
 			vanilla.put(order);
 		}
+		log.info("Wrote {} into queue '{}', queue size now {}",
+				orders.size(), vanilla.getName(), vanilla.size());
 
 		// A distributed object of MyPriorityQueue type
 		DistributedObject distributedObject

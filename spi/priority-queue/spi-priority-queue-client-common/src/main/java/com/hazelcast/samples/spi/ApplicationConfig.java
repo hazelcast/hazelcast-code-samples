@@ -37,7 +37,7 @@ public class ApplicationConfig {
     		// Add the ability to access our remote service
     		ProxyFactoryConfig proxyFactoryConfig = new ProxyFactoryConfig();
     		proxyFactoryConfig.setClassName(MyPriorityQueueProxyFactory.class.getName());
-    		proxyFactoryConfig.setService("MyPriorityQueueService");
+    		proxyFactoryConfig.setService(MyPriorityQueue.SERVICE_NAME);
     		
     		clientConfig.getProxyFactoryConfigs().add(proxyFactoryConfig);
     	

@@ -18,13 +18,16 @@ import com.hazelcast.core.DistributedObject;
  */
 public interface MyPriorityQueue<E> extends DistributedObject {
 
-	public static final String SERVICE_NAME = "MyPriorityQueueService";
+	// The service that handles this object
+	public static final String SERVICE_NAME 
+			= MyPriorityQueue.class.getSimpleName() + "Service";
 	
-	// Write if not full
-	public boolean offer(E e);
+	// Write
+	public boolean offer(E e) throws Exception;
 
 	// Read
-	public E poll();
+	public E poll() throws Exception;
 
-	public int size();
+	// For debugging
+	public int size() throws Exception;
 }

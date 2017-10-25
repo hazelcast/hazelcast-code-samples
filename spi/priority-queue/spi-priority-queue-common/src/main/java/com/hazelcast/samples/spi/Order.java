@@ -1,7 +1,11 @@
 package com.hazelcast.samples.spi;
 
-import java.io.Serializable;
+import java.io.IOException;
 import java.util.UUID;
+
+import com.hazelcast.nio.ObjectDataInput;
+import com.hazelcast.nio.ObjectDataOutput;
+import com.hazelcast.nio.serialization.DataSerializable;
 
 import lombok.Data;
 
@@ -20,9 +24,8 @@ import lombok.Data;
  * Friday in the collating sequence.</p>
  * <p>It's just an example! You can enhance to fix if you like.</p>
  */
-@SuppressWarnings("serial")
 @Data
-public class Order implements Comparable<Order>, Serializable {
+public class Order implements Comparable<Order>, DataSerializable {
 
 	private UUID id;
 	private int seqNo;
@@ -35,5 +38,26 @@ public class Order implements Comparable<Order>, Serializable {
 	public int compareTo(Order that) {
 		return this.dueDate.compareTo(that.getDueDate());
 	}
+
+	/**
+	 * <p>Send.
+	 * </p>
+	 */
+	@Override
+    public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
+        objectDataOutput.writeObject(this.id);
+        objectDataOutput.writeInt(this.seqNo);
+        objectDataOutput.writeObject(this.dueDate);
+    }
+	/**
+	 * <p>Receive.
+	 * </p>
+	 */
+	@Override
+    public void readData(ObjectDataInput objectDataInput) throws IOException {
+    		this.id = objectDataInput.readObject();
+    		this.seqNo = objectDataInput.readInt();
+    		this.dueDate = objectDataInput.readObject();
+    }
 	
 }

@@ -1,6 +1,9 @@
 package com.hazelcast.samples.spi;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.PriorityBlockingQueue;
 
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.spi.ManagedService;
@@ -19,9 +22,16 @@ import com.hazelcast.spi.RemoteService;
  * as other Hazelcast instances can access it. Hence we return a proxy
  * to the real thing for them to work with.
  * </p>
+ * <p>This is <b>not</b> yet a
+ * {@link com.hazelcast.spi.MigrationAwareService MigrationAwareService}.
+ * It should be for more realistic use but would complicate the example
+ * further.
+ * </p>
  */
 public class MyPriorityQueueService implements ManagedService, RemoteService {
 
+	private Map<String, PriorityBlockingQueue<?>> mapPriorityBlockingQueue
+		= new HashMap<>();
 	private NodeEngine nodeEngine;
 
 	/**
@@ -32,7 +42,7 @@ public class MyPriorityQueueService implements ManagedService, RemoteService {
 	 * </p>
 	 * 
 	 * @param nodeEngine The Hazelcast operation processor
-	 * @param properties Empty here so ignored
+	 * @param properties {@code @NotNull} but not used
 	 */
 	@Override
 	public void init(NodeEngine nodeEngine, Properties properties) {
@@ -55,7 +65,7 @@ public class MyPriorityQueueService implements ManagedService, RemoteService {
 	 * <p>No action needed to shut down the service.
 	 * </p>.
 	 * 
-	 * @param terminate ?
+	 * @param terminate Ignored
 	 */
 	@Override
 	public void shutdown(boolean terminate) {
@@ -72,7 +82,7 @@ public class MyPriorityQueueService implements ManagedService, RemoteService {
 	 */
 	@Override
 	public DistributedObject createDistributedObject(String objectName) {
-		return new MyPriorityQueueServiceProxy<>(objectName, this.nodeEngine, this);
+		return new MyPriorityQueueServiceProxy(objectName, this.nodeEngine, this);
 	}
 
 	/**
@@ -85,6 +95,26 @@ public class MyPriorityQueueService implements ManagedService, RemoteService {
 	 */
 	@Override
 	public void destroyDistributedObject(String objectName) {
+	}
+
+	/**
+	 * <p>Helper method to return a queue held in the service,
+	 * creating if necessary.
+	 * </p>
+	 * 
+	 * @param name The queue name
+	 * @return     The queue
+	 */
+	protected PriorityBlockingQueue<?> _getQueue(String name) {
+		PriorityBlockingQueue<?> priorityBlockingQueue
+			= this.mapPriorityBlockingQueue.get(name);
+		
+		if (priorityBlockingQueue==null) {
+			priorityBlockingQueue = new PriorityBlockingQueue<>();
+			this.mapPriorityBlockingQueue.put(name, priorityBlockingQueue);
+		}
+		
+		return priorityBlockingQueue;
 	}
 
 }
