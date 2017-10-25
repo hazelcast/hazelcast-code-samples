@@ -58,6 +58,7 @@
         <module>hazelcast-integration</module>
         <module>helper</module>
         <module>jcache</module>
+        <module>jcache2</module>
         <module>jmx</module>
         <module>learning-basics</module>
         <module>mapreduce</module>
