@@ -11,11 +11,12 @@
 	<artifactId>spi-priority-queue-server</artifactId>
 
     	<name>Priority Queue Server</name>
+	<description>A framework to exercise the core</description>
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.hazelcast.samples.spi</groupId>
-			<artifactId>spi-priority-queue-common</artifactId>
+			<artifactId>spi-priority-queue-core</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

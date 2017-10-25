@@ -8,8 +8,9 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>spi-priority-queue-common</artifactId>
+	<artifactId>spi-priority-queue-core</artifactId>
 
-    	<name>Priority Queue Common</name>
+    	<name>Priority Queue Core</name>
+    	<description>The core of the solution - objects</description>
 	
 </project>
