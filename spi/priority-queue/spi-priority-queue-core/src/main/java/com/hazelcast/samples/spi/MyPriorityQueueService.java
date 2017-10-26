@@ -1,9 +1,9 @@
 package com.hazelcast.samples.spi;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Properties;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.spi.ManagedService;
@@ -27,11 +27,21 @@ import com.hazelcast.spi.RemoteService;
  * It should be for more realistic use but would complicate the example
  * further.
  * </p>
+ * <p><b>OPTIMISATION NOTE</b></p>The threading model of Hazelcast
+ * is such that only one thread is responsible for a subset of partitions.
+ * (Eg. {@code thread-1} looks after partitions 1 &amp; 2. {@code thread-2}
+ * looks after partitions 3 &amp; 4. And so on.)
+ * So no partition's operations are ever handled by two threads
+ * concurrently. Hence we can use {@link java.util.PriorityQueue}
+ * rather than {@link java.util.concurrent.PriorityBlockingQueue} and this
+ * gives better performance.
+ * </p>
  */
 public class MyPriorityQueueService implements ManagedService, RemoteService {
 
-	private Map<String, PriorityBlockingQueue<?>> mapPriorityBlockingQueue
-		= new HashMap<>();
+	// See class comments, PriorityQueue not PriorityBlockingQueue
+	private Map<String, PriorityQueue<?>> mapPriorityQueue
+		= new ConcurrentHashMap<>();
 	private NodeEngine nodeEngine;
 
 	/**
@@ -80,6 +90,7 @@ public class MyPriorityQueueService implements ManagedService, RemoteService {
 	 * @param objectName The name for the priority queue
 	 * @return The priority queue with that name
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public DistributedObject createDistributedObject(String objectName) {
 		return new MyPriorityQueueServiceProxy(objectName, this.nodeEngine, this);
@@ -105,16 +116,16 @@ public class MyPriorityQueueService implements ManagedService, RemoteService {
 	 * @param name The queue name
 	 * @return     The queue
 	 */
-	protected PriorityBlockingQueue<?> _getQueue(String name) {
-		PriorityBlockingQueue<?> priorityBlockingQueue
-			= this.mapPriorityBlockingQueue.get(name);
+	protected PriorityQueue<?> _getQueue(String name) {
+		PriorityQueue<?> priorityQueue
+			= this.mapPriorityQueue.get(name);
 		
-		if (priorityBlockingQueue==null) {
-			priorityBlockingQueue = new PriorityBlockingQueue<>();
-			this.mapPriorityBlockingQueue.put(name, priorityBlockingQueue);
+		if (priorityQueue==null) {
+			priorityQueue = new PriorityQueue<>();
+			this.mapPriorityQueue.put(name, priorityQueue);
 		}
 		
-		return priorityBlockingQueue;
+		return priorityQueue;
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.hazelcast.samples.spi;
 
 import java.io.IOException;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.PriorityQueue;
 
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -26,21 +26,20 @@ public class MyPriorityQueueOpPoll
 	// Input
 	private String name;
 	// Output
-	private Order response;
+	private Object response;
 	
 	/**
 	 * <p>Run the {@code poll()} operation on the named
 	 * queue stored in the service.
 	 * </p>
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void run() throws Exception {
 		MyPriorityQueueService myPriorityQueueService = super.getService();
 
-		PriorityBlockingQueue<Order> queue
-			= (PriorityBlockingQueue<Order>) 
-			myPriorityQueueService._getQueue(this.name);		
+		PriorityQueue queue
+			= myPriorityQueueService._getQueue(this.name);		
 		
 		this.response = queue.poll();
 	}
@@ -54,7 +53,6 @@ public class MyPriorityQueueOpPoll
     protected void writeInternal(ObjectDataOutput objectDataOutput) throws IOException {
         super.writeInternal(objectDataOutput);
         objectDataOutput.writeUTF(this.name);
-        objectDataOutput.writeObject(this.response);
     }
 
 	/**
@@ -65,7 +63,6 @@ public class MyPriorityQueueOpPoll
     protected void readInternal(ObjectDataInput objectDataInput) throws IOException {
         super.readInternal(objectDataInput);
         this.name = objectDataInput.readUTF();
-        this.response = objectDataInput.readObject();
     }
 
 }

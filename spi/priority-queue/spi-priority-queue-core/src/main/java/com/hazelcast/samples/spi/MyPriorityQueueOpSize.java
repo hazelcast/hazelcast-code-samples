@@ -47,7 +47,6 @@ public class MyPriorityQueueOpSize
     protected void writeInternal(ObjectDataOutput objectDataOutput) throws IOException {
         super.writeInternal(objectDataOutput);
         objectDataOutput.writeUTF(this.name);
-        objectDataOutput.writeInt(this.response);
     }
 
 	/**
@@ -58,7 +57,6 @@ public class MyPriorityQueueOpSize
     protected void readInternal(ObjectDataInput objectDataInput) throws IOException {
         super.readInternal(objectDataInput);
         this.name = objectDataInput.readUTF();
-        this.response = objectDataInput.readInt();
     }
 
 }

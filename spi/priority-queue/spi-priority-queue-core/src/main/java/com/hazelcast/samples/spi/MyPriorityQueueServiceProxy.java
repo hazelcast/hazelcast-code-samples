@@ -17,15 +17,17 @@ import com.hazelcast.spi.NodeEngine;
  * make it easier to follow.
  * </p>
  */
-public class MyPriorityQueueServiceProxy
+public class MyPriorityQueueServiceProxy<E>
 	extends AbstractDistributedObject<MyPriorityQueueService> 
-	implements MyPriorityQueue<Order> {
+	implements MyPriorityQueue<E> {
 
 	private String name;
+	private int partitionId;
 	
 	protected MyPriorityQueueServiceProxy(String name, NodeEngine nodeEngine, MyPriorityQueueService myPriorityQueueService) {
 		super(nodeEngine, myPriorityQueueService);
 		this.name = name;
+		this.partitionId = nodeEngine.getPartitionService().getPartitionId(this.name);
 	}
 
 	/**
@@ -58,21 +60,18 @@ public class MyPriorityQueueServiceProxy
 	 * @return Always true as this queue is unbounded
 	 */
 	@Override
-	public boolean offer(Order order) throws Exception {
+	public boolean offer(E e) throws Exception {
 		// Create the operation
 		MyPriorityQueueOpOffer myPriorityQueueOpOffer = new MyPriorityQueueOpOffer();
 		myPriorityQueueOpOffer.setName(this.name);
-		myPriorityQueueOpOffer.setOrder(order);
+		myPriorityQueueOpOffer.setPayload(e);
 		
 		// Find out how it's going to be submitted
 		NodeEngine nodeEngine = this.getNodeEngine();
 
-		// Find out which partition contains the queue based on the name
-	    int partitionId = nodeEngine.getPartitionService().getPartitionId(this.name);
-	    
 	    // Build the remote execution from service name, operation and object partition
 	    InvocationBuilder builder = nodeEngine.getOperationService()
-	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpOffer, partitionId);
+	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpOffer, this.partitionId);
 
 	    // Submit and wait for the result
 	    Future<Boolean> future = builder.invoke();
@@ -87,23 +86,20 @@ public class MyPriorityQueueServiceProxy
 	 * @return Null or an object, depending if the queue is empty
 	 */
 	@Override
-	public Order poll() throws Exception {
+	public E poll() throws Exception {
 		// Create the operation
 		MyPriorityQueueOpPoll myPriorityQueueOpPoll = new MyPriorityQueueOpPoll();
 		myPriorityQueueOpPoll.setName(this.name);
 		
 		// Find out how it's going to be submitted
 		NodeEngine nodeEngine = this.getNodeEngine();
-
-		// Find out which partition contains the queue based on the name
-	    int partitionId = nodeEngine.getPartitionService().getPartitionId(this.name);
 	    
 	    // Build the remote execution from service name, operation and object partition
 	    InvocationBuilder builder = nodeEngine.getOperationService()
-	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpPoll, partitionId);
+	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpPoll, this.partitionId);
 
 	    // Submit and wait for the result
-	    Future<Order> future = builder.invoke();
+	    Future<E> future = builder.invoke();
 	    return future.get();
 	}
 
@@ -123,12 +119,9 @@ public class MyPriorityQueueServiceProxy
 		// Find out how it's going to be submitted
 		NodeEngine nodeEngine = this.getNodeEngine();
 
-		// Find out which partition contains the queue based on the name
-	    int partitionId = nodeEngine.getPartitionService().getPartitionId(this.name);
-	    
 	    // Build the remote execution from service name, operation and object partition
 	    InvocationBuilder builder = nodeEngine.getOperationService()
-	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpSize, partitionId);
+	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpSize, this.partitionId);
 
 	    // Submit and wait for the result
 	    Future<Integer> future = builder.invoke();
