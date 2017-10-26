@@ -4,4 +4,4 @@
 <p>These examples are for JCache version 1.1</p>
 
 - <h3>times-table</h3>
-	Calculate the times table (`6 x 5 == 30`) using JCache to optimise the recursion.
+	Calculate the times table ( `6 x 5 == 30` ) using JCache to optimise the recursion.
