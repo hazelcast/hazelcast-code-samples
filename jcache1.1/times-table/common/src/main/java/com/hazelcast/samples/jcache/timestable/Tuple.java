@@ -13,7 +13,21 @@ import lombok.Data;
  */
 @SuppressWarnings("serial")
 @Data
-public class Tuple implements Serializable {
+public class Tuple implements Comparable<Tuple>, Serializable {
 	private int operand1;
 	private int operand2;
+	
+	
+	/**
+	 * <p>Simple numeric ordering on tuples. Assumes no overflow
+	 * </p>
+	 */
+	@Override
+	public int compareTo(Tuple that) {
+		if (this.operand1==that.getOperand1()) {
+			return this.operand2 - that.operand2;
+		} else {
+			return this.operand1 - that.operand1;
+		}
+	}
 }
