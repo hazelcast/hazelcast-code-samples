@@ -11,11 +11,11 @@
     </parent>
 
     <groupId>com.hazelcast.samples.jcache</groupId>
-    <artifactId>jcache2</artifactId>
+    <artifactId>jcache_1.1</artifactId>
     <packaging>pom</packaging>
 
-    <name>JCache:2:</name>
-    <description>Hazelcast JCache More Examples</description>
+    <name>JCache:1.1:</name>
+    <description>Hazelcast JCache 1.1 Examples</description>
 
     <properties>
         <!-- needed for checkstyle/findbugs -->
@@ -27,6 +27,10 @@
 	<spring-boot.version>1.5.7.RELEASE</spring-boot.version>
 	<spring-shell.version>1.2.0.RELEASE</spring-shell.version>
     </properties>
+
+    <modules>
+	<module>times-table</module>
+    </modules>
 
     <dependencies>
 	        <dependency>
