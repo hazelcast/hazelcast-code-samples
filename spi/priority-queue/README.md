@@ -110,7 +110,6 @@ algorithm is flawed.
 
 ### TODO
 
-
 ## Running the sample solution
 
 These are Spring Boot examples, so run `mvn` as far as the "_package_" stage.
@@ -129,7 +128,7 @@ multiple servers which should join together to form a cluster.
 
 ### Sample solution steps
 
-The sample solution uses (Spring Shell)[https://projects.spring.io/spring-shell/]
+The sample solution uses [Spring Shell](https://projects.spring.io/spring-shell/)
 to provide a command line interface to interact with Hazelcast.
 
 The commands are defined in the `com.hazelcast.samples.spi.CliCommands` class.
@@ -257,12 +256,12 @@ To keep the sample simple, some parts have been omitted.
 `MigrationAwareService` is not yet implemented, but would not be that difficult to
 add. This would allow queue contents to be moved from server from server
 when the cluster changes size (servers are added or removed) and the
-data load needs rebalanced. This would be a necessary step for a
+data load needs re-balanced. This would be a necessary step for a
 production strength implementation.
 
 Client access is not yet implemented, but would be a more serious coding
 effort. In Hazelcast, the client-server protocol is public -- see
-(here)[https://github.com/hazelcast/hazelcast-client-protocol/raw/v1.2.0/docs/published/protocol/1.2.0/HazelcastOpenBinaryClientProtocol-1.2.0.pdf].
+[here](https://github.com/hazelcast/hazelcast-client-protocol/raw/v1.2.0/docs/published/protocol/1.2.0/HazelcastOpenBinaryClientProtocol-1.2.0.pdf).
 What this means in practice is client-server access needs to adhere
 to this protocol, which means the use of _codecs_, and beyond the
 scope of this simple example.
