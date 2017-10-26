@@ -2,7 +2,9 @@ package com.hazelcast.samples.jcache.timestable;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>The key of the times table entry.
@@ -11,6 +13,8 @@ import lombok.Data;
  * value "{@code 30}".
  * </p> 
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @SuppressWarnings("serial")
 @Data
 public class Tuple implements Comparable<Tuple>, Serializable {
