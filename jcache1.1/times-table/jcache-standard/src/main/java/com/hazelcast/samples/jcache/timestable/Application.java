@@ -35,7 +35,7 @@ public class Application {
         /* Command line processing
          */
         CLI cli = new CLI();
-        cli.process();
+        cli.process(cacheManager);
 
         /* JVM shutdown hooks should close the cache and client,
          * but do so manually to show how it could be done.
@@ -44,10 +44,10 @@ public class Application {
             cacheManager.close();
 
             HazelcastCacheManager hazelcastCacheManager
-                = (HazelcastCacheManager) cacheManager;
+            = (HazelcastCacheManager) cacheManager;
 
             HazelcastInstance hazelcastInstance
-                = hazelcastCacheManager.getHazelcastInstance();
+            = hazelcastCacheManager.getHazelcastInstance();
 
             if (hazelcastInstance.getLifecycleService().isRunning()) {
                     hazelcastInstance.shutdown();
