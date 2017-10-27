@@ -8,9 +8,9 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>server</artifactId>
+	<artifactId>jcache-spring</artifactId>
 
-	<name>Times Table: Server</name>
+	<name>Times Table: JCache with Spring</name>
 
     <properties>
         <!-- needed for checkstyle/findbugs -->
@@ -19,6 +19,15 @@
     </properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast-spring</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>com.hazelcast.samples.jcache.timestable</groupId>
 			<artifactId>common</artifactId>

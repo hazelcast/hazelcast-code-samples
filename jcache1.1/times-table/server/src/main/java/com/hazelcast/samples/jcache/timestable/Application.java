@@ -12,16 +12,16 @@ import org.springframework.shell.Bootstrap;
 @SpringBootApplication
 public class Application {
 
-	/**
-	 * <p>Set Hazelcast logging type and let
-	 * Spring do the rest.
-	 * </p>
-	 * 
-	 * @param args From command line
-	 */
-	public static void main(String[] args) throws Exception {
-		System.setProperty("hazelcast.logging.type", "slf4j");
-		Bootstrap.main(args);
-	}
+    /**
+     * <p>Set Hazelcast logging type and let
+     * Spring do the rest.
+     * </p>
+     *
+     * @param args From command line
+     */
+    public static void main(String[] args) throws Exception {
+        System.setProperty("hazelcast.logging.type", "slf4j");
+        Bootstrap.main(args);
+    }
 
 }
