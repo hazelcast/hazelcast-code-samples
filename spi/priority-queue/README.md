@@ -108,8 +108,6 @@ What is relevant here is we have a nature of compability. There is a
 way to determine which order is the more important, even if the
 algorithm is flawed.
 
-### TODO
-
 ## Running the sample solution
 
 These are Spring Boot examples, so run `mvn` as far as the "_package_" stage.

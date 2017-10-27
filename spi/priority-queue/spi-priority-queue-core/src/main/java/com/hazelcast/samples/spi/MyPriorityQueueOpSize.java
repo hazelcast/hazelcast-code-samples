@@ -9,6 +9,7 @@ import com.hazelcast.spi.PartitionAwareOperation;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>A request to run {@link MyPriorityQueue#size()},
@@ -18,6 +19,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Slf4j
 public class MyPriorityQueueOpSize
 	extends Operation
 	implements PartitionAwareOperation {
@@ -34,6 +36,8 @@ public class MyPriorityQueueOpSize
 	 */
 	@Override
 	public void run() throws Exception {
+		log.trace("run() for '{}'", this.name);
+		
 		MyPriorityQueueService myPriorityQueueService = super.getService();
 
 		this.response = myPriorityQueueService._getQueue(this.name).size();
