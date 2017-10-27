@@ -80,7 +80,7 @@ public class CLI implements CommandMarker {
      * </p>
      * <p>Usage:
      * <pre>
-     * lookup --x 5 --y 6
+     * times --x 5 --y 6
      * </pre> should return "{@code 30}"
      * </p>
      *
