@@ -51,6 +51,10 @@ public class CliCommands implements CommandMarker {
 					distributedObjectName,
 					distributedObjectServiceName
 					);
+			log.trace("Distributed Object, name '{}', class '{}'",
+					distributedObjectName,
+					distributedObject.getClass().getName()
+					);
 
 			// If it's our queue, use one of the operations defined for it
 			if (distributedObjectServiceName.equals(MyPriorityQueue.SERVICE_NAME)) {
@@ -91,7 +95,7 @@ public class CliCommands implements CommandMarker {
     public void read() throws Exception {
 
     		// Normal IQueue
-        IQueue<Day> vanilla = this.hazelcastInstance.getQueue("vanilla");
+        IQueue<Order> vanilla = this.hazelcastInstance.getQueue("vanilla");
 
         log.info("Queue '{}' has size {}",
                         vanilla.getName(), vanilla.size());

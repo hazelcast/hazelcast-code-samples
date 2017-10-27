@@ -22,11 +22,13 @@ public class MyPriorityQueueServiceProxy<E>
 	implements MyPriorityQueue<E> {
 
 	private String name;
+	private NodeEngine nodeEngine;
 	private int partitionId;
 	
 	protected MyPriorityQueueServiceProxy(String name, NodeEngine nodeEngine, MyPriorityQueueService myPriorityQueueService) {
 		super(nodeEngine, myPriorityQueueService);
 		this.name = name;
+		this.nodeEngine = nodeEngine;
 		this.partitionId = nodeEngine.getPartitionService().getPartitionId(this.name);
 	}
 
@@ -66,11 +68,8 @@ public class MyPriorityQueueServiceProxy<E>
 		myPriorityQueueOpOffer.setName(this.name);
 		myPriorityQueueOpOffer.setPayload(e);
 		
-		// Find out how it's going to be submitted
-		NodeEngine nodeEngine = this.getNodeEngine();
-
 	    // Build the remote execution from service name, operation and object partition
-	    InvocationBuilder builder = nodeEngine.getOperationService()
+	    InvocationBuilder builder = this.nodeEngine.getOperationService()
 	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpOffer, this.partitionId);
 
 	    // Submit and wait for the result
@@ -90,12 +89,9 @@ public class MyPriorityQueueServiceProxy<E>
 		// Create the operation
 		MyPriorityQueueOpPoll myPriorityQueueOpPoll = new MyPriorityQueueOpPoll();
 		myPriorityQueueOpPoll.setName(this.name);
-		
-		// Find out how it's going to be submitted
-		NodeEngine nodeEngine = this.getNodeEngine();
 	    
 	    // Build the remote execution from service name, operation and object partition
-	    InvocationBuilder builder = nodeEngine.getOperationService()
+	    InvocationBuilder builder = this.nodeEngine.getOperationService()
 	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpPoll, this.partitionId);
 
 	    // Submit and wait for the result
@@ -116,11 +112,8 @@ public class MyPriorityQueueServiceProxy<E>
 		MyPriorityQueueOpSize myPriorityQueueOpSize = new MyPriorityQueueOpSize();
 		myPriorityQueueOpSize.setName(this.name);
 		
-		// Find out how it's going to be submitted
-		NodeEngine nodeEngine = this.getNodeEngine();
-
 	    // Build the remote execution from service name, operation and object partition
-	    InvocationBuilder builder = nodeEngine.getOperationService()
+	    InvocationBuilder builder = this.nodeEngine.getOperationService()
 	               .createInvocationBuilder(MyPriorityQueue.SERVICE_NAME, myPriorityQueueOpSize, this.partitionId);
 
 	    // Submit and wait for the result

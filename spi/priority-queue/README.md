@@ -108,6 +108,226 @@ What is relevant here is we have a nature of compability. There is a
 way to determine which order is the more important, even if the
 algorithm is flawed.
 
+## Services, proxies &amp; operations
+
+The _SPI_ works with _services_, _service proxies_ and _operations_.
+These are used for the built-in Hazelcast distributed objects and
+for custom objects.
+
+* The first concept is of a _service_. 
+
+The service runs on the grid somewhere, and has its lifecycle of
+creation and deletion managed by Hazelcast.
+
+The service manages multiple priority queues, each of which is
+identified by a name.
+
+What this means in practice is when priority queue with name "_xyz_"
+is needed, the hosting workload is distributed onto the grid.
+
+The queue instance with name "_xyz_" is hosted on *one* of the
+available Hazelcast service instances in the grid, as queues
+aren't striped across servers.
+
+We don't control which Hazelcast server hosts this queue.
+Hazelcast decides this, and further may need to move queue
+from host to host if a data re-balance is run.
+
+* The second concept is the _service proxy_.
+
+As above, the _service_ for a queue exists on one Hazelcast server instance
+in the grid.
+
+A _service proxy_ is created on any Hazelcast server instance that
+needs to work with the _service_.
+
+A Hazelcast instance that needs to work with the _service_ is
+provided with a _service proxy_ object instead. All the necessary
+operations are available, but as the name suggest this is just
+a local wrapper onto something that is actually elsewhere.
+
+What this means is the local process doesn't need to know or
+care if the object being accessed is local or remote, the
+proxy handles it.
+
+Even if the _service_ is on the same Hazelcast instance as the
+code trying to use it, a _service proxy_ is provided. This
+makes for uniform behaviour should the underlying data structure
+(here a priority queue) be migrated to a different Hazelcast
+server.
+
+* Finally there is the _operation_.
+
+An _operation_ is how the _service proxy_ works with the
+_service_. It is a runnable object that can be sent from
+place to place.
+
+The _service proxy_ creates an _operation_, which may have
+arguments and may return a value, a remote function
+essentially.
+
+Hazelcast looks after delivering the _operation_ from
+the _service proxy_ to the _service_, running the
+_operation_ at the destination, and delivering any
+result back from the _service_ to the _service proxy_.
+
+## The solution detail
+
+The objective here is a distributed priority queue,
+which we implement using operations, services and
+service proxies.
+
+### `MyPriorityQueue` interface
+
+This defines how the queue will behave. Operations are defined to add items
+to the queue (`offer(E)`), take items from the queue (`poll()`) and confirm how
+many items are in it (`size()`).
+
+The real thing would have more methods defined, but wouldn't add anything
+to understanding.
+
+The interface also specifies this is a `DistributedObject` so we also get
+all the Hazelcase framework operations such as `getName()`. We can define
+multiple such queues as named object on the grid and distinguish them by name.
+
+### `MyPriorityQueueService` class
+
+The _service_ class is where the real work happens. The _service proxy_ below
+just provides a way to use it from anywhere in the grid.
+
+There are three components to this
+
+* `ManagedService`
+
+Firstly, we define this to be a _ManagedService_.
+
+Meaning, its lifecycle is managed by Hazelcast. Hazelcast will call `init()` and
+`shutdown()` methods when the service is born and when Hazelcast is shutting down
+to close the service. These allow us to do any extra activities such as opening
+and closing resources that Hazelcast doesn't know about.
+
+* `RemoteService`
+
+Secondly, we define this to be a _RemoteService_.
+
+Meaning, we can access this service remotely via a _service proxy_.
+We provide the methods to create the queue proxies and tidy up when
+queues are deleted.
+
+* Finally, the priority queues
+
+The solution needs priority queues!
+
+Fortunately, Java provides them for us. So all the _service_ needs to
+do is store a collection of `java.util.PriorityQueue`.
+
+So what is here is a standard Java map, `Map<String, PriorityQueue>`
+where each of the named priority queues are stored.
+
+* PriorityBlockingQueue ?
+
+As an aside, consideration needs to be given to thread safety.
+
+Why is `PriorityQueue` adequate, when `PriorityBlockingQueue` would seem
+necessary ?
+
+The answer here is in Hazelcast's threading model.
+
+Data storage in Hazelcast is split into parts called partitions,
+and these are spread across the available servers in the grid.
+Each server process hosts some of the partitions and has some
+worker threads allocated to partition operations.
+
+Crucially there is a _one:many_ mapping between worker threads
+and partitions. Each worker thread looks after some partitions.
+No partition is shared amongst worker threads.
+
+If there are two threads and six partitions, this would mean
+that `thread-1` looks after partitions _1_,_2_ &amp; _3_ and `thread-2`
+looks after partitions _4_,_5_ &amp; _6_. If this becomes
+a bottleneck, just increase the thread count.
+
+Since the _service_ sits in a partition, and exactly one
+thread is responsible for the partition, then only that
+thread can be accessing the queue in the _service_.
+Consequently we don't have to worry about concurrent access
+from multiple threads to the same object.
+
+So since `PriorityQueue` or `PriorityBlockingQueue` can be used, the former
+is preferable as performance is higher.
+
+(For the same reason, a standard map and not a concurrent map
+is fine for storing the queues in the _service_).
+
+### `MyPriorityQueueServiceProxy` class
+
+The _service proxy_ has to provide implementations of the
+methods in the queue interface ("_offer()_", "_poll()_", "_size()_").
+
+It does this by creating _operations_ and sending them for execution
+to the _service_.
+
+For example, the implementation in the _service proxy_ for the "_size()_"
+method looks like this:
+
+```
+public int size() throws Exception {
+	MyPriorityQueueOpSize myPriorityQueueOpSize = new MyPriorityQueueOpSize();
+	myPriorityQueueOpSize.setName(this.name);
+		
+    	InvocationBuilder builder = 
+    		this.nodeEngine.getOperationService()
+           .createInvocationBuilder("MyPriorityQueueService", myPriorityQueueOpSize, this.partitionId);
+
+	Future<Integer> future = builder.invoke()
+	return future.get();
+}
+```
+
+* A `myPriorityQueueOpSize` operation is created, and the name of the queue
+needing sized is provided.
+
+* An operation invocation is created, to send the operation to the
+service on one of the partitions in the grid.
+
+The grid contains multiple data partitions shared across the servers.
+If there were four partitions and two servers, it might work out
+that `server-1` is hosting partitions _1_ &amp; _2_, and `server-2` is
+hosting partitions _3_ &amp; _4_.
+
+So what this means is the operation is to be sent to the server
+currently hosting the specified partition.
+
+The _NodeEngine_ is the accessor to Hazelcast internals, the
+core of Hazelcast.
+
+* We invoke the operation, and wait for the result of the execution.
+
+### `MyPriorityQueueOpOffer`, `MyPriorityQueueOpPoll` &amp; `MyPriorityQueueOpSize` classes
+
+These are the operations that `MyPriorityQueueServiceProxy` sends to
+`MyPriorityQueueService` to do the actual work.
+
+All are serializable and runnable.
+
+The caller (`MyPriorityQueueServiceProxy`) creates the operation and adds any required
+arguments. For example, for `MyPriorityQueueOpOffer` the item being offered to the
+queue is a constructor argument.
+
+When the operation is submitted by the _service proxy_, Hazelcast takes care
+transporting the operation from the _service proxy_ to the _service_, as
+these may be on different JVMs.
+
+Once the operation arrives at the _service_, the `run()` method is invoked.
+
+The `run()` method does the actual work, accessing the _service_ and doing
+the necessary.
+
+Since we're not implementing the priority queue from the ground up, the
+implementation of these operations is easy. All we need do is retrieve
+the right `java.util.PriorityQueue` object from the _service_, and use
+it's methods to provide the operation response.
+
 ## Running the sample solution
 
 These are Spring Boot examples, so run `mvn` as far as the "_package_" stage.
@@ -247,15 +467,34 @@ spring-shell>list
 spring-shell>
 ```
 
+#### Step 5 : Bonus
+
+When we create the `IQueue` named "_vanilla_" in the `write()` call in the `CLICommands.java`
+class the code is this:
+
+```
+com.hazelcast.core.IQueue<Order> vanilla = this.hazelcastInstance.getQueue("vanilla");
+```
+
+But if you have trace logging enabled, the `size()` call shows this
+
+```
+07:41:19.216 TRACE Spring Shell com.hazelcast.samples.spi.CliCommands - Distributed Object, name 'vanilla', class 'com.hazelcast.collection.impl.queue.QueueProxyImpl' 
+```
+
+We asked for a `IQueue` and instead we got a `QueueProxyImpl`. We get a _service proxy_
+for the Hazelcast built-in objects, just like for our own custom object.
+
 ## What the sample solution is missing
 
 To keep the sample simple, some parts have been omitted.
 
-`MigrationAwareService` is not yet implemented, but would not be that difficult to
-add. This would allow queue contents to be moved from server from server
-when the cluster changes size (servers are added or removed) and the
-data load needs re-balanced. This would be a necessary step for a
-production strength implementation.
+`MigrationAwareService` and `BackupAwareOperation` are not yet implemented.
+This means there is only one copy of each priority queue, no backup,
+and should the cluster change in capacity the queues aren't moved
+from server to server to re-balance the data load.
+This is covered by [this example](https://github.com/hazelcast/hazelcast-code-samples/tree/master/spi/backups) 
+and would be a necessary step for a production strength implementation.
 
 Client access is not yet implemented, but would be a more serious coding
 effort. In Hazelcast, the client-server protocol is public -- see
