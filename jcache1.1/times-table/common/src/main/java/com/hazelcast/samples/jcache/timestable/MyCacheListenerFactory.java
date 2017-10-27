@@ -10,11 +10,11 @@ import javax.cache.configuration.Factory;
 @SuppressWarnings({ "serial", "rawtypes" })
 public class MyCacheListenerFactory implements Factory<MyCacheListener> {
 
-	private static MyCacheListener myCacheListener = new MyCacheListener();
+    private static MyCacheListener myCacheListener = new MyCacheListener();
 
-	@Override
-	public MyCacheListener create() {
-		return myCacheListener;
-	}
+    @Override
+    public MyCacheListener create() {
+        return myCacheListener;
+    }
 
 }
