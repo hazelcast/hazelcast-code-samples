@@ -13,6 +13,12 @@
     	<name>Priority Queue Server</name>
 	<description>A framework to exercise the core</description>
 	
+	<properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.hazelcast.samples.spi</groupId>
