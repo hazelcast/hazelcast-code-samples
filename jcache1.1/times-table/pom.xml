@@ -35,9 +35,7 @@
 		<module>common</module>
 		<module>server</module>
 		<module>jcache-spring</module>
-		<!-- 
 		<module>jcache-standard</module>
-		 -->
 	</modules>
 
 	<dependencies>
