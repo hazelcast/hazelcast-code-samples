@@ -39,93 +39,93 @@ import com.hazelcast.spi.RemoteService;
  */
 public class MyPriorityQueueService implements ManagedService, RemoteService {
 
-	// See class comments, PriorityQueue not PriorityBlockingQueue
-	private Map<String, PriorityQueue<?>> mapPriorityQueue
-		= new ConcurrentHashMap<>();
-	private NodeEngine nodeEngine;
+    // See class comments, PriorityQueue not PriorityBlockingQueue
+    private Map<String, PriorityQueue<?>> mapPriorityQueue
+        = new ConcurrentHashMap<>();
+    private NodeEngine nodeEngine;
 
-	/**
-	 * <p>{@link com.hazelcast.spi.ManagedService ManagedService}
-	 * </p>
-	 * <p>Save the {@link com.hazelcast.spi.NodeEngine NodeEngine}
-	 * for later.
-	 * </p>
-	 * 
-	 * @param nodeEngine The Hazelcast operation processor
-	 * @param properties {@code @NotNull} but not used
-	 */
-	@Override
-	public void init(NodeEngine nodeEngine, Properties properties) {
-		this.nodeEngine = nodeEngine;
-	}
+    /**
+     * <p>{@link com.hazelcast.spi.ManagedService ManagedService}
+     * </p>
+     * <p>Save the {@link com.hazelcast.spi.NodeEngine NodeEngine}
+     * for later.
+     * </p>
+     *
+     * @param nodeEngine The Hazelcast operation processor
+     * @param properties {@code @NotNull} but not used
+     */
+    @Override
+    public void init(NodeEngine nodeEngine, Properties properties) {
+        this.nodeEngine = nodeEngine;
+    }
 
-	/**
-	 * <p>{@link com.hazelcast.spi.ManagedService ManagedService}
-	 * </p>
-	 * <p>Not used in this example.
-	 * </p>
-	 */
-	@Override
-	public void reset() {
-	}
+    /**
+     * <p>{@link com.hazelcast.spi.ManagedService ManagedService}
+     * </p>
+     * <p>Not used in this example.
+     * </p>
+     */
+    @Override
+    public void reset() {
+    }
 
-	/**
-	 * <p>{@link com.hazelcast.spi.ManagedService ManagedService}
-	 * </p>
-	 * <p>No action needed to shut down the service.
-	 * </p>.
-	 * 
-	 * @param terminate Ignored
-	 */
-	@Override
-	public void shutdown(boolean terminate) {
-	}
+    /**
+     * <p>{@link com.hazelcast.spi.ManagedService ManagedService}
+     * </p>
+     * <p>No action needed to shut down the service.
+     * </p>.
+     *
+     * @param terminate Ignored
+     */
+    @Override
+    public void shutdown(boolean terminate) {
+    }
 
-	/**
-	 * <p>{@link com.hazelcast.spi.RemoteService RemoteService}
-	 * </p>
-	 * <p>Create a remotely accessible service instance.
-	 * </p>
-	 * 
-	 * @param objectName The name for the priority queue
-	 * @return The priority queue with that name
-	 */
-	@SuppressWarnings("rawtypes")
-	@Override
-	public DistributedObject createDistributedObject(String objectName) {
-		return new MyPriorityQueueServiceProxy(objectName, this.nodeEngine, this);
-	}
+    /**
+     * <p>{@link com.hazelcast.spi.RemoteService RemoteService}
+     * </p>
+     * <p>Create a remotely accessible service instance.
+     * </p>
+     *
+     * @param objectName The name for the priority queue
+     * @return The priority queue with that name
+     */
+    @SuppressWarnings("rawtypes")
+    @Override
+    public DistributedObject createDistributedObject(String objectName) {
+        return new MyPriorityQueueServiceProxy(objectName, this.nodeEngine, this);
+    }
 
-	/**
-	 * <p>{@link com.hazelcast.spi.RemoteService RemoteService}
-	 * </p>
-	 * <p>No action needed to shut down the service instance.
-	 * </p>.
-	 * 
-	 * @param objectName A named priority queue
-	 */
-	@Override
-	public void destroyDistributedObject(String objectName) {
-	}
+    /**
+     * <p>{@link com.hazelcast.spi.RemoteService RemoteService}
+     * </p>
+     * <p>No action needed to shut down the service instance.
+     * </p>.
+     *
+     * @param objectName A named priority queue
+     */
+    @Override
+    public void destroyDistributedObject(String objectName) {
+    }
 
-	/**
-	 * <p>Helper method to return a queue held in the service,
-	 * creating if necessary.
-	 * </p>
-	 * 
-	 * @param name The queue name
-	 * @return     The queue
-	 */
-	protected PriorityQueue<?> _getQueue(String name) {
-		PriorityQueue<?> priorityQueue
-			= this.mapPriorityQueue.get(name);
-		
-		if (priorityQueue==null) {
-			priorityQueue = new PriorityQueue<>();
-			this.mapPriorityQueue.put(name, priorityQueue);
-		}
-		
-		return priorityQueue;
-	}
+    /**
+     * <p>Helper method to return a queue held in the service,
+     * creating if necessary.
+     * </p>
+     *
+     * @param name The queue name
+     * @return     The queue
+     */
+    protected PriorityQueue<?> getQueue(String name) {
+        PriorityQueue<?> priorityQueue
+            = this.mapPriorityQueue.get(name);
+
+        if (priorityQueue == null) {
+            priorityQueue = new PriorityQueue<>();
+            this.mapPriorityQueue.put(name, priorityQueue);
+        }
+
+        return priorityQueue;
+    }
 
 }

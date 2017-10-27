@@ -12,17 +12,17 @@ import org.springframework.shell.Bootstrap;
 @SpringBootApplication
 public class Application {
 
-	/**
-	 * <p>Start Spring. Indirectly, a 
-	 * Hazelcast server instance is created in
-	 * this JVM by {@link com.hazelcast.samples.spi.ApplicationConfig ApplicationConfig}.
-	 * </p>
-	 * 
-	 * @param args From command line
-	 */
-	public static void main(String[] args) throws Exception {
-		System.setProperty("hazelcast.logging.type", "slf4j");
-		Bootstrap.main(args);
-	}
+    /**
+     * <p>Start Spring. Indirectly, a
+     * Hazelcast server instance is created in
+     * this JVM by {@link com.hazelcast.samples.spi.ApplicationConfig ApplicationConfig}.
+     * </p>
+     *
+     * @param args From command line
+     */
+    public static void main(String[] args) throws Exception {
+        System.setProperty("hazelcast.logging.type", "slf4j");
+        Bootstrap.main(args);
+    }
 
 }

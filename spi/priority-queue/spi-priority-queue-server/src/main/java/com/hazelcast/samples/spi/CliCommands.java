@@ -22,88 +22,88 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class CliCommands implements CommandMarker {
-	
+
     @Autowired
     private HazelcastInstance hazelcastInstance;
 
-	/**
-	 * <p>Look up the {@link com.hazelcast.core.DistributedObject DistributedObject}
-	 * that are currently defined in the cluster. As we are not
-	 * accessing by name, this won't trigger the lazy creation.
-	 * It only shows the ones currently present.
-	 * </p>
-	 */
+    /**
+     * <p>Look up the {@link com.hazelcast.core.DistributedObject DistributedObject}
+     * that are currently defined in the cluster. As we are not
+     * accessing by name, this won't trigger the lazy creation.
+     * It only shows the ones currently present.
+     * </p>
+     */
     @CliCommand(value = "list",
-			help = "List (but don't create) distributed objects")
+            help = "List (but don't create) distributed objects")
     public void list() throws Exception {
-		log.info("-----------------------");
-		
-		Collection<DistributedObject> distributedObjects
-			= this.hazelcastInstance.getDistributedObjects();
-		
-		// Find the distributed queue a different way than by name
-		for (DistributedObject distributedObject : distributedObjects) {
+        log.info("-----------------------");
 
-			String distributedObjectName = distributedObject.getName();
-			String distributedObjectServiceName = distributedObject.getServiceName();
+        Collection<DistributedObject> distributedObjects
+            = this.hazelcastInstance.getDistributedObjects();
 
-			log.info("Distributed Object, name '{}', service '{}'",
-					distributedObjectName,
-					distributedObjectServiceName
-					);
-			log.trace("Distributed Object, name '{}', class '{}'",
-					distributedObjectName,
-					distributedObject.getClass().getName()
-					);
+        // Find the distributed queue a different way than by name
+        for (DistributedObject distributedObject : distributedObjects) {
 
-			// If it's our queue, use one of the operations defined for it
-			if (distributedObjectServiceName.equals(MyPriorityQueue.SERVICE_NAME)) {
-				MyPriorityQueue<?> myPriorityQueue
-					= (MyPriorityQueue<?>) distributedObject;
+            String distributedObjectName = distributedObject.getName();
+            String distributedObjectServiceName = distributedObject.getServiceName();
 
-				log.info(" -> queue size {}", myPriorityQueue.size());
-			}
-			
-			if (distributedObject instanceof IQueue) {
-				IQueue<?> iQueue
-					= (IQueue<?>) distributedObject;
+            log.info("Distributed Object, name '{}', service '{}'",
+                    distributedObjectName,
+                    distributedObjectServiceName
+                    );
+            log.trace("Distributed Object, name '{}', class '{}'",
+                    distributedObjectName,
+                    distributedObject.getClass().getName()
+                    );
 
-					log.info(" -> queue size {}", iQueue.size());
-			}
-		}
-		
-		if (distributedObjects.size() > 0) {
-			log.info("-----------------------");
-		}
-		
-		log.info("[{} distributed object{}]", 
-				distributedObjects.size(),
-				(distributedObjects.size()==1 ? "": "s")
-				);
-		
-		log.info("-----------------------");
-	}
+            // If it's our queue, use one of the operations defined for it
+            if (distributedObjectServiceName.equals(MyPriorityQueue.SERVICE_NAME)) {
+                MyPriorityQueue<?> myPriorityQueue
+                    = (MyPriorityQueue<?>) distributedObject;
 
-    
+                log.info(" -> queue size {}", myPriorityQueue.size());
+            }
+
+            if (distributedObject instanceof IQueue) {
+                IQueue<?> iQueue
+                    = (IQueue<?>) distributedObject;
+
+                    log.info(" -> queue size {}", iQueue.size());
+            }
+        }
+
+        if (distributedObjects.size() > 0) {
+            log.info("-----------------------");
+        }
+
+        log.info("[{} distributed object{}]",
+                distributedObjects.size(),
+                (distributedObjects.size() == 1 ? "" : "s")
+                );
+
+        log.info("-----------------------");
+    }
+
+
     /**
      * <p>Read data from the queues.
      * </p>
      */
     @SuppressWarnings("unchecked")
-	@CliCommand(value = "read",
-			help = "Read orders from IQueue and MyPriorityQueue")
+    @CliCommand(value = "read",
+            help = "Read orders from IQueue and MyPriorityQueue")
     public void read() throws Exception {
 
-    		// Normal IQueue
+            // Normal IQueue
         IQueue<Order> vanilla = this.hazelcastInstance.getQueue("vanilla");
 
         log.info("Queue '{}' has size {}",
                         vanilla.getName(), vanilla.size());
-        
-        for (int i=0 ; !vanilla.isEmpty() ; i++) {
+
+        for (int i = 0 ; !vanilla.isEmpty() ; i++) {
                 log.info("Item {} => {}", i, vanilla.poll());
         }
-        
+
         // MyPriorityQueue
         DistributedObject distributedObject
                 = this.hazelcastInstance.getDistributedObject(MyPriorityQueue.SERVICE_NAME, "strawberry");
@@ -111,31 +111,31 @@ public class CliCommands implements CommandMarker {
 
         log.info("Queue '{}' has size {}",
                         strawberry.getName(), strawberry.size());
-        
+
         int max = strawberry.size();
-        for (int i=0 ; i<max ; i++) {
+        for (int i = 0 ; i < max ; i++) {
                 log.info("Item {} => {}", i, strawberry.poll());
         }
     }
-    
-    
+
+
     /**
      * <p>Write data to the queues, same data to both
      * kinds.
      * </p>
      */
     @SuppressWarnings("unchecked")
-	@CliCommand(value = "write",
-			help = "Write orders into IQueue and MyPriorityQueue")
+    @CliCommand(value = "write",
+            help = "Write orders into IQueue and MyPriorityQueue")
     public void write() throws Exception {
-    	
+
         // Normal IQueue
         List<Order> orders = TestData.createOrders();
-        
+
         IQueue<Order> vanilla = this.hazelcastInstance.getQueue("vanilla");
-        for (int i=0 ; i<orders.size() ; i++) {
-        		Order order = orders.get(i);
-        		log.info("Item {} => {}", i, order);
+        for (int i = 0 ; i < orders.size() ; i++) {
+                Order order = orders.get(i);
+                log.info("Item {} => {}", i, order);
             vanilla.put(order);
         }
         log.info("Wrote {} into queue '{}', queue size now {}",
@@ -146,13 +146,13 @@ public class CliCommands implements CommandMarker {
                 = this.hazelcastInstance.getDistributedObject(MyPriorityQueue.SERVICE_NAME, "strawberry");
         MyPriorityQueue<Order> strawberry = (MyPriorityQueue<Order>) distributedObject;
 
-        for (int i=0 ; i<orders.size() ; i++) {
-    			Order order = orders.get(i);
-    			log.info("Item {} => {}", i, order);
+        for (int i = 0 ; i < orders.size() ; i++) {
+                Order order = orders.get(i);
+                log.info("Item {} => {}", i, order);
             strawberry.offer(order);
         }
         log.info("Wrote {} into queue '{}', queue size now {}",
                         orders.size(), strawberry.getName(), strawberry.size());
     }
-    	
+
 }

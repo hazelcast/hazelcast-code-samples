@@ -4,7 +4,7 @@ import com.hazelcast.core.DistributedObject;
 
 /**
  * <p>{@code MyPriorityQueue} is a distributed object
- * (distributed onto the IMDG grid), just like 
+ * (distributed onto the IMDG grid), just like
  * {@link com.hazelcast.core.IQueue IQueue},
  * {@link com.hazelcast.core.IMap IMap} and all
  * the other built-ins.
@@ -18,16 +18,16 @@ import com.hazelcast.core.DistributedObject;
  */
 public interface MyPriorityQueue<E> extends DistributedObject {
 
-	// The service that handles this object
-	public static final String SERVICE_NAME 
-			= MyPriorityQueue.class.getSimpleName() + "Service";
-	
-	// Write
-	public boolean offer(E e) throws Exception;
+    // The service that handles this object
+    String SERVICE_NAME
+            = MyPriorityQueue.class.getSimpleName() + "Service";
 
-	// Read
-	public E poll() throws Exception;
+    // Write
+    boolean offer(E e) throws Exception;
 
-	// For debugging
-	public int size() throws Exception;
+    // Read
+    E poll() throws Exception;
+
+    // For debugging
+    int size() throws Exception;
 }

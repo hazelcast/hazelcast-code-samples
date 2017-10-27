@@ -22,38 +22,38 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class MyPriorityQueueOpOffer
-	extends Operation
-	implements PartitionAwareOperation {
+    extends Operation
+    implements PartitionAwareOperation {
 
-	// Input
-	private String name;
-	private Object payload;
-	// Output
-	private Boolean response;
-	
-	/**
-	 * <p>Run the {@code poll()} operation on the named
-	 * queue stored in the service.
-	 * </p>
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void run() throws Exception {
-		log.trace("run() for '{}', payload '{}'", this.name, this.payload);
+    // Input
+    private String name;
+    private Object payload;
+    // Output
+    private Boolean response;
 
-		MyPriorityQueueService myPriorityQueueService = super.getService();
+    /**
+     * <p>Run the {@code poll()} operation on the named
+     * queue stored in the service.
+     * </p>
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public void run() throws Exception {
+        log.trace("run() for '{}', payload '{}'", this.name, this.payload);
 
-		PriorityQueue queue
-			= myPriorityQueueService._getQueue(this.name);		
-		
-		this.response = queue.offer(this.payload);
-	}
+        MyPriorityQueueService myPriorityQueueService = super.getService();
 
-	
-	/**
-	 * <p>Serialize the operation fields to send from local to remote.
-	 * </p>
-	 */
+        PriorityQueue queue
+            = myPriorityQueueService.getQueue(this.name);
+
+        this.response = queue.offer(this.payload);
+    }
+
+
+    /**
+     * <p>Serialize the operation fields to send from local to remote.
+     * </p>
+     */
     @Override
     protected void writeInternal(ObjectDataOutput objectDataOutput) throws IOException {
         super.writeInternal(objectDataOutput);
@@ -61,10 +61,10 @@ public class MyPriorityQueueOpOffer
         objectDataOutput.writeObject(this.payload);
     }
 
-	/**
-	 * <p>De-serialize the operation fields to receive from remote to local.
-	 * </p>
-	 */
+    /**
+     * <p>De-serialize the operation fields to receive from remote to local.
+     * </p>
+     */
     @Override
     protected void readInternal(ObjectDataInput objectDataInput) throws IOException {
         super.readInternal(objectDataInput);

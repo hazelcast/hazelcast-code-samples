@@ -19,40 +19,41 @@ import com.hazelcast.core.HazelcastInstance;
  */
 @Configuration
 public class ApplicationConfig {
- 
-	/**
-	 * <p>Load Hazelcast configuration from the standard
-	 * file "{@code hazelcast.xml}" then extend it with
-	 * the custom service.
-	 * </p>
-	 * 
-	 * @return Configuration to build a Hazelcast server
-	 */
-	@Bean
-	public Config config() {
-		Config config = new ClasspathXmlConfig("hazelcast.xml");
 
-		// Record the custom service class
-		ServiceConfig serviceConfig = new ServiceConfig();
-		serviceConfig.setEnabled(true);
-		serviceConfig.setName(MyPriorityQueueService.class.getSimpleName());
-		serviceConfig.setClassName(MyPriorityQueueService.class.getName());
-		
-		// Add it to overall config
-		config.getServicesConfig().addServiceConfig(serviceConfig);
-		
-		return config;
-	}
+    /**
+     * <p>Load Hazelcast configuration from the standard
+     * file "{@code hazelcast.xml}" then extend it with
+     * the custom service.
+     * </p>
+     *
+     * @return Configuration to build a Hazelcast server
+     */
+    @Bean
+    public Config config() {
+        Config config = new ClasspathXmlConfig("hazelcast.xml");
 
-	/**
-	 * <p>Create a Hazelcast server instance configured
-	 * as provided.</p>
-	 *  
-	 * @param config The {@code @Bean} created above
-	 * @return A Hazelcast server, as a Spring {@code @Bean}
-	 */
-	@Bean	
-	public HazelcastInstance hazelcastInstance(Config config) {
-		return Hazelcast.newHazelcastInstance(config);
-	}
+        // Record the custom service class
+        ServiceConfig serviceConfig = new ServiceConfig();
+        serviceConfig.setEnabled(true);
+        serviceConfig.setName(MyPriorityQueueService.class.getSimpleName());
+        serviceConfig.setClassName(MyPriorityQueueService.class.getName());
+
+        // Add it to overall config
+        config.getServicesConfig().addServiceConfig(serviceConfig);
+
+        return config;
+    }
+
+    /**
+     * <p>Create a Hazelcast server instance configured
+     * as provided.</p>
+     *
+     * @param config The {@code @Bean} created above
+     * @return A Hazelcast server, as a Spring {@code @Bean}
+     */
+    @Bean
+    public HazelcastInstance hazelcastInstance(Config config) {
+        return Hazelcast.newHazelcastInstance(config);
+        }
+
 }

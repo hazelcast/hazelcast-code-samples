@@ -27,37 +27,37 @@ import lombok.Data;
 @Data
 public class Order implements Comparable<Order>, DataSerializable {
 
-	private UUID id;
-	private int seqNo;
-	private Day dueDate;
-	
-	/**
-	 * <p>Sort only by day of the week</p>
-	 */
-	@Override
-	public int compareTo(Order that) {
-		return this.dueDate.compareTo(that.getDueDate());
-	}
+    private UUID id;
+    private int seqNo;
+    private Day dueDate;
 
-	/**
-	 * <p>Send.
-	 * </p>
-	 */
-	@Override
+    /**
+     * <p>Sort only by day of the week</p>
+     */
+    @Override
+    public int compareTo(Order that) {
+        return this.dueDate.compareTo(that.getDueDate());
+    }
+
+    /**
+     * <p>Send.
+     * </p>
+     */
+    @Override
     public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
         objectDataOutput.writeObject(this.id);
         objectDataOutput.writeInt(this.seqNo);
         objectDataOutput.writeObject(this.dueDate);
     }
-	/**
-	 * <p>Receive.
-	 * </p>
-	 */
-	@Override
+    /**
+     * <p>Receive.
+     * </p>
+     */
+    @Override
     public void readData(ObjectDataInput objectDataInput) throws IOException {
-    		this.id = objectDataInput.readObject();
-    		this.seqNo = objectDataInput.readInt();
-    		this.dueDate = objectDataInput.readObject();
+            this.id = objectDataInput.readObject();
+            this.seqNo = objectDataInput.readInt();
+            this.dueDate = objectDataInput.readObject();
     }
-	
+
 }
