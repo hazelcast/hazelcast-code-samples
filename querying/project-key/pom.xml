@@ -18,8 +18,8 @@
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<hazelcast.version>3.9-SNAPSHOT</hazelcast.version>
-		<hazelcast-jet.version>0.5-SNAPSHOT</hazelcast-jet.version>
+		<hazelcast.version>3.9</hazelcast.version>
+		<hazelcast-jet.version>0.5</hazelcast-jet.version>
 		<!-- Jet requires Java 8 -->
 		<java.version>1.8</java.version>
 		<spring-boot.version>1.5.7.RELEASE</spring-boot.version>
