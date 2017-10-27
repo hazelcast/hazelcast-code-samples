@@ -24,6 +24,7 @@
         <module>getting-started</module>
         <module>notification</module>
         <module>partition-migration</module>
+        <module>priority-queue</module>
         <module>proxy</module>
     </modules>
 
