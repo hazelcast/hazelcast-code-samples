@@ -1,5 +1,8 @@
 package com.hazelcast.samples.jcache.timestable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.cache.CacheManager;
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
@@ -7,10 +10,13 @@ import javax.cache.spi.CachingProvider;
 import com.hazelcast.cache.HazelcastCacheManager;
 import com.hazelcast.core.HazelcastInstance;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * <p>The application entry point.
  * </p>
  */
+@Slf4j
 public class Application {
 
     /**
@@ -41,8 +47,24 @@ public class Application {
          * but do so manually to show how it could be done.
          */
         if (!cacheManager.isClosed()) {
+            log.info("cacheManager.close()");
             cacheManager.close();
 
+            /* JCache 1.1 specifies an exception should be
+             * thrown trying to access cache names after
+             * cache closure.
+             */
+            try {
+                Collection<String> cacheNames = new ArrayList<>();
+                cacheManager.getCacheNames().forEach(cacheNames::add);
+
+                log.error("JCache 1.0 behaviour, {}", cacheNames);
+            } catch (IllegalStateException jcache11Exception) {
+                log.info("JCache1.1 behaviour, {}", jcache11Exception.getLocalizedMessage());
+            }
+
+            /* Close Hazelcast connection
+             */
             HazelcastCacheManager hazelcastCacheManager
             = (HazelcastCacheManager) cacheManager;
 
