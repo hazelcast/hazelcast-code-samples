@@ -138,8 +138,7 @@ public class CLI implements CommandMarker {
     public void timestable() {
         log.info("-----------------------");
 
-        Cache<Tuple, Integer> cache = this.cacheManager
-                .getCache(TIMESTABLE_CACHE_NAME, Tuple.class, Integer.class);
+        Cache<Tuple, Integer> cache = this.cacheManager.getCache(TIMESTABLE_CACHE_NAME);
 
         Map<Tuple, Integer> tmpMap = new TreeMap<>();
         cache.forEach(entry -> tmpMap.put(entry.getKey(), entry.getValue()));

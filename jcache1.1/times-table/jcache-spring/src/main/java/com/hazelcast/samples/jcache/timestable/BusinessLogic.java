@@ -1,19 +1,23 @@
 package com.hazelcast.samples.jcache.timestable;
 
+import javax.cache.annotation.CacheResult;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>The business logic of the application,
+ * <p>Spring version of the business logic of the application,
  * doing mathematics.
  * </p>
- *
- * TODO: Add recursive @CacheResult
  */
 @Component
 @Slf4j
 public class BusinessLogic {
+
+    @Autowired
+    private BusinessLogic businessLogic;
 
     /**
      * <p>Find the product of two numbers. Although
@@ -30,8 +34,9 @@ public class BusinessLogic {
      * @param tuple "{@code (x, y)}"
      * @return "{@code x * y}"
      */
-    public int product(Tuple tuple) {
-            log.info("product({})", tuple);
+    @CacheResult(cacheName = CLI.TIMESTABLE_CACHE_NAME)
+    public Integer product(Tuple tuple) {
+        log.info("product({})", tuple);
 
         int operand1 = tuple.getOperand1();
         int operand2 = tuple.getOperand2();
@@ -41,7 +46,7 @@ public class BusinessLogic {
             return operand2;
         } else {
             // (1 + x) * y = y + (x * y)
-            return operand2 + this.product(new Tuple(operand1 - 1, operand2));
+            return operand2 + this.businessLogic.product(new Tuple(operand1 - 1, operand2));
         }
     }
 

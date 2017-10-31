@@ -165,6 +165,7 @@ public class CLI {
         log.info("-----------------------");
         log.info("Retrieve {} * {}", x, y);
 
+        Cache<Tuple, Integer> cache = cacheManager.getCache(TIMESTABLE_CACHE_NAME);
         Instant before = Instant.now();
 
         // Commutative
@@ -175,7 +176,7 @@ public class CLI {
            tuple = new Tuple(y, x);
         }
 
-        int z = x * y;//XXX this.businessLogic.product(tuple);
+        int z = BusinessLogic.product(tuple, cache);
 
         Instant after = Instant.now();
 
@@ -195,8 +196,7 @@ public class CLI {
     private void timesTables(CacheManager cacheManager) {
         log.info("-----------------------");
 
-        Cache<Tuple, Integer> cache = cacheManager
-                .getCache(TIMESTABLE_CACHE_NAME, Tuple.class, Integer.class);
+        Cache<Tuple, Integer> cache = cacheManager.getCache(TIMESTABLE_CACHE_NAME);
 
         Map<Tuple, Integer> tmpMap = new TreeMap<>();
         cache.forEach(entry -> tmpMap.put(entry.getKey(), entry.getValue()));
