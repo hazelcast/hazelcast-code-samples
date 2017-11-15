@@ -1,6 +1,7 @@
 package com.hazelcast.springconfiguration;
 
 import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.core.FlakeIdGenerator;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.IAtomicReference;
@@ -45,6 +46,7 @@ public class HazelcastDataTypes {
         executeList();
         executeExecutorService();
         executeIdGenerator();
+        executeFlakeIdGenerator();
         executeAtomicLong();
         executeAtomicReference();
         executeCountDownLatch();
@@ -140,6 +142,12 @@ public class HazelcastDataTypes {
         System.out.println("NewId: " + idgenerator.newId() + "\n");
     }
 
+    private static void executeFlakeIdGenerator() {
+        System.out.println("### FlakeIdGenerator Execution Started... ###");
+        FlakeIdGenerator flakeIdGenerator = context.getBean("flakeIdGenerator", FlakeIdGenerator.class);
+        System.out.println("NewId: " + flakeIdGenerator.newId() + "\n");
+    }
+
     private static void executeAtomicLong() {
         System.out.println("### AtomicLong Execution Started... ###");
         IAtomicLong atomicLong = context.getBean("atomicLong", IAtomicLong.class);
@@ -163,7 +171,7 @@ public class HazelcastDataTypes {
         System.out.println("Count is set to 10.");
         countDownLatch.countDown();
         System.out.println("countDown() call...");
-        System.out.println("CountDownLatch Count :" + countDownLatch.getCount() + "\n");
+        System.out.println("CountDownLatch Count: " + countDownLatch.getCount() + "\n");
     }
 
     private static void executeSemaphore() {
@@ -188,10 +196,10 @@ public class HazelcastDataTypes {
         ILock lock = context.getBean("lock", ILock.class);
         lock.lock();
         System.out.println("lock() call...");
-        System.out.println("is locked by current thread? :" + lock.isLockedByCurrentThread());
+        System.out.println("is locked by current thread: " + lock.isLockedByCurrentThread());
         lock.unlock();
         System.out.println("unlock() call...");
-        System.out.println("is locked? :" + lock.isLocked());
+        System.out.println("is locked: " + lock.isLocked());
     }
 
     private static class EchoTask implements Runnable, Serializable {
@@ -204,7 +212,7 @@ public class HazelcastDataTypes {
 
         @Override
         public void run() {
-            System.out.println("echo:" + msg);
+            System.out.println("echo: " + msg);
         }
     }
 }

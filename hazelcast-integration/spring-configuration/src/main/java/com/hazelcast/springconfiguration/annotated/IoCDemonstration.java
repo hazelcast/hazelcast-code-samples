@@ -1,5 +1,6 @@
 package com.hazelcast.springconfiguration.annotated;
 
+import com.hazelcast.core.FlakeIdGenerator;
 import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.IAtomicReference;
 import com.hazelcast.core.ICountDownLatch;
@@ -54,6 +55,9 @@ public class IoCDemonstration {
     private IdGenerator hzIdGenerator;
 
     @Autowired
+    private FlakeIdGenerator hzFlakeIdGenerator;
+
+    @Autowired
     private IAtomicLong hzAtomicLong;
 
     @Autowired
@@ -78,6 +82,7 @@ public class IoCDemonstration {
         Assert.notNull(this.hzList);
         Assert.notNull(this.hzExecutorService);
         Assert.notNull(this.hzIdGenerator);
+        Assert.notNull(this.hzFlakeIdGenerator);
         Assert.notNull(this.hzAtomicLong);
         Assert.notNull(this.hzAtomicReference);
         Assert.notNull(this.hzCountDownLatch);
@@ -93,6 +98,7 @@ public class IoCDemonstration {
         System.out.println("hzList = " + this.hzList.getClass());
         System.out.println("hzExecutorService = " + this.hzExecutorService.getClass());
         System.out.println("hzIdGenerator = " + this.hzIdGenerator.getClass());
+        System.out.println("hzFlakeIdGenerator = " + this.hzFlakeIdGenerator.getClass());
         System.out.println("hzAtomicLong = " + this.hzAtomicLong.getClass());
         System.out.println("hzAtomicReference = " + this.hzAtomicReference.getClass());
         System.out.println("hzCountDownLatch = " + this.hzCountDownLatch.getClass());

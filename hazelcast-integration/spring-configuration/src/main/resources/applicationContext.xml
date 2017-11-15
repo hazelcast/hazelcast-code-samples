@@ -53,6 +53,7 @@
     <hz:list id="list" instance-ref="instance" name="List"/>
     <hz:executorService id="executorService" instance-ref="instance" name="ExecutorService"/>
     <hz:idGenerator id="idGenerator" instance-ref="instance" name="IdGenerator"/>
+    <hz:flakeIdGenerator id="flakeIdGenerator" instance-ref="instance" name="FlakeIdGenerator"/>
     <hz:atomicLong id="atomicLong" instance-ref="instance" name="atomicLong"/>
     <hz:atomicReference id="atomicReference" instance-ref="instance" name="atomicReference"/>
     <hz:countDownLatch id="countDownLatch" instance-ref="instance" name="countDownLatch"/>

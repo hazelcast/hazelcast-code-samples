@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -cp target/lib/*:target/classes IdGeneratorMember
+java -cp target/lib/*:target/classes FlakeIdGeneratorSample
