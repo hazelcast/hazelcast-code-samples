@@ -1,0 +1,23 @@
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.9.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         
+    <network>
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="true">
+                <member-list>
+                    <member>127.0.0.1</member>
+                </member-list>
+            </tcp-ip>
+        </join>
+    </network>
+
+	<map name="life">
+		<attributes>
+			<!-- This class builds a field called "age" -->
+        		<attribute extractor="com.hazelcast.samples.querying.domain.LifeAgeValueExtractor">age</attribute>
+        </attributes>		
+	</map>
+	
+</hazelcast>

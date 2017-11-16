@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="NORMAL" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %thread %logger{1} - %msg %n</pattern>
+        </encoder>
+    </appender>
+    <appender name="HIGHLIGHT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %thread %white(%logger{1}) - %cyan(%msg) %n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.hazelcast" level="info"/>
+    <logger name="com.hazelcast.samples" level="trace" additivity="false">
+        <appender-ref ref="HIGHLIGHT"/>
+    </logger>
+    <logger name="org.springframework" level="error"/>
+
+    <root level="error">
+        <appender-ref ref="NORMAL"/>
+    </root>
+</configuration>
