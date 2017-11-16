@@ -138,14 +138,14 @@ public class MyJoinPipeline {
 
         // 1 - read a map
         ComputeStage<Entry<PersonKey, PersonValue>> stage1 = pipeline
-                .drawFrom(Sources.<PersonKey, PersonValue>readMap("person"));
+                .drawFrom(Sources.<PersonKey, PersonValue>map("person"));
 
         // 2 - simplify output from step 1, smaller to transmit
         ComputeStage<Tuple2<String, LocalDate>> stage2 = stage1
                 .map(entry -> Tuple2.tuple2(entry.getKey().getFirstName(), entry.getValue().getDateOfBirth()));
 
         // 3 - read another map
-        ComputeStage<Entry<String, LocalDate>> stage3 = pipeline.drawFrom(Sources.<String, LocalDate>readMap("deaths"));
+        ComputeStage<Entry<String, LocalDate>> stage3 = pipeline.drawFrom(Sources.<String, LocalDate>map("deaths"));
 
         // 4 - simplify output from step 3, smaller to transmit
         ComputeStage<Tuple2<String, LocalDate>> stage4 = stage3
@@ -182,7 +182,7 @@ public class MyJoinPipeline {
         });
 
         // 8 - save the map entry
-        stage7.drainTo(Sinks.writeMap("life"));
+        stage7.drainTo(Sinks.map("life"));
 
         // Return the query execution plan
         return pipeline;
