@@ -31,7 +31,7 @@
         <module>condition</module>
         <module>countdownlatch</module>
         <module>idgenerator</module>
-        <module>flakeidgenerator</module>
+        <module>reliable-id-generator</module>
         <module>lock</module>
         <module>semaphore</module>
     </modules>

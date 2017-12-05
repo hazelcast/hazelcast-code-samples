@@ -1,6 +1,5 @@
 package com.hazelcast.springconfiguration.annotated;
 
-import com.hazelcast.core.FlakeIdGenerator;
 import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.IAtomicReference;
 import com.hazelcast.core.ICountDownLatch;
@@ -14,6 +13,7 @@ import com.hazelcast.core.ISet;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.IdGenerator;
 import com.hazelcast.core.MultiMap;
+import com.hazelcast.core.ReliableIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 /**
  * This class shows the way you must declare the attributes to retrieve the hazelcast objects from spring context.
  * <p/>
- * Note: for collections, you must use the @Resource annotation instead of the @Autowired.
+ * Note: for collections, you must use the {@code @Resource} annotation instead of {@code @Autowired}.
  */
 @Component
 @SuppressWarnings("unused")
@@ -55,7 +55,7 @@ public class IoCDemonstration {
     private IdGenerator hzIdGenerator;
 
     @Autowired
-    private FlakeIdGenerator hzFlakeIdGenerator;
+    private ReliableIdGenerator hzReliableIdGenerator;
 
     @Autowired
     private IAtomicLong hzAtomicLong;
@@ -82,7 +82,7 @@ public class IoCDemonstration {
         Assert.notNull(this.hzList);
         Assert.notNull(this.hzExecutorService);
         Assert.notNull(this.hzIdGenerator);
-        Assert.notNull(this.hzFlakeIdGenerator);
+        Assert.notNull(this.hzReliableIdGenerator);
         Assert.notNull(this.hzAtomicLong);
         Assert.notNull(this.hzAtomicReference);
         Assert.notNull(this.hzCountDownLatch);
@@ -98,7 +98,7 @@ public class IoCDemonstration {
         System.out.println("hzList = " + this.hzList.getClass());
         System.out.println("hzExecutorService = " + this.hzExecutorService.getClass());
         System.out.println("hzIdGenerator = " + this.hzIdGenerator.getClass());
-        System.out.println("hzFlakeIdGenerator = " + this.hzFlakeIdGenerator.getClass());
+        System.out.println("hzReliableIdGenerator = " + this.hzReliableIdGenerator.getClass());
         System.out.println("hzAtomicLong = " + this.hzAtomicLong.getClass());
         System.out.println("hzAtomicReference = " + this.hzAtomicReference.getClass());
         System.out.println("hzCountDownLatch = " + this.hzCountDownLatch.getClass());
