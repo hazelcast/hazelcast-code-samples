@@ -6,19 +6,19 @@ This is a sample Spring Boot application that exposes some basic Hazelcast map o
 through a RESTful Web Service interface.
 
 This application uses Hazelcast Client to connect to a Hazelcast cluster thats deployed on 
-[Pivotal Cloud Foundry (PCF)](https://pivotal.io/platform) platform using [Hazelcast for PCF](https://network.pivotal.io/).
+[Pivotal Cloud Foundry (PCF)](https://pivotal.io/platform) platform using [Hazelcast IMDG Enterprise for PCF](https://network.pivotal.io/).
 
 ## Creating a Hazelcast Cluster using Hazelcast for PCF
 
 1) Download Hazelcast for PCF from [Pivotal Network](https://network.pivotal.io/)
 
-2) Install Hazelcast for PCF to your PCF setup. You can refer to Hazelcast for PCF [documentation](https://docs.pivotal.io/partners/hazelcast/) for detailed installation instructions.
+2) Install Hazelcast IMDG Enterprise for PCF to your PCF setup. You can refer to Hazelcast IMDG Enterprise for PCF [documentation](https://docs.pivotal.io/partners/hazelcast/) for detailed installation instructions.
 
 3) Check your Hazelcast installation using `cf marketplace` command. You should see "hazelcast" as a service after installation.
 
 ![cf-marketplace](markdown/images/cf-marketplace.png)
 
-4) Create a service `cf create-service hazelcast PLAN_NAME SERVICE_NAME -c PATH_TO_hazelcast.json` command. Hazelcast for PCF accepts configuration as JSON. You can use 
+4) Create a service `cf create-service hazelcast PLAN_NAME SERVICE_NAME -c PATH_TO_hazelcast.json` command. Hazelcast IMDG Enterprise for PCF accepts configuration as JSON. You can use 
 [hazelcast.json](hazelcast.json)  provided in this project by filling the `licensekey` section with a valid license.
 [hazelcast.json](hazelcast.json) has two additional configuration options compared to the standard Hazelcast configuration.
 - `instanceCount`: You can set number of desired Hazelcast members using this option while creating your Hazelcast service. 
@@ -43,7 +43,7 @@ you can modify it according to your needs.
 ```
 applications:
 - name: hazelcast-pcf-integration-test-app
-  memory: 512M
+  memory: 1024M
   instances: 1
   path: target/pcf-integration-0.1-SNAPSHOT.jar
 ```
