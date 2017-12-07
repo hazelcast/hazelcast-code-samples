@@ -28,6 +28,7 @@
         <module>data-serializable</module>
         <module>externalizable</module>
         <module>global-serializer</module>
+        <module>hazelcast-airlines</module>
         <module>hazelcast-instance-aware</module>
         <module>identified-data-serializable</module>
         <module>kryo-serializer</module>
