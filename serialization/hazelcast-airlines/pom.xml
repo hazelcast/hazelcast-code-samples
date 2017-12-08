@@ -23,6 +23,9 @@
 		<hazelcast.version>3.9.1</hazelcast.version>
 		<java.version>8</java.version>
 
+		<kryo.version>4.0.0</kryo.version>
+		<protobuf.version>3.5.0</protobuf.version>
+		
 		<spring-boot.version>1.5.9.RELEASE</spring-boot.version>
 		<spring-shell.version>1.2.0.RELEASE</spring-shell.version>
 	</properties>
@@ -33,6 +36,18 @@
 	</modules>
 
 	<dependencies>
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo</artifactId>
+            <version>${kryo.version}</version>
+        </dependency>	
+	
+ 		<dependency>
+        		<groupId>com.google.protobuf</groupId>
+            	<artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
+        </dependency> 
+
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>

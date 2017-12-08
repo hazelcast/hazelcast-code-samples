@@ -1,4 +1,4 @@
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.7.xsd"
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.9.xsd"
            xmlns="http://www.hazelcast.com/schema/config"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -24,5 +24,10 @@
     		<portable-factories>
       		<portable-factory factory-id="2">com.hazelcast.samples.serialization.hazelcast.airlines.util.MyPortableFactory</portable-factory>
 		</portable-factories>
+		<serializers>
+			<!-- V6Flight is serialized/deserialized by V6FlightSerializer -->
+			<serializer type-class="com.hazelcast.samples.serialization.hazelcast.airlines.V6Flight"
+				class-name="com.hazelcast.samples.serialization.hazelcast.airlines.V6FlightSerializer"/>
+		</serializers>
 	</serialization>    
 </hazelcast>

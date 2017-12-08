@@ -12,7 +12,9 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p><u>{@code V4Flight}, version 4 of the data model</u></p>
- * <p>TODO
+ * <p>Identify the object with a code number rather than the
+ * class name.
+ * </p>
  * <p>Pros:</p>
  * <ul>
  * <li><p>Codes not text represent the object class in byte stream, smaller</p></li>

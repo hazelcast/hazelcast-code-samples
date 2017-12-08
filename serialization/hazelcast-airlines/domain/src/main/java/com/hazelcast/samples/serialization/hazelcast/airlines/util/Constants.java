@@ -48,11 +48,12 @@ public class Constants {
 	public static final int MY_DATASERIALIZABLE_FACTORY = 1;
 	public static final int MY_PORTABLE_FACTORY = 1 + MY_DATASERIALIZABLE_FACTORY;
 	
-	/* Unique ids for the objects built by the factories (ie. 1 & 2)
+	/* Unique ids for the objects built by the factories (ie. 1, 2....)
 	 */
 	public static final int V4FLIGHT_ID = 1;
 	public static final int V5FLIGHT_ID = 1 + V4FLIGHT_ID;
-	public static final int SEATRESERVERATIONENTRYPROCESSOR_ID = 1 + V5FLIGHT_ID;
+	public static final int V6FLIGHT_ID = 1 + V5FLIGHT_ID;
+	public static final int SEATRESERVERATIONENTRYPROCESSOR_ID = 1 + V6FLIGHT_ID;
 	
 	/* Field names for Portable objects
 	 */
