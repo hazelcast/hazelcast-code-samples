@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 /**
  * <p><u>{@code V1Flight}, version 1 of the data model</u></p>
  * <p>The simplest way, let Java do it.
+ * </p>
  * <p>Pros:</p>
  * <ul>
  * <li><p>No code, just "{@code implements Serializable}"</p></li>

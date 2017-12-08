@@ -3,44 +3,36 @@ package com.hazelcast.samples.serialization.hazelcast.airlines;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import org.junit.Test;
 
+import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
+import com.hazelcast.spi.serialization.SerializationService;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>Java serialization test for {@link V1Flight}
+ * <p>Hazelcast serialization test for {@link V3Flight}
  * </p>
  */
 @Slf4j
-public class V1FlightTest {
+public class V3FlightTest {
 
 	@Test
 	public void test_serialization() throws Exception {
-		V1Flight objectSent = FlightBuilder.buildV1();
+		V3Flight objectSent = FlightBuilder.buildV3();
 		Object objectReceived = null;
 		byte[] bytes;
 
-		// Serialize
-		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-				ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);) {
+        SerializationService serializationService = 
+                new com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder()
+                .build();
 
-			objectOutputStream.writeObject(objectSent);
-			bytes = byteArrayOutputStream.toByteArray();
-		}
+        Data data = serializationService.toData(objectSent);
+        bytes = data.toByteArray();
 
-		// De-Serialize
-		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-				ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);) {
-			objectReceived = objectInputStream.readObject();
-		}
-
+        objectReceived = serializationService.toObject(data);
+        
 		// We should get back a different object of the same type and content
 		assertThat(objectReceived, notNullValue());
 		assertThat(objectReceived, instanceOf(objectSent.getClass()));

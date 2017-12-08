@@ -3,6 +3,8 @@ package com.hazelcast.samples.serialization.hazelcast.airlines;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +35,6 @@ public abstract class AbstractFlight implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		StringBuilder sb = new StringBuilder("%n");
 		
 		sb.append("Flight [%n Code=").append(code).append(",%n Date=").append(date).append("%n");
@@ -51,7 +52,7 @@ public abstract class AbstractFlight implements Serializable {
 						sb.append("   ");
 					}
 					
-					sb.append(" ").append(ALPHABET.charAt(j)).append("- ");
+					sb.append(" ").append(Constants.ALPHABET.charAt(j)).append("- ");
 					if (row[j]==null) {
 						sb.append("......");
 					} else {

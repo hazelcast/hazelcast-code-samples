@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class V2FlightTest {
 
 	@Test
-	public void test() throws Exception {
+	public void test_serialization() throws Exception {
 		V2Flight objectSent = FlightBuilder.buildV2();
 		Object objectReceived = null;
 		byte[] bytes;

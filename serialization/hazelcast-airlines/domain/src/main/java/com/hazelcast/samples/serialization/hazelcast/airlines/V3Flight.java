@@ -1,9 +1,6 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.time.LocalDate;
 
 import com.hazelcast.nio.ObjectDataInput;
@@ -17,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * <p><u>{@code V3Flight}, version 3 of the data model</u></p>
  * <p>We take control and optimize for Hazelcast
+ * </p>
  * <p>Pros:</p>
  * <ul>
  * <li><p>Still not much code, just input and output</p></li>

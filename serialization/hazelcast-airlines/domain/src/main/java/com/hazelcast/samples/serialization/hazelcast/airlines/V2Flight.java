@@ -13,7 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p><u>{@code V2Flight}, version 2 of the data model</u></p>
- * <p>We take control
+ * <p>We take control of serializable and deserialization of fields.
+ * </p>
  * <p>Pros:</p>
  * <ul>
  * <li><p>Not much code, just input and output added</p></li>

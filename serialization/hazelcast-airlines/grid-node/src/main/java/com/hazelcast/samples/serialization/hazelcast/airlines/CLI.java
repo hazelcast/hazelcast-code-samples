@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.samples.serialization.hazelcast.airlines.ep.FlightLoadingEntryProcessor;
+import com.hazelcast.samples.serialization.hazelcast.airlines.ep.SeatReservationEntryProcessor;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
 
@@ -32,6 +33,60 @@ public class CLI implements CommandMarker {
 
     @Autowired
     private HazelcastInstance hazelcastInstance;
+
+    
+    /**
+     * <p>Book a seat on a flight using an {@link com.hazelcast.map.EntryProcessor EntryProcessor}.
+     * </p>
+     * <p>There are three things to note here:
+     * </p>
+     * <ul>
+     * <li><p><i>Efficiency : </i>The entry processor is sent to the data. For a small
+     * update to a large object (booking 1 seat out of 120) this is more efficient than
+     * bringing the object to this process, updating it, and sending it back.
+     * </p></li>
+     * <li><p><i>Concurrency : </i>Because the entry processor runs on the master copy
+     * we don't have to worry about double-booking. If two such processors are submitted
+     * they run one after the other.
+     * </p></li>
+     * <li><p><i>Serialization : </i>The entry processor is <u>sent</u> to the data.
+     * So across the network, and is serialized. The one in question does not use
+     * default serialization {@link java.io.Serializable Serializable} but instead
+     * uses {@link com.hazelcast.nio.serialization.Portable Portable} to transport
+     * the field values to where the entry processor runs.
+     * </p></li>
+     * </ul>
+     * 
+     * @param name Who to book the seat for
+     * @return The seat booked
+     */
+    @CliCommand(value = "BOOK",
+            help = "BOOK A SEAT ON A FLIGHT")
+    public String loading(
+            @CliOption(key = {"CODE"}, mandatory = true, help = "THE FLIGHT TO BOOK ONTO") 
+            		String code,
+            @CliOption(key = {"NAME"}, mandatory = true, help = "WHO TO BOOK ONTO THE FLIGHT")
+            		String name
+    		) {
+		IMap<MyKey, AbstractFlight> flightsMap = this.hazelcastInstance.getMap(Constants.IMAP_FLIGHTS);
+    	
+		MyKey myKey = new MyKey(code, Constants.WHEN);
+		
+		if (flightsMap.containsKey(myKey)) {
+			SeatReservationEntryProcessor seatReservationEntryProcessor = new SeatReservationEntryProcessor(name);
+
+			String seat = flightsMap.executeOnKey(myKey, seatReservationEntryProcessor).toString();
+
+			if (seat==null) {
+				return String.format("Flight '%s' is full, sorry.%n", myKey);
+			} else {
+				return String.format("Flight '%s', seat '%s' booked.%n", myKey, seat);
+			}
+			
+		} else {
+			return String.format("Flight '%s' does not exist%n", myKey);
+		}
+    }
 
     
     /**
@@ -123,10 +178,20 @@ public class CLI implements CommandMarker {
 		MyKey myKey1 = new MyKey("HAZ001", Constants.WHEN);
 		MyKey myKey2 = new MyKey("HAZ002", Constants.WHEN);
 		MyKey myKey3 = new MyKey("HAZ003", Constants.WHEN);
+		MyKey myKey4 = new MyKey("HAZ004", Constants.WHEN);
+		MyKey myKey5 = new MyKey("HAZ005", Constants.WHEN);
+		MyKey myKey6 = new MyKey("HAZ006", Constants.WHEN);
+		MyKey myKey7 = new MyKey("HAZ007", Constants.WHEN);
+		MyKey myKey8 = new MyKey("HAZ008", Constants.WHEN);
 		
     		V1Flight v1Flight = FlightBuilder.buildV1();
     		V2Flight v2Flight = FlightBuilder.buildV2();
     		V3Flight v3Flight = FlightBuilder.buildV3();
+    		V4Flight v4Flight = FlightBuilder.buildV4();
+    		V5Flight v5Flight = FlightBuilder.buildV5();
+    		V6Flight v6Flight = FlightBuilder.buildV6();
+    		V7Flight v7Flight = FlightBuilder.buildV7();
+    		V8Flight v8Flight = FlightBuilder.buildV8();
 
     		@SuppressWarnings("unused")
 		Object previous = hazelcastMap.put(myKey1,v1Flight);
@@ -137,10 +202,15 @@ public class CLI implements CommandMarker {
     		
     		Map<MyKey, AbstractFlight> ordinaryMap = new HashMap<>();
     		ordinaryMap.put(myKey3, v3Flight);
+    		ordinaryMap.put(myKey4, v4Flight);
+    		ordinaryMap.put(myKey5, v5Flight);
+    		ordinaryMap.put(myKey6, v6Flight);
+    		ordinaryMap.put(myKey7, v7Flight);
+    		ordinaryMap.put(myKey8, v8Flight);
     		hazelcastMap.putAll(ordinaryMap);
     		sb.append("Map.putAll('").append(Arrays.asList(ordinaryMap.keySet())).append("') is void method%n");
     		
     		return String.format(sb.toString());
     }
-
+    
 }
