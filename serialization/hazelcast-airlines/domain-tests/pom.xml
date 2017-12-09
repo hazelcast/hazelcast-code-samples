@@ -8,14 +8,30 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>domain</artifactId>
+	<artifactId>domain-tests</artifactId>
 
-	<name>Serialization: Hazelcast Airlines : Domain</name>
+	<name>Serialization: Hazelcast Airlines : Domain Tests</name>
+	<description>A separate module for unit tests as some domain classes are generated</description>
 
 	<properties>
 		<!-- needed for checkstyle/findbugs -->
 		<main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.hazelcast.samples.serialization.hazelcast.airlines</groupId>
+			<artifactId>domain</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring-boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 </project>

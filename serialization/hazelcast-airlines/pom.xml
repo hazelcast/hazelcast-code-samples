@@ -20,38 +20,44 @@
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+		<avro.version>1.8.2</avro.version>
 		<hazelcast.version>3.9.1</hazelcast.version>
 		<java.version>8</java.version>
-
 		<kryo.version>4.0.0</kryo.version>
 		<protobuf.version>3.5.0</protobuf.version>
-		
 		<spring-boot.version>1.5.9.RELEASE</spring-boot.version>
 		<spring-shell.version>1.2.0.RELEASE</spring-shell.version>
 	</properties>
 
 	<modules>
 		<module>domain</module>
+		<module>domain-tests</module>
 		<module>grid-node</module>
 	</modules>
 
 	<dependencies>
-        <dependency>
-            <groupId>com.esotericsoftware</groupId>
-            <artifactId>kryo</artifactId>
-            <version>${kryo.version}</version>
-        </dependency>	
-	
- 		<dependency>
-        		<groupId>com.google.protobuf</groupId>
-            	<artifactId>protobuf-java</artifactId>
-            <version>${protobuf.version}</version>
-        </dependency> 
+		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryo</artifactId>
+			<version>${kryo.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${protobuf.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
 			<version>${hazelcast.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
 		</dependency>
 
 		<dependency>
@@ -95,6 +101,27 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>avro-maven-plugin</artifactId>
+					<version>${avro.version}</version>
+					<configuration>
+						<sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
+						<outputDirectory>${project.basedir}/src/main/</outputDirectory>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>schema</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>
