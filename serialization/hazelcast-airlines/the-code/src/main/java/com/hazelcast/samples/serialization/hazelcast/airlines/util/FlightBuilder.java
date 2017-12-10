@@ -26,7 +26,9 @@ public class FlightBuilder {
      * @param flight The object to inject into
      * @param code Part of the key
      */
-    private static void populate(AbstractFlight flight, String code) {
+    //CHECKSTYLE:OFF
+	private static void populate(AbstractFlight flight, String code) {
+    //CHECKSTYLE:ON
         flight.setCode(code);
         flight.setDate(Constants.WHEN);
         Person[][] rows = new Person[Constants.ROWS][Constants.SEATS];
