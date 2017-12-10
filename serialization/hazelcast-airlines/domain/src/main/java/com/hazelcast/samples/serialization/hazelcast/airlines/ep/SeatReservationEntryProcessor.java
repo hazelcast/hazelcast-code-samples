@@ -72,8 +72,8 @@ public class SeatReservationEntryProcessor extends AbstractEntryProcessor<MyKey,
         int i = -1;
         int j = -1;
         String result = null;
-        for (i = rows.length-1 ; i > =0 ; i--) {
-            for (j = rows[i].length - 1 ; j > =0 ; j--) {
+        for (i = rows.length-1 ; i >= 0 ; i--) {
+            for (j = rows[i].length - 1 ; j >= 0 ; j--) {
                 if (rows[i][j] == null && result == null) {
                     rows[i][j] = person;
                     result = String.format("Row %d Seat %s", i, Constants.ALPHABET.charAt(j));
