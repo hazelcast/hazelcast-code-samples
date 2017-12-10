@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
-import com.hazelcast.samples.serialization.hazelcast.airlines.util.Helpers;
 
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -97,7 +96,7 @@ public class V3Flight extends AbstractFlight implements DataSerializable {
         for (int i=0 ; i < rows.length ; i++) {
             Person[] row = rows[i];
 
-            boolean empty = Helpers.emptyRow(row);
+            boolean empty = com.hazelcast.samples.serialization.hazelcast.airlines.util.Helpers.emptyRow(row);
             log.trace("Row {} empty: {}", i, empty);
 
             // So the receiver knows what to expect

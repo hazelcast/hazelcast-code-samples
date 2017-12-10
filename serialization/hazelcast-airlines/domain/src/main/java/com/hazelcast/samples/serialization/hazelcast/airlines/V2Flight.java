@@ -6,8 +6,6 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.time.LocalDate;
 
-import com.hazelcast.samples.serialization.hazelcast.airlines.util.Helpers;
-
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
@@ -96,7 +94,7 @@ public class V2Flight extends AbstractFlight implements Externalizable {
         for (int i=0 ; i < rows.length ; i++) {
             Person[] row = rows[i];
 
-            boolean empty = Helpers.emptyRow(row);
+            boolean empty = com.hazelcast.samples.serialization.hazelcast.airlines.util.Helpers.emptyRow(row);
             log.trace("Row {} empty: {}", i, empty);
 
             // So the receiver knows what to expect
