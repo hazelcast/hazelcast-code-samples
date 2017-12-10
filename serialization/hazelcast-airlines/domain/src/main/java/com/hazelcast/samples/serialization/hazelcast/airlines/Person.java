@@ -18,5 +18,5 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("serial")
 public class Person implements Serializable {
 
-	private String name;
+    private String name;
 }

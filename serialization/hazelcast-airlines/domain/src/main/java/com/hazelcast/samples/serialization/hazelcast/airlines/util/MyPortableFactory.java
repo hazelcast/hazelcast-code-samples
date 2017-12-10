@@ -15,14 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MyPortableFactory implements PortableFactory {
 
-	@Override
-	public Portable create(int id) {
-		switch (id) {
-			case Constants.V5FLIGHT_ID: return new V5Flight();
-			case Constants.SEATRESERVERATIONENTRYPROCESSOR_ID: return new SeatReservationEntryProcessor();
-		}
-		log.error("create({}), unknown code", id);
-		return null;
-	}
+    @Override
+    public Portable create(int id) {
+        switch (id) {
+            case Constants.V5FLIGHT_ID: return new V5Flight();
+            case Constants.SEATRESERVERATIONENTRYPROCESSOR_ID: return new SeatReservationEntryProcessor();
+            default: log.error("create({}), unknown code", id);
+                     return null;
+        }
+    }
 
 }

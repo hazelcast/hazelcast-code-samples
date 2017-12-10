@@ -18,23 +18,23 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("serial")
 public class MyKey implements Comparable<MyKey>, Serializable {
 
-	private String code;
-	private LocalDate date;
-	
-	/**
-	 * <p>Sort ascending, on code then date
-	 * </p>
-	 * 
-	 * @param that Another such key
-	 */
-	@Override
-	public int compareTo(MyKey that) {
-		
-		if (!this.getCode().equals(that.getCode())) {
-			return this.getCode().compareTo(that.getCode());
-		} else {
-			return this.getDate().compareTo(that.getDate());
-		}
-		
-	}
+    private String code;
+    private LocalDate date;
+
+    /**
+     * <p>Sort ascending, on code then date
+     * </p>
+     *
+     * @param that Another such key
+     */
+    @Override
+    public int compareTo(MyKey that) {
+
+        if (!this.getCode().equals(that.getCode())) {
+            return this.getCode().compareTo(that.getCode());
+        } else {
+            return this.getDate().compareTo(that.getDate());
+        }
+
+    }
 }

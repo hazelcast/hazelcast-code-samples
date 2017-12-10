@@ -27,28 +27,28 @@ import com.hazelcast.samples.serialization.hazelcast.airlines.util.Helpers;
 @SuppressWarnings("serial")
 public class FlightLoadingEntryProcessor implements EntryProcessor<MyKey, AbstractFlight>, ReadOnly {
 
-	/**
-	 * <p>Count how many seats are allocated.
-	 * </p>
-	 * 
-	 * @param entry A flight
-	 * @return How many seats are taken
-	 */
-	@Override
-	public Integer process(Entry<MyKey, AbstractFlight> entry) {
-		AbstractFlight flight = entry.getValue();
-		Person[][] rows = flight.getRows();
-		return Helpers.countOccupied(rows);
-	}
+    /**
+     * <p>Count how many seats are allocated.
+     * </p>
+     *
+     * @param entry A flight
+     * @return How many seats are taken
+     */
+    @Override
+    public Integer process(Entry<MyKey, AbstractFlight> entry) {
+        AbstractFlight flight = entry.getValue();
+        Person[][] rows = flight.getRows();
+        return Helpers.countOccupied(rows);
+    }
 
-	/**
-	 * <p>Null as {@link com.hazelcast.core.ReadOnly ReadOnly} means
-	 * the data is not mutated, nothing is applied to backup copies.
-	 * </p>
-	 */
-	@Override
-	public EntryBackupProcessor<MyKey, AbstractFlight> getBackupProcessor() {
-		return null;
-	}
+    /**
+     * <p>Null as {@link com.hazelcast.core.ReadOnly ReadOnly} means
+     * the data is not mutated, nothing is applied to backup copies.
+     * </p>
+     */
+    @Override
+    public EntryBackupProcessor<MyKey, AbstractFlight> getBackupProcessor() {
+        return null;
+    }
 
 }

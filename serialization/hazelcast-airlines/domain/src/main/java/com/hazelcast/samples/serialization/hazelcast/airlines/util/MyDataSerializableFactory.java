@@ -14,13 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MyDataSerializableFactory implements DataSerializableFactory {
 
-	@Override
-	public IdentifiedDataSerializable create(int id) {
-		switch (id) {
-			case Constants.V4FLIGHT_ID: return new V4Flight();
-		}
-		log.error("create({}), unknown code", id);
-		return null;
-	}
+    @Override
+    public IdentifiedDataSerializable create(int id) {
+        switch (id) {
+            case Constants.V4FLIGHT_ID: return new V4Flight();
+            default: log.error("create({}), unknown code", id);
+                     return null;
+        }
+    }
 
 }

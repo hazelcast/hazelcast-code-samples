@@ -21,11 +21,11 @@ import lombok.EqualsAndHashCode;
  * </ul>
  * <p><B>Summary:</B> Not optimal, ideal when this doesn't matter.</p>
  */
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class V1Flight extends AbstractFlight implements Serializable {
-	
-	/**
-	 * <p>Generated</p>
-	 */
-	private static final long serialVersionUID = 6336918236919307393L;
+
+    /**
+     * <p>Generated</p>
+     */
+    private static final long serialVersionUID = 6336918236919307393L;
 }

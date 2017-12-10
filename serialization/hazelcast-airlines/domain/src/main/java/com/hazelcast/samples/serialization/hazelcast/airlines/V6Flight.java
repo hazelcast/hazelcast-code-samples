@@ -20,6 +20,6 @@ import lombok.EqualsAndHashCode;
  * <p><B>Summary:</B> Fast, generic, what's not to like</p>
  */
 @SuppressWarnings("serial")
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class V6Flight extends AbstractFlight {
 }

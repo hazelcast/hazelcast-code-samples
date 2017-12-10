@@ -25,47 +25,47 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public abstract class AbstractFlight implements Serializable {
 
-	private String code;
-	private LocalDate date;
-	private Person[][] rows;
+    private String code;
+    private LocalDate date;
+    private Person[][] rows;
 
-	/**
-	 * <p>Pretty print the plane seating over multiple lines.
-	 * </p>
-	 */
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("%n");
-		
-		sb.append("Flight [%n Code=").append(code).append(",%n Date=").append(date).append("%n");
+    /**
+     * <p>Pretty print the plane seating over multiple lines.
+     * </p>
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("%n");
 
-		if (rows==null) {
-			sb.append(" Rows=null%n");
-		} else {
-			for (int i=0 ; i <rows.length ; i++) {
-				sb.append(" Row ").append(String.format("%2d [ ", i));
-				Person[] row = rows[i];
+        sb.append("Flight [%n Code=").append(code).append(",%n Date=").append(date).append("%n");
 
-				for (int j=0 ; j<row.length ; j++) {
-					if (j==3) {
-						// Aisle 
-						sb.append("   ");
-					}
-					
-					sb.append(" ").append(Constants.ALPHABET.charAt(j)).append("- ");
-					if (row[j]==null) {
-						sb.append("......");
-					} else {
-						String occupier = row[j].getName().toUpperCase() + "      ";
-						sb.append(occupier.subSequence(0, 6));
-					}
-				}
-				sb.append(" ]%n");
-			}
-		}
-		
-		sb.append("]%n");
-		return String.format(sb.toString());
-	}
-	
+        if (rows == null) {
+            sb.append(" Rows=null%n");
+        } else {
+            for (int i = 0 ; i < rows.length ; i++) {
+                sb.append(" Row ").append(String.format("%2d [ ", i));
+                Person[] row = rows[i];
+
+                for (int j = 0 ; j < row.length ; j++) {
+                    if (j == 3) {
+                        // Aisle
+                        sb.append("   ");
+                    }
+
+                    sb.append(" ").append(Constants.ALPHABET.charAt(j)).append("- ");
+                    if (row[j] == null) {
+                        sb.append("......");
+                    } else {
+                        String occupier = row[j].getName().toUpperCase() + "      ";
+                        sb.append(occupier.subSequence(0, 6));
+                    }
+                }
+                sb.append(" ]%n");
+            }
+        }
+
+        sb.append("]%n");
+        return String.format(sb.toString());
+    }
+
 }
