@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Map.Entry;
 
 import com.hazelcast.map.AbstractEntryProcessor;
-import com.hazelcast.nio.serialization.Portable;
-import com.hazelcast.nio.serialization.PortableReader;
-import com.hazelcast.nio.serialization.PortableWriter;
+import com.hazelcast.nio.ObjectDataInput;
+import com.hazelcast.nio.ObjectDataOutput;
+import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
 import com.hazelcast.samples.serialization.hazelcast.airlines.AbstractFlight;
 import com.hazelcast.samples.serialization.hazelcast.airlines.MyKey;
 import com.hazelcast.samples.serialization.hazelcast.airlines.Person;
@@ -25,12 +25,13 @@ import lombok.EqualsAndHashCode;
  * </p>
  * <p>In order to send this code from where it is called to where it is run
  * we need some method of serialization. In this case we use
- * {@link com.hazelcast.nio.serialization.Portable Portable}.
+ * {@link com.hazelcast.nio.serialization.IdentifiedDataSerializable IdentifiedDataSerializable}.
  * </p>
  */
 @SuppressWarnings("serial")
 @EqualsAndHashCode(callSuper = false)
-public class SeatReservationEntryProcessor extends AbstractEntryProcessor<MyKey, AbstractFlight> implements Portable {
+public class SeatReservationEntryProcessor extends AbstractEntryProcessor<MyKey, AbstractFlight>
+    implements IdentifiedDataSerializable {
 
     private String name;
 
@@ -92,36 +93,36 @@ public class SeatReservationEntryProcessor extends AbstractEntryProcessor<MyKey,
     }
 
     /**
-     * <p>Implementing {@link com.hazelcast.nio.serialization.Portable Portable}.</p>
+     * <p>Implementing {@link com.hazelcast.nio.serialization.IdentifiedDataSerializable IdentifiedDataSerializable}.</p>
      */
     @Override
-    public void readPortable(PortableReader portableReader) throws IOException {
-        this.name = portableReader.readUTF(Constants.FIELD_NAME_NAME);
+    public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
+        objectDataOutput.writeUTF(this.name);
     }
 
     /**
-     * <p>Implementing {@link com.hazelcast.nio.serialization.Portable Portable}.</p>
+     * <p>Implementing {@link com.hazelcast.nio.serialization.IdentifiedDataSerializable IdentifiedDataSerializable}.</p>
      */
     @Override
-    public void writePortable(PortableWriter portableWriter) throws IOException {
-        portableWriter.writeUTF(Constants.FIELD_NAME_NAME, this.name);
+    public void readData(ObjectDataInput objectDataInput) throws IOException {
+        this.name = objectDataInput.readUTF();
     }
 
 
     /**
-     * <p>Implementing {@link com.hazelcast.nio.serialization.Portable Portable}.</p>
+     * <p>Implementing {@link com.hazelcast.nio.serialization.IdentifiedDataSerializable IdentifiedDataSerializable}.</p>
      */
     @Override
     public int getFactoryId() {
-        return Constants.MY_PORTABLE_FACTORY;
+        return Constants.MY_DATASERIALIZABLE_FACTORY;
     }
 
 
     /**
-     * <p>Implementing {@link com.hazelcast.nio.serialization.Portable Portable}.</p>
+     * <p>Implementing {@link com.hazelcast.nio.serialization.IdentifiedDataSerializable IdentifiedDataSerializable}.</p>
      */
     @Override
-    public int getClassId() {
+    public int getId() {
         return Constants.SEATRESERVERATIONENTRYPROCESSOR_ID;
     }
 

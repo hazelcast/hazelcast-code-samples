@@ -15,16 +15,16 @@ import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>A serializer for {@link V6Flight} objects.
+ * <p>A serializer for {@link V5Flight} objects.
  * </p>
  * <p>Use Esoteric Software's <a href="https://github.com/EsotericSoftware/kryo">Kryo</a>
  * which takes a byte stream.</p>
- * <p>This code could easily be made more generic. Although it deals with {@link V6Flight}
+ * <p>This code could easily be made more generic. Although it deals with {@link V5Flight}
  * it does not mention the fields etc
  * </p>
  */
 @Slf4j
-public class V6FlightSerializer implements StreamSerializer<V6Flight> {
+public class V5FlightSerializer implements StreamSerializer<V5Flight> {
 
     /**
      * <p>"<i>Register</i>" the class so Kryo can figure out how to efficently
@@ -35,7 +35,7 @@ public class V6FlightSerializer implements StreamSerializer<V6Flight> {
         @Override
         protected Kryo initialValue() {
             Kryo kryo = new Kryo();
-            kryo.register(V6Flight.class);
+            kryo.register(V5Flight.class);
             return kryo;
             }
     };
@@ -47,12 +47,12 @@ public class V6FlightSerializer implements StreamSerializer<V6Flight> {
      * </p>
      */
     @Override
-    public void write(ObjectDataOutput objectDataOutput, V6Flight v6Flight) throws IOException {
+    public void write(ObjectDataOutput objectDataOutput, V5Flight v5Flight) throws IOException {
         Kryo kryo = KRYO_THREAD_LOCAL.get();
         Output output = new Output((OutputStream) objectDataOutput);
-        kryo.writeObject(output, v6Flight);
+        kryo.writeObject(output, v5Flight);
         output.flush();
-        log.trace("Serialize {}", v6Flight.getClass().getSimpleName());
+        log.trace("Serialize {}", v5Flight.getClass().getSimpleName());
     }
 
 
@@ -62,12 +62,12 @@ public class V6FlightSerializer implements StreamSerializer<V6Flight> {
      * </p>
      */
     @Override
-    public V6Flight read(ObjectDataInput objectDataInput) throws IOException {
+    public V5Flight read(ObjectDataInput objectDataInput) throws IOException {
         InputStream inputStream = (InputStream) objectDataInput;
         Input input = new Input(inputStream);
         Kryo kryo = KRYO_THREAD_LOCAL.get();
-        log.trace("De-serialize {}", V6Flight.class.getSimpleName());
-        return kryo.readObject(input, V6Flight.class);
+        log.trace("De-serialize {}", V5Flight.class.getSimpleName());
+        return kryo.readObject(input, V5Flight.class);
     }
 
 
@@ -77,7 +77,7 @@ public class V6FlightSerializer implements StreamSerializer<V6Flight> {
      */
     @Override
     public int getTypeId() {
-        return Constants.V6FLIGHT_ID;
+        return Constants.V5FLIGHT_ID;
     }
 
 

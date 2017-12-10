@@ -7,7 +7,6 @@ import com.hazelcast.samples.serialization.hazelcast.airlines.V2Flight;
 import com.hazelcast.samples.serialization.hazelcast.airlines.V3Flight;
 import com.hazelcast.samples.serialization.hazelcast.airlines.V4Flight;
 import com.hazelcast.samples.serialization.hazelcast.airlines.V5Flight;
-import com.hazelcast.samples.serialization.hazelcast.airlines.V6Flight;
 
 /**
  * <p>Build flight objects.
@@ -64,12 +63,6 @@ public class FlightBuilder {
         V5Flight v5Flight = new V5Flight();
         FlightBuilder.populate(v5Flight, "HAZ005");
         return v5Flight;
-    }
-
-    public static V6Flight buildV6() {
-        V6Flight v6Flight = new V6Flight();
-        FlightBuilder.populate(v6Flight, "HAZ006");
-        return v6Flight;
     }
 
 }

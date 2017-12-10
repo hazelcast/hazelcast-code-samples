@@ -14,21 +14,21 @@ import com.hazelcast.spi.serialization.SerializationService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>External serialization test for {@link V6Flight}
+ * <p>External serialization test for {@link V5Flight}
  * </p>
  */
 @Slf4j
-public class V6FlightTest {
+public class V5FlightTest {
 
 	@Test
 	public void test_serialization() throws Exception {
-		V6Flight objectSent = FlightBuilder.buildV6();
+		V5Flight objectSent = FlightBuilder.buildV5();
 		Object objectReceived = null;
 		byte[] bytes;
 
 		SerializerConfig serializerConfig = new SerializerConfig();
-		serializerConfig.setTypeClass(V6Flight.class);
-		serializerConfig.setClass(V6FlightSerializer.class);
+		serializerConfig.setTypeClass(V5Flight.class);
+		serializerConfig.setClass(V5FlightSerializer.class);
 		
 		SerializationConfig serializationConfig = new SerializationConfig();
 		serializationConfig.addSerializerConfig(serializerConfig);

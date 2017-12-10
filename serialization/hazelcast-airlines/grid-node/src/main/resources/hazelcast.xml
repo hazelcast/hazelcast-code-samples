@@ -21,13 +21,10 @@
 		<data-serializable-factories>
 			<data-serializable-factory factory-id="1">com.hazelcast.samples.serialization.hazelcast.airlines.util.MyDataSerializableFactory</data-serializable-factory>
 		</data-serializable-factories>
-    		<portable-factories>
-      		<portable-factory factory-id="2">com.hazelcast.samples.serialization.hazelcast.airlines.util.MyPortableFactory</portable-factory>
-		</portable-factories>
 		<serializers>
-			<!-- V6Flight is serialized/deserialized by V6FlightSerializer -->
-			<serializer type-class="com.hazelcast.samples.serialization.hazelcast.airlines.V6Flight"
-				class-name="com.hazelcast.samples.serialization.hazelcast.airlines.V6FlightSerializer"/>
+			<!-- V5Flight is serialized/deserialized by V5FlightSerializer -->
+			<serializer type-class="com.hazelcast.samples.serialization.hazelcast.airlines.V5Flight"
+				class-name="com.hazelcast.samples.serialization.hazelcast.airlines.V5FlightSerializer"/>
 		</serializers>
 	</serialization>    
 </hazelcast>

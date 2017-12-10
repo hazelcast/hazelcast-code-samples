@@ -43,22 +43,14 @@ public class Constants {
             "Justin",
     };
 
-    /* Unique ids for factories that build objects of different kinds (ie. 1 & 2)
+    /* Unique ids for factories that build objects of different kinds
      */
     public static final int MY_DATASERIALIZABLE_FACTORY = 1;
-    public static final int MY_PORTABLE_FACTORY = 1 + MY_DATASERIALIZABLE_FACTORY;
 
-    /* Unique ids for the objects built by the factories (ie. 1, 2....)
+    /* Unique ids for the objects built by the factories
      */
     public static final int V4FLIGHT_ID = 1;
     public static final int V5FLIGHT_ID = 1 + V4FLIGHT_ID;
-    public static final int V6FLIGHT_ID = 1 + V5FLIGHT_ID;
-    public static final int SEATRESERVERATIONENTRYPROCESSOR_ID = 1 + V6FLIGHT_ID;
+    public static final int SEATRESERVERATIONENTRYPROCESSOR_ID = 1 + V5FLIGHT_ID;
 
-    /* Field names for Portable objects
-     */
-    public static final String FIELD_NAME_CODE = "code";
-    public static final String FIELD_NAME_DATE = "date";
-    public static final String FIELD_NAME_NAME = "name";
-    public static final String FIELD_NAME_ROWS = "rows";
 }

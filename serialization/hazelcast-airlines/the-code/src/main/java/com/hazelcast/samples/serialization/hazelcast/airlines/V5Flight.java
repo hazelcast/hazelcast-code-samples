@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
  * <p>Use Esoteric Software's <a href="https://github.com/EsotericSoftware/kryo">Kryo</a>
  * rather than write our own serializer.
  * </p>
- * <p>Serialization logic is in {@link V6FlightSerializer}.
+ * <p>Serialization logic is in {@link V5FlightSerializer}.
  * </p>
  * <p>Pros:</p>
  * <ul>
@@ -21,5 +21,5 @@ import lombok.EqualsAndHashCode;
  */
 @SuppressWarnings("serial")
 @EqualsAndHashCode(callSuper = false)
-public class V6Flight extends AbstractFlight {
+public class V5Flight extends AbstractFlight {
 }

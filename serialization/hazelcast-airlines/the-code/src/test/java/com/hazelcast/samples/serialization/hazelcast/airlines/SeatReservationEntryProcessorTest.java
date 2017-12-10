@@ -14,7 +14,7 @@ import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.samples.serialization.hazelcast.airlines.ep.SeatReservationEntryProcessor;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
-import com.hazelcast.samples.serialization.hazelcast.airlines.util.MyPortableFactory;
+import com.hazelcast.samples.serialization.hazelcast.airlines.util.MyDataSerializableFactory;
 import com.hazelcast.spi.serialization.SerializationService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class SeatReservationEntryProcessorTest {
 
         SerializationService serializationService = 
                 new com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder()
-                .addPortableFactory(Constants.MY_PORTABLE_FACTORY, new MyPortableFactory())
+                .addDataSerializableFactory(Constants.MY_DATASERIALIZABLE_FACTORY, new MyDataSerializableFactory())
                 .build();
 
         Data data = serializationService.toData(objectSent);
