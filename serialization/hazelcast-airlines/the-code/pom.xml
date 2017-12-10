@@ -8,9 +8,9 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>domain</artifactId>
+	<artifactId>the-code</artifactId>
 
-	<name>Serialization: Hazelcast Airlines : Domain</name>
+	<name>Serialization: Hazelcast Airlines : The Code</name>
 
 	<properties>
 		<!-- needed for checkstyle/findbugs -->

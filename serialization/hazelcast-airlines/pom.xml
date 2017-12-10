@@ -28,7 +28,7 @@
 	</properties>
 
 	<modules>
-		<module>domain</module>
+		<module>the-code</module>
 		<module>grid-node</module>
 	</modules>
 
