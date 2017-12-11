@@ -3,6 +3,8 @@ package com.hazelcast.samples.serialization.hazelcast.airlines;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import com.hazelcast.nio.serialization.Data;
@@ -45,9 +47,11 @@ public class V3FlightTest {
 		log.info("====================================================================");
 		log.info("Bytes for object serialized: {}", bytes.length);
 		log.info("====================================================================");
+        log.info(Arrays.toString(bytes));
+        log.info("====================================================================");
 		log.info(new String(bytes));
 		log.info("====================================================================");
-		log.error(objectReceived.toString());
+		log.info(objectReceived.toString());
 		log.info("====================================================================");
 	}
 

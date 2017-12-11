@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -53,9 +54,11 @@ public class V1FlightTest {
 		log.info("====================================================================");
 		log.info("Bytes for object serialized: {}", bytes.length);
 		log.info("====================================================================");
+        log.info(Arrays.toString(bytes));
+        log.info("====================================================================");
 		log.info(new String(bytes));
 		log.info("====================================================================");
-		log.error(objectReceived.toString());
+		log.info(objectReceived.toString());
 		log.info("====================================================================");
 	}
 
