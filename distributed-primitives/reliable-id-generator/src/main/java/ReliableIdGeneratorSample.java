@@ -6,6 +6,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ReliableIdGenerator;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class ReliableIdGeneratorSample {
     public static void main(String[] args) {
@@ -13,7 +14,8 @@ public class ReliableIdGeneratorSample {
 
         ClientConfig clientConfig = new ClientConfig()
                 .addReliableIdGeneratorConfig(new ReliableIdGeneratorConfig("idGenerator")
-                        .setPrefetchCount(10));
+                        .setPrefetchCount(10)
+                        .setPrefetchValidityMillis(MINUTES.toMillis(10)));
         HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
 
         ReliableIdGenerator idGenerator = client.getReliableIdGenerator("idGenerator");
