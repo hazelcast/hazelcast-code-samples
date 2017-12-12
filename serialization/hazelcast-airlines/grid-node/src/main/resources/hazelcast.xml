@@ -1,0 +1,30 @@
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.9.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <network>
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="true">
+                <member-list>
+                    <member>127.0.0.1</member>
+                </member-list>
+            </tcp-ip>
+        </join>
+    </network>
+
+	<!-- Serialization configuration -->
+	<!-- =========================== -->
+	<!-- Factory IDs must match the code,                                                -->
+	<!--  see com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants.java -->
+	<serialization>
+		<data-serializable-factories>
+			<data-serializable-factory factory-id="1">com.hazelcast.samples.serialization.hazelcast.airlines.util.MyDataSerializableFactory</data-serializable-factory>
+		</data-serializable-factories>
+		<serializers>
+			<!-- V5Flight is serialized/deserialized by V5FlightSerializer -->
+			<serializer type-class="com.hazelcast.samples.serialization.hazelcast.airlines.V5Flight"
+				class-name="com.hazelcast.samples.serialization.hazelcast.airlines.V5FlightSerializer"/>
+		</serializers>
+	</serialization>    
+</hazelcast>

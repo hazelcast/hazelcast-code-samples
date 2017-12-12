@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>pom</packaging>
+
+	<groupId>com.hazelcast.samples.serialization.hazelcast.airlines</groupId>
+	<artifactId>pom</artifactId>
+	<name>Serialization: Hazelcast Airlines</name>
+	<description>Project POM</description>
+
+	<parent>
+		<artifactId>serialization</artifactId>
+		<groupId>com.hazelcast.samples.serialization</groupId>
+		<version>0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<properties>
+		<!-- needed for checkstyle/findbugs -->
+		<main.basedir>${project.parent.parent.basedir}</main.basedir>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<hazelcast.version>3.9.1</hazelcast.version>
+		<java.version>8</java.version>
+		<kryo.version>4.0.0</kryo.version>
+		<spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+		<spring-shell.version>1.2.0.RELEASE</spring-shell.version>
+	</properties>
+
+	<modules>
+		<module>the-code</module>
+		<module>grid-node</module>
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryo</artifactId>
+			<version>${kryo.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+			<version>${hazelcast.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.shell</groupId>
+				<artifactId>spring-shell</artifactId>
+				<version>${spring-shell.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-parent</artifactId>
+				<type>pom</type>
+				<scope>import</scope>
+				<version>${spring-boot.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
