@@ -80,6 +80,7 @@ public class V3Flight extends AbstractFlight implements DataSerializable {
      * are not empty.Depending how full the seats are this might work
      * out as a smaller serialized object.
      * </p>
+     *
     @Override
     public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
         objectDataOutput.writeUTF(this.getCode());
@@ -102,16 +103,23 @@ public class V3Flight extends AbstractFlight implements DataSerializable {
             // So the receiver knows what to expect
             objectDataOutput.writeBoolean(empty);
             if (!empty) {
+                    //String[] names = new String[row.length];
+                    //for(int l=0; l<row.length; l++) {
+                    //    names[l] = row[l] == null ? "" : row[l].getName();
+                    //}
+                    //objectDataOutput.writeUTFArray(names);
                 objectDataOutput.writeObject(row);
             }
         }
         log.trace("Serialize {}", this.getClass().getSimpleName());
     }
-     */
+    */
+
 
     /**
      * <p>The counterpart logic to write
      * </p>
+     *
     @Override
     public void readData(ObjectDataInput objectDataInput) throws IOException {
         this.setCode(objectDataInput.readUTF());
@@ -133,6 +141,14 @@ public class V3Flight extends AbstractFlight implements DataSerializable {
             if (empty) {
                 rows[k] = new Person[j];
             } else {
+                    //String[] names = (String[]) objectDataInput.readUTFArray();
+                    //rows[k] = new Person[names.length];
+                    //for (int l=0 ; l<names.length; l++) {
+                    //    if (!names[l].equals("")) {
+                    //        Person person = new Person(names[l]);
+                    //        rows[k][l] = person;
+                    //    }
+                    //}
                 rows[k] = (Person[]) objectDataInput.readObject();
             }
         }
