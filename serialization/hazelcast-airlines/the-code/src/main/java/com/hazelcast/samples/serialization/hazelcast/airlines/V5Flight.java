@@ -3,7 +3,7 @@ package com.hazelcast.samples.serialization.hazelcast.airlines;
 import lombok.EqualsAndHashCode;
 
 /**
- * <p><u>{@code V6Flight}, version 6 of the data model</u></p>
+ * <p><u>{@code V5Flight}, version 5 of the data model</u></p>
  * <p>Use Esoteric Software's <a href="https://github.com/EsotericSoftware/kryo">Kryo</a>
  * rather than write our own serializer.
  * </p>
