@@ -17,8 +17,8 @@ import com.hazelcast.core.IdGenerator;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 import com.hazelcast.core.MultiMap;
-import com.hazelcast.core.ReliableIdGenerator;
 import com.hazelcast.core.ReplicatedMap;
+import com.hazelcast.reliableidgen.ReliableIdGenerator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 

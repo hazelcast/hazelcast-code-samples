@@ -3,7 +3,7 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.ReliableIdGeneratorConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ReliableIdGenerator;
+import com.hazelcast.reliableidgen.ReliableIdGenerator;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 import static java.util.concurrent.TimeUnit.MINUTES;
