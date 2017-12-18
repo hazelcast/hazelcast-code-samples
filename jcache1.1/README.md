@@ -2,7 +2,7 @@
 
 JSR107 is JCache 1.0, but the specification is evolving.
 
-These examples are for JCache version 1.1.
+These examples are for JCache version 1.1, released on the 16th of December 2017.
 
 ## times-table
 
