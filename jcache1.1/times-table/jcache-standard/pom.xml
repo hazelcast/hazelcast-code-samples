@@ -52,7 +52,8 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<finalName>${project.artifactId}</finalName>
+					<!-- Deliberately overwrite so only one Jar in target folder -->
+					<finalName>${project.artifactId}-${project.version}</finalName>
 				</configuration>
 				<executions>
 					<execution>

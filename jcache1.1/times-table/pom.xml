@@ -20,8 +20,8 @@
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<hazelcast.version>3.9.1</hazelcast.version>
-		<hazelcast-client.version>3.9.1</hazelcast-client.version>
+		<hazelcast.version>3.9.2</hazelcast.version>
+		<hazelcast-client.version>3.9.2</hazelcast-client.version>
 		<java.version>8</java.version>
 
 		<javax-cache.version>1.1.0</javax-cache.version>
