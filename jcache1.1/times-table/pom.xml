@@ -20,12 +20,11 @@
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<hazelcast.version>3.9</hazelcast.version>
-		<hazelcast-client.version>3.9</hazelcast-client.version>
+		<hazelcast.version>3.9.1</hazelcast.version>
+		<hazelcast-client.version>3.9.1</hazelcast-client.version>
 		<java.version>8</java.version>
 
-		<!-- TEMP til 1.1 is out -->
-		<javax-cache.version>1.0.0</javax-cache.version>
+		<javax-cache.version>1.1.0</javax-cache.version>
 
 		<spring-boot.version>1.5.8.RELEASE</spring-boot.version>
 		<spring-shell.version>1.2.0.RELEASE</spring-shell.version>
