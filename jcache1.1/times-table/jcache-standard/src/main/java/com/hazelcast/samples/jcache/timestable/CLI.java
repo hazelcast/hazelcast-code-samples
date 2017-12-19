@@ -12,6 +12,8 @@ import java.util.TreeMap;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
+import javax.cache.configuration.Configuration;
+import javax.cache.configuration.MutableConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,6 +39,8 @@ public class CLI {
      * @param CacheManager
      */
     public void process(CacheManager cacheManager) throws Exception {
+
+        this.init(cacheManager);
 
         try (InputStreamReader inputStreamReader = new InputStreamReader(System.in);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
@@ -112,9 +116,13 @@ public class CLI {
     /**
      * <p>Show the caches visible to this cache manager.
      * </p>
+     * <p>In JCache 1.0, you cannot retrieve a cache with specific
+     * key and value types by name along. In JCache 1.1 you can.
+     * </p>
      *
      * @param cacheManager
      */
+    @SuppressWarnings("unchecked")
     private void cacheNames(CacheManager cacheManager) {
         log.info("-----------------------");
 
@@ -123,6 +131,21 @@ public class CLI {
 
         for (String cacheName : cacheNames) {
             log.info("Cache => name '{}'", cacheName);
+
+            try {
+                Cache<?, ?> cache = cacheManager.getCache(cacheName);
+
+                Configuration<?, ?> configuration = cache.getConfiguration(Configuration.class);
+                Class<?> keyType = configuration.getKeyType();
+                Class<?> valueType = configuration.getValueType();
+
+                log.info("      => key class '{}'", keyType.getSimpleName());
+                log.info("      => value class '{}'", valueType.getSimpleName());
+
+            } catch (IllegalArgumentException jcache10Exception) {
+                log.info("JCache1.0 behaviour, {}", jcache10Exception.getLocalizedMessage());
+            }
+
         }
 
         if (cacheNames.size() > 0) {
@@ -135,6 +158,19 @@ public class CLI {
         log.info("-----------------------");
     }
 
+    /**
+     * <p>Create the necessary caches.
+     * </p>
+     *
+     * @param cacheManager
+     */
+    private void init(CacheManager cacheManager) {
+        MutableConfiguration<Tuple, Integer> mutableConfiguration = new MutableConfiguration<>();
+
+        mutableConfiguration.setTypes(Tuple.class, Integer.class);
+
+        cacheManager.createCache(TIMESTABLE_CACHE_NAME, mutableConfiguration);
+    }
 
     /**
      * <p>Multiply the two arguments
@@ -196,7 +232,7 @@ public class CLI {
     private void timesTables(CacheManager cacheManager) {
         log.info("-----------------------");
 
-        Cache<Tuple, Integer> cache = cacheManager.getCache(TIMESTABLE_CACHE_NAME);
+        Cache<Tuple, Integer> cache = cacheManager.getCache(TIMESTABLE_CACHE_NAME, Tuple.class, Integer.class);
 
         Map<Tuple, Integer> tmpMap = new TreeMap<>();
         cache.forEach(entry -> tmpMap.put(entry.getKey(), entry.getValue()));

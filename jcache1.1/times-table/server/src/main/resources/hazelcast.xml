@@ -14,6 +14,9 @@
     </network>
 
     <cache name="timestable">
+    		<key-type class-name="com.hazelcast.samples.jcache.timestable.Tuple"/>
+    		<value-type class-name="java.lang.Integer"/>
+    
         <management-enabled>true</management-enabled>
         <statistics-enabled>true</statistics-enabled>
                 
