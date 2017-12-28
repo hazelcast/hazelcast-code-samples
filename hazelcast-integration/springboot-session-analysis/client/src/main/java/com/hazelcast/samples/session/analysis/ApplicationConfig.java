@@ -1,5 +1,7 @@
 package com.hazelcast.samples.session.analysis;
 
+import java.util.Currency;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.springframework.context.annotation.Bean;
@@ -21,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ApplicationConfig {
 
     /**
-     * <p>Configuratation properties to connect HTTP session storage
+     * <p>Configuration properties to connect HTTP session storage
      * to the Hazelcast IMDG server.
      * </p>
      * <p>Meaning of each:
@@ -68,6 +70,20 @@ public class ApplicationConfig {
                 return hazelcastInstance;
         }
         return null;
+    }
+
+    /**
+     * <p>Return a currency symbol to display on the {@code index.html}
+     * page. This is the currency of the HTML web server (which is the Hazelcast
+     * client) rather than the browser, so not truly localised but better
+     * than nothing.
+     * </p>
+     *
+     * @return Currency symbol for the server's locale.
+     */
+    @Bean
+    public String currencySymbol() {
+        return Currency.getInstance(Locale.getDefault()).getSymbol();
     }
 
 }

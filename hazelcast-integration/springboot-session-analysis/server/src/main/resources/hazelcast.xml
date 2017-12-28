@@ -29,7 +29,7 @@
         </entry-listeners>
 	</map>
 
-	<!-- IMap events from the named map are made available to Jet -->
+	<!-- IMap events from the named map are kept available for Jet -->
 	<event-journal enabled="true">
 		<mapName>jsessionid</mapName>
 

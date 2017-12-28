@@ -12,6 +12,9 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.Job;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>Additional commands for this application to augment those
@@ -21,6 +24,7 @@ import com.hazelcast.jet.JetInstance;
  * </p>
  */
 @Component
+@Slf4j
 public class ApplicationCLI implements CommandMarker {
 
     private HazelcastInstance hazelcastInstance;
@@ -39,16 +43,48 @@ public class ApplicationCLI implements CommandMarker {
         this.hazelcastInstance = hazelcastInstance;
         this.jetInstance = jetInstance;
 
+        // Initialise all maps
         for (String iMapName : Constants.IMAP_NAMES) {
             this.hazelcastInstance.getMap(iMapName);
         }
+
+        // Populate maps if needed, first member in cluster
+        IMap<String, Integer> stockMap = this.hazelcastInstance.getMap(Constants.IMAP_NAME_STOCK);
+        if (stockMap.isEmpty()) {
+                for (Object[] item : Constants.TESTDATA) {
+                    String key = item[0].toString();
+                    Integer value = Integer.valueOf(item[1].toString());
+                    stockMap.set(key, value);
+                }
+                log.info("Loaded {} into IMap '{}'", Constants.TESTDATA.length, stockMap.getName());
+        }
+
     }
 
     /**
-     * <p>List IMaps in name order, and the keys contained in each (but not the values).
+     * <p>Run a Jet analysis job to examine the journal of updates to
+     * HTTP sessions. As we don't expect this to be long running, wait
+     * for it to complete.
      * </p>
-     * <p>Note this is essentially a {@link com.hazelcast.core.IMap#get IMap#get} or
-     * <b><i>read</i></b> operation. It won't interfere with session expiry as this
+     */
+    @CliCommand(value = "ANALYSIS", help = "Analyse the orders")
+    public void analyseSessions() {
+        IMap<String, Integer> sequenceMap = this.hazelcastInstance.getMap(Constants.IMAP_NAME_SEQUENCE);
+
+        sequenceMap.clear();
+
+        Job analysisJob = this.jetInstance.newJob(SequenceAnalysis.build()); 
+
+        analysisJob.getFuture();
+
+        System.out.printf("%d sequence%s found%n", sequenceMap.size(), (sequenceMap.size() == 1 ? "" : "s"));
+    }
+
+    /**
+     * <p>List IMaps in name order, and the data contained in each.
+     * </p>
+     * <p>Note these are {@link com.hazelcast.core.IMap#get IMap#get} or
+     * <b><i>read</i></b> operations. They won't interfere with session expiry as this
      * is set on <b><i>write</i></b>.
      * </p>
      */
@@ -63,6 +99,7 @@ public class ApplicationCLI implements CommandMarker {
         iMapNames.stream().forEach(name -> {
             IMap<?, ?> iMap = this.hazelcastInstance.getMap(name);
 
+            System.out.println("");
             System.out.printf("IMap: '%s'%n", name);
 
             // Sort if possible
@@ -72,11 +109,13 @@ public class ApplicationCLI implements CommandMarker {
             }
 
             keys.stream().forEach(key -> {
-                System.out.printf("    -> '%s'%n", key);
+                System.out.printf("    -> '%s' -> %s%n", key, iMap.get(key));
             });
 
             System.out.printf("[%d entr%s]%n", iMap.size(), (iMap.size() == 1 ? "y" : "ies"));
         });
+
+        System.out.println("");
     }
 
 }

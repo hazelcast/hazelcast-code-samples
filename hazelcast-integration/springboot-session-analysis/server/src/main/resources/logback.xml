@@ -14,8 +14,8 @@
 
         <!-- A selection of Hazelcast system messages -->
     <logger name="com.hazelcast.internal.cluster.ClusterService" level="info"/>
+    <logger name="com.hazelcast.jet" level="info"/>
     <logger name="com.hazelcast.nio" level="info"/>
-    <logger name="com.hazelcast.jet.impl.JetService" level="info"/>
     
     <!-- Code for the sample -->
     <logger name="com.hazelcast.samples" level="trace" additivity="false">

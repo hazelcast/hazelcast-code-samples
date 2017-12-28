@@ -20,7 +20,7 @@ public class Application {
      */
     public static void main(String[] args) throws Exception {
 
-            System.setProperty("hazelcast.logging.type", "slf4j");
+        System.setProperty("hazelcast.logging.type", "slf4j");
         System.setProperty("my.group.name", Constants.MY_GROUP_NAME);
         System.setProperty("my.group.password", Constants.MY_GROUP_PASSWORD);
 

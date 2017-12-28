@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title>Hazelcast Online Shop</title>
+  </head>
+
+  <body>
+   <h1>Hazelcast Online Shop</h1>
+       
+   <h3>Session</h3>
+   <p th:text="${#httpSession.id}">?</p>
+
+   <hr/>
+   	<table>
+      <tr>
+      	<th>Item</th><th>Price</th><th>&nbsp;</th>
+      </tr>	
+      <tr th:each="item : ${stock}">
+      	<td th:text="${item.key}">?</td>
+      	<td th:text="${@currencySymbol + item.value}">?</td>
+      	<td>
+      	  <form th:action="@{/}">
+      	  	<input type="hidden" name="add" th:value="${item.key}"/>
+		    <input type="submit" value="Add"/>
+      	  </form>
+      	</td>
+      </tr>
+   	</table>
+   <hr/>
+
+   <h3>Your basket contains <span th:text="${#httpSession.getAttribute('basket').size()}">?</span> items</h3>
+   <form th:if="${#httpSession.getAttribute('basket').size() > 0}" th:action="@{/checkout}">
+     <input type="submit" value="Purchase items in basket?"/>
+   </form>
+
+  </body>
+        
+</html>
