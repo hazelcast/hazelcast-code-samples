@@ -66,6 +66,7 @@ public class MyController {
         }
         if (httpSession.getAttribute(Constants.SESSION_ATTRIBUTE_BROWSER) == null) {
                 String userAgent = httpServletRequest.getHeader(HttpHeaders.USER_AGENT);
+                log.trace("{}=={}", HttpHeaders.USER_AGENT, userAgent);
                 httpSession.setAttribute(Constants.SESSION_ATTRIBUTE_BROWSER, (userAgent == null ? "null" : userAgent));
         }
 
