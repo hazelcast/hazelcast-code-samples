@@ -2,6 +2,7 @@ package com.hazelcast.samples.session.analysis;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.shell.core.CommandMarker;
@@ -13,6 +14,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
+import com.hazelcast.jet.core.JobStatus;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,19 +65,30 @@ public class ApplicationCLI implements CommandMarker {
 
     /**
      * <p>Run a Jet analysis job to examine the journal of updates to
-     * HTTP sessions. As we don't expect this to be long running, wait
-     * for it to complete.
+     * HTTP sessions. As we don't want it to run for ever, give it a
+     * second or two to do some work then end it.
      * </p>
      */
     @CliCommand(value = "ANALYSIS", help = "Analyse the orders")
-    public void analyseSessions() {
+    public void analyseSessions() throws Exception {
         IMap<String, Integer> sequenceMap = this.hazelcastInstance.getMap(Constants.IMAP_NAME_SEQUENCE);
 
         sequenceMap.clear();
 
-        Job analysisJob = this.jetInstance.newJob(SequenceAnalysis.build()); 
+        Job analysisJob = this.jetInstance.newJob(SequenceAnalysis.build());
 
         analysisJob.getFuture();
+
+        // Give the job time to do something
+        int wait = 2;
+        log.info("Sleep {} seconds", wait);
+        TimeUnit.SECONDS.sleep(wait);
+
+        if (analysisJob.getJobStatus() == JobStatus.RUNNING) {
+            analysisJob.cancel();
+        } else {
+            log.error("Job status {}", analysisJob.getJobStatus());
+        }
 
         System.out.printf("%d sequence%s found%n", sequenceMap.size(), (sequenceMap.size() == 1 ? "" : "s"));
     }
