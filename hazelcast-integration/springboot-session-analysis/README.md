@@ -3,10 +3,10 @@
 In this example. we'll look at doing some analytics on an online shop to gain insights
 into customer behaviour.
 
-[Screenshot1]: src/site/markdown/images/screenshot1.png "Image screenshot1.png"
-[Screenshot2]: src/site/markdown/images/screenshot1.png "Image screenshot2.png"
-[Screenshot3]: src/site/markdown/images/screenshot1.png "Image screenshot3.png"
-[Screenshot4]: src/site/markdown/images/screenshot1.png "Image screenshot4.png"
+[Screenshot1]: src/site/markdown/images/Screenshot1.png "Image screenshot1.png"
+[Screenshot2]: src/site/markdown/images/Screenshot2.png "Image screenshot2.png"
+[Screenshot3]: src/site/markdown/images/Screenshot3.png "Image screenshot3.png"
+[Screenshot4]: src/site/markdown/images/Screenshot4.png "Image screenshot4.png"
 
 ## Background
 
@@ -28,7 +28,7 @@ as arranging for the delivery of the items, confirmation emails and so on.
 As a retailer, we would be interested in understanding this behaviour, and this
 is where the analytics come in.
 
-With a better understanding of what customers do, so as to adjust the shopping
+With a better understanding of what customers do we can adjust the shopping
 experience to better suit the customer, increasing customer retention, revisits
 and so on for a long term profitable business.
 
@@ -42,11 +42,13 @@ A sensible thing to buy as well might be batteries. If that's something the
 customer needs and they buy from us, that's convenience for the customer and
 more sales for us, everyone wins.
 
-Note also the reference inference is not so certain. If the customer is
+Note also the reverse inference is not so certain. If the customer is
 buying batteries, it's much more of a guess that they need a torch too.
+They might already have bought a torch (from us!) or it might be they need batteries
+for a TV remote control, lots of possibilities.
 
 So the problem really is about sequencing and causality. What things do
-people buy together than may be related.
+people buy together that may be related.
 
 ### Winter Clothing
 
@@ -98,7 +100,7 @@ runs an embedded Tomcat server on port 8080.
 If you navigate on your browser to [localhost:8080](http://localhost:8080)
 you should something similar to the below:
 
-![Image of the online shop][ScreenshotTODO] 
+![Image of the online shop][Screenshot1] 
 
 This clearly isn't the world's best online shop, but that's not what this
 example is about. You can click on the add buttons, and if the basket
@@ -108,14 +110,35 @@ For simplicity, there's not a page to display the basket content
 nor a way to remove items from the basket. And the checkout page
 doesn't take any money, not ideal for the real world!
 
-#### NB Session Id
+#### Follow Along
 
-For later reference, note that the page displays an HTTP session id,
-in this case _XXX_ although you'll get a different value.
-![Reminder to replace XXX here with session id][ScreenshotTODO] 
+The actual steps accompanying these screenshots are as follows. You
+can do these too, or vary it, though obviously the latter will give
+different analysis results.
 
-You'll also see this listed in the JVM logs on both the *client* and
+* 1 Gloves, Hat, Scarf, _checkout_
+
+* 2 Gloves, _checkout_
+
+* 3 Gloves, Scarf, _checkout_
+
+* 4 Gloves, Hat, _checkout_
+
+* 5 Hat, Scarf, _checkout_
+
+* 6 Scarf, Hat, _checkout_
+
+#### Session Id
+
+Note that the page displays an HTTP session id,
+in this case _HZ3230C826F6744BB595C7F95A6F4F3EDE_. The value changes
+each time we checkout. It's not normally something shown to the
+end user, but it's useful for following what's happening. You'll also
+see this listed in the JVM logs on both the *client* and
 *server* JVM logs.
+
+This HTTP session id is the key of the session object when stored in
+the "_jsessionid_" map.
 
 ### Step 2 : data analysis
 
@@ -135,7 +158,7 @@ From the command line, type the command `LIST` into the
 to see the command prompt, logging of other activity
 may have cluttered the screen.
 
-![Console output from the first list command][ScreenshotTODO] 
+![Console output from the first list command][Screenshot2] 
 
 There is are Hazelcast maps called "_jsessionid_", "_sequence_"
 and "_stock_". These are listed along with their content.
@@ -153,7 +176,7 @@ The "_sequence_" map displays the output of data analysis.
 Now give the `analysis` command to the *server* process's
 command line to run the data analytics.
 
-![Console output from the analysis command][ScreenshotTODO] 
+![Console output from the analysis command][Screenshot3] 
 
 Analysis is not meant to be interactive. You might see
 console output that indicates something is happening, but
@@ -167,10 +190,39 @@ command line processor.
 Now the "_sequence_" map should have some content, as this
 is where the `ANALYSIS` command stores the results.
 
-![Console output from the second list command][ScreenshotTODO] 
+![Console output from the second list command][Screenshot4] 
 
 Exactly what sequences of basket manipulation you have recorded
 will depend on what buttons you clicked in step 1.
+
+#### Follow Along - Results
+
+If you chose to follow along, your result should be
+
+```
+IMap: 'sequence'
+    -> 'Tuple2{3, Scarf}' -> 1
+    -> 'Tuple2{2, Scarf}' -> 2
+    -> 'Tuple2{1, Gloves}' -> 4
+    -> 'Tuple2{1, Scarf}' -> 1
+    -> 'Tuple2{1, Hat}' -> 1
+    -> 'Tuple2{2, Hat}' -> 3
+[6 entries]
+```
+
+The `Tuple2` (pair) that begin with 2 represent the 2nd thing
+added to the basket. 
+
+Of these, we have
+
+```
+    -> 'Tuple2{2, Scarf}' -> 2
+    -> 'Tuple2{2, Hat}' -> 3
+```
+
+Scarf has a count of 2 and hat has a count of 3. Hat is a more
+frequent additional purchase than scarf, and gloves don't
+feature at all as an additional purchase.
 
 ## So, how is this done ?
 
