@@ -28,6 +28,7 @@ import com.hazelcast.web.SessionState;
  * processing pipeline for Jet to run. A processing pipeline
  * is a sequence of steps to transform input into output
  * </p>
+ * TODO : Group by session id, and trailing space to break chekstyle    
  */
 public class SequenceAnalysis {
 
