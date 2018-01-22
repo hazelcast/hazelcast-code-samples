@@ -13,7 +13,7 @@ import com.hazelcast.core.ISet;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.IdGenerator;
 import com.hazelcast.core.MultiMap;
-import com.hazelcast.reliableidgen.ReliableIdGenerator;
+import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -55,7 +55,7 @@ public class IoCDemonstration {
     private IdGenerator hzIdGenerator;
 
     @Autowired
-    private ReliableIdGenerator hzReliableIdGenerator;
+    private FlakeIdGenerator hzFlakeIdGenerator;
 
     @Autowired
     private IAtomicLong hzAtomicLong;
@@ -82,7 +82,7 @@ public class IoCDemonstration {
         Assert.notNull(this.hzList);
         Assert.notNull(this.hzExecutorService);
         Assert.notNull(this.hzIdGenerator);
-        Assert.notNull(this.hzReliableIdGenerator);
+        Assert.notNull(this.hzFlakeIdGenerator);
         Assert.notNull(this.hzAtomicLong);
         Assert.notNull(this.hzAtomicReference);
         Assert.notNull(this.hzCountDownLatch);
@@ -98,7 +98,7 @@ public class IoCDemonstration {
         System.out.println("hzList = " + this.hzList.getClass());
         System.out.println("hzExecutorService = " + this.hzExecutorService.getClass());
         System.out.println("hzIdGenerator = " + this.hzIdGenerator.getClass());
-        System.out.println("hzReliableIdGenerator = " + this.hzReliableIdGenerator.getClass());
+        System.out.println("hzFlakeIdGenerator = " + this.hzFlakeIdGenerator.getClass());
         System.out.println("hzAtomicLong = " + this.hzAtomicLong.getClass());
         System.out.println("hzAtomicReference = " + this.hzAtomicReference.getClass());
         System.out.println("hzCountDownLatch = " + this.hzCountDownLatch.getClass());
