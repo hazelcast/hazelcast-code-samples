@@ -10,7 +10,6 @@ import java.util.TreeMap;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.configuration.Configuration;
-import javax.cache.configuration.MutableConfiguration;
 
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
@@ -40,15 +39,12 @@ public class CLI implements CommandMarker {
      * @param businessLogic
      * @param cacheManager
      */
+    @SuppressWarnings("unchecked")
     public CLI(BusinessLogic businessLogic, CacheManager cacheManager) {
         this.businessLogic = businessLogic;
         this.cacheManager = cacheManager;
 
-        MutableConfiguration<Tuple, Integer> mutableConfiguration = new MutableConfiguration<>();
-
-        mutableConfiguration.setTypes(Tuple.class, Integer.class);
-
-        this.cacheManager.createCache(TIMESTABLE_CACHE_NAME, mutableConfiguration);
+        cacheManager.createCache(TIMESTABLE_CACHE_NAME, ClientUtil.timesTableConfiguration());
     }
 
 

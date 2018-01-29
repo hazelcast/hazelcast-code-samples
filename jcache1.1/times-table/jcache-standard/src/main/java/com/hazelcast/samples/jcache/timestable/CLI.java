@@ -13,7 +13,6 @@ import java.util.TreeMap;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.configuration.Configuration;
-import javax.cache.configuration.MutableConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -164,12 +163,9 @@ public class CLI {
      *
      * @param cacheManager
      */
+    @SuppressWarnings("unchecked")
     private void init(CacheManager cacheManager) {
-        MutableConfiguration<Tuple, Integer> mutableConfiguration = new MutableConfiguration<>();
-
-        mutableConfiguration.setTypes(Tuple.class, Integer.class);
-
-        cacheManager.createCache(TIMESTABLE_CACHE_NAME, mutableConfiguration);
+        cacheManager.createCache(TIMESTABLE_CACHE_NAME, ClientUtil.timesTableConfiguration());
     }
 
     /**

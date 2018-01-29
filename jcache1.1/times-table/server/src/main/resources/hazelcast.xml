@@ -17,16 +17,12 @@
     		<key-type class-name="com.hazelcast.samples.jcache.timestable.Tuple"/>
     		<value-type class-name="java.lang.Integer"/>
     
-        <management-enabled>true</management-enabled>
-        <statistics-enabled>true</statistics-enabled>
-                
         <cache-entry-listeners>
         		<cache-entry-listener old-value-required="true">
 				<cache-entry-listener-factory 
 				 class-name="com.hazelcast.samples.jcache.timestable.MyCacheListenerFactory"/>
         		</cache-entry-listener>
         </cache-entry-listeners>
-        
     </cache>
     
 </hazelcast>
