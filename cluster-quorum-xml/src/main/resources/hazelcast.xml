@@ -2,6 +2,14 @@
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
                                http://www.hazelcast.com/schema/config/hazelcast-config-3.9.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
+
+
+    <!--
+    The term "quorum" simply refers to the count of members in the cluster required for an operation to succeed.
+    It does NOT refer to an implementation of Paxos or Raft protocols as used in many NoSQL and distributed systems.
+    The mechanism it provides in Hazelcast protects the user in case the number of nodes in a cluster drops below the specified one.
+    -->
+
     <quorum enabled="true" name="twoNodeQuorum">
         <quorum-size>2</quorum-size>
         <quorum-type>READ_WRITE</quorum-type>
@@ -14,4 +22,30 @@
     <lock name="lockWithQuorum">
         <quorum-ref>twoNodeQuorum</quorum-ref>
     </lock>
+
+    <!--
+      Hazelcast Quorum is supported in the following data-structures:
+         - IMap
+         - TransactionalMap
+         - ICache
+         - IQueue
+         - TransactionalQueue
+         - ILock
+         - ISet
+         - TransactionalSet
+         - IList
+         - TransactionalList
+         - ISemaphore
+         - ICountDownLatch
+         - IAtomicLong
+         - IAtomicReference
+         - ReplicatedMap
+         - MultiMap
+         - IExecutorService
+         - DurableExecutorService
+         - IScheduledExecutorService
+         - Ringbuffer
+         - CardinalityEstimator
+    -->
+
 </hazelcast>

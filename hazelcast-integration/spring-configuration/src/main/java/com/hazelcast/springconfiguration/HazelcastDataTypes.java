@@ -18,7 +18,7 @@ import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 import com.hazelcast.core.MultiMap;
 import com.hazelcast.core.ReplicatedMap;
-import com.hazelcast.reliableidgen.ReliableIdGenerator;
+import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -46,7 +46,7 @@ public class HazelcastDataTypes {
         executeList();
         executeExecutorService();
         executeIdGenerator();
-        executeReliableIdGenerator();
+        executeFlakeIdGenerator();
         executeAtomicLong();
         executeAtomicReference();
         executeCountDownLatch();
@@ -142,10 +142,10 @@ public class HazelcastDataTypes {
         System.out.println("NewId: " + idgenerator.newId() + "\n");
     }
 
-    private static void executeReliableIdGenerator() {
-        System.out.println("### ReliableIdGenerator Execution Started... ###");
-        ReliableIdGenerator reliableIdGenerator = context.getBean("reliableIdGenerator", ReliableIdGenerator.class);
-        System.out.println("NewId: " + reliableIdGenerator.newId() + "\n");
+    private static void executeFlakeIdGenerator() {
+        System.out.println("### FlakeIdGenerator Execution Started... ###");
+        FlakeIdGenerator flakeIdGenerator = context.getBean("flakeIdGenerator", FlakeIdGenerator.class);
+        System.out.println("NewId: " + flakeIdGenerator.newId() + "\n");
     }
 
     private static void executeAtomicLong() {

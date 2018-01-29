@@ -6,6 +6,36 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.quorum.QuorumException;
 
+/**
+ * The term "quorum" simply refers to the count of members in the cluster required for an operation to succeed.
+ * It does NOT refer to an implementation of Paxos or Raft protocols as used in many NoSQL and distributed systems.
+ * The mechanism it provides in Hazelcast protects the user in case the number of nodes in a cluster drops below the
+ * specified one.
+ *
+ * Hazelcast Quorum is supported in the following data-structures:
+ * Hazelcast Quorum is supported in the following data-structures:
+ * - IMap
+ * - TransactionalMap
+ * - ICache
+ * - IQueue
+ * - TransactionalQueue
+ * - ILock
+ * - ISet
+ * - TransactionalSet
+ * - IList
+ * - TransactionalList
+ * - ISemaphore
+ * - ICountDownLatch
+ * - IAtomicLong
+ * - IAtomicReference
+ * - ReplicatedMap
+ * - MultiMap
+ * - IExecutorService
+ * - DurableExecutorService
+ * - IScheduledExecutorService
+ * - Ringbuffer
+ * - CardinalityEstimator
+ */
 public class ClusterQuorum {
 
     private static final String NAME = "AT_LEAST_TWO_NODES";
