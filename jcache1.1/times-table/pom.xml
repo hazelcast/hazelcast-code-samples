@@ -22,10 +22,10 @@
 
 		<!-- these versions are set by the build profile, see the bottom of this file -->
 		<cache-annotations-ri-cdi.version>${profile.jsr107.version}</cache-annotations-ri-cdi.version>
+		<hazelcast.version>${profile.hazelcast.version}</hazelcast.version>
 		<javax-cache.version>${profile.jsr107.version}</javax-cache.version>
 
 		<cdi-api.version>2.0</cdi-api.version>
-		<hazelcast.version>3.9.3-SNAPSHOT</hazelcast.version>
 		<java.version>8</java.version>
 		<javaee-api.version>8.0</javaee-api.version>
 		<spring-boot.version>1.5.9.RELEASE</spring-boot.version>
@@ -172,6 +172,7 @@
              <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
+             <profile.hazelcast.version>3.9.3-SNAPSHOT</profile.hazelcast.version>
              <profile.jsr107.version>1.1.0</profile.jsr107.version>
             </properties>
         </profile>
@@ -181,6 +182,7 @@
              <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
+             <profile.hazelcast.version>3.9.2</profile.hazelcast.version>
              <profile.jsr107.version>1.0.0</profile.jsr107.version>
             </properties>
         </profile>

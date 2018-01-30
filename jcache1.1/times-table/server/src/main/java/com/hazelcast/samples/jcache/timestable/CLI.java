@@ -3,8 +3,10 @@ package com.hazelcast.samples.jcache.timestable;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
+import org.springframework.shell.plugin.support.DefaultPromptProvider;
 import org.springframework.stereotype.Component;
 
 import com.hazelcast.cache.ICache;
@@ -20,11 +22,24 @@ import lombok.extern.slf4j.Slf4j;
  * </p>
  */
 @Component
+@Order(Integer.MIN_VALUE)
 @Slf4j
-public class CLI implements CommandMarker {
+public class CLI extends DefaultPromptProvider implements CommandMarker {
 
     @Autowired
     private HazelcastInstance hazelcastInstance;
+
+    /**
+     * <p>Use the command prompt to indicate the
+     * Cache API library used by Maven build.
+     * </p>
+     *
+     * @return {@code 1.0.0} or {@code 1.1.0}
+     */
+    @Override
+    public String getPrompt() {
+        return Util.getPrompt();
+    }
 
     /**
      * <p>List the clients connected to the grid.

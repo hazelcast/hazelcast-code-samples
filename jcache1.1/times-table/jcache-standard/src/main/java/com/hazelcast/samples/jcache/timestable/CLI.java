@@ -36,8 +36,9 @@ public class CLI {
      * </p>
      *
      * @param CacheManager
+     * @param Prompt Indicate is JSR107 or not.
      */
-    public void process(CacheManager cacheManager) throws Exception {
+    public void process(CacheManager cacheManager, String prompt) throws Exception {
 
         this.init(cacheManager);
 
@@ -45,6 +46,7 @@ public class CLI {
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
 
             this.banner();
+            System.out.print(prompt);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] tokens = line.toLowerCase().split(" ");
@@ -82,6 +84,7 @@ public class CLI {
                     }
 
                     this.banner();
+                    System.out.print(prompt);
                 }
             }
         }
@@ -165,7 +168,7 @@ public class CLI {
      */
     @SuppressWarnings("unchecked")
     private void init(CacheManager cacheManager) {
-        cacheManager.createCache(TIMESTABLE_CACHE_NAME, ClientUtil.timesTableConfiguration());
+        cacheManager.createCache(TIMESTABLE_CACHE_NAME, Util.timesTableConfiguration());
     }
 
     /**

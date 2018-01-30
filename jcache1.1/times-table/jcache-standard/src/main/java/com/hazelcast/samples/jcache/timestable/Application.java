@@ -41,7 +41,7 @@ public class Application {
         /* Command line processing
          */
         CLI cli = new CLI();
-        cli.process(cacheManager);
+        cli.process(cacheManager, Util.getPrompt());
 
         /* JVM shutdown hooks should close the cache and client,
          * but do so manually to show how it could be done.

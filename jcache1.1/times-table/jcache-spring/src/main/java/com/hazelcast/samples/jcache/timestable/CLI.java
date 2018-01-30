@@ -11,9 +11,11 @@ import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.configuration.Configuration;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
+import org.springframework.shell.plugin.support.DefaultPromptProvider;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +26,9 @@ import lombok.extern.slf4j.Slf4j;
  * </p>
  */
 @Component
+@Order(Integer.MIN_VALUE)
 @Slf4j
-public class CLI implements CommandMarker {
+public class CLI extends DefaultPromptProvider implements CommandMarker {
 
     public static final String TIMESTABLE_CACHE_NAME = "timestable";
 
@@ -44,9 +47,20 @@ public class CLI implements CommandMarker {
         this.businessLogic = businessLogic;
         this.cacheManager = cacheManager;
 
-        cacheManager.createCache(TIMESTABLE_CACHE_NAME, ClientUtil.timesTableConfiguration());
+        cacheManager.createCache(TIMESTABLE_CACHE_NAME, Util.timesTableConfiguration());
     }
 
+    /**
+     * <p>Use the command prompt to indicate the
+     * Cache API library used by Maven build.
+     * </p>
+     *
+     * @return {@code 1.0.0} or {@code 1.1.0}
+     */
+    @Override
+    public String getPrompt() {
+        return Util.getPrompt();
+    }
 
     /**
      * <p>Display the cache manager.
