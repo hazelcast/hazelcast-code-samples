@@ -1,6 +1,6 @@
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
-import com.hazelcast.config.FlakeIdGeneratorConfig;
+import com.hazelcast.client.config.ClientFlakeIdGeneratorConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.flakeidgen.FlakeIdGenerator;
@@ -13,7 +13,7 @@ public class FlakeIdGeneratorSample {
         HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance();
 
         ClientConfig clientConfig = new ClientConfig()
-                .addFlakeIdGeneratorConfig(new FlakeIdGeneratorConfig("idGenerator")
+                .addFlakeIdGeneratorConfig(new ClientFlakeIdGeneratorConfig("idGenerator")
                         .setPrefetchCount(10)
                         .setPrefetchValidityMillis(MINUTES.toMillis(10)));
         HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
