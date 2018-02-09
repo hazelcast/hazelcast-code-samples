@@ -1,7 +1,6 @@
 package com.hazelcast.samples.jcache.timestable;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -63,7 +62,7 @@ public class Util {
         }
 
         try (InputStream inputStream =
-                Util.class.getClassLoader().getResourceAsStream("/" + PROPERTIES_FILE_NAME);
+                Util.class.getResourceAsStream("/" + PROPERTIES_FILE_NAME);
              InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
              BufferedReader bufferedReader = new BufferedReader(inputStreamReader);)
         {
@@ -74,8 +73,8 @@ public class Util {
                     prompt = PROMPT_PREFIX + value + " > ";
                 }
             }
-        } catch (IOException ioException) {
-            ioException.printStackTrace(System.err);
+        } catch (Exception exception) {
+            exception.printStackTrace(System.err);
         }
 
         if (prompt == null) {

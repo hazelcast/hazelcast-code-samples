@@ -21,22 +21,17 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- these versions are set by the build profile, see the bottom of this file -->
-		<cache-annotations-ri-cdi.version>${profile.jsr107.version}</cache-annotations-ri-cdi.version>
 		<hazelcast.version>${profile.hazelcast.version}</hazelcast.version>
 		<javax-cache.version>${profile.jsr107.version}</javax-cache.version>
 
-		<cdi-api.version>2.0</cdi-api.version>
 		<java.version>8</java.version>
-		<javaee-api.version>8.0</javaee-api.version>
 		<spring-boot.version>1.5.9.RELEASE</spring-boot.version>
 		<spring-shell.version>1.2.0.RELEASE</spring-shell.version>
-		<weld.version>3.0.2.Final</weld.version>
 	</properties>
 
 	<modules>
 		<module>common</module>
 		<module>server</module>
-		<module>jcache-weld</module>
 		<module>jcache-spring</module>
 		<module>jcache-standard</module>
 	</modules>
@@ -91,36 +86,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>javax</groupId>
-				<artifactId>javaee-api</artifactId>
-				<version>${javaee-api.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>javax.enterprise</groupId>
-				<artifactId>cdi-api</artifactId>
-				<version>${cdi-api.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jboss.weld.se</groupId>
-				<artifactId>weld-se-shaded</artifactId>
-				<version>${weld.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jsr107.ri</groupId>
-				<artifactId>cache-annotations-ri-cdi</artifactId>
-				<version>${cache-annotations-ri-cdi.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>javax.enterprise</groupId>
-						<artifactId>cdi-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-cache</artifactId>
 			</dependency>
@@ -152,7 +117,7 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-			<!-- Stops "Artifact has not been packaged yet" issue -->
+			<!-- Reduces "Artifact has not been packaged yet" issue -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
