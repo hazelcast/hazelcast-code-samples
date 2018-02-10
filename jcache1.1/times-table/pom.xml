@@ -137,7 +137,7 @@
              <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-             <profile.hazelcast.version>3.9.3-SNAPSHOT</profile.hazelcast.version>
+             <profile.hazelcast.version>3.9.3</profile.hazelcast.version>
              <profile.jsr107.version>1.1.0</profile.jsr107.version>
             </properties>
         </profile>
