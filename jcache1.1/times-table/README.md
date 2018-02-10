@@ -20,7 +20,7 @@ The JCache 1.1 specification [JSR107 v1.1.0](https://github.com/jsr107/jsr107spe
 In this example, the one we will focus on is `CacheManager.getCache(String cacheName)`
 
 The JCache 1.1 definition is [here](https://static.javadoc.io/javax.cache/cache-api/1.1.0/javax/cache/CacheManager.html#getCache-java.lang.String-).
-The JCache 1.0 definition is [here](https://static.javadoc.io/javax.cache/cache-api/1.0.0/javax/cache/CacheManager.html#getCache(java.lang.String).
+The JCache 1.0 definition is [here](https://static.javadoc.io/javax.cache/cache-api/1.0.0/javax/cache/CacheManager.html#getCache\(java.lang.String\)).
 
 The difference between two, is JCache 1.0 can throw `IllegalArgumentException` and JCache 1.1 can't,
 and is used to lookup a cache by name. In JCache 1.0, if you don't know the key/value classes
@@ -121,4 +121,3 @@ JCache 1.1 is a maintenance release of the JCache specification. Although not as
 as the launch of JCache itself (1.0), it does make a few useful amendments.
 
 JCache 1.1 is implemented by Hazelcast 3.9.3 and beyond.
-
