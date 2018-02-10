@@ -299,26 +299,3 @@ JCache 1.1 is a maintenance release of the JCache specification. Although not as
 as the launch of JCache itself (1.0), it does make a few useful amendments.
 
 JCache 1.1 is implemented by Hazelcast 3.9.3 and beyond.
-
-
-
-
-
-## Java first - 1.0 - IllegalArgumentException
-BARF AS 
-java.lang.IllegalArgumentException: Cache timestable was defined with specific types Cache<class com.hazelcast.samples.jcache.timestable.Tuple, class java.lang.Integer> in which case CacheManager.getCache(String, Class, Class) must be used
-CLI LINE 203
-        Cache<Tuple, Integer> cache = cacheManager.getCache(TIMESTABLE_CACHE_NAME);
-
-As Business Logic is using Cache explicitly, no annotation
-
-## Spring first - 1.0 - IllegalArgumentException
-Same barf, as cache annotations being used
-Spring defines BusinessLogic with     @CacheResult(cacheName = CLI.TIMESTABLE_CACHE_NAME)
-
-
-
-
-server - `list` and `clients`
-
-
