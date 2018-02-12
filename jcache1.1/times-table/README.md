@@ -1,4 +1,4 @@
-# Times Table with JCache
+# Times Table with JCache 1.1
 
 # An example showing Hazelcast support for _JCache 1.1_.
 
@@ -8,6 +8,83 @@ This is now supported by Hazelcast, from release 3.9.3 onwards, released on 14th
 
 This example allows you to build either version, to compare the differences. Mainly the differences are quite
 minor, but _JCache 1.1_ is useful if you wish to mix Spring style caching with standard Java caching.
+
+# Caching
+
+One definition of cache is a copy of something that is elsewhere, but that is then faster to access.
+
+This phrasing outlines two significant aspects.
+
+Firstly, the performance boost comes from time not distance. It's generally assumed that the cache
+will be physically nearer than the original, but it can be further away so long as you get to it
+quickly enough.
+
+Hazelcast provides both options here. It can be an in-process cache so is geographically adjacent
+to the application. More usually it is a multi-process cache so most of the data will be slightly
+further away, a tolerable trade-off to give increased capacity, scalabilty and resilience.
+
+Secondly, the re-use. Once you have the readily available copy, it only provides any benefit for the
+next access. For a cache that is empty to begin with, you have to read an item more than once to
+benefit.
+
+## Data Caching
+
+The most frequent use-case is data caching.
+
+A data record is retrieved from somewhere, such as a relational database based on disk technology,
+and once retrieved the retrieved copy is retained in memory.
+
+If that data record is requested again, and is found in the cache, it can be returned from the
+cache without needing to interact with the relational database again.
+
+## Method Caching
+
+The counterpart use-cache is method caching.
+
+Here what is retrieved is the result of a calculation, for example the square of a number,
+and once calculated the square is retained in memory.
+
+If the square of the number is requested again, and the result of the calculation is in the cache,
+the calculation can be bypassed.
+
+## Do these differ ?
+
+No.
+
+In the data caching use-case the input is the key of the data record, there is a function where
+there is a reformatting (using an ORM such as Hibernate), and it is the result that is cached.
+
+In the method caching use-case the input are the arguments to a function, the function runs,
+and the result is produced and cached.
+
+The different really is conceptual. in the former the input and the output perceived as
+different representations of the same logical item. In the latter the input leads to the
+output, rather than resembles the output.
+
+# JCache
+
+JCache is the Java Caching standard, also known as JSR107 (_Java Specification Request_ number 107).
+
+The key point of course is standardisation.
+
+The Java Caching standard specifies API calls. So _your_ code can make a call such as `getCache("apple")`
+and receive a reference to an object that behaves in a predefined manner.
+
+The flip side is that something has to provide this behaviour. Hazelcast provides an implementation
+of JCache, validated by the JCache test suite.
+
+This means your code can interact with the JCache API, get the behaviour you expect, and you not
+really be aware that Hazelcast is part of the tech stack.
+
+You will probably be aware that Hazelcast is in the mix. You've set project dependencies,
+there are log messages, and you'll be getting excellent performance, scalability and
+resilience. But the point remains that you don't need to be aware.
+
+Other JCache implementation providers exist, if you'd prefer something slower, but they're
+still going to *have* to behave in the same way.
+
+And of course, the JCache standard can itself evolve. So the original version 1.0 from March 2014
+has had a maintenance release 1.0 issued in December 2017 with some enhancements.
 
 ## JCache 1.1 differences
 
