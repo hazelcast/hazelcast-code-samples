@@ -68,7 +68,7 @@ The `pom.xml` in this example includes two build profiles, one for each style. S
 
 The application here is the trivial, as the objective here is to show how the clients can interact with cached data.
 
-Specifically, the application calculates _Times Tables_. "*Fives times six is thirty*", "*six times time is thirty-six*", and so on.
+Specifically, the application calculates _Times Tables_. "*Fives times six is thirty*", "*six times six is thirty-six*", and so on.
 
 However, rather than do this the normal way by multiplication, this is calculated by iterative addition.
 
