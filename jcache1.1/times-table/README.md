@@ -4,7 +4,7 @@
 
 As a maintenance release to the JSR 107 Java Caching Specification, _JCache 1.1_ was released on 16th December 2017.
 
-This is now supported by Hazelcast, from release 3.9.3 onwards, released on 14th February 2018.
+This is now supported by Hazelcast, from release 3.9.3 onwards, released on 16th February 2018.
 
 This example allows you to build either version, to compare the differences. Mainly the differences are quite
 minor, but _JCache 1.1_ is useful if you wish to mix Spring style caching with standard Java caching.
@@ -185,7 +185,7 @@ Use the command:
 java -jar server/target/server-0.1-SNAPSHOT.jar
 ```
 
-Once this starts, you should see a command line prompt indicating that we have "*jsr107=1.0.0 >*" as the
+Once this starts, you should see a command line prompt indicating that we have "*jsr107=1.1.0 >*" as the
 prompt, confirming we have built as JCache 1.1.
 
 In this example, the IMDG server is just a common place to store the caches. If you like, there
@@ -376,3 +376,6 @@ JCache 1.1 is a maintenance release of the JCache specification. Although not as
 as the launch of JCache itself (1.0), it does make a few useful amendments.
 
 JCache 1.1 is implemented by Hazelcast 3.9.3 and beyond.
+
+The change to `CacheManager.getCache(String cacheName)` in JCache 1.1 makes it much easier to mix Spring
+use of JCache and standard Java use of JCache.
