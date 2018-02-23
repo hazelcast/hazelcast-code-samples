@@ -66,12 +66,14 @@
         <module>monitoring</module>
         <module>near-cache</module>
         <module>network-configuration</module>
+        <module>org-website-samples</module>
         <module>osgi</module>
         <module>replicated-map</module>
         <module>querying</module>
         <module>serialization</module>
         <module>spi</module>
         <module>transactions</module>
+        <module>org-website-samples</module>
     </modules>
 
     <build>
