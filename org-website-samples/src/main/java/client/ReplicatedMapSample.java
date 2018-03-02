@@ -14,7 +14,7 @@ public class ReplicatedMapSample {
         ReplicatedMap<String, String> map = hz.getReplicatedMap("my-replicated-map");
         // Put and Get a value from the Replicated Map
         map.put("key", "value"); // key/value replicated to all members
-        map.get("key"); // the value retrieved from local member
+        map.get("key"); // the value is retrieved from a random member in the cluster
         // Shutdown the Hazelcast Cluster Member
         hz.shutdown();
     }

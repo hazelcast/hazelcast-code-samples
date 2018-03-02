@@ -34,7 +34,7 @@ public class EntryProcessorSample {
         hz.shutdown();
     }
 
-    // This IncEntryProcessor class must be available on the Hazelcast Cluster Members Classpath
+    // This is the Class that is deployed by the Client to the Cluster via ClientUserCodeDeployment
     public static class IncEntryProcessor extends AbstractEntryProcessor<String, Integer> implements Serializable {
         @Override
         public Object process(Map.Entry<String, Integer> entry) {

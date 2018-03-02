@@ -35,7 +35,7 @@ public class DistributedExecutorServiceSample {
         hz1.shutdown();
     }
 
-    // This MessagePrinter class must be available on the Hazelcast Cluster Members Classpath
+    // This is the Class that is deployed by the Client to the Cluster via ClientUserCodeDeployment
     static class MessagePrinter implements Runnable, Serializable {
         final String message;
 
