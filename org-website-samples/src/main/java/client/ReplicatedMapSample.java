@@ -13,8 +13,10 @@ public class ReplicatedMapSample {
         // Get a Replicated Map called "my-replicated-map"
         ReplicatedMap<String, String> map = hz.getReplicatedMap("my-replicated-map");
         // Put and Get a value from the Replicated Map
-        map.put("key", "value"); // key/value replicated to all members
-        map.get("key"); // the value is retrieved from a random member in the cluster
+        String replacedValue = map.put("key", "value");// key/value replicated to all members
+        System.out.println("replacedValue = " + replacedValue); // Will be null as its first update
+        String value = map.get("key");// the value is retrieved from a random member in the cluster
+        System.out.println("value for key = " + value);
         // Shutdown the Hazelcast Cluster Member
         hz.shutdown();
     }

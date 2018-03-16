@@ -25,9 +25,9 @@ public class EntryProcessorSample {
         // Get the Distributed Map from Cluster.
         IMap<String, Integer> map = hz.getMap("my-distributed-map");
         // Put the integer value of 0 into the Distributed Map
-        map.put("key", 0);
+        Integer replacedValue = map.put("key", 0);
         // Run the IncEntryProcessor class on the Hazelcast Cluster Member holding the key called "key"
-        map.executeOnKey("key", new IncEntryProcessor());
+        Object returnValueFromIncEntryProcessor = map.executeOnKey("key", new IncEntryProcessor());
         // Show that the IncEntryProcessor updated the value.
         System.out.println("new value:" + map.get("key"));
         // Shutdown the Hazelcast Cluster Member
@@ -44,7 +44,7 @@ public class EntryProcessorSample {
             int newValue = oldValue + 1;
             // Update the value back to the entry stored in the Hazelcast Member this EntryProcessor is running on.
             entry.setValue(newValue);
-            // No need to return anything back to the caller
+            // No need to return anything back to the caller, we can return whatever we like here.
             return null;
         }
     }
