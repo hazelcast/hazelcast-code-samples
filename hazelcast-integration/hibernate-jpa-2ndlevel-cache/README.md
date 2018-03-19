@@ -1,10 +1,13 @@
-<h1>Hibernate 2nd Level Cache with Hazelcast by using JPA</h1>
+# Hibernate 2nd Level Cache with Hazelcast by using JPA
+
 In this repository, you can find a sample implementation of hibernate 2nd level cache with hazelcast by using JPA. You can also find detailed explanation at http://hazelcast.org/ 
 
-<h2>Prerequisites</h2>
+## Prerequisites
+
 You should have installed Apache Maven(http://maven.apache.org/download.cgi).
 
-By default some dependencies added to project in "pom.xml" file as follows:
+By default some dependencies added to project in `pom.xml` file as follows:
+
 ```
 <dependency>
     <groupId>com.hazelcast</groupId>
@@ -42,23 +45,33 @@ By default some dependencies added to project in "pom.xml" file as follows:
     <version>1.0.0.Final</version>
 </dependency>
 ```
+
 But project is also compatible with hibernate 3.X.X versions. You can change these entries accordingly.
 
-<h2>How to Run Sample Application</h2>
+## How to Run Sample Application
+
 1) Compile project using:
-```
-mvn compile
-```
+
+    ```
+    mvn compile
+    ```
+    
 2) Create database using:
-```
-mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.CreateDB"
-```
+
+    ```
+    mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.CreateDB"
+    ```
+
 3) After running the following code, you can add or delete employees. Start with writing help in the application:
-```
-mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.ManageEmployeeJPA"
-```
-<h3>Sample Use Case</h3>
+
+    ```
+    mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.ManageEmployeeJPA"
+    ```
+    
+### Sample Use Case
+
 Execute the following commands in ManageEmployeeJPA.
+
 ```
 Command:
 add
@@ -86,6 +99,6 @@ Key:
 After application running it creates sample db with 19 records (id range from 1 to 19).
 If execute 'show' command with id in range above you will not see any SQL statements in the console (cached entities).
 
-4) Also you may see Hibernate statistics via jconsole.
+Also you may see Hibernate statistics via `jconsole`.
 
 
