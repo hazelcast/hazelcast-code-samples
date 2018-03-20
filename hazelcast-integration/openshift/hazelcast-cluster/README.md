@@ -1,22 +1,19 @@
-# Hazelcast OpenShift
-
-Hazelcast can be used as a Caching Layer for applications deployed to OpenShift. 
+# Hazelcast cluster in OpenShift
 
 This repository contains the following folders:
 
-* [Hazelcast Enterprise OpenShift Centos](hazelcast-enterprise-openshift-centos/): Provides the instructions and required files to deploy Hazelcast IMDG Enterprise onto OpenShift Container Platform. _This image is based on Centos_
-* [Hazelcast Enterprise OpenShift RHEL](hazelcast-enterprise-openshift-rhel/): Provides the instructions and required files to deploy Hazelcast IMDG Enterprise onto OpenShift Container Platform. _This image is based on RHEL – not Centos – and as such you need to build it and register it into your Docker registry yourself._
-* [Hazelcast OpenShift Origin](hazelcast-openshift-origin/): Provides the instructions and required files to deploy Hazelcast IMDG onto OpenShift.
+* [Hazelcast Enterprise OpenShift Centos](hazelcast-enterprise-openshift-centos/): Provides the template to deploy Hazelcast IMDG Enterprise onto OpenShift Container Platform.
+* [Hazelcast OpenShift Origin](hazelcast-openshift-origin/): Provides the template to deploy Hazelcast IMDG onto OpenShift.
 
 ### Table of Contents
-- [Usage](#usage)
-- [Getting Started](#getting-started)
+- [Quick start](#quick-start)
+- [Step-by-step instruction](#step-by-step-instruction)
 - [Custom Configuration](#custom-configuration)
 - [Management Center](#management-center)
 - [Development Tips](#development-tips)
 - [Security Implications](#security-implications)
 
-# Usage
+# Quick start
 
 You can start the Hazelcast application on OpenShift with the following command:
 
@@ -26,47 +23,16 @@ $ oc new-app -f hazelcast-template.json \
   -p ENTERPRISE_LICENSE_KEY=<hazelcast_enterprise_license>
 ```
 
-# Getting Started
+# Step-by-step instruction
 
-## Install OpenShift environment
-
-[Minishift](https://www.openshift.org/minishift/) toolkit is used to help with running OpenShift locally. Use the following steps to set it up:
-
-1) Install OpenShift Container Development Kit (CDK) as described [here](https://developers.redhat.com/products/cdk/download/)
-2) Configure CDK and run a first Hello World OpenShift application as described [here](https://developers.redhat.com/products/cdk/hello-world/)
-3) Make sure your `minishift` and `oc` tools are installed and ready to use
-
-```
-$ minishift version
-minishift v1.11.0+d7f374a
-CDK v3.3.0-1
-
-$ oc version
-oc v3.9.0-alpha.3+78ddc10
-kubernetes v1.9.1+a0ce1bc657
-features: Basic-Auth
-```
-
-## Start Hazelcast Cluster
-
-In case of Hazelcast Enterprise, make sure that you have a valid license key for Hazelcast Enterprise version. You can get a trial key from [this link](https://hazelcast.com/hazelcast-enterprise-download/trial/).
-
-**1) Setup and start Minishift**
-```
-$ minishift setup-cdk
-$ minishift start
-```
-
-Note that the presented deployment process is done via the `oc` CLI tool, however, each of the next steps can be also performed using OpenShift Web Console (accessed by `minishift console`).
-
-**2) Create Project**
+**1) Create Project**
 ```
 $ oc new-project hazelcast
 ```
 
 Note that the name of the project is automatically its namespace, so you need to use `hazelcast` as the namespace name in the further steps.
 
-**3) Start Hazelcast cluster**
+**2) Start Hazelcast cluster**
 ```
 $ oc new-app -f hazelcast-template.json \
   -l name=hazelcast-cluster-1 \
@@ -86,7 +52,7 @@ You can check other available parameters in `hazelcast-template.json`, the most 
 
 Minishift comes with predefined Persistent Volumes (pv0001, pv0002, ..., pv0100). In order to create a new Persistent Volume please follow the description [here](https://developers.redhat.com/blog/2017/04/05/adding-persistent-storage-to-minishift-cdk-3-in-minutes/).
 
-**4) Check that Hazelcast is running**
+**3) Check that Hazelcast is running**
 
 To check all created OpenShift resources, use the `oc get all` command.
 
@@ -127,7 +93,7 @@ Members [3] {
 
 ```
 
-**5) Delete Hazelcast cluster**
+**4) Delete Hazelcast cluster**
 
 To delete all resources related to the cluster (Replication Controller, Service, PODs) use the following command:
 
