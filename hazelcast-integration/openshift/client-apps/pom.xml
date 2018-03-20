@@ -3,22 +3,22 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <artifactId>ocp-demo</artifactId>
-    <name>ocp-demo</name>
-    <groupId>com.hazelcast.samples.ocp-demo</groupId>
+    <artifactId>client-apps</artifactId>
+    <name>client-apps</name>
+    <groupId>com.hazelcast.samples.openshift.client-apps</groupId>
     <description>
-        about Openshift Container Platform
+        Complete applications to deply onto Openshift Container Platform
     </description>
 
     <parent>
-        <artifactId>hazelcast-integration</artifactId>
-        <groupId>com.hazelcast.samples</groupId>
+        <artifactId>openshift</artifactId>
+        <groupId>com.hazelcast.samples.openshift</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
     <properties>
         <!-- needed for checkstyle/findbugs -->
-        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -32,7 +32,7 @@
     </properties>
 
     <modules>
-        <module>ocp-demo-frontend</module>
         <module>ocp-entry-processor</module>
+        <module>ocp-demo-frontend</module>
     </modules>
 </project>

@@ -9,15 +9,15 @@
     <version>0.1-SNAPSHOT</version>
 
     <parent>
-        <artifactId>ocp-demo</artifactId>
-        <groupId>com.hazelcast.samples.ocp-demo</groupId>
+        <artifactId>client-apps</artifactId>
+        <groupId>com.hazelcast.samples.openshift.client-apps</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>
         <!-- needed for checkstyle/findbugs -->
-        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+        <main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -35,7 +35,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.hazelcast.samples.ocp-demo</groupId>
+            <groupId>com.hazelcast.samples.openshift.client-apps</groupId>
             <artifactId>ocp-entry-processor</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
