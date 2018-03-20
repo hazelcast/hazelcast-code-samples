@@ -35,7 +35,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.hazelcast.samples.ocp-demo</groupId>
+            <groupId>com.hazelcast.samples.openshift.client-apps</groupId>
             <artifactId>ocp-entry-processor</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>

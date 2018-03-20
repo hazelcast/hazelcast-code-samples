@@ -32,7 +32,7 @@
     </properties>
 
     <modules>
-        <module>ocp-demo-frontend</module>
         <module>ocp-entry-processor</module>
+        <module>ocp-demo-frontend</module>
     </modules>
 </project>
