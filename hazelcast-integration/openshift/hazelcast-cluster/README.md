@@ -1,16 +1,15 @@
-# Hazelcast cluster in OpenShift
+# Hazelcast cluster on OpenShift
 
 This repository contains the following folders:
 
-* [Hazelcast Enterprise OpenShift Centos](hazelcast-enterprise-openshift-centos/): Provides the template to deploy Hazelcast IMDG Enterprise onto OpenShift Container Platform.
-* [Hazelcast OpenShift Origin](hazelcast-openshift-origin/): Provides the template to deploy Hazelcast IMDG onto OpenShift.
+* [Hazelcast Enterprise OpenShift Centos](hazelcast-enterprise-openshift-centos/): provides the template to deploy Hazelcast IMDG Enterprise onto OpenShift Container Platform
+* [Hazelcast OpenShift Origin](hazelcast-openshift-origin/): provides the template to deploy Hazelcast IMDG onto OpenShift
 
 ### Table of Contents
 - [Quick start](#quick-start)
 - [Step-by-step instruction](#step-by-step-instruction)
 - [Custom Configuration](#custom-configuration)
 - [Management Center](#management-center)
-- [Development Tips](#development-tips)
 - [Security Implications](#security-implications)
 
 # Quick start
@@ -121,7 +120,7 @@ error: persistentvolumeclaims "mc-vc" already exists
 --> Failed
 ```
 
-In such case (even though the message says `Failed`), the cluster will be created and the already-existing storage will be re-used.
+In such case (even though the message says `Failed`), the cluster is created and the already-existing storage is re-used.
 
 # Custom Configuration
 
@@ -138,6 +137,8 @@ Short explanation of the command above:
 * `/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0001/` - location of the Persistent Volume `pv0001` in Minishift VM
 
 The other possibility to put a configuration inside the Minishift VM is to share a directory with the host system using [Minishift hostfolder](https://docs.openshift.org/latest/minishift/using/host-folders.html).
+
+One more possibility for using custom Hazelcast configuration is to [create a ConfigMap](https://docs.openshift.com/enterprise/3.2/dev_guide/configmaps.html) with the key "hazelcast.xml" and the value with the file content and to mount it instead of using Persistent Volume.
 
 After starting the application again, the containers use the custom Hazelcast configuration.
 
@@ -168,81 +169,6 @@ management-center-service   management-center-service-hazelcast.192.168.1.113.ni
 ```
 
 Then, you can access Management Center by opening `management-center-service-hazelcast.192.168.1.113.nip.io/mancenter` in your browser.
-
-# Development Tips
-
-## Useful commands
-
-The complete guide to the `oc` CLI tool can be found [here](https://docs.openshift.org/latest/cli_reference/index.html). Below you can see the most interesting use cases in the context of Hazelcast.
-
-**Scaling application**
-
-To scale the Hazelcast application, you can change the number of replicas in the Replication Controller. For example, to scale up to 5 replicas, use the following comamnd:
-
-```
-$ oc scale rc/hz-rc --replicas=5
-```
-
-**Exposing application**
-
-By default (as mentioned in [Security Implications](#security-implications)) the Hazelcast cluster is accessible only from the OpenShift environment. You can, however, make it accessible from outside.
-
-```
-$ oc expose svc/hzservice
-route "hzservice" exposed
-```
-
-Then, you should be able to access Hazelcast via the exposed route (you can check what the route is by `oc status` or `oc get routes/hzservice`). For example, to check the health of Hazelcast:
-
-```
-$ curl hzservice-hazelcast.192.168.1.113.nip.io/hazelcast/health
-Hazelcast::NodeState=ACTIVE
-Hazelcast::ClusterState=ACTIVE
-Hazelcast::ClusterSafe=TRUE
-Hazelcast::MigrationQueueSize=0
-Hazelcast::ClusterSize=1
-```
-
-## Local Docker images
-
-During the development process, a very common use case is to build locally own Docker images and run them on Minishift. For example, you may want to create a separate application on top of the Hazelcast OpenShift image and check if it works, or you may want to create a seprate application and check how it interacts with Hazelcast when deployed together on OpenShift.
-
-Minishift is provided together with Docker Engine and Docker Registry. 
-
-**1) Configure access to Docker Engine**
-
-```
-$ minishift docker-env
-export DOCKER_TLS_VERIFY="1"
-export DOCKER_HOST="tcp://192.168.99.101:2376"
-export DOCKER_CERT_PATH="/home/rafal/.minishift/certs"
-export DOCKER_API_VERSION="1.24"
-# Run this command to configure your shell:
-# eval $(minishift docker-env)
-```
-
-**2) Push into Minishift Docker Registry**
-
-The following commands push the image into Minishift Docker Registry. More details can be found [here](https://docs.openshift.org/latest/minishift/openshift/openshift-docker-registry.html).
-
-```
-$ docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
-$ docker tag my-app $(minishift openshift registry)/myproject/my-app
-$ docker push $(minishift openshift registry)/myproject/my-app
-```
-
-Then the application can be started on the OpenShift cluster with:
-```
-$ oc new-app --image-stream=my-app --name=my-app
-```
-
-## Debugging
-
-Debbuging containerized applications in the OpenShift cluster can be difficult. In order to attach to the running POD, you can use the following command:
-
-```
-oc exec -ti <pod_name> -- bash
-```
 
 # Security Implications
 
