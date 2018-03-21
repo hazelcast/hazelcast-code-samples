@@ -25,6 +25,8 @@ $ oc new-app -f hazelcast-template.json \
 
 # Step-by-step instruction
 
+Note that, in case of [Hazelcast Enterprise OpenShift Centos](hazelcast-enterprise-openshift-centos/), you will need a valid license key for the Hazelcast Enterprise version. If you don't have one, you can either use [Hazelcast OpenShift Origin](hazelcast-openshift-origin/) or get a trial key from [this link](https://hazelcast.com/hazelcast-enterprise-download/trial/).
+
 **1) Create Project**
 ```
 $ oc new-project hazelcast
@@ -44,7 +46,7 @@ Note that the label 'hazelcast-cluster-1', even though not mandatory, is helpful
 
 Used parameters:
 * `NAMESPACE`: must be the same as the OpenShift project's name
-* `ENTERPRISE_LICENSE_KEY`: Hazelcast Enterprise License (not needed for the non-enterprise version)
+* `ENTERPRISE_LICENSE_KEY`: Hazelcast Enterprise License (not needed for [Hazelcast OpenShift Origin](hazelcast-openshift-origin/))
 
 You can check other available parameters in `hazelcast-template.json`, the most interesting ones are related to Persistent Volumes:
 * `HAZELCAST_VOLUME_NAME`: Persistent Volume used for Hazelcast Home Directory (`pv0001` by default)
@@ -62,15 +64,18 @@ NAME             READY     STATUS    RESTARTS   AGE
 po/hz-rc-5pl4f   1/1       Running   0          3m
 po/hz-rc-dfz84   1/1       Running   0          3m
 po/hz-rc-pjps7   1/1       Running   0          3m
+po/mc-rc-w5d5l   1/1       Running   0          3m
 
 NAME       DESIRED   CURRENT   READY     AGE
 rc/hz-rc   3         3         3         3m
+rc/mc-rc   1         1         1         3m
 
-NAME            TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
-svc/hzservice   ClusterIP   None         <none>        5701/TCP   3m
+NAME                          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+svc/hzservice                 ClusterIP   None         <none>        5701/TCP   3m
+svc/management-center-service None        None         <none>        8080/TCP   3m
 ```
 
-Then, to check the logs for each replica, use the following command:
+Please check that the `STATUS` is `Running` for all PODs. Then, to check the logs for each replica, use the following command:
 
 ```
 $ oc logs po/hz-rc-5pl4f
@@ -109,7 +114,14 @@ You can also delete the Persistent Storage Claim by:
 $ oc delete pvc hz-vc && oc delete pvc mv-vc
 ```
 
-If you don't do it, then the next time you run your application, the same storage will be re-used.
+If you don't do it, then the next time you run your application, you will see a message: 
+```
+error: persistentvolumeclaims "hz-vc" already exists
+error: persistentvolumeclaims "mc-vc" already exists
+--> Failed
+```
+
+In such case (even though the message says `Failed`), the cluster will be created and the already-existing storage will be re-used.
 
 # Custom Configuration
 
