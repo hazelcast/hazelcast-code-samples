@@ -22,7 +22,8 @@ public class QueueSample {
         String anotherItem = queue.poll(5, TimeUnit.SECONDS);
         //Indefinitely blocking Operations
         queue.put("yetanotheritem");
-        String yetanother = queue.take();
+        //String yetanother = queue.take();
+        System.out.println(queue.take());
         // Shutdown the Hazelcast Cluster Member
         hz.shutdown();
     }

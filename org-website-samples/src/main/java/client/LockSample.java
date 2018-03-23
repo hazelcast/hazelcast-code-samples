@@ -5,7 +5,7 @@ import com.hazelcast.core.HazelcastInstance;
 
 import java.util.concurrent.locks.Lock;
 
-public class DistributedLockSample {
+public class LockSample {
     public static void main(String[] args) {
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient();

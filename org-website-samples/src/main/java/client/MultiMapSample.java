@@ -6,7 +6,7 @@ import com.hazelcast.core.MultiMap;
 
 import java.util.Collection;
 
-public class DistributedMultiMapSample {
+public class MultiMapSample {
     public static void main(String[] args) {
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient();

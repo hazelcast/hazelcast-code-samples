@@ -5,7 +5,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IAtomicLong;
 
 public class AtomicLongSample {
-
     public static void main(String[] args) {
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient();
@@ -18,5 +17,4 @@ public class AtomicLongSample {
         // Shutdown this Hazelcast Client
         hz.shutdown();
     }
-
 }

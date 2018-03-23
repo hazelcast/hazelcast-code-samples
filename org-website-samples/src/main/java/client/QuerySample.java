@@ -1,20 +1,29 @@
 package client;
 
 import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.nio.serialization.Portable;
+import com.hazelcast.nio.serialization.PortableFactory;
+import com.hazelcast.nio.serialization.PortableReader;
+import com.hazelcast.nio.serialization.PortableWriter;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import com.hazelcast.query.SqlPredicate;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 
 public class QuerySample {
     public static void main(String[] args) {
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
-        HazelcastInstance hz = HazelcastClient.newHazelcastClient();
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.getSerializationConfig()
+                .addPortableFactory(ThePortableFactory.FACTORY_ID, new ThePortableFactory());
+        HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
         // Get a Distributed Map called "users"
         IMap<String, User> users = hz.getMap("users");
         // Add some users to the Distributed Map
@@ -42,20 +51,23 @@ public class QuerySample {
         users.put("Freddy", new User("Freddy",23,true));
     }
 
-    /**
-     * The User class that is a value object in the "users" Distributed Map
-     * This Class must be available on the Classpath of the Hazelcast Cluster Members
-     */
-    public static class User implements Serializable {
+    public static class User implements Portable {
+
+        public static final int CLASS_ID = 1;
+
+        public String username;
+        public int age;
+        public boolean active;
+
         public User(String username, int age, boolean active) {
             this.username = username;
             this.age = age;
             this.active = active;
         }
 
-        String username;
-        int age;
-        boolean active;
+        public User() {
+
+        }
 
         @Override
         public String toString() {
@@ -64,6 +76,41 @@ public class QuerySample {
                     ", age=" + age +
                     ", active=" + active +
                     '}';
+        }
+
+        @Override
+        public int getFactoryId() {
+            return ThePortableFactory.FACTORY_ID;
+        }
+
+        @Override
+        public int getClassId() {
+            return CLASS_ID;
+        }
+
+        @Override
+        public void writePortable(PortableWriter writer) throws IOException {
+            writer.writeUTF("username", username);
+            writer.writeInt("age", age);
+            writer.writeBoolean("active", active);
+        }
+
+        @Override
+        public void readPortable(PortableReader reader) throws IOException {
+            username = reader.readUTF("username");
+            age = reader.readInt("age");
+            active = reader.readBoolean("active");
+        }
+    }
+
+    public static class ThePortableFactory implements PortableFactory {
+
+        public static final int FACTORY_ID = 1;
+
+        @Override
+        public Portable create(int classId) {
+            if (classId == User.CLASS_ID) return new User();
+            return null;
         }
     }
 }

@@ -7,19 +7,55 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.AbstractEntryProcessor;
+import com.hazelcast.map.EntryProcessor;
+import com.hazelcast.nio.ObjectDataInput;
+import com.hazelcast.nio.ObjectDataOutput;
+import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
 public class EntryProcessorSample {
 
+    public static class IncEntryProcessor extends AbstractEntryProcessor<String, Integer> implements IdentifiedDataSerializable {
+        public static final int FACTORY_ID = 1;
+        public static final int CLASS_ID = 9;
+
+        @Override
+        public void writeData(ObjectDataOutput out) throws IOException {
+
+        }
+
+        @Override
+        public void readData(ObjectDataInput in) throws IOException {
+
+        }
+
+        @Override
+        public int getFactoryId() {
+            return FACTORY_ID;
+        }
+
+        @Override
+        public int getId() {
+            return CLASS_ID;
+        }
+
+        @Override
+        public Object process(Map.Entry<String, Integer> entry) {
+            // Get the value passed
+            int oldValue = entry.getValue();
+            // Update the value
+            int newValue = oldValue + 1;
+            // Update the value back to the entry stored in the Hazelcast Member this EntryProcessor is running on.
+            entry.setValue(newValue);
+            // No need to return anything back to the caller, we can return whatever we like here.
+            return null;
+        }
+    }
+
     public static void main(String[] args) {
-        // Enable Code Deployment from this Client classpath to the Cluster Members classpath
-        // User Code Deployment needs to be enabled on the Cluster Members as well.
-        ClientConfig config = new ClientConfig();
-        ClientUserCodeDeploymentConfig userCodeDeploymentConfig = config.getUserCodeDeploymentConfig();
-        userCodeDeploymentConfig.setEnabled(true);
-        userCodeDeploymentConfig.addClass(EntryProcessorSample.IncEntryProcessor.class);
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient();
         // Get the Distributed Map from Cluster.
@@ -32,20 +68,5 @@ public class EntryProcessorSample {
         System.out.println("new value:" + map.get("key"));
         // Shutdown the Hazelcast Cluster Member
         hz.shutdown();
-    }
-
-    // This is the Class that is deployed by the Client to the Cluster via ClientUserCodeDeployment
-    public static class IncEntryProcessor extends AbstractEntryProcessor<String, Integer> implements Serializable {
-        @Override
-        public Object process(Map.Entry<String, Integer> entry) {
-            // Get the value passed
-            int oldValue = entry.getValue();
-            // Update the value
-            int newValue = oldValue + 1;
-            // Update the value back to the entry stored in the Hazelcast Member this EntryProcessor is running on.
-            entry.setValue(newValue);
-            // No need to return anything back to the caller, we can return whatever we like here.
-            return null;
-        }
     }
 }
