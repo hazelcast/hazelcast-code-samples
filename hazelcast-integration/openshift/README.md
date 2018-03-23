@@ -19,9 +19,11 @@ This sample is a complete guideline on how to set up the local OpenShift environ
 
     The Red Hat guide is complete in general, however here are a few hints that can save your time:
     * Complete the "Setup" section before you run `minishift setup-cdk`
+    * In case of any issues with Minishift, you can enable fine level logging with the option `--show-libmachine-logs -v5`
     * In case of using Windows and Hyper-V:
       * In one of the points you need to create the virtual switch, you can use [this guide](https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/create-a-virtual-switch-for-hyper-v-virtual-machines) to do it; then the name of the created switch is the one you need to use as "External (Wireless)"
       * Make sure to [add user to Hyper-V Administrator group](https://blogs.msdn.microsoft.com/virtual_pc_guy/2016/05/30/adding-yourself-to-the-hyper-v-administrators-group-with-powershell/)
+      * Hyper-V does not support well NAT networks, so your router must accept the Virtual Machine connecting directly to the same network interface (in case of problems, you will see a meaningless error `Too many retries waiting for SSH to be available`); the solution is to use VirutalBox instead of Hyper-V or play with the [experimental Minishift features](https://docs.openshift.org/latest/minishift/using/experimental-features.html)
 
 
 3) Make sure your `minishift` and `oc` tools are installed and ready to use
