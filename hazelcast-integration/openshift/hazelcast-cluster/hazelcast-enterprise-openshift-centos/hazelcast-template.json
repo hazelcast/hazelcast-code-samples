@@ -49,7 +49,7 @@
                 "env": [
                   {
                     "name": "HAZELCAST_KUBERNETES_SERVICE_DNS",
-                    "value": "${SERVICE_NAME}.${NAMESPACE}.svc.${KUBERNETES_SERVICE_DOMAIN}"
+                    "value": "${SERVICE_NAME}.${NAMESPACE}.svc"
                   },
                   {
                     "name": "HAZELCAST_KUBERNETES_SERVICE_NAME",
@@ -94,8 +94,8 @@
                       "./readiness.sh"
                     ]
                   },
-                  "initialDelaySeconds": 30,
-                  "timeoutSeconds": 5
+                  "initialDelaySeconds": 0,
+                  "periodSeconds" : 1
                 },
                 "livenessProbe": {
                   "exec": {
@@ -103,8 +103,7 @@
                       "./liveness.sh"
                     ]
                   },
-                  "initialDelaySeconds": 60,
-                  "timeoutSeconds": 5
+                  "initialDelaySeconds": 0
                 }
               }
             ]

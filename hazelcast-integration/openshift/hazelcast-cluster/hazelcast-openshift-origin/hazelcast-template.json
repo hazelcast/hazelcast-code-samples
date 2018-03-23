@@ -90,8 +90,8 @@
                       "./readiness.sh"
                     ]
                   },
-                  "initialDelaySeconds": 30,
-                  "timeoutSeconds": 5
+                  "initialDelaySeconds": 0,
+                  "periodSeconds" : 1
                 },
                 "livenessProbe": {
                   "exec": {
@@ -99,8 +99,7 @@
                       "./liveness.sh"
                     ]
                   },
-                  "initialDelaySeconds": 60,
-                  "timeoutSeconds": 5
+                  "initialDelaySeconds": 0
                 }
               }
             ]
