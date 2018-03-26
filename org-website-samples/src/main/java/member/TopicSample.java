@@ -3,6 +3,11 @@ package member;
 import com.hazelcast.core.*;
 
 public class TopicSample implements MessageListener<String> {
+    @Override
+    public void onMessage(Message<String> message) {
+        System.out.println("Got message " + message.getMessageObject());
+    }
+
     public static void main(String[] args) {
         // Start the Embedded Hazelcast Cluster Member.
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
@@ -14,10 +19,5 @@ public class TopicSample implements MessageListener<String> {
         topic.publish("Hello to distributed world");
         // Shutdown the Hazelcast Cluster Member
         hz.shutdown();
-    }
-
-    @Override
-    public void onMessage(Message<String> message) {
-        System.out.println("Got message " + message.getMessageObject());
     }
 }

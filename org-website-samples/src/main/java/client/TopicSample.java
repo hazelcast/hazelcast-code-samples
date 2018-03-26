@@ -4,6 +4,11 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.*;
 
 public class TopicSample implements MessageListener<String> {
+    @Override
+    public void onMessage(Message<String> message) {
+        System.out.println("Got message " + message.getMessageObject());
+    }
+
     public static void main(String[] args) {
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient();
@@ -17,8 +22,4 @@ public class TopicSample implements MessageListener<String> {
         hz.shutdown();
     }
 
-    @Override
-    public void onMessage(Message<String> message) {
-        System.out.println("Got message " + message.getMessageObject());
-    }
 }
