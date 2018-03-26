@@ -55,7 +55,7 @@ public class CustomSerializerSample {
                 .setTypeClass(CustomSerializable.class));
 
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
-        //CustomSerializer will serialize/deserialize Custom objects
+        //CustomSerializer will serialize/deserialize CustomSerializable objects
         hz.shutdown();
     }
 }
