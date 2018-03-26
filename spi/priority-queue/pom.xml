@@ -26,8 +26,8 @@
     </properties>
 
     <modules>
-    		<module>spi-priority-queue-core</module>
-    		<module>spi-priority-queue-server</module>
+    		<module>priority-queue-core</module>
+    		<module>priority-queue-server</module>
     </modules>
 
     <dependencies>

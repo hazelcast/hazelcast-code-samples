@@ -1,0 +1,28 @@
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.10.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <network>
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="true">
+                <member-list>
+                    <member>127.0.0.1</member>
+                </member-list>
+            </tcp-ip>
+        </join>
+    </network>
+
+    <cache name="timestable">
+        <key-type class-name="com.hazelcast.samples.jcache.timestable.Tuple"/>
+        <value-type class-name="java.lang.Integer"/>
+
+        <cache-entry-listeners>
+            <cache-entry-listener old-value-required="true">
+                <cache-entry-listener-factory
+                        class-name="com.hazelcast.samples.jcache.timestable.MyCacheListenerFactory"/>
+            </cache-entry-listener>
+        </cache-entry-listeners>
+    </cache>
+
+</hazelcast>
