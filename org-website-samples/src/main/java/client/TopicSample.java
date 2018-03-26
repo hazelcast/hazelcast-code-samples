@@ -13,7 +13,7 @@ public class TopicSample implements MessageListener<String> {
         topic.addMessageListener(new TopicSample());
         // Publish a message to the Topic
         topic.publish("Hello to distributed world");
-        // Shutdown the Hazelcast Cluster Member
+        // Shutdown this Hazelcast Client
         hz.shutdown();
     }
 

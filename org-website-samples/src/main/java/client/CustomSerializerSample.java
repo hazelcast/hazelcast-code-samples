@@ -9,16 +9,11 @@ import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.StreamSerializer;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class CustomSerializerSample {
 
     static class CustomSerializable {
         public String value;
-
-        CustomSerializable() {
-
-        }
 
         CustomSerializable(String value) {
             this.value = value;
@@ -60,10 +55,7 @@ public class CustomSerializerSample {
                 .setTypeClass(CustomSerializable.class));
 
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
-        Map<Long, CustomSerializable> map = hz.getMap("customMap");
-        map.put(1L, new CustomSerializable("fooooo"));
-
-        //Shutdown this Hazelcast Client
+        //CustomSerializer will serialize/deserialize Custom objects
         hz.shutdown();
     }
 }

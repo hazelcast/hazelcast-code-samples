@@ -21,7 +21,7 @@ public class PortableSerializableSample {
 
         @Override
         public int getFactoryId() {
-            return ThePortableFactory.FACTORY_ID;
+            return SamplePortableFactory.FACTORY_ID;
         }
 
         @Override
@@ -42,18 +42,9 @@ public class PortableSerializableSample {
             name = reader.readUTF("name");
             lastOrder = new Date(reader.readLong("lastOrder"));
         }
-
-        @Override
-        public String toString() {
-            return "Customer{" +
-                    "name='" + name + '\'' +
-                    ", id=" + id +
-                    ", lastOrder=" + lastOrder +
-                    '}';
-        }
     }
 
-    public static class ThePortableFactory implements PortableFactory {
+    public static class SamplePortableFactory implements PortableFactory {
 
         public static final int FACTORY_ID = 1;
 
@@ -67,7 +58,9 @@ public class PortableSerializableSample {
     public static void main(String[] args) {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.getSerializationConfig()
-                .addPortableFactory(ThePortableFactory.FACTORY_ID, new ThePortableFactory());
+                .addPortableFactory(SamplePortableFactory.FACTORY_ID, new SamplePortableFactory());
         HazelcastInstance hz = HazelcastClient.newHazelcastClient();
+        //Customer can be used here
+        hz.shutdown();
     }
 }

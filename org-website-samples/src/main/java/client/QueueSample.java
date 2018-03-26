@@ -16,15 +16,14 @@ public class QueueSample {
         // Offer a String into the Distributed Queue
         queue.offer("item");
         // Poll the Distributed Queue and return the String
-        String item = queue.poll();
+        queue.poll();
         //Timed blocking Operations
         queue.offer("anotheritem", 500, TimeUnit.MILLISECONDS);
-        String anotherItem = queue.poll(5, TimeUnit.SECONDS);
+        queue.poll(5, TimeUnit.SECONDS);
         //Indefinitely blocking Operations
         queue.put("yetanotheritem");
-        //String yetanother = queue.take();
         System.out.println(queue.take());
-        // Shutdown the Hazelcast Cluster Member
+        // Shutdown this Hazelcast Client
         hz.shutdown();
     }
 }

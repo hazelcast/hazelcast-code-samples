@@ -18,30 +18,7 @@ import java.util.Map;
 
 public class EntryProcessorSample {
 
-    public static class IncEntryProcessor extends AbstractEntryProcessor<String, Integer> implements IdentifiedDataSerializable {
-        public static final int FACTORY_ID = 1;
-        public static final int CLASS_ID = 9;
-
-        @Override
-        public void writeData(ObjectDataOutput out) throws IOException {
-
-        }
-
-        @Override
-        public void readData(ObjectDataInput in) throws IOException {
-
-        }
-
-        @Override
-        public int getFactoryId() {
-            return FACTORY_ID;
-        }
-
-        @Override
-        public int getId() {
-            return CLASS_ID;
-        }
-
+    public static class IncEntryProcessor extends AbstractEntryProcessor<String, Integer> implements Serializable {
         @Override
         public Object process(Map.Entry<String, Integer> entry) {
             // Get the value passed
@@ -56,17 +33,23 @@ public class EntryProcessorSample {
     }
 
     public static void main(String[] args) {
+        // Enable Code Deployment from this Client classpath to the Cluster Members classpath
+        // User Code Deployment needs to be enabled on the Cluster Members as well.
+        ClientConfig config = new ClientConfig();
+        ClientUserCodeDeploymentConfig userCodeDeploymentConfig = config.getUserCodeDeploymentConfig();
+        userCodeDeploymentConfig.setEnabled(true);
+        userCodeDeploymentConfig.addClass(EntryProcessorSample.IncEntryProcessor.class);
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
-        HazelcastInstance hz = HazelcastClient.newHazelcastClient();
+        HazelcastInstance hz = HazelcastClient.newHazelcastClient(config);
         // Get the Distributed Map from Cluster.
         IMap<String, Integer> map = hz.getMap("my-distributed-map");
         // Put the integer value of 0 into the Distributed Map
-        Integer replacedValue = map.put("key", 0);
+        map.put("key", 0);
         // Run the IncEntryProcessor class on the Hazelcast Cluster Member holding the key called "key"
-        Object returnValueFromIncEntryProcessor = map.executeOnKey("key", new IncEntryProcessor());
+        map.executeOnKey("key", new IncEntryProcessor());
         // Show that the IncEntryProcessor updated the value.
         System.out.println("new value:" + map.get("key"));
-        // Shutdown the Hazelcast Cluster Member
+        // Shutdown this Hazelcast Client
         hz.shutdown();
     }
 }

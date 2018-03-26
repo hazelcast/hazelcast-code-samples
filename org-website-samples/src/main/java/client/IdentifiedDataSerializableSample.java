@@ -43,7 +43,6 @@ public class IdentifiedDataSerializableSample {
     }
 
     public static class SampleDataSerializableFactory implements DataSerializableFactory {
-
         public static final int FACTORY_ID = 1000;
 
         @Override
@@ -59,5 +58,7 @@ public class IdentifiedDataSerializableSample {
                 .addDataSerializableFactory(SampleDataSerializableFactory.FACTORY_ID,
                         new SampleDataSerializableFactory());
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
+        //Employee can be used here
+        hz.shutdown();
     }
 }

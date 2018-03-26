@@ -36,7 +36,7 @@ public class JCacheSample {
         icache.put("key", "newValue", customExpiryPolicy);
         //Size of the Cache should reflect the ICache and JCache operations
         icache.size();
-        //Shutdown the underlying Hazelcast Cluster Member
+        //Shutdown this Hazelcast Client
         manager.getCachingProvider().close();
     }
 }

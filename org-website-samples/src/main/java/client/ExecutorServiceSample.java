@@ -13,36 +13,14 @@ import com.hazelcast.nio.serialization.PortableWriter;
 import java.io.IOException;
 import java.io.Serializable;
 
-public class DistributedExecutorServiceSample {
-    // The counterpart for this class should be implemented on the cluster side with same factory-id and class-id
-    static class MessagePrinter implements Portable, Runnable {
-        public static final int FACTORY_ID = 1;
-        public static final int CLASS_ID = 9;
+public class ExecutorServiceSample {
+
+    static class MessagePrinter implements Serializable, Runnable {
 
         public String message;
 
         MessagePrinter(String message) {
             this.message = message;
-        }
-
-        @Override
-        public int getFactoryId() {
-            return FACTORY_ID;
-        }
-
-        @Override
-        public int getClassId() {
-            return CLASS_ID;
-        }
-
-        @Override
-        public void writePortable(PortableWriter writer) throws IOException {
-            writer.writeUTF("message", message);
-        }
-
-        @Override
-        public void readPortable(PortableReader reader) throws IOException {
-            message = reader.readUTF("message");
         }
 
         @Override
@@ -52,8 +30,14 @@ public class DistributedExecutorServiceSample {
     }
 
     public static void main(String[] args) {
+        // Enable Code Deployment from this Client classpath to the Cluster Members classpath
+        // User Code Deployment needs to be enabled on the Cluster Members as well.
+        ClientConfig config = new ClientConfig();
+        ClientUserCodeDeploymentConfig userCodeDeploymentConfig = config.getUserCodeDeploymentConfig();
+        userCodeDeploymentConfig.setEnabled(true);
+        userCodeDeploymentConfig.addClass(ExecutorServiceSample.MessagePrinter.class);
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
-        HazelcastInstance hz = HazelcastClient.newHazelcastClient();
+        HazelcastInstance hz = HazelcastClient.newHazelcastClient(config);
         // Get the Distributed Executor Service
         IExecutorService ex = hz.getExecutorService("my-distributed-executor");
         // Submit the MessagePrinter Runnable to a random Hazelcast Cluster Member
@@ -66,7 +50,7 @@ public class DistributedExecutorServiceSample {
         ex.executeOnAllMembers(new MessagePrinter("message to all members in the cluster"));
         // Submit the MessagePrinter Runnable to the Hazelcast Cluster Member owning the key called "key"
         ex.executeOnKeyOwner(new MessagePrinter("message to the member that owns the following key"), "key");
-        // Shutdown this Hazelcast Cluster Member
+        // Shutdown this Hazelcast Client
         hz.shutdown();
     }
 }

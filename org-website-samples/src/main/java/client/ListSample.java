@@ -14,7 +14,6 @@ public class ListSample {
         // Add elements to the list
         list.add("item1");
         list.add("item2");
-
         // Remove the first element
         System.out.println("Removed: " + list.remove(0));
         // There is only one element left

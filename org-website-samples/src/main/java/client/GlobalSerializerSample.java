@@ -40,6 +40,7 @@ public class GlobalSerializerSample {
         clientConfig.getSerializationConfig().setGlobalSerializerConfig(
                 new GlobalSerializerConfig().setImplementation(new GlobalSerializer())
         );
+        //GlobalSerializer will serialize/deserialize all non-builtin types
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
     }
 }

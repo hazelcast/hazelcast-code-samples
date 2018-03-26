@@ -21,7 +21,7 @@ public class MultiMapSample {
         System.out.println(values);
         // remove specific key/value pair
         multiMap.remove("my-key", "value2");
-        // Shutdown the Hazelcast Cluster Member
+        // Shutdown this Hazelcast Client
         hz.shutdown();
     }
 }

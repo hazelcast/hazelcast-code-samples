@@ -17,7 +17,7 @@ public class ReplicatedMapSample {
         System.out.println("replacedValue = " + replacedValue); // Will be null as its first update
         String value = map.get("key");// the value is retrieved from a random member in the cluster
         System.out.println("value for key = " + value);
-        // Shutdown the Hazelcast Cluster Member
+        // Shutdown this Hazelcast Client
         hz.shutdown();
     }
 }
