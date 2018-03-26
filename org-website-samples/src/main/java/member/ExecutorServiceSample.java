@@ -7,7 +7,7 @@ import com.hazelcast.core.Member;
 
 import java.io.Serializable;
 
-public class DistributedExecutorServiceSample {
+public class ExecutorServiceSample {
     public static void main(String[] args) {
         // Start the Embedded Hazelcast Cluster Member.
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance();
@@ -27,6 +27,7 @@ public class DistributedExecutorServiceSample {
         ex.executeOnKeyOwner(new MessagePrinter("message to the member that owns the following key"), "key");
         // Shutdown this Hazelcast Cluster Member
         hz1.shutdown();
+        // Shutdown this Hazelcast Cluster Member
         hz2.shutdown();
     }
 

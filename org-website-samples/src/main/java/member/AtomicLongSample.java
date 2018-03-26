@@ -6,6 +6,12 @@ import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.IFunction;
 
 public class AtomicLongSample {
+    public static class MultiplyByTwo implements IFunction<Long,Long> {
+        @Override
+        public Long apply(Long input) {
+            return input*2;
+        }
+    }
 
     public static void main(String[] args) {
         // Start the Embedded Hazelcast Cluster Member.
@@ -20,12 +26,5 @@ public class AtomicLongSample {
         System.out.println("counter: "+counter.get());
         // Shutdown this Hazelcast Cluster Member
         hz.shutdown();
-    }
-
-    public static class MultiplyByTwo implements IFunction<Long,Long> {
-        @Override
-        public Long apply(Long input) {
-            return input*2;
-        }
     }
 }

@@ -6,36 +6,20 @@ import com.hazelcast.ringbuffer.Ringbuffer;
 
 public class RingbufferSample {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
         // Start the Embedded Hazelcast Cluster Member.
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        // Get a Ringbuffer called "my-ringbuffer"
-        final Ringbuffer<Integer> rb = hz.getRingbuffer("my-ringbuffer");
-        // Start a separate Thread that prints out the elements of the Ringbuffer.
-        new MyThread(rb).start();
-        // On the main thread add elements to the Ringbuffer
-        for(int k=0;k<100;k++){
-            rb.add(k);
-        }
-    }
-
-    private static class MyThread extends Thread {
-        private final Ringbuffer<Integer> rb;
-
-        public MyThread(Ringbuffer<Integer> rb) {
-            this.rb = rb;
-        }
-
-        @Override
-        public void run(){
-            try {
-                long seq = rb.tailSequence();
-                for (; ; ) {
-                    System.out.println(rb.readOne(seq));
-                    seq++;
-                }
-            }catch (InterruptedException e){
-            }
-        }
+        Ringbuffer<Long> rb = hz.getRingbuffer("rb");
+        // add two items into ring buffer
+        rb.add(100L);
+        rb.add(200L);
+        // we start from the oldest item.
+        // if you want to start from the next item, call rb.tailSequence()+1
+        long sequence = rb.headSequence();
+        System.out.println(rb.readOne(sequence));
+        sequence++;
+        System.out.println(rb.readOne(sequence));
+        // Shutdown the Hazelcast Cluster Member
+        hz.shutdown();
     }
 }

@@ -5,7 +5,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ReplicatedMap;
 
 public class ReplicatedMapSample {
-
     public static void main(String[] args) {
         // Start the Embedded Hazelcast Cluster Member.
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();

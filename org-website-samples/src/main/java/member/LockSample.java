@@ -5,7 +5,7 @@ import com.hazelcast.core.HazelcastInstance;
 
 import java.util.concurrent.locks.Lock;
 
-public class DistributedLockSample {
+public class LockSample {
     public static void main(String[] args) {
         // Start the Embedded Hazelcast Cluster Member.
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
@@ -18,7 +18,7 @@ public class DistributedLockSample {
         } finally {
             lock.unlock();
         }
-        // Shutdown this Hazelcast Client
+        // Shutdown this Hazelcast Cluster Member
         hz.shutdown();
     }
 }
