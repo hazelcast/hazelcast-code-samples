@@ -57,6 +57,7 @@ public class IdentifiedDataSerializableSample {
         clientConfig.getSerializationConfig()
                 .addDataSerializableFactory(SampleDataSerializableFactory.FACTORY_ID,
                         new SampleDataSerializableFactory());
+        // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
         //Employee can be used here
         hz.shutdown();

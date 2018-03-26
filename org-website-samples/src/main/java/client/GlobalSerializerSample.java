@@ -40,7 +40,9 @@ public class GlobalSerializerSample {
         clientConfig.getSerializationConfig().setGlobalSerializerConfig(
                 new GlobalSerializerConfig().setImplementation(new GlobalSerializer())
         );
-        //GlobalSerializer will serialize/deserialize all non-builtin types
+        // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
+        //GlobalSerializer will serialize/deserialize all non-builtin types
+        hz.shutdown();
     }
 }

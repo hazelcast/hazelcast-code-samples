@@ -54,6 +54,7 @@ public class CustomSerializerSample {
                 .setImplementation(new CustomSerializer())
                 .setTypeClass(CustomSerializable.class));
 
+        // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
         //CustomSerializer will serialize/deserialize CustomSerializable objects
         hz.shutdown();

@@ -13,7 +13,7 @@ import javax.cache.expiry.ExpiryPolicy;
 public class JCacheSample {
 
     public static void main(String[] args) {
-        // Run as a Hazelcast Member
+        // Run as a Hazelcast Client
         System.setProperty("hazelcast.jcache.provider.type", "client");
         // Create the JCache CacheManager
         CacheManager manager = Caching.getCachingProvider().getCacheManager();

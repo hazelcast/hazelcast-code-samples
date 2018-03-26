@@ -88,10 +88,10 @@ public class QuerySample {
     }
 
     public static void main(String[] args) {
-        // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.getSerializationConfig()
                 .addPortableFactory(ThePortableFactory.FACTORY_ID, new ThePortableFactory());
+        // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
         // Get a Distributed Map called "users"
         IMap<String, User> users = hz.getMap("users");

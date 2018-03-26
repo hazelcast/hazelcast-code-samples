@@ -59,7 +59,8 @@ public class PortableSerializableSample {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.getSerializationConfig()
                 .addPortableFactory(SamplePortableFactory.FACTORY_ID, new SamplePortableFactory());
-        HazelcastInstance hz = HazelcastClient.newHazelcastClient();
+        // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
+        HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig);
         //Customer can be used here
         hz.shutdown();
     }
