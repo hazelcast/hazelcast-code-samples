@@ -73,7 +73,6 @@
         <module>serialization</module>
         <module>spi</module>
         <module>transactions</module>
-        <module>org-website-samples</module>
     </modules>
 
     <build>
