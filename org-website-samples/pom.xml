@@ -26,6 +26,8 @@
     </build>
 
     <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.basedir}</main.basedir>
         <jsr107.api.version>1.1.0</jsr107.api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

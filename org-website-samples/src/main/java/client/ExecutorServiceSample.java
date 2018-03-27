@@ -6,11 +6,7 @@ import com.hazelcast.client.config.ClientUserCodeDeploymentConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IExecutorService;
 import com.hazelcast.core.Member;
-import com.hazelcast.nio.serialization.Portable;
-import com.hazelcast.nio.serialization.PortableReader;
-import com.hazelcast.nio.serialization.PortableWriter;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 public class ExecutorServiceSample {

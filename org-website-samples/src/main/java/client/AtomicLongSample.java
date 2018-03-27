@@ -11,9 +11,10 @@ public class AtomicLongSample {
         // Get an Atomic Counter, we'll call it "counter"
         IAtomicLong counter = hz.getAtomicLong("counter");
         // Add and Get the "counter"
-        counter.addAndGet(3); // value is now 3
+        counter.addAndGet(3);
+        // value is now 3
         // Display the "counter" value
-        System.out.println("counter: "+counter.get());
+        System.out.println("counter: " + counter.get());
         // Shutdown this Hazelcast Client
         hz.shutdown();
     }

@@ -3,16 +3,10 @@ package client;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientUserCodeDeploymentConfig;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.AbstractEntryProcessor;
-import com.hazelcast.map.EntryProcessor;
-import com.hazelcast.nio.ObjectDataInput;
-import com.hazelcast.nio.ObjectDataOutput;
-import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 

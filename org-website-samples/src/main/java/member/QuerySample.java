@@ -13,30 +13,30 @@ import java.util.Collection;
 public class QuerySample {
 
     public static class User implements Serializable {
+        String username;
+        int age;
+        boolean active;
+
         public User(String username, int age, boolean active) {
             this.username = username;
             this.age = age;
             this.active = active;
         }
 
-        String username;
-        int age;
-        boolean active;
-
         @Override
         public String toString() {
-            return "User{" +
-                    "username='" + username + '\'' +
-                    ", age=" + age +
-                    ", active=" + active +
-                    '}';
+            return "User{"
+                    + "username='" + username + '\''
+                    + ", age=" + age
+                    + ", active=" + active
+                    + '}';
         }
     }
 
     private static void generateUsers(IMap<String, User> users) {
-        users.put("Rod", new User("Rod",19,true));
-        users.put("Jane", new User("Jane",20,true));
-        users.put("Freddy", new User("Freddy",23,true));
+        users.put("Rod", new User("Rod", 19, true));
+        users.put("Jane", new User("Jane", 20, true));
+        users.put("Freddy", new User("Freddy", 23, true));
     }
 
     public static void main(String[] args) {

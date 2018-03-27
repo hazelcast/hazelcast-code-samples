@@ -1,7 +1,6 @@
 package client;
 
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 import java.util.concurrent.BlockingQueue;

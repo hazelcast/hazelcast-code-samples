@@ -47,7 +47,9 @@ public class IdentifiedDataSerializableSample {
 
         @Override
         public IdentifiedDataSerializable create(int typeId) {
-            if (typeId == 100) return new Employee();
+            if (typeId == 100) {
+                return new Employee();
+            }
             return null;
         }
     }

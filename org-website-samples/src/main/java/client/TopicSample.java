@@ -1,7 +1,10 @@
 package client;
 
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.*;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ITopic;
+import com.hazelcast.core.Message;
+import com.hazelcast.core.MessageListener;
 
 public class TopicSample implements MessageListener<String> {
     @Override
@@ -21,5 +24,4 @@ public class TopicSample implements MessageListener<String> {
         // Shutdown this Hazelcast Client
         hz.shutdown();
     }
-
 }

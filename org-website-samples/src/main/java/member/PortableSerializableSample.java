@@ -50,7 +50,9 @@ public class PortableSerializableSample {
 
         @Override
         public Portable create(int classId) {
-            if (classId == Customer.CLASS_ID) return new Customer();
+            if (classId == Customer.CLASS_ID) {
+                return new Customer();
+            }
             return null;
         }
     }

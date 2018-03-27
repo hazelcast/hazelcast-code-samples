@@ -2,7 +2,6 @@ package client;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.nio.serialization.Portable;
@@ -14,7 +13,6 @@ import com.hazelcast.query.Predicates;
 import com.hazelcast.query.SqlPredicate;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Collection;
 
 public class QuerySample {
@@ -38,11 +36,11 @@ public class QuerySample {
 
         @Override
         public String toString() {
-            return "User{" +
-                    "username='" + username + '\'' +
-                    ", age=" + age +
-                    ", active=" + active +
-                    '}';
+            return "User{"
+                    + "username='" + username + '\''
+                    + ", age=" + age
+                    + ", active=" + active
+                    + '}';
         }
 
         @Override
@@ -76,15 +74,17 @@ public class QuerySample {
 
         @Override
         public Portable create(int classId) {
-            if (classId == User.CLASS_ID) return new User();
+            if (classId == User.CLASS_ID) {
+                return new User();
+            }
             return null;
         }
     }
 
     private static void generateUsers(IMap<String, User> users) {
-        users.put("Rod", new User("Rod",19,true));
-        users.put("Jane", new User("Jane",20,true));
-        users.put("Freddy", new User("Freddy",23,true));
+        users.put("Rod", new User("Rod", 19, true));
+        users.put("Jane", new User("Jane", 20, true));
+        users.put("Freddy", new User("Freddy", 23, true));
     }
 
     public static void main(String[] args) {
