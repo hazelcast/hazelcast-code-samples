@@ -1,0 +1,308 @@
+{
+  "apiVersion": "v1",
+  "kind": "Template",
+  "metadata": {
+    "name": "hazelcast-enterprise-openshift-centos",
+    "annotations": {
+      "description": "Openshift deployment template for Hazelcast Enterpise based on CENTOS 7",
+      "tags": "hazelcast, imdg, datagrid, inmemory, kvstore, nosql, java",
+      "iconClass": "icon-java"
+    }
+  },
+  "labels": {
+    "template": "hazelcast-enterprise-openshift-centos-template"
+  },
+  "objects": [
+    {
+      "apiVersion": "v1",
+      "kind": "ReplicationController",
+      "metadata": {
+        "generateName": "hazelcast-enterprise-cluster-rc-${DEPLOYMENT_NAME}-",
+        "name": "hz-rc"
+      },
+      "spec": {
+        "replicas": 3,
+        "selector": {
+          "name": "hazelcast-enterprise-node-${DEPLOYMENT_NAME}"
+        },
+        "template": {
+          "metadata": {
+            "name": "hazelcast-enterprise-node",
+            "generateName": "hazelcast-enterprise-node-${DEPLOYMENT_NAME}-",
+            "labels": {
+              "name": "hazelcast-enterprise-node-${DEPLOYMENT_NAME}"
+            }
+          },
+          "spec": {
+            "volumes": [
+              {
+                "name": "hazelcast-storage",
+                "persistentVolumeClaim": {
+                  "claimName": "hz-vc"
+                }
+              }
+            ],
+            "containers": [
+              {
+                "image": "${HAZELCAST_IMAGE}",
+                "name": "hazelcast-enterprise-openshift-centos",
+                "env": [
+                  {
+                    "name": "HAZELCAST_KUBERNETES_SERVICE_DNS",
+                    "value": "${SERVICE_NAME}.${NAMESPACE}.svc"
+                  },
+                  {
+                    "name": "HAZELCAST_KUBERNETES_SERVICE_NAME",
+                    "value": "${SERVICE_NAME}"
+                  },
+                  {
+                    "name": "HAZELCAST_KUBERNETES_NAMESPACE",
+                    "value": "${NAMESPACE}"
+                  },
+                  {
+                    "name": "HAZELCAST_KUBERNETES_SERVICE_DNS_IP_TYPE",
+                    "value": "IPV4"
+                  },
+                  {
+                    "name": "HAZELCAST_KUBERNETES_SERVICE_DOMAIN",
+                    "value": "${KUBERNETES_SERVICE_DOMAIN}"
+                  },
+                  {
+                    "name": "HZ_LICENSE_KEY",
+                    "value": "${ENTERPRISE_LICENSE_KEY}"
+                  },
+                  {
+                    "name": "HZ_DATA",
+                    "value": "/data/hazelcast"
+                  }
+                ],
+                "ports": [
+                  {
+                    "containerPort": 5701,
+                    "protocol": "TCP"
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "mountPath": "/data/hazelcast",
+                    "name": "hazelcast-storage"
+                  }
+                ],
+                "readinessProbe": {
+                  "exec": {
+                    "command": [
+                      "./readiness.sh"
+                    ]
+                  },
+                  "initialDelaySeconds": 0,
+                  "periodSeconds" : 1
+                },
+                "livenessProbe": {
+                  "exec": {
+                    "command": [
+                      "./liveness.sh"
+                    ]
+                  },
+                  "initialDelaySeconds": 0
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "${SERVICE_NAME}"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "clusterIP": "None",
+        "selector": {
+          "name": "hazelcast-enterprise-node-${DEPLOYMENT_NAME}"
+        },
+        "ports": [
+          {
+            "port": 5701,
+            "protocol": "TCP"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "name": "hz-vc"
+      },
+      "spec": {
+        "selector": {
+          "name": "hazelcast-vc-${DEPLOYMENT_NAME}"
+        },
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "1Gi"
+          }
+        },
+        "volumeName": "${HAZELCAST_VOLUME_NAME}"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ReplicationController",
+      "metadata": {
+        "generateName": "management-center-rc-${DEPLOYMENT_NAME}-",
+        "name": "mc-rc"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "name": "management-center-node-${DEPLOYMENT_NAME}"
+        },
+        "template": {
+          "metadata": {
+            "name": "management-center-node",
+            "generateName": "management-center-node-${DEPLOYMENT_NAME}-",
+            "labels": {
+              "name": "management-center-node-${DEPLOYMENT_NAME}"
+            }
+          },
+          "spec": {
+            "volumes": [
+              {
+                "name": "management-center-storage",
+                "persistentVolumeClaim": {
+                  "claimName": "mc-vc"
+                }
+              }
+            ],
+            "containers": [
+              {
+                "image": "${MC_IMAGE}",
+                "name": "management-center-openshift",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "mountPath": "/data",
+                    "name": "management-center-storage"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "${MC_SERVICE_NAME}"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "clusterIP": "None",
+        "selector": {
+          "name": "management-center-node-${DEPLOYMENT_NAME}"
+        },
+        "ports": [
+          {
+            "port": 8080,
+            "protocol": "TCP"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "name": "mc-vc"
+      },
+      "spec": {
+        "selector": {
+          "name": "management-center-vc-${DEPLOYMENT_NAME}"
+        },
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "1Gi"
+          }
+        },
+        "volumeName": "${MC_VOLUME_NAME}"
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "HAZELCAST_IMAGE",
+      "description": "Defines the location of Hazelcast Enterprise on Centos 7 image",
+      "value": "hazelcast/hazelcast-enterprise-openshift-centos:3.9.2",
+      "required": true
+    },
+    {
+      "name": "DEPLOYMENT_NAME",
+      "description": "Defines the base name of this deployment unit",
+      "value": "hazelcast-deployment",
+      "required": true
+    },
+    {
+      "name": "SERVICE_NAME",
+      "description": "Defines the service name of the POD to lookup of Kubernetes.",
+      "value": "hazelcast-service",
+      "required": true
+    },
+    {
+      "name": "NAMESPACE",
+      "description": "Defines the namespace of the application POD of Kubernetes, if not defined the container will use the value of /var/run/secrets/kubernetes.io/serviceaccount/namespace",
+      "required": false
+    },
+    {
+      "name": "KUBERNETES_SERVICE_DOMAIN",
+      "description": "Defines the domain part of a kubernetes dns lookup.",
+      "value": "cluster.local",
+      "required": true
+    },
+    {
+      "name": "ENTERPRISE_LICENSE_KEY",
+      "description": "Defines Hazelcast Enterpise License Key, please enter your License",
+      "required": true
+    },
+    {
+      "name": "HAZELCAST_VOLUME_NAME",
+      "description": "Defines volume location where you put your domain classes and custom Hazelcast configuration xml file.",
+      "value": "pv0001",
+      "required": true
+    },
+    {
+      "name": "MC_IMAGE",
+      "description": "Defines the location of Hazelcast Management Center image",
+      "value": "hazelcast/management-center-openshift:3.9.2",
+      "required": true
+    },
+    {
+      "name": "MC_SERVICE_NAME",
+      "description": "Defines the Management Center service name of the POD to lookup of Kubernetes.",
+      "value": "management-center-service",
+      "required": true
+    },
+    {
+      "name": "MC_VOLUME_NAME",
+      "description": "Defines volume location mount as Management Center Data directory.",
+      "value": "pv0002",
+      "required": true
+    }
+  ]
+}

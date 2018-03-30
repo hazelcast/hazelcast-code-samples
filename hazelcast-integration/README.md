@@ -6,6 +6,8 @@
 	Implementation of hibernate 2nd level cache integration of hazelcast as employee managing application.
 - <h3>jca-ra</h3>
 	Implementation of jca resource adapter integration of hazelcast.
+- <h3>openshift</h3>
+    A guideline to start using Hazelcast on the Red Hat OpenShift platform.
 - <h3>pcf-integration</h3>
     A Spring Boot application that uses Hazelcast Client to communicate with a Hazelcast Cluster that is deployed on a PCF installation using [Hazelcast for PCF](https://network.pivotal.io/hazelcast).
 - <h3>spring-cache-manager</h3>
