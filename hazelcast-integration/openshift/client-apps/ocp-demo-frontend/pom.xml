@@ -103,7 +103,7 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>fabric8-maven-plugin</artifactId>
-                <version>3.2.28</version>
+                <version>3.5.37</version>
                 <configuration>
                     <buildStrategy>docker</buildStrategy>
                     <generator>
