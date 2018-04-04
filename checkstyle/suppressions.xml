@@ -15,4 +15,8 @@
     <suppress checks="StrictDuplicateCode" files="\.java" lines="1-15"/>
 
     <suppress checks="NPathComplexity" files="com/hazelcast/examples/iterator/CacheIteratorUsage"/>
+    <suppress checks="VisibilityModifierCheck" files="member/*" />
+    <suppress checks="VisibilityModifierCheck" files="client/*" />
+    <suppress checks="EmptyBlock" files="member/LockSample" />
+    <suppress checks="EmptyBlock" files="client/LockSample" />
 </suppressions>
