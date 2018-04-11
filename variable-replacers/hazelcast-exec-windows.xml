@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.10.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+    <config-replacers >
+        <replacer class-name="com.hazelcast.sample.replacer.ExecReplacer">
+            <properties>
+                <property name="argumentSeparator">#</property>
+            </properties>
+        </replacer>
+    </config-replacers>
+
+    <group>
+        <name>$EXEC{cmd.exe#/c#echo Variable Test Group}</name>
+    </group>
+</hazelcast>
