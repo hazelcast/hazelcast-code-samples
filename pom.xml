@@ -73,6 +73,7 @@
         <module>serialization</module>
         <module>spi</module>
         <module>transactions</module>
+        <module>variable-replacers</module>
     </modules>
 
     <build>
@@ -108,6 +109,15 @@
                 </executions>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
