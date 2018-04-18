@@ -13,7 +13,6 @@ public class Application {
     public static void main(String[] args) {
 
         System.setProperty("my.group.name", Constants.MY_GROUP_NAME);
-        System.setProperty("my.group.password", Constants.MY_GROUP_PASSWORD);
 
         SpringApplication.run(Application.class, args);
     }

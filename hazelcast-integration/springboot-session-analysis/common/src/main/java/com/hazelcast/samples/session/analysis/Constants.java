@@ -14,7 +14,6 @@ public class Constants {
 
     // Cluster group
     public static final String MY_GROUP_NAME = "sessions";
-    public static final String MY_GROUP_PASSWORD = MY_GROUP_NAME;
 
     // HTML info
     public static final String HTML_ACTION_ADD = "add";

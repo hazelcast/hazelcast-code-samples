@@ -22,7 +22,6 @@ public class Application {
 
         System.setProperty("hazelcast.logging.type", "slf4j");
         System.setProperty("my.group.name", Constants.MY_GROUP_NAME);
-        System.setProperty("my.group.password", Constants.MY_GROUP_PASSWORD);
 
         Bootstrap.main(args);
     }

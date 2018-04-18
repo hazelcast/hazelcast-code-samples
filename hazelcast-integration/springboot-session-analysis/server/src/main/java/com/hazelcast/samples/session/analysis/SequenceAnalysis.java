@@ -7,15 +7,15 @@ import java.util.TreeSet;
 
 import com.hazelcast.core.EntryEventType;
 import com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder;
-import com.hazelcast.jet.JournalInitialPosition;
-import com.hazelcast.jet.Pipeline;
-import com.hazelcast.jet.Sinks;
-import com.hazelcast.jet.Sources;
 import com.hazelcast.jet.core.processor.Processors;
 import com.hazelcast.jet.datamodel.Tuple2;
 import com.hazelcast.jet.function.DistributedFunction;
 import com.hazelcast.jet.function.DistributedFunctions;
 import com.hazelcast.jet.function.DistributedPredicate;
+import com.hazelcast.jet.pipeline.JournalInitialPosition;
+import com.hazelcast.jet.pipeline.Pipeline;
+import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.jet.pipeline.Sources;
 import com.hazelcast.map.AbstractEntryProcessor;
 import com.hazelcast.map.EntryProcessor;
 import com.hazelcast.map.journal.EventJournalMapEvent;
@@ -28,7 +28,9 @@ import com.hazelcast.web.SessionState;
  * processing pipeline for Jet to run. A processing pipeline
  * is a sequence of steps to transform input into output
  * </p>
- * TODO : Group by session id, and trailing space to break chekstyle    
+ * TODO : mention Group by session id
+ * TODO : Trailing space to break checkstyle    
+ * TODO : Change to 3.10 when released <hazelcast.version>3.10-BETA-2</hazelcast.version>
  */
 public class SequenceAnalysis {
 
@@ -61,6 +63,53 @@ public class SequenceAnalysis {
      * </p>
      *
      * <p>The method uses these six steps, run in order:
+	 * <pre>
+	 *              +------------+
+	 *              |1   IMap    |
+	 *              |"jsessionid"|
+	 *              |   Journal  |
+	 *              +------------+
+	 *                     |
+	 *                     |
+	 *                     |
+	 *              +------------+
+	 *              |2           |
+	 *              |   Filter   |
+	 *              |            |
+	 *              +------------+
+	 *                     |
+	 *                     |
+	 *                     |
+	 *              +------------+
+	 *              |3           |
+	 *              |  Reformat  |
+	 *              |            |
+	 *              +------------+
+	 *                     |
+	 *                     |
+	 *                     |
+	 *              +------------+
+	 *              |4           |
+	 *              |   Filter   |
+	 *              |            |
+	 *              +------------+
+	 *                     |
+	 *                     |
+	 *                     |
+	 *              +------------+
+	 *              |5           |
+	 *              |  Reformat  |
+	 *              |            |
+	 *              +------------+
+	 *                     |
+	 *                     |
+	 *                     |
+	 *              +------------+
+	 *              |6   IMap    |
+	 *              | "sequence" |
+	 *              | tally sink |
+	 *              +------------+
+	 * </pre>
      * <ol>
      * <li><b>Source</b>
      * <p>The source here is a map journal attached to the map that stores

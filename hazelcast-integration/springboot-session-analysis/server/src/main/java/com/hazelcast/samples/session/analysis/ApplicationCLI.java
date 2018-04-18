@@ -84,10 +84,10 @@ public class ApplicationCLI implements CommandMarker {
         log.info("Sleep {} seconds", wait);
         TimeUnit.SECONDS.sleep(wait);
 
-        if (analysisJob.getJobStatus() == JobStatus.RUNNING) {
+        if (analysisJob.getStatus() == JobStatus.RUNNING) {
             analysisJob.cancel();
         } else {
-            log.error("Job status {}", analysisJob.getJobStatus());
+            log.error("Job status {}", analysisJob.getStatus());
         }
 
         System.out.printf("%d sequence%s found%n", sequenceMap.size(), (sequenceMap.size() == 1 ? "" : "s"));
