@@ -31,6 +31,7 @@ import com.hazelcast.web.SessionState;
  * TODO : mention Group by session id
  * TODO : Trailing space to break checkstyle    
  * TODO : Change to 3.10 when released <hazelcast.version>3.10-BETA-2</hazelcast.version>
+ * TODO : Change to Spring Boot 2.0
  */
 public class SequenceAnalysis {
 
