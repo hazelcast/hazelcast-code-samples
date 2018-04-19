@@ -13,7 +13,6 @@ import com.hazelcast.quorum.QuorumException;
  * specified one.
  *
  * Hazelcast Quorum is supported in the following data-structures:
- * Hazelcast Quorum is supported in the following data-structures:
  * - IMap
  * - TransactionalMap
  * - ICache
@@ -38,11 +37,32 @@ import com.hazelcast.quorum.QuorumException;
  */
 public class ClusterQuorum {
 
+    private enum QuorumChoice {
+        MEMBER_COUNT,
+        PROBABILISTIC,
+        RECENTLY_ACTIVE
+    }
     private static final String NAME = "AT_LEAST_TWO_NODES";
 
     public static void main(String[] args) throws Exception {
-        QuorumConfig quorumConfig = new QuorumConfig();
-        quorumConfig.setName(NAME).setEnabled(true).setSize(2);
+        QuorumChoice choice = QuorumChoice.MEMBER_COUNT;
+        if (args.length == 1) {
+            choice = QuorumChoice.valueOf(args[0]);
+        }
+        QuorumConfig quorumConfig;
+
+        switch (choice) {
+            case PROBABILISTIC:
+                quorumConfig = probabilisticQuorumConfig();
+                break;
+            case RECENTLY_ACTIVE:
+                quorumConfig = recentlyActiveQuorumConfig();
+                break;
+            default:
+                quorumConfig = memberCountQuorumConfig();
+        }
+
+        System.out.println("Configured quorum is " + quorumConfig);
 
         MapConfig mapConfig = new MapConfig();
         mapConfig.setName(NAME).setQuorumName(NAME);
@@ -77,5 +97,25 @@ public class ClusterQuorum {
         }
 
         Hazelcast.shutdownAll();
+    }
+
+    private static QuorumConfig memberCountQuorumConfig() {
+        QuorumConfig quorumConfig = new QuorumConfig();
+        quorumConfig.setName(NAME).setEnabled(true).setSize(2);
+        return quorumConfig;
+    }
+
+    private static QuorumConfig recentlyActiveQuorumConfig() {
+        QuorumConfig quorumConfig = QuorumConfig.newRecentlyActiveQuorumConfigBuilder(NAME, 2, 20000).build();
+        return quorumConfig;
+    }
+
+    private static QuorumConfig probabilisticQuorumConfig() {
+        QuorumConfig quorumConfig = QuorumConfig.newProbabilisticQuorumConfigBuilder(NAME, 2)
+                .withAcceptableHeartbeatPauseMillis(60000)
+                .withHeartbeatIntervalMillis(5000)
+                .withSuspicionThreshold(10)
+                .build();
+        return quorumConfig;
     }
 }
