@@ -26,6 +26,7 @@
         <module>partition-migration</module>
         <module>priority-queue</module>
         <module>proxy</module>
+        <module>split-brain</module>
     </modules>
 
     <properties>
