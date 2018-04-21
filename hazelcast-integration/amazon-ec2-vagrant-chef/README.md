@@ -212,7 +212,7 @@ INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Starting with 2 generic opera
 Dec 31, 2014 2:53:22 PM com.hazelcast.system
 INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Hazelcast 3.4-RC1-SNAPSHOT (20141215 - 24f7902) starting at A$
 Dec 31, 2014 2:53:22 PM com.hazelcast.system
-INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Copyright (C) 2008-2014 Hazelcast.com
+INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Copyright (C) 2008-2018 Hazelcast.com
 Dec 31, 2014 2:53:22 PM com.hazelcast.instance.Node
 INFO: [192.168.0.19]:5701 [dev] [3.4-RC1-SNAPSHOT] Creating MulticastJoiner
 Dec 31, 2014 2:53:22 PM com.hazelcast.core.LifecycleService
