@@ -49,7 +49,7 @@
                 "env": [
                   {
                     "name": "HAZELCAST_KUBERNETES_SERVICE_DNS",
-                    "value": "${SERVICE_NAME}.${NAMESPACE}.svc.${KUBERNETES_SERVICE_DOMAIN}"
+                    "value": "${SERVICE_NAME}.${NAMESPACE}.svc"
                   },
                   {
                     "name": "HAZELCAST_KUBERNETES_SERVICE_NAME",
@@ -159,11 +159,13 @@
     {
       "name": "DEPLOYMENT_NAME",
       "description": "Defines the base name of this deployment unit",
+      "value": "hazelcast-deployment",
       "required": true
     },
     {
       "name": "SERVICE_NAME",
       "description": "Defines the service name of the POD to lookup of Kubernetes.",
+      "value": "hazelcast-service",
       "required": true
     },
     {
@@ -180,7 +182,7 @@
     {
       "name": "HAZELCAST_VOLUME_NAME",
       "description": "Defines volume location where you put your domain classes and custom Hazelcast configuration xml file.",
-      "value": "hz-pv",
+      "value": "pv0001",
       "required": true
     }
   ]
