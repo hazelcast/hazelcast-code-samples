@@ -1,4 +1,4 @@
-# OpenShift Example
+# Hazelcast for OpenShift
 
 Hazelcast can be used a Caching Layer for applications deployed on [OpenShift](https://www.openshift.com/).
 
