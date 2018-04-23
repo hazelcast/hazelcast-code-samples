@@ -343,7 +343,7 @@ This is a very real possibility. Various surveys have aligned different age grou
 browsers, and it doesn't seem unreasonable to assume that shopping preferences for winter clothes
 could differ too. Older people may care more for warmth than fashion, or may have more savings to spend.
 
-## Exensions - 2 - Abandonments
+## Extensions - 2 - Abandonments
 
 This example is looking at the update history for the basket. It doesn't pay any attention to
 whether the basket was purchased, or if the customer gave up.
@@ -362,6 +362,24 @@ Note also that the `LIST` command is making *read* access to the maps. This won'
 for expiry of the HTTP sessions, as the map here is configured for _time-to-live_ which is *write*
 access.
 
+## Extensions - 3 - Session Grouping
+
+To keep the example simple, session update matching is implicit. It is assumed that two
+consecutive updates in the event history are for the same session. This is the case if
+there is only one user at a time, as is here with the follow-along style.
+
+This is open to enhancement by the reader, and requires the HTTP Session Id (the object key)
+to be passed further through the processing pipeline.
+
+A simple implementation would just be to discard "_before_" and "_after_" pairings with
+different HTTP Session Ids. This is easy coding, and if the online shop doesn't have
+a huge number of concurrent customers will still get insights most of the time.
+
+A more complex implementation would be use Jet's "_session windowing_" and "_grouping_"
+functionality to collate and sort session updates by HTTP Session Id. This would
+complicate the processing more than intended for this blog post, but may feature
+in a later one.
+
 ## Summary
 
 [IMDG's](https://hazelcast.org/) map journal introduced in Hazelcast 3.9 keeps a configurable history of changes.
@@ -372,3 +390,7 @@ non-consecutive changes or go back prior to the current point in time.
 
 Running such analysis on HTTP sessions allows meaningful insights to be obtained into shopping habits
 that can be input into designed better or more profitable e-commerce.
+
+There are other ways to determine what is popular in an online shop, such as to look at the orders and
+stock levels. What tracking the basket does is give insights into the sequence things are selected,
+or de-selected.

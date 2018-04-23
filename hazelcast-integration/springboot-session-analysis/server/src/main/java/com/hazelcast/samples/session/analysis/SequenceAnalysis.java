@@ -28,10 +28,14 @@ import com.hazelcast.web.SessionState;
  * processing pipeline for Jet to run. A processing pipeline
  * is a sequence of steps to transform input into output
  * </p>
- * TODO : mention Group by session id
+ * TODO: PUSH OUT ONCE JET AUTO CONFIG!! 
+ * TODO: REDO THE SCREENSHOTS
  * TODO : Trailing space to break checkstyle    
- * TODO : Change to 3.10 when released <hazelcast.version>3.10-BETA-2</hazelcast.version>
- * TODO : Change to Spring Boot 2.0
+ * TODO: <hazelcast.version>3.10</hazelcast.version>
+ * TODO: <hazelcast-jet.version>0.6.1</hazelcast-jet.version>
+ * TODO: <hazelcast-wm.version>3.8.3??</hazelcast-wm.version>
+ * TODO: <spring-boot.version>2.0.1.RELEASE</spring-boot.version>
+ * TODO: <spring-shell.version>2.0.0.RELEASE</spring-shell.version>
  */
 public class SequenceAnalysis {
 
@@ -58,9 +62,11 @@ public class SequenceAnalysis {
      * <p>The data derived answers this question. Data records such as
      * <pre>
      * Tuple2{1, Gloves} 3
+     * Tuple2{1, Hats} 2
      * </pre>
-     * tells us that "gloves" as the 1st item added to the basket has happened
-     * 3 times.
+     * tells us that "gloves" as the first item added to the basket has happened
+     * 3 times and that "hats" has the first item has happened 2 times. Meaning,
+     * gloves are added first more times than hats.
      * </p>
      *
      * <p>The method uses these six steps, run in order:

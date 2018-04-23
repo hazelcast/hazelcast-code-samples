@@ -5,9 +5,8 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.springframework.shell.core.CommandMarker;
-import org.springframework.shell.core.annotation.CliCommand;
-import org.springframework.stereotype.Component;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -25,9 +24,9 @@ import lombok.extern.slf4j.Slf4j;
  * <p>Our commands are in upper case.
  * </p>
  */
-@Component
+@ShellComponent
 @Slf4j
-public class ApplicationCLI implements CommandMarker {
+public class ApplicationCLI {
 
     private HazelcastInstance hazelcastInstance;
     private JetInstance jetInstance;
@@ -69,7 +68,7 @@ public class ApplicationCLI implements CommandMarker {
      * second or two to do some work then end it.
      * </p>
      */
-    @CliCommand(value = "ANALYSIS", help = "Analyse the orders")
+    @ShellMethod(key = "ANALYSIS", value = "Analyse the orders")
     public void analyseSessions() throws Exception {
         IMap<String, Integer> sequenceMap = this.hazelcastInstance.getMap(Constants.IMAP_NAME_SEQUENCE);
 
@@ -102,7 +101,7 @@ public class ApplicationCLI implements CommandMarker {
      * </p>
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    @CliCommand(value = "LIST", help = "List map keys")
+    @ShellMethod(key = "LIST", value = "List map keys")
     public void listIMaps() {
         Set<String> iMapNames = this.hazelcastInstance.getDistributedObjects().stream()
                 .filter(distributedObject -> distributedObject instanceof IMap)

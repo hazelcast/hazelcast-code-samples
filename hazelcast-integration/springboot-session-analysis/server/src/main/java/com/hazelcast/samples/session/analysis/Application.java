@@ -1,29 +1,21 @@
 package com.hazelcast.samples.session.analysis;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.shell.Bootstrap;
 
 /**
- * <p>Kick off <a href="https://projects.spring.io/spring-shell/">Spring Shell</a>
- * to run things on our behalf.
+ * <p>Start, run and end under {@code Spring Boot}  control,
+ * but also using {@code Spring Shell} for interactive CLI.
  * </p>
  */
 @SpringBootApplication
 public class Application {
 
-    /**
-     * <p>Direct Hazelcast to use the same logging as Spring.
-     * </p>
-     *
-     * @param args From the command line
-     * @throws Exception Hopefully not
-     */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
-        System.setProperty("hazelcast.logging.type", "slf4j");
         System.setProperty("my.group.name", Constants.MY_GROUP_NAME);
 
-        Bootstrap.main(args);
+        SpringApplication.run(Application.class, args);
     }
 
 }
