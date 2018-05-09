@@ -1,6 +1,6 @@
 # Hazelcast for OpenShift
 
-Hazelcast can be used a Caching Layer for applications deployed on [OpenShift](https://www.openshift.com/).
+Hazelcast can be used as a Caching Layer for applications deployed on [OpenShift](https://www.openshift.com/).
 
 This sample is a complete guideline on how to set up the local OpenShift environment, start Hazelcast cluster, configure Management Center, and finally run a sample client application.
 
@@ -8,19 +8,25 @@ This sample is a complete guideline on how to set up the local OpenShift environ
 * [Step-by-step instruction](#step-by-step-instruction)
   * [Step 1: Install OpenShift environment](#step-1-install-openshift-environment)
   * [Step 2: Start Hazelcast cluster](#step-2-start-hazelcast-cluster)
-  * [Step 3: Access Management Center (optional)](#step-3-access-management-center-optional)
-  * [Step 4: Run a sample Hazelcast client application (optional)](#step-4-run-a-sample-hazelcast-client-application-optional)
-* [Custom Configuration and Custom Domain JARs](#custom-configuration-and-custom-domain-jars)
-* [Development Tips](#development-tips)
-  * [Useful commands](#useful-commands)
-  * [Local Docker images](#local-docker-images)
-  * [Debugging](#debugging)
+  * [Step 3: Access Management Center](#step-3-access-management-center)
+  * [Step 4: Run a sample Hazelcast client application](#step-4-run-a-sample-hazelcast-client-application)
+* [Authenticate to Red Hat Container Catalog](#authenticate-to-red-hat-container-catalog)
+* [External Hazelcast Client](#external-hazelcast-client)
+* [Debugging](#debugging)
 
 # Step-by-step instruction
 
 ## Step 1: Install OpenShift environment
 
-[Minishift](https://www.openshift.org/minishift/) toolkit (version 3.3.0) is used to help with running OpenShift locally. Use the following steps to set it up:
+There are multiple options to run the OpenShift environment:
+ * [Minishift](https://www.openshift.org/minishift/): local OpenShift deployed on Virtual Machine
+ * [OpenShift Online](https://www.openshift.com/products/online/): Red Hat's cloud platform
+ * [OpenShift installed on AWS](https://github.com/aws-quickstart/quickstart-redhat-openshift)
+ * OpenShift installed on any other cloud platform or a dedicated server
+
+**Note**: This guide can be followed on any environment, however some of the steps differ, for example, accessing Persistent Storage. What's more, some of the steps are not possible to execute on certain environments, for example, connecting with external client to the Hazelcast deployed on OpenShift Online (since it does not provide public IPs). In such cases, the Minishift solution is presented, because Minishift is free and simple to start from.
+
+Minishift toolkit (version 3.3.0) is used to help with running OpenShift locally. Use the following steps to set it up:
 
 1) Install OpenShift Container Development Kit (CDK) as described [here](https://developers.redhat.com/products/cdk/download/)
 2) Configure CDK and run a first Hello World OpenShift application as described [here](https://developers.redhat.com/products/cdk/hello-world/)
@@ -47,16 +53,29 @@ kubernetes v1.7.6+a08f5eeb62
 features: Basic-Auth
 ```
 
+4) Make also sure that you're able to access the OpenShift Web Console.
+
+```
+$ minishift console
+```
+
+Log in as Username: "developer", Password: "developer".
+
+![OpenShift](markdown/images/minishift_console.png)
+
+
 ## Step 2: Start Hazelcast cluster
 
-Note that, in case of [Hazelcast Enterprise OpenShift Centos](hazelcast-cluster/hazelcast-enterprise-openshift-centos/), you will need a valid license key for the Hazelcast Enterprise version. If you don't have one, you can either use [Hazelcast OpenShift Origin](hazelcast-cluster/hazelcast-openshift-origin/) or get a trial key from [this link](https://hazelcast.com/hazelcast-enterprise-download/trial/).
+Note that, in case of Hazelcast Enterprise OpenShift (both [Centos](hazelcast-cluster/hazelcast-enterprise-openshift-centos/) and [RHEL](hazelcast-cluster/hazelcast-enterprise-openshift-rhel/), you will need a valid Hazelcast license key. If you don't have one, you can either use [Hazelcast OpenShift Origin](hazelcast-cluster/hazelcast-openshift-origin/) instead or get a trial key from [this link](https://hazelcast.com/hazelcast-enterprise-download/trial/).
 
 **1) Create Project**
 
-Make sure you are logged into the OpenShift Platform.
+Log into OpenShift Platform. The login command is available when you click in the Web Console: "Copy Login Command".
+
+![Copy Login Command](markdown/images/copy_login_command.png)
+
 ```
-$ oc login -u developer -p developer
-Login successful.
+$ oc login https://192.168.1.176:8443 --token=OnqI91DRdpni6ChmpMDwsRkGd5cjkmXKp7xKsI7u8QE
 ```
 
 Then, you can create a new project.
@@ -64,30 +83,25 @@ Then, you can create a new project.
 $ oc new-project hazelcast
 ```
 
-Note that the name of the project is automatically its namespace, so you need to use `hazelcast` as the namespace in the further steps.
+Note that, in case of [Hazelcast Enterprise OpenShift RHEL](hazelcast-cluster/hazelcast-enterprise-openshift-rhel/), you will need to authenticate to Red Hat Container Catalog as described [here](#authenticate-to-red-hat-container-catalog).
 
 **2) Start Hazelcast cluster**
 
-Change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-centos`) or Hazelcast Open Source (`$ cd hazelcast-cluster/hazelcast-openshift-origin`).
+Change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-centos`), Hazelcast Enterprise RHEL (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-rhel`) or Hazelcast (`$ cd hazelcast-cluster/hazelcast-openshift-origin`).
+
+Then, create a ConfigMap with the Hazelcast configuration and start the cluster.
 
 ```
+$ oc create configmap hazelcast-configuration \
+  --from-file=hazelcast-configuration
 $ oc new-app -f hazelcast-template.json \
-  -l name=hazelcast-cluster-1 \
-  -p NAMESPACE=hazelcast \
+  -p NAMESPACE=$(oc project -q) \
   -p ENTERPRISE_LICENSE_KEY=<hazelcast_enterprise_license>
 ```
-
-Note that the label 'hazelcast-cluster-1', even though not mandatory, is helpful to manage all resources related to the created application.
 
 Used parameters:
 * `NAMESPACE`: must be the same as the OpenShift project's name
 * `ENTERPRISE_LICENSE_KEY`: Hazelcast Enterprise License (not needed for [Hazelcast OpenShift Origin](hazelcast-cluster/hazelcast-openshift-origin/))
-
-You can check other available parameters in `hazelcast-template.json`, the most interesting ones are related to Persistent Volumes:
-* `HAZELCAST_VOLUME_NAME`: Persistent Volume used for Hazelcast Home Directory (`pv0001` by default)
-* `MC_VOLUME_NAME`: Persistent Volume used for Management Center Data Directory (`pv0002` by default)
-
-Minishift comes with predefined Persistent Volumes (pv0001, pv0002, ..., pv0100). In order to create a new Persistent Volume please follow the description [here](https://developers.redhat.com/blog/2017/04/05/adding-persistent-storage-to-minishift-cdk-3-in-minutes/).
 
 **3) Check that Hazelcast is running**
 
@@ -107,7 +121,7 @@ rc/mc-rc   1         1         1         3m
 
 NAME                          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
 svc/hzservice                 ClusterIP   None         <none>        5701/TCP   3m
-svc/management-center-service None        None         <none>        8080/TCP   3m
+svc/management-center-service ClusterIP   None         <none>        8080/TCP   3m
 ```
 
 Please check that the `STATUS` is `Running` for all PODs. Then, to check the logs for each replica, use the following command:
@@ -117,7 +131,7 @@ $ oc logs po/hz-rc-5pl4f
 
 ...
 Kubernetes Namespace: hazelcast
-Kubernetes Service DNS: hzservice.hazelcast.svc.cluster.local
+Kubernetes Service DNS: hazelcast-service.hazelcast.svc
 ########################################
 # RUN_JAVA=
 # JAVA_OPTS=
@@ -133,62 +147,23 @@ Members [3] {
 
 ```
 
+Note that you can also perform all the operations and observe the results in the OpenShift Web Console.
+
+![Hazelcast PODs](markdown/images/hazelcast_pods.png)
+
 **4) Delete Hazelcast cluster**
 
-To delete all resources related to the cluster (Replication Controller, Service, PODs) use the following command:
+If you want to delete all resources (Replication Controller, Service, PODs, Storage, Config Map), you could use the following commands:
 
 ```
-$ oc delete all -l name=hazelcast-cluster-1
-replicationcontroller "hz-rc" deleted
-service "hzservice" deleted
+$ oc delete all --all
+$ oc delete pvc --all
+$ oc delete configmap --all
 ```
 
-You can also delete the Persistent Storage Claim by:
+## Step 3: Access Management Center
 
-```
-$ oc delete pvc hz-vc && oc delete pvc mv-vc
-```
-
-If you don't do it, then the next time you run your application, you will see a message: 
-```
-error: persistentvolumeclaims "hz-vc" already exists
-error: persistentvolumeclaims "mc-vc" already exists
---> Failed
-```
-
-In such case (even though the message says `Failed`), the cluster is created and the already-existing storage is re-used.
-
-## Step 3: Access Management Center (optional)
-
-Management Center application (Hazelcast Enterprise only) is already started together with Hazelcast members when using `hazelcast-template.json`. Nevertheless, in order to make it usable, you need to perform the following steps.
-
-**1) Add Management Center to Hazelcast configuration**
-
-In order to connect Hazelcast nodes to Management Center, they need to use the custom `hazelcast.xml` configuration file with the `management-center` entry (as described [here](http://docs.hazelcast.org/docs/management-center/3.8.3/manual/html/Deploying_and_Starting.html)). You can copy the already prepared configuration into the used Persistent Volume with the following commands:
-
-```
-$ scp -i $HOME/.minishift/machines/minishift/id_rsa hazelcast.xml docker@$(minishift ip):/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0001/
-```
-
-If your cluster is already started, you need to restart the PODs. There are many ways to do it, for example, you can terminate the existing PODs (and they will be automatically restarted).
-
-```
-$ oc get pods
-NAME          READY     STATUS    RESTARTS   AGE
-hz-rc-4pnnr   1/1       Running   0          41m
-hz-rc-9mlqj   1/1       Running   0          41m
-hz-rc-lht7j   1/1       Running   0          41m
-mc-rc-l86cw   1/1       Running   0          41m
-
-$ oc delete po/hz-rc-4pnnr po/hz-rc-9mlqj po/hz-rc-lht7j
-pod "hz-rc-4pnnr" deleted
-pod "hz-rc-9mlqj" deleted
-pod "hz-rc-lht7j" deleted
-```
-
-**2) Expose Management Center**
-
-To make Management Center accessible from outside of its container, use the following command:
+Management Center application (Hazelcast Enterprise only) is already started together with Hazelcast members when using `hazelcast-template.json`. Nevertheless, in order to make it usable, you need to expose its service.
 
 ```
 $ oc expose svc/management-center-service
@@ -201,24 +176,28 @@ NAME                        HOST/PORT                                           
 management-center-service   management-center-service-hazelcast.192.168.1.113.nip.io             management-center-service   8080                    None
 ```
 
-Then, you can access Management Center by opening `management-center-service-hazelcast.192.168.1.113.nip.io/mancenter` in your browser.
+Then, you can access Management Center by opening `management-center-service-hazelcast.192.168.1.113.nip.io/hazelcast-mancenter` (`/mancenter` for versions prior to 3.10) in your browser.
 
-## Step 4: Run a sample Hazelcast client application (optional)
+![Management Center](markdown/images/access_management_center.png)
+
+## Step 4: Run a sample Hazelcast client application
 
 If you're interested not only in setting up the Hazelcast cluster, but also in using it in the client application, you can follow the following guidelines.
 
 Note that OpenShift sample uses the [fabric8](https://fabric8.io/) maven plugin to build Docker image. Fabric8 requires 3.3.x or higher maven version, therefore make sure that you have proper maven version installed on your machine.
 
+Note also that the commands below are presented for the Minishift, because they use access to the Docker Registry provided with OpenShift. In case of OpenShift Online (in which you don't have access to the OpenShift's Docker Registry), you may use an external registry (for example, [Docker Hub](https://hub.docker.com/)).
+
 **1) Build Maven dependencies**
 
-Install the snapshot JAR files from the root directory:
+Make sure you're in the main `openshift` directory and install the snapshot JAR files from the root directory:
 ```
 $ mvn -f ../../pom.xml clean install
 ```
 
 **2) Build "ocp-demo-frontend" Docker image**
 
-Note also that in order to build the Docker image, you need to have your OpenShift Docker Engine configured. In case of Minishift, you can do it using the guidelines from the `minishift docker-env` command, so in case of Unix-based systems:
+Note that in order to build the Docker image, you need to have your OpenShift Docker Engine configured. In case of Minishift, you can do it using the guidelines from the `minishift docker-env` command, so in case of Unix-based systems:
 
 ```
 $ eval $(minishift docker-env)
@@ -239,7 +218,7 @@ NAME                DOCKER REPO                                   TAGS      UPDA
 ocp-demo-frontend   172.30.1.1:5000/hazelcast/ocp-demo-frontend   latest    39 seconds ago
 ```
 
-In case you see the message `No resources found`, you need to manually push the image with the following command:
+In case you see the message `No resources found`, you need to manually push the image with the following commands:
 ```
 $ docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
 $ docker tag client-apps/ocp-demo-frontend $(minishift openshift registry)/$(oc project -q)/ocp-demo-frontend
@@ -250,14 +229,14 @@ Then, you should see `oc-demo-frontend` in the output for `$ oc get is`.
 
 **4) Start "ocp-demo-frontend" application**
 
-To start the application you can use the following command:
+To start the application, use the following command:
 ```
-$ oc new-app --image-stream=ocp-demo-frontend --name=hazelcast-client-app -l name=hazelcast-client-app-1
+$ oc new-app --image-stream=ocp-demo-frontend --name=hazelcast-client-app
 ```
 
 You can check that the application is running correctly:
 ```
-$ oc get all -l name=hazelcast-client-app-1
+$ oc get all -l app=hazelcast-client-app
 NAME                                     REVISION   DESIRED   CURRENT   TRIGGERED BY
 deploymentconfigs/hazelcast-client-app   1          1         1         config,image(ocp-demo-frontend:latest)
 
@@ -290,110 +269,114 @@ Now, if you open in the browser `hazelcast-client-app-hazelcast.192.168.2.123.ni
 
 ![welcome](markdown/images/welcome.png)
 
-You can check that the application is really working together with the Hazelcast cluster by doing some operation in the application, for example, entering "12" in the "Data Operations->Count" and clicking "Auto Pilot". Then, in the Management Center application, you should see that the entries are added.
+You can check that the application really works together with the Hazelcast cluster by doing some operation in the application, for example, entering "12" in the "Data Operations->Count" and clicking "Auto Pilot". Then, in the Management Center application, you should see that the entries are added.
 
-![management_center](markdown/images/management_center.png)
+![Management Center](markdown/images/management_center.png)
 
-**6) Enable Entry Processor (optional)**
+**6) Enable Entry Processor**
 
-If you want to play with "Entry Processor" from the code sample, you need to copy the Entry Processor JAR into the Persistent Volume of Hazelcast cluster.
+If you want to play with "Entry Processor" from the code sample, you need to place the Entry Processor JAR into the `/data` directory of Hazelcast. Currently, you use ConfigMap with `hazelcast.xml` as the volume mounted to `/data`. However, if we want to copy the custom JAR, you need to change it and use OpenShift Persistent Volume.
 
-```
-$ scp -i $HOME/.minishift/machines/minishift/id_rsa client-apps/ocp-entry-processor/target/ocp-entry-processor-0.1-SNAPSHOT.jar docker@$(minishift ip):/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0001/
-```
+Let's first change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-centos`), Hazelcast Enterprise RHEL (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-rhel`) or Hazelcast (`$ cd hazelcast-cluster/hazelcast-openshift-origin`).
 
-Then, after restarting all PODs in the Hazelcast cluster, you can play with "Entry Processor".
-
-# Custom Configuration and Custom Domain JARs
-
-In order to use a custom Hazelcast configuration (or custom domain JARs), you need to copy them into the Persistent Volume used in the application. Since the Persistent Volume is located inside the Minishift VM, you can do it using the following command:
+Then, replace ConfigMap with the Persistent Storage.
 
 ```
-$ scp -i $HOME/.minishift/machines/minishift/id_rsa hazelcast.xml docker@$(minishift ip):/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0001/
+oc volume rc/hz-rc --add --overwrite --claim-size 1Gi --mount-path /data/hazelcast
 ```
 
-Short explanation of the command above:
+Now, copy `hazelcast.xml` and `ocp-entry-processor-0.1-SNAPSHOT.jar` into the volume. In case of Minishift, you need to first check the volume name.
+
+```
+$ oc get pvc
+NAME        STATUS    VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+pvc-6qrqc   Bound     pv0090    100Gi      RWO,ROX,RWX                   1h
+```
+
+The volume name is `pv0090` and the following commands copy the necessary files.
+
+```
+$ scp -i $HOME/.minishift/machines/minishift/id_rsa hazelcast-configuration/hazelcast.xml docker@$(minishift ip):/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0090/
+$ scp -i $HOME/.minishift/machines/minishift/id_rsa ../../client-apps/ocp-entry-processor/target/ocp-entry-processor-0.1-SNAPSHOT.jar docker@$(minishift ip):/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0090/
+```
+
+Short explanation of the commands above:
 * `$HOME/.minishift/machines/minishift/id_rsa` - ssh key to Minishift VM is stored in the Minishift's home directory
 * `hazelcast.xml` - custom configuration of Hazelcast
 * `minishift ip` - command to return the IP address of the Minishift VM
-* `/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0001/` - location of the Persistent Volume `pv0001` in Minishift VM
+* `/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0090/` - location of the Persistent Volume `pv0090` in Minishift VM
 
-The other possibility to put a configuration inside the Minishift VM is to share a directory with the host system using [Minishift hostfolder](https://docs.openshift.org/latest/minishift/using/host-folders.html).
-
-One more possibility for using custom Hazelcast configuration is to [create a ConfigMap](https://docs.openshift.com/enterprise/3.2/dev_guide/configmaps.html) with the key "hazelcast.xml" and the value with the file content and to mount it instead of using Persistent Volume.
-
-After starting the application again, the containers use the custom Hazelcast configuration.
-
-# Development Tips
-
-## Useful commands
-
-The complete guide to the `oc` CLI tool can be found [here](https://docs.openshift.org/latest/cli_reference/index.html). Below you can see the most interesting use cases in the context of Hazelcast.
-
-**Scaling application**
-
-To scale the Hazelcast application, you can change the number of replicas in the Replication Controller. For example, to scale up to 5 replicas, use the following command:
+Then, after restarting all PODs (delete them, they will automatically start again), you can play with "Entry Processor".
 
 ```
-$ oc scale rc/hz-rc --replicas=5
+oc delete po --all
 ```
 
-**Exposing application**
+![Entry Processor](markdown/images/entry_processor.png)
 
-By default, the Hazelcast cluster is accessible only from the OpenShift environment. You can, however, make it accessible from outside.
+The results should be visible in Management Center.
 
-```
-$ oc expose svc/hzservice
-route "hzservice" exposed
-```
+![Management Center](markdown/images/management_center_entry_processor.png)
 
-Then, you should be able to access Hazelcast via the exposed route (you can check what the route is by `oc status` or `oc get routes/hzservice`). For example, to check the health of Hazelcast:
+# Authenticate to Red Hat Container Catalog
 
-```
-$ curl hzservice-hazelcast.192.168.1.113.nip.io/hazelcast/health
-Hazelcast::NodeState=ACTIVE
-Hazelcast::ClusterState=ACTIVE
-Hazelcast::ClusterSafe=TRUE
-Hazelcast::MigrationQueueSize=0
-Hazelcast::ClusterSize=1
-```
-
-## Local Docker images
-
-During the development process, a very common use case is to build locally own Docker images and run them on Minishift. For example, you may want to create a separate application on top of the Hazelcast OpenShift image and check if it works, or you may want to create a seprate application and check how it interacts with Hazelcast when deployed together on OpenShift.
-
-Minishift is provided together with Docker Engine and Docker Registry. 
-
-**1) Configure access to Docker Engine**
+The `hazelcast-cluster/hazelcast-enterprise-openshift-rhel/hazelcast-template.json` uses images from [Red Hat Container Catalog](https://access.redhat.com/containers/), which requires setting Red Hat credentials. In order to do it, you need to execute the following command after creating the OpenShift project.
 
 ```
-$ minishift docker-env
-export DOCKER_TLS_VERIFY="1"
-export DOCKER_HOST="tcp://192.168.99.101:2376"
-export DOCKER_CERT_PATH="/home/rafal/.minishift/certs"
-export DOCKER_API_VERSION="1.24"
-# Run this command to configure your shell:
-# eval $(minishift docker-env)
+$ oc create secret docker-registry rhcc \
+   --docker-server=registry.connect.redhat.com \
+   --docker-username=<red_hat_username> \
+   --docker-password=<red_hat_password> \
+   --docker-email=<red_hat_email>
+$ oc secrets link default rhcc --for=pull
 ```
 
-**2) Push into Minishift Docker Registry**
+# External Hazelcast Client
 
-The following commands push the image into Minishift Docker Registry. More details can be found [here](https://docs.openshift.org/latest/minishift/openshift/openshift-docker-registry.html).
+Client application presented in this tutorial works only if deployed inside the OpenShift environment, because Kubernetes Discovery SPI does not support external clients. If you need to connect to the Hazelcast cluster deployed on OpenShift, then you can expose a service with `externalIP` and connect to the cluster with Smart Routing disabled.
+
+**Note**: Your OpenShift environment needs to provide public IP addresses, so for example, the solution won't work on the OpenShift Online environment.
+
+You can create a service with automatically assigned external IP and port.
 
 ```
-$ docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
-$ docker tag my-app $(minishift openshift registry)/myproject/my-app
-$ docker push $(minishift openshift registry)/myproject/my-app
+$ oc expose rc hz-rc --type=LoadBalancer --name=hazelcast-ingress
 ```
 
-Then the application can be started on the OpenShift cluster with:
+The following command checks the external port under which the service is published.
+
 ```
-$ oc new-app --image-stream=my-app --name=my-app
+$ oc get service hazelcast-ingress -o custom-columns=EXTERNAL_PORT:.spec.ports[0].nodePort
+EXTERNAL_PORT
+31296
 ```
 
-## Debugging
+Then, it's possible to access the Hazelcast cluster using server's public IP and that port. In case of Minishift, you can check its IP by:
 
-Debbuging containerized applications in the OpenShift cluster can be difficult. In order to attach to the running POD, you can use the following command:
+```
+$ minishift ip
+192.168.1.176
+```
+
+Finally, you can connect to the cluster with the following Java client code:
+
+```java
+public class Client {
+    public static void main(String[] args) throws Exception {
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.getNetworkConfig().setSmartRouting(false);
+        clientConfig.getNetworkConfig().addAddress("192.168.1.176:31296");
+        HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
+        IMap map = client.getMap("test-map");
+        map.put("testKey", "testValue");
+        client.shutdown();
+    }
+}
+```
+
+# Debugging
+
+Debugging containerized applications in the OpenShift cluster can be difficult. In order to attach to the running POD, you can use the following command:
 
 ```
 oc exec -ti <pod_name> -- bash
