@@ -4,7 +4,7 @@
   "metadata": {
     "name": "hazelcast-enterprise",
     "annotations": {
-      "description": "Openshift deployment template for Hazelcast Enterpise",
+      "description": "Openshift deployment template for Hazelcast Enterprise",
       "tags": "hazelcast, imdg, datagrid, inmemory, kvstore, nosql, java",
       "iconClass": "icon-java"
     }
