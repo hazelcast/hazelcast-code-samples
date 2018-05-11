@@ -69,10 +69,9 @@
                   }
                 ],
                 "readinessProbe": {
-                  "exec": {
-                    "command": [
-                      "./readiness.sh"
-                    ]
+                  "httpGet": {
+                    "path": "/hazelcast/health/node-state",
+                    "port": 5701
                   },
                   "initialDelaySeconds": 0,
                   "periodSeconds" : 1,
@@ -80,10 +79,9 @@
                   "timeoutSeconds": 10
                 },
                 "livenessProbe": {
-                  "exec": {
-                    "command": [
-                      "./liveness.sh"
-                    ]
+                  "httpGet": {
+                    "path": "/hazelcast/health/node-state",
+                    "port": 5701
                   },
                   "initialDelaySeconds": 60,
                   "periodSeconds": 60,
