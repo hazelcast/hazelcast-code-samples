@@ -21,8 +21,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <java.version>1.7</java.version>
-        <spring-boot.version>1.4.2.RELEASE</spring-boot.version>
-        <spring-data-hazelcast.version>1.0</spring-data-hazelcast.version>
+        <spring-boot.version>1.5.0.RELEASE</spring-boot.version>
+        <spring-data-hazelcast.version>1.2.0</spring-data-hazelcast.version>
         <spring-shell.version>1.2.0.RELEASE</spring-shell.version>
     </properties>
 
