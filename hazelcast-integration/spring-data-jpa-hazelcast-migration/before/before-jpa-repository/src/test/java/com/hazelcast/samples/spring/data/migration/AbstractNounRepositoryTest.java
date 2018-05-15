@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -17,6 +18,7 @@ import static org.junit.Assert.assertThat;
  * <P>Test CRUD operations against a Spring repository for {@link Noun}
  * </P>
  */
+@EnableAutoConfiguration
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Object.class})
 public abstract class AbstractNounRepositoryTest {
