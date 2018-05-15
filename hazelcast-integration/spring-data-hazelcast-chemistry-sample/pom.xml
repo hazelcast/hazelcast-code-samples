@@ -75,7 +75,7 @@
                 <artifactId>spring-boot-starter-parent</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
-                <version>1.5.0.RELEASE</version>
+                <version>1.5.13.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
