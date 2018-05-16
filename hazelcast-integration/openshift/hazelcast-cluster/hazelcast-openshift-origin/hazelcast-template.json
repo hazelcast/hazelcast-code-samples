@@ -2,7 +2,7 @@
   "apiVersion": "v1",
   "kind": "Template",
   "metadata": {
-    "name": "hazelcast-openshift",
+    "name": "hazelcast",
     "annotations": {
       "description": "Openshift deployment template for Hazelcast",
       "tags": "hazelcast, imdg, datagrid, inmemory, kvstore, nosql, java",
@@ -21,7 +21,7 @@
         "name": "hz-rc"
       },
       "spec": {
-        "replicas": 3,
+        "replicas": "${HAZELCAST_REPLICAS}",
         "selector": {
           "name": "hazelcast-node-${DEPLOYMENT_NAME}"
         },
@@ -37,8 +37,8 @@
             "volumes": [
               {
                 "name": "hazelcast-storage",
-                "persistentVolumeClaim": {
-                  "claimName": "hz-vc"
+                "configMap": {
+                  "name": "hazelcast-configuration"
                 }
               }
             ],
@@ -50,22 +50,6 @@
                   {
                     "name": "HAZELCAST_KUBERNETES_SERVICE_DNS",
                     "value": "${SERVICE_NAME}.${NAMESPACE}.svc"
-                  },
-                  {
-                    "name": "HAZELCAST_KUBERNETES_SERVICE_NAME",
-                    "value": "${SERVICE_NAME}"
-                  },
-                  {
-                    "name": "HAZELCAST_KUBERNETES_NAMESPACE",
-                    "value": "${NAMESPACE}"
-                  },
-                  {
-                    "name": "HAZELCAST_KUBERNETES_SERVICE_DNS_IP_TYPE",
-                    "value": "IPV4"
-                  },
-                  {
-                    "name": "HAZELCAST_KUBERNETES_SERVICE_DOMAIN",
-                    "value": "${KUBERNETES_SERVICE_DOMAIN}"
                   },
                   {
                     "name": "HZ_DATA",
@@ -85,21 +69,24 @@
                   }
                 ],
                 "readinessProbe": {
-                  "exec": {
-                    "command": [
-                      "./readiness.sh"
-                    ]
+                  "httpGet": {
+                    "path": "/hazelcast/health/node-state",
+                    "port": 5701
                   },
                   "initialDelaySeconds": 0,
-                  "periodSeconds" : 1
+                  "periodSeconds" : 1,
+                  "failureThreshold": 10, 
+                  "timeoutSeconds": 10
                 },
                 "livenessProbe": {
-                  "exec": {
-                    "command": [
-                      "./liveness.sh"
-                    ]
+                  "httpGet": {
+                    "path": "/hazelcast/health/node-state",
+                    "port": 5701
                   },
-                  "initialDelaySeconds": 0
+                  "initialDelaySeconds": 60,
+                  "periodSeconds": 60,
+                  "failureThreshold": 20,
+                  "timeoutSeconds": 10
                 }
               }
             ]
@@ -126,34 +113,13 @@
           }
         ]
       }
-    },
-    {
-      "apiVersion": "v1",
-      "kind": "PersistentVolumeClaim",
-      "metadata": {
-        "name": "hz-vc"
-      },
-      "spec": {
-        "selector": {
-          "name": "hazelcast-vc-${DEPLOYMENT_NAME}"
-        },
-        "accessModes": [
-          "ReadWriteOnce"
-        ],
-        "resources": {
-          "requests": {
-            "storage": "1Gi"
-          }
-        },
-        "volumeName": "${HAZELCAST_VOLUME_NAME}"
-      }
     }
   ],
   "parameters": [
     {
       "name": "HAZELCAST_IMAGE",
-      "description": "Defines the location of Hazelcast",
-      "value": "hazelcast/hazelcast-openshift:3.9.3",
+      "description": "Defines the location of Hazelcast image",
+      "value": "hazelcast/hazelcast-openshift:3.10",
       "required": true
     },
     {
@@ -164,25 +130,19 @@
     },
     {
       "name": "SERVICE_NAME",
-      "description": "Defines the service name of the POD to lookup of Kubernetes.",
+      "description": "Defines the service name of the POD to lookup of Kubernetes",
       "value": "hazelcast-service",
       "required": true
     },
     {
       "name": "NAMESPACE",
-      "description": "Defines the namespace of the application POD of Kubernetes, if not defined the container will use the value of /var/run/secrets/kubernetes.io/serviceaccount/namespace",
+      "description": "Defines the namespace (project name) of the application POD of Kubernetes",
       "required": false
     },
     {
-      "name": "KUBERNETES_SERVICE_DOMAIN",
-      "description": "Defines the domain part of a kubernetes dns lookup.",
-      "value": "cluster.local",
-      "required": true
-    },
-    {
-      "name": "HAZELCAST_VOLUME_NAME",
-      "description": "Defines volume location where you put your domain classes and custom Hazelcast configuration xml file.",
-      "value": "pv0001",
+      "name": "HAZELCAST_REPLICAS",
+      "description": "Number of Hazelcast members",
+      "value" : "3",
       "required": true
     }
   ]

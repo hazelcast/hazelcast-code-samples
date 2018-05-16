@@ -73,9 +73,10 @@
                   }
                 ],
                 "readinessProbe": {
-                  "httpGet": {
-                    "path": "/hazelcast/health/node-state",
-                    "port": 5701
+                  "exec": {
+                    "command": [
+                      "./readiness.sh"
+                    ]
                   },
                   "initialDelaySeconds": 0,
                   "periodSeconds" : 1,
@@ -83,9 +84,10 @@
                   "timeoutSeconds": 10
                 },
                 "livenessProbe": {
-                  "httpGet": {
-                    "path": "/hazelcast/health/node-state",
-                    "port": 5701
+                  "exec": {
+                    "command": [
+                      "./liveness.sh"
+                    ]
                   },
                   "initialDelaySeconds": 60,
                   "periodSeconds": 60,
@@ -211,7 +213,7 @@
     {
       "name": "HAZELCAST_IMAGE",
       "description": "Defines the location of Hazelcast Enterprise image",
-      "value": "hazelcast/hazelcast-enterprise-openshift-centos:3.10",
+      "value": "registry.connect.redhat.com/hazelcast/hazelcast-3-rhel7:3.9.4-1",
       "required": true
     },
     {
@@ -245,7 +247,7 @@
     {
       "name": "MANAGEMENT_CENTER_IMAGE",
       "description": "Defines the location of Hazelcast Management Center image",
-      "value": "hazelcast/management-center:3.10",
+      "value": "registry.connect.redhat.com/hazelcast/management-center-3-rhel7:3.9.4-3",
       "required": true
     },
     {
