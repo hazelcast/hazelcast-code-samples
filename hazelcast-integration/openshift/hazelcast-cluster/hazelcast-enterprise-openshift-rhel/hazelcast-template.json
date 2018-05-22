@@ -72,17 +72,6 @@
                     "name": "hazelcast-storage"
                   }
                 ],
-                "readinessProbe": {
-                  "exec": {
-                    "command": [
-                      "./readiness.sh"
-                    ]
-                  },
-                  "initialDelaySeconds": 0,
-                  "periodSeconds" : 1,
-                  "failureThreshold": 10, 
-                  "timeoutSeconds": 10
-                },
                 "livenessProbe": {
                   "exec": {
                     "command": [
