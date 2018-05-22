@@ -72,16 +72,6 @@
                     "name": "hazelcast-storage"
                   }
                 ],
-                "readinessProbe": {
-                  "httpGet": {
-                    "path": "/hazelcast/health/node-state",
-                    "port": 5701
-                  },
-                  "initialDelaySeconds": 0,
-                  "periodSeconds" : 1,
-                  "failureThreshold": 10, 
-                  "timeoutSeconds": 10
-                },
                 "livenessProbe": {
                   "httpGet": {
                     "path": "/hazelcast/health/node-state",
