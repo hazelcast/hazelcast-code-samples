@@ -20,22 +20,17 @@ This code sample presents a sequence of steps which leads to a complete autoscal
 ```
 $ sudo yum install -y jq
 ```
-3. Download `healthcheck.sh`
-```
-$ wget https://raw.githubusercontent.com/hazelcast/hazelcast/master/hazelcast/src/main/resources/healthcheck.sh
-$ chmod +x healthcheck.sh
-```
-4. Download [lifecycle_hook_listener.sh](lifecycle_hook_listener.sh)
+3. Download [lifecycle_hook_listener.sh](lifecycle_hook_listener.sh)
 ```
 $ wget https://raw.githubusercontent.com/leszko/hazelcast-code-samples/aws_autoscaling/hazelcast-integration/aws-autoscaling/lifecycle_hook_listener.sh
 $ chmod +x lifecycle_hook_listener.sh
 ```
-5. Configure AWS CLI
+4. Configure AWS CLI
 ```
 $ sudo aws configure
 ```
-6. Create AMI Image from the EC2 Instance (by clicking "Image→Create Image")
-7. The image should be visible in the AWS console
+5. Create AMI Image from the EC2 Instance (by clicking "Image→Create Image")
+6. The image should be visible in the AWS console
 
 ![AWS Images](markdown/images/aws_images.png)
 

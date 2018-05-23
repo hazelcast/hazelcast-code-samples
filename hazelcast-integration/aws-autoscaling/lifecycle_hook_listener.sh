@@ -13,7 +13,7 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 
 command -v jq >/dev/null 2>&1 || { echo >&2 "Lifecycle Hook Listener script requires 'jq' but it's not installed. Aborting."; exit 1; }
 command -v aws >/dev/null 2>&1 || { echo >&2 "Lifecycle Hook Listener script requires 'aws' but it's not installed. Aborting."; exit 1; }
-command -v $DIR/healthcheck.sh >/dev/null 2>&1 || { echo >&2 "Lifecycle Hook Listener script requires 'healthcheck.sh' but it's not available. Aborting."; exit 1; }
+command -v curl >/dev/null 2>&1 || { echo >&2 "Lifecycle Hook Listener script requires 'aws' but it's not installed. Aborting."; exit 1; }
 
 get_queue_url()
 {
@@ -69,7 +69,7 @@ while true; do
 	echo "Instance private IP: ${INSTANCE_PRIVATE_IP}"
 
 	# Wait until the cluster is in the safe state.
-	while [ "$($DIR/healthcheck.sh -o cluster-safe -a ${INSTANCE_PRIVATE_IP} -p ${HAZELCAST_PORT})" != 'TRUE' ]; do
+	while [ "$(curl -s -o /dev/null -w "%{http_code}" ${INSTANCE_PRIVATE_IP}:${HAZELCAST_PORT}/hazelcast/health/cluster-safe)" != '200' ]; do
 		sleep 5
 	done
 
