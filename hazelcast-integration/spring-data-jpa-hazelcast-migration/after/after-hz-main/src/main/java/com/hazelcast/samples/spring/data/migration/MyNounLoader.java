@@ -34,7 +34,7 @@ public class MyNounLoader implements ApplicationContextAware, MapLoader<Integer,
     @Override
     public Noun load(Integer key) {
         log.info("load({})", key);
-        return nounJPARepository.findOne(key);
+        return nounJPARepository.findById(key).get();
     }
 
     /**

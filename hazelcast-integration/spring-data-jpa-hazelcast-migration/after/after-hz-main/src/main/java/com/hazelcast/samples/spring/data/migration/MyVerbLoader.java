@@ -34,7 +34,7 @@ public class MyVerbLoader implements ApplicationContextAware, MapLoader<Integer,
     @Override
     public Verb load(Integer key) {
         log.info("load({})", key);
-        return verbJPARepository.findOne(key);
+        return verbJPARepository.findById(key).get();
     }
 
     /**
