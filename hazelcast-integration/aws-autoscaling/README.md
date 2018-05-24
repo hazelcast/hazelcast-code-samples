@@ -22,7 +22,7 @@ $ sudo yum install -y jq
 ```
 3. Download [lifecycle_hook_listener.sh](lifecycle_hook_listener.sh)
 ```
-$ https://raw.githubusercontent.com/hazelcast/hazelcast-code-samples/master/hazelcast-integration/aws-autoscaling/lifecycle_hook_listener.sh 
+$ wget https://raw.githubusercontent.com/hazelcast/hazelcast-code-samples/master/hazelcast-integration/aws-autoscaling/lifecycle_hook_listener.sh 
 $ chmod +x lifecycle_hook_listener.sh
 ```
 4. Configure AWS CLI
