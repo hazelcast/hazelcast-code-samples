@@ -29,6 +29,7 @@
         <module>hd-memory-client-server</module>
         <module>hidensity-cache</module>
         <module>hot-restart</module>
+        <module>jaas-security</module>
         <module>security-interceptor</module>
         <module>socket-interceptor</module>
         <module>wan-replication</module>
