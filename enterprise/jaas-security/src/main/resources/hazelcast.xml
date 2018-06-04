@@ -35,7 +35,8 @@
         <client-login-modules>
             <login-module class-name="ClientLoginModule" usage="REQUIRED">
                 <properties>
-                    <property name="lookupFilePath">value3</property>
+                    <!-- You could use this pass configuration to a LDAP or AD server connection -->
+                    <property name="yourProperties">yourSetupValuesToPassToLoginModule</property>
                 </properties>
             </login-module>
         </client-login-modules>
