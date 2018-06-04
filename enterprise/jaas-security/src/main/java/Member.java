@@ -32,11 +32,11 @@ public class Member {
 
             public void clientConnected(Client client) {
                 ClientEndpoint clientEndpoint = (ClientEndpoint) client;
-                System.out.println("Connected");
+                System.out.println("Client Connected with Credentials " + clientEndpoint.getCredentials());
             }
 
             public void clientDisconnected(Client client) {
-
+                System.out.println("Client Disconnected");
             }
         });
     }
