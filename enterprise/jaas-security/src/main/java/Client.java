@@ -12,13 +12,13 @@ import java.util.logging.Level;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
- * Created by dbrimley on 19/05/2014.
+ * A Hazelcast client, that connects using {@link com.hazelcast.security.Credentials}
  */
 public class Client {
 
     private final ILogger logger = Logger.getLogger(getClass().getName());
 
-    public static void main(String args[]){
+    public static void main(String[] args) {
 
         Client client = new Client();
 
@@ -26,25 +26,24 @@ public class Client {
 
         client.readOnlyUserCannotPutIntoImportantMap();
 
-
     }
 
     private void readOnlyUserCannotPutIntoImportantMap() {
 
         HazelcastInstance readOnlyClient = getClientConnection("chris", "password2", "127.0.0.1");
 
-        Map<String,String> readOnlyClientsImportantMap = readOnlyClient.getMap("importantMap");
+        Map<String, String> readOnlyClientsImportantMap = readOnlyClient.getMap("importantMap");
 
         // This will pass
-        logger.log(Level.INFO,"Chris is performing get on the ImportantMap");
+        logger.log(Level.INFO, "Chris is performing get on the ImportantMap");
         readOnlyClientsImportantMap.get("1");
 
         // This will fail as chris is not a member of the admin group
-        try{
-            logger.log(Level.INFO,"Chris is performing put on the ImportantMap");
-            readOnlyClientsImportantMap.put("2","2");
-        } catch (AccessControlException e){
-            logger.log(Level.SEVERE,"Could not perform put operation, access denied",e);
+        try {
+            logger.log(Level.INFO, "Chris is performing put on the ImportantMap");
+            readOnlyClientsImportantMap.put("2", "2");
+        } catch (AccessControlException e) {
+            logger.log(Level.SEVERE, "Could not perform put operation, access denied", e);
         }
     }
 
@@ -52,11 +51,11 @@ public class Client {
 
         HazelcastInstance adminClient = getClientConnection("david", "password1", "127.0.0.1");
 
-        Map<String,String> adminClientsImportantMap = adminClient.getMap("importantMap");
+        Map<String, String> adminClientsImportantMap = adminClient.getMap("importantMap");
 
         // This will pass
-        logger.log(Level.INFO,"David is performing put on the ImportantMap");
-        adminClientsImportantMap.put("1","1");
+        logger.log(Level.INFO, "David is performing put on the ImportantMap");
+        adminClientsImportantMap.put("1", "1");
     }
 
     private HazelcastInstance getClientConnection(String username, String password, String thisClientIP) {

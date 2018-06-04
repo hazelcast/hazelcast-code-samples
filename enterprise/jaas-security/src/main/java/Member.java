@@ -16,7 +16,7 @@ import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
  */
 public class Member {
 
-    public static void main(String args[]){
+    public static void main(String[] args) {
 
         InputStream inputSteam = Member.class.getResourceAsStream("hazelcast.xml");
         XmlConfigBuilder configBuilder = new XmlConfigBuilder(inputSteam);

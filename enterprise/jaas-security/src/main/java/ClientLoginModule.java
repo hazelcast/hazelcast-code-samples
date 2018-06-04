@@ -3,7 +3,12 @@ import com.hazelcast.logging.Logger;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
-import com.hazelcast.security.*;
+import com.hazelcast.security.ClusterPrincipal;
+import com.hazelcast.security.Credentials;
+import com.hazelcast.security.CredentialsCallback;
+import com.hazelcast.security.SecurityConstants;
+import com.hazelcast.security.SecurityUtil;
+import com.hazelcast.security.UsernamePasswordCredentials;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -21,9 +26,15 @@ import java.util.logging.Level;
  * perform look up against an LDAP store that would then return a set of Groups for the User.
  * <p>
  * Obviously you would NEVER store passwords in clear text.
- *
  */
-public class ClientLoginModule implements LoginModule  {
+public class ClientLoginModule
+        implements LoginModule {
+
+    // Username and Password are stored here in clear text, obviously NEVER do this.
+    private static final Map<String, String> ALLOWED_USERS_MAP = new HashMap<String, String>();
+
+    // This map represents the userAssignedGroup(s) that a user would belong to, this would be the result from your LDAP store.
+    private static final Map<String, String> USER_GROUPS = new HashMap<String, String>();
 
     private final ILogger logger = Logger.getLogger(getClass().getName());
     private Credentials credentials;
@@ -35,19 +46,13 @@ public class ClientLoginModule implements LoginModule  {
     // The Group that the user is authorised for.
     private UserGroupCredentials userGroupCredentials;
 
-    // Usernames and Password are stored here in clear text, obviously NEVER do this.
-    private static Map<String,String> allowedUsersMap = new HashMap<String,String>();
+    static {
 
-    // This map represents the userAssignedGroup(s) that a user would belong to, this would be the result from your LDAP store.
-    private static Map<String,String> userGroups = new HashMap<String,String>();
+        ALLOWED_USERS_MAP.put("david", "password1");
+        ALLOWED_USERS_MAP.put("chris", "password2");
 
-    static{
-
-        allowedUsersMap.put("david","password1");
-        allowedUsersMap.put("chris","password2");
-
-        userGroups.put("david","adminGroup");
-        userGroups.put("chris","readOnlyGroup");
+        USER_GROUPS.put("david", "adminGroup");
+        USER_GROUPS.put("chris", "readOnlyGroup");
 
     }
 
@@ -64,7 +69,8 @@ public class ClientLoginModule implements LoginModule  {
      * @return is login successful
      * @throws LoginException
      */
-    public boolean login() throws LoginException {
+    public boolean login()
+            throws LoginException {
         boolean loginOk = false;
 
         final CredentialsCallback cb = new CredentialsCallback();
@@ -75,13 +81,13 @@ public class ClientLoginModule implements LoginModule  {
             throw new LoginException(e.getClass().getName() + ":" + e.getMessage());
         }
 
-        if(credentials == null) {
+        if (credentials == null) {
             logger.log(Level.WARNING, "Credentials could not be retrieved!");
             return false;
         }
         logger.log(Level.INFO, "Authenticating " + SecurityUtil.getCredentialsFullName(credentials));
 
-        if (credentials instanceof UsernamePasswordCredentials){
+        if (credentials instanceof UsernamePasswordCredentials) {
             loginOk = doLoginCheck((UsernamePasswordCredentials) credentials);
         }
 
@@ -91,14 +97,14 @@ public class ClientLoginModule implements LoginModule  {
     private boolean doLoginCheck(UsernamePasswordCredentials credentials) {
 
         String username = credentials.getUsername();
-        String password = allowedUsersMap.get(username);
+        String password = ALLOWED_USERS_MAP.get(username);
         boolean loginCheckOk = false;
 
-        if (password != null){
-            if(password.equals(credentials.getPassword())){
-                String userGroup = userGroups.get(username);
-                if (userGroup != null){
-                    userGroupCredentials = new UserGroupCredentials(credentials.getEndpoint(),userGroup);
+        if (password != null) {
+            if (password.equals(credentials.getPassword())) {
+                String userGroup = USER_GROUPS.get(username);
+                if (userGroup != null) {
+                    userGroupCredentials = new UserGroupCredentials(credentials.getEndpoint(), userGroup);
                     sharedState.put(SecurityConstants.ATTRIBUTE_CREDENTIALS, credentials);
                     loginCheckOk = true;
                 } else {
@@ -117,10 +123,12 @@ public class ClientLoginModule implements LoginModule  {
 
     /**
      * Commit is called when all of the modules in the chain have passed.
+     *
      * @return
      * @throws LoginException
      */
-    public final boolean commit() throws LoginException {
+    public final boolean commit()
+            throws LoginException {
         logger.log(Level.FINEST, "Committing authentication of " + SecurityUtil.getCredentialsFullName(credentials));
         final Principal principal = new ClusterPrincipal(userGroupCredentials);
         subject.getPrincipals().add(principal);
@@ -130,10 +138,12 @@ public class ClientLoginModule implements LoginModule  {
 
     /**
      * Abort is called when one of the modules in the chain has failed.
+     *
      * @return
      * @throws LoginException
      */
-    public final boolean abort() throws LoginException {
+    public final boolean abort()
+            throws LoginException {
         logger.log(Level.FINEST, "Aborting authentication of " + SecurityUtil.getCredentialsFullName(credentials));
         clearSubject();
         return true;
@@ -145,7 +155,8 @@ public class ClientLoginModule implements LoginModule  {
      * @return
      * @throws LoginException
      */
-    public final boolean logout() throws LoginException {
+    public final boolean logout()
+            throws LoginException {
         logger.log(Level.FINEST, "Logging out " + SecurityUtil.getCredentialsFullName(credentials));
         clearSubject();
         return true;
@@ -160,12 +171,14 @@ public class ClientLoginModule implements LoginModule  {
         subject.getPublicCredentials().clear();
     }
 
-    public class UserGroupCredentials implements Credentials, DataSerializable {
+    public class UserGroupCredentials
+            implements Credentials, DataSerializable {
 
         private String endpoint;
         private String userGroup;
 
-        public UserGroupCredentials(){}
+        public UserGroupCredentials() {
+        }
 
         public UserGroupCredentials(String endPoint, String userGroup) {
             this.endpoint = endPoint;
@@ -184,12 +197,14 @@ public class ClientLoginModule implements LoginModule  {
             return this.userGroup;
         }
 
-        public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
+        public void writeData(ObjectDataOutput objectDataOutput)
+                throws IOException {
             objectDataOutput.writeUTF(endpoint);
             objectDataOutput.writeUTF(userGroup);
         }
 
-        public void readData(ObjectDataInput objectDataInput) throws IOException {
+        public void readData(ObjectDataInput objectDataInput)
+                throws IOException {
             this.endpoint = objectDataInput.readUTF();
             this.userGroup = objectDataInput.readUTF();
         }
