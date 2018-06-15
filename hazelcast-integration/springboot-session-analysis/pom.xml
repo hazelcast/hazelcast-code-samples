@@ -20,12 +20,12 @@
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<hazelcast.version>3.10-BETA-2</hazelcast.version>
+		<hazelcast.version>3.10.2</hazelcast.version>
 		<hazelcast-jet.version>0.6</hazelcast-jet.version>
 		<hazelcast-wm.version>3.8.3</hazelcast-wm.version>
 		<java.version>1.8</java.version>
-		<spring-boot.version>2.1.0.BUILD-SNAPSHOT</spring-boot.version>
-		<spring-shell.version>2.0.0.RELEASE</spring-shell.version>
+		<spring-boot.version>2.0.2.RELEASE</spring-boot.version>
+		<spring-shell.version>2.0.1.RELEASE</spring-shell.version>
 	</properties>
 
 	<modules>
@@ -76,7 +76,7 @@
 
 			<dependency>
 				<groupId>org.springframework.shell</groupId>
-				<artifactId>spring-shell</artifactId>
+				<artifactId>spring-shell-starter</artifactId>
 				<version>${spring-shell.version}</version>
 			</dependency>
 		</dependencies>

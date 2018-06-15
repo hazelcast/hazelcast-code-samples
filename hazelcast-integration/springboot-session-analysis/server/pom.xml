@@ -37,7 +37,7 @@
 
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
-			<artifactId>spring-shell</artifactId>
+			<artifactId>spring-shell-starter</artifactId>
 		</dependency>
 	</dependencies>
 
