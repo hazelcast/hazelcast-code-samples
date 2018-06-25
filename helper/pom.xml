@@ -10,6 +10,7 @@
         <artifactId>code-samples</artifactId>
         <groupId>com.hazelcast.samples</groupId>
         <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>

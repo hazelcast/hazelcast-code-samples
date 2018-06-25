@@ -1,11 +1,11 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.10.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <serialization>
         <serializers>
-            <serializer type-class="Person" class-name="PersonKryoSerializer" />
+            <serializer type-class="Person" class-name="PersonKryoSerializer"/>
         </serializers>
     </serialization>
 </hazelcast>
