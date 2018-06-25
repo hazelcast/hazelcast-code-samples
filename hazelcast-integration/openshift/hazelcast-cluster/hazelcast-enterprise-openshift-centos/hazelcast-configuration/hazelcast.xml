@@ -14,28 +14,27 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
 
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.9.xsd"
-           xmlns="http://www.hazelcast.com/schema/config"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <properties>
+        <property name="hazelcast.discovery.enabled">true</property>
+        <property name="hazelcast.rest.enabled">true</property>
+    </properties>
 
-  <properties>
-    <property name="hazelcast.discovery.enabled">true</property>
-    <property name="hazelcast.rest.enabled">true</property>
-  </properties>
+    <network>
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="false"/>
 
-  <network>
-    <join>
-      <multicast enabled="false"/>
-      <tcp-ip enabled="false" />
+            <discovery-strategies>
+                <discovery-strategy enabled="true" class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy">
+                </discovery-strategy>
+            </discovery-strategies>
+        </join>
+    </network>
 
-      <discovery-strategies>
-        <discovery-strategy enabled="true" class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy">
-        </discovery-strategy>
-      </discovery-strategies>
-    </join>
-  </network>
-
-  <management-center enabled="true">http://management-center-service.hazelcast.svc:8080/hazelcast-mancenter</management-center>
-
+    <management-center enabled="true">http://management-center-service.hazelcast.svc:8080/hazelcast-mancenter</management-center>
 </hazelcast>
