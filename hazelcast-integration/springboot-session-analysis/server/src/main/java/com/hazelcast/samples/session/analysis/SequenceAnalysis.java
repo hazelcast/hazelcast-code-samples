@@ -28,14 +28,6 @@ import com.hazelcast.web.SessionState;
  * processing pipeline for Jet to run. A processing pipeline
  * is a sequence of steps to transform input into output
  * </p>
- * TODO: PUSH OUT ONCE JET AUTO CONFIG!! 
- * TODO: REDO THE SCREENSHOTS
- * TODO : Trailing space to break checkstyle    
- * TODO: <hazelcast.version>3.10</hazelcast.version>
- * TODO: <hazelcast-jet.version>0.6.1</hazelcast-jet.version>
- * TODO: <hazelcast-wm.version>3.8.3??</hazelcast-wm.version>
- * TODO: <spring-boot.version>2.0.1.RELEASE</spring-boot.version>
- * TODO: <spring-shell.version>2.0.0.RELEASE</spring-shell.version>
  */
 public class SequenceAnalysis {
 
@@ -70,53 +62,53 @@ public class SequenceAnalysis {
      * </p>
      *
      * <p>The method uses these six steps, run in order:
-	 * <pre>
-	 *              +------------+
-	 *              |1   IMap    |
-	 *              |"jsessionid"|
-	 *              |   Journal  |
-	 *              +------------+
-	 *                     |
-	 *                     |
-	 *                     |
-	 *              +------------+
-	 *              |2           |
-	 *              |   Filter   |
-	 *              |            |
-	 *              +------------+
-	 *                     |
-	 *                     |
-	 *                     |
-	 *              +------------+
-	 *              |3           |
-	 *              |  Reformat  |
-	 *              |            |
-	 *              +------------+
-	 *                     |
-	 *                     |
-	 *                     |
-	 *              +------------+
-	 *              |4           |
-	 *              |   Filter   |
-	 *              |            |
-	 *              +------------+
-	 *                     |
-	 *                     |
-	 *                     |
-	 *              +------------+
-	 *              |5           |
-	 *              |  Reformat  |
-	 *              |            |
-	 *              +------------+
-	 *                     |
-	 *                     |
-	 *                     |
-	 *              +------------+
-	 *              |6   IMap    |
-	 *              | "sequence" |
-	 *              | tally sink |
-	 *              +------------+
-	 * </pre>
+     * <pre>
+     *              +------------+
+     *              |1   IMap    |
+     *              |"jsessionid"|
+     *              |   Journal  |
+     *              +------------+
+     *                     |
+     *                     |
+     *                     |
+     *              +------------+
+     *              |2           |
+     *              |   Filter   |
+     *              |            |
+     *              +------------+
+     *                     |
+     *                     |
+     *                     |
+     *              +------------+
+     *              |3           |
+     *              |  Reformat  |
+     *              |            |
+     *              +------------+
+     *                     |
+     *                     |
+     *                     |
+     *              +------------+
+     *              |4           |
+     *              |   Filter   |
+     *              |            |
+     *              +------------+
+     *                     |
+     *                     |
+     *                     |
+     *              +------------+
+     *              |5           |
+     *              |  Reformat  |
+     *              |            |
+     *              +------------+
+     *                     |
+     *                     |
+     *                     |
+     *              +------------+
+     *              |6   IMap    |
+     *              | "sequence" |
+     *              | tally sink |
+     *              +------------+
+     * </pre>
      * <ol>
      * <li><b>Source</b>
      * <p>The source here is a map journal attached to the map that stores
