@@ -19,7 +19,7 @@
         <jdk.version>1.6</jdk.version>
         <jdk.integration.version>1.8</jdk.integration.version>
 
-        <hazelcast.version>3.10-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.11-SNAPSHOT</hazelcast.version>
         <hazelcast-jet.version>0.4</hazelcast-jet.version>
         <hazelcast-jclouds.version>3.7</hazelcast-jclouds.version>
 
@@ -66,12 +66,14 @@
         <module>monitoring</module>
         <module>near-cache</module>
         <module>network-configuration</module>
+        <module>org-website-samples</module>
         <module>osgi</module>
         <module>replicated-map</module>
         <module>querying</module>
         <module>serialization</module>
         <module>spi</module>
         <module>transactions</module>
+        <module>variable-replacers</module>
     </modules>
 
     <build>
@@ -107,6 +109,15 @@
                 </executions>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>

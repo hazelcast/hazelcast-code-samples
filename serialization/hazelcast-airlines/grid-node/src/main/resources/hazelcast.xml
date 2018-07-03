@@ -1,6 +1,7 @@
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.10.xsd"
-           xmlns="http://www.hazelcast.com/schema/config"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
 
     <network>
         <join>
@@ -13,18 +14,20 @@
         </join>
     </network>
 
-	<!-- Serialization configuration -->
-	<!-- =========================== -->
-	<!-- Factory IDs must match the code,                                                -->
-	<!--  see com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants.java -->
-	<serialization>
-		<data-serializable-factories>
-			<data-serializable-factory factory-id="1">com.hazelcast.samples.serialization.hazelcast.airlines.util.MyDataSerializableFactory</data-serializable-factory>
-		</data-serializable-factories>
-		<serializers>
-			<!-- V5Flight is serialized/deserialized by V5FlightSerializer -->
-			<serializer type-class="com.hazelcast.samples.serialization.hazelcast.airlines.V5Flight"
-				class-name="com.hazelcast.samples.serialization.hazelcast.airlines.V5FlightSerializer"/>
-		</serializers>
-	</serialization>    
+    <!-- Serialization configuration -->
+    <!-- =========================== -->
+    <!-- Factory IDs must match the code,                                                -->
+    <!--  see com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants.java -->
+    <serialization>
+        <data-serializable-factories>
+            <data-serializable-factory factory-id="1">
+                com.hazelcast.samples.serialization.hazelcast.airlines.util.MyDataSerializableFactory
+            </data-serializable-factory>
+        </data-serializable-factories>
+        <serializers>
+            <!-- V5Flight is serialized/deserialized by V5FlightSerializer -->
+            <serializer type-class="com.hazelcast.samples.serialization.hazelcast.airlines.V5Flight"
+                        class-name="com.hazelcast.samples.serialization.hazelcast.airlines.V5FlightSerializer"/>
+        </serializers>
+    </serialization>
 </hazelcast>

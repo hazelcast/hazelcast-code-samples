@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <config-replacers>
+        <replacer class-name="com.hazelcast.sample.replacer.ExecReplacer"/>
+    </config-replacers>
+
+    <group>
+        <name>$EXEC{echo -n Variable Test Group}</name>
+    </group>
+</hazelcast>
