@@ -99,7 +99,8 @@ public class ClientLoginModule
         if (credentials instanceof UsernamePasswordCredentials) {
             doLoginCheck((UsernamePasswordCredentials) credentials);
         } else {
-            logger.log(Level.WARNING, "Credentials were not of expected class type of " + UsernamePasswordCredentials.class.getName());
+            logger.log(Level.WARNING, "Credentials were not of expected class type of "
+                    + UsernamePasswordCredentials.class.getName());
             return false;
         }
 
