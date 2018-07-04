@@ -13,6 +13,7 @@ import com.hazelcast.security.UsernamePasswordCredentials;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 /**
- * An example ClientLoginModule that hard codes authorisation details in a pair of Maps.  You could amend this class to
+ * An example ClientLoginModule that hard codes authorisation details in a pair of Maps. You could amend this class to
  * perform look up against an LDAP store that would then return a set of Groups for the User.
  * <p>
  * Obviously you would NEVER store passwords in clear text.
@@ -60,45 +61,56 @@ public class ClientLoginModule
         this.subject = subject;
         this.callbackHandler = callbackHandler;
         this.sharedState = sharedState;
+        // Options are a way of passing extra configuration to the LoginModule for example connection properties
+        // for an LDAP server. These are the properties element you can find in the XML configuration for the <login-module>
         this.options = options;
     }
 
     /**
      * Login is called when this module is executed.
      *
-     * @return is login successful
-     * @throws LoginException
+     * @return false if authentication checks could not be executed due to bad or missing parameters
+     * @throws LoginException when authentication check has been made but credentials are not accepted or found.
      */
     public boolean login()
             throws LoginException {
-        boolean loginOk = false;
+
+        boolean loginOk = true;
 
         final CredentialsCallback cb = new CredentialsCallback();
+
+        // Get the Credentials upon which to perform the Authentication
         try {
             callbackHandler.handle(new Callback[]{cb});
             credentials = cb.getCredentials();
         } catch (Exception e) {
-            throw new LoginException(e.getClass().getName() + ":" + e.getMessage());
+            logger.log(Level.WARNING, e.getClass().getName() + ":" + e.getMessage());
+            return false;
         }
 
+        // If no Credentials were found exit returning false
         if (credentials == null) {
             logger.log(Level.WARNING, "Credentials could not be retrieved!");
             return false;
         }
+
         logger.log(Level.INFO, "Authenticating " + SecurityUtil.getCredentialsFullName(credentials));
 
         if (credentials instanceof UsernamePasswordCredentials) {
-            loginOk = doLoginCheck((UsernamePasswordCredentials) credentials);
+            doLoginCheck((UsernamePasswordCredentials) credentials);
+        } else {
+            logger.log(Level.WARNING, "Credentials were not of expected class type of " + UsernamePasswordCredentials.class.getName());
+            return false;
         }
 
         return loginOk;
     }
 
-    private boolean doLoginCheck(UsernamePasswordCredentials credentials) {
+    private void doLoginCheck(UsernamePasswordCredentials credentials)
+            throws FailedLoginException {
 
         String username = credentials.getUsername();
         String password = ALLOWED_USERS_MAP.get(username);
-        boolean loginCheckOk = false;
 
         if (password != null) {
             if (password.equals(credentials.getPassword())) {
@@ -106,18 +118,15 @@ public class ClientLoginModule
                 if (userGroup != null) {
                     userGroupCredentials = new UserGroupCredentials(credentials.getEndpoint(), userGroup);
                     sharedState.put(SecurityConstants.ATTRIBUTE_CREDENTIALS, credentials);
-                    loginCheckOk = true;
                 } else {
                     logger.log(Level.WARNING, "User Group not found for user " + username);
-                    loginCheckOk = false;
+                    throw new FailedLoginException("User Group not found for user " + username);
                 }
             }
         } else {
             logger.log(Level.WARNING, "User details not found for " + username);
-            loginCheckOk = false;
+            throw new FailedLoginException("User details not found for " + username);
         }
-
-        return loginCheckOk;
 
     }
 
