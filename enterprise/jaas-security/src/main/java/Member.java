@@ -1,8 +1,5 @@
-import com.hazelcast.client.ClientEndpoint;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.XmlConfigBuilder;
-import com.hazelcast.core.Client;
-import com.hazelcast.core.ClientListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
@@ -28,17 +25,6 @@ public class Member {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         System.out.println("Hazelcast Member instance is running!");
 
-        hz.getClientService().addClientListener(new ClientListener() {
-
-            public void clientConnected(Client client) {
-                ClientEndpoint clientEndpoint = (ClientEndpoint) client;
-                System.out.println("Client Connected with Credentials " + clientEndpoint.getCredentials());
-            }
-
-            public void clientDisconnected(Client client) {
-                System.out.println("Client Disconnected");
-            }
-        });
     }
 
 }

@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.6.xsd"
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd"
            xmlns="http://www.hazelcast.com/schema/config"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -36,6 +36,7 @@
             <login-module class-name="ClientLoginModule" usage="REQUIRED">
                 <properties>
                     <!-- You could use this pass configuration to a LDAP or AD server connection -->
+                    <!-- You can get these from the options Map that is passed to the initialise method on the LoginModule class -->
                     <property name="yourProperties">yourSetupValuesToPassToLoginModule</property>
                 </properties>
             </login-module>
