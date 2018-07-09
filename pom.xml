@@ -19,7 +19,7 @@
         <jdk.version>1.6</jdk.version>
         <jdk.integration.version>1.8</jdk.integration.version>
 
-        <hazelcast.version>3.10.3-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>3.10.3</hazelcast.version>
         <hazelcast-jet.version>0.4</hazelcast-jet.version>
         <hazelcast-jclouds.version>3.7</hazelcast-jclouds.version>
 
