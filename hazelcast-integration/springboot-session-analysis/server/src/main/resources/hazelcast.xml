@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast
+	xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.10.xsd"
+	xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<group>
+		<name>${my.group.name}</name>
+	</group>
+
+	<network>
+		<join>
+			<multicast enabled="false" />
+			<tcp-ip enabled="true">
+				<member-list>
+					<member>127.0.0.1</member>
+				</member-list>
+			</tcp-ip>
+		</join>
+	</network>
+
+	<!-- Keep sessions for 60 seconds -->
+	<map name="jsessionid">
+		<!-- Sessions update on access, so last read and last write times don't differ -->
+		<time-to-live-seconds>60</time-to-live-seconds>
+		<!-- Log some session change events -->
+		<entry-listeners>
+			<entry-listener local="true" include-value="false">com.hazelcast.samples.session.analysis.SessionKeyLoggingListener</entry-listener>
+        </entry-listeners>
+	</map>
+
+	<!-- IMap events from the named map are kept available for Jet -->
+	<event-journal enabled="true">
+		<mapName>jsessionid</mapName>
+
+		<!-- Default : 10000 items -->
+		<capacity>10000</capacity>
+		<!-- Default : Do not expire -->
+		<time-to-live-seconds>0</time-to-live-seconds>
+	</event-journal>
+
+</hazelcast>

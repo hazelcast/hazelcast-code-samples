@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>hazelcast-integration</artifactId>
+		<groupId>com.hazelcast.samples</groupId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.hazelcast.samples.session.analysis</groupId>
+	<artifactId>springboot-session-analysis</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Spring Boot: HTTP Session Analysis</name>
+	<description>Project POM</description>
+
+	<properties>
+		<!-- needed for checkstyle/findbugs -->
+		<main.basedir>${project.parent.parent.basedir}</main.basedir>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<hazelcast.version>3.10.2</hazelcast.version>
+		<hazelcast-jet.version>0.6.1</hazelcast-jet.version>
+		<hazelcast-wm.version>3.8.3</hazelcast-wm.version>
+		<java.version>1.8</java.version>
+		<spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+		<spring-shell.version>2.0.1.RELEASE</spring-shell.version>
+	</properties>
+
+	<modules>
+		<module>common</module>
+		<module>client</module>
+		<module>server</module>
+	</modules>
+
+	<dependencies>
+		<!-- Web modules, needed on client and server side -->
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast-wm</artifactId>
+			<version>${hazelcast-wm.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.hazelcast</groupId>
+				<artifactId>hazelcast</artifactId>
+				<version>${hazelcast.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hazelcast</groupId>
+				<artifactId>hazelcast-client</artifactId>
+				<version>${hazelcast.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hazelcast.jet</groupId>
+				<artifactId>hazelcast-jet</artifactId>
+				<version>${hazelcast-jet.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-parent</artifactId>
+				<type>pom</type>
+				<scope>import</scope>
+				<version>${spring-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.shell</groupId>
+				<artifactId>spring-shell-starter</artifactId>
+				<version>${spring-shell.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

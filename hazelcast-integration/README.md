@@ -30,6 +30,8 @@
 	Spring Boot style HTTP session replication, using embedded web container in standalone Jar.
 - <h3>springboot-eureka-partition-groups</h3>
 	Discovery using Eureka as a node registry, and also to configure data safety via partition groups
+- <h3>springboot-session-analysis</h3>
+	HTTP session inspection
 - <h3>tricolor</h3>
 	Three coloured output as a way to follow testing multiple Hazelcast instances in the one JVM.
     

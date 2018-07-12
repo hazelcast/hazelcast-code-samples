@@ -64,6 +64,7 @@
         <module>springboot-caching-jcache</module>
         <module>springboot-eureka-partition-groups</module>
         <module>springboot-http</module>
+        <module>springboot-session-analysis</module>
         <module>tricolor</module>
     </modules>
 
