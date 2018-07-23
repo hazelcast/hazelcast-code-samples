@@ -36,5 +36,5 @@
     </join>
   </network>
 
-  <management-center enabled="true">http://management-center-service.hazelcast.svc:8080/mancenter</management-center>
+  <management-center enabled="true">http://management-center-service.hazelcast.svc:8080/hazelcast-mancenter</management-center>
 </hazelcast>

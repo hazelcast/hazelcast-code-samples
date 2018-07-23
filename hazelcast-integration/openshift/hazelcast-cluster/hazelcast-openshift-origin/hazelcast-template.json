@@ -52,8 +52,8 @@
                     "value": "${SERVICE_NAME}.${NAMESPACE}.svc"
                   },
                   {
-                    "name": "HZ_DATA",
-                    "value": "/data/hazelcast"
+                    "name": "JAVA_OPTS",
+                    "value": "-Dhazelcast.config=/data/hazelcast/hazelcast.xml"
                   }
                 ],
                 "ports": [
@@ -109,7 +109,7 @@
     {
       "name": "HAZELCAST_IMAGE",
       "description": "Defines the location of Hazelcast image",
-      "value": "hazelcast/hazelcast-openshift:3.10",
+      "value": "hazelcast/hazelcast:3.10.3",
       "required": true
     },
     {

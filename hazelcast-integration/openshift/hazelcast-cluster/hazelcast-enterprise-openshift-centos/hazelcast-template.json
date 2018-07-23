@@ -56,8 +56,8 @@
                     "value": "${ENTERPRISE_LICENSE_KEY}"
                   },
                   {
-                    "name": "HZ_DATA",
-                    "value": "/data/hazelcast"
+                    "name": "JAVA_OPTS",
+                    "value": "-Dhazelcast.config=/data/hazelcast/hazelcast.xml"
                   }
                 ],
                 "ports": [
@@ -201,7 +201,7 @@
     {
       "name": "HAZELCAST_IMAGE",
       "description": "Defines the location of Hazelcast Enterprise image",
-      "value": "hazelcast/hazelcast-enterprise-openshift-centos:3.10",
+      "value": "hazelcast/hazelcast-enterprise:3.10.3",
       "required": true
     },
     {
@@ -235,7 +235,7 @@
     {
       "name": "MANAGEMENT_CENTER_IMAGE",
       "description": "Defines the location of Hazelcast Management Center image",
-      "value": "hazelcast/management-center:3.10",
+      "value": "hazelcast/management-center:3.10.2",
       "required": true
     },
     {

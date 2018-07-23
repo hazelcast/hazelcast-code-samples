@@ -202,7 +202,7 @@
     {
       "name": "HAZELCAST_IMAGE",
       "description": "Defines the location of Hazelcast Enterprise image",
-      "value": "registry.connect.redhat.com/hazelcast/hazelcast-3-rhel7:3.9.4-1",
+      "value": "registry.connect.redhat.com/hazelcast/hazelcast-3-rhel7:3.10.2",
       "required": true
     },
     {
@@ -236,7 +236,7 @@
     {
       "name": "MANAGEMENT_CENTER_IMAGE",
       "description": "Defines the location of Hazelcast Management Center image",
-      "value": "registry.connect.redhat.com/hazelcast/management-center-3-rhel7:3.9.4-3",
+      "value": "registry.connect.redhat.com/hazelcast/management-center-3-rhel7:3.10.2",
       "required": true
     },
     {
