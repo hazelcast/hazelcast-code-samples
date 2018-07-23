@@ -57,9 +57,6 @@ objects:
             <tcp-ip enabled="false" />
             <discovery-strategies>
               <discovery-strategy enabled="true" class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy">
-                <properties>
-                  <property name="service-name">${serviceName}</property>
-                </properties>
               </discovery-strategy>
             </discovery-strategies>
           </join>
@@ -167,8 +164,6 @@ objects:
           app: hazelcast
           role: mancenter
       spec:
-        securityContext:
-          runAsUser: 0
         containers:
         - name: management-center
           image: ${MANAGEMENT_CENTER_IMAGE}
@@ -181,18 +176,18 @@ objects:
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 15
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 10
           readinessProbe:
             httpGet:
               path: /hazelcast-mancenter
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
-            timeoutSeconds: 1
+            timeoutSeconds: 15
             successThreshold: 1
-            failureThreshold: 1
+            failureThreshold: 10
           volumeMounts:
           - name: mancenter-storage
             mountPath: /data
