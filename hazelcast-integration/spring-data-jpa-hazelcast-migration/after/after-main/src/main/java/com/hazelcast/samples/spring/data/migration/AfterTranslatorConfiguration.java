@@ -6,7 +6,6 @@ import com.hazelcast.client.config.XmlClientConfigBuilder;
 import com.hazelcast.core.HazelcastInstance;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.hazelcast.repository.config.EnableHazelcastRepositories;
 
 /**
  * Configuration class to make the necessary Spring beans available for this to work.
