@@ -25,7 +25,6 @@ import org.springframework.data.hazelcast.repository.config.EnableHazelcastRepos
  * </ol>
  */
 @Configuration
-@EnableHazelcastRepositories
 public class AfterTranslatorConfiguration {
 
     /**
