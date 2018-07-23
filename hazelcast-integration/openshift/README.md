@@ -89,12 +89,10 @@ Note that, in case of [Hazelcast Enterprise OpenShift RHEL](hazelcast-cluster/ha
 
 Change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-centos`), Hazelcast Enterprise RHEL (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-rhel`) or Hazelcast (`$ cd hazelcast-cluster/hazelcast-openshift-origin`).
 
-Then, create a ConfigMap with the Hazelcast configuration and start the cluster.
+Then, start the cluster with the following command.
 
 ```
-$ oc create configmap hazelcast-configuration \
-  --from-file=hazelcast-configuration
-$ oc new-app -f hazelcast-template.json \
+$ oc new-app -f hazelcast.yaml \
   -p NAMESPACE=$(oc project -q) \
   -p ENTERPRISE_LICENSE_KEY=<hazelcast_enterprise_license>
 ```
@@ -163,7 +161,7 @@ $ oc delete configmap --all
 
 ## Step 3: Access Management Center
 
-Management Center application (Hazelcast Enterprise only) is already started together with Hazelcast members when using `hazelcast-template.json`. Nevertheless, in order to make it usable, you need to expose its service.
+Management Center application (Hazelcast Enterprise only) is already started together with Hazelcast members when using `hazelcast.yaml`. Nevertheless, in order to make it usable, you need to expose its service.
 
 ```
 $ oc expose svc/management-center-service
@@ -320,7 +318,7 @@ The results should be visible in Management Center.
 
 # Authenticate to Red Hat Container Catalog
 
-The `hazelcast-cluster/hazelcast-enterprise-openshift-rhel/hazelcast-template.json` uses images from [Red Hat Container Catalog](https://access.redhat.com/containers/), which requires setting Red Hat credentials. In order to do it, you need to execute the following command after creating the OpenShift project.
+The `hazelcast-cluster/hazelcast-enterprise-openshift-rhel/hazelcast.yaml` uses images from [Red Hat Container Catalog](https://access.redhat.com/containers/), which requires setting Red Hat credentials. In order to do it, you need to execute the following command after creating the OpenShift project.
 
 ```
 $ oc create secret docker-registry rhcc \
