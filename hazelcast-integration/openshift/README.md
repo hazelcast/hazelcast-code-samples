@@ -107,25 +107,33 @@ To check all created OpenShift resources, use the following command.
 
 ```
 $ oc get all
-NAME             READY     STATUS    RESTARTS   AGE
-po/hz-rc-5pl4f   1/1       Running   0          3m
-po/hz-rc-dfz84   1/1       Running   0          3m
-po/hz-rc-pjps7   1/1       Running   0          3m
-po/mc-rc-w5d5l   1/1       Running   0          3m
+NAME                       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/management-center   1         1         1            1           7m
 
-NAME       DESIRED   CURRENT   READY     AGE
-rc/hz-rc   3         3         3         3m
-rc/mc-rc   1         1         1         3m
+NAME                              DESIRED   CURRENT   READY     AGE
+rs/management-center-3761922137   1         1         1         7m
 
-NAME                          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
-svc/hzservice                 ClusterIP   None         <none>        5701/TCP   3m
-svc/management-center-service ClusterIP   None         <none>        8080/TCP   3m
+NAME                       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/management-center   1         1         1            1           7m
+
+NAME                     DESIRED   CURRENT   AGE
+statefulsets/hazelcast   3         3         7m
+
+NAME                                    READY     STATUS    RESTARTS   AGE
+po/hazelcast-0                          1/1       Running   0          7m
+po/hazelcast-1                          1/1       Running   0          6m
+po/hazelcast-2                          1/1       Running   0          5m
+po/management-center-3761922137-kc6nx   1/1       Running   0          7m
+
+NAME                            TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+svc/hazelcast-service           ClusterIP   None         <none>        5701/TCP   7m
+svc/management-center-service   ClusterIP   None         <none>        8080/TCP   7m
 ```
 
 Please check that the `STATUS` is `Running` for all PODs. Then, to check the logs for each replica, use the following command:
 
 ```
-$ oc logs po/hz-rc-5pl4f
+$ oc logs po/hazelcast-2
 
 ...
 Kubernetes Namespace: hazelcast
