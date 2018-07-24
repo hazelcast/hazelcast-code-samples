@@ -9,6 +9,22 @@ import java.util.Random;
 
 public class IndexStatisticsDemo {
 
+    private static final int INSERT_COUNT = 1000;
+    private static final int UPDATE_COUNT = 50;
+    private static final int REMOVE_COUNT = 10;
+    private static final int QUERY_COUNT = 100;
+
+    private static final String[] FIRST_NAMES = new String[]{
+            "Jacob", "Sophia", "Mason", "Isabella", "William", "Emma", "Jayden", "Olivia", "Noah", "Ava",
+            "Michael", "Emily", "Ethan", "Abigail", "Alexander", "Madison", "Aiden", "Mia", "Daniel", "Chloe",
+            };
+    private static final String[] LAST_NAMES = new String[]{
+            "Chaney", "Webb", "Strickland", "Gregory", "Salinas", "Yang", "Meyer", "Nicholson", "Liu", "Andrade",
+            "Reynolds", "Shannon", "Pace", "Finley", "Forbes", "Burnett", "Rich", "Mcknight", "Ibarra", "Parrish",
+            };
+
+    private static final Random RANDOM = new Random();
+
     public static void main(String[] args) {
         // 1. Start a new Hazelcast instance.
 
@@ -77,22 +93,6 @@ public class IndexStatisticsDemo {
 
         Hazelcast.shutdownAll();
     }
-
-    private static final int INSERT_COUNT = 1000;
-    private static final int UPDATE_COUNT = 50;
-    private static final int REMOVE_COUNT = 10;
-    private static final int QUERY_COUNT = 100;
-
-    private static final String[] FIRST_NAMES = new String[]{
-            "Jacob", "Sophia", "Mason", "Isabella", "William", "Emma", "Jayden", "Olivia", "Noah", "Ava",
-            "Michael", "Emily", "Ethan", "Abigail", "Alexander", "Madison", "Aiden", "Mia", "Daniel", "Chloe",
-            };
-    private static final String[] LAST_NAMES = new String[]{
-            "Chaney", "Webb", "Strickland", "Gregory", "Salinas", "Yang", "Meyer", "Nicholson", "Liu", "Andrade",
-            "Reynolds", "Shannon", "Pace", "Finley", "Forbes", "Burnett", "Rich", "Mcknight", "Ibarra", "Parrish",
-            };
-
-    private static final Random RANDOM = new Random();
 
     private static Name generateRandomName() {
         String forename = randomForename();
