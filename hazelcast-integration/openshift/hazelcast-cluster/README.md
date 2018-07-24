@@ -10,7 +10,7 @@ This repository contains the following folders:
 You can start the Hazelcast application on OpenShift with the following command:
 
 ```
-$ oc new-app -f hazelcast-template.json \
+$ oc new-app -f hazelcast.yaml \
   -p NAMESPACE=<project_name> \
   -p ENTERPRISE_LICENSE_KEY=<hazelcast_enterprise_license>
 ```

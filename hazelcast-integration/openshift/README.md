@@ -89,12 +89,10 @@ Note that, in case of [Hazelcast Enterprise OpenShift RHEL](hazelcast-cluster/ha
 
 Change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-centos`), Hazelcast Enterprise RHEL (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-rhel`) or Hazelcast (`$ cd hazelcast-cluster/hazelcast-openshift-origin`).
 
-Then, create a ConfigMap with the Hazelcast configuration and start the cluster.
+Then, start the cluster with the following command.
 
 ```
-$ oc create configmap hazelcast-configuration \
-  --from-file=hazelcast-configuration
-$ oc new-app -f hazelcast-template.json \
+$ oc new-app -f hazelcast.yaml \
   -p NAMESPACE=$(oc project -q) \
   -p ENTERPRISE_LICENSE_KEY=<hazelcast_enterprise_license>
 ```
@@ -109,25 +107,33 @@ To check all created OpenShift resources, use the following command.
 
 ```
 $ oc get all
-NAME             READY     STATUS    RESTARTS   AGE
-po/hz-rc-5pl4f   1/1       Running   0          3m
-po/hz-rc-dfz84   1/1       Running   0          3m
-po/hz-rc-pjps7   1/1       Running   0          3m
-po/mc-rc-w5d5l   1/1       Running   0          3m
+NAME                       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/management-center   1         1         1            1           7m
 
-NAME       DESIRED   CURRENT   READY     AGE
-rc/hz-rc   3         3         3         3m
-rc/mc-rc   1         1         1         3m
+NAME                              DESIRED   CURRENT   READY     AGE
+rs/management-center-3761922137   1         1         1         7m
 
-NAME                          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
-svc/hzservice                 ClusterIP   None         <none>        5701/TCP   3m
-svc/management-center-service ClusterIP   None         <none>        8080/TCP   3m
+NAME                       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/management-center   1         1         1            1           7m
+
+NAME                     DESIRED   CURRENT   AGE
+statefulsets/hazelcast   3         3         7m
+
+NAME                                    READY     STATUS    RESTARTS   AGE
+po/hazelcast-0                          1/1       Running   0          7m
+po/hazelcast-1                          1/1       Running   0          6m
+po/hazelcast-2                          1/1       Running   0          5m
+po/management-center-3761922137-kc6nx   1/1       Running   0          7m
+
+NAME                            TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+svc/hazelcast-service           ClusterIP   None         <none>        5701/TCP   7m
+svc/management-center-service   ClusterIP   None         <none>        8080/TCP   7m
 ```
 
 Please check that the `STATUS` is `Running` for all PODs. Then, to check the logs for each replica, use the following command:
 
 ```
-$ oc logs po/hz-rc-5pl4f
+$ oc logs po/hazelcast-2
 
 ...
 Kubernetes Namespace: hazelcast
@@ -163,7 +169,7 @@ $ oc delete configmap --all
 
 ## Step 3: Access Management Center
 
-Management Center application (Hazelcast Enterprise only) is already started together with Hazelcast members when using `hazelcast-template.json`. Nevertheless, in order to make it usable, you need to expose its service.
+Management Center application (Hazelcast Enterprise only) is already started together with Hazelcast members when using `hazelcast.yaml`. Nevertheless, in order to make it usable, you need to expose its service.
 
 ```
 $ oc expose svc/management-center-service
@@ -320,7 +326,7 @@ The results should be visible in Management Center.
 
 # Authenticate to Red Hat Container Catalog
 
-The `hazelcast-cluster/hazelcast-enterprise-openshift-rhel/hazelcast-template.json` uses images from [Red Hat Container Catalog](https://access.redhat.com/containers/), which requires setting Red Hat credentials. In order to do it, you need to execute the following command after creating the OpenShift project.
+The `hazelcast-cluster/hazelcast-enterprise-openshift-rhel/hazelcast.yaml` uses images from [Red Hat Container Catalog](https://access.redhat.com/containers/), which requires setting Red Hat credentials. In order to do it, you need to execute the following command after creating the OpenShift project.
 
 ```
 $ oc create secret docker-registry rhcc \
