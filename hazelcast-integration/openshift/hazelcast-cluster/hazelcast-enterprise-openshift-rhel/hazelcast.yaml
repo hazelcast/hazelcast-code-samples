@@ -167,6 +167,9 @@ objects:
         containers:
         - name: management-center
           image: ${MANAGEMENT_CENTER_IMAGE}
+          resources:
+            limits:
+              memory: 1Gi
           ports:
           - name: mancenter
             containerPort: 8080
