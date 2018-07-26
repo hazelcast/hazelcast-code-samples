@@ -2,6 +2,8 @@
 
 This sample is a guideline on how to start Hazelcast cluster on the Kubernetes environment.
 
+Note: For the Helm Chart installation, please refer to [Hazelcast Helm Chart](https://github.com/helm/charts/tree/master/stable/hazelcast).
+
 ## Prerequisites
 
 1) Up and running [Kubernetes](https://kubernetes.io) version 1.9 or higher.
