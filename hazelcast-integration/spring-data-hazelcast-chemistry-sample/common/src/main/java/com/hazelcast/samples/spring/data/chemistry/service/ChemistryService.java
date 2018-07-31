@@ -91,7 +91,7 @@ public class ChemistryService {
         ArrayList<Element> result = new ArrayList<Element>();
 
         for (Isotope isotope : this.isotopeRepository.findByIsotopeKeyAtomicWeight(weight)) {
-            result.add(this.elementRepository.findOne(isotope.getIsotopeKey().getSymbol()));
+            this.elementRepository.findById(isotope.getIsotopeKey().getSymbol()).ifPresent(result::add);
         }
 
         return result;

@@ -21,7 +21,7 @@ public class DatabaseService {
     private VerbJPARepository verbJPARepository;
 
     public Noun findNoun(Integer id) {
-        return this.nounJPARepository.findOne(id);
+        return this.nounJPARepository.findById(id).get();
     }
 
     public Iterable<Integer> findNounIds() {
@@ -29,7 +29,7 @@ public class DatabaseService {
     }
 
     public Verb findVerb(Integer id) {
-        return this.verbJPARepository.findOne(id);
+        return this.verbJPARepository.findById(id).get();
     }
 
     public Iterable<Integer> findVerbIds() {
