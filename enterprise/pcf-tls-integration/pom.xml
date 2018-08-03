@@ -18,8 +18,9 @@
 
     <properties>
         <!-- needed for checkstyle/findbugs -->
-        <!--<main.basedir>${project.parent.parent.basedir}</main.basedir>-->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <hazelcast.version>3.9.4</hazelcast.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
