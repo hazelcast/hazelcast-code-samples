@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>pom</artifactId>
+        <groupId>com.hazelcast.samples.kubernetes</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>samples</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Kubernetes: Samples</name>
+    <description>Project POM</description>
+
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+	<module>springboot-k8s-hello-world</module>
+    </modules>
+
+</project>
