@@ -32,13 +32,21 @@
 	</properties>
 
 	<modules>
+		<module>the-client</module>
+		<module>the-server</module>
 	</modules>
 
 	<dependencies>
-		<!-- Hazelcast bits, the client, indirectly the server and Kubernetes connectivity -->
+		<!-- Hazelcast bits, the server, the client and Kubernetes connectivity -->
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+			<version>${hazelcast.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast-client</artifactId>
+			<version>${hazelcast.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hazelcast</groupId>
@@ -46,26 +54,16 @@
 			<version>${hazelcast-kubernetes.version}</version>
 		</dependency>
 
-		<!-- Generate common code, like getters/setters -->
+		<!-- For logging -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
 
 		<!-- All executable jars are HTTP port 8080 enabled -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 	</dependencies>
 
