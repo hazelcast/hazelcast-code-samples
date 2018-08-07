@@ -17,9 +17,13 @@
 	<properties>
 		<!-- needed for checkstyle/findbugs -->
 		<main.basedir>${project.parent.parent.parent.parent.parent.basedir}</main.basedir>
+
+		<docker.image.prefix>${project.parent.artifactId}</docker.image.prefix>
 	</properties>
 
 	<build>
+		<finalName>${project.artifactId}</finalName>
+		
 		<plugins>
 			<plugin>
 				<groupId>com.spotify</groupId>
