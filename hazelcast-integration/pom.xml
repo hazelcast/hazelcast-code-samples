@@ -45,6 +45,7 @@
         <module>hibernate-2ndlevel-cache</module>
         <module>hibernate-jpa-2ndlevel-cache</module>
         <module>jca-ra</module>
+        <module>kubernetes</module>
         <module>manager-based-session-replication</module>
         <module>mongodb</module>
         <module>openshift</module>
