@@ -30,25 +30,25 @@ import com.hazelcast.core.IMap;
 @RestController
 public class MyRestController {
 
-	private static final Logger log = LoggerFactory.getLogger(MyRestController.class);
-	
-	@Autowired
-	private HazelcastInstance hazelcastInstance;
-	
-	@GetMapping
-	public Collection<String> index() {
-		log.info("index()");
-		
-		IMap<String, String> helloMap = this.hazelcastInstance.getMap("hello");
-		
-		Set<String> keys = new TreeSet<>(helloMap.keySet());
-		
-		Collection<String> result = new ArrayList<>();
-		
-		for (String key : keys) {
-			result.add(helloMap.get(key));
-		}
-		
-		return result;
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyRestController.class);
+
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    @GetMapping
+    public Collection<String> index() {
+        LOGGER.info("index()");
+
+        IMap<String, String> helloMap = this.hazelcastInstance.getMap("hello");
+
+        Set<String> keys = new TreeSet<>(helloMap.keySet());
+
+        Collection<String> result = new ArrayList<>();
+
+        for (String key : keys) {
+            result.add(helloMap.get(key));
+        }
+
+        return result;
+    }
 }

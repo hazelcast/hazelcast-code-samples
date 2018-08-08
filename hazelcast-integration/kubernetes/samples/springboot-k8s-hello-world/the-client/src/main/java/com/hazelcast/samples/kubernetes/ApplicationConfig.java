@@ -14,7 +14,6 @@ import com.hazelcast.spi.properties.GroupProperty;
 
 
 /**
- * XXX
  * <p>
  * Dynamic configuration for the Hazelcast client. The logic is
  * the same as for the Hazelcast server.
@@ -53,38 +52,38 @@ import com.hazelcast.spi.properties.GroupProperty;
  */
 @Configuration
 public class ApplicationConfig {
-	
-	private static final String DEFAULT_FALSE = "false";
-	private static final String HAZELCAST_SERVICE_NAME = "service-hazelcast-server";
 
-	@Bean
-	public ClientConfig clientConfig() throws Exception {
-		ClientConfig clientConfig = 
-				new XmlClientConfigBuilder("hazelcast-client.xml").build();
-		
-		boolean k8s = new Boolean(System.getProperty("k8s", DEFAULT_FALSE));
+    private static final String DEFAULT_FALSE = "false";
+    private static final String HAZELCAST_SERVICE_NAME = "service-hazelcast-server";
 
-		if (k8s) {
-			// Step (1) in docs above
-			HazelcastKubernetesDiscoveryStrategyFactory hazelcastKubernetesDiscoveryStrategyFactory
-				= new HazelcastKubernetesDiscoveryStrategyFactory();
-			DiscoveryStrategyConfig discoveryStrategyConfig = 
-					new DiscoveryStrategyConfig(hazelcastKubernetesDiscoveryStrategyFactory);
-			discoveryStrategyConfig.addProperty(KubernetesProperties.SERVICE_DNS.key(), 
-					HAZELCAST_SERVICE_NAME);
+    @Bean
+    public ClientConfig clientConfig() throws Exception {
+        ClientConfig clientConfig =
+                new XmlClientConfigBuilder("hazelcast-client.xml").build();
 
-			// Step (2) in docs above
-			clientConfig.setProperty(GroupProperty.DISCOVERY_SPI_ENABLED.toString(), "true");
-			clientConfig
-				.getNetworkConfig()
-				.getDiscoveryConfig()
-				.addDiscoveryStrategyConfig(discoveryStrategyConfig);
-		} else {
-			clientConfig
-				.getNetworkConfig()
-				.setAddresses(Collections.singletonList("127.0.0.1:5701"));
-		}
-		
-		return clientConfig;
-	}
+        boolean k8s = System.getProperty("k8s", DEFAULT_FALSE).equalsIgnoreCase("true");
+
+        if (k8s) {
+            // Step (1) in docs above
+            HazelcastKubernetesDiscoveryStrategyFactory hazelcastKubernetesDiscoveryStrategyFactory
+                = new HazelcastKubernetesDiscoveryStrategyFactory();
+            DiscoveryStrategyConfig discoveryStrategyConfig =
+                    new DiscoveryStrategyConfig(hazelcastKubernetesDiscoveryStrategyFactory);
+            discoveryStrategyConfig.addProperty(KubernetesProperties.SERVICE_DNS.key(),
+                    HAZELCAST_SERVICE_NAME);
+
+            // Step (2) in docs above
+            clientConfig.setProperty(GroupProperty.DISCOVERY_SPI_ENABLED.toString(), "true");
+            clientConfig
+                .getNetworkConfig()
+                .getDiscoveryConfig()
+                .addDiscoveryStrategyConfig(discoveryStrategyConfig);
+        } else {
+            clientConfig
+                .getNetworkConfig()
+                .setAddresses(Collections.singletonList("127.0.0.1:5701"));
+        }
+
+        return clientConfig;
+    }
 }

@@ -29,25 +29,25 @@ import com.hazelcast.core.HazelcastInstance;
 @RestController
 public class MyK8sController {
 
-	private static final Logger log = LoggerFactory.getLogger(MyK8sController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyK8sController.class);
 
-	@Autowired
-	private HazelcastInstance hazelcastInstance;
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
 
-	/**
-	 * @return {@code true} if good, exception otherwise
-	 */
-	@GetMapping("/k8s")
-	public String k8s() {
-		log.info("k8s()");
+    /**
+     * @return {@code true} if good, exception otherwise
+     */
+    @GetMapping("/k8s")
+    public String k8s() {
+        LOGGER.info("k8s()");
 
-		ClusterState clusterState = this.hazelcastInstance.getCluster().getClusterState();
-		
-		if (clusterState == ClusterState.ACTIVE) {
-			return Boolean.TRUE.toString();
-		} else {
-			throw new RuntimeException("ClusterState==" + clusterState);
-		}
-	}
-	
+        ClusterState clusterState = this.hazelcastInstance.getCluster().getClusterState();
+
+        if (clusterState == ClusterState.ACTIVE) {
+            return Boolean.TRUE.toString();
+        } else {
+            throw new RuntimeException("ClusterState==" + clusterState);
+        }
+    }
+
 }

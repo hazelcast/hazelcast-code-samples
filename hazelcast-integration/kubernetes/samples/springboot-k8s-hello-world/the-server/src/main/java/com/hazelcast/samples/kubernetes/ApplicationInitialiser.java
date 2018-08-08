@@ -32,31 +32,31 @@ import com.hazelcast.core.IMap;
 @Component
 public class ApplicationInitialiser implements CommandLineRunner {
 
-	private static final Logger log = LoggerFactory.getLogger(ApplicationInitialiser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationInitialiser.class);
 
-	private static final String[][] GREETINGS = new String[][] {
-		{ "english", "hello world" },
-		{ "espanol", "hola mundo" },
-		{ "deutsch", "hallo welt" },
-		{ "italiano", "ciao mondo" },
-		{ "francais", "bonjour le monde" },
-	};
-	
-	@Autowired
-	private HazelcastInstance hazelcastInstance;
+    private static final String[][] GREETINGS = new String[][] {
+        { "english", "hello world" },
+        { "espanol", "hola mundo" },
+        { "deutsch", "hallo welt" },
+        { "italiano", "ciao mondo" },
+        { "francais", "bonjour le monde" },
+    };
 
-	@Override
-	public void run(String... arg0) throws Exception {
-		IMap<String, String> helloMap = this.hazelcastInstance.getMap("hello");
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
 
-		if (!helloMap.isEmpty()) {
-			log.info("Skip loading '{}', not empty", helloMap.getName());
-		} else {
-			Arrays.stream(GREETINGS).forEach(pair -> {
-				helloMap.set(pair[0], pair[1]);
-			});
-			log.info("Loaded {} into '{}'", GREETINGS.length, helloMap.getName());
-		}
-	}
+    @Override
+    public void run(String... arg0) throws Exception {
+        IMap<String, String> helloMap = this.hazelcastInstance.getMap("hello");
+
+        if (!helloMap.isEmpty()) {
+            LOGGER.info("Skip loading '{}', not empty", helloMap.getName());
+        } else {
+            Arrays.stream(GREETINGS).forEach(pair -> {
+                helloMap.set(pair[0], pair[1]);
+            });
+            LOGGER.info("Loaded {} into '{}'", GREETINGS.length, helloMap.getName());
+        }
+    }
 
 }

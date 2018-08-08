@@ -28,25 +28,25 @@ import com.hazelcast.core.HazelcastInstance;
 @RestController
 public class MyK8sController {
 
-	private static final Logger log = LoggerFactory.getLogger(MyK8sController.class);
-	
-	@Autowired
-	private HazelcastInstance hazelcastInstance;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyK8sController.class);
 
-	/**
-	 * @return {@code true} if good, exception otherwise
-	 */
-	@GetMapping("/k8s")
-	public String k8s() {
-		log.info("k8s()");
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
 
-		Boolean running = this.hazelcastInstance.getLifecycleService().isRunning(); 
-		
-		if (running) {
-			return running.toString();
-		} else {
-			throw new RuntimeException("Running==" + running);
-		}
-	}
-	
+    /**
+     * @return {@code true} if good, exception otherwise
+     */
+    @GetMapping("/k8s")
+    public String k8s() {
+        LOGGER.info("k8s()");
+
+        Boolean running = this.hazelcastInstance.getLifecycleService().isRunning();
+
+        if (running) {
+            return running.toString();
+        } else {
+            throw new RuntimeException("Running==" + running);
+        }
+    }
+
 }
