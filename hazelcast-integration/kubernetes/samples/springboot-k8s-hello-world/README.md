@@ -262,37 +262,54 @@ Now finally we need to get Kubernetes bits installed on your machine.
 
 ### `docker images`
 
-TODO
+On Docker, images are ready to deploy bundles. So we use the `docker images` command
+to list them.
+
+Here we don't actually care what images exist, we're doing this command
+as a way to test is Docker is running.
+
+If Docker isn't running, you'll get an error message as seen towards the top
+of this screenshot. If it's not running, go start it.
+
+If Docker is running, you'll get a list (possibly empty) of some ready
+to deploy images.
 
 ![Image of Docker images without Minikube][Screenshot07] 
 
 ### `minikube start`
 
-TODO
+Once Docker is running, use the `minikube start` command to start Minikube.
+This might take a minute or two.
 
 ![Image of Minikube start][Screenshot08] 
 
 ### `kubectl config get-contexts`
 
-TODO
+Now run the `kubectl config get-contexts` to see what Kubernetes implementations
+are available.
+
+`kubectl` is the *KUBE*rnetes command line *C*on*T*ro*L* program.
+
+Since we've only installed Minikube, we would only expect to find this
+implementation.
 
 ![Image of Kubernetes contexts][Screenshot09] 
 
 ### Docker environment 
 
-TODO
+We next need to connect Kubernetes to our Docker, so that Kubernetes can
+find application images to deploy to the machines it creates.
 
-```
-eval $(minikube docker-env)
-```
+On Mac the command is `eval $(minikube docker-env)`
+
+On Windows the command is
+
+XXX Windows XXX
+
+Note, as this command sets up temporary environment variables, you should
+continue to use this command window for the rest of the tutorial.
 
 ![Image of Kubectl Minikube connection][Screenshot10] 
-
-### `docker images` again
-
-TODO
-
-![Image of Docker images with Minikube][Screenshot11] 
 
 ## Example with Kubernetes
 
@@ -448,6 +465,10 @@ If all has gone well, you should now have 5 extra Docker images,
 the three downloaded and the two made by Maven:
 
 ![Image of Docker images after pull][Screenshot13] 
+
+There will be other images, the images that were there when we
+first started the environment plus any output from Maven builds
+that are re-run.
 
 ### Checkpoint
 
