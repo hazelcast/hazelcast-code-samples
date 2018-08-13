@@ -1,0 +1,166 @@
+# =========================================================
+# 1st action == Set of pods for Hazelcast Servers
+# =========================================================
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pod-hazelcast-server
+spec:
+  # 1 or 2 server pods
+  # replicas: 2
+  replicas: 1
+  serviceName: service-hazelcast-server
+  selector:
+    matchLabels:
+      app: pod-hazelcast-server
+  template:
+    metadata:
+      labels:
+        app: pod-hazelcast-server
+    spec:
+      containers:
+        - env:
+          # Are we in Kubernetes
+          - name: K8S
+            value: "true"
+          image: "springboot-k8s-hello-world/the-server"
+          # Always from local, never from Dockerhub
+          imagePullPolicy: Never
+          # Url to check every 10 seconds if the container is ok
+          livenessProbe:
+            httpGet:
+              path: /k8s
+              port: 8080
+          name: container-hazelcast-server
+          # Url to check the container is up
+          readinessProbe:
+            httpGet:
+              path: /k8s
+              port: 8080
+            initialDelaySeconds: 30
+---
+# =========================================================
+# 2nd action == Service from Hazelcast Servers pods
+# =========================================================
+# Note the name 'service-hazelcast-server' is
+# hardcoded in Hazelcast Server when it tries to find the
+# cluster members. If you change one, change the other.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-hazelcast-server
+spec:
+  # Headless service, only cluster members
+  clusterIP: None
+  selector:
+    app: pod-hazelcast-server
+  ports:
+  - protocol: TCP
+    port: 5701
+    targetPort: 5701
+---
+# =========================================================
+# 3rd action == Set of pods for Hazelcast Management Center
+# =========================================================
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: pod-hazelcast-management-center
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pod-hazelcast-management-center
+    spec:
+      containers:
+        - image: hazelcast/management-center
+          name: container-hazelcast-management-center
+---
+# =========================================================
+# 4th action == HTTP to Hazelcast Management Center
+# =========================================================
+# Note the name 'service-hazelcast-management-center' is
+# hardcoded in Hazelcast Server when it tries to find the
+# Management Center. If you change one, change the other.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-hazelcast-management-center
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: pod-hazelcast-management-center
+  type: NodePort
+---
+# =========================================================
+# 5th action == Set of pods for Hazelcast Clients
+# =========================================================
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pod-hazelcast-client
+spec:
+  # 1 or 2 client pods
+  # replicas: 1
+  replicas: 2
+  serviceName: service-hazelcast-server
+  selector:
+    matchLabels:
+      app: pod-hazelcast-client
+  template:
+    metadata:
+      labels:
+        app: pod-hazelcast-client
+    spec:
+      # Evil hack, wait for server up rather than test URL in a loop
+      initContainers:
+        - name: wait-for-pod-hazelcast-server
+          image: busybox
+          command: ['sh', '-c', 'sleep 120']
+      containers:
+        - env:
+          # Are we in Kubernetes
+          - name: K8S
+            value: "true"
+          image: "springboot-k8s-hello-world/the-client"
+          # Always from local, never from Dockerhub
+          imagePullPolicy: Never
+          # Url to check every 10 seconds if the container is ok
+          livenessProbe:
+            httpGet:
+              path: /k8s
+              port: 8080
+          name: container-hazelcast-client
+          # Url to check the container is up
+          readinessProbe:
+            httpGet:
+              path: /k8s
+              port: 8080
+            initialDelaySeconds: 30
+---
+# =========================================================
+# 6th action == HTTP to Hazelcast Clients
+# =========================================================
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-hazelcast-client
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: pod-hazelcast-client
+  type: LoadBalancer
+---
