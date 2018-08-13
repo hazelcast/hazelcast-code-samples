@@ -258,30 +258,395 @@ need lots of hardware.
 
 Now finally we need to get Kubernetes bits installed on your machine.
 
-![Image of XXX][Screenshot07] 
-![Image of XXX][Screenshot08] 
-![Image of XXX][Screenshot09] 
-![Image of XXX][Screenshot10] 
-![Image of XXX][Screenshot11] 
-![Image of XXX][Screenshot12] 
-![Image of XXX][Screenshot13] 
-![Image of XXX][Screenshot14] 
-![Image of XXX][Screenshot15] 
-![Image of XXX][Screenshot16] 
-![Image of XXX][Screenshot17] 
-![Image of XXX][Screenshot18] 
-![Image of XXX][Screenshot19] 
-![Image of XXX][Screenshot20] 
-![Image of XXX][Screenshot21] 
-![Image of XXX][Screenshot22] 
-![Image of XXX][Screenshot23] 
-![Image of XXX][Screenshot24] 
-![Image of XXX][Screenshot25] 
-![Image of XXX][Screenshot26] 
-![Image of XXX][Screenshot27] 
-![Image of XXX][Screenshot28] 
-![Image of XXX][Screenshot29] 
-![Image of XXX][Screenshot30] 
+# TODO
+
+### `docker images`
+
+TODO
+
+![Image of Docker images without Minikube][Screenshot07] 
+
+### `minikube start`
+
+TODO
+
+![Image of Minikube start][Screenshot08] 
+
+### `kubectl config get-contexts`
+
+TODO
+
+![Image of Kubernetes contexts][Screenshot09] 
+
+### Docker environment 
+
+TODO
+
+```
+eval $(minikube docker-env)
+```
+
+![Image of Kubectl Minikube connection][Screenshot10] 
+
+### `docker images` again
+
+TODO
+
+![Image of Docker images with Minikube][Screenshot11] 
+
+## Example with Kubernetes
+
+Assuming you have got this example to work on your machine, it's now
+time for the fun, magic and much waiting around that Kubernetes brings
+to the party.
+
+### Modules
+
+Let's start with a look at the example, and some key files
+
+```
+├── the-client/
+├── the-client/src/main/resources/hazelcast-client.xml
+├── the-client/Dockerfile
+├── the-server/
+├── the-server/src/main/resources/hazelcast.xml
+├── the-server/Dockerfile
+├── deployment.yaml
+├── pom.xml
+├── README.md
+```
+
+There are four kinds of files, _"*.java"_, _"*.xml"_, _"Dockerfile"_ and _"deployment.yaml"_. 
+
+#### *the-client* : `Application.java`, `ApplicationConfig.java`, `MyK8SController.java` & `MyRestController.java`
+
+The main coding to look at is here in `ApplicationConfig.java`. This directs the Hazelcast client
+to use [this plugin](https://github.com/hazelcast/hazelcast-kubernetes) so that it finds
+the Hazelcast server locations by querying Kubernetes, as we don't know the location in advance.
+
+The two controller classes provide REST endpoints for Kubernetes to test
+the client is ok (`MyK8SController.java`) and for us to get data (`MyRestController.java`).
+
+#### *the-client* : `hazelcast-client.xml`
+
+This is the familiar XML file used to configure a Hazelcast client. Here we set
+the name for the cluster we wish to use and a property to activate statistics for
+the client.
+
+The Java code amends the configuration loaded from this XML before it used.
+
+#### *the-client* : `Dockerfile`
+
+This file is used to build a Docker deployment image to deploy to a container.
+
+It's fairly simple, copying the output of the Maven build into the image, and 
+specifying it as the application that the container runs.
+
+We can push this image to a Docker container to get it to run, but
+we'll get Kubernetes to do this for us.
+
+#### *the-server* : `Application.java`, `ApplicationConfig.java`, `ApplicationInitialiser.java` & `MyK8SController.java`
+
+This is the Java code for the server module, the main part of interest being
+the `ApplicationConfig.java` file. This configures the Hazelcast server to use the
+Hazelcast Kubernetes plugin to override some of the configuration from `hazelcast.xml`.
+In Kubernetes we don't know the server locations in advance, so have to
+ask Kubernetes where they have been placed when each server starts.
+
+There is a REST endpoint handled by `MyK8sController`. that Kubernetes uses to check
+this process is happy.
+
+Finally, the `ApplicationInitializer.java` class injects some test data into the cluster
+as it starts.
+
+#### *the-server* : `hazelcast.xml`
+
+This is the usual `hazelcast.xml` file, that configures the cluster with the
+cluster name and management center location.
+
+The `ApplicationConfig.java` class loads this, will extend it with the server
+locations from Kubernetes and override the Management Center location
+with the correct location from Kubernetes.
+
+#### *the-server* : `Dockerfile`
+
+The file is used to build the Docker deployment image for the Hazelcast server.
+
+It's the same idea as for the Hazelcast client, take the _Jar_ file
+produced by Maven and make that the command that the Docker container
+runs.
+
+### Top level : `deployment.yaml`
+
+Finally, the `deployment.yaml` file.
+
+This is the file that Kubernetes uses when we tell it.
+
+In this file we specify what Docker images we want to deploy, how many
+of each we want, and various other things. More on this later.
+
+### Build The Example
+
+Now we need to prepare the Docker images that Kubernetes needs to deploy.
+These images need to go to a Docker image repository that Kubernetes
+can access.
+
+#### Before
+
+So the first thing to check is that you're running the build in the right
+environment, the Docker repository associated with Kubernetes.
+
+Run the `docker images` command again, just to be sure you're still in the
+right window.
+
+You should see some Docker images already present, much like the above,
+with names containing the word *"kubernetes"*.
+
+#### `docker pull`
+
+In the same window, run these three commands.
+
+```
+docker pull library/openjdk:8-jre
+docker pull library/busybox
+docker pull hazelcast/management-center
+```
+
+These command will "pull" (ie. download) three existing Docker images from the
+[Docker Hub](https://hub.docker.com/) and put them in the Docker
+repository associated with Kubernetes on your machine.
+
+This may take a minute or two depending on your network speed.
+
+If we don't download them now, Kubernetes will fetch them when we need
+them. Doing it now saves time later on.
+
+![Image of Docker pull][Screenshot12] 
+
+#### `mvn install dockerfile:build`
+
+In the same window, run this command
+
+```
+mvn install dockerfile:build
+```
+
+This does the usual Maven build to create executable _Jar_ files,
+but also runs the *Dockerfile* Maven plugin.
+
+As you might guess, the *Dockerfile* Maven plugin uses the
+`Dockerfile` file as guidance to build a Docker image. This image
+is stored in a Docker repository.
+
+So this builds two Docker images, one for the Hazelcast server
+and one for the Hazelcast client, with each image containing
+the relevant executable Spring Boot application _Jar_.
+
+#### After
+
+If all has gone well, you should now have 5 extra Docker images,
+the three downloaded and the two made by Maven:
+
+![Image of Docker images after pull][Screenshot13] 
+
+### Checkpoint
+
+We're now about to actually run the example in Kubernetes.
+
+If any of the commands below fail, hang or time-out, that's
+probably an indication your physical machine doesn't
+have enough capacity to run this demo. Sorry.
+
+### Run The Example
+
+In the usual command window, run this command:
+
+```
+kubectl create -f deployment.yaml
+```
+
+That's it! 
+
+Kubernetes does the rest.
+
+![Image of Kubernetes creating a deployment][Screenshot14] 
+
+All we do now is inspect and test, and wait quite a bit while
+things are handled for us. 
+
+What will happen in the background is some pods will be created
+for 1 Hazelcast server, 1 Hazelcast Management Center
+and 2 Hazelcast clients. The numbers for each are in the `deployment.yaml`
+file.
+
+These pods will hold Docker containers that run on our only Kubernetes node
+(minikube) which in turn is a virtual machine provided by VirtualBox. Many
+layers of complication.
+
+#### Hazelcast Server on Kubernetes
+
+The first thing we want to see is that the Hazelcast server is ok.
+We have only requested one of these be run.
+
+TODO
+
+```
+kubectl get pods
+```
+
+![Image of first get pods][Screenshot15] 
+
+TODO
+
+```
+kubectl logs pod-hazelcast-server-0    
+```
+
+TODO
+
+![Image of Hazelcast server logs][Screenshot16] 
+
+What we're expecting to see is the same start-up messages
+we saw when we ran the Hazelcast server outside Kubernetes
+earlier, culminating in the message that 5 test data records
+have been loaded to the "hello" map.
+
+What we should also see is multiple lines being logged
+by the `MyK8sController.java`. We have configured Kubernetes
+to test the Hazelcast server's REST endpoint every few
+seconds to see if it is available.
+
+#### Hazelcast Management Center on Kubernetes
+
+The next thing we want to do is access the Hazelcast
+Management Center, to monitor our cluster.
+
+TODO
+
+```
+minikube service service-hazelcast-management-center --url --format "http://{{.IP}}:{{.Port}}/hazelcast-mancenter"
+```
+
+![Image of Hazelcast management center url][Screenshot17] 
+
+TODO
+
+![Image of Hazelcast management center showing server][Screenshot18] 
+
+#### Hazelcast Client on Kubernetes
+
+TODO
+
+```
+kubectl get pods
+```
+
+![Image of second get pods][Screenshot19] 
+
+TODO
+
+![Image of first Hazelcast client log][Screenshot20] 
+
+TODO
+
+![Image of second Hazelcast client pod][Screenshot21] 
+
+TODO
+
+![Image of third get pods][Screenshot22] 
+
+TODO
+
+```
+kubectl logs pod-hazelcast-client-0    
+```
+
+TODO
+
+```
+kubectl logs pod-hazelcast-client-1    
+```
+
+TODO
+
+```
+minikube service service-hazelcast-client --url
+```
+
+TODO
+
+![Image of Hazelcast client url][Screenshot23] 
+
+TODO
+
+![Image of Hazelcast client curl tests][Screenshot24] 
+
+TODO
+
+![Image of Hazelcast client log][Screenshot25] 
+
+TODO
+
+![Image of Hazelcast management center with clients][Screenshot26] 
+
+### Explaining the `deployment.yaml` file
+
+TODO
+
+### Tidy Up
+
+In the usual command window, run this command:
+
+```
+kubectl delete -f deployment.yaml
+```
+
+This directs Kubernetes to remove the items that it added when running
+the `kubectl create -f deployment.yaml`. The file lists what to create, so therefore
+what was created and should be deleted.
+
+![Image of Kubernetes deployment delete][Screenshot27] 
+
+Just to be sure try:
+
+```
+kubectl get pods --all-namespaces=true
+```
+
+The pods created (one Hazelcast server, one Hazelcast management center, two
+Hazelcast clients) will be shut down. Depending when you run this you might
+see them with status "_Terminating_" indicating they are shutting down,
+or perhaps completely gone. Retry this command until all these four pods
+are gone.
+
+The extra option here `--all-namespaces=true` directs the `get pods` command to list
+the system pods, so you can see the parts that Kubernetes uses itself.
+
+![Image of fourth get pods showing all][Screenshot28] 
+
+### Tidy-Up 2
+
+All the pods and containers we have added have now been deleted.
+However, Minikube and Docker are still running, consuming resources
+on your machine.
+
+Use
+
+```
+minikube stop
+minikube delete
+```
+
+to shutdown Minikube.
+
+![Image of Minikube shutdown and delete][Screenshot29] 
+
+#### Mac - Docker shutdown
+
+On a Mac, Docker runs as a daemon process. Stop it using the
+menu on command bar.
+
+![Image of Docker quit on Mac][Screenshot30] 
 
 #### Windows - Docker shutdown
 
