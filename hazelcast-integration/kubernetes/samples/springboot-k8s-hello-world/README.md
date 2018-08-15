@@ -54,7 +54,7 @@ So your computer needs enough strength to support all this load.
 
 On a Mac, this sample has been validated on a 4 core machine with 16GB of RAM.
 
-XXX Windows XXX
+XXX Windows XXX Want to know what size of machine this works on
 
 If you've less than this, it might just work or everything might grind to a halt as your
 machine starts swapping. 
@@ -257,7 +257,90 @@ need lots of hardware.
 
 Now finally we need to get Kubernetes bits installed on your machine.
 
-# TODO
+There are four of these to do, Docker, VirtualBox, Minikube and Kubernetes CLI.
+
+Each has their own install instructions, and it's best to refer to their
+own websites for this.
+
+#### Docker
+
+Docker is a tool for creating containers on a machine. Containers
+are like miniature virtual machines, containing single applications.
+
+See [here](https://www.docker.com) for Docker.
+
+You could install it this way
+
+```
+brew cask install docker
+```
+
+from a terminal window on Mac.
+
+XXX Windows XXX Want one liner if possible for Docker install
+
+### VirtualBox
+
+Virtual Box is a tool for creating virtual machines on your physical
+machine. We'll need it for Minikube.
+
+See [here](https://www.virtualbox.org/) for Virtual Box.
+
+You could install it this way
+
+```
+brew cask install virtualbox
+```
+
+from a terminal window on Mac.
+
+XXX Windows XXX Want one liner if possible for VirtualBox install
+
+#### Minikube
+
+Minikube is an implementation of Kubernetes that runs solely on
+your machine. Hence it's is "mini" compared to a normal Kubernetes
+set up that would use multiple physical machines.
+
+See [here](https://github.com/kubernetes/minikube) for Minikube.
+
+Minikube uses something to provide a virtual machine on your
+physical machine. Here we use VirtualBox installed in the 
+previous step,
+
+You could install it this way
+
+```
+brew cask install minikube
+```
+
+from a terminal window on Mac.
+
+XXX Windows XXX Want one liner if possible for Minikube install
+
+### Kubernetes CLI
+
+The last thing to install is the Kubernetes command line interpreter,
+so we can interact with Kubernetes via a terminal window.
+
+See [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/) for
+the Kubernetes CLI install instruction.
+
+Remember, Minikube here is the Kubernetes implementation. 
+The tool we install here (mainly `kubectl`the *KUBE*rnetes *C*on*T*ro*L* program)
+is just for easy interaction. 
+
+You could install it this way
+
+```
+brew install kubernetes-cli
+```
+
+XXX Windows XXX Want one liner if possible for kubectl install
+
+## Running Kubernetes
+
+And with Kubernetes ready to use, let's use it.
 
 ### `docker images`
 
@@ -303,7 +386,7 @@ On Mac the command is `eval $(minikube docker-env)`
 
 On Windows the command is
 
-XXX Windows XXX
+XXX Windows XXX Want the Windows equivalent if one exists for eval statement
 
 Note, as this command sets up temporary environment variables, you should
 continue to use this command window for the rest of the tutorial.
@@ -860,7 +943,26 @@ with another command.
 
 #### service-hazelcast-client
 
-TODO
+The sixth and last command binds a service
+named "_service-hazelcast-client_" to any pod
+with the name "_pod-hazelcast-client_".
+
+There will be two such pods, so this service
+name acts as a collection for the two pods.
+
+Finally, the service has this:
+
+```
+type: LoadBalancer
+```
+
+The service is implemented as a load balancer,
+so will alternate incoming requests across the
+pods.
+
+Again we need to use the `minikube service` command
+to find the external IP address for this load
+balancer so we can send HTTP traffic to it.
 
 ### Tidy Up
 
@@ -919,7 +1021,7 @@ menu on command bar.
 
 #### Windows - Docker shutdown
 
-XXX Windows XXX
+XXX Windows XXX Want to know how to shut down Docker daemon on Windows, ideally a screenshot
 
 ### Variations
 
