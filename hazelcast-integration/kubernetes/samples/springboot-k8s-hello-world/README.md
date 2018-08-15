@@ -10,7 +10,6 @@
 [Screenshot08]: src/site/markdown/images/screenshot08.png "Image screenshot08.png"
 [Screenshot09]: src/site/markdown/images/screenshot09.png "Image screenshot09.png"
 [Screenshot10]: src/site/markdown/images/screenshot10.png "Image screenshot10.png"
-[Screenshot11]: src/site/markdown/images/screenshot11.png "Image screenshot11.png"
 [Screenshot12]: src/site/markdown/images/screenshot12.png "Image screenshot12.png"
 [Screenshot13]: src/site/markdown/images/screenshot13.png "Image screenshot13.png"
 [Screenshot14]: src/site/markdown/images/screenshot14.png "Image screenshot14.png"
@@ -504,26 +503,30 @@ These pods will hold Docker containers that run on our only Kubernetes node
 (minikube) which in turn is a virtual machine provided by VirtualBox. Many
 layers of complication.
 
-#### Hazelcast Server on Kubernetes
+#### Hazelcast Server on Kubernetes - start
 
 The first thing we want to see is that the Hazelcast server is ok.
 We have only requested one of these be run.
 
-TODO
+Enter this command below
 
 ```
 kubectl get pods
 ```
 
+This asks Kubernetes for the status of the pods. The one we are interested in here is `pod-hazelcast-server-0`. This name comes from the `deployment.yaml` file.
+
+We're expecting this to be starting or started, since it doesn't depend on anything.
+
 ![Image of first get pods][Screenshot15] 
 
-TODO
+However being told "_Running_" is useful but not enough. We want to see what is happening inside.
+
+Run this command to stream the system output logs from the pod to our screen:
 
 ```
 kubectl logs pod-hazelcast-server-0    
 ```
-
-TODO
 
 ![Image of Hazelcast server logs][Screenshot16] 
 
@@ -537,12 +540,24 @@ by the `MyK8sController.java`. We have configured Kubernetes
 to test the Hazelcast server's REST endpoint every few
 seconds to see if it is available.
 
-#### Hazelcast Management Center on Kubernetes
+#### Hazelcast Management Center on Kubernetes - start &amp; use
 
 The next thing we want to do is access the Hazelcast
 Management Center, to monitor our cluster.
 
-TODO
+Again we can access the Management Center's logs (the command would be
+`kubectl logs ` and the pod name), but that's not particularly useful.
+Management Center is a web application, we wish to access it from
+a browser.
+
+However, the browser is on our computer, outside of Kubernetes control.
+The Management Center is inside the Kubernetes cluster.
+
+Section 4 of the `deployment.yaml` file exposes the Management Center pod
+as to HTTP traffic. All we need do is find out the pod's location.
+
+Use this command to ask Minikube for the routing to the Kubernetes
+service that fronts the Management Center pod.
 
 ```
 minikube service service-hazelcast-management-center --url --format "http://{{.IP}}:{{.Port}}/hazelcast-mancenter"
@@ -550,13 +565,30 @@ minikube service service-hazelcast-management-center --url --format "http://{{.I
 
 ![Image of Hazelcast management center url][Screenshot17] 
 
-TODO
+Now we know the Management Center's web address.
+
+In the screenshot above it is host 192.168.99.100 port 30549.
+
+The output of the Minikube service query is the full URL to paste
+into a browser to get access to the Management Center.
+
+When you do this, you'll be the first person to log into that
+Management Center instance, so will need to set up a logon
+and password for the "_admin_" user. Once done you can log in
+and should see something like the below.
 
 ![Image of Hazelcast management center showing server][Screenshot18] 
 
-#### Hazelcast Client on Kubernetes
+The only server in the "_k8s_" cluster is monitored by that Management
+Center.
 
-TODO
+#### Hazelcast Client on Kubernetes - start
+
+Now we turn out attention to the Hazelcast clients. In the `deployment.yaml`
+file we asked for two of these to run.
+
+Again, we need to see what state the Kubernetes pods holding Docker
+containers running Hazelcast clients are actually in. So try this:
 
 ```
 kubectl get pods
@@ -564,53 +596,269 @@ kubectl get pods
 
 ![Image of second get pods][Screenshot19] 
 
-TODO
+We have asked in the `deployment.yaml` file for two pods to be run for
+clients and these will be named `pod-hazelcast-client-0` for the first
+and `pod-hazelcast-client-1` for the second. 
+
+Depending how quickly you run this command, you should see one of three
+things. 
+* The first pod is initializing and the second isn't present.
+* The first pod is running and the second pod is initializing.
+* Or both pods are running.
+
+Kubernetes starts one after the other, so at some point the pod
+status will be each of these three options.
+
+Assuming the first pod is *running*, you can use this command
+to look at it's logs `kubectl logs pod-hazelcast-client-0` 
+and get output like the below:
 
 ![Image of first Hazelcast client log][Screenshot20] 
 
-TODO
+What the above screenshot shows is the usual Spring Boot
+start-up messages. At some point in this list you'll see a
+web server started on port 8080.
+
+Thereafter Kubernetes will test the "_/k8s_" URL every few
+seconds to check the container is good, and we'll see this
+logged by the `MyK8sController` class
+
+Now try the same command to inspect the logs of the 2nd
+pod (so `kubectl logs pod-hazelcast-client-1`).
+
+In this screenshot, we try to see the 2nd pods logs while
+it is still initializing and we get rejected. It's safe
+enough to keep trying this until the pod is up.
 
 ![Image of second Hazelcast client pod][Screenshot21] 
 
-TODO
+Finally the `kubectl get pods` command will show all four pods
+we need are up and running.
 
 ![Image of third get pods][Screenshot22] 
 
-TODO
+#### Hazelcast Client on Kubernetes - use
 
-```
-kubectl logs pod-hazelcast-client-0    
-```
+Now that the clients are up and running, we can actually use
+them.
 
-TODO
+What we have done in the `deployment.yaml` file, step 6, is to
+put a load balancer in front of the client's REST interface.
 
-```
-kubectl logs pod-hazelcast-client-1    
-```
+So there are 2 Hazelcast clients but 1 URL that alternates
+traffic accross them.
 
-TODO
+Use this command to find out the address of the load balancer:
 
 ```
 minikube service service-hazelcast-client --url
 ```
 
-TODO
+In the example below the load balancer has been placed on
+192.168.99.100 port 30339. It might not that for you.
+
+Now we can try the `curl` command a few times against the
+load balancer. Here we try it three times and get
+the usual "_Hello World_" output.
 
 ![Image of Hazelcast client url][Screenshot23] 
 
-TODO
+Now try `kubectl logs pod-hazelcast-client-0` and/or `kubectl logs pod-hazelcast-client-1`.
+
+What we see in the below output from one of the pods is
+that the "_index()_" method in `MyRestController` has been
+invoked twice. There are still lots of lines as
+Kubernetes is polling the "_/k8s_" URL too, but it's
+there if you look closely (and easier to find if you
+turn off logging for the "_/k8s_" call).
 
 ![Image of Hazelcast client curl tests][Screenshot24] 
 
-TODO
+So we called the load balancer 3 times, and saw 
+the REST URL output from one client 2 times. So the
+load balancer sent the other call to the other client.
 
 ![Image of Hazelcast client log][Screenshot25] 
 
-TODO
+Finally, if you go back the Hazelcast management center,
+you should now see two clients connected.
 
 ![Image of Hazelcast management center with clients][Screenshot26] 
 
+Remember, clients don't show by default. These ones are
+visible as we've set `hazelcast.client.statistics.enabled` to "_true_"
+in the client's `hazelcast-client.xml` file.
+
 ### Explaining the `deployment.yaml` file
+
+All the magic happens in the `deployment.yaml` file, which acts
+as a command script that the `kubectl` program executes.
+
+Actually, this file contains 6 commands in sequence,
+that `kubectl` will execute.
+
+Three dashes (`---`) are used to separate the 6 commands
+so we can put them in the one file. 6 files is possible
+to, and as we will see might be a better idea.
+
+So what do the 6 sections do ?
+
+#### pod-hazelcast-server
+
+This first section creates a Kubernetes pod.
+
+There is only one pod created by this section, as we
+have specified:
+
+```
+replicas: 1
+```
+
+The pod contains this image, built earlier by Maven
+and found in the Docker image repository:
+
+```
+image: "springboot-k8s-hello-world/the-server"
+```
+
+Finally, we specify a URL that Kubernetes can use
+to test the pod for it being useable.
+
+```
+livenessProbe:
+  httpGet:
+    path: /k8s
+```
+
+This is of course the REST endpoint "_/k8s_" that
+the `MyK8SController` class implements.
+
+#### service-hazelcast-server
+
+This second section creates a "_service_" in Kubernetes,
+named "service-hazelcast-server".
+
+It uses this statement for the service to include
+the Hazelcast server pods:
+
+```
+selector:
+  app: pod-hazelcast-server
+```
+
+This service is a collection that allows us to
+group a number of pods. Specifically, only 
+Hazelcast server pods, and as per the first
+section only one of these Hazelcast server pods
+is started.
+
+Kubernetes will probably be in the middle of
+the Hazelcast server pod starting when this
+second action is executed, but that's ok.
+We can bind the service and the pod together
+even if the pod isn't yet useable.
+
+#### pod-hazelcast-management-center
+
+The third section starts another single pod
+for the Hazelcast management center.
+
+This is a similar idea to the pod specification
+for the Hazelcast server. We request one pod
+(`replicas: 1`) and specify the image from the
+Docker repository (`image: hazelcast/management-center`).
+
+One difference though is the image `hazelcast/management-center`
+isn't one we build ourselves. It's built by
+Hazelcast, and in earlier setup we'd requested
+the `docker pull hazelcast/management-center` to download it.
+
+If you want to look, you can find this image
+on the public Docker hub [here](https://hub.docker.com/r/hazelcast/management-center/).
+
+Again, Kubernetes will action this request while
+it's doing the first two, which is fine.
+The Hazelcast server can start before
+the Hazelcast management center, or
+vice versa.
+
+#### service-hazelcast-management-center
+
+Command 4 is similar to command 2, we ask
+for a service name to be bound to the pod
+created by the proceeding command.
+
+So the service name "_service-hazelcast-management-center_"
+is bound to the "_pod-hazelcast-management-center_" pod.
+
+Finally we specify this,
+
+```
+type: NodePort
+```
+
+This opens a node and port on the service that connects
+to the pod. In other words, this exposes the pod's
+HTTP interface to the outside world, so we can log into
+the Hazelcast management center.
+
+Again, this command will run in parallel while the
+Hazelcast management center is starting, so any
+attempt to log in while it's starting won't be
+particularly successful. Since we've alrady downloaded
+the Hazelcast management center Docker image, there
+shouldn't be any waiting for it to start so this
+shouldn't really be a problem.
+
+Remember, much earlier we used the `minikube service` command
+to find the actual node and port for this service.
+
+#### pod-hazelcast-client
+
+Command five starts 2 pods for Hazelcast clients, as
+it has this:
+
+```
+replicas: 2
+```
+
+Mostly, the specification is pretty much the same
+as we've seen before. There's an Docker image name
+to run (`springboot-k8s-hello-world/the-client`) and a URL for
+Kubernetes to check the pod is ok.
+
+What is different here is this section:
+
+```
+initContainers:
+    name: wait-for-pod-hazelcast-server 
+    image: busybox
+    command: ['sh', '-c', 'sleep 120']
+```
+
+We don't want Kubernetes to start the pod containing
+the Hazelcast client (command section 5) until the
+pod containing the Hazelcast server (command section 1)
+is ready.
+
+So we use the `initContainers` section to specify what
+initialisation actions to do prior to starting the pod.
+
+There are a number of ways to achieve this. Here we
+go for a naive method, we wait for 120 seconds.
+
+There are certainly better ways to do this, but not
+simpler.
+
+For example, you could test the Hazelcast server's
+"_/k8s_" URL.
+
+Or you could split the `deployment.yaml` file into two.
+Run steps 1 to 4 with one command, manually verify
+everything is ready, and then run steps 5 &amp; 6
+with another command.
+
+#### service-hazelcast-client
 
 TODO
 
