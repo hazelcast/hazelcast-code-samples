@@ -25,6 +25,9 @@
 
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
+        <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
+        
+        <lombok.version>1.16.22</lombok.version>
     </properties>
 
     <repositories>
@@ -119,6 +122,16 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <profiles>
         <profile>
