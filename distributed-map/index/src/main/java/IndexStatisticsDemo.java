@@ -85,8 +85,7 @@ public class IndexStatisticsDemo {
             System.out.println(
                     "\tAverage Remove Latency:\t\t" + indexStats.getTotalRemoveLatency() / indexStats.getRemoveCount() + " ns");
 
-            System.out.println("\tOn-Heap Memory Cost:\t\t" + indexStats.getOnHeapMemoryCost() + " bytes (approximate)");
-            System.out.println("\tOff-Heap Memory Cost:\t\t" + indexStats.getOffHeapMemoryCost() + " bytes");
+            System.out.println("\tMemory Cost:\t\t\t\t" + indexStats.getMemoryCost() + " bytes");
         }
 
         // 7. Shutdown the instance.
