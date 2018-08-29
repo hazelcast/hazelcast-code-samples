@@ -1,5 +1,3 @@
-# pcf-tls-integration
-
 # Sample Spring Boot Application to use Hazelcast for PCF with TLS enabled
 
 This is a sample Spring Boot application that exposes some basic Hazelcast map operations like `IMap#get`, `IMap#put`

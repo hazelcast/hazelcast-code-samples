@@ -27,13 +27,13 @@ public class Application {
     public static final String LICENSE_KEY = "YOUR_LICENSE_KEY";
     private static ClientConfig clientConfig;
     private static File tsFile;
-    private static final String pwd = "123456";
+    private static final String PASSWORD = "123456";
 
     @Bean
     public HazelcastInstance hazelcastClient() {
         Properties clientSslProps = new Properties();
         clientSslProps.setProperty("trustStore", tsFile.getAbsolutePath());
-        clientSslProps.setProperty("trustStorePassword", pwd);
+        clientSslProps.setProperty("trustStorePassword", PASSWORD);
         clientConfig.getNetworkConfig().setSSLConfig(new SSLConfig().setEnabled(true).setProperties(clientSslProps));
         clientConfig.setLicenseKey(LICENSE_KEY);
         return HazelcastClient.newHazelcastClient(clientConfig);
