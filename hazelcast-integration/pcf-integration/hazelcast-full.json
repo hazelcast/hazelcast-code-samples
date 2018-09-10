@@ -1,0 +1,722 @@
+{
+  "licenseKey": "YOUR_LICENSE_KEY",
+  "instanceCount": 9,
+  "mancenterAppName": "mancenter",
+  "managementCenterConfig": {
+    "enabled": true,
+    "updateInterval": 2
+  },
+  "properties": {
+    "your-property": "Value of the property"
+  },
+  "groupConfig": {
+    "name": "dev",
+    "password": "dev-pass"
+  },
+  "networkConfig": {
+    "port": 5701,
+    "portCount": 100,
+    "portAutoIncrement": true,
+    "reuseAddress": false,
+    "publicAddress": "11.22.33.44:5555",
+    "outboundPortDefinitions": [
+      "34500"
+    ],
+    "interfaces": {
+      "enabled": false,
+      "interfaceSet": [
+        "10.10.1.*"
+      ]
+    },
+    "join": {
+      "multicastConfig": {
+        "enabled": true,
+        "multicastGroup": "224.2.2.3",
+        "multicastPort": 54327,
+        "multicastTimeoutSeconds": 2,
+        "multicastTimeToLive": 32,
+        "trustedInterfaces": [],
+        "loopbackModeEnabled": false
+      },
+      "tcpIpConfig": {
+        "connectionTimeoutSeconds": 5,
+        "enabled": false,
+        "members": [
+          "127.0.0.1"
+        ]
+      },
+      "awsConfig": {
+        "enabled": false,
+        "accessKey": "my-access-key",
+        "secretKey": "my-secret-key",
+        "region": "us-west-1",
+        "securityGroupName": "hazelcast-sg",
+        "tagKey": "type",
+        "tagValue": "hz-nodes",
+        "hostHeader": "ec2.amazonaws.com",
+        "iamRole": "dummy",
+        "connectionTimeoutSeconds": 5
+      },
+      "discoveryConfig": {
+        "discoveryStrategyConfigs": [
+          {
+            "properties": {
+              "credential": "GCE_CREDENTIAL",
+              "provider": "google-compute-engine",
+              "identity": "GCE_IDENTITY"
+            },
+            "className": "com.hazelcast.jclouds.JCloudsDiscoveryStrategy"
+          }
+        ]
+      }
+    },
+    "symmetricEncryptionConfig": {
+      "enabled": false,
+      "algorithm": "PBEWithMD5AndDES",
+      "password": "...",
+      "salt": "...",
+      "iterationCount": 7
+    },
+    "socketInterceptorConfig": {
+      "enabled": false,
+      "properties": {}
+    },
+    "sslConfig": {
+      "enabled": false,
+      "factoryClassName": "com.hazelcast.nio.ssl.BasicSSLContextFactory",
+      "properties": {
+        "mutualAuthentication": "REQUIRED",
+        "keyStoreType": "JKS",
+        "trustStorePassword": "changeit",
+        "trustStoreType": "JKS",
+        "keyStorePassword": "secret.97531",
+        "protocol": "TLS"
+      }
+    },
+    "memberAddressProviderConfig": {
+      "enabled": false,
+      "className": "com.hazelcast.MemberAddressProviderImpl",
+      "properties": {
+        "prop2": "prop2-value",
+        "prop1": "prop1-value"
+      }
+    }
+  },
+  "mapConfigs": {
+    "default": {
+      "name": "default",
+      "backupCount": 1,
+      "asyncBackupCount": 0,
+      "timeToLiveSeconds": 0,
+      "maxIdleSeconds": 0,
+      "maxSizeConfig": {
+        "maxSizePolicy": "PER_NODE",
+        "size": 2147483647
+      },
+      "evictionPolicy": "NONE",
+      "mapStoreConfig": {
+        "enabled": true,
+        "writeCoalescing": true,
+        "className": "com.hazelcast.examples.DummyStore",
+        "writeDelaySeconds": 60,
+        "writeBatchSize": 1000,
+        "properties": {
+          "jdbc_url": "my.jdbc.com"
+        },
+        "initialLoadMode": "LAZY"
+      },
+      "nearCacheConfig": {
+        "inMemoryFormat": "BINARY",
+        "serializeKeys": false,
+        "invalidateOnChange": true,
+        "timeToLiveSeconds": 0,
+        "maxIdleSeconds": 60,
+        "maxSize": 5000,
+        "evictionPolicy": "LRU",
+        "evictionConfig": {
+          "size": 1000,
+          "maxSizePolicy": "USED_NATIVE_MEMORY_SIZE",
+          "evictionPolicy": "LFU",
+          "sizeConfigured": true
+        },
+        "cacheLocalEntries": false,
+        "localUpdatePolicy": "INVALIDATE",
+        "preloaderConfig": {
+          "enabled": false,
+          "directory": "",
+          "storeInitialDelaySeconds": 600,
+          "storeIntervalSeconds": 600
+        }
+      },
+      "readBackupData": false,
+      "cacheDeserializedValues": "INDEX_ONLY",
+      "mergePolicy": "PutIfAbsentMergePolicy",
+      "inMemoryFormat": "BINARY",
+      "wanReplicationRef": {
+        "name": "my-wan-cluster-batch",
+        "mergePolicy": "com.hazelcast.map.merge.PassThroughMergePolicy",
+        "filters": [
+          "com.example.SampleFilter",
+          "com.example.SampleFilter2"
+        ],
+        "republishingEnabled": false
+      },
+      "entryListenerConfigs": [
+        {
+          "local": false,
+          "includeValue": false,
+          "className": "com.your-package.MyEntryListener"
+        }
+      ],
+      "partitionLostListenerConfigs": [
+        {
+          "className": "com.your-package.YourPartitionLostListener"
+        }
+      ],
+      "mapIndexConfigs": [
+        {
+          "attribute": "name",
+          "ordered": false
+        },
+        {
+          "attribute": "age",
+          "ordered": true
+        }
+      ],
+      "mapAttributeConfigs": [
+        {
+          "name": "currency",
+          "extractor": "com.bank.CurrencyExtractor"
+        }
+      ],
+      "queryCacheConfigs": [
+        {
+          "batchSize": 2,
+          "bufferSize": 32,
+          "delaySeconds": 3,
+          "includeValue": true,
+          "populate": true,
+          "coalesce": false,
+          "inMemoryFormat": "BINARY",
+          "name": "myContQueryCache",
+          "predicateConfig": {
+            "className": "com.hazelcast.examples.ExamplePredicate"
+          },
+          "evictionConfig": {
+            "size": 1000,
+            "maxSizePolicy": "USED_NATIVE_MEMORY_SIZE",
+            "evictionPolicy": "LFU",
+            "sizeConfigured": true
+          },
+          "entryListenerConfigs": [
+            {
+              "local": false,
+              "includeValue": false,
+              "className": "..."
+            }
+          ],
+          "indexConfigs": [
+            {
+              "attribute": "...",
+              "ordered": true
+            }
+          ]
+        }
+      ],
+      "statisticsEnabled": true,
+      "hotRestartConfig": {
+        "enabled": false,
+        "fsync": false
+      }
+    }
+  },
+  "cacheConfigs": {
+    "default": {
+      "name": "default",
+      "keyType": "java.lang.Object",
+      "valueType": "java.lang.Object",
+      "statisticsEnabled": false,
+      "managementEnabled": false,
+      "readThrough": true,
+      "writeThrough": true,
+      "cacheLoaderFactory": "com.example.cache.MyCacheLoaderFactory",
+      "cacheWriterFactory": "com.example.cache.MyCacheWriterFactory",
+      "expiryPolicyFactoryConfig": {
+        "className": "com.example.cache.MyExpirePolicyFactory"
+      },
+      "cacheEntryListeners": [
+        {
+          "cacheEntryListenerFactory": "com.example.cache.MyEntryListenerFactory",
+          "cacheEntryEventFilterFactory": "com.example.cache.MyEntryEventFilterFactory",
+          "oldValueRequired": false,
+          "synchronous": false
+        }
+      ],
+      "asyncBackupCount": 0,
+      "backupCount": 1,
+      "inMemoryFormat": "NATIVE",
+      "evictionConfig": {
+        "size": 1000,
+        "maxSizePolicy": "USED_NATIVE_MEMORY_SIZE",
+        "evictionPolicy": "LFU",
+        "sizeConfigured": true
+      },
+      "wanReplicationRef": {
+        "name": "my-wan-cluster-batch",
+        "mergePolicy": "com.hazelcast.cache.merge.PassThroughCacheMergePolicy",
+        "filters": [
+          "com.example.SampleFilter"
+        ],
+        "republishingEnabled": true
+      },
+      "partitionLostListenerConfigs": [
+        {
+          "className": "com.your-package.YourPartitionLostListener"
+        }
+      ],
+      "mergePolicy": "com.hazelcast.cache.merge.LatestAccessCacheMergePolicy",
+      "hotRestartConfig": {
+        "enabled": false,
+        "fsync": false
+      },
+      "disablePerEntryInvalidationEvents": true
+    }
+  },
+  "topicConfigs": {
+    "default": {
+      "name": "default",
+      "globalOrderingEnabled": true,
+      "statisticsEnabled": true,
+      "multiThreadingEnabled": false,
+      "listenerConfigs": [
+        {
+          "className": "com.hazelcast.examples.MessageListener"
+        }
+      ]
+    }
+  },
+  "reliableTopicConfigs": {
+    "default": {
+      "readBatchSize": 10,
+      "name": "default",
+      "statisticsEnabled": true,
+      "listenerConfigs": [
+        {
+          "className": "com.hazelcast.examples.MessageListener"
+        }
+      ],
+      "topicOverloadPolicy": "ERROR"
+    }
+  },
+  "queueConfigs": {
+    "default": {
+      "name": "default",
+      "listenerConfigs": [
+        {
+          "includeValue": true,
+          "className": "com.hazelcast.examples.ItemListener"
+        }
+      ],
+      "backupCount": 1,
+      "asyncBackupCount": 0,
+      "maxSize": 0,
+      "emptyQueueTtl": -1,
+      "queueStoreConfig": {
+        "enabled": true,
+        "className": "com.hazelcast.QueueStoreImpl",
+        "properties": {
+          "bulk-load": "500",
+          "memory-limit": "1000",
+          "binary": "false"
+        }
+      },
+      "statisticsEnabled": true
+    }
+  },
+  "lockConfigs": {
+    "default": {
+      "name": "default",
+      "quorumName": "quorumRuleWithThreeNodes"
+    }
+  },
+  "multiMapConfigs": {
+    "default": {
+      "name": "default",
+      "valueCollectionType": "SET",
+      "listenerConfigs": [
+        {
+          "local": true,
+          "includeValue": true,
+          "className": "com.hazelcast.examples.EntryListener"
+        }
+      ],
+      "binary": true,
+      "backupCount": 1,
+      "asyncBackupCount": 0,
+      "statisticsEnabled": true
+    }
+  },
+  "listConfigs": {
+    "default": {
+      "name": "default",
+      "listenerConfigs": [
+        {
+          "includeValue": true,
+          "className": "com.hazelcast.examples.ItemListener"
+        }
+      ],
+      "backupCount": 1,
+      "asyncBackupCount": 0,
+      "maxSize": 0,
+      "statisticsEnabled": false
+    }
+  },
+  "setConfigs": {
+    "default": {
+      "name": "default",
+      "listenerConfigs": [
+        {
+          "includeValue": true,
+          "className": "com.hazelcast.examples.ItemListener"
+        }
+      ],
+      "backupCount": 1,
+      "asyncBackupCount": 0,
+      "maxSize": 10,
+      "statisticsEnabled": true
+    }
+  },
+  "executorConfigs": {
+    "default": {
+      "name": "default",
+      "poolSize": 16,
+      "queueCapacity": 0,
+      "statisticsEnabled": true
+    }
+  },
+  "durableExecutorConfigs": {
+    "default": {
+      "name": "default",
+      "poolSize": 16,
+      "durability": 1,
+      "capacity": 100
+    }
+  },
+  "scheduledExecutorConfigs": {
+    "default": {
+      "name": "default",
+      "durability": 1,
+      "capacity": 100,
+      "poolSize": 16
+    }
+  },
+  "semaphoreConfigs": {
+    "default": {
+      "name": "default",
+      "initialPermits": 0,
+      "backupCount": 1,
+      "asyncBackupCount": 0
+    }
+  },
+  "replicatedMapConfigs": {
+    "replicatedMap1": {
+      "name": "replicatedMap1",
+      "inMemoryFormat": "BINARY",
+      "asyncFillup": true,
+      "statisticsEnabled": true,
+      "mergePolicy": "com.hazelcast.replicatedmap.merge.PutIfAbsentMapMergePolicy",
+      "listenerConfigs": [
+        {
+          "local": true,
+          "includeValue": true,
+          "className": "com.hazelcast.examples.EntryListener"
+        }
+      ]
+    }
+  },
+  "wanReplicationConfigs": {
+    "my-wan-cluster-batch": {
+      "name": "my-wan-cluster-batch",
+      "wanConsumerConfig": {
+        "properties": {},
+        "className": "com.myCompany.CustomWanConsumer"
+      },
+      "wanPublisherConfigs": [
+        {
+          "groupName": "nyc",
+          "queueCapacity": 15000,
+          "queueFullBehavior": "DISCARD_AFTER_MUTATION",
+          "properties": {
+            "response.timeout.millis": "60000",
+            "endpoints": "10.3.5.1:5701,10.3.5.2:5701",
+            "group.password": "nyc-pass",
+            "batch.max.delay.millis": "2000",
+            "batch.size": "1000",
+            "snapshot.enabled": "false",
+            "ack.type": "ACK_ON_OPERATION_COMPLETE"
+          },
+          "className": "com.hazelcast.enterprise.wan.replication.WanBatchReplication",
+          "awsConfig": {
+            "enabled": false,
+            "region": "us-east-1",
+            "hostHeader": "ec2.amazonaws.com",
+            "connectionTimeoutSeconds": 5
+          },
+          "discoveryConfig": {
+            "discoveryStrategyConfigs": []
+          }
+        }
+      ]
+    }
+  },
+  "jobTrackerConfigs": {
+    "default": {
+      "name": "default",
+      "maxThreadSize": 0,
+      "retryCount": 0,
+      "chunkSize": 1000,
+      "queueSize": 0,
+      "communicateStats": true,
+      "topologyChangedStrategy": "CANCEL_RUNNING_OPERATION"
+    }
+  },
+  "quorumConfigs": {
+    "quorumRuleWithThreeMembers": {
+      "name": "quorumRuleWithThreeMembers",
+      "enabled": true,
+      "size": 3,
+      "listenerConfigs": [
+        {
+          "className": "com.your-package.ThreeMemberQuorumListener"
+        }
+      ],
+      "type": "READ_WRITE",
+      "quorumFunctionClassName": "com.your-package.AbsPresMyQuorum"
+    }
+  },
+  "ringbufferConfigs": {
+    "default": {
+      "name": "default",
+      "capacity": 10000,
+      "backupCount": 1,
+      "asyncBackupCount": 0,
+      "timeToLiveSeconds": 0,
+      "inMemoryFormat": "BINARY",
+      "ringbufferStoreConfig": {
+        "enabled": true,
+        "className": "com.hazelcast.RingbufferStoreImpl",
+        "properties": {
+          "prop2": "prop2-value",
+          "prop1": "prop1-value"
+        }
+      }
+    }
+  },
+  "cardinalityEstimatorConfigs": {
+    "default": {
+      "name": "default",
+      "backupCount": 1,
+      "asyncBackupCount": 0
+    }
+  },
+  "mapEventJournalConfigs": {
+    "default": {
+      "mapName": "default",
+      "enabled": false,
+      "capacity": 10000,
+      "timeToLiveSeconds": 0
+    }
+  },
+  "cacheEventJournalConfigs": {
+    "default": {
+      "cacheName": "default",
+      "enabled": false,
+      "capacity": 10000,
+      "timeToLiveSeconds": 0
+    }
+  },
+  "servicesConfig": {
+    "enableDefaults": false,
+    "services": {
+      "custom-service": {
+        "enabled": true,
+        "name": "custom-service",
+        "className": "com.hazelcast.examples.MyService",
+        "properties": {
+          "prop2": "prop2-value",
+          "prop1": "prop1-value"
+        }
+      }
+    }
+  },
+  "securityConfig": {
+    "enabled": false,
+    "memberCredentialsConfig": {
+      "className": "com.hazelcast.examples.MyCredentialsFactory",
+      "properties": {
+        "property": "value"
+      }
+    },
+    "memberLoginModuleConfigs": [
+      {
+        "className": "com.hazelcast.examples.MyRequiredLoginModule",
+        "usage": "REQUIRED",
+        "properties": {
+          "property": "value"
+        }
+      }
+    ],
+    "securityInterceptorConfigs": [
+      {
+        "className": "com.your-package.YourSecurityInterceptorImplementation"
+      }
+    ],
+    "clientLoginModuleConfigs": [
+      {
+        "className": "com.hazelcast.examples.MyOptionalLoginModule",
+        "usage": "OPTIONAL",
+        "properties": {
+          "property": "value"
+        }
+      },
+      {
+        "className": "com.hazelcast.examples.MyRequiredLoginModule",
+        "usage": "REQUIRED",
+        "properties": {
+          "property": "value"
+        }
+      }
+    ],
+    "clientPolicyConfig": {
+      "className": "com.hazelcast.examples.MyPermissionPolicy",
+      "properties": {
+        "property": "value"
+      }
+    },
+    "clientPermissionConfigs": [
+      {
+        "type": "MAP",
+        "name": "custom",
+        "principal": "dev",
+        "endpoints": [
+          "127.0.0.1"
+        ],
+        "actions": [
+          "read",
+          "create",
+          "destroy",
+          "put"
+        ]
+      },
+      {
+        "type": "ALL",
+        "name": "*",
+        "principal": "admin",
+        "endpoints": [
+          "127.0.0.1"
+        ]
+      }
+    ]
+  },
+  "listenerConfigs": [
+    {
+      "className": "your-package.YourMembershipListener"
+    },
+    {
+      "className": "your-package.YourDistributedObjectListener"
+    },
+    {
+      "className": "your-package.YourMigrationListener"
+    },
+    {
+      "className": "your-package.YourPartitionLostListener"
+    }
+  ],
+  "partitionGroupConfig": {
+    "enabled": true,
+    "groupType": "CUSTOM",
+    "memberGroupConfigs": [
+      {
+        "interfaces": [
+          "10.10.5.*",
+          "10.10.3.*",
+          "10.10.0.*"
+        ]
+      },
+      {
+        "interfaces": [
+          "10.10.2.*",
+          "10.10.1.*",
+          "10.10.10.10-100"
+        ]
+      }
+    ]
+  },
+  "serializationConfig": {
+    "portableVersion": 0,
+    "dataSerializableFactoryClasses": {
+      "1": "com.hazelcast.examples.DataSerializableFactory"
+    },
+    "portableFactoryClasses": {
+      "1": "com.hazelcast.examples.PortableFactory"
+    },
+    "globalSerializerConfig": {
+      "className": "com.hazelcast.examples.GlobalSerializerFactory",
+      "overrideJavaSerialization": false
+    },
+    "serializerConfigs": [
+      {
+        "className": "com.hazelcast.examples.SerializerFactory",
+        "typeClassName": "com.hazelcast.examples.DummyType"
+      }
+    ],
+    "checkClassDefErrors": true,
+    "useNativeByteOrder": false,
+    "byteOrder": {
+      "name": "BIG_ENDIAN"
+    },
+    "enableCompression": false,
+    "enableSharedObject": true,
+    "allowUnsafe": false
+  },
+  "userContext": {},
+  "memberAttributeConfig": {
+    "attributes": {
+      "CPU_CORE_COUNT": 4,
+      "CPU_CORE_FREQ": 1033
+    }
+  },
+  "nativeMemoryConfig": {
+    "enabled": true,
+    "size": {
+      "value": 256,
+      "unit": "MEGABYTES"
+    },
+    "allocatorType": "POOLED",
+    "minBlockSize": 32,
+    "pageSize": 4194304,
+    "metadataSpacePercentage": 12.5
+  },
+  "hotRestartPersistenceConfig": {
+    "enabled": true,
+    "baseDir": {
+      "path": "/mnt/hot-restart"
+    },
+    "backupDir": {
+      "path": "/mnt/hot-backup"
+    },
+    "parallelism": 1,
+    "validationTimeoutSeconds": 120,
+    "dataLoadTimeoutSeconds": 900,
+    "clusterDataRecoveryPolicy": "PARTIAL_RECOVERY_MOST_COMPLETE"
+  },
+  "userCodeDeploymentConfig": {
+    "classCacheMode": "ETERNAL",
+    "providerMode": "LOCAL_CLASSES_ONLY",
+    "blacklistedPrefixes": "com.foo",
+    "whitelistedPrefixes": "com.bar.MyClass",
+    "providerFilter": "HAS_ATTRIBUTE:lite",
+    "enabled": true
+  },
+  "liteMember": false
+}
