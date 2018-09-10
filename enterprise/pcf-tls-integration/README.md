@@ -26,13 +26,15 @@ This application uses Hazelcast Enterprise Client to connect on a TLS-secured co
     scale in/out your Hazelcast cluster.
     - `mancenterAppName`: This option is only meaningful when Hazelcast Management Center is enabled using below configuration.
      This has to be a unique name as this name will be registered to your PCF app domain. (i.e; http://mancenter.apps.yourpcfdomain.com)
-     Note :Leave the configuration as it is if you wouldn't like to start Management Center at this point.
+     Note: Leave the configuration as it is if you wouldn't like to start Management Center at this point.
     ```
     ...
     "managementCenterConfig":{"enabled":true,"updateInterval":3}
     ...
     "mancenterAppName":"mancenter"
     ```
+
+  A [hazelcast-full.json](../../hazelcast-integration/pcf-integration/hazelcast-full.json) file in this project is provided as well to show syntax for advanced settings. You can copy the relevant parts to your own config file and change the values according to your needs.
 
 5) Check you service status using `cf services`. In our case, there are two Hazelcast services available.
 
