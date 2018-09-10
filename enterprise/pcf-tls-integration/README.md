@@ -34,7 +34,7 @@ This application uses Hazelcast Enterprise Client to connect on a TLS-secured co
     "mancenterAppName":"mancenter"
     ```
 
-  A [hazelcast-full.json](../../hazelcast-integration/pcf-integration/hazelcast-full.json) file in this project is provided as well to show syntax for advanced settings. You can copy the relevant parts to your own config file and change the values according to your needs.5) Check you service status using `cf services`. In our case, there are two Hazelcast services available.
+  A [hazelcast-full.json](../../hazelcast-integration/pcf-integration/hazelcast-full.json) file in this project is provided as well to show syntax for advanced settings. You can copy the relevant parts to your own config file and change the values according to your needs.
 
 5) Check you service status using `cf services`. In our case, there are two Hazelcast services available.
 
