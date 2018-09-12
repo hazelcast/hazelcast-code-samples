@@ -33,7 +33,11 @@
 An step-by-step example to running Hazelcast on Kubernetes, the classic "_Hello World_"
 style beginners introduction. 
 
-The sample includes instructions and screenshots for running on Mac and Windows.
+The sample includes instructions and screenshots for running on Mac.
+
+The process is essentially the same for Windows or Linux, although for Windows you will
+need a version that supports the appropriate networking (Windows 10 Professional not Windows 10 Home,
+for instance).
 
 See [here](https://github.com/hazelcast/hazelcast-code-samples/tree/master/hazelcast-integration/kubernetes/samples/springboot-k8s-hello-world) for the code.
 
@@ -52,12 +56,11 @@ Kubernetes oversees a number of independent machine images, a bit like virtual
 machines. In this sample these will all run on your computer.
 So your computer needs enough strength to support all this load.
 
-On a Mac, this sample has been validated on a 4 core machine with 16GB of RAM.
+This sample has been validated on a 4 core machine with 16GB of RAM, and this
+was borderline for performance. It worked but slowly.
 
-XXX Windows XXX Want to know what size of machine this works on
-
-If you've less than this, it might just work or everything might grind to a halt as your
-machine starts swapping. 
+If you have less power than this, it's unlikely to work for you, your machine
+will start swapping and grind to a halt.
 
 ## Hazelcast concepts
 
@@ -275,10 +278,6 @@ You could install it this way
 brew cask install docker
 ```
 
-from a terminal window on Mac.
-
-XXX Windows XXX Want one liner if possible for Docker install
-
 ### VirtualBox
 
 Virtual Box is a tool for creating virtual machines on your physical
@@ -291,10 +290,6 @@ You could install it this way
 ```
 brew cask install virtualbox
 ```
-
-from a terminal window on Mac.
-
-XXX Windows XXX Want one liner if possible for VirtualBox install
 
 #### Minikube
 
@@ -314,10 +309,6 @@ You could install it this way
 brew cask install minikube
 ```
 
-from a terminal window on Mac.
-
-XXX Windows XXX Want one liner if possible for Minikube install
-
 ### Kubernetes CLI
 
 The last thing to install is the Kubernetes command line interpreter,
@@ -335,8 +326,6 @@ You could install it this way
 ```
 brew install kubernetes-cli
 ```
-
-XXX Windows XXX Want one liner if possible for kubectl install
 
 ## Running Kubernetes
 
@@ -383,10 +372,6 @@ We next need to connect Kubernetes to our Docker, so that Kubernetes can
 find application images to deploy to the machines it creates.
 
 On Mac the command is `eval $(minikube docker-env)`
-
-On Windows the command is
-
-XXX Windows XXX Want the Windows equivalent if one exists for eval statement
 
 Note, as this command sets up temporary environment variables, you should
 continue to use this command window for the rest of the tutorial.
@@ -1012,16 +997,12 @@ to shutdown Minikube.
 
 ![Image of Minikube shutdown and delete][Screenshot29] 
 
-#### Mac - Docker shutdown
+#### Docker shutdown
 
 On a Mac, Docker runs as a daemon process. Stop it using the
 menu on command bar.
 
 ![Image of Docker quit on Mac][Screenshot30] 
-
-#### Windows - Docker shutdown
-
-XXX Windows XXX Want to know how to shut down Docker daemon on Windows, ideally a screenshot
 
 ### Variations
 
