@@ -48,8 +48,8 @@ minishift v1.11.0+d7f374a
 CDK v3.3.0-1
 
 $ oc version
-oc v3.7.14
-kubernetes v1.7.6+a08f5eeb62
+oc v3.9.0-alpha.3+78ddc10
+kubernetes v1.9.1+a0ce1bc657
 features: Basic-Auth
 ```
 
@@ -325,6 +325,8 @@ The results should be visible in Management Center.
 ![Management Center](markdown/images/management_center_entry_processor.png)
 
 # Authenticate to Red Hat Container Catalog
+
+**NOTE**: Executing the following commands requires `oc` in version `3.9` or higher!
 
 The `hazelcast-cluster/hazelcast-enterprise-openshift-rhel/hazelcast.yaml` uses images from [Red Hat Container Catalog](https://access.redhat.com/containers/), which requires setting Red Hat credentials. In order to do it, you need to execute the following command after creating the OpenShift project.
 

@@ -79,6 +79,10 @@
             <version>2.0.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.annotation</groupId>
+            <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

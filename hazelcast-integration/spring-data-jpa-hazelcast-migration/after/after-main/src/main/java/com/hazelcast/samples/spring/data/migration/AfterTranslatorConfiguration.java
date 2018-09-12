@@ -6,9 +6,6 @@ import com.hazelcast.client.config.XmlClientConfigBuilder;
 import com.hazelcast.core.HazelcastInstance;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.hazelcast.HazelcastKeyValueAdapter;
-import org.springframework.data.hazelcast.repository.config.EnableHazelcastRepositories;
-import org.springframework.data.keyvalue.core.KeyValueTemplate;
 
 /**
  * Configuration class to make the necessary Spring beans available for this to work.
@@ -27,7 +24,6 @@ import org.springframework.data.keyvalue.core.KeyValueTemplate;
  * </ol>
  */
 @Configuration
-@EnableHazelcastRepositories
 public class AfterTranslatorConfiguration {
 
     /**
@@ -42,19 +38,5 @@ public class AfterTranslatorConfiguration {
     public HazelcastInstance hazelcastInstance() throws Exception {
         ClientConfig clientConfig = new XmlClientConfigBuilder("hazelcast-client.xml").build();
         return HazelcastClient.newHazelcastClient(clientConfig);
-    }
-
-    /**
-     * A {@link org.springframework.data.keyvalue.core.KeyValueTemplate KeyValueTemplate}
-     * instructs Spring to use Hazelcast for key-value repositories.
-     *
-     * This is boilerplate coding, one day will likely be auto-configured.
-     *
-     * @param hazelcastInstance Created above
-     * @return The template from which to build repository operations
-     */
-    @Bean
-    public KeyValueTemplate keyValueTemplate(HazelcastInstance hazelcastInstance) {
-        return new KeyValueTemplate(new HazelcastKeyValueAdapter(hazelcastInstance));
     }
 }

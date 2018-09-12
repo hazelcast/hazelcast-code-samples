@@ -1,0 +1,7 @@
+---
+applications:
+- name: hazelcast-tls
+  memory: 2048M
+  instances: 1
+  path: target/pcf-tls-integration-0.1-SNAPSHOT.jar
+  random-route: false
