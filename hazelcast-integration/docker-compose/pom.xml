@@ -29,6 +29,7 @@
             <plugin>
                 <!-- builds fat jar to be deployed as docker image -->
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifest>

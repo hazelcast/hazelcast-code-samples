@@ -55,14 +55,14 @@ public abstract class AbstractVerbRepositoryTest {
 
         assertThat("Not empty during", this.verbRepository.count(), equalTo(1L));
 
-        Verb invite2 = this.verbRepository.findOne(invite.getId());
+        Verb invite2 = this.verbRepository.findById(invite.getId()).get();
         this.log.info("curd(), read {}", invite2);
 
         assertThat(invite2, not(nullValue()));
         assertThat("System.identityHashCode", System.identityHashCode(invite2), not(equalTo(System.identityHashCode(invite))));
         assertThat(invite2, equalTo(invite));
 
-        this.verbRepository.delete(invite.getId());
+        this.verbRepository.delete(invite);
 
         assertThat("Empty after", this.verbRepository.count(), equalTo(0L));
     }

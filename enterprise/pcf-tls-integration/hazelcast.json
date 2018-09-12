@@ -1,6 +1,7 @@
 {
   "licenseKey": "YOUR_LICENSE_KEY",
   "instanceCount": 9,
+  "tlsArchiveUrl": "VALID_URL",
   "mancenterAppName": "mancenter",
   "managementCenterConfig": {
     "enabled": true,
@@ -43,6 +44,16 @@
       },
       "discoveryConfig": {
         "discoveryStrategyConfigs": []
+      }
+    },
+    "sslConfig": {
+      "enabled": true,
+      "properties": {
+        "protocol": "TLS",
+        "keyStorePassword": "123456",
+        "trustStorePassword": "123456",
+        "keyManagerAlgorithm": "SunX509",
+        "trustManagerAlgorithm": "SunX509"
       }
     }
   },
