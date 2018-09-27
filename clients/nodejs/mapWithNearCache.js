@@ -12,7 +12,7 @@ let listener = require('./listener');
 
 let initConfig = (nearCache) => {
 	  let config = new Config.ClientConfig();
-	  config.networkConfig.addresses = [{host: '127.0.0.1', port: '5701'}];
+	  config.networkConfig.addresses = ['127.0.0.1:5701'];
 
 
 	  //region NearCache

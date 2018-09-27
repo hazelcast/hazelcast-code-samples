@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "hazelcast-client": "0.6.1"
+    "hazelcast-client": "0.9.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
