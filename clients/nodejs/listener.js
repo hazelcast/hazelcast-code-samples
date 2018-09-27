@@ -4,6 +4,9 @@ let listener = {
     },
     removed: function (key, oldVal, newVal) {
         console.log('removed key: ' + key + ', old value: ' + oldVal + ', new value: ' + newVal);
+    },
+    updated: function (key, oldVal, newVal) {
+        console.log('updated key: ' + key + ', old value: ' + oldVal + ', new value: ' + newVal);
     }
 };
 
