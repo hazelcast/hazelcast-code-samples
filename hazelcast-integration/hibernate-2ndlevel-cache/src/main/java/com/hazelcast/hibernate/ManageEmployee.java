@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.util.List;
 import java.util.Scanner;
@@ -89,11 +90,11 @@ public class ManageEmployee {
                 System.out.println("change       change between two sessions");
                 System.out.println("exit         exit");
             } else if (command.equals("exit")) {
-                if (!tx1.wasCommitted()) {
+                if (tx1.getStatus() != TransactionStatus.COMMITTED) {
                     tx1.commit();
                     session1.close();
                 }
-                if (!tx2.wasCommitted()) {
+                if (tx2.getStatus() != TransactionStatus.COMMITTED) {
                     tx2.commit();
                     session2.close();
                 }
