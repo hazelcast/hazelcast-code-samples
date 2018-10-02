@@ -24,6 +24,7 @@
     <modules>
         <module>basic</module>
         <module>client-exponential-backoff</module>
+        <module>client-custom-credentials</module>
         <module>client-near-cache</module>
         <module>client-rest</module>
         <module>client-statistics</module>
