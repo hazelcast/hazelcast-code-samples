@@ -28,13 +28,13 @@
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate4</artifactId>
-            <version>3.6.4</version>
+            <artifactId>hazelcast-hibernate5</artifactId>
+            <version>1.2.3</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.3.8.Final</version>
+            <version>5.0.9.Final</version>
         </dependency>
         <dependency>
             <groupId>javassist</groupId>

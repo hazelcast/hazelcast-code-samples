@@ -14,11 +14,11 @@ By default `hibernate-core` added to project in `pom.xml` file as follows:
 <dependency>
     <groupId>org.hibernate</groupId>
     <artifactId>hibernate-core</artifactId>
-    <version>4.3.5.Final</version>
+    <version>5.0.9.Final</version>
 </dependency>
 ```
 
-But project is also compatible with hibernate 3.X.X versions. You can change these entries accordingly.
+But project is also compatible with hibernate 3.X.X and 4.X.XQ versions. You can change these entries accordingly.
 
 ## How to Run Sample Application
 
@@ -31,7 +31,7 @@ mvn compile
 2) Create database using:
 
 ```
-mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.CreateDB"
+mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.CreateTable"
 ```
 
 3) After running the following code, you can add or delete employees. Start with writing help in the application:
