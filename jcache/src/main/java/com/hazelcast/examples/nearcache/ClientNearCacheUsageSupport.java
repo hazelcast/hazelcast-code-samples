@@ -32,7 +32,7 @@ public abstract class ClientNearCacheUsageSupport {
 
     protected static final String DEFAULT_CACHE_NAME = "ClientCache";
 
-    private static final int EXPIRATION_TASK_DELAY_SECONDS = 2 * NearCache.DEFAULT_EXPIRATION_TASK_DELAY_IN_SECONDS;
+    private static final int EXPIRATION_TASK_DELAY_SECONDS = 2 * NearCache.DEFAULT_EXPIRATION_TASK_PERIOD_SECONDS;
     private static final int INVALIDATION_DELAY_SECONDS
             = 2 * parseInt(CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue());
 
