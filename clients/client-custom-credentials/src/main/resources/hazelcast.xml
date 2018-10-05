@@ -1,0 +1,36 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <license-key>PUT_YOUR_HAZELCAST_LICENSE_HERE</license-key>
+
+    <security enabled="true">
+        <member-credentials-factory class-name="com.hazelcast.examples.CustomCredentialsFactory">
+            <properties>
+                <property name="username">aUserNameForMembers</property>
+                <property name="key1">firstKeyForMembers</property>
+                <property name="key2">SecondKeyForMembers</property>
+            </properties>
+        </member-credentials-factory>
+        <member-login-modules>
+            <login-module class-name="com.hazelcast.examples.CustomLoginModule" usage="REQUIRED">
+                <properties>
+                    <property name="username">aUserNameForMembers</property>
+                    <property name="key1">firstKeyForMembers</property>
+                    <property name="key2">SecondKeyForMembers</property>
+                </properties>
+            </login-module>
+        </member-login-modules>
+
+        <client-login-modules>
+            <login-module class-name="com.hazelcast.examples.CustomLoginModule">
+                <properties>
+                    <property name="username">aUserNameForClients</property>
+                    <property name="key1">firstKeyForClients</property>
+                    <property name="key2">SecondKeyForClients</property>
+                </properties>
+            </login-module>
+        </client-login-modules>
+    </security>
+</hazelcast>
