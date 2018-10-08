@@ -10,8 +10,8 @@
     </description>
 
     <parent>
-        <groupId>book.hazelcast.client</groupId>
-        <artifactId>clients</artifactId>
+        <artifactId>enterprise</artifactId>
+        <groupId>com.hazelcast.samples.enterprise</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -22,11 +22,4 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-enterprise</artifactId>
-            <version>${hazelcast.version}</version>
-        </dependency>
-    </dependencies>
 </project>

@@ -33,6 +33,7 @@
         <module>socket-interceptor</module>
         <module>wan-replication</module>
         <module>pcf-tls-integration</module>
+        <module>client-custom-credentials</module>
     </modules>
 
     <repositories>
