@@ -21,7 +21,8 @@
     </properties>
 
     <modules>
-	<module>springboot-k8s-hello-world</module>
+        <module>springboot-k8s-hello-world</module>
+        <module>embedded</module>
     </modules>
 
 </project>
