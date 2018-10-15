@@ -9,12 +9,6 @@
     <version>0.1-SNAPSHOT</version>
     <description>A sample Spring Boot Application to demonstrate integration with AWS ECS</description>
 
-    <!--<parent>-->
-    <!--<artifactId>hazelcast-integration</artifactId>-->
-    <!--<groupId>com.hazelcast.samples</groupId>-->
-    <!--<version>0.1-SNAPSHOT</version>-->
-    <!--</parent>-->
-
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
