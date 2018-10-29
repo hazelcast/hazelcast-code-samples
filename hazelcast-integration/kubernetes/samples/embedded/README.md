@@ -8,45 +8,39 @@ This sample uses Kubernetes API for Hazelcast member discovery.
 
 You can configure Hazelcast to work on Kubernetes using the [hazelcast-kubernetes](https://github.com/hazelcast/hazelcast-kubernetes) plugin.
 
-Add the following Maven dependency:
+Add the following Maven dependencies:
 ```xml
 <dependency>
     <groupId>com.hazelcast</groupId>
+    <artifactId>hazelcast</artifactId>
+    <version>3.11</version>
+</dependency>
+<dependency>
+    <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast-kubernetes</artifactId>
-    <version>1.2.2</version>
+    <version>1.3.1</version>
 </dependency>
 ```
 
 Then, configure the Kubernetes Discovery Strategy. You can do it in two different manners: Java-based configuration or XML configuration. In this code sample, we used the first approach:
 ```java
 public Config hazelcastConfig() {
-        Config config = new Config();
-        config.getProperties().setProperty("hazelcast.discovery.enabled", "true");
-        JoinConfig joinConfig = config.getNetworkConfig().getJoin();
-        joinConfig.getMulticastConfig().setEnabled(false);
-
-        HazelcastKubernetesDiscoveryStrategyFactory discoveryStrategyFactory = new HazelcastKubernetesDiscoveryStrategyFactory();
-        Map<String, Comparable> properties = new HashMap<>();
-        joinConfig.getDiscoveryConfig()
-                  .addDiscoveryStrategyConfig(new DiscoveryStrategyConfig(discoveryStrategyFactory, properties));
-
-        return config;
-    }
+    Config config = new Config();
+    JoinConfig joinConfig = config.getNetworkConfig().getJoin();
+    joinConfig.getMulticastConfig().setEnabled(false);
+    joinConfig.getKubernetesConfig().setEnabled(true);
+    return config;
+}
 ``` 
 
 The equivalent XML configuration would look as follows:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.10.xsd">
-<properties>
- <property name="hazelcast.discovery.enabled">true</property>
-</properties>
+<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd">
   <network>
     <join>
       <multicast enabled="false"/>
-        <discovery-strategies>
-            <discovery-strategy enabled="true" class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy"/>
-        </discovery-strategies>
+      <kubernetes enabled="true"/>
     </join>
   </network>
 </hazelcast>
