@@ -46,7 +46,7 @@ The equivalent XML configuration would look as follows:
 </hazelcast>
 ```
 
-Note that the current configuration will form a Hazelcast with all Hazelcast instances assigned to services in the current namespace. If you want to filter the instances, use the properties as described [here](https://github.com/hazelcast/hazelcast-kubernetes).
+Note that this configuration will form a Hazelcast with all Hazelcast instances assigned to services in the current namespace. If you want to filter the instances, use the properties as described [here](https://github.com/hazelcast/hazelcast-kubernetes).
 
 ## 2. Build application and Docker image
 
