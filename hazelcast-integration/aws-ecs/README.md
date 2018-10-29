@@ -24,12 +24,17 @@ When you click "Create", the cluster is created and after clicking "View Cluster
 
 You can configure Hazelcast to work on AWS by using the [hazelcast-aws](https://github.com/hazelcast/hazelcast-aws) plugin.
 
-Add the following Maven dependency:
+Add the following Maven dependencies:
 ```xml
 <dependency>
     <groupId>com.hazelcast</groupId>
+    <artifactId>hazelcast</artifactId>
+    <version>3.11</version>
+</dependency>
+<dependency>
+    <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast-aws</artifactId>
-    <version>2.2</version>
+    <version>2.3</version>
 </dependency>
 ```
 
@@ -37,19 +42,14 @@ Then, configure the AWS Discovery Strategy properties. You can do it in differen
 ```java
 public Config hazelcastConfig() {
     Config config = new Config();
-    config.getProperties().setProperty(GroupProperty.DISCOVERY_SPI_ENABLED.getName(), "true");
-    config.getNetworkConfig().getInterfaces().addInterface("10.0.*.*");
+    config.getNetworkConfig().getInterfaces().setEnabled(true).addInterface("10.0.*.*");
     JoinConfig joinConfig = config.getNetworkConfig().getJoin();
     joinConfig.getMulticastConfig().setEnabled(false);
-
-    AwsDiscoveryStrategyFactory awsDiscoveryStrategyFactory = new AwsDiscoveryStrategyFactory();
-    Map<String, Comparable> properties = new HashMap<>();
-    properties.put("region", "eu-central-1");
-    properties.put("tag-key", "aws:cloudformation:stack-name");
-    properties.put("tag-value", "EC2ContainerService-test-cluster");
-    joinConfig.getDiscoveryConfig()
-              .addDiscoveryStrategyConfig(new DiscoveryStrategyConfig(awsDiscoveryStrategyFactory, properties));
-
+    joinConfig.getAwsConfig()
+              .setEnabled(true)
+              .setProperty("region", "eu-central-1")
+              .setProperty("tag-key", "aws:cloudformation:stack-name")
+              .setProperty("tag-value", "EC2ContainerService-test-cluster");
     return config;
 }
 ``` 
@@ -57,25 +57,18 @@ public Config hazelcastConfig() {
 The equivalent XML configuration would look as follows:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.10.xsd">
-<properties>
- <property name="hazelcast.discovery.enabled">true</property>
-</properties>
+<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd">
   <network>
     <interfaces enabled="true">
       <interface>10.0.*.*</interface>
     </interfaces>
     <join>
       <multicast enabled="false"/>
-        <discovery-strategies>
-            <discovery-strategy enabled="true" class="com.hazelcast.aws.AwsDiscoveryStrategy">
-                <properties>
-                   <property name="region">eu-central-1</property>
-                   <property name="tag-key">aws:cloudformation:stack-name</property>
-                   <property name="tag-value">EC2ContainerService-test-cluster</property>
-                </properties>
-            </discovery-strategy>
-        </discovery-strategies>
+      <aws enabled="true">
+        <region>eu-central-1</region>
+        <tag-key>aws:cloudformation:stack-name</tag-key>
+        <tag-value>EC2ContainerService-test-cluster</tag-value>
+      </aws>
     </join>
   </network>
 </hazelcast>
@@ -88,23 +81,13 @@ Note the following parameters:
 
 ## 3. Build application and Docker image
 
-To build your application, use Maven:
-```bash
-mvn clean package
-```
-
-Then, you can build Docker image with the use of `Dockerfile`.
-```bash
-docker build -t leszko/aws-ecs-sample .
-```
-
-Please change `leszko` to your Docker Hub login.
-
-Push the image into the registry.
+The following command compiles the project, builds the Docker image, and pushes it into your Docker Hub account.
 
 ```bash
-docker push leszko/aws-ecs-sample
+mvn clean compile jib:build -Dimage=leszko/aws-ecs-sample
 ```
+
+Please change `leszko` to your Docker Hub login. Then, make sure that your image in Docker Hub is public (you can do it on the [Docker Hub website](https://hub.docker.com/)).
 
 ## 4. Create AWS ECS Task Definition
 

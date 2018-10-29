@@ -19,19 +19,14 @@ public class Application {
     @Bean
     public Config hazelcastConfig() {
         Config config = new Config();
-        config.getProperties().setProperty("hazelcast.discovery.enabled", "true");
         config.getNetworkConfig().getInterfaces().setEnabled(true).addInterface("10.0.*.*");
         JoinConfig joinConfig = config.getNetworkConfig().getJoin();
         joinConfig.getMulticastConfig().setEnabled(false);
-
-        AwsDiscoveryStrategyFactory awsDiscoveryStrategyFactory = new AwsDiscoveryStrategyFactory();
-        Map<String, Comparable> properties = new HashMap<>();
-        properties.put("region", "eu-central-1");
-        properties.put("tag-key", "aws:cloudformation:stack-name");
-        properties.put("tag-value", "EC2ContainerService-test-cluster");
-        joinConfig.getDiscoveryConfig()
-                  .addDiscoveryStrategyConfig(new DiscoveryStrategyConfig(awsDiscoveryStrategyFactory, properties));
-
+        joinConfig.getAwsConfig()
+                  .setEnabled(true)
+                  .setProperty("region", "eu-central-1")
+                  .setProperty("tag-key", "aws:cloudformation:stack-name")
+                  .setProperty("tag-value", "EC2ContainerService-test-cluster");
         return config;
     }
 
