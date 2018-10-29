@@ -56,23 +56,13 @@ Note that the current configuration will form a Hazelcast with all Hazelcast ins
 
 ## 2. Build application and Docker image
 
-To build your application, use Maven:
-```bash
-mvn clean package
-```
-
-Then, you can build Docker image with the use of `Dockerfile`.
-```bash
-docker build -t leszko/hazelcast-kubernetes-embedded-sample .
-```
-
-Please change `leszko` to your Docker Hub login.
-
-Push the image into the registry.
+The following command compiles the project, builds the Docker image, and pushes it into your Docker Hub account.
 
 ```bash
-docker push leszko/hazelcast-kubernetes-embedded-sample
+mvn clean compile jib:build -Dimage=leszko/hazelcast-kubernetes-embedded-sample
 ```
+
+Please change `leszko` to your Docker Hub login. Then, make sure that your image in Docker Hub is public (you can do it on the [Docker Hub website](https://hub.docker.com/)).
 
 ## 3. Grant access to Kubernetes API
 
