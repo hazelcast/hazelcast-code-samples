@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hazelcast-embedded
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hazelcast-embedded
+  template:
+    metadata:
+      labels:
+        app: hazelcast-embedded
+    spec:
+      containers:
+        - name: hazelcast-embedded
+          image: leszko/hazelcast-kubernetes-embedded-sample
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5701
+          - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazelcast-embedded
+spec:
+  type: LoadBalancer
+  selector:
+    app: hazelcast-embedded
+  ports:
+  - name: hazelcast
+    port: 5701
+  - name: app
+    port: 8080
