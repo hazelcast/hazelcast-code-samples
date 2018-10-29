@@ -39,6 +39,7 @@
     <modules>
         <module>amazon-ec2-vagrant-chef</module>
         <module>amazon-elasticbeanstalk</module>
+        <module>aws-ecs</module>
         <module>dynacache</module>
         <module>docker-compose</module>
         <module>filter-based-session-replication</module>
