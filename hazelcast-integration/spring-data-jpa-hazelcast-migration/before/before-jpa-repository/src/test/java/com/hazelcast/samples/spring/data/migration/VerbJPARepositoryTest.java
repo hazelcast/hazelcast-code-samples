@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertThat;
  * <P>Test CRUD and query operations against a JPA database.
  * </P>
  */
-@DataJpaTest
+@EnableAutoConfiguration
 @Slf4j
 public class VerbJPARepositoryTest extends AbstractVerbRepositoryTest {
 
