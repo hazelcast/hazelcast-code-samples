@@ -12,7 +12,7 @@ labels:
 parameters:
 - name: HAZELCAST_IMAGE
   description: "Defines the location of Hazelcast image"
-  value: hazelcast/hazelcast:3.10.3
+  value: hazelcast/hazelcast:3.11
   required: true
 - name: SERVICE_NAME
   description: "Defines the service name of the POD to lookup of Kubernetes"
@@ -97,7 +97,7 @@ objects:
             mountPath: /data/hazelcast
           env:
           - name: HAZELCAST_KUBERNETES_SERVICE_DNS
-            value: ${SERVICE_NAME}.${NAMESPACE}.svc
+            value: ${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local
           - name: JAVA_OPTS
             value: "-Dhazelcast.rest.enabled=true -Dhazelcast.config=/data/hazelcast/hazelcast.xml"
         volumes:
