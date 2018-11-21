@@ -30,7 +30,7 @@ parameters:
   required": true
 - name: MANAGEMENT_CENTER_IMAGE
   description: "Defines the location of Hazelcast Management Center image"
-  value: hazelcast/management-center:3.10.2
+  value: hazelcast/management-center:3.11
   required: true
 - name: MANAGEMENT_CENTER_SERVICE_NAME
   description: "Defines the service name of Management Center"
