@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Iterator;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertThat;
  * <li>Add a test for the {@code findAllId()} query method that has been added.</li>
  * </ol>
  */
-@DataJpaTest
+@EnableAutoConfiguration
 @Slf4j
 public class NounJPARepositoryTest extends AbstractNounRepositoryTest {
 
