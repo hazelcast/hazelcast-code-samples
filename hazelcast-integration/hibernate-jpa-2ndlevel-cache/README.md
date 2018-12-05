@@ -59,7 +59,7 @@ But project is also compatible with hibernate 3.X.X versions. You can change the
 2) Create database using:
 
     ```
-    mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.CreateDB"
+    mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.CreateTable"
     ```
 
 3) After running the following code, you can add or delete employees. Start with writing help in the application:
