@@ -16,3 +16,4 @@ bin/
 hibernateDB
 springHibernateDB
 osgi/felix-cache/
+.java-version
