@@ -14,7 +14,7 @@ By default `hibernate-core` added to project in `pom.xml` file as follows:
 <dependency>
     <groupId>org.hibernate</groupId>
     <artifactId>hibernate-core</artifactId>
-    <version>5.0.9.Final</version>
+    <version>${hibernate.version}</version>
 </dependency>
 ```
 
