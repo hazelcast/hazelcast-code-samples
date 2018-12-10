@@ -38,7 +38,7 @@ Add the following Maven dependencies:
 </dependency>
 ```
 
-Then, configure the AWS Discovery Strategy properties. You can do it in different two manners: Java-based configuration or XML configuration. In this code sample, we used the first approach:
+Then, configure the AWS Discovery Strategy properties. You can do it in two different manners: Java-based configuration or XML configuration. In this code sample, we used the first approach:
 ```java
 public Config hazelcastConfig() {
     Config config = new Config();
@@ -77,7 +77,7 @@ The equivalent XML configuration would look as follows:
 Note the following parameters:
 * **interface**: must be the same as "VPC CIDR block"
 * **region**: must the same as the region in which your cluster is running
-* **tag-key, tag-value**: ECS automatically tags EC2 instances, so you can use the tags (change "test-cluster" to the name of your cluster); if you don't specify "tag-key" and "tag-value", then all your EC2 Instances will be used to form Hazlecast cluster
+* **tag-key, tag-value**: ECS automatically tags EC2 instances, so you can use the tags (change "test-cluster" to the name of your cluster); if you don't specify "tag-key" and "tag-value", then all your EC2 Instances will be used to form the Hazelcast cluster
 
 ## 3. Build application and Docker image
 
