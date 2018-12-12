@@ -3,27 +3,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>pom</artifactId>
+        <artifactId>samples</artifactId>
         <groupId>com.hazelcast.samples.kubernetes</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>samples</artifactId>
+    <artifactId>ssl</artifactId>
     <packaging>pom</packaging>
 
-    <name>Kubernetes: Samples</name>
+    <name>Kubernetes: Samples SSL</name>
     <description>Project POM</description>
 
     <properties>
         <!-- needed for checkstyle/findbugs -->
-        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+        <main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <modules>
-        <module>springboot-k8s-hello-world</module>
-        <module>embedded</module>
-        <module>ssl</module>
+        <module>client</module>
     </modules>
 
 </project>
