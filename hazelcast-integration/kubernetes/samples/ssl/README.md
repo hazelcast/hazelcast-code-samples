@@ -179,6 +179,8 @@ Certificate was added to keystore
 $ rm client.crt
 ```
 
+**Note**: *We used `hazelcast-mancenter` as the hostname, which means that if you start Management Center, its service must be named `hazelcast-mancenter` (otherwise the hostname verification fails).*
+
 ### Mutual Authentication
 
 SSL Mutual Authentication can be enabled to increase the security. To enable it, you need to configure it in both Hazelcast Server and Hazelcast Client.
