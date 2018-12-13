@@ -183,6 +183,8 @@ $ rm client.crt
 
 SSL Mutual Authentication can be enabled to increase the security. To enable it, you need to configure it in both Hazelcast Server and Hazelcast Client.
 
+**Note**: *Currently, Mutual Authentication does not work with `livenessProbe`/`readinessProbe` enabled.*
+
 #### Hazelcast Server
 
 Add the following line to the `<ssl>` properties section (in `hazelcast.xml`):
