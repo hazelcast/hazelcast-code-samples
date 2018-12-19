@@ -7,14 +7,6 @@
             <multicast enabled="false"/>
             <kubernetes enabled="true" />
         </join>
-        <ssl enabled="true">
-            <factory-class-name>
-                com.hazelcast.nio.ssl.BasicSSLContextFactory
-            </factory-class-name>
-            <properties>
-                <property name="keyStore">keystore</property>
-                <property name="trustStore">truststore</property>
-            </properties>
-        </ssl>
+        <ssl enabled="true" />
     </network>
 </hazelcast>
