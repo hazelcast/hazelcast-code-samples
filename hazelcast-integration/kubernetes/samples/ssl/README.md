@@ -17,25 +17,24 @@ The example also assumes you have a running Kubernetes cluster and the `kubectl`
 
 ## 1. Creating Hazelcast Cluster
 
-Hazelcast must have access to `keystore` and `truststore`, so the prepared `Dockerfile` includes the commands to add them as well as `hazelcast.xml` with SSL enabled. All you need to do is to build and push it into your Docker Hub.
+Hazelcast must have access to `hazelcast.xml` as well as `keystore` and `truststore`, so we'll store them as `ConfigMap`/`Secret`.
 
 ```bash
-$ docker build -t leszko/hazelcast-enterprise server
-$ docker push leszko/hazelcast-enterprise
+$ kubectl create configmap hazelcast-configuration --from-file=server/hazelcast.xml
+$ kubectl create secret generic keystore \
+                 --from-file=server/keystore \
+                 --from-file=server/truststore \
+                 --from-literal keystorePassword=123456 \
+                 --from-literal truststorePassword=123456
 ```
 
-Please change `leszko` to your Docker Hub login. Then, make sure that your image in Docker Hub is public (you can do it on the [Docker Hub website](https://hub.docker.com/)).
-
-Next, you need to create secrets with Hazelcast Enterprise License (if you don't have one, get a trial license key from this [link](https://hazelcast.com/hazelcast-enterprise-download/trial/)) and KeyStore/TrustStore password.
+Next, you need to create a secret with Hazelcast Enterprise License (if you don't have one, get a trial license key from this [link](https://hazelcast.com/hazelcast-enterprise-download/trial/)).
 
 ```bash
 $ kubectl create secret generic hz-license-key --from-literal license=<hz-license-key>
-$ kubectl create secret generic keystore-password --from-literal password=123456
 ```
 
-**Note**: *In the real life scenario, you may even want to be more secure and not distribute publicly the Hazelcast image with your KeyStore and TrustStore. In such case, you can use private Docker registry or mount a volume with `keystore`/`trustore` instead of including it inside your image.*
-
-Now you can edit `server/statefulset.yaml` and change `leszko` to your Docker Hub account. Then, grant access to Kubernetes API with `rbac.yaml` and deploy Hazelcast cluster to Kubernetes.
+Now grant access to Kubernetes API with `rbac.yaml` and deploy Hazelcast cluster to Kubernetes.
 
 ```bash
 $ kubectl apply -f server/rbac.yaml
