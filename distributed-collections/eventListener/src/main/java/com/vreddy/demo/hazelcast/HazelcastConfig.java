@@ -107,7 +107,7 @@ public class HazelcastConfig {
     private String partitionCount;
 
     @Value("${hazelcast.ttl:86400}")
-    private int capacityCacheTTL;
+    private int cacheTTL;
 
     /**
      * method creating hazelcast instance bean.
@@ -118,7 +118,7 @@ public class HazelcastConfig {
     @Bean
     public HazelcastInstance hazelcastInstance(Config hazelcastConfig) {
         LOGGER.info("Instantiating hazelcast instance !");
-        System.out.println("Hazelcast instance is up baby!");
+        LOGGER.info("Hazelcast instance is up baby!");
         return Hazelcast.newHazelcastInstance(hazelcastConfig);
     }
 
@@ -174,12 +174,6 @@ public class HazelcastConfig {
         return setConfig;
     }
 
-    /**
-     * method to set mapstore configuration.
-     *
-     * @param mapName
-     * @return
-     */
     private MapConfig getMapConfig(String mapName) {
         MapConfig mapConfig = new MapConfig();
         mapConfig.setName(mapName);
@@ -188,9 +182,8 @@ public class HazelcastConfig {
         mapConfig.setAsyncBackupCount(1);
         mapConfig.getMaxSizeConfig().setSize(goaMapMaxEntryPerNode)
                 .setMaxSizePolicy(MaxSizeConfig.MaxSizePolicy.PER_NODE);
-        mapConfig.setTimeToLiveSeconds(capacityCacheTTL);
+        mapConfig.setTimeToLiveSeconds(cacheTTL);
         MapStoreConfig mapStoreConfig = new MapStoreConfig();
-        //mapStoreConfig.setImplementation(capacityConsumptionMapStore);
         mapStoreConfig.setWriteDelaySeconds(1);
         mapStoreConfig.setWriteBatchSize(5);
         mapStoreConfig.setWriteCoalescing(false);
