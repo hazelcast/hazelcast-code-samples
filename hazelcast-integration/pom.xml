@@ -67,6 +67,7 @@
         <module>springboot-http</module>
         <module>springboot-session-analysis</module>
         <module>tricolor</module>
+        <module>eureka</module>
     </modules>
 
     <dependencies>
