@@ -17,6 +17,8 @@
 
     <modules>
         <module>eureka-server</module>
-        <module>hazelcast</module>
+        <module>hazelcast-only</module>
+        <module>hazelcast-separate-client</module>
+        <module>hazelcast-metadata</module>
     </modules>
 </project>
