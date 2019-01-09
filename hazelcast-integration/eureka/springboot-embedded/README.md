@@ -147,7 +147,7 @@ Hazelcast members should form a cluster together as in the previous section. You
 
 ## 3. Verify that Application works correctly
 
-You can check that the application works correctly, by inserting a value into one of the instance and reading it in the other instance.
+You can check that the application works correctly by inserting a value into one of the instance and reading it in the other instance.
       
 ![Verify Application](markdown/verify-application-1.png)
 
