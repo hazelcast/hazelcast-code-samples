@@ -1,0 +1,7 @@
+<hazelcast-client-failover>
+    <try-count>5</try-count>
+    <clients>
+        <client>clientToCluster1.xml</client>
+        <client>clientToCluster2.xml</client>
+    </clients>
+</hazelcast-client-failover>
