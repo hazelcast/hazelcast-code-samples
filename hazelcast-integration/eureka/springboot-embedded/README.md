@@ -106,6 +106,45 @@ Hazelcast members should form a cluster together as in the previous section. You
 
 ![Eureka Hazelcast Separate Client](markdown/eureka-hazelcast-separate-client.png)
 
+## 2.3 Hazelcast reusing Eureka Client with Metadata
+
+Sometimes, you may not want to have Hazelcast registered as a separate application in Eureka. After all, Hazelcast is not a separate application, but a library embedded inside your Spring Boot application. In that case the Eureka plugin provides a solution to store the information about Hazelcast `host` and `port` in the Metadata of the application itself, by using the same Eureka client as the application.
+
+Change your Hazelcast configuration to include the metadata-related properties.
+
+```java
+@Bean
+public Config hazelcastConfig(EurekaClient eurekaClient) {
+    Config config = new Config();
+    config.getProperties().setProperty("hazelcast.discovery.enabled", "true");
+    JoinConfig joinConfig = config.getNetworkConfig().getJoin();
+    joinConfig.getMulticastConfig().setEnabled(false);
+    
+    EurekaOneDiscoveryStrategyFactory.setEurekaClient(eurekaClient);
+    EurekaOneDiscoveryStrategyFactory discoveryStrategyFactory = new EurekaOneDiscoveryStrategyFactory();
+    Map<String, Comparable> properties = new HashMap<String, Comparable>();
+    properties.put("self-registration", "true");
+    properties.put("namespace", "hazelcast");
+    properties.put("use-metadata-for-host-and-port", "true");
+    DiscoveryStrategyConfig discoveryStrategyConfig = new DiscoveryStrategyConfig(discoveryStrategyFactory, properties);
+    joinConfig.getDiscoveryConfig().addDiscoveryStrategyConfig(discoveryStrategyConfig);
+
+    return config;
+}
+```
+
+Start the first application.
+
+    $ java -jar hazelcast-metadata/target/hazelcast-metadata-0.1-SNAPSHOT.jar --server.port=8081 --hazelcast.port=5703
+
+Then, start the second application.
+
+    $ java -jar hazelcast-metadata/target/hazelcast-metadata-0.1-SNAPSHOT.jar --server.port=8080 --hazelcast.port=5701
+        
+Hazelcast members should form a cluster together as in the previous section. You should also see two separate entries in the Eureka web console.
+
+![Eureka Hazelcast Separate Client](markdown/eureka-hazelcast-metadata.png)
+
 ## 3. Verify that Application works correctly
 
 You can check that the application works correctly by inserting a value into one of the instance and reading it in the other instance.
