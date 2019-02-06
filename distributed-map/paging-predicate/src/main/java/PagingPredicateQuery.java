@@ -22,6 +22,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.query.PagingPredicate;
 import com.hazelcast.query.impl.predicates.EqualPredicate;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
@@ -45,14 +46,7 @@ public class PagingPredicateQuery {
         EqualPredicate equalPredicate = new EqualPredicate("className", ClassName.ClassA.name());
 
         // a comparator which helps to sort in descending order of id field
-        Comparator<Map.Entry> descendingComparator = new Comparator<Map.Entry>() {
-            @Override
-            public int compare(Map.Entry e1, Map.Entry e2) {
-                Student s1 = (Student) e1.getValue();
-                Student s2 = (Student) e2.getValue();
-                return s2.getId() - s1.getId();
-            }
-        };
+        Comparator<Map.Entry<Integer, Student>> descendingComparator = new DescendingIdComparator();
 
         // a predicate which filters out non ClassA students, sort them descending order and fetches 4 students for each page
         PagingPredicate pagingPredicate = new PagingPredicate(equalPredicate, descendingComparator, 4);
@@ -98,4 +92,17 @@ public class PagingPredicateQuery {
         System.out.println();
         Hazelcast.shutdownAll();
     }
+
+    // it's important for a comparator to be Serializable to use it in a multi-node cluster
+    public static class DescendingIdComparator implements Serializable, Comparator<Map.Entry<Integer, Student>> {
+
+        @Override
+        public int compare(Map.Entry<Integer, Student> o1, Map.Entry<Integer, Student> o2) {
+            Student s1 = o1.getValue();
+            Student s2 = o2.getValue();
+            return s2.getId() - s1.getId();
+        }
+
+    }
+
 }
