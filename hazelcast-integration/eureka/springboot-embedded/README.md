@@ -108,7 +108,7 @@ Hazelcast members should form a cluster together as in the previous section. You
 
 ## 2.3 Hazelcast reusing Eureka Client with Metadata
 
-Sometimes, you may not want to have Hazelcast registered as a separate application in Eureka. After all, Hazelcast is not a separate application, but a library embedded inside your Spring Boot application. In that case the Eureka plugin provides a solution to store the information about Hazelcast in Metadata.
+Sometimes, you may not want to have Hazelcast registered as a separate application in Eureka. After all, Hazelcast is not a separate application, but a library embedded inside your Spring Boot application. In that case the Eureka plugin provides a solution to store the information about Hazelcast `host` and `port` in the Metadata of the application itself, by using the same Eureka client as the application.
 
 Change your Hazelcast configuration to include the metadata-related properties.
 
