@@ -10,7 +10,14 @@
 
     <map name="personsWithIndex">
         <indexes>
+            <index ordered="false">name.forename</index>
             <index ordered="false">name.surname</index>
+        </indexes>
+    </map>
+
+    <map name="personsWithCompositeIndex">
+        <indexes>
+            <index ordered="false">name.forename, name.surname</index>
         </indexes>
     </map>
 
