@@ -21,7 +21,7 @@ import com.hazelcast.core.ClientListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
-public class DeclarativeAttributesExample {
+public class DeclarativeLabelsExample {
 
     public static void main(String[] args) {
         Config config = new Config();

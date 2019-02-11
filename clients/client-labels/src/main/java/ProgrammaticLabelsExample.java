@@ -6,7 +6,7 @@ import com.hazelcast.core.ClientListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
-public class ProgrammaticAttributesExample {
+public class ProgrammaticLabelsExample {
     public static void main(String[] args) {
         Config config = new Config();
         JoinConfig join = config.getNetworkConfig().getJoin();
@@ -28,7 +28,7 @@ public class ProgrammaticAttributesExample {
         });
 
         ClientConfig clientConfig = new ClientConfig();
-        //setting instance name and attributes
+        //setting client instance name and adding client labels
         clientConfig.setInstanceName("SampleClientName");
         clientConfig.addLabel("role admin");
         clientConfig.addLabel("region foo");
