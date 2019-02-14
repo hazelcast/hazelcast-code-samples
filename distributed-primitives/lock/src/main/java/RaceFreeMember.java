@@ -3,6 +3,13 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.ILock;
 
+/**
+ * @deprecated {@code HazelcastInstance.getLock()} may lose strong consistency
+ * in case of network failures and server failures.
+ * Please use {@code HazelcastInstance.getCPSubsystem().getLock()} instead.
+ * You can see a code sample for the new impl in the cp-subsystem code samples module.
+ */
+@Deprecated
 public class RaceFreeMember {
 
     public static void main(String[] args) throws Exception {
