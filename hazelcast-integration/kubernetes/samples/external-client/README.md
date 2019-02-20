@@ -1,28 +1,36 @@
+## Configure Hazelcast Server
+
+## Install Metacontroller with Service-Per-Pod DecoratorController
+
+#### Install Metacontroller
+
+```
+# Create metacontroller namespace.
+kubectl create namespace metacontroller
+# Create metacontroller service account and role/binding.
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/master/manifests/metacontroller-rbac.yaml
+# Create CRDs for Metacontroller APIs, and the Metacontroller StatefulSet.
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/master/manifests/metacontroller.yaml
+```
+
+If you're interested, you can read more about Metacontroller [here](https://metacontroller.app).
+
+#### Install Service-Per-Pod DecoratorController
+
+```
+kubectl create configmap service-per-pod-hooks -n metacontroller --from-file=hooks
+kubectl apply -f service-per-pod.yaml
+```
+
+To read more about Service-Per-Pod decorator, please check [here](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod).
+
+## Install Hazelcast cluster with Service-Per-Pod Decorator
+
+TBD
+
 ## Configure Service Account
 
 #### Create Cluster Role
-
-Create `clusterrole.yaml`
-
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: sample-cluster-role
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - endpoints
-  - pods
-  - nodes
-  - services
-  verbs:
-  - get
-  - list
-```
-
-Apply Cluster Role.
 
 ```
 $ kubectl apply -f clusterrole.yaml
@@ -30,41 +38,11 @@ $ kubectl apply -f clusterrole.yaml
 
 #### Create Service Account
 
-Create `serviceaccount.yaml`
-
-```yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: sample-service-account
-```
-
-Apply Service Account
-
 ```
 $ kubectl apply -f serviceaccount.yaml
 ```
 
 #### Create Cluster Role Binding
-
-Create `clusterrolebinding.yaml`
-
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: sample-role-binding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: sample-cluster-role
-subjects:
-- kind: ServiceAccount
-  name: sample-service-account
-  namespace: default
-```
-
-Apply Cluster Role Binding
 
 ```
 $ kubectl apply -f clusterrolebinding.yaml
