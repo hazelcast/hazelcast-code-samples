@@ -24,13 +24,21 @@ metadata:
   name: hazelcast
   labels:
     app: hazelcast
+  annotations:
+    service-per-pod-label: "statefulset.kubernetes.io/pod-name"
+    service-per-pod-ports: "5701:5701"
 spec:
   replicas: 3
+  serviceName: hazelcast-service
+  selector:
+    matchLabels:
+      app: hazelcast
   template:
     metadata:
       labels:
         app: hazelcast
     spec:
+      serviceAccountName: hazelcast-service-account
       containers:
       - name: hazelcast
         image: hazelcast/hazelcast:3.11.1
