@@ -33,19 +33,19 @@ TBD
 #### Create Cluster Role
 
 ```
-$ kubectl apply -f clusterrole.yaml
+kubectl apply -f clusterrole.yaml
 ```
 
 #### Create Service Account
 
 ```
-$ kubectl apply -f serviceaccount.yaml
+kubectl apply -f serviceaccount.yaml
 ```
 
 #### Create Cluster Role Binding
 
 ```
-$ kubectl apply -f clusterrolebinding.yaml
+kubectl apply -f clusterrolebinding.yaml
 ```
 
 ## Fetch Ca Certificate and Access Token
@@ -111,7 +111,7 @@ DwupAKLLiaYs47a8JgUa
     <network>
         <kubernetes enabled="true">
             <use-public-ip>true</use-public-ip>
-            <kubernetes-master>hhttps://35.226.182.228</kubernetes-master>
+            <kubernetes-master>https://35.226.182.228</kubernetes-master>
             <api-token>eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhbXBsZS1zZXJ2aWNlLWFjY291bnQtdG9rZW4tNnM5NGgiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoic2FtcGxlLXNlcnZpY2UtYWNjb3VudCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjI5OTI1NzBmLTI1NDQtMTFlOS1iNjg3LTQyMDEwYTgwMDI4YiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OnNhbXBsZS1zZXJ2aWNlLWFjY291bnQifQ.o-j4e-ducrMmQc23xYDnPr6TIyzlAs3pLNAmGLqPe9Vq1mwsxOh3ujcVKR90HAdkfHIF_Sw66qC9hXIDvxfqN_rLXlOKbvTX3gjDrAnyY_93Y3MpmSBj8yR9yHMb4O29a9UIwN5F2_VoCsc0IGumScU_EhPYc9mvEXlwp2bATQOEU-SVAGYPqvVPs9h5wjWZ7WUQa_-RBLMF6KRc9EP2i3c7dPSRVL9ZQ6k6OyUUOVEaPa1tqIxP7vOgx9Tg2C1KmYF5RDrlzrWkhEcjd4BLTiYDKEyaoBff9RqdPYlPwu0YcEH-F7yU8tTDN74KX5jvah3amg_zTiXeNoe5ZFcVdg</api-token>
             <ca-certificate>
                 -----BEGIN CERTIFICATE-----
