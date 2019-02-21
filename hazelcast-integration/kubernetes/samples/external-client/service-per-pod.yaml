@@ -17,26 +17,9 @@ spec:
     sync:
       webhook:
         url: http://service-per-pod.metacontroller/sync-service-per-pod
+
 ---
-apiVersion: metacontroller.k8s.io/v1alpha1
-kind: DecoratorController
-metadata:
-  name: pod-name-label
-spec:
-  resources:
-  - apiVersion: v1
-    resource: pods
-    labelSelector:
-      matchExpressions:
-      - {key: pod-name, operator: DoesNotExist}
-    annotationSelector:
-      matchExpressions:
-      - {key: pod-name-label, operator: Exists}
-  hooks:
-    sync:
-      webhook:
-        url: http://service-per-pod.metacontroller/sync-pod-name-label
----
+
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
