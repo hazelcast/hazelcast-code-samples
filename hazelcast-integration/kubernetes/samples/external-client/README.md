@@ -6,7 +6,7 @@ This example assumes you have a running Kubernetes cluster and the `kubectl` too
 
 ## Configure Hazelcast cluster on Kubernetes
 
-As the first step, you need to start Hazelcast cluster in such a way that each member is exposed with a separate public IP/port. In Kubernetes PODs can be accessed from outside only via services, so the configuration requires creating a separate service (LoadBalancer or NodePort) for each Hazelcast member POD. The simplest way to do it is to use [Metacontroller](https://metacontroller.app/) plugin with [Service-Per-Pod](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod) Decorator Controller.
+As the first step, you need to start Hazelcast cluster in such a way that each member is exposed with a separate public IP/port. In Kubernetes PODs can be accessed from outside only via services, so the configuration requires creating a separate service (LoadBalancer or NodePort) for each Hazelcast member POD. The simplest way to achieve it is to use [Metacontroller](https://metacontroller.app/) plugin with [Service-Per-Pod](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod) Decorator Controller.
 
 ### 1. Install Metacontroller plugin
 
@@ -40,7 +40,7 @@ annotations:
 
 ### 3. Configure Service Account
 
-Hazelcast uses Kubernetes API for the member discovery and it therefore requires granting permission to certain resources. To create ServiceAccount with minimal permissions, run the following command.
+Hazelcast uses Kubernetes API for the member discovery and therefore it requires granting permission to certain resources. To create ServiceAccount with minimal permissions, run the following command.
 
 ```
 kubectl apply -f rbac.yaml
@@ -56,7 +56,7 @@ To install Hazelcast cluster, you need to include the Service-Per-Pod annotation
 kubectl apply -f hazelcast-cluster.yaml
 ``` 
 
-You can check that for each there was a service created and that Hazelcast members formed a cluster.
+You can check that for each Hazelcast Member POD there was a service created and that Hazelcast members formed a cluster.
 
 ```
 $ kubectl get all
@@ -83,7 +83,7 @@ Members {size:3, ver:3} [
 
 ## Configure Hazelcast Client outside Kubernetes
 
-When we have a working Hazelcast cluster deployed on Kubernetes, we can connect to it with an external Hazelcast Smart. You need first to fetch the credentials of the created Service Account and then use them to configure the client.
+When we have a working Hazelcast cluster deployed on Kubernetes, we can connect to it with an external Hazelcast Smart Client. You need first to fetch the credentials of the created Service Account and then use them to configure the client.
 
 ### 5. Check Kubernetes Master IP
 
@@ -105,7 +105,7 @@ default-token-q9sp8                  kubernetes.io/service-account-token   3    
 hazelcast-service-account-token-6s94h   kubernetes.io/service-account-token   3         9m
 ```
 
-Then, to fetch the Access Token, use the following command.
+Then, to fetch Access Token, use the following command.
 
 ```
 $ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.token} | base64 -d
@@ -178,37 +178,24 @@ Modify `src/main/resources/hazelcast-client.xml` to include your credentials.
 </hazelcast-client>
 ```
 
-#### Running Hazelcast Client
+### 8. Run Hazelcast Client application
 
-Logs:
+You can run the client application with the following command.
+
 ```
-Feb 20, 2019 3:01:05 PM com.hazelcast.client.config.XmlClientConfigLocator
-INFO: Loading 'hazelcast-client.xml' from classpath.
-Feb 20, 2019 3:01:06 PM com.hazelcast.client.HazelcastClient
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] A non-empty group password is configured for the Hazelcast client. Starting with Hazelcast version 3.11, clients with the same group name, but with different group passwords (that do not use authentication) will be accepted to a cluster. The group password configuration will be removed completely in a future release.
-Feb 20, 2019 3:01:06 PM com.hazelcast.core.LifecycleService
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] HazelcastClient 3.11-SNAPSHOT (20181015 - e6d277b) is STARTING
-Feb 20, 2019 3:01:07 PM com.hazelcast.spi.discovery.integration.DiscoveryService
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] Kubernetes Discovery properties: { service-dns: null, service-dns-timeout: 5, service-name: null, service-port: 0, service-label: null, service-label-value: true, namespace: default, resolve-not-ready-addresses: false, kubernetes-master: https://35.226.182.228}
-Feb 20, 2019 3:01:07 PM com.hazelcast.spi.discovery.integration.DiscoveryService
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] Kubernetes Discovery activated resolver: KubernetesApiEndpointResolver
-Feb 20, 2019 3:01:07 PM com.hazelcast.client.spi.ClientInvocationService
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] Running with 2 response threads
-Feb 20, 2019 3:01:07 PM com.hazelcast.core.LifecycleService
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] HazelcastClient 3.11-SNAPSHOT (20181015 - e6d277b) is STARTED
-Node: 1
-Feb 20, 2019 3:01:14 PM com.hazelcast.client.connection.ClientConnectionManager
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] Trying to connect to [10.16.1.8]:5701 as owner member
-Feb 20, 2019 3:01:17 PM com.hazelcast.client.connection.ClientConnectionManager
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] Setting ClientConnection{alive=true, connectionId=1, channel=NioChannel{/192.168.105.9:55311->/35.188.214.176:5701}, remoteEndpoint=[10.16.1.8]:5701, lastReadTime=2019-02-20 15:01:17.823, lastWriteTime=2019-02-20 15:01:17.671, closedTime=never, connected server version=3.11.1} as owner with principal ClientPrincipal{uuid='e75d0a60-9955-4d80-a5e7-ac8a81629dc3', ownerUuid='d92556f2-a03a-48f9-b3c5-aa3e2e585f6f'}
-Feb 20, 2019 3:01:17 PM com.hazelcast.client.connection.ClientConnectionManager
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] Authenticated with server [10.16.1.8]:5701, server version:3.11.1 Local address: /192.168.105.9:55311
-Feb 20, 2019 3:01:18 PM com.hazelcast.client.spi.impl.ClientMembershipListener
-INFO: hz.client_0 [dev] [3.11-SNAPSHOT] 
+mvn spring-boot:run
+```
 
+Application is a web service that uses Hazelcast Client to connect to the Hazelcast cluster. 
+
+To check it works correctly, you can:
+* Open browser at: `http://localhost:8080/put?key=sampleKey&value=sampleValue` (you should see a reply `{"response":null}`)
+* Open browser at: `http://localhost:8080/get?key=sampleKey` (you should see a reply `{"response":"sampleValue"}`)
+* Check the application logs to find:
+```
 Members [3] {
-	Member [10.16.2.10]:5701 - 462589d9-7779-4f60-8c9e-71b50a32620d
-	Member [10.16.1.8]:5701 - d92556f2-a03a-48f9-b3c5-aa3e2e585f6f
-	Member [10.16.0.15]:5701 - 011893fc-83d4-4b75-abe1-4158c95ac140
+        Member [10.16.1.10]:5701 - abab30fe-5a45-484d-bad5-e60c252572ca
+        Member [10.16.2.7]:5701 - 9b948e91-0115-470f-850e-d5cbf2e3b0e1
+        Member [10.16.0.8]:5701 - e68ce431-4000-467b-92c6-0072b2601d60
 }
 ```
