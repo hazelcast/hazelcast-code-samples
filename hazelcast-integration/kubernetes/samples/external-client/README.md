@@ -1,8 +1,16 @@
-## Configure Hazelcast Server
+# Hazelcast with external Client
 
-## Install Metacontroller with Service-Per-Pod DecoratorController
+This is a complete example presenting how to use Hazelcast cluster deployed on Kubernetes with Hazelcast Smart Client running outside of Kubernetes.
 
-#### Install Metacontroller
+This example assumes you have a running Kubernetes cluster and the `kubectl` tool installed and configured.  
+
+## Configure Hazelcast cluster on Kubernetes
+
+As the first step, you need to start Hazelcast cluster in such a way that each member is exposed with a separate public IP/port. In Kubernetes PODs can be accessed from outside only via services, so the configuration requires creating a separate service (LoadBalancer or NodePort) for each Hazelcast member POD. The simplest way to do it is to use [Metacontroller](https://metacontroller.app/) plugin with [Service-Per-Pod](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod) Decorator Controller.
+
+### Install Metacontroller plugin
+
+To install [Metacontroller](https://metacontroller.app/) plugin, it's enough to execute the following commands.
 
 ```
 # Create metacontroller namespace.
@@ -13,20 +21,40 @@ kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/metacontr
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/master/manifests/metacontroller.yaml
 ```
 
-If you're interested, you can read more about Metacontroller [here](https://metacontroller.app).
+### Install Service-Per-Pod DecoratorController
 
-#### Install Service-Per-Pod DecoratorController
+[Service-Per-Pod](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod) Decorator Controller automatically creates a service for each POD marked with the following annotations:
+
+```yaml
+annotations:
+    service-per-pod-label: "statefulset.kubernetes.io/pod-name"
+    service-per-pod-ports: "5701:5701"
+``` 
+
+To install this Decorator Controller, you need to execute the following commands.
 
 ```
 kubectl create configmap service-per-pod-hooks -n metacontroller --from-file=hooks
 kubectl apply -f service-per-pod.yaml
 ```
 
-To read more about Service-Per-Pod decorator, please check [here](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod).
+### Configure Service Account
 
-## Install Hazelcast cluster with Service-Per-Pod Decorator
+Hazelcast uses Kubernetes API for the member discovery and it therefore requires granting permission to certain resources. To create ServiceAccount with minimal permissions, run the following command.
 
-TBD
+```
+kubectl apply -f rbac.yaml
+```
+
+The Service Account 'hazelcast-service-account' was created and you can use it in all further steps.
+
+### Install Hazelcast cluster
+
+To install Hazelcast cluster, you need to include the Service-Per-Pod annotations into your StatefulSet (or Deployment) Hazelcast configuration. Then, deploy Hazelcast cluster into your Kubernetes environment.
+
+```
+kubectl apply -f hazelcast-cluster.yaml
+``` 
 
 ## Configure Service Account
 
