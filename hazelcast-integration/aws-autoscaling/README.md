@@ -15,7 +15,7 @@ This code sample presents a sequence of steps which leads to a complete autoscal
 ### Step 2: Create AMI (Amazon Machine Image) with Hazelcast
 1. Set up a EC2 Instance with Hazelcast:
    1. Hazelcast should run as a service (or start in the User Data script)
-   1. Hazelcast needs to have the health REST endpoint enabled (property `hazelcast.http.healthcheck.enabled` set to `true`)
+   1. Hazelcast needs to have the health REST endpoint enabled (`<endpoint-group name="HEALTH_CHECK" enabled="true"/>` in REST config)
 2. Install the necessary tool: `jq`
 ```
 $ sudo yum install -y jq
