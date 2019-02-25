@@ -33,7 +33,7 @@ public class DeclarativeAttributesExample {
             @Override
             public void clientConnected(com.hazelcast.core.Client client) {
                 System.out.println("Client : " + client.getName() + " is connected to member: " + instance.getName());
-                System.out.println("Client : " + client.getName() + " is connected with attributes " + client.getAttributes());
+                System.out.println("Client : " + client.getName() + " is connected with attributes " + client.getLabels());
 
             }
 
