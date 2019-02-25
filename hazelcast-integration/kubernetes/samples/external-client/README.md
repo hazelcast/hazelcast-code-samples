@@ -21,9 +21,11 @@ kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/metacontr
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/master/manifests/metacontroller.yaml
 ```
 
+If you have any issues while creating Metacontroller, it may mean that you don't have `ClusterRole` access to your cluster. Please check [this](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control#defining_permissions_in_a_role) for details.
+
 ### 2. Install Service-Per-Pod DecoratorController
 
-To install [Service-Per-Pod](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod) Decorator Controller, you need to execute the following commands.
+To install [Service-Per-Pod](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod) Decorator Controller, you need to execute the following commands from this Code Sample directory.
 
 ```
 kubectl create configmap service-per-pod-hooks -n metacontroller --from-file=hooks
@@ -108,14 +110,14 @@ hazelcast-service-account-token-6s94h   kubernetes.io/service-account-token   3 
 Then, to fetch Access Token, use the following command.
 
 ```
-$ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.token} | base64 -d
+$ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.token} | base64 --decode | xargs echo
 eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhbXBsZS1zZXJ2aWNlLWFjY291bnQtdG9rZW4tNnM5NGgiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoic2FtcGxlLXNlcnZpY2UtYWNjb3VudCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjI5OTI1NzBmLTI1NDQtMTFlOS1iNjg3LTQyMDEwYTgwMDI4YiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OnNhbXBsZS1zZXJ2aWNlLWFjY291bnQifQ.o-j4e-ducrMmQc23xYDnPr6TIyzlAs3pLNAmGLqPe9Vq1mwsxOh3ujcVKR90HAdkfHIF_Sw66qC9hXIDvxfqN_rLXlOKbvTX3gjDrAnyY_93Y3MpmSBj8yR9yHMb4O29a9UIwN5F2_VoCsc0IGumScU_EhPYc9mvEXlwp2bATQOEU-SVAGYPqvVPs9h5wjWZ7WUQa_-RBLMF6KRc9EP2i3c7dPSRVL9ZQ6k6OyUUOVEaPa1tqIxP7vOgx9Tg2C1KmYF5RDrlzrWkhEcjd4BLTiYDKEyaoBff9RqdPYlPwu0YcEH-F7yU8tTDN74KX5jvah3amg_zTiXeNoe5ZFcVdg
 ```
 
 To fetch CA Certificate, use the following command.
 
 ```
-$ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.ca\\.crt} | base64 -d
+$ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.ca\\.crt} | base64 --decode | xargs echo
 -----BEGIN CERTIFICATE-----
 MIIDCzCCAfOgAwIBAgIQVcTHv3jK6g1l7Ph9Xyd9DTANBgkqhkiG9w0BAQsFADAv
 MS0wKwYDVQQDEyQ4YjRhNjgwMS04NzJhLTQ2NDEtYjIwOC0zYjEyNDEwYWVkMTcw
