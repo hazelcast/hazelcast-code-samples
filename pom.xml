@@ -71,6 +71,7 @@
         <module>network-configuration</module>
         <module>org-website-samples</module>
         <module>osgi</module>
+        <module>pipeline</module>
         <module>replicated-map</module>
         <module>querying</module>
         <module>serialization</module>
