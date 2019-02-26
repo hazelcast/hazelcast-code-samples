@@ -4,6 +4,13 @@ import com.hazelcast.core.ICountDownLatch;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @deprecated {@code HazelcastInstance.getCountDownLatch()} may lose strong consistency
+ * in case of network failures and server failures.
+ * Please use {@code HazelcastInstance.getCPSubsystem().getCountDownLatch()} instead.
+ * You can see a code sample for the new impl in the cp-subsystem code samples module.
+ */
+@Deprecated
 public class Follower {
 
     public static void main(String[] args) throws Exception {

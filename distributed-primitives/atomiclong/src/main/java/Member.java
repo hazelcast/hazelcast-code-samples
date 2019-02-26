@@ -4,6 +4,13 @@ import com.hazelcast.core.IAtomicLong;
 
 import static java.lang.String.format;
 
+/**
+ * @deprecated {@code HazelcastInstance.getAtomicLong()} may lose strong consistency
+ * in case of network failures and server failures.
+ * Please use {@code HazelcastInstance.getCPSubsystem().getAtomicLong()} instead.
+ * You can see a code sample for the new impl in the cp-subsystem code samples module.
+ */
+@Deprecated
 public class Member {
 
     public static void main(String[] args) {

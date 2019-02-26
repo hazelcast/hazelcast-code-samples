@@ -52,6 +52,7 @@
         <module>cluster-quorum</module>
         <module>cluster-quorum-xml</module>
         <module>cluster-state</module>
+        <module>cp-subsystem</module>
         <module>demo</module>
         <module>distributed-collections</module>
         <module>distributed-executor</module>
