@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>client-attributes</artifactId>
-    <name>Clients - Attributes</name>
-    <groupId>book.hazelcast.client.client-attributes</groupId>
+    <artifactId>client-labels</artifactId>
+    <name>Clients - Labels</name>
+    <groupId>book.hazelcast.client.client-labels</groupId>
     <description>
-        Sample usage of attributes and client name on the servers
+        Sample usage of client labels and client name on the servers
     </description>
 
     <parent>

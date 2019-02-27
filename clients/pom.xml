@@ -28,7 +28,7 @@
         <module>client-rest</module>
         <module>client-statistics</module>
         <module>user-code-deployment</module>
-        <module>client-attributes</module>
+        <module>client-labels</module>
     </modules>
 
     <dependencies>

@@ -21,9 +21,9 @@
 
     <instance-name>Client2</instance-name>
 
-    <client-attributes>
-        <attribute name="role">user</attribute>
-        <attribute name="region">bar</attribute>
-    </client-attributes>
+    <client-labels>
+        <label>admin</label>
+        <label>foo</label>
+    </client-labels>
 
 </hazelcast-client>
