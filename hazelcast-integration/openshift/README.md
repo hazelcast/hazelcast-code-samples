@@ -4,16 +4,6 @@ Hazelcast can be used as a Caching Layer for applications deployed on [OpenShift
 
 This sample is a complete guideline on how to set up the local OpenShift environment, start Hazelcast cluster, configure Management Center, and finally run a sample client application.
 
-### Table of Contents
-* [Step-by-step instruction](#step-by-step-instruction)
-  * [Step 1: Install OpenShift environment](#step-1-install-openshift-environment)
-  * [Step 2: Start Hazelcast cluster](#step-2-start-hazelcast-cluster)
-  * [Step 3: Access Management Center](#step-3-access-management-center)
-  * [Step 4: Run a sample Hazelcast client application](#step-4-run-a-sample-hazelcast-client-application)
-* [Authenticate to Red Hat Container Catalog](#authenticate-to-red-hat-container-catalog)
-* [External Hazelcast Client](#external-hazelcast-client)
-* [Debugging](#debugging)
-
 # Step-by-step instruction
 
 ## Step 1: Install OpenShift environment
@@ -341,20 +331,37 @@ $ oc secrets link default rhcc --for=pull
 
 # External Hazelcast Client
 
-Client application presented in this tutorial works only if deployed inside the OpenShift environment, because Kubernetes Discovery SPI does not support external clients. If you need to connect to the Hazelcast cluster deployed on OpenShift, then you can expose a service with `externalIP` and connect to the cluster with Smart Routing disabled.
+Client application presented in this tutorial works only if deployed inside the OpenShift environment. If you need to connect to the Hazelcast cluster deployed on OpenShift, then you can expose a service as `LoadBalancer` or `NodePort` and connect to the cluster with Smart Routing disabled.
 
 **Note**: Your OpenShift environment needs to provide public IP addresses, so for example, the solution won't work on the OpenShift Online environment.
 
-You can create a service with automatically assigned external IP and port.
+To create a `LoadBalancer` service, create `service.yaml` file.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazelcast-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: hazelcast
+    role: hazelcast
+  ports:
+  - protocol: TCP
+    port: 5701
+```
+
+Then, apply it into your OpenShift cluster.
 
 ```
-$ oc expose rc hz-rc --type=LoadBalancer --name=hazelcast-ingress
+oc apply -f service.yaml
 ```
 
 The following command checks the external port under which the service is published.
 
 ```
-$ oc get service hazelcast-ingress -o custom-columns=EXTERNAL_PORT:.spec.ports[0].nodePort
+$ oc get service hazelcast-loadbalancer -o custom-columns=EXTERNAL_PORT:.spec.ports[0].nodePort
 EXTERNAL_PORT
 31296
 ```
@@ -380,6 +387,33 @@ public class Client {
         client.shutdown();
     }
 }
+```
+
+# WAN Replication
+
+You need to expose your Hazelcast cluster with the `LoadBalancer` (or `NodePort`) service as described in the section "External Hazelcast Client".
+
+Then, use the External IP in `endpoints` in the WAN Configuration. For example,
+
+```
+<wan-replication name="wan-replication-cluster">
+  <wan-publisher group-name="dev">
+      <class-name>com.hazelcast.enterprise.wan.replication.WanBatchReplication</class-name>
+      <queue-full-behavior>THROW_EXCEPTION</queue-full-behavior>
+      <queue-capacity>1000</queue-capacity>
+      <properties>
+          <property name="batch.size">500</property>
+          <property name="batch.max.delay.millis">1000</property>
+          <property name="snapshot.enabled">false</property>
+          <property name="response.timeout.millis">60000</property>
+          <property name="ack.type">ACK_ON_OPERATION_COMPLETE</property>
+          <property name="endpoints">EXTERNAL_IP:EXTERNAL_PORT</property>
+          <property name="discovery.period">20</property>
+          <property name="executorThreadCount">2</property>
+      </properties>
+ 
+  </wan-publisher>
+</wan-replication>
 ```
 
 # Debugging
