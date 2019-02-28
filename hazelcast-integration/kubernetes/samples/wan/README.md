@@ -13,7 +13,7 @@ The example also assumes you have two running Kubernetes clusters and the `kubec
 
 ## 1. Create Receiver Cluster
 
-Hazelcast uses Kubernetes API for the member discovery and therefore it requires granting permission to certain resources.
+Hazelcast uses Kubernetes API for the member discovery and it therefore requires granting view permission to certain resources.
 
 ```
 (Receiver) $ kubectl apply -f rbac.yaml
@@ -105,7 +105,7 @@ Finally, we can start the publisher Hazelcast cluster.
 (Publisher) $ kubectl apply -f statefulset.yaml
 ```
 
-Your two Hazelcast clusters are set up with the WAN Replication. Now, we can check if it works correctly.
+Your two Hazelcast clusters are set up with the WAN Replication. Now, we can check if everything works correctly.
 
 ## 3. Verify WAN Replication
 
