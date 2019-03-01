@@ -34,6 +34,7 @@
         <module>wan-replication</module>
         <module>pcf-tls-integration</module>
         <module>client-custom-credentials</module>
+        <module>client-failover-cluster</module>
     </modules>
 
     <repositories>
