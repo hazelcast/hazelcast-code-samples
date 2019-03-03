@@ -36,6 +36,7 @@
         <module>ssl</module>
         <module>symmetric-encryption</module>
         <module>tcpip</module>
+        <module>advanced-network-configuration</module>
     </modules>
 
     <dependencies>
