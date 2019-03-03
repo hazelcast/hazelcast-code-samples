@@ -28,6 +28,7 @@
         <module>configure-logging</module>
         <module>configure-programmatic</module>
         <module>configure-xml</module>
+        <module>configure-yaml</module>
         <module>destroying-instances</module>
         <module>loading-instances</module>
         <module>multiple-hazelcast-instances</module>

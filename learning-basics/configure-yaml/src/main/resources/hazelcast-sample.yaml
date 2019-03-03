@@ -1,0 +1,4 @@
+hazelcast:
+  network:
+    port:
+      port: ${hazelcast.member.port}
