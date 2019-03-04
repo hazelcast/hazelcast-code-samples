@@ -10,6 +10,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 import java.util.Collections;
+import java.util.Map;
 
 public class MemberA {
 
@@ -26,7 +27,7 @@ public class MemberA {
         config.getAdvancedNetworkConfig().getJoin()
               .getTcpIpConfig().setEnabled(true).addMember("192.168.1.10,192.168.1.11,192.168.1.12");
 
-        // configure the MEMBER protocol server socket to listen on 192.168.1.0-255:5701
+        // configure the MEMBER protocol server socket to listen on 192.168.1.10-12:5701
         config.getAdvancedNetworkConfig().setMemberEndpointConfig(createMemberEndpointConfig());
 
         // configure the CLIENT protocol server socket:
@@ -38,15 +39,19 @@ public class MemberA {
         config.getAdvancedNetworkConfig().addWanEndpointConfig(createWanEndpointConfig());
 
         // setup WAN replication
+        WanPublisherConfig wanPublisherConfig = new WanPublisherConfig()
+                .setGroupName("cluster-b")
+                .setClassName("com.hazelcast.enterprise.wan.replication.WanBatchReplication")
+                // refer to the WAN endpoint config by name
+                .setEndpoint("active-wan");
+        Map<String, Comparable> props = wanPublisherConfig.getProperties();
+        props.put("endpoints", "147.102.1.10:8443,147.102.1.11:8443,147.102.1.12:8443");
+        props.put("group.password", "clusterB-pass");
+
         config.addWanReplicationConfig(
                 new WanReplicationConfig()
                         .setName("active-wan-replication")
-                        .addWanPublisherConfig(
-                            new WanPublisherConfig()
-                                    .setGroupName("cluster-b")
-                                    .setClassName("com.hazelcast.enterprise.wan.replication.WanBatchReplication")
-                                    // refer to the WAN endpoint config by name
-                                    .setEndpoint("active-wan")));
+                        .addWanPublisherConfig(wanPublisherConfig));
 
         config.addMapConfig(
                 new MapConfig("wan-map")
@@ -85,7 +90,7 @@ public class MemberA {
                       .addInterface("10.10.200.10-12");
 
         // set public address of this member for NAT
-        endpointConfig.setPublicAddress("172.10.100.10:9000");
+        endpointConfig.setPublicAddress("172.10.10.10:9000");
 
         return endpointConfig;
     }

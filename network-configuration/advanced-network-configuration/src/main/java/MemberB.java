@@ -25,8 +25,9 @@ public class MemberB {
         endpointConfig.setName("active-wan")
                       .setSSLConfig(new SSLConfig()
                               .setEnabled(true)
-                              .setProperty("trustStore", "truststore")
-                              .setProperty("trustStorePassword", System.getenv("KEYSTORE_PASSWORD")));
+                              .setFactoryClassName("com.hazelcast.nio.ssl.BasicSSLContextFactory")
+                              .setProperty("keyStore", "/home/hazelcast/hazelcast.p12")
+                              .setProperty("keyStorePassword", System.getenv("KEYSTORE_PASSWORD")));
 
         endpointConfig.setPort(8443)
                       .setPublicAddress("147.102.1.10:8443");
