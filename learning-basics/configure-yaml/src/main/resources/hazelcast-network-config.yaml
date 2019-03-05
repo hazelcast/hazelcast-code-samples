@@ -1,0 +1,6 @@
+hazelcast:
+  network:
+    port:
+      port: 7000
+    interfaces:
+      - 127.0.0.1
