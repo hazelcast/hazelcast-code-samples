@@ -43,11 +43,7 @@ objects:
         <network>
           <join>
             <multicast enabled="false"/>
-            <tcp-ip enabled="false" />
-            <discovery-strategies>
-              <discovery-strategy enabled="true" class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy">
-              </discovery-strategy>
-            </discovery-strategies>
+            <kubernetes enabled="true"/>
           </join>
         </network>
       </hazelcast>

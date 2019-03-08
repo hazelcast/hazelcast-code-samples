@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd"
+           xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <properties>
+        <property name="hazelcast.discovery.enabled">true</property>
+    </properties>
+    <network>
+        <join>
+            <multicast enabled="false"/>
+            <kubernetes enabled="true"/>
+        </join>
+    </network>
+    <management-center enabled="true">http://management-center-service.hazelcast.svc:8080/hazelcast-mancenter
+    </management-center>
+</hazelcast>
+

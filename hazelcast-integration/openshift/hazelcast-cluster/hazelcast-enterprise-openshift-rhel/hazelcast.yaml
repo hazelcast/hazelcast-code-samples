@@ -45,7 +45,7 @@ objects:
   data:
     hazelcast.xml: |-
       <?xml version="1.0" encoding="UTF-8"?>
-      <hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.10.xsd"
+      <hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd"
                      xmlns="http://www.hazelcast.com/schema/config"
                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <properties>
@@ -54,11 +54,7 @@ objects:
         <network>
           <join>
             <multicast enabled="false"/>
-            <tcp-ip enabled="false" />
-            <discovery-strategies>
-              <discovery-strategy enabled="true" class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy">
-              </discovery-strategy>
-            </discovery-strategies>
+            <kubernetes enabled="true"/>
           </join>
         </network>
         <management-center enabled="true">http://management-center-service.hazelcast.svc:8080/hazelcast-mancenter</management-center>
