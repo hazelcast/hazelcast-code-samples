@@ -147,7 +147,7 @@ Modify `src/main/resources/hazelcast-client.xml` to include your credentials.
 <?xml version="1.0" encoding="UTF-8"?>
 <hazelcast-client xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
-                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config.xsd"
                   xmlns="http://www.hazelcast.com/schema/client-config">
     <network>
         <kubernetes enabled="true">
