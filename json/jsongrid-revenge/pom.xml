@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.hazelcast.samples.json</groupId>
+    <artifactId>jsongrid-revenge</artifactId>
+    <name>JSON: JSON Grid Revenge</name>
+    <description>Project POM</description>
+    <packaging>pom</packaging>
+
+    <parent>
+        <artifactId>json</artifactId>
+        <groupId>com.hazelcast.samples</groupId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <java.version>8</java.version>
+        <spring-boot.version>2.1.3.RELEASE</spring-boot.version>
+    </properties>
+
+    <modules>
+	<!--
+        <module>jsongrid-database</module>
+        <module>jsongrid-database-tester</module>
+        <module>jsongrid-hibernate-revenge</module>
+        <module>jsongrid-repository</module>
+        <module>jsongrid-server</module>
+        <module>jsongrid-client-java</module>
+	-->
+    </modules>
+
+    <dependencies>
+	<dependency>
+		<groupId>org.hsqldb</groupId>
+		<artifactId>hsqldb</artifactId>
+	</dependency>
+
+        <dependency>
+       		<groupId>org.projectlombok</groupId>
+            	<artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-client</artifactId>
+                <version>${hazelcast.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
