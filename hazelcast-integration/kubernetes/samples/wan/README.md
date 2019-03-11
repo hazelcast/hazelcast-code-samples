@@ -11,6 +11,8 @@ This example focuses on the WAN Replication feature and assumes that you have so
    
 The example also assumes you have two running Kubernetes clusters and the `kubectl` tool installed. For all the commands the indication `(Receiver)` means that `kubectl` uses the context of the receiver cluster and the indication `(Publisher)` means that `kubectl` uses the context of the publisher cluster.
 
+**Note**: This Code Sample presents WAN Replication via LoadBalancer, which may result in the communication over only one of the target members. If you need higher performance, please check out [External Smart Client Code Sample](../external-client) and use such configuration in the WAN Replication part.  
+
 ## 1. Create Receiver Cluster
 
 Hazelcast uses Kubernetes API for the member discovery and it therefore requires granting view permission to certain resources.
