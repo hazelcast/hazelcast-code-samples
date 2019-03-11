@@ -30,7 +30,7 @@
 	</properties>
 
 	<modules>
-		<module>jsongrid-revenge</module>
+		<module>jsongrid</module>
 	</modules>
 
 	<dependencies>
