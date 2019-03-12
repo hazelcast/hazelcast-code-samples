@@ -48,9 +48,6 @@ objects:
       <hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd"
                      xmlns="http://www.hazelcast.com/schema/config"
                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <properties>
-          <property name="hazelcast.discovery.enabled">true</property>
-        </properties>
         <network>
           <join>
             <multicast enabled="false"/>
