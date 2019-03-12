@@ -67,7 +67,7 @@ import lombok.extern.slf4j.Slf4j;
  * </p>
  * </li>
  * <li>
- * <p><b>V load(K)</b> XXX
+ * <p><b>V load(K)</b>
  * </p>
  * <p>This method is called once per primary key to try to
  * load the associated value. It may return null if the
@@ -128,7 +128,7 @@ public class MyJsonMapLoader implements MapLoader<Integer, HazelcastJsonValue> {
      */
     @Override
     public Map<Integer, HazelcastJsonValue> loadAll(Collection<Integer> keys) {
-        log.info("loadAll({})", keys);
+        log.debug("loadAll({})", keys);
 
         return keys
         .stream()
@@ -148,8 +148,12 @@ public class MyJsonMapLoader implements MapLoader<Integer, HazelcastJsonValue> {
      */
     @Override
     public Iterable<Integer> loadAllKeys() {
-        log.info("loadAllKeys()");
+        log.debug("loadAllKeys()");
 
-        return MyDbUtil.findIds(this.jdbcTemplate, this.tableName);
+        Collection<Integer> ids = MyDbUtil.findIds(this.jdbcTemplate, this.tableName);
+
+        log.info("loadAllKeys() -> {}", (ids == null ? ids : ids.size()));
+
+        return ids;
     }
 }
