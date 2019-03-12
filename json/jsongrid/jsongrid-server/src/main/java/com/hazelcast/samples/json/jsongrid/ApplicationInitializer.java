@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastJsonValue;
+import com.hazelcast.core.IMap;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,12 +55,35 @@ public class ApplicationInitializer implements CommandLineRunner {
      * same names, which forces their creation if they
      * don't exist and data loading actions.
      * </p>
+     * <p>Print the first value from each to prove data
+     * is there, whether loaded now or already loaded.
+     * </p>
      */
+    @SuppressWarnings("rawtypes")
     @Override
     public void run(String... args) throws Exception {
         this.findTableNames().stream().forEach(name -> {
             log.info("this.hazelcastInstance.getMap(\"{}\")", name);
-            this.hazelcastInstance.getMap(name);
+            IMap<Comparable, ?> iMap = this.hazelcastInstance.getMap(name);
+
+            TreeSet<?> keys = new TreeSet<>(iMap.keySet());
+
+            if (keys.size() == 0) {
+                log.error("Map '{}' empty", name);
+            } else {
+                Object key = keys.first();
+                Object value = iMap.get(key);
+
+                if (value instanceof HazelcastJsonValue) {
+                    HazelcastJsonValue hazelcastJsonValue =
+                            (HazelcastJsonValue) value;
+                    log.info(" --> '{}'.get('{}')=='{}'",
+                            iMap.getName(), key, hazelcastJsonValue.toJsonString());
+                } else {
+                    log.info(" --> '{}'.get('{}')=='{}'",
+                            iMap.getName(), key, value);
+                }
+            }
         });
     }
 

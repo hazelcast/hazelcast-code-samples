@@ -24,10 +24,3 @@ hazelcast:
         enabled: true
         member-list:
           - 127.0.0.1:9701
-
-# map:
-#    default:
-#      map-store:
-#        enabled: true
-#        initial-mode: LAZY
-#        class-name: com.hazelcast.examples.DummyStore
