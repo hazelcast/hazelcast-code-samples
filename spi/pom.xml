@@ -27,6 +27,7 @@
         <module>priority-queue</module>
         <module>proxy</module>
         <module>split-brain</module>
+        <module>tenant-control</module>
     </modules>
 
     <properties>
