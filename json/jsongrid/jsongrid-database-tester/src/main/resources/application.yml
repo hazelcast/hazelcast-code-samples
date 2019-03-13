@@ -5,3 +5,8 @@ spring:
     password: ''
     url:  'jdbc:hsqldb:hsql://localhost/mydatabase'
     username: 'SA'
+  main:
+    banner-mode: 'off'
+
+logging.level:
+  ROOT: warn

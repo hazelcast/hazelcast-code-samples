@@ -1,0 +1,7 @@
+# The client only connects to servers, does not know about database
+hazelcast-client:
+  group:
+    name: jsongrid
+  network:
+    cluster-members:
+      - 127.0.0.1:9701

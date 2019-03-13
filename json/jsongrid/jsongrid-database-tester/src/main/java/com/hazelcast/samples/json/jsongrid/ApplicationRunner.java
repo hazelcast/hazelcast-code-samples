@@ -36,8 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApplicationRunner implements CommandLineRunner {
 
-    private static final String NEWLINE = System.getProperty("line.separator");
-
     private static final String[] SQLS = {
             "SELECT * FROM potus",
             "SELECT * FROM vpotus",
@@ -51,8 +49,8 @@ public class ApplicationRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         for (String sql : SQLS) {
-            log.info("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            log.info(sql);
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.println(sql);
 
             try {
                 List<Map<String, Object>> resultSet = this.jdbcTemplate.queryForList(sql);
@@ -74,15 +72,15 @@ public class ApplicationRunner implements CommandLineRunner {
                         stringBuilder.append(entry.getKey() + "==" + entry.getValue());
                         j++;
                     }
-                    log.info(stringBuilder.toString() + NEWLINE);
+                    System.out.println(stringBuilder.toString());
                 }
-                log.info("[{} row{}]", resultSet.size(), (resultSet.size() == 1 ? "" : "s"));
+                System.out.printf("[%d row%s]%n", resultSet.size(), (resultSet.size() == 1 ? "" : "s"));
 
             } catch (Exception e) {
                 log.error(sql, e);
             }
 
-            log.info("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
     }
 }
