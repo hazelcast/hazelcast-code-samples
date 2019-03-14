@@ -40,16 +40,16 @@ Minishift toolkit (version 3.3.0) is used to help with running OpenShift locally
       * Hyper-V does not well support NAT networks, so your router must accept the Virtual Machine connecting directly to the same network interface (in case of problems, you may see a meaningless error `Too many retries waiting for SSH to be available`); the solution is to use VirutalBox instead of Hyper-V or play with the [experimental Minishift features](https://docs.openshift.org/latest/minishift/using/experimental-features.html)
 
 
-3) Make sure your `minishift` and `oc` tools are installed and ready to use
+3) Run `eval $(minishift oc-env)` and make sure your `minishift` and `oc` tools are installed and ready to use. 
 
 ```
 $ minishift version
-minishift v1.11.0+d7f374a
-CDK v3.3.0-1
+minishift v1.27.0+5981f996
+CDK v3.7.0-1
 
 $ oc version
-oc v3.9.0-alpha.3+78ddc10
-kubernetes v1.9.1+a0ce1bc657
+oc v3.11.43
+kubernetes v1.11.0+d4cacc0
 features: Basic-Auth
 ```
 
@@ -103,7 +103,8 @@ Used parameters:
 
 **3) Check that Hazelcast is running**
 
-To check all created OpenShift resources, use the following command.
+To check all created OpenShift resources, use the following command. You might need to wait some time until
+all pods are in `Running` status.
 
 ```
 $ oc get all
@@ -156,16 +157,6 @@ Members [3] {
 Note that you can also perform all the operations and observe the results in the OpenShift Web Console.
 
 ![Hazelcast PODs](markdown/images/hazelcast_pods.png)
-
-**4) Delete Hazelcast cluster**
-
-If you want to delete all resources (Replication Controller, Service, PODs, Storage, Config Map), you could use the following commands:
-
-```
-$ oc delete all --all
-$ oc delete pvc --all
-$ oc delete configmap --all
-```
 
 ## Step 3: Access Management Center
 
@@ -288,29 +279,23 @@ Let's first change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluste
 Then, replace ConfigMap with the Persistent Storage.
 
 ```
-oc volume rc/hz-rc --add --overwrite --claim-size 1Gi --mount-path /data/hazelcast
+oc set volume statefulset.apps/hazelcast --add --overwrite --claim-size 1Gi --mount-path /data/hazelcast
 ```
 
-Now, copy `hazelcast.xml` and `ocp-entry-processor-0.1-SNAPSHOT.jar` into the volume. In case of Minishift, you need to first check the volume name.
-
 ```
-$ oc get pvc
-NAME        STATUS    VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-pvc-6qrqc   Bound     pv0090    100Gi      RWO,ROX,RWX                   1h
+cp ../../client-apps/ocp-entry-processor/target/ocp-entry-processor-0.1-SNAPSHOT.jar hazelcast-configuration/
 ```
 
-The volume name is `pv0090` and the following commands copy the necessary files.
+Then, after restarting all PODs (delete them, they will automatically start again), new volume will be available to the pods.
 
 ```
-$ scp -i $HOME/.minishift/machines/minishift/id_rsa hazelcast-configuration/hazelcast.xml docker@$(minishift ip):/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0090/
-$ scp -i $HOME/.minishift/machines/minishift/id_rsa ../../client-apps/ocp-entry-processor/target/ocp-entry-processor-0.1-SNAPSHOT.jar docker@$(minishift ip):/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0090/
+oc delete po --all
 ```
 
-Short explanation of the commands above:
-* `$HOME/.minishift/machines/minishift/id_rsa` - ssh key to Minishift VM is stored in the Minishift's home directory
-* `hazelcast.xml` - custom configuration of Hazelcast
-* `minishift ip` - command to return the IP address of the Minishift VM
-* `/mnt/sda1/var/lib/minishift/openshift.local.pv/pv0090/` - location of the Persistent Volume `pv0090` in Minishift VM
+Now, copy `hazelcast.xml` and `ocp-entry-processor-0.1-SNAPSHOT.jar` into the volume.
+```
+oc rsync hazelcast-configuration/ hazelcast-0:/data/hazelcast/
+```
 
 Then, after restarting all PODs (delete them, they will automatically start again), you can play with "Entry Processor".
 
@@ -323,6 +308,18 @@ oc delete po --all
 The results should be visible in Management Center.
 
 ![Management Center](markdown/images/management_center_entry_processor.png)
+
+## Step 5: Clean up Hazelcast Deployment
+
+**Delete Hazelcast cluster**
+
+If you want to delete all resources (Replication Controller, Service, PODs, Storage, Config Map), you could use the following commands:
+
+```
+$ oc delete all --all
+$ oc delete pvc --all
+$ oc delete configmap --all
+```
 
 # Authenticate to Red Hat Container Catalog
 
