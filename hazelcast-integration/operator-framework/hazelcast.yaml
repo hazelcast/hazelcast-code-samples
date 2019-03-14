@@ -1,0 +1,12 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+  name: hz
+spec:
+  image:
+    tag: "3.11.2"
+  hazelcast:
+    licenseKeySecretName: "hz-license-key-secret"
+  securityContext:
+    runAsUser: 65534
+    fsGroup: 65534
