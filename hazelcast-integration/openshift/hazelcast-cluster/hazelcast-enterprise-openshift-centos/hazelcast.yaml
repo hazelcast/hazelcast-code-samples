@@ -54,7 +54,7 @@ objects:
             <kubernetes enabled="true"/>
           </join>
         </network>
-        <management-center enabled="true">http://management-center-service.hazelcast.svc:8080/hazelcast-mancenter</management-center>
+        <management-center enabled="true">http://management-center-service.${namespace}.svc:8080/hazelcast-mancenter</management-center>
       </hazelcast>
 
 - apiVersion: apps/v1
@@ -108,7 +108,7 @@ objects:
           - name: HZ_LICENSE_KEY
             value: ${ENTERPRISE_LICENSE_KEY}
           - name: JAVA_OPTS
-            value: "-Dhazelcast.rest.enabled=true -Dhazelcast.config=/data/hazelcast/hazelcast.xml"
+            value: "-Dhazelcast.rest.enabled=true -Dhazelcast.config=/data/hazelcast/hazelcast.xml -Dnamespace=${NAMESPACE}"
         volumes:
         - name: hazelcast-storage
           configMap:
