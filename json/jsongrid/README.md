@@ -336,6 +336,6 @@ you, it's not exactly important.
 JSON can be queried efficiently, the grid knows how to parse JSON objects. You can search for
 records in a memory-based data-grid (Hazelcast!) faster than a disk-based system.
 
-If you have a legacy store, you can have an optimized sata loader that understands how to
+If you have a legacy store, you can have an optimized data loader that understands how to
 translate the data model as relation tables into JSON. Or you can do as we do here, a generic
 routine that decudes what to do. Pick which fits your need.
