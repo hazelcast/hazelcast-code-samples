@@ -6,6 +6,7 @@
 target/
 .project
 .classpath
+.factorypath
 .settings/
 **/.springBeans
 .idea/

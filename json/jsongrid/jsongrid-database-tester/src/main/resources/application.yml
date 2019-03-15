@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    continue-on-error: true
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    password: ''
+    url:  'jdbc:hsqldb:hsql://localhost/mydatabase'
+    username: 'SA'
+  main:
+    banner-mode: 'off'
+
+logging.level:
+  ROOT: warn
