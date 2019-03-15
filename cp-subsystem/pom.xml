@@ -29,6 +29,11 @@
         <module>cp-countdownlatch</module>
         <module>fenced-lock</module>
         <module>cp-semaphore</module>
+        <module>start-cp-subsystem-1</module>
+        <module>start-cp-subsystem-2</module>
+        <module>remove-crashed-cp-members-manually</module>
+        <module>remove-crashed-cp-members-automatically</module>
+        <module>restart-cp-subsystem</module>
     </modules>
 
     <dependencies>
