@@ -39,6 +39,7 @@
         <module>hashcode-and-equals</module>
         <module>in-memory-format</module>
         <module>index</module>
+        <module>json</module>
         <module>locking</module>
         <module>map-interceptor</module>
         <module>mapstore</module>

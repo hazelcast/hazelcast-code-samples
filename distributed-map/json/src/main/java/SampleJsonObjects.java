@@ -1,0 +1,38 @@
+public class SampleJsonObjects {
+
+    public static final String DEPARTMENT1 = "{\n"
+            + "    \"departmentId\": 1,\n"
+            + "    \"room\": \"alpha\",\n" + "    \"people\": [\n"
+            + "        {\n"
+            + "            \"name\": \"Peter\",\n"
+            + "            \"age\": 26,\n"
+            + "            \"salary\": 50000\n"
+            + "        },\n"
+            + "        {\n"
+            + "            \"name\": \"Jonah\",\n"
+            + "            \"age\": 50,\n"
+            + "            \"salary\": 140000\n"
+            + "        }\n"
+            + "    ]\n"
+            + "}";
+
+    public static final String DEPARTMENT2 = "{\n"
+            + "    \"departmentId\": 2,\n"
+            + "    \"room\": \"beta\",\n"
+            + "    \"people\": [\n"
+            + "        {\n"
+            + "            \"name\": \"Mary\",\n"
+            + "            \"age\": 26,\n"
+            + "            \"salary\": 55000\n"
+            + "        },\n"
+            + "        {\n"
+            + "            \"name\": \"Felicia\",\n"
+            + "            \"age\": 24,\n"
+            + "            \"salary\": 30000,\n"
+            + "            \"notes\": [\n"
+            + "                \"parttime\"\n"
+            + "            ]\n"
+            + "        }\n"
+            + "    ]\n"
+            + "}";
+}
