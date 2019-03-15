@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.hazelcast.core.HazelcastJsonValue;
-import com.hazelcast.json.HazelcastJson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -111,7 +110,7 @@ public class MyDbUtil {
 
                 stringBuilder.append(" }");
 
-                return HazelcastJson.fromString(stringBuilder.toString());
+                return new HazelcastJsonValue(stringBuilder.toString());
             }
 
         } catch (Exception e) {

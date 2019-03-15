@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastJsonValue;
 import com.hazelcast.core.IMap;
 
 import lombok.extern.slf4j.Slf4j;
@@ -74,15 +73,8 @@ public class ApplicationInitializer implements CommandLineRunner {
                 Object key = keys.first();
                 Object value = iMap.get(key);
 
-                if (value instanceof HazelcastJsonValue) {
-                    HazelcastJsonValue hazelcastJsonValue =
-                            (HazelcastJsonValue) value;
-                    log.info(" --> '{}'.get('{}')=='{}'",
-                            iMap.getName(), key, hazelcastJsonValue.toJsonString());
-                } else {
-                    log.info(" --> '{}'.get('{}')=='{}'",
-                            iMap.getName(), key, value);
-                }
+                log.info(" --> '{}'.get('{}')=='{}'",
+                        iMap.getName(), key, value);
             }
         });
     }

@@ -105,11 +105,7 @@ public class MyJsonMapLoader implements MapLoader<Integer, HazelcastJsonValue> {
         HazelcastJsonValue hazelcastJsonValue =
                 MyDbUtil.rowToJson(this.jdbcTemplate, this.tableName, key);
 
-        if (hazelcastJsonValue == null) {
-            log.info("load({}) -> {}", key, hazelcastJsonValue);
-        } else {
-            log.info("load({}) -> {}", key, hazelcastJsonValue.toJsonString());
-        }
+        log.info("load({}) -> {}", key, hazelcastJsonValue);
 
         return hazelcastJsonValue;
     }

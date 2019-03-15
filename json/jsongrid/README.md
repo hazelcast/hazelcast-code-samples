@@ -14,7 +14,7 @@ Hazelcast has a number of ways to be configured.
 
 Sensible defaults mean you don't have to bother with most of the
 configuration. But you can do configuration from Java, or from
-from XML. From Hazelcast 3.12 onwards, YAML is also possible.
+XML. From Hazelcast 3.12 onwards, YAML is also possible.
 
 So to configure Hazelcast from YAML, you might have a file named
 `hazelcast.yml` containing this:
@@ -64,7 +64,7 @@ Both achieve the same thing, it's just a question of preference.
 
 ## Hello JSON
 
-The next thing want to do is have easier handling of JSON.
+The next thing we want to do is have easier handling of JSON.
 
 Hazelcast has always supported strings as data keys and data values,
 and we can easily store JSON in this format. Really, JSON is just
@@ -88,10 +88,10 @@ mvn clean install
 
 What this will build is four modules:
 
-* jsongrid-database A [HSQL](http://hsqldb.org/) database
-* jsongrid-database-tester A JDBC routine to prove the database is valid.
-* jsongrid-server A Hazelcast server process, one of at least one in the grid
-* jsongrid-client-java A client of this grid, that happens to be written in Java too
+* *jsongrid-database* A [HSQL](http://hsqldb.org/) database
+* *jsongrid-database-tester* A JDBC routine to prove the database is valid.
+* *jsongrid-server* A Hazelcast server process, one of at least one in the grid
+* *jsongrid-client-java* A client of this grid, that happens to be written in Java too
 
 ## Motivation
 
@@ -113,8 +113,8 @@ So the basic idea here is around JSON. The grid deduces how to get JSON in
 from an external source (a relational database), and the client queries this
 data without caring where it came from. 
 
-From a developer or architects viewpoint, we can be _querying_ *JSON* data at _memory
-speed_ that *somehow* came from a relational database, without bothering too much
+From a developer or architects viewpoint, we can be querying JSON data at memory
+speed that somehow came from a relational database, without bothering too much
 about the details. 
 
 ### The relational database (RDBMS)
@@ -207,7 +207,7 @@ Start a Hazelcast grid member using
 java -jar jsongrid-server/target/jsongrid-server.jar
 ```
 
-One is enough for this data volume 93 records! Start more servers if you like.
+One is enough for this data volume of 93 records! Start more servers if you like.
 
 #### The logic
 

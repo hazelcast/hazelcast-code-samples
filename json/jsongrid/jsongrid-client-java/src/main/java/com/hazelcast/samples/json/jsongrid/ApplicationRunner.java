@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastJsonValue;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.SqlPredicate;
 
@@ -159,13 +158,7 @@ public class ApplicationRunner implements CommandLineRunner {
                 iMap.values(new SqlPredicate(sql));
 
         for (Object result : results) {
-            if (result instanceof HazelcastJsonValue) {
-                HazelcastJsonValue hazelcastJsonValue
-                    = (HazelcastJsonValue) result;
-                System.out.println(hazelcastJsonValue.toJsonString());
-            } else {
-                System.out.println(result);
-            }
+            System.out.println(result);
         }
 
         if (results.size() == 0) {
