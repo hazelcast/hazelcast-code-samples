@@ -65,6 +65,7 @@
         <module>jcache</module>
         <module>jcache-1.1</module>
         <module>jmx</module>
+        <module>json</module>
         <module>learning-basics</module>
         <module>mapreduce</module>
         <module>monitoring</module>
