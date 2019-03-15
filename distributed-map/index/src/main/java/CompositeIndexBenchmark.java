@@ -40,10 +40,9 @@ public class CompositeIndexBenchmark {
     private static void benchmark(HazelcastInstance instance, boolean useCompositeIndex) {
         // see resources/hazelcast.xml for the map configuration
         IMap<Integer, Person> personMap;
-        if (useCompositeIndex){
+        if (useCompositeIndex) {
             personMap = instance.getMap("personsWithCompositeIndex");
-        }
-        else {
+        } else {
             personMap = instance.getMap("personsWithIndex");
         }
 
