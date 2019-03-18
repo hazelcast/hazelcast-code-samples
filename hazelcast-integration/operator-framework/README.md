@@ -67,6 +67,10 @@ Your Hazelcast Enterprise cluster (together with Management Center) should be cr
 
 **Note**: In `hazelcast.yaml` you can specify all parameters available in the [Hazelcast Enterprise Helm Chart](https://github.com/hazelcast/charts/tree/master/stable/hazelcast-enterprise).
 
+To connect to Management Center, you can use `EXTERNAL-IP` and open your browser at: `http://<EXTERNAL-IP>:8080/hazelcast-mancenter`. If your Kubernetes environment does not have Load Balancer configured, then please use `NodePort` or `Ingress`.
+
+![Management Center](markdown/management-center.png)
+
 ## OpenShift Deployment steps
 
 Below are the steps to start a Hazelcast Enterprise cluster using Operator Framework. Note that the first 3 steps are usually performed only once for the OpenShift cluster/project (usually by the cluster admin). The step 4 is performed each time you want to create a new Hazelcast cluster.
@@ -137,6 +141,10 @@ Your Hazelcast Enterprise cluster (together with Management Center) should be cr
 
 **Note**: In `hazelcast.yaml` you can specify all parameters available in the [Hazelcast Enterprise Helm Chart](https://github.com/hazelcast/charts/tree/master/stable/hazelcast-enterprise).
 
+To connect to Management Center, you can use `EXTERNAL-IP` and open your browser at: `http://<EXTERNAL-IP>:8080/hazelcast-mancenter`. If your OpenShift environment does not have Load Balancer configured, then please use `NodePort` or `Ingress`.
+
+![Management Center](markdown/management-center.png)
+
 ## Troubleshooting
 
 Kubernetes/OpenShift clusters are deployed in many different ways and you may encounter some of the following issues in some environments.
@@ -152,17 +160,26 @@ Some of the Kubernetes/OpenShift environments may have the restriction on the Us
     
 Then, please update your `hazelcast.yaml` with the valid `runAsUser` and `fsGroup` values.
 
-```
-apiVersion: hazelcast.com/v1alpha1
-kind: Hazelcast
-metadata:
-  name: hz
-spec:
-  image:
-    tag: "3.11.2"
-  hazelcast:
-    licenseKeySecretName: "hz-license-key-secret"
-  securityContext:
-    runAsUser: 1000160000
-    fsGroup: 1000160000
-```
+    apiVersion: hazelcast.com/v1alpha1
+    kind: Hazelcast
+    metadata:
+      name: hz
+    spec:
+      image:
+        tag: "3.11.2"
+      hazelcast:
+        licenseKeySecretName: "hz-license-key-secret"
+      securityContext:
+        runAsUser: 1000160000
+        fsGroup: 1000160000
+
+#### Invalid value: must be no more than 63 characters
+
+In the sample `hazelcast.yaml`, the name of the Hazelcast cluster is `hz`. If you make this value longer, you may encounter the following error.
+
+    oc describe statefulset.apps/my-hazelcast-2esqhajupdg5002uqwgoc8jnj-hazelcast-enterprise
+     
+    .......Invalid value: "my-hazelcast-2esqhajupdg5002uqwgoc8jnj-hazelcast-enterprise-74cf94b5": must be no more than 63 characters
+    
+This is the issue of the Operator itself, so there is not better solution for now than giving your cluster a short name.
+
