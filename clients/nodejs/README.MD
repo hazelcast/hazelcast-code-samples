@@ -1,13 +1,22 @@
-# ENABLING NEARCACHE IN NODE JS HAZELCAST CLIENT 
-Remote calls are expensive, it impacts performance. If an application has to make a remote call everytime it process a request its performance can be improved greatly by introducing smart local caching which automatically reduces the remote calls.In this article we will look at how to set up a nodejs client for hazelcast and use the Near-Cache feature of hazelcast to improve the performance of applications.
-### Why Hazelcast Near Cache ?
-In distributed architectures, obviously remote operations are more costly than local ones so you should try to increase local ops-to remote ops ratio in your system. Near-cache is a feature that allows you to do just that. Once enabled the client will cache objects fetched from Hazelcast cluster in a local cache such that subsequent requests can be fulfilled with object stored in the clients local cache (Near Cache). This  limits the need to fetch object from the remote cluster every time.Near Cache is highly recommended for data  that are mostly read-only or have a short lifespan.
-Hazlecast client applications within your service layer be it Java,NodeJs,C# etc can cache objects and responses locally for a configurable period of time to avoid remote calls. Hazelcast also allows to implement granular control of the nearcache with ability to configure properties like timeToLive, timeToIdle, invalidateOnChange, evicton policy , preloader etc.  We will not look at setting up a simple example of Nodejs client with Near-cache.   
+# Enabling Near Cache in Hazelcast Node.js Client
 
-### Setting up Nodejs Client for Hazelcat 
-Before we go futher into near cache implementation we need to set up a NodeJs client for Hazelcast. Hazelcast has a nodejs module/package called 'hazelcast-client' which can be added as a dependency and used to communicate with hazelcast cluster from a NodeJs application. The package can be installed as below ...
-   ####  npm install hazelcast-client
-The module can be added as a dependancy in the package.json file as below 
+The remote calls are expensive, it impacts the performance. If an application has to make a remote call everytime it process a request, its performance can be improved greatly by introducing the smart local caching which automatically reduces the remote calls. In this document, we look at how to set up a Hazelcast Node.js client to use IMDG's Near Cache feature for improving the performance of applications.
+
+### Why Hazelcast Near Cache?
+
+In distributed architectures, the remote operations are more costly than the local ones. So, you should try to increase the local ops/remote ops ratio in your system. Near Cache is a feature that allows you to do that. Once enabled, the client caches the objects fetched from the Hazelcast cluster in a local cache such that the subsequent requests can be fulfilled with the object stored in the clients local cache (Near Cache). This  limits the need to fetch object from the remote cluster every time. Near Cache is highly recommended for data that are mostly read-only or have a short lifespan.
+Hazelcast client applications (Java, Node.js, C#, etc.) within your service layer can cache the objects and responses locally for a configurable period of time to avoid the remote calls. Hazelcast also allows to implement granular control of the Near Cache with the ability to configure the properties like `timeToLive`, `timeToIdle`, `invalidateOnChange`, `evictonpolicy` and `preloader`.  We will now look at setting up a simple example of Node.js client with Near Cache.
+
+### Setting Up Node.js Client for Hazelcast
+
+Before we go further into the Near Cache implementation, we need to set up a Node.js client for Hazelcast. Hazelcast has a Node.js module/package called `hazelcast-client` which can be added as a dependency and used to communicate with a Hazelcast cluster from a Node.js application. The package can be installed as shown below.
+
+```
+npm install hazelcast-client
+```
+
+The module can be added as a dependency in the `package.json` file as shown below:
+
 ```
 {
   "dependencies": {
@@ -20,14 +29,15 @@ The module can be added as a dependancy in the package.json file as below
    }
 }
 ```
-**Package.json
 
-Now we are ready to use hazelcast in the Nodejs application.
+Now we are ready to use Hazelcast in the Node.js application.
 
-### SPECIFYING NEARCACHE CONFIG IN NODEJS APP
-The near cache is configured in nodejs application using the NearCacheConfig attribute of the Config class in Hazelcast-client node js module.
+### Configuring Near Cache in a Node.js Application
 
-The definition of NearCacheConfig is as below :
+Near Cache is configured in the Node.js application using the `NearCacheConfig` attribute of the `Config` class in ``hazelcast-client``s Node.js module.
+
+The definition of `NearCacheConfig` is shown below:
+
 ```
 var NearCacheConfig = (function () {
       function NearCacheConfig() {
@@ -41,11 +51,14 @@ var NearCacheConfig = (function () {
       this.evictionSamplingCount = 8;
       this.evictionSamplingPoolSize = 16;
    }
-  ``` 
-For more details on these configuration element please visit documentation at http://docs.hazelcast.org/docs/latest-development/manual/html/Performance/Near_Cache/Hazelcast_Data_Structures_with_Near_Cache_Support.html
+``` 
 
-### NodeJs Code Sample with Near Cache
-ExampleApp.js
+For more details on these configuration elements, see their [documentation](https://docs.hazelcast.org/docs/latest-dev/manual/html-single/#hazelcast-data-structures-with-near-cache-support).
+
+### Node.js Code Sample with Near Cache
+
+`ExampleApp.js`:
+
 ```
     1. const HazelcastClient = require('hazelcast-client').Client;
     2. const Config = require('hazelcast-client').Config;
@@ -79,30 +92,32 @@ ExampleApp.js
     30.       .then(() => map.remove('key'))
     31.    ;
     32.    });
-   ```
-   
-   
- ### Code Walkthrough
-
 ```
-1. Import Client Class
-2. Import Config Class (hazelcast-client\lib\Config.js 
-5. Function to create configuration
-7.Provide the Network config i.e. the details of the cluster to connect to. 
-10. Assign a NEW instance of NearCacheConfig element to local variable ‘orgsNearCacheConfig’
-11.Set NearCacheConfig element ‘invalidateOnChange’ 
-12. Set NearCacheConfig element ‘Name’ (Map Name)
-14.Create an array of NearCacheConfig element ‘ncConfigs’ 
-15. Assign the nearCacheConfig as the first element in ncConfigs
 
-**Repeat the process to create more NearCache Configs 16 Set the array ncConfigs to config.nearCacheConfigs
+### Code Walkthrough
 
-18.Print the Configuration to Console Connecting to and Using Cluster
-23.Get Hazelcast Client Instance 24 Get Distributed Map 'my-distributed-map'
-25 - 31. Add listener and use the ‘promise’ feature of nodejs to sequentially add and update values in map
-```
-## Code Output
-The near cache element of the configuration that is printed out when you run the code is as below 
+1. Import the `Client` class.
+2. Import the `Config` class (hazelcast-client\lib\Config.js).
+5. Function to create the configuration.
+7. Provide the `Network` configuration, i.e., the details of the cluster to connect to. 
+10. Assign a new instance of the `NearCacheConfig` element to the ‘orgsNearCacheConfig’ local variable.
+11. Set the `NearCacheConfig` element's ‘invalidateOnChange’.
+12. Set the `NearCacheConfig` element's name (map name).
+14. Create an array of the `NearCacheConfig` element: ‘ncConfigs’.
+15. Assign the `NearCacheConfig` as the first element in `ncConfigs`.
+
+Repeat the process to create more Near Cache configurations.
+
+16. Set the `ncConfigs` array to `config.nearCacheConfigs`.
+18. Print the configuration to the console connecting to and using the cluster.
+23. Get the Hazelcast client instance. 
+24. Get the 'my-distributed-map' map.
+25 - 31. Add the listener and use the Promise feature of Node.js to sequentially add and update the values in the map.
+
+### Code Output
+
+The Near Cache element of the configuration that is printed out when you run the code is shown below:
+
 ```
 "nearCacheConfigs": {
     "my-distributed-map": {
@@ -119,7 +134,8 @@ The near cache element of the configuration that is printed out when you run the
 }
 ```
 
-The output of the program is as below 
+The output of the program is shown below:
+
 ```
 [DefaultLogger] INFO at ClusterService: Members received.
 [ Member {
@@ -131,11 +147,12 @@ The output of the program is as below
 
 added key: key, old value: undefined, new value: value
 removed key: key, old value: somevalue, new value: undefined
-
 ```
-## HAZELCAST NODE JS CLIENT RESOURCES
-API Documentation & API :[Click Here](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/)
 
-API Reference for Config Module :[Click Here](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/modules/_config_.html)
+## Hazelcast Node.js Client Resources
 
-API Reference for the NearCacheConfig Element : [Click Here](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/classes/_config_.nearcacheconfig.html)
+[API Documentation & API](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/)
+
+[API Reference for Config Module](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/modules/_config_.html)
+
+[API Reference for the NearCacheConfig Element](http://hazelcast.github.io/hazelcast-nodejs-client/api/0.6.1/docs/classes/_config_.nearcacheconfig.html)
