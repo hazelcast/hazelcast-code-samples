@@ -2,4 +2,4 @@
 
 dir=`dirname "$0"`
 
-java -cp ${dir}/target/lib/*:${dir}/target/classes com.hazelcast.codesamples.cp.RestartCPSubsystem
+java -ea -cp ${dir}/target/lib/*:${dir}/target/classes com.hazelcast.codesamples.cp.RestartCPSubsystem
