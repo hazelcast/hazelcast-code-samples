@@ -60,6 +60,7 @@
         <module>distributed-primitives</module>
         <module>distributed-topic</module>
         <module>enterprise</module>
+        <module>hazelcast-cloud</module>
         <module>hazelcast-integration</module>
         <module>helper</module>
         <module>jcache</module>
