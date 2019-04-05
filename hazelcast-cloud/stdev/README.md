@@ -366,7 +366,7 @@ It's pretty clear that *if* data volumes scale, the server-side
 computation copes better. The same amount of data still has to
 be examined, but less data moves. 
 
-## Do not forget concurrency
+## Do not forget concurrency
 
 The coding in this example disregards concurrency. Generally a
 bad idea unless you know what you are doing.
