@@ -48,6 +48,8 @@ public class BusinessLogic {
 
         System.out.println("Locally calculated total difference squared..: "
                 + localTotalDifferenceSquared);
+        System.out.println("Remotely calculated total difference squared.: "
+                + remoteTotalDifferenceSquared);
         System.out.println("-------------------------");
 
         /* Step 3: find the average value from step 2
