@@ -9,14 +9,17 @@ This is an example showing one way you might connect to the
 Hazelcast cloud, and how you can harness it's power for
 improved performance.
 
-The example shows a custom domain model, and server-side
-code execution.
+As a problem we're going to calculate the spread of customer
+satisfaction, as the average doesn't give enough insight.
 
-It's a working example, but you will need an account on
+The example shows a custom domain model, and server-side
+code execution. It's a working example, but you will need at
+least a *free* account on
 [Hazelcast Cloud](https://cloud.hazelcast.com/) to run it.
 
 The example code shows both the junior developer and
-senior developer approach to cloud computing.
+senior developer approach to cloud computing with the
+latter being substantially more efficient.
 
 ## The problem
 
@@ -296,7 +299,7 @@ Map<Member, Future<Double>> results =
 
 The task is sent to all grid servers in parallel.
 
-Each server calculates a sub-total only for the data the server hosts.
+Each server calculates a sub-total only for the data that server hosts.
 If you have two servers, the calculation takes half the time. If you
 have ten servers, the calculation takes a tenth of the time. Each
 server runs it's calculation independently, the run time is dependent
@@ -456,7 +459,7 @@ clientUserCodeDeploymentConfig.addClass(Customer.class);
 ```
 
 We adjust the client's configuration to say it can send Java classes
-to the servers, and which particular ones.
+to the servers, and which particular ones to send.
 
 ## Summary
 
@@ -466,6 +469,10 @@ cache. If you want it to be, it can be a compute grid.
 This is demonstrated by an example where the business logic is
 shown the "_junior developer_" way and the "_senior developer_"
 way.
+
+On a cluster with 2 Hazelcast servers, the senior developer's
+way is twice as fast. Expand to 3 servers and now it's 3 times
+faster than the junior developer's way. Scalable speed.
 
 One way is better than the other, but which is better depends
 on whether you value performance or simplicity. The skill of
