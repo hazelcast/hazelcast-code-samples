@@ -24,20 +24,15 @@ public class Application {
 
     @Bean
     public Config hazelcastConfig(EurekaClient eurekaClient) {
+        EurekaOneDiscoveryStrategyFactory.setEurekaClient(eurekaClient);
         Config config = new Config();
         config.getNetworkConfig().setPort(hazelcastPort);
-        config.getProperties().setProperty("hazelcast.discovery.enabled", "true");
-        JoinConfig joinConfig = config.getNetworkConfig().getJoin();
-        joinConfig.getMulticastConfig().setEnabled(false);
-        EurekaOneDiscoveryStrategyFactory.setEurekaClient(eurekaClient);
-        EurekaOneDiscoveryStrategyFactory discoveryStrategyFactory = new EurekaOneDiscoveryStrategyFactory();
-        Map<String, Comparable> properties = new HashMap<String, Comparable>();
-        properties.put("self-registration", "true");
-        properties.put("namespace", "hazelcast");
-        properties.put("use-metadata-for-host-and-port", "true");
-        DiscoveryStrategyConfig discoveryStrategyConfig = new DiscoveryStrategyConfig(discoveryStrategyFactory, properties);
-        joinConfig.getDiscoveryConfig().addDiscoveryStrategyConfig(discoveryStrategyConfig);
-
+        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
+        config.getNetworkConfig().getJoin().getEurekaConfig()
+              .setEnabled(true)
+              .setProperty("self-registration", "true")
+              .setProperty("namespace", "hazelcast")
+              .setProperty("use-metadata-for-host-and-port", "true");
         return config;
     }
 
