@@ -61,6 +61,13 @@ $ docker build -t leszko/hazelcast-python-client .
 $ docker push leszko/hazelcast-python-client 
 ```
 
+**Note**: If you don't have a Docker Hub account or you don't want to use it, you can do one of the followings:
+ * Use `leszko/hazelcast-python-client` in all further steps
+ * Build image with your Kubernetes-related Docker host (then you don't need to push it):
+   * If you use Docker Desktop, then your local image is already accessible to Kubernetes
+   * If you use Minikube, then you need to execute `eval $(minikube docker-env)` before building the image
+   * If you use Kubernetes from a Cloud platform, then you need to upload the image to their registry 
+
 ### 3. Create Sidecar Deployment
 
 The next step is to configure Python application container and Hazelcast member container to exist in the same Kubernetes Pod. We do in [deployment.yaml](deployment.yaml).
@@ -80,7 +87,7 @@ containers:
       containerPort: 5000
 ```
 
-Apart from that, we configure the deployment to have 2 Pod replicas and a `LoadBalancer` service to expose the Python application.
+Apart from that, we configure the deployment to have 2 Pod replicas and a `NodePort` service to expose the Python application.
 
 ### 4. Deploy Sidecar Application
 
@@ -132,15 +139,28 @@ Members [2] {
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ```
 
-Finally, we can check the LoadBalancer IP and insert some data using `/put` and `/get` endpoints.
+Finally, we can check the NodePort Service IP and Port and insert some data using `/put` and `/get` endpoints.
+
+To check `<NODE-PORT>`, run the following command.
 
 ```bash
 $ kubectl get service hazelcast-sidecar
-NAME                TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)          AGE
-hazelcast-sidecar   LoadBalancer   10.19.247.87   35.232.146.40   5000:32470/TCP   4m
+NAME                TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)         AGE
+hazelcast-sidecar   NodePort   10.19.247.87   <none>       5000:32470/TCP  4m
+```
 
-$ curl 35.232.146.40:5000/put?key=someKey\&value=someValue
-$ curl 35.232.146.40:5000/get?key=someKey
+In our case `<NODE-PORT>` is `32470`.
+
+Checking `<NODE-IP>` depends on your Kubernetes:
+* In case of Docker Desktop, it's `localhost`
+* In case of Minikube, check it with `minikube ip`
+* In case of Cloud platforms (and on-premise), check it with: `kubectl get nodes -o jsonpath='{ $.items[*].status.addresses[?(@.type=="ExternalIP")].address }'`
+
+Let's insert some data and then read it.
+
+```bash
+$ curl <NODE-IP>:<NODE-PORT>/put?key=someKey\&value=someValue
+$ curl <NODE-IP>:<NODE-PORT>/get?key=someKey
 someValue
 ```
 

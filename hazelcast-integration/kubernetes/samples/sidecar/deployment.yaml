@@ -44,7 +44,7 @@ kind: Service
 metadata:
   name: hazelcast-sidecar
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: hazelcast-sidecar
   ports:
