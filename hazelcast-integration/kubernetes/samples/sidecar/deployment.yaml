@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hazelcast-sidecar
+  labels:
+    app: hazelcast-sidecar
+spec:
+  replicas: 2
+  serviceName: hazelcast-sidecar-service
+  selector:
+    matchLabels:
+      app: hazelcast-sidecar
+  template:
+    metadata:
+      labels:
+        app: hazelcast-sidecar
+    spec:
+      containers:
+      - name: hazelcast
+        image: hazelcast/hazelcast:3.12
+        ports:
+        - name: hazelcast
+          containerPort: 5701
+        volumeMounts:
+        - name: hazelcast-storage
+          mountPath: /data/hazelcast
+        env:
+        - name: JAVA_OPTS
+          value: "-Dhazelcast.rest.enabled=true -Dhazelcast.config=/data/hazelcast/hazelcast.yaml"
+      - name: app
+        image: leszko/hazelcast-python-client
+        ports:
+        - name: app
+          containerPort: 5000
+      volumes:
+      - name: hazelcast-storage
+        configMap:
+          name: hazelcast-configuration
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazelcast-sidecar
+spec:
+  type: NodePort
+  selector:
+    app: hazelcast-sidecar
+  ports:
+  - name: app
+    port: 5000
