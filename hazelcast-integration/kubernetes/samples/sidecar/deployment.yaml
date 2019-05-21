@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: hazelcast
-        image: hazelcast/hazelcast:3.11.2
+        image: hazelcast/hazelcast:3.12
         ports:
         - name: hazelcast
           containerPort: 5701
@@ -26,7 +26,7 @@ spec:
           mountPath: /data/hazelcast
         env:
         - name: JAVA_OPTS
-          value: "-Dhazelcast.rest.enabled=true -Dhazelcast.config=/data/hazelcast/hazelcast.xml"
+          value: "-Dhazelcast.rest.enabled=true -Dhazelcast.config=/data/hazelcast/hazelcast.yaml"
       - name: app
         image: leszko/hazelcast-python-client
         ports:
