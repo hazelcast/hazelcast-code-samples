@@ -12,7 +12,7 @@ labels:
 parameters:
 - name: HAZELCAST_IMAGE
   description: "Defines the location of Hazelcast image"
-  value: hazelcast/hazelcast:3.11
+  value: hazelcast/hazelcast:3.12
   required: true
 - name: SERVICE_NAME
   description: "Defines the service name of the POD to lookup of Kubernetes"
