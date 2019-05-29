@@ -1,8 +1,8 @@
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Partition;
-import com.hazelcast.core.PartitionService;
+import com.hazelcast.partition.Partition;
+import com.hazelcast.partition.PartitionService;
 
 import java.util.Map;
 

@@ -31,7 +31,7 @@ public class ForceLocalMemberToBeSafe {
 
     public static void main(String[] args) throws Exception {
         Config config = new Config();
-        config.getMemberAttributeConfig().setBooleanAttribute("EAST", true);
+        config.getMemberAttributeConfig().setAttribute("EAST", "true");
 
         HazelcastInstance node = Hazelcast.newHazelcastInstance(config);
         IExecutorService executorService = node.getExecutorService(ForceLocalMemberToBeSafe.class.getName());
@@ -39,7 +39,7 @@ public class ForceLocalMemberToBeSafe {
         Future<Boolean> result = executorService.submit(new MemberSafe(), new MemberSelector() {
             @Override
             public boolean select(Member member) {
-                Boolean east = member.getBooleanAttribute("EAST");
+                Boolean east = Boolean.parseBoolean(member.getAttribute("EAST"));
                 return Boolean.TRUE.equals(east);
             }
         });
