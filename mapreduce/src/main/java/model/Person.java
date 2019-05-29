@@ -16,7 +16,7 @@
 
 package model;
 
-import com.hazelcast.core.PartitionAware;
+import com.hazelcast.partition.PartitionAware;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;

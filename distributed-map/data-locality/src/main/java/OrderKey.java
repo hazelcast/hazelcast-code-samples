@@ -1,4 +1,4 @@
-import com.hazelcast.core.PartitionAware;
+import com.hazelcast.partition.PartitionAware;
 
 import java.io.Serializable;
 
