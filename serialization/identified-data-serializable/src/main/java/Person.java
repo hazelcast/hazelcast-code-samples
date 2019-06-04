@@ -31,7 +31,7 @@ public class Person implements IdentifiedDataSerializable {
     }
 
     @Override
-    public int getId() {
+    public int getClassId() {
         return PersonDataSerializableFactory.PERSON_TYPE;
     }
 

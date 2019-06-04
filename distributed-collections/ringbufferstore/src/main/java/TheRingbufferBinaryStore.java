@@ -1,4 +1,4 @@
-import com.hazelcast.core.RingbufferStore;
+import com.hazelcast.ringbuffer.RingbufferStore;
 
 public class TheRingbufferBinaryStore implements RingbufferStore<byte[]> {
 

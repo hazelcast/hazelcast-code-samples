@@ -1,8 +1,8 @@
-import com.hazelcast.map.AbstractEntryProcessor;
+import com.hazelcast.map.EntryProcessor;
 
 import java.util.Map;
 
-public class IncrementingEntryProcessor extends AbstractEntryProcessor<Integer, Integer> {
+public class IncrementingEntryProcessor implements EntryProcessor<Integer, Integer, Object> {
 
     @Override
     public Object process(Map.Entry<Integer, Integer> entry) {

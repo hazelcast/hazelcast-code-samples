@@ -5,14 +5,13 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientUserCodeDeploymentConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.map.AbstractEntryProcessor;
+import com.hazelcast.map.EntryProcessor;
 
-import java.io.Serializable;
 import java.util.Map;
 
 public class EntryProcessorSample {
 
-    public static class IncEntryProcessor extends AbstractEntryProcessor<String, Integer> implements Serializable {
+    public static class IncEntryProcessor implements EntryProcessor<String, Integer, Object> {
         @Override
         public Object process(Map.Entry<String, Integer> entry) {
             // Get the value passed
