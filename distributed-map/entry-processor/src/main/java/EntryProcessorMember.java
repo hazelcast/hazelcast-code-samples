@@ -1,7 +1,7 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.map.AbstractEntryProcessor;
+import com.hazelcast.map.EntryProcessor;
 
 import java.util.Map;
 
@@ -14,22 +14,17 @@ public class EntryProcessorMember {
         employees.put("Mark", new Employee(1000));
         employees.put("Spencer", new Employee(1000));
 
-        employees.executeOnEntries(new EmployeeRaiseEntryProcessor());
+        employees.executeOnEntries((EntryProcessor<String, Employee, Object>) entry -> {
+            Employee value = entry.getValue();
+            value.incSalary(10);
+            entry.setValue(value);
+            return null;
+        });
 
         for (Map.Entry<String, Employee> entry : employees.entrySet()) {
             System.out.println(entry.getKey() + " salary: " + entry.getValue().getSalary());
         }
 
         Hazelcast.shutdownAll();
-    }
-
-    private static class EmployeeRaiseEntryProcessor extends AbstractEntryProcessor<String, Employee> {
-        @Override
-        public Object process(Map.Entry<String, Employee> entry) {
-            Employee value = entry.getValue();
-            value.incSalary(10);
-            entry.setValue(value);
-            return null;
-        }
     }
 }

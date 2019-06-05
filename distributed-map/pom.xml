@@ -24,8 +24,6 @@
     </properties>
 
     <modules>
-        <module>aggregations</module>
-
         <module>backup</module>
         <module>basics</module>
         <module>continuous-query</module>

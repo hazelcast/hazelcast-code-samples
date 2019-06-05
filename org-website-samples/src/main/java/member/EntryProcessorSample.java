@@ -3,12 +3,12 @@ package member;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.map.AbstractEntryProcessor;
+import com.hazelcast.map.EntryProcessor;
 
 import java.util.Map;
 
 public class EntryProcessorSample {
-    public static class IncEntryProcessor extends AbstractEntryProcessor<String, Integer> {
+    public static class IncEntryProcessor implements EntryProcessor<String, Integer, Object> {
         @Override
         public Object process(Map.Entry<String, Integer> entry) {
             // Get the value passed

@@ -16,7 +16,7 @@
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <jdk.version>1.6</jdk.version>
+        <jdk.version>1.8</jdk.version>
         <jdk.integration.version>1.8</jdk.integration.version>
 
         <hazelcast.version>4.0-SNAPSHOT</hazelcast.version>
@@ -67,7 +67,6 @@
         <module>jmx</module>
         <module>json</module>
         <module>learning-basics</module>
-        <module>mapreduce</module>
         <module>monitoring</module>
         <module>near-cache</module>
         <module>network-configuration</module>
