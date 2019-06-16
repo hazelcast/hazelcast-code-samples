@@ -1,8 +1,8 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
-import com.hazelcast.core.ICondition;
-import com.hazelcast.core.ILock;
+import com.hazelcast.cp.IAtomicLong;
+import com.hazelcast.cp.lock.ICondition;
+import com.hazelcast.cp.lock.ILock;
 
 public class NotifyMember {
 

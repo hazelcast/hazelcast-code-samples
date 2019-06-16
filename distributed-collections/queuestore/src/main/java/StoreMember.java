@@ -1,9 +1,9 @@
+import com.hazelcast.collection.IQueue;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.QueueConfig;
 import com.hazelcast.config.QueueStoreConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IQueue;
 
 public class StoreMember {
 

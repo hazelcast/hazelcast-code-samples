@@ -16,6 +16,7 @@
 
 package com.hazelcast.demo;
 
+import com.hazelcast.collection.IQueue;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.EntryAdapter;
 import com.hazelcast.core.EntryEvent;
@@ -23,12 +24,11 @@ import com.hazelcast.core.EntryListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ITopic;
-import com.hazelcast.core.Message;
-import com.hazelcast.core.MessageListener;
 import com.hazelcast.internal.diagnostics.HealthMonitorLevel;
 import com.hazelcast.query.SqlPredicate;
+import com.hazelcast.topic.ITopic;
+import com.hazelcast.topic.Message;
+import com.hazelcast.topic.MessageListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;

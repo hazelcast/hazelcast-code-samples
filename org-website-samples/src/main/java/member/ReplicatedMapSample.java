@@ -2,7 +2,7 @@ package member;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ReplicatedMap;
+import com.hazelcast.replicatedmap.ReplicatedMap;
 
 public class ReplicatedMapSample {
     public static void main(String[] args) {

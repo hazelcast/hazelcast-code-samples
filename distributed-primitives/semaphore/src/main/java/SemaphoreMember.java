@@ -1,7 +1,7 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
-import com.hazelcast.core.ISemaphore;
+import com.hazelcast.cp.IAtomicLong;
+import com.hazelcast.cp.ISemaphore;
 
 /**
  * @deprecated {@code HazelcastInstance.getSemaphore()} may lose strong consistency

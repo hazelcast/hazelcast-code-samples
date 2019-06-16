@@ -1,7 +1,7 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.IFunction;
+import com.hazelcast.cp.IAtomicLong;
 
 public class Member {
 

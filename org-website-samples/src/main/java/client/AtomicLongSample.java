@@ -2,7 +2,7 @@ package client;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
+import com.hazelcast.cp.IAtomicLong;
 
 public class AtomicLongSample {
     public static void main(String[] args) {

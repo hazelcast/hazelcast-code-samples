@@ -1,8 +1,8 @@
+import com.hazelcast.collection.ICollection;
+import com.hazelcast.collection.ItemEvent;
+import com.hazelcast.collection.ItemListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ICollection;
-import com.hazelcast.core.ItemEvent;
-import com.hazelcast.core.ItemListener;
 
 public class ItemListenerMember {
 

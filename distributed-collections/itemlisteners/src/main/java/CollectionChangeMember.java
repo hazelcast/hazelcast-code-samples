@@ -1,6 +1,6 @@
+import com.hazelcast.collection.IQueue;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IQueue;
 
 public class CollectionChangeMember {
 

@@ -16,7 +16,7 @@
 
 package mergepolicies;
 
-import com.hazelcast.core.IAtomicReference;
+import com.hazelcast.cp.IAtomicReference;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.spi.merge.MergingValue;

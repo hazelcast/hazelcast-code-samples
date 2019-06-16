@@ -1,4 +1,5 @@
-import com.hazelcast.core.QueueStore;
+
+import com.hazelcast.collection.QueueStore;
 
 import java.util.Collection;
 import java.util.Map;

@@ -1,5 +1,5 @@
-import com.hazelcast.core.Member;
-import com.hazelcast.core.MembershipEvent;
+import com.hazelcast.cluster.Member;
+import com.hazelcast.cluster.MembershipEvent;
 import com.hazelcast.util.Clock;
 import org.junit.Test;
 

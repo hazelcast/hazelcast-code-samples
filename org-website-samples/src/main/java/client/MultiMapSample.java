@@ -2,7 +2,7 @@ package client;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.MultiMap;
+import com.hazelcast.multimap.MultiMap;
 
 import java.util.Collection;
 

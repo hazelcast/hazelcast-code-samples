@@ -1,8 +1,9 @@
 import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.api.Client;
+import com.hazelcast.client.api.ClientListener;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.JoinConfig;
-import com.hazelcast.core.ClientListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
@@ -15,14 +16,14 @@ public class ProgrammaticLabelsExample {
         final HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         instance.getClientService().addClientListener(new ClientListener() {
             @Override
-            public void clientConnected(com.hazelcast.core.Client client) {
+            public void clientConnected(Client client) {
                 System.out.println("Client : " + client.getName() + " is connected to member: " + instance.getName());
                 System.out.println("Client : " + client.getName() + " is connected with labels " + client.getLabels());
 
             }
 
             @Override
-            public void clientDisconnected(com.hazelcast.core.Client client) {
+            public void clientDisconnected(Client client) {
 
             }
         });
