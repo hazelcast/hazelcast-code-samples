@@ -81,10 +81,16 @@
         <repository>
             <id>Hazelcast Private Snapshot Repository</id>
             <url>https://repository.hazelcast.com/snapshot/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
         <repository>
             <id>Hazelcast Private Release Repository</id>
             <url>https://repository.hazelcast.com/release/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
 </project>
