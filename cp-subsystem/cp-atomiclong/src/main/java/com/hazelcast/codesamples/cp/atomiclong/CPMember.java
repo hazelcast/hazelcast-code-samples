@@ -3,7 +3,7 @@ package com.hazelcast.codesamples.cp.atomiclong;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
+import com.hazelcast.cp.IAtomicLong;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 

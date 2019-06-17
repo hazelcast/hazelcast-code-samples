@@ -1,6 +1,6 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicReference;
+import com.hazelcast.cp.IAtomicReference;
 
 /**
  * @deprecated {@code HazelcastInstance.getAtomicReference()} may lose strong consistency

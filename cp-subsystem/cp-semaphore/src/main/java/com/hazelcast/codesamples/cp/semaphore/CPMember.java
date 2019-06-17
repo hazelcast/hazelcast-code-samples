@@ -3,7 +3,7 @@ package com.hazelcast.codesamples.cp.semaphore;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ISemaphore;
+import com.hazelcast.cp.ISemaphore;
 
 import java.util.Date;
 import java.util.Random;

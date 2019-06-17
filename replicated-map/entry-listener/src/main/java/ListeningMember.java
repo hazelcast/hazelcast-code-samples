@@ -3,7 +3,7 @@ import com.hazelcast.core.EntryListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.MapEvent;
-import com.hazelcast.core.ReplicatedMap;
+import com.hazelcast.replicatedmap.ReplicatedMap;
 
 public class ListeningMember {
 
@@ -45,6 +45,11 @@ public class ListeningMember {
         @Override
         public void mapCleared(MapEvent event) {
             System.out.println("mapCleared: " + event);
+        }
+
+        @Override
+        public void entryExpired(EntryEvent<String, String> event) {
+            System.out.println("entryExpired:" + event);
         }
     }
 }

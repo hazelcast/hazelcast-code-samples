@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import com.hazelcast.cluster.Member;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Member;
 
 public class IsMemberSafe {
 

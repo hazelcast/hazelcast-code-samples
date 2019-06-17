@@ -1,7 +1,7 @@
+import com.hazelcast.collection.IQueue;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ILock;
-import com.hazelcast.core.IQueue;
+import com.hazelcast.cp.lock.ILock;
 import com.hazelcast.quorum.QuorumException;
 
 /**

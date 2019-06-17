@@ -3,7 +3,7 @@ package com.hazelcast.codesamples.cp.countdownlatch;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ICountDownLatch;
+import com.hazelcast.cp.ICountDownLatch;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 

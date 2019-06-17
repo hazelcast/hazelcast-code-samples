@@ -1,6 +1,6 @@
+import com.hazelcast.collection.IList;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IList;
 
 public class ReadMember {
 

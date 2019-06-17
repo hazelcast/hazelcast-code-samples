@@ -1,6 +1,6 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ICountDownLatch;
+import com.hazelcast.cp.ICountDownLatch;
 
 /**
  * @deprecated {@code HazelcastInstance.getCountDownLatch()} may lose strong consistency
