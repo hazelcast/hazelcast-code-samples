@@ -19,7 +19,6 @@ package com.hazelcast.examples;
 import com.hazelcast.security.ClusterLoginModule;
 import com.hazelcast.security.Credentials;
 import com.hazelcast.security.CredentialsCallback;
-import com.hazelcast.security.SerializationServiceCallback;
 import com.hazelcast.security.TokenCredentials;
 
 import javax.security.auth.callback.Callback;
@@ -27,6 +26,8 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class CustomLoginModule extends ClusterLoginModule {
 
@@ -35,25 +36,19 @@ public class CustomLoginModule extends ClusterLoginModule {
     @Override
     protected boolean onLogin() throws LoginException {
         CredentialsCallback cb = new CredentialsCallback();
-        SerializationServiceCallback sscb = new SerializationServiceCallback();
         try {
-            callbackHandler.handle(new Callback[] {cb, sscb });
+            callbackHandler.handle(new Callback[] { cb });
         } catch (IOException | UnsupportedCallbackException e) {
             throw new LoginException("Problem getting credentials");
         }
         Credentials credentials = cb.getCredentials();
-        if (credentials instanceof TokenCredentials) {
-            TokenCredentials tokenCreds = (TokenCredentials) credentials;
-            credentials = sscb.getSerializationService().toObject(tokenCreds.asData());
-        }
-        if (!(credentials instanceof CustomCredentials)) {
+        if (!(credentials instanceof TokenCredentials)) {
             throw new FailedLoginException();
         }
-        CustomCredentials cc = (CustomCredentials) credentials;
-        if (cc.getName().equals(options.get("username"))
-                && cc.getKey1().equals(options.get("key1"))
-                && cc.getKey2().equals(options.get("key2"))) {
-            name = cc.getName();
+        byte[] token = ((TokenCredentials) credentials).getToken();
+        byte[] otoken = ((String) options.get("token")).getBytes(StandardCharsets.UTF_8);
+        if (Arrays.equals(token, otoken)) {
+            name = (String) options.get("name");
             addRole(name);
             return true;
         }
