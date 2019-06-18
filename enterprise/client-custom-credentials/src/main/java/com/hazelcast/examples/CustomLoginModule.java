@@ -17,37 +17,52 @@
 package com.hazelcast.examples;
 
 import com.hazelcast.security.ClusterLoginModule;
+import com.hazelcast.security.Credentials;
+import com.hazelcast.security.CredentialsCallback;
+import com.hazelcast.security.SerializationServiceCallback;
+import com.hazelcast.security.TokenCredentials;
 
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 
 public class CustomLoginModule extends ClusterLoginModule {
 
+    private String name;
+
     @Override
     protected boolean onLogin() throws LoginException {
+        CredentialsCallback cb = new CredentialsCallback();
+        SerializationServiceCallback sscb = new SerializationServiceCallback();
+        try {
+            callbackHandler.handle(new Callback[] {cb, sscb });
+        } catch (IOException | UnsupportedCallbackException e) {
+            throw new LoginException("Problem getting credentials");
+        }
+        Credentials credentials = cb.getCredentials();
+        if (credentials instanceof TokenCredentials) {
+            TokenCredentials tokenCreds = (TokenCredentials) credentials;
+            credentials = sscb.getSerializationService().toObject(tokenCreds.asData());
+        }
         if (!(credentials instanceof CustomCredentials)) {
-            return false;
+            throw new FailedLoginException();
         }
         CustomCredentials cc = (CustomCredentials) credentials;
-        if (cc.getPrincipal().equals(options.get("username"))
+        if (cc.getName().equals(options.get("username"))
                 && cc.getKey1().equals(options.get("key1"))
                 && cc.getKey2().equals(options.get("key2"))) {
+            name = cc.getName();
+            addRole(name);
             return true;
         }
         throw new LoginException("Invalid credentials");
     }
 
     @Override
-    protected boolean onCommit() {
-        return loginSucceeded;
+    protected String getName() {
+        return name;
     }
 
-    @Override
-    protected boolean onAbort() {
-        return false;
-    }
-
-    @Override
-    protected boolean onLogout() {
-        return true;
-    }
 }

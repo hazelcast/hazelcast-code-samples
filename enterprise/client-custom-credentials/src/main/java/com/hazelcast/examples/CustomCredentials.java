@@ -23,10 +23,8 @@ public class CustomCredentials implements Credentials {
     private String username;
     private String key1;
     private String key2;
-    private String endpoint;
 
     public CustomCredentials() {
-
     }
 
     public CustomCredentials(String username, String key1, String key2) {
@@ -36,17 +34,7 @@ public class CustomCredentials implements Credentials {
     }
 
     @Override
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    @Override
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
-    }
-
-    @Override
-    public String getPrincipal() {
+    public String getName() {
         return username;
     }
 
