@@ -17,37 +17,47 @@
 package com.hazelcast.examples;
 
 import com.hazelcast.security.ClusterLoginModule;
+import com.hazelcast.security.Credentials;
+import com.hazelcast.security.CredentialsCallback;
+import com.hazelcast.security.TokenCredentials;
 
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class CustomLoginModule extends ClusterLoginModule {
 
+    private String name;
+
     @Override
     protected boolean onLogin() throws LoginException {
-        if (!(credentials instanceof CustomCredentials)) {
-            return false;
+        CredentialsCallback cb = new CredentialsCallback();
+        try {
+            callbackHandler.handle(new Callback[] { cb });
+        } catch (IOException | UnsupportedCallbackException e) {
+            throw new LoginException("Problem getting credentials");
         }
-        CustomCredentials cc = (CustomCredentials) credentials;
-        if (cc.getPrincipal().equals(options.get("username"))
-                && cc.getKey1().equals(options.get("key1"))
-                && cc.getKey2().equals(options.get("key2"))) {
+        Credentials credentials = cb.getCredentials();
+        if (!(credentials instanceof TokenCredentials)) {
+            throw new FailedLoginException();
+        }
+        byte[] token = ((TokenCredentials) credentials).getToken();
+        byte[] otoken = ((String) options.get("token")).getBytes(StandardCharsets.UTF_8);
+        if (Arrays.equals(token, otoken)) {
+            name = (String) options.get("name");
+            addRole(name);
             return true;
         }
         throw new LoginException("Invalid credentials");
     }
 
     @Override
-    protected boolean onCommit() {
-        return loginSucceeded;
+    protected String getName() {
+        return name;
     }
 
-    @Override
-    protected boolean onAbort() {
-        return false;
-    }
-
-    @Override
-    protected boolean onLogout() {
-        return true;
-    }
 }

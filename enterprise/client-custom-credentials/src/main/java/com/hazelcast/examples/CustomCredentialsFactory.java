@@ -19,23 +19,24 @@ package com.hazelcast.examples;
 import com.hazelcast.config.GroupConfig;
 import com.hazelcast.security.Credentials;
 import com.hazelcast.security.ICredentialsFactory;
+import com.hazelcast.security.SimpleTokenCredentials;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public  class CustomCredentialsFactory implements ICredentialsFactory {
-    private String username;
-    private String key1;
-    private String key2;
+    private byte[] token;
+
     @Override
     public void configure(GroupConfig groupConfig, Properties properties) {
-        username = properties.getProperty("username");
-        key1 = properties.getProperty("key1");
-        key2 = properties.getProperty("key2");
+        token = properties.getProperty("token").getBytes(StandardCharsets.UTF_8);
     }
+
     @Override
     public Credentials newCredentials() {
-        return new CustomCredentials(username, key1, key2);
+        return new SimpleTokenCredentials(token);
     }
+
     @Override
     public void destroy() {
     }
