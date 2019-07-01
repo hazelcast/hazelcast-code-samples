@@ -2,7 +2,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.SqlPredicate;
+import com.hazelcast.query.Predicates;
 
 import static com.hazelcast.core.Hazelcast.newHazelcastInstance;
 import static com.hazelcast.query.Predicates.equal;
@@ -37,7 +37,7 @@ public class Member {
         System.out.println(personsMap.values(equal("email", "support@hazelcast.com")));
 
         System.out.println("---- where email is not support@hazelcast.com");
-        System.out.println(personsMap.values(new SqlPredicate("email != support@hazelcast.com")));
+        System.out.println(personsMap.values(Predicates.sql("email != support@hazelcast.com")));
     }
 
     private static void populate(IMap<Integer, Person> personsMap) {

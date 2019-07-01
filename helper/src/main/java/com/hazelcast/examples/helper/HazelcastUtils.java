@@ -19,11 +19,11 @@ package com.hazelcast.examples.helper;
 import com.hazelcast.cluster.Cluster;
 import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.instance.impl.HazelcastInstanceImpl;
+import com.hazelcast.instance.impl.HazelcastInstanceProxy;
+import com.hazelcast.instance.impl.Node;
 import com.hazelcast.partition.Partition;
 import com.hazelcast.partition.PartitionService;
-import com.hazelcast.instance.HazelcastInstanceImpl;
-import com.hazelcast.instance.HazelcastInstanceProxy;
-import com.hazelcast.instance.Node;
 import com.hazelcast.internal.partition.InternalPartitionService;
 
 import java.lang.reflect.Field;

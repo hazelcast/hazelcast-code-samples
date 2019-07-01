@@ -19,7 +19,6 @@ import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MergePolicyConfig;
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 import mergepolicies.UserContextMergePolicy;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,7 +55,7 @@ public final class UserContextMergePolicyExample {
                 .setUserContext(userContext);
 
 
-        HazelcastInstanceFactory.newHazelcastInstance(config);
+        Hazelcast.newHazelcastInstance(config);
 
         Hazelcast.shutdownAll();
     }

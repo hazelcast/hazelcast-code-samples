@@ -18,7 +18,6 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.ListConfig;
 import com.hazelcast.config.MergePolicyConfig;
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 import mergepolicies.MergeCollectionOfIntegerValuesMergePolicy;
 
 /**
@@ -44,7 +43,7 @@ public final class IntegerValuesListMergePolicyExample {
                 .addListConfig(listConfig);
 
 
-        HazelcastInstanceFactory.newHazelcastInstance(config);
+        Hazelcast.newHazelcastInstance(config);
 
         Hazelcast.shutdownAll();
     }

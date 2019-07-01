@@ -1,5 +1,5 @@
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.Node;
+import com.hazelcast.instance.impl.Node;
 import com.hazelcast.memory.DefaultMemoryStats;
 import com.hazelcast.memory.HazelcastMemoryManager;
 import com.hazelcast.memory.MemoryStats;

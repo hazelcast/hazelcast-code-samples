@@ -18,7 +18,6 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.MergePolicyConfig;
 import com.hazelcast.config.RingbufferConfig;
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 import mergepolicies.RingbufferMergeIntegerValuesMergePolicy;
 
 /**
@@ -42,7 +41,7 @@ public final class IntegerValuesRingbufferMergePolicyExample {
                 //.setProperty("hazelcast.logging.type", "none")
                 .addRingBufferConfig(ringbufferConfig);
 
-        HazelcastInstanceFactory.newHazelcastInstance(config);
+        Hazelcast.newHazelcastInstance(config);
 
         Hazelcast.shutdownAll();
     }

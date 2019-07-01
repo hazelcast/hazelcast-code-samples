@@ -17,7 +17,7 @@
 package com.hazelcast.examples.helper;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.HazelcastInstanceProxy;
+import com.hazelcast.instance.impl.HazelcastInstanceProxy;
 import com.hazelcast.nio.EndpointManager;
 import com.hazelcast.util.EmptyStatement;
 import com.hazelcast.util.ExceptionUtil;
