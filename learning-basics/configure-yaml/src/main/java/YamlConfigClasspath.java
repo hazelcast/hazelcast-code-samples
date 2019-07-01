@@ -16,8 +16,8 @@
 
 import com.hazelcast.config.ClasspathYamlConfig;
 import com.hazelcast.config.Config;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 
 import java.util.Properties;
 
@@ -26,14 +26,14 @@ public class YamlConfigClasspath {
         // taking the member port from system properties
         System.setProperty("hazelcast.member.port", "5555");
         Config config = new ClasspathYamlConfig("hazelcast-sample.yaml");
-        HazelcastInstance instance = HazelcastInstanceFactory.newHazelcastInstance(config);
+        HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         instance.shutdown();
 
         // taking the member port from the provided properties instance
         Properties configProperties = new Properties();
         configProperties.setProperty("hazelcast.member.port", "5999");
         config = new ClasspathYamlConfig("hazelcast-sample.yaml", configProperties);
-        instance = HazelcastInstanceFactory.newHazelcastInstance(config);
+        instance = Hazelcast.newHazelcastInstance(config);
         instance.shutdown();
     }
 }
