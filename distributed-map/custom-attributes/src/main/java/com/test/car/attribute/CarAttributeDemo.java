@@ -3,7 +3,7 @@ package com.test.car.attribute;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.SqlPredicate;
+import com.hazelcast.query.impl.predicates.SqlPredicate;
 import com.test.car.Car;
 
 import java.text.ParseException;
