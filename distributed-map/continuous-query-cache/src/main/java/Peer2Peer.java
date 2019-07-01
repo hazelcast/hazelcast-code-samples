@@ -2,7 +2,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.QueryCache;
-import com.hazelcast.query.impl.predicates.SqlPredicate;
+import com.hazelcast.query.Predicates;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
 
@@ -16,7 +16,7 @@ public class Peer2Peer {
         Hazelcast.newHazelcastInstance();
 
         IMap<Integer, String> map = node.getMap("test");
-        QueryCache<Integer, String> cache = map.getQueryCache("myCache", new SqlPredicate("__key > 3 and __key < 84"), true);
+        QueryCache<Integer, String> cache = map.getQueryCache("myCache", Predicates.sql("__key > 3 and __key < 84"), true);
 
         for (int i = 0; i < 100; i++) {
             map.put(i, String.valueOf(i));

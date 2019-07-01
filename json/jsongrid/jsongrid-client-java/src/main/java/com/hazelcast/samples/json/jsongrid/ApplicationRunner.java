@@ -3,6 +3,7 @@ package com.hazelcast.samples.json.jsongrid;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import com.hazelcast.query.Predicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.SqlPredicate;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -155,7 +155,7 @@ public class ApplicationRunner implements CommandLineRunner {
         IMap<?, ?> iMap = this.hazelcastInstance.getMap(iMapName);
 
         Collection<?> results =
-                iMap.values(new SqlPredicate(sql));
+                iMap.values(Predicates.sql(sql));
 
         for (Object result : results) {
             System.out.println(result);

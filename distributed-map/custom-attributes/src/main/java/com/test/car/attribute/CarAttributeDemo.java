@@ -3,7 +3,7 @@ package com.test.car.attribute;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.impl.predicates.SqlPredicate;
+import com.hazelcast.query.Predicates;
 import com.test.car.Car;
 
 import java.text.ParseException;
@@ -21,7 +21,7 @@ public class CarAttributeDemo {
 
         // we're using a custom attribute called 'attribute' which is provided by the 'CarAttributeExtractor'
         // we are also passing an argument 'mileage' to the extractor
-        Set<Car> cars = (Set<Car>) map.values(new SqlPredicate("attribute[mileage] < 30000"));
+        Set<Car> cars = (Set<Car>) map.values(Predicates.sql("attribute[mileage] < 30000"));
         System.out.println("Cars: " + cars);
 
         Hazelcast.shutdownAll();

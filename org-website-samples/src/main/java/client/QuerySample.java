@@ -10,7 +10,6 @@ import com.hazelcast.nio.serialization.PortableReader;
 import com.hazelcast.nio.serialization.PortableWriter;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
-import com.hazelcast.query.impl.predicates.SqlPredicate;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -98,7 +97,7 @@ public class QuerySample {
         // Add some users to the Distributed Map
         generateUsers(users);
         // Create a Predicate from a String (a SQL like Where clause)
-        Predicate sqlQuery = new SqlPredicate("active AND age BETWEEN 18 AND 21)");
+        Predicate sqlQuery = Predicates.sql("active AND age BETWEEN 18 AND 21)");
         // Creating the same Predicate as above but with a builder
         Predicate criteriaQuery = Predicates.and(
                 Predicates.equal("active", true),

@@ -3,7 +3,7 @@ package com.test.car.trip;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.impl.predicates.SqlPredicate;
+import com.hazelcast.query.Predicates;
 import com.test.car.Car;
 
 import java.text.ParseException;
@@ -20,7 +20,7 @@ public class CarTripDemo {
         map.put(3, new Car("Porsche Cayenne").setTrip(2000, 8000));
 
         // we're using a custom 'tripDistance' attribute which is provided by the 'CarTripDistanceExtractor'
-        Set<Car> cars = (Set<Car>) map.values(new SqlPredicate("tripDistance < 3000"));
+        Set<Car> cars = (Set<Car>) map.values(Predicates.sql("tripDistance < 3000"));
         System.out.println("Cars: " + cars);
 
         Hazelcast.shutdownAll();

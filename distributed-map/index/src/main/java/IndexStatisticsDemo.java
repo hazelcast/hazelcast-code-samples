@@ -2,7 +2,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.monitor.LocalIndexStats;
-import com.hazelcast.query.impl.predicates.SqlPredicate;
+import com.hazelcast.query.Predicates;
 
 import java.util.Map;
 import java.util.Random;
@@ -55,7 +55,7 @@ public class IndexStatisticsDemo {
         // 5. Run some queries on the map.
 
         for (int i = 0; i < QUERY_COUNT; ++i) {
-            persons.values(new SqlPredicate("name.surname = '" + randomSurname() + "'"));
+            persons.values(Predicates.sql("name.surname = '" + randomSurname() + "'"));
         }
 
         // 6. Obtain and print the local index statistics.

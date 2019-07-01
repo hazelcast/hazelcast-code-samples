@@ -3,7 +3,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.PredicateBuilder;
-import com.hazelcast.query.impl.PredicateBuilderImpl;
+import com.hazelcast.query.Predicates;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -73,7 +73,7 @@ public class PredicateMember {
     }
 
     private Set<Person> getWithNameAndAgeSimplified(String name, int age) {
-        PredicateBuilder.EntryObject e = new PredicateBuilderImpl().getEntryObject();
+        PredicateBuilder.EntryObject e = Predicates.newPredicateBuilder().getEntryObject();
         Predicate predicate = e.get("name").equal(name).and(e.get("age").equal(age));
         return (Set<Person>) personMap.values(predicate);
     }

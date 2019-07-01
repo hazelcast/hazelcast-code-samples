@@ -25,7 +25,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.internal.diagnostics.HealthMonitorLevel;
-import com.hazelcast.query.impl.predicates.SqlPredicate;
+import com.hazelcast.query.Predicates;
 import com.hazelcast.topic.ITopic;
 import com.hazelcast.topic.Message;
 import com.hazelcast.topic.MessageListener;
@@ -493,7 +493,7 @@ public final class AllTest {
         addOperation(operations, new Runnable() {
             public void run() {
                 IMap map = hazelcast.getMap("myMap");
-                Iterator it = map.entrySet(new SqlPredicate("year=" + random.nextInt(100))).iterator();
+                Iterator it = map.entrySet(Predicates.sql("year=" + random.nextInt(100))).iterator();
                 while (it.hasNext()) {
                     it.next();
                 }
@@ -502,7 +502,7 @@ public final class AllTest {
         addOperation(operations, new Runnable() {
             public void run() {
                 IMap map = hazelcast.getMap("myMap");
-                Iterator it = map.entrySet(new SqlPredicate("name=" + random.nextInt(10000))).iterator();
+                Iterator it = map.entrySet(Predicates.sql("name=" + random.nextInt(10000))).iterator();
                 while (it.hasNext()) {
                     it.next();
                 }
@@ -511,7 +511,7 @@ public final class AllTest {
         addOperation(operations, new Runnable() {
             public void run() {
                 IMap map = hazelcast.getMap("myMap");
-                Iterator it = map.keySet(new SqlPredicate("name=" + random.nextInt(10000))).iterator();
+                Iterator it = map.keySet(Predicates.sql("name=" + random.nextInt(10000))).iterator();
                 while (it.hasNext()) {
                     it.next();
                 }
@@ -529,7 +529,7 @@ public final class AllTest {
         addOperation(operations, new Runnable() {
             public void run() {
                 IMap map = hazelcast.getMap("myMap");
-                Iterator it = map.localKeySet(new SqlPredicate("name=" + random.nextInt(10000))).iterator();
+                Iterator it = map.localKeySet(Predicates.sql("name=" + random.nextInt(10000))).iterator();
                 while (it.hasNext()) {
                     it.next();
                 }

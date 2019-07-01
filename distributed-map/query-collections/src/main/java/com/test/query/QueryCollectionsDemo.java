@@ -3,7 +3,7 @@ package com.test.query;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.impl.predicates.SqlPredicate;
+import com.hazelcast.query.Predicates;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -23,7 +23,7 @@ public class QueryCollectionsDemo {
         map.put(3, new Person("Hans", limb("left-leg"), limb("right-leg")));
         map.put(4, new Person("Stefanie", limb("left-arm"), limb("right-arm")));
 
-        Set<Person> employees = (Set<Person>) map.values(new SqlPredicate("limbs[any].name == right-leg"));
+        Set<Person> employees = (Set<Person>) map.values(Predicates.sql("limbs[any].name == right-leg"));
         System.out.println("People: " + employees);
 
         Hazelcast.shutdownAll();

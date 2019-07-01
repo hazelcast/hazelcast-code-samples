@@ -6,7 +6,7 @@ import com.hazelcast.cp.lock.ILock;
 import com.hazelcast.projection.Projection;
 import com.hazelcast.projection.Projections;
 import com.hazelcast.query.Predicate;
-import com.hazelcast.query.impl.predicates.SqlPredicate;
+import com.hazelcast.query.Predicates;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,7 +179,7 @@ public class FraudService {
 
         String sql = "code = '" + airportCode + "' OR code = '" + user.getLastCardUsePlace() + "'";
 
-        Predicate predicate = new SqlPredicate(sql);
+        Predicate predicate = Predicates.sql(sql);
 
         Projection projection = Projections.singleAttribute("description");
 
