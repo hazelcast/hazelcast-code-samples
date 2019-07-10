@@ -19,7 +19,7 @@
 package com.hazelcast.loader;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 
 /**
  * Starter application for read-through / write-through example with Hazelcast and MongoDB.

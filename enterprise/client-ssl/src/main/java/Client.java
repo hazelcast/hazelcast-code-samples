@@ -23,7 +23,6 @@ public class Client {
         sslConfig.setProperty("javax.net.ssl.trustStore", new File("hazelcast.ts").getAbsolutePath());
 
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         clientConfig.getNetworkConfig().addAddress("127.0.0.1");
         clientConfig.getNetworkConfig().setSSLConfig(sslConfig);
 

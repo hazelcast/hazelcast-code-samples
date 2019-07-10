@@ -1,6 +1,6 @@
 package com.hazelcast.springHibernate;
 
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 
 @SuppressWarnings("unused")
 public class DistributedMapService {

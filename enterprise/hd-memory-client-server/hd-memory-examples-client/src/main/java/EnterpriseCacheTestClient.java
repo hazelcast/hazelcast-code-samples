@@ -59,7 +59,6 @@ public final class EnterpriseCacheTestClient {
                                       int valueMin, int valueMax, long duration) throws IOException {
         InputStream configInputStream = EnterpriseCacheTestClient.class.getResourceAsStream("/hazelcast-client-hd-memory.xml");
         ClientConfig clientConfig = new XmlClientConfigBuilder(configInputStream).build();
-        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
 
         this.instance = HazelcastClient.newHazelcastClient(clientConfig);
         this.cacheManager = HazelcastClientCachingProvider.createCachingProvider(instance).getCacheManager();

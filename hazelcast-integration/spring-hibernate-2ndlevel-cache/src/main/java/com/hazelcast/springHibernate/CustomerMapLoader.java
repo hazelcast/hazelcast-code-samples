@@ -1,6 +1,6 @@
 package com.hazelcast.springHibernate;
 
-import com.hazelcast.core.MapLoader;
+import com.hazelcast.map.MapLoader;
 
 import java.util.Collection;
 import java.util.Map;

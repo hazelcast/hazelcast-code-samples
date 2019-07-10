@@ -5,13 +5,13 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.hazelcast.map.MapLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.hazelcast.core.HazelcastJsonValue;
-import com.hazelcast.core.MapLoader;
 
 import lombok.extern.slf4j.Slf4j;
 

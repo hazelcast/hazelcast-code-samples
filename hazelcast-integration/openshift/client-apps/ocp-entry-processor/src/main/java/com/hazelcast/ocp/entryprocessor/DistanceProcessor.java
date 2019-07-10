@@ -2,7 +2,7 @@ package com.hazelcast.ocp.entryprocessor;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.hazelcast.map.EntryProcessor;
 
 import java.util.Map;

@@ -51,7 +51,6 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
                 .setEnabled(true);
 
         return super.createClientConfig()
-                .setLicenseKey(ENTERPRISE_LICENSE_KEY)
                 .setNativeMemoryConfig(nativeMemoryConfig);
     }
 

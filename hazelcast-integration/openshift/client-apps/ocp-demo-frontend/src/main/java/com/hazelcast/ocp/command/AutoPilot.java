@@ -1,6 +1,6 @@
 package com.hazelcast.ocp.command;
 
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.hazelcast.util.Preconditions;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
