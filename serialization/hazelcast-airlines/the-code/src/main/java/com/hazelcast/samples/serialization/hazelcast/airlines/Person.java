@@ -1,9 +1,9 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * <p>Someone who is on a flight. Note that this object is

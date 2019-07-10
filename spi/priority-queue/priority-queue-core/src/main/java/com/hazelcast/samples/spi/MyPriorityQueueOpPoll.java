@@ -1,16 +1,15 @@
 package com.hazelcast.samples.spi;
 
-import java.io.IOException;
-import java.util.PriorityQueue;
-
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.spi.Operation;
 import com.hazelcast.spi.PartitionAwareOperation;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.util.PriorityQueue;
 
 /**
  * A request to run {@link MyPriorityQueue#poll()},

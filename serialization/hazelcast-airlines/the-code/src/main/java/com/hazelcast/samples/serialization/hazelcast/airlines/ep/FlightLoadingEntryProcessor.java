@@ -1,7 +1,5 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines.ep;
 
-import java.util.Map.Entry;
-
 import com.hazelcast.core.ReadOnly;
 import com.hazelcast.map.EntryBackupProcessor;
 import com.hazelcast.map.EntryProcessor;
@@ -9,6 +7,8 @@ import com.hazelcast.samples.serialization.hazelcast.airlines.AbstractFlight;
 import com.hazelcast.samples.serialization.hazelcast.airlines.MyKey;
 import com.hazelcast.samples.serialization.hazelcast.airlines.Person;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Helpers;
+
+import java.util.Map.Entry;
 
 /**
  * <p>An {@link com.hazelcast.map.EntryProcessor EntryProcessor} is code that

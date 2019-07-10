@@ -1,9 +1,9 @@
 package com.hazelcast.samples.querying.domain;
 
-import java.time.temporal.ChronoUnit;
-
 import com.hazelcast.query.extractor.ValueCollector;
 import com.hazelcast.query.extractor.ValueExtractor;
+
+import java.time.temporal.ChronoUnit;
 
 /**
  * <P>

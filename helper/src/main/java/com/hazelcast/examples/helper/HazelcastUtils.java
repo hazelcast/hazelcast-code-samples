@@ -22,9 +22,9 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.instance.impl.HazelcastInstanceImpl;
 import com.hazelcast.instance.impl.HazelcastInstanceProxy;
 import com.hazelcast.instance.impl.Node;
+import com.hazelcast.internal.partition.InternalPartitionService;
 import com.hazelcast.partition.Partition;
 import com.hazelcast.partition.PartitionService;
-import com.hazelcast.internal.partition.InternalPartitionService;
 
 import java.lang.reflect.Field;
 

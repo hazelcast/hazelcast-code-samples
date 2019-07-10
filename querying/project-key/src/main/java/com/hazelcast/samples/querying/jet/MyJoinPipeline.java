@@ -1,9 +1,5 @@
 package com.hazelcast.samples.querying.jet;
 
-import java.time.LocalDate;
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Map.Entry;
-
 import com.hazelcast.jet.ComputeStage;
 import com.hazelcast.jet.JoinClause;
 import com.hazelcast.jet.Pipeline;
@@ -15,6 +11,10 @@ import com.hazelcast.jet.function.DistributedFunctions;
 import com.hazelcast.samples.querying.domain.LifeValue;
 import com.hazelcast.samples.querying.domain.PersonKey;
 import com.hazelcast.samples.querying.domain.PersonValue;
+
+import java.time.LocalDate;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Map.Entry;
 
 /**
  * <P>

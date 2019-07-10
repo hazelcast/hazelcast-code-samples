@@ -1,19 +1,17 @@
 package com.hazelcast.samples.json.jsongrid;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import com.hazelcast.core.HazelcastJsonValue;
 import com.hazelcast.map.MapLoader;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.hazelcast.core.HazelcastJsonValue;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>A {@link com.hazelcast.core.MapLoader MapLoader} provides a way to get data

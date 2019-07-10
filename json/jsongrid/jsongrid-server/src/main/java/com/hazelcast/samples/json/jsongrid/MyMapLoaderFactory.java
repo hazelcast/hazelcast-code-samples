@@ -1,12 +1,12 @@
 package com.hazelcast.samples.json.jsongrid;
 
-import java.util.Properties;
-
 import com.hazelcast.map.MapLoader;
 import com.hazelcast.map.MapStoreFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.Properties;
 
 /**
  * <p>A factory method to create

@@ -1,18 +1,16 @@
 package com.hazelcast.samples.json.jsongrid;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
+import com.hazelcast.core.DistributedObject;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 import com.hazelcast.query.Predicates;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
-import com.hazelcast.core.DistributedObject;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.map.IMap;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * <p>Run some queries against the data.

@@ -1,10 +1,5 @@
 package com.hazelcast.samples.kubernetes;
 
-import java.util.Collections;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.hazelcast.config.ClasspathXmlConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.DiscoveryStrategyConfig;
@@ -12,6 +7,10 @@ import com.hazelcast.config.JoinConfig;
 import com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategyFactory;
 import com.hazelcast.kubernetes.KubernetesProperties;
 import com.hazelcast.spi.properties.GroupProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Collections;
 
 /**
  * <p>

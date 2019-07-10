@@ -6,8 +6,6 @@ import com.hazelcast.core.HazelcastInstance;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
-import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
-
 /**
  * You have to set your Hazelcast Enterprise license key to make this code sample work.
  * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.

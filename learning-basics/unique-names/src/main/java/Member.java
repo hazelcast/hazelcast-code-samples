@@ -1,7 +1,7 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.map.IMap;
 import com.hazelcast.core.IdGenerator;
+import com.hazelcast.map.IMap;
 
 public class Member {
 

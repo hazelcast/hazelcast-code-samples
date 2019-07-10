@@ -1,15 +1,10 @@
 package com.hazelcast.aws.ecs;
 
-import com.hazelcast.aws.AwsDiscoveryStrategyFactory;
 import com.hazelcast.config.Config;
-import com.hazelcast.config.DiscoveryStrategyConfig;
 import com.hazelcast.config.JoinConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootApplication
 public class Application {

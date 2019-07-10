@@ -1,16 +1,10 @@
 package com.hazelcast.samples.eureka;
 
 import com.hazelcast.config.Config;
-import com.hazelcast.config.DiscoveryStrategyConfig;
-import com.hazelcast.config.JoinConfig;
-import com.hazelcast.eureka.one.EurekaOneDiscoveryStrategyFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootApplication
 public class Application {

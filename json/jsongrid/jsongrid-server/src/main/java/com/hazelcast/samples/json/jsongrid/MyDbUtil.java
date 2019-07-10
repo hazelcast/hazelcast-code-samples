@@ -1,5 +1,9 @@
 package com.hazelcast.samples.json.jsongrid;
 
+import com.hazelcast.core.HazelcastJsonValue;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -8,12 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import com.hazelcast.core.HazelcastJsonValue;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>Isolate look-up of database into this class, will make

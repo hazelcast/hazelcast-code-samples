@@ -1,9 +1,9 @@
 package com.hazelcast.samples.amazon.ec2.client;
 
-import com.hazelcast.config.AwsConfig;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
+import com.hazelcast.config.AwsConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 

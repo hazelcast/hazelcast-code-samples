@@ -1,12 +1,11 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * <p>Basic representation of a flight from somewhere to somewhere else.

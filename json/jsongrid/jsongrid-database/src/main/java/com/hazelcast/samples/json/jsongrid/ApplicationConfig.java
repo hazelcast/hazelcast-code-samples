@@ -8,10 +8,9 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
-
-import javax.sql.DataSource;
 
 /**
  * <p>Spring style configuration to create an instance of the

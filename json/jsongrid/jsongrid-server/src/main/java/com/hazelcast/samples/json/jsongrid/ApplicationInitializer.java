@@ -1,19 +1,17 @@
 package com.hazelcast.samples.json.jsongrid;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.map.IMap;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * <p>Initialise the Hazelcast server by referencing

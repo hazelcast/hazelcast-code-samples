@@ -1,15 +1,14 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import java.io.IOException;
-import java.time.LocalDate;
-
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
-
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.time.LocalDate;
 
 /**
  * <p><u>{@code V4Flight}, version 4 of the data model</u></p>

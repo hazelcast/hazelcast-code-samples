@@ -1,10 +1,9 @@
 package com.hazelcast.samples.querying.domain;
 
-import java.io.Serializable;
-
 import com.hazelcast.core.PartitionAware;
-
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * <P>
