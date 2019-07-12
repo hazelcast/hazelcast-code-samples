@@ -20,8 +20,8 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
 import com.hazelcast.logging.ILogger;
+import com.hazelcast.map.IMap;
 
 import static com.hazelcast.config.MapStoreConfig.InitialLoadMode.EAGER;
 

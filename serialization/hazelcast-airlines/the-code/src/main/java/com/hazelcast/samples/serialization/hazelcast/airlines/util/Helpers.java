@@ -1,8 +1,8 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines.util;
 
-import java.util.Random;
-
 import com.hazelcast.samples.serialization.hazelcast.airlines.Person;
+
+import java.util.Random;
 
 /**
  * <p>Communal helper functions

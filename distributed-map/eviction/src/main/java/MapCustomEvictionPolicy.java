@@ -19,7 +19,7 @@ import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.EntryView;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.hazelcast.map.eviction.MapEvictionPolicy;
 import com.hazelcast.map.listener.EntryEvictedListener;
 

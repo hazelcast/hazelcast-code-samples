@@ -1,8 +1,5 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines.ep;
 
-import java.io.IOException;
-import java.util.Map.Entry;
-
 import com.hazelcast.map.AbstractEntryProcessor;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -11,8 +8,10 @@ import com.hazelcast.samples.serialization.hazelcast.airlines.AbstractFlight;
 import com.hazelcast.samples.serialization.hazelcast.airlines.MyKey;
 import com.hazelcast.samples.serialization.hazelcast.airlines.Person;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
-
 import lombok.EqualsAndHashCode;
+
+import java.io.IOException;
+import java.util.Map.Entry;
 
 /**
  * <P>An {@link com.hazelcast.map.EntryProcessor EntryProcessor} that we use to do

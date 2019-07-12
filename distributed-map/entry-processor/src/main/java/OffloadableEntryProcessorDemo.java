@@ -1,9 +1,9 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
 import com.hazelcast.core.Offloadable;
 import com.hazelcast.core.ReadOnly;
 import com.hazelcast.map.EntryProcessor;
+import com.hazelcast.map.IMap;
 
 import java.util.Map;
 

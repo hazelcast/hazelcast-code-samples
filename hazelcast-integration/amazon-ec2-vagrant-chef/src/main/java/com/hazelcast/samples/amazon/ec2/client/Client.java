@@ -1,11 +1,11 @@
 package com.hazelcast.samples.amazon.ec2.client;
 
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.client.config.ClientAwsConfig;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
+import com.hazelcast.config.AwsConfig;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 
 /**
  * Example of a client connecting to a Hazelcast Cluster running on Amazon EC2.
@@ -18,10 +18,10 @@ public class Client {
     public static void main(String[] args) {
         ClientConfig clientConfig = new ClientConfig();
         ClientNetworkConfig clientNetworkConfig = new ClientNetworkConfig();
-        ClientAwsConfig awsConfig = new ClientAwsConfig();
+        AwsConfig awsConfig = new AwsConfig();
 
-        awsConfig.setInsideAws(false);
         awsConfig.setEnabled(true);
+        awsConfig.setUsePublicIp(true);
         awsConfig.setAccessKey("-- YOUR AMAZON ACCESS KEY --");
         awsConfig.setSecretKey("-- YOUR AMAZON SECRET KEY --");
         awsConfig.setRegion("us-east-1");

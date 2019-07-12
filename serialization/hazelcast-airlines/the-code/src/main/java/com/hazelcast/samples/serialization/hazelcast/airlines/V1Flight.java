@@ -1,8 +1,8 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import java.io.Serializable;
-
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p><u>{@code V1Flight}, version 1 of the data model</u></p>

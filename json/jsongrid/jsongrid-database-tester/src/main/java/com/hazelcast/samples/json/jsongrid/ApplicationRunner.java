@@ -1,15 +1,14 @@
 package com.hazelcast.samples.json.jsongrid;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>The {@code JdbcTemplate} injected by Spring gives us

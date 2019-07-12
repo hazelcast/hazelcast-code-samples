@@ -1,16 +1,14 @@
 package com.hazelcast.samples.kubernetes;
 
-import java.util.Arrays;
-
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import java.util.Arrays;
 
 /**
  * <p>

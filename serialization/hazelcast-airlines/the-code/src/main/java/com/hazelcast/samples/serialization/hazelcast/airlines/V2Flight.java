@@ -1,13 +1,13 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
+import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.time.LocalDate;
-
-import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p><u>{@code V2Flight}, version 2 of the data model</u></p>

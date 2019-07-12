@@ -1,7 +1,7 @@
 package com.hazelcast.ocp.command;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.hazelcast.ocp.entryprocessor.DistanceProcessor;
 import com.hazelcast.ocp.entryprocessor.Position;
 import lombok.extern.slf4j.Slf4j;

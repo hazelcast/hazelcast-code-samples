@@ -1,7 +1,7 @@
 package com.hazelcast.jca.examples.servlet;
 
-import com.hazelcast.core.IMap;
 import com.hazelcast.jca.HazelcastConnection;
+import com.hazelcast.map.IMap;
 
 import javax.annotation.Resource;
 import javax.resource.ResourceException;

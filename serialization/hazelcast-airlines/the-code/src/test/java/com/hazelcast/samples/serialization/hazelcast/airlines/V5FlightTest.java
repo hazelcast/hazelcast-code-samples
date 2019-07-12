@@ -1,19 +1,20 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-
-import org.junit.Test;
-
 import com.hazelcast.config.SerializationConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
 import com.hazelcast.spi.serialization.SerializationService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
+
+import java.util.Arrays;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * <p>External serialization test for {@link V5Flight}

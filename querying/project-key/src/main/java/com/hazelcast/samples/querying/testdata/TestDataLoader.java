@@ -1,17 +1,16 @@
 package com.hazelcast.samples.querying.testdata;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.samples.querying.domain.PersonKey;
+import com.hazelcast.samples.querying.domain.PersonValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.stereotype.Component;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
-import com.hazelcast.samples.querying.domain.PersonKey;
-import com.hazelcast.samples.querying.domain.PersonValue;
+import java.time.LocalDate;
+import java.util.Arrays;
 
 /**
  * <P>

@@ -41,7 +41,6 @@ public class SocketInterceptorClient {
 
     private static ClientConfig createClientConfig() {
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         SocketInterceptorConfig interceptorConfig = new SocketInterceptorConfig();
         interceptorConfig.setEnabled(true).setClassName(MySocketInterceptor.class.getName());
         clientConfig.getNetworkConfig().setSocketInterceptorConfig(interceptorConfig);

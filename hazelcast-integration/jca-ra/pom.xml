@@ -49,14 +49,14 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-jca</artifactId>
-            <version>3.6.4</version>
+            <version>3.7.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-jca-rar</artifactId>
-            <version>3.6.4</version>
-            <type>rar</type>
+            <version>3.7.2</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.spec.javax.servlet</groupId>

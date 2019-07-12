@@ -35,7 +35,6 @@ public class Application {
         clientSslProps.setProperty("trustStore", tsFile.getAbsolutePath());
         clientSslProps.setProperty("trustStorePassword", PASSWORD);
         clientConfig.getNetworkConfig().setSSLConfig(new SSLConfig().setEnabled(true).setProperties(clientSslProps));
-        clientConfig.setLicenseKey(LICENSE_KEY);
         return HazelcastClient.newHazelcastClient(clientConfig);
     }
 

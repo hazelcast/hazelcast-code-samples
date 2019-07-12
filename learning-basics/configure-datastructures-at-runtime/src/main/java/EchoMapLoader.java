@@ -16,7 +16,7 @@
  *
  */
 
-import com.hazelcast.core.MapLoader;
+import com.hazelcast.map.MapLoader;
 
 import java.util.Arrays;
 import java.util.Collection;

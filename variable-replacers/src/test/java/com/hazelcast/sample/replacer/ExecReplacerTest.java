@@ -16,15 +16,14 @@
 
 package com.hazelcast.sample.replacer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.util.Properties;
-
+import com.hazelcast.util.StringUtil;
 import org.junit.Assume;
 import org.junit.Test;
 
-import com.hazelcast.util.StringUtil;
+import java.util.Properties;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Unit tests for {@link ExecReplacer}.

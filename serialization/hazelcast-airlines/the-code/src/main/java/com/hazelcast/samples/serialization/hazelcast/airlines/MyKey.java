@@ -1,10 +1,10 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * <p>The key for a flight object. Keys here are

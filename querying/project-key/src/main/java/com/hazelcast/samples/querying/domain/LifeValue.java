@@ -1,9 +1,9 @@
 package com.hazelcast.samples.querying.domain;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.time.LocalDate;
-
-import lombok.Data;
 
 /**
  * <P>

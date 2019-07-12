@@ -1,8 +1,8 @@
 package com.hazelcast.sample.replacer;
 
-import java.util.Properties;
-
 import com.hazelcast.config.replacer.spi.ConfigReplacer;
+
+import java.util.Properties;
 
 /**
  * Variable replacer, which just returns provided value (i.e. identity).

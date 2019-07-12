@@ -1,8 +1,8 @@
 package com.hazelcast.samples.nearcache.frauddetection;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
 import com.hazelcast.cp.lock.ILock;
+import com.hazelcast.map.IMap;
 import com.hazelcast.projection.Projection;
 import com.hazelcast.projection.Projections;
 import com.hazelcast.query.Predicate;

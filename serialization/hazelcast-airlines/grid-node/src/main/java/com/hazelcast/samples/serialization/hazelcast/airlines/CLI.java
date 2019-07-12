@@ -1,24 +1,23 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.shell.core.CommandMarker;
-import org.springframework.shell.core.annotation.CliCommand;
-import org.springframework.shell.core.annotation.CliOption;
-import org.springframework.stereotype.Component;
-
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.samples.serialization.hazelcast.airlines.ep.FlightLoadingEntryProcessor;
 import com.hazelcast.samples.serialization.hazelcast.airlines.ep.SeatReservationEntryProcessor;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.shell.core.CommandMarker;
+import org.springframework.shell.core.annotation.CliCommand;
+import org.springframework.shell.core.annotation.CliOption;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * <p>Commands additional to the defaults provided

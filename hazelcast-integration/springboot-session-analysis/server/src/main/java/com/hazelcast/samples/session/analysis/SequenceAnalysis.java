@@ -1,10 +1,5 @@
 package com.hazelcast.samples.session.analysis;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
-
 import com.hazelcast.core.EntryEventType;
 import com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder;
 import com.hazelcast.jet.core.processor.Processors;
@@ -21,6 +16,11 @@ import com.hazelcast.map.EntryProcessor;
 import com.hazelcast.map.journal.EventJournalMapEvent;
 import com.hazelcast.spi.serialization.SerializationService;
 import com.hazelcast.web.SessionState;
+
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * <p>Analyse the sequence of items being added to baskets.

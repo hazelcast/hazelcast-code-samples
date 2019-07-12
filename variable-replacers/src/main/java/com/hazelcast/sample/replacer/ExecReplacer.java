@@ -16,9 +16,9 @@
 
 package com.hazelcast.sample.replacer;
 
-import static com.hazelcast.nio.IOUtil.closeResource;
-import static com.hazelcast.util.StringUtil.UTF8_CHARSET;
-import static com.hazelcast.util.StringUtil.isNullOrEmpty;
+import com.hazelcast.config.replacer.spi.ConfigReplacer;
+import com.hazelcast.logging.ILogger;
+import com.hazelcast.logging.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,9 +26,9 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
-import com.hazelcast.config.replacer.spi.ConfigReplacer;
-import com.hazelcast.logging.ILogger;
-import com.hazelcast.logging.Logger;
+import static com.hazelcast.nio.IOUtil.closeResource;
+import static com.hazelcast.util.StringUtil.UTF8_CHARSET;
+import static com.hazelcast.util.StringUtil.isNullOrEmpty;
 
 /**
  * This class is an <b>example</b> {@link ConfigReplacer} implementation which allows to replace variables with a standard

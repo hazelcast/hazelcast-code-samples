@@ -1,17 +1,15 @@
 package com.hazelcast.samples.session.analysis;
 
-import java.util.Currency;
-import java.util.Locale;
-import java.util.Properties;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.web.WebFilter;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Currency;
+import java.util.Locale;
+import java.util.Properties;
 
 /**
  * <p>Spring beans to make a Hazelcast client for HTTP session storage

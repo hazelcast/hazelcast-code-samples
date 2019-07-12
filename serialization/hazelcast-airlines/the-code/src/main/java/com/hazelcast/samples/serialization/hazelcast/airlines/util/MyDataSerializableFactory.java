@@ -4,7 +4,6 @@ import com.hazelcast.nio.serialization.DataSerializableFactory;
 import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
 import com.hazelcast.samples.serialization.hazelcast.airlines.V4Flight;
 import com.hazelcast.samples.serialization.hazelcast.airlines.ep.SeatReservationEntryProcessor;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
