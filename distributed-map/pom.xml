@@ -49,6 +49,7 @@
         <module>sqlquery</module>
         <module>fast-aggregations</module>
         <module>projections</module>
+        <module>entrystore</module>
     </modules>
 
     <dependencies>
