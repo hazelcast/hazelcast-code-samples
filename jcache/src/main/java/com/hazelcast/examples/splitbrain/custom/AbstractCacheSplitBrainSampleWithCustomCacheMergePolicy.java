@@ -1,6 +1,5 @@
 package com.hazelcast.examples.splitbrain.custom;
 
-import com.hazelcast.cache.CacheEntryView;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.spi.merge.MergingValue;
