@@ -1,6 +1,6 @@
 package com.hazelcast.examples.splitbrain.putifabsent;
 
-import com.hazelcast.cache.merge.PutIfAbsentCacheMergePolicy;
+import com.hazelcast.spi.merge.PutIfAbsentMergePolicy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 
@@ -20,7 +20,7 @@ public class ProgrammaticCacheSplitBrainSampleWithPutIfAbsentCacheMergePolicy
 
     @Override
     protected Cache<String, Object> getCache(String cacheName, CacheManager cacheManager) {
-        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, PutIfAbsentCacheMergePolicy.class.getName());
+        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, PutIfAbsentMergePolicy.class.getName());
         return cacheManager.createCache(cacheName, cacheConfig);
     }
 

@@ -1,4 +1,4 @@
-import com.hazelcast.spi.NodeEngine;
+import com.hazelcast.spi.impl.NodeEngine;
 import com.hazelcast.spi.impl.operationservice.InvocationBuilder;
 import com.hazelcast.util.ExceptionUtil;
 
