@@ -5,7 +5,7 @@ import com.hazelcast.query.extractor.ValueExtractor;
 
 import java.util.Calendar;
 
-public class AgeExtractor extends ValueExtractor<Customer, String> {
+public class AgeExtractor implements ValueExtractor<Customer, String> {
 
     @Override
     public void extract(Customer customer, String argument, ValueCollector valueCollector) {

@@ -6,7 +6,7 @@ import com.hazelcast.query.Predicates;
 
 import static com.hazelcast.core.Hazelcast.newHazelcastInstance;
 import static com.hazelcast.query.Predicates.equal;
-import static com.hazelcast.serialization.PersonProtos.Person;
+import static com.hazelcast.nio.serialization.PersonProtos.Person;
 
 /**
  * Hazelcast Member with custom serialization registration

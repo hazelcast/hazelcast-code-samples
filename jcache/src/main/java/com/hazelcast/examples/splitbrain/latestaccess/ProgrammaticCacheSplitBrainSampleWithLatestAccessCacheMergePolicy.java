@@ -1,6 +1,6 @@
 package com.hazelcast.examples.splitbrain.latestaccess;
 
-import com.hazelcast.cache.merge.LatestAccessCacheMergePolicy;
+import com.hazelcast.spi.merge.LatestAccessMergePolicy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 
@@ -20,7 +20,7 @@ public class ProgrammaticCacheSplitBrainSampleWithLatestAccessCacheMergePolicy
 
     @Override
     protected Cache<String, Object> getCache(String cacheName, CacheManager cacheManager) {
-        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, LatestAccessCacheMergePolicy.class.getName());
+        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, LatestAccessMergePolicy.class.getName());
         return cacheManager.createCache(cacheName, cacheConfig);
     }
 

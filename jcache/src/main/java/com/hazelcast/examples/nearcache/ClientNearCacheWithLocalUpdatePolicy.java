@@ -17,7 +17,7 @@ public class ClientNearCacheWithLocalUpdatePolicy extends ClientNearCacheUsageSu
         NearCacheConfig nearCacheConfig = createNearCacheConfig()
                 .setInMemoryFormat(InMemoryFormat.OBJECT)
                 .setInvalidateOnChange(false)
-                .setLocalUpdatePolicy(NearCacheConfig.LocalUpdatePolicy.CACHE)
+                .setLocalUpdatePolicy(NearCacheConfig.LocalUpdatePolicy.CACHE_ON_UPDATE)
                 .setEvictionConfig(createEvictionConfigWithEntryCountPolicy(RECORD_COUNT * 2));
 
         ICache<String, Article> cache1 = createCacheWithNearCache(nearCacheConfig);

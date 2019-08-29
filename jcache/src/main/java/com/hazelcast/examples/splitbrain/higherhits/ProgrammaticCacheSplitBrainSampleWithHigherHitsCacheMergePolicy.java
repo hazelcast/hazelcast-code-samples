@@ -1,6 +1,6 @@
 package com.hazelcast.examples.splitbrain.higherhits;
 
-import com.hazelcast.cache.merge.HigherHitsCacheMergePolicy;
+import com.hazelcast.spi.merge.HigherHitsMergePolicy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 
@@ -20,7 +20,7 @@ public class ProgrammaticCacheSplitBrainSampleWithHigherHitsCacheMergePolicy
 
     @Override
     protected Cache<String, Object> getCache(String cacheName, CacheManager cacheManager) {
-        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, HigherHitsCacheMergePolicy.class.getName());
+        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, HigherHitsMergePolicy.class.getName());
         return cacheManager.createCache(cacheName, cacheConfig);
     }
 

@@ -26,8 +26,7 @@ public class EvictionTest {
         CacheConfig cacheConfig = cache.getConfiguration(CacheConfig.class);
 
         EvictionConfig evictionConfig = cacheConfig.getEvictionConfig();
-        System.out.println("cache configured with eviction -> size:" + evictionConfig.getSize()
-                + " policy:" + evictionConfig.getEvictionPolicyType());
+        System.out.println("cache configured with eviction -> size:" + evictionConfig.getSize());
 
 
         // initial put [0 to 50.000]

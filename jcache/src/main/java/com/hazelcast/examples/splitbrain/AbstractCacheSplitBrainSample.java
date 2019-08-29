@@ -5,6 +5,7 @@ import com.hazelcast.cluster.MembershipEvent;
 import com.hazelcast.cluster.MembershipListener;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.MergePolicyConfig;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.LifecycleEvent;
@@ -50,7 +51,7 @@ public abstract class AbstractCacheSplitBrainSample {
     protected static CacheConfig newCacheConfig(String cacheName, String mergePolicy) {
         CacheConfig cacheConfig = new CacheConfig();
         cacheConfig.setName(cacheName);
-        cacheConfig.setMergePolicy(mergePolicy);
+        cacheConfig.setMergePolicyConfig(new MergePolicyConfig(mergePolicy, 100));
         return cacheConfig;
     }
 

@@ -1,7 +1,7 @@
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.StreamSerializer;
-import com.hazelcast.serialization.PersonProtos;
+import com.hazelcast.nio.serialization.PersonProtos;
 
 import java.io.IOException;
 
