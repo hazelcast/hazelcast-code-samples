@@ -493,7 +493,7 @@ In the same window, run these three commands.
 ```
 docker pull library/openjdk:8-jre
 docker pull library/busybox
-docker pull hazelcast/management-center
+docker pull hazelcast/management-center:3.12.5
 ```
 
 These command will "pull" (ie. download) three existing Docker images from the

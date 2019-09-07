@@ -77,7 +77,7 @@ spec:
         app: pod-hazelcast-management-center
     spec:
       containers:
-        - image: hazelcast/management-center:3.12.4
+        - image: hazelcast/management-center:3.12.5
           name: container-hazelcast-management-center
 ---
 # =========================================================
