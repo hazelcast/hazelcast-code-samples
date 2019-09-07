@@ -5,7 +5,7 @@ import com.hazelcast.query.extractor.ValueCollector;
 import com.hazelcast.query.extractor.ValueExtractor;
 import com.hazelcast.query.extractor.ValueReader;
 
-public class LimbNameExtractor extends ValueExtractor<ValueReader, Object> {
+public class LimbNameExtractor implements ValueExtractor<ValueReader, Object> {
 
     @Override
     public void extract(ValueReader valueReader, Object arg, ValueCollector valueCollector) {

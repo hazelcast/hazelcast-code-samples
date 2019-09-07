@@ -1,7 +1,7 @@
 import com.hazelcast.core.DistributedObject;
-import com.hazelcast.spi.ManagedService;
-import com.hazelcast.spi.NodeEngine;
-import com.hazelcast.spi.RemoteService;
+import com.hazelcast.internal.services.ManagedService;
+import com.hazelcast.spi.impl.NodeEngine;
+import com.hazelcast.internal.services.RemoteService;
 
 import java.util.Properties;
 

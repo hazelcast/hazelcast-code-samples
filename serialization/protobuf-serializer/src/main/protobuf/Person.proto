@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package proto_test;
 
-option java_package = "com.hazelcast.serialization";
+option java_package = "com.hazelcast.nio.serialization";
 option java_outer_classname = "PersonProtos";
 
 message Person {

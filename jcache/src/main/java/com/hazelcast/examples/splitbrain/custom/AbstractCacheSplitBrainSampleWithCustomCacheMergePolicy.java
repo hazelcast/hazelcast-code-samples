@@ -1,7 +1,9 @@
 package com.hazelcast.examples.splitbrain.custom;
 
-import com.hazelcast.cache.CacheEntryView;
-import com.hazelcast.cache.CacheMergePolicy;
+import com.hazelcast.nio.ObjectDataInput;
+import com.hazelcast.nio.ObjectDataOutput;
+import com.hazelcast.spi.merge.MergingValue;
+import com.hazelcast.spi.merge.SplitBrainMergePolicy;
 import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
@@ -11,6 +13,7 @@ import com.hazelcast.examples.splitbrain.AbstractCacheSplitBrainSample;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.spi.CachingProvider;
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 import static com.hazelcast.examples.helper.CommonUtils.assertClusterSizeEventually;
@@ -21,7 +24,7 @@ import static com.hazelcast.examples.helper.HazelcastUtils.generateKeyOwnedBy;
 /**
  * Base class for jcache split-brain sample based on `custom cache merge policy.
  *
- * Custom cache merge policy implements {@link com.hazelcast.cache.CacheMergePolicy} and handles its own logic.
+ * Custom cache merge policy implements {@link com.hazelcast.spi.merge.SplitBrainMergePolicy} and handles its own logic.
  */
 abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
@@ -70,14 +73,24 @@ abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends A
         }
     }
 
-    public static class CustomCacheMergePolicy implements CacheMergePolicy {
+    public static class CustomCacheMergePolicy implements SplitBrainMergePolicy<Object, MergingValue<Object>> {
 
         @Override
-        public Object merge(String cacheName, CacheEntryView mergingEntry, CacheEntryView existingEntry) {
-            if (mergingEntry.getValue() instanceof Integer) {
-                return mergingEntry.getValue();
+        public Object merge(MergingValue<Object> mergingValue, MergingValue<Object> existingValue) {
+            if (mergingValue.getValue() instanceof Integer) {
+                return mergingValue.getValue();
             }
             return null;
+        }
+
+        @Override
+        public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
+
+        }
+
+        @Override
+        public void readData(ObjectDataInput objectDataInput) throws IOException {
+
         }
     }
 }

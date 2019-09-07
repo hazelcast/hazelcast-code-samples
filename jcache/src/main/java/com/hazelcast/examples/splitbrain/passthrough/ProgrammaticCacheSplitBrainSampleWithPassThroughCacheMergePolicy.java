@@ -1,6 +1,6 @@
 package com.hazelcast.examples.splitbrain.passthrough;
 
-import com.hazelcast.cache.merge.PassThroughCacheMergePolicy;
+import com.hazelcast.spi.merge.PassThroughMergePolicy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 
@@ -20,7 +20,7 @@ public class ProgrammaticCacheSplitBrainSampleWithPassThroughCacheMergePolicy
 
     @Override
     protected Cache<String, Object> getCache(String cacheName, CacheManager cacheManager) {
-        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, PassThroughCacheMergePolicy.class.getName());
+        CacheConfig<String, Object> cacheConfig = newCacheConfig(cacheName, PassThroughMergePolicy.class.getName());
         return cacheManager.createCache(cacheName, cacheConfig);
     }
 

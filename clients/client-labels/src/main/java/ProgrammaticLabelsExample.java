@@ -1,6 +1,6 @@
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.client.api.Client;
-import com.hazelcast.client.api.ClientListener;
+import com.hazelcast.client.Client;
+import com.hazelcast.client.ClientListener;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.JoinConfig;

@@ -3,7 +3,7 @@ import com.hazelcast.config.EndpointConfig;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.SSLConfig;
 import com.hazelcast.config.ServerSocketEndpointConfig;
-import com.hazelcast.config.WanPublisherConfig;
+import com.hazelcast.config.WanBatchReplicationPublisherConfig;
 import com.hazelcast.config.WanReplicationConfig;
 import com.hazelcast.config.WanReplicationRef;
 import com.hazelcast.core.Hazelcast;
@@ -39,19 +39,19 @@ public class MemberA {
         config.getAdvancedNetworkConfig().addWanEndpointConfig(createWanEndpointConfig());
 
         // setup WAN replication
-        WanPublisherConfig wanPublisherConfig = new WanPublisherConfig()
+        WanBatchReplicationPublisherConfig wanBatchReplicationPublisherConfig = new WanBatchReplicationPublisherConfig()
                 .setGroupName("cluster-b")
                 .setClassName("com.hazelcast.enterprise.wan.replication.WanBatchReplication")
                 // refer to the WAN endpoint config by name
                 .setEndpoint("active-wan");
-        Map<String, Comparable> props = wanPublisherConfig.getProperties();
+        Map<String, Comparable> props = wanBatchReplicationPublisherConfig.getProperties();
         props.put("endpoints", "147.102.1.10:8443,147.102.1.11:8443,147.102.1.12:8443");
         props.put("group.password", "clusterB-pass");
 
         config.addWanReplicationConfig(
                 new WanReplicationConfig()
                         .setName("active-wan-replication")
-                        .addWanPublisherConfig(wanPublisherConfig));
+                        .addWanBatchReplicationPublisherConfig(wanBatchReplicationPublisherConfig));
 
         config.addMapConfig(
                 new MapConfig("wan-map")

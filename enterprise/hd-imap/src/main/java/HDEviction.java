@@ -45,7 +45,6 @@ public class HDEviction {
         mapConfig.setInMemoryFormat(InMemoryFormat.NATIVE);
         mapConfig.setEvictionPolicy(EvictionPolicy.LRU);
         mapConfig.setMaxSizeConfig(maxSizeConfig);
-        mapConfig.setMinEvictionCheckMillis(0);
 
         MemorySize memorySize = new MemorySize(128, MemoryUnit.MEGABYTES);
         NativeMemoryConfig memoryConfig = new NativeMemoryConfig();
