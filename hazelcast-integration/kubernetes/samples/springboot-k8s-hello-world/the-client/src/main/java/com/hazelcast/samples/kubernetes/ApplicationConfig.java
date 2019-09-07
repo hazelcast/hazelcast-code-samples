@@ -53,7 +53,7 @@ import java.util.Collections;
 public class ApplicationConfig {
 
     private static final String DEFAULT_FALSE = "false";
-    private static final String HAZELCAST_SERVICE_NAME = "service-hazelcast-server";
+    private static final String HAZELCAST_SERVICE_NAME = "service-hazelcast-server.default.svc.cluster.local";
 
     @Bean
     public ClientConfig clientConfig() throws Exception {
