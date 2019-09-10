@@ -44,8 +44,8 @@
     <modules>
         <module>clients</module>
         <module>cluster</module>
-        <module>cluster-quorum</module>
-        <module>cluster-quorum-xml</module>
+        <module>cluster-split-brain-protection</module>
+        <module>cluster-split-brain-protection-xml</module>
         <module>cluster-state</module>
         <module>cp-subsystem</module>
         <module>demo</module>

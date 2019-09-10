@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cluster-quorum-xml</artifactId>
-    <name>Cluster Quorum sample for queue and lock with XML configuration</name>
+    <artifactId>cluster-split-brain-protection-xml</artifactId>
+    <name>Cluster Split brain protection sample for queue and lock with XML configuration</name>
 
     <parent>
         <groupId>com.hazelcast.samples</groupId>

@@ -1,6 +1,6 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <group>
@@ -29,12 +29,12 @@
         </join>
     </network>
 
-    <quorum enabled="true" name="cache-quorum">
-        <quorum-size>2</quorum-size>
-        <quorum-type>READ_WRITE</quorum-type>
-    </quorum>
+    <split-brain-protection enabled="true" name="cache-split-brain-protection">
+        <minimum-cluster-size>2</minimum-cluster-size>
+        <protect-on>READ_WRITE</protect-on>
+    </split-brain-protection>
 
-    <cache name="cache-with-quorum">
-        <quorum-ref>cache-quorum</quorum-ref>
+    <cache name="cache-with-split-brain-protection">
+        <split-brain-protection-ref>cache-split-brain-protection</split-brain-protection-ref>
     </cache>
 </hazelcast>

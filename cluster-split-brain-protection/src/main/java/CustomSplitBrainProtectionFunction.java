@@ -2,8 +2,8 @@ import com.hazelcast.cluster.Member;
 import com.hazelcast.cluster.MemberAttributeEvent;
 import com.hazelcast.cluster.MembershipEvent;
 import com.hazelcast.cluster.MembershipListener;
-import com.hazelcast.quorum.HeartbeatAware;
-import com.hazelcast.quorum.QuorumFunction;
+import com.hazelcast.splitbrainprotection.HeartbeatAware;
+import com.hazelcast.splitbrainprotection.SplitBrainProtectionFunction;
 import com.hazelcast.util.Clock;
 
 import java.util.Collection;
@@ -13,16 +13,16 @@ import java.util.Map;
 import static java.lang.Math.abs;
 
 /**
- * This is a custom quorum function that tracks membership changes and heartbeats.
+ * This is a custom split brain protection function that tracks membership changes and heartbeats.
  * If a heartbeat has not been received from a member within the last 2 seconds, the member is considered
- * absent for the purposes of split-brain protection. At least 2 members must be present for quorum to be
+ * absent for the purposes of split-brain protection. At least 2 members must be present for split brain protection to be
  * considered present. This is a simplified version of built-in
- * {@link com.hazelcast.quorum.impl.RecentlyActiveQuorumFunction}.
+ * {@link com.hazelcast.splitbrainprotection.impl.RecentlyActiveSplitBrainProtectionFunction}.
  */
-public class CustomQuorumFunction implements QuorumFunction, MembershipListener, HeartbeatAware {
+public class CustomSplitBrainProtectionFunction implements SplitBrainProtectionFunction, MembershipListener, HeartbeatAware {
 
     static final long HEARTBEAT_TOLERANCE_MILLIS = 3000;
-    static final int QUORUM_SIZE = 2;
+    static final int SPLIT_BRAIN_PROTECTION_SIZE = 2;
 
     private Map<Member, Long> lastHeartbeatReceived = new HashMap<Member, Long>();
 
@@ -61,6 +61,6 @@ public class CustomQuorumFunction implements QuorumFunction, MembershipListener,
                 countOfPresentMembers++;
             }
         }
-        return countOfPresentMembers >= QUORUM_SIZE;
+        return countOfPresentMembers >= SPLIT_BRAIN_PROTECTION_SIZE;
     }
 }
