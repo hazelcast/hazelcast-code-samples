@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cluster-quorum</artifactId>
-    <name>Cluster Quorum</name>
+    <artifactId>cluster-split-brain-protection</artifactId>
+    <name>Cluster Split brain protection</name>
 
     <parent>
         <groupId>com.hazelcast.samples</groupId>
@@ -48,7 +48,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>ClusterQuorum</mainClass>
+                            <mainClass>ClusterSplitBrainProtectio</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -62,7 +62,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>ClusterQuorum</mainClass>
+                            <mainClass>ClusterSplitBrainProtection</mainClass>
                             <arguments>
                                 <argument>PROBABILISTIC</argument>
                             </arguments>
@@ -79,7 +79,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>ClusterQuorum</mainClass>
+                            <mainClass>ClusterSplitBrainProtection</mainClass>
                             <arguments>
                                 <argument>RECENTLY_ACTIVE</argument>
                             </arguments>
@@ -89,14 +89,14 @@
             </build>
         </profile>
         <profile>
-            <id>custom-quorum-function</id>
+            <id>custom-split-brain-protection-function</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>CustomClusterQuorum</mainClass>
+                            <mainClass>CustomClusterSplitBrainProtection</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>

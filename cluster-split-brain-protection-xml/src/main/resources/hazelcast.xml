@@ -1,29 +1,29 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <!--
-    The term "quorum" simply refers to the count of members in the cluster required for an operation to succeed.
+    The term "split brain protection" simply refers to the count of members in the cluster required for an operation to succeed.
     It does NOT refer to an implementation of Paxos or Raft protocols as used in many NoSQL and distributed systems.
     The mechanism it provides in Hazelcast protects the user in case the number of nodes in a cluster drops below the specified one.
     -->
 
-    <quorum enabled="true" name="twoNodeQuorum">
-        <quorum-size>2</quorum-size>
-        <quorum-type>READ_WRITE</quorum-type>
-    </quorum>
+    <split-brain-protection enabled="true" name="twoNodeSplitBrainProtection">
+        <minimum-cluster-size>2</minimum-cluster-size>
+        <protect-on>READ_WRITE</protect-on>
+    </split-brain-protection>
 
-    <queue name="queueWithQuorum">
-        <quorum-ref>twoNodeQuorum</quorum-ref>
+    <queue name="queueWithSplitBrainProtection">
+        <split-brain-protection-ref>twoNodeSplitBrainProtection</split-brain-protection-ref>
     </queue>
 
-    <lock name="lockWithQuorum">
-        <quorum-ref>twoNodeQuorum</quorum-ref>
+    <lock name="lockWithSplitBrainProtection">
+        <split-brain-protection-ref>twoNodeSplitBrainProtection</split-brain-protection-ref>
     </lock>
 
     <!--
-      Hazelcast Quorum is supported in the following data-structures:
+      Hazelcast Split brain protection is supported in the following data-structures:
          - IMap
          - TransactionalMap
          - ICache
