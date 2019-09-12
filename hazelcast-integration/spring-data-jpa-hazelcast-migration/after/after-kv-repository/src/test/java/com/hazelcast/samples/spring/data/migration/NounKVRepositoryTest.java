@@ -2,6 +2,7 @@ package com.hazelcast.samples.spring.data.migration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertThat;
 @EnableHazelcastRepositories
 @Import(value = HazelcastTestInstance.class)
 @Slf4j
+@Ignore("Need to release plugins for 4.0 first")
 public class NounKVRepositoryTest extends AbstractNounRepositoryTest {
 
     @Autowired
