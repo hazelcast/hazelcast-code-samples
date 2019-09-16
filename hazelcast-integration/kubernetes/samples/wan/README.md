@@ -70,8 +70,8 @@ Then, update the WAN Replication configuration in `publisher/hazelcast.xml` with
 
 ```xml
 <wan-replication name="wan-replication-cluster">
-    <wan-publisher group-name="dev">
-        <class-name>com.hazelcast.enterprise.wan.replication.WanBatchReplication</class-name>
+    <batch-publisher>
+       <cluster-name>dev</cluster-name>>
         <queue-full-behavior>THROW_EXCEPTION</queue-full-behavior>
         <queue-capacity>1000</queue-capacity>
         <properties>
@@ -85,7 +85,7 @@ Then, update the WAN Replication configuration in `publisher/hazelcast.xml` with
             <property name="executorThreadCount">2</property>
         </properties>
     
-    </wan-publisher>
+    </batch-publisher>
 </wan-replication>
 ```
 

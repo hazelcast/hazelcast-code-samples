@@ -1,7 +1,7 @@
 package com.hazelcast.wan.batch.cache.filter;
 
 import com.hazelcast.cache.CacheEntryView;
-import com.hazelcast.cache.wan.filter.CacheWanEventFilter;
+import com.hazelcast.cache.wan.CacheWanEventFilter;
 import com.hazelcast.enterprise.wan.WanFilterEventType;
 
 /**

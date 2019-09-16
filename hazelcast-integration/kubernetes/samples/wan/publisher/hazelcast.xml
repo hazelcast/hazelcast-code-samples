@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.12.xsd"
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <network>
@@ -10,8 +10,8 @@
     </network>
 
     <wan-replication name="wan-replication-cluster">
-        <wan-publisher group-name="dev">
-            <class-name>com.hazelcast.enterprise.wan.replication.WanBatchReplication</class-name>
+        <batch-publisher>
+            <cluster-name>dev</cluster-name>>
             <queue-full-behavior>THROW_EXCEPTION</queue-full-behavior>
             <queue-capacity>1000</queue-capacity>
             <properties>
@@ -25,7 +25,7 @@
                 <property name="executorThreadCount">2</property>
             </properties>
 
-        </wan-publisher>
+        </batch-publisher>
     </wan-replication>
 
     <map name="rep">

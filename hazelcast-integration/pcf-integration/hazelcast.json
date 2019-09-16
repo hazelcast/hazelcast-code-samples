@@ -7,7 +7,7 @@
     "updateInterval": 2
   },
   "properties": {},
-  "groupConfig": {
+  "clusterConfig": {
     "name": "dev",
     "password": "dev-pass"
   },

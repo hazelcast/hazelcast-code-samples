@@ -35,13 +35,13 @@
 
                 <!-- Base topic name to use while publishing events to Solace appliance.
                      This is an optional property. If not defined, members will publish to topics
-                     in "T/hz/[cluster-group-name]/partitionId" format.
+                     in "T/hz/[cluster-name]/partitionId" format.
                      When defined, [topic.base.name]/partitionId format will be used. -->
                 <!-- <property name="topic.base.name"></property> -->
 
                 <!-- This property is only valid if {@link #INITIAL_QUEUE_MAPPING_ENABLED} property is
                  set to true and defines the queue to be used in topic-to-queue mapping.
-                 Default queue name is "Q/hz/[cluster-group-name]. -->
+                 Default queue name is "Q/hz/[cluster-name]. -->
                 <property name="queue.name">Q/hz/clusterA</property>
 
                 <!--

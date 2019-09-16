@@ -9,7 +9,7 @@
   "properties": {
     "your-property": "Value of the property"
   },
-  "groupConfig": {
+  "clusterConfig": {
     "name": "dev",
     "password": "dev-pass"
   },
@@ -443,7 +443,7 @@
       },
       "wanPublisherConfigs": [
         {
-          "groupName": "nyc",
+          "clusterName": "nyc",
           "queueCapacity": 15000,
           "queueFullBehavior": "DISCARD_AFTER_MUTATION",
           "properties": {
