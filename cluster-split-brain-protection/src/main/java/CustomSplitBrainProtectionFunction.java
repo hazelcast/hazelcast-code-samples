@@ -2,9 +2,9 @@ import com.hazelcast.cluster.Member;
 import com.hazelcast.cluster.MemberAttributeEvent;
 import com.hazelcast.cluster.MembershipEvent;
 import com.hazelcast.cluster.MembershipListener;
+import com.hazelcast.internal.util.Clock;
 import com.hazelcast.splitbrainprotection.HeartbeatAware;
 import com.hazelcast.splitbrainprotection.SplitBrainProtectionFunction;
-import com.hazelcast.util.Clock;
 
 import java.util.Collection;
 import java.util.HashMap;

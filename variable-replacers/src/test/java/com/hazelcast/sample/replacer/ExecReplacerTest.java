@@ -16,7 +16,7 @@
 
 package com.hazelcast.sample.replacer;
 
-import com.hazelcast.util.StringUtil;
+import com.hazelcast.internal.util.StringUtil;
 import org.junit.Assume;
 import org.junit.Test;
 

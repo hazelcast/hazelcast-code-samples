@@ -29,7 +29,6 @@
         <module>atomicreference</module>
         <module>cardinalityestimator</module>
         <module>condition</module>
-        <module>countdownlatch</module>
         <module>idgenerator</module>
         <module>flake-id-generator</module>
         <module>pn-counter</module>
