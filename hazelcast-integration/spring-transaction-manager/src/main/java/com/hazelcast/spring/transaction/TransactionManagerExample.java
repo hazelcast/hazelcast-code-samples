@@ -2,8 +2,8 @@ package com.hazelcast.spring.transaction;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.internal.util.EmptyStatement;
 import com.hazelcast.map.IMap;
-import com.hazelcast.util.EmptyStatement;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 

@@ -1,6 +1,6 @@
 import com.hazelcast.cluster.Member;
 import com.hazelcast.cluster.MembershipEvent;
-import com.hazelcast.util.Clock;
+import com.hazelcast.internal.util.Clock;
 import org.junit.Test;
 
 import java.util.ArrayList;

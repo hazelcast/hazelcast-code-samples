@@ -26,9 +26,9 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
+import static com.hazelcast.internal.util.StringUtil.UTF8_CHARSET;
+import static com.hazelcast.internal.util.StringUtil.isNullOrEmpty;
 import static com.hazelcast.nio.IOUtil.closeResource;
-import static com.hazelcast.util.StringUtil.UTF8_CHARSET;
-import static com.hazelcast.util.StringUtil.isNullOrEmpty;
 
 /**
  * This class is an <b>example</b> {@link ConfigReplacer} implementation which allows to replace variables with a standard

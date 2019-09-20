@@ -1,6 +1,6 @@
+import com.hazelcast.internal.util.ExceptionUtil;
 import com.hazelcast.spi.impl.NodeEngine;
 import com.hazelcast.spi.impl.operationservice.InvocationBuilder;
-import com.hazelcast.util.ExceptionUtil;
 
 import java.util.concurrent.Future;
 

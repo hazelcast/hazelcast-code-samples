@@ -12,7 +12,7 @@ import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.Collections;
 
-import static com.hazelcast.util.EmptyStatement.ignore;
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 
 /**
  * Create a Hazelcast instance that can be one of many running on the

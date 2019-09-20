@@ -186,7 +186,7 @@
       "mapAttributeConfigs": [
         {
           "name": "currency",
-          "extractor": "com.bank.CurrencyExtractor"
+          "extractor-class-name": "com.bank.CurrencyExtractor"
         }
       ],
       "queryCacheConfigs": [

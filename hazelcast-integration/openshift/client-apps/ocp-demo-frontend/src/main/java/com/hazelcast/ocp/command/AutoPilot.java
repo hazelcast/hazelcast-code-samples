@@ -1,7 +1,7 @@
 package com.hazelcast.ocp.command;
 
+import com.hazelcast.internal.util.Preconditions;
 import com.hazelcast.map.IMap;
-import com.hazelcast.util.Preconditions;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
