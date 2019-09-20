@@ -1,6 +1,6 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
     <network>
         <join>
@@ -11,7 +11,7 @@
     <map name="people">
         <!-- custom attribute definitions -->
         <attributes>
-            <attribute extractor="com.test.customer.AgeExtractor">age</attribute>
+            <attribute extractor-class-name="com.test.customer.AgeExtractor">age</attribute>
         </attributes>
 
         <!-- index definitions using custom attributes -->
@@ -24,8 +24,8 @@
     <map name="cars">
         <!-- custom attribute definitions -->
         <attributes>
-            <attribute extractor="com.test.car.attribute.CarAttributeExtractor">attribute</attribute>
-            <attribute extractor="com.test.car.trip.CarTripDistanceExtractor">tripDistance</attribute>
+            <attribute extractor-class-name="com.test.car.attribute.CarAttributeExtractor">attribute</attribute>
+            <attribute extractor-class-name="com.test.car.trip.CarTripDistanceExtractor">tripDistance</attribute>
         </attributes>
 
         <!-- index definitions using custom attributes -->
@@ -40,7 +40,7 @@
     <map name="customers">
         <!-- custom attribute defined together with extractor -->
         <attributes>
-            <attribute extractor="com.test.customer.AgeExtractor">age</attribute>
+            <attribute extractor-class-name="com.test.customer.AgeExtractor">age</attribute>
         </attributes>
     </map>
 
