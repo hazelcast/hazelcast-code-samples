@@ -45,7 +45,7 @@ public class MyConfiguration {
         ClientConfig clientConfig = new ClientConfig();
 
         // Naming
-        clientConfig.getGroupConfig().setName(Constants.CLUSTER_NAME);
+        clientConfig.setClusterName(Constants.CLUSTER_NAME);
 
         // Discovery
         clientConfig.setProperty("hazelcast.discovery.enabled", Boolean.TRUE.toString());

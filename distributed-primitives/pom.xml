@@ -24,16 +24,9 @@
     </properties>
 
     <modules>
-        <module>atomiclong</module>
-        <module>atomiclong-functions</module>
-        <module>atomicreference</module>
         <module>cardinalityestimator</module>
-        <module>condition</module>
-        <module>idgenerator</module>
         <module>flake-id-generator</module>
         <module>pn-counter</module>
-        <module>lock</module>
-        <module>semaphore</module>
     </modules>
 
     <dependencies>

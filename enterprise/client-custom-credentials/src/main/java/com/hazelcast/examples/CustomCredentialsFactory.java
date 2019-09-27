@@ -16,7 +16,6 @@
 
 package com.hazelcast.examples;
 
-import com.hazelcast.config.GroupConfig;
 import com.hazelcast.security.Credentials;
 import com.hazelcast.security.ICredentialsFactory;
 import com.hazelcast.security.SimpleTokenCredentials;
@@ -28,7 +27,7 @@ public  class CustomCredentialsFactory implements ICredentialsFactory {
     private byte[] token;
 
     @Override
-    public void configure(GroupConfig groupConfig, Properties properties) {
+    public void configure(String clusterName, String clusterPassword, Properties properties) {
         token = properties.getProperty("token").getBytes(StandardCharsets.UTF_8);
     }
 

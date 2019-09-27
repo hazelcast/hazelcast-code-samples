@@ -3,9 +3,9 @@ import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.internal.memory.MemoryStats;
 import com.hazelcast.logging.ILogger;
 import com.hazelcast.memory.MemorySize;
-import com.hazelcast.memory.MemoryStats;
 import com.hazelcast.memory.MemoryUnit;
 
 import java.io.InputStream;

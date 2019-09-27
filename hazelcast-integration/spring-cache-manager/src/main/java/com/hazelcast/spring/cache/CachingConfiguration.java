@@ -18,8 +18,8 @@ class CachingConfiguration implements CachingConfigurer {
     @Bean
     public CacheManager cacheManager() {
         ClientConfig config = new ClientConfig();
-        config.getGroupConfig().setName("grp");
-        config.getGroupConfig().setPassword("grp-pass");
+        config.setClusterName("grp");
+        config.setClusterPassword("grp-pass");
         config.getNetworkConfig().addAddress("127.0.0.1:5701");
         HazelcastInstance client = HazelcastClient.newHazelcastClient(config);
 

@@ -40,7 +40,7 @@ public class MemberA {
 
         // setup WAN replication
         WanBatchReplicationPublisherConfig wanBatchReplicationPublisherConfig = new WanBatchReplicationPublisherConfig()
-                .setGroupName("cluster-b")
+                .setClusterName("cluster-b")
                 .setClassName("com.hazelcast.enterprise.wan.replication.WanBatchReplication")
                 // refer to the WAN endpoint config by name
                 .setEndpoint("active-wan");

@@ -16,9 +16,7 @@
 
 package configvalidation;
 
-import com.hazelcast.config.AtomicLongConfig;
 import com.hazelcast.config.Config;
-import com.hazelcast.config.InvalidConfigurationException;
 import com.hazelcast.config.MergePolicyConfig;
 import com.hazelcast.config.ReplicatedMapConfig;
 import com.hazelcast.core.Hazelcast;
@@ -38,12 +36,8 @@ public class ComposedHitsAndCreationTimeExample {
         ReplicatedMapConfig mapConfig = new ReplicatedMapConfig("default")
                 .setMergePolicyConfig(mergePolicyConfig);
 
-        AtomicLongConfig atomicLongConfig = new AtomicLongConfig("default")
-                .setMergePolicyConfig(mergePolicyConfig);
-
         Config config = new Config()
-                .addReplicatedMapConfig(mapConfig)
-                .addAtomicLongConfig(atomicLongConfig);
+                .addReplicatedMapConfig(mapConfig);
 
         try {
             HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(config);
@@ -51,11 +45,6 @@ public class ComposedHitsAndCreationTimeExample {
             // this works, since ReplicatedMap provides hits and creation time
             hazelcastInstance.getReplicatedMap("myReplicatedMap");
 
-            try {
-                hazelcastInstance.getAtomicLong("myAtomicLong");
-            } catch (InvalidConfigurationException expected) {
-                System.out.println("IAtomicLong doesn't provide the required hit statistics: " + expected.getMessage());
-            }
         } finally {
             Hazelcast.shutdownAll();
         }

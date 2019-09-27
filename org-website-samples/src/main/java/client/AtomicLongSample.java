@@ -9,7 +9,7 @@ public class AtomicLongSample {
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient();
         // Get an Atomic Counter, we'll call it "counter"
-        IAtomicLong counter = hz.getAtomicLong("counter");
+        IAtomicLong counter = hz.getCPSubsystem().getAtomicLong("counter");
         // Add and Get the "counter"
         counter.addAndGet(3);
         // value is now 3

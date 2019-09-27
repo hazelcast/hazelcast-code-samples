@@ -6,12 +6,11 @@ import com.hazelcast.collection.IQueue;
 import com.hazelcast.collection.ISet;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.IExecutorService;
-import com.hazelcast.core.IdGenerator;
 import com.hazelcast.cp.IAtomicLong;
 import com.hazelcast.cp.IAtomicReference;
 import com.hazelcast.cp.ICountDownLatch;
 import com.hazelcast.cp.ISemaphore;
-import com.hazelcast.cp.lock.ILock;
+import com.hazelcast.cp.lock.FencedLock;
 import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import com.hazelcast.map.IMap;
 import com.hazelcast.multimap.MultiMap;
@@ -45,7 +44,6 @@ public class HazelcastDataTypes {
         executeSet();
         executeList();
         executeExecutorService();
-        executeIdGenerator();
         executeFlakeIdGenerator();
         executeAtomicLong();
         executeAtomicReference();
@@ -134,14 +132,6 @@ public class HazelcastDataTypes {
         executorService.shutdown();
     }
 
-    private static void executeIdGenerator() {
-        System.out.println("### IdGenerator Execution Started... ###");
-        IdGenerator idgenerator = context.getBean("idGenerator", IdGenerator.class);
-        idgenerator.init(100L);
-        System.out.println("IdGenerator is initialized with 100.");
-        System.out.println("NewId: " + idgenerator.newId() + "\n");
-    }
-
     private static void executeFlakeIdGenerator() {
         System.out.println("### FlakeIdGenerator Execution Started... ###");
         FlakeIdGenerator flakeIdGenerator = context.getBean("flakeIdGenerator", FlakeIdGenerator.class);
@@ -193,7 +183,7 @@ public class HazelcastDataTypes {
 
     private static void executeLock() {
         System.out.println("### Lock Execution Started... ###");
-        ILock lock = context.getBean("lock", ILock.class);
+        FencedLock lock = context.getBean("lock", FencedLock.class);
         lock.lock();
         System.out.println("lock() call...");
         System.out.println("is locked by current thread: " + lock.isLockedByCurrentThread());

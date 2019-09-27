@@ -51,7 +51,7 @@ public class MyConfiguration {
         Config config = new Config();
 
         // Naming
-        config.getGroupConfig().setName(Constants.CLUSTER_NAME);
+        config.setClusterName(Constants.CLUSTER_NAME);
 
         // Discovery
         config.setProperty("hazelcast.discovery.enabled", Boolean.TRUE.toString());

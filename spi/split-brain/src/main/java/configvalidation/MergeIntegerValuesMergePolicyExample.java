@@ -16,7 +16,6 @@
 
 package configvalidation;
 
-import com.hazelcast.config.AtomicReferenceConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MergePolicyConfig;
@@ -38,15 +37,11 @@ public class MergeIntegerValuesMergePolicyExample {
         MapConfig mapConfig = new MapConfig("default")
                 .setMergePolicyConfig(mergePolicyConfig);
 
-        AtomicReferenceConfig atomicReferenceConfig = new AtomicReferenceConfig("default")
-                .setMergePolicyConfig(mergePolicyConfig);
-
         ScheduledExecutorConfig scheduledExecutorConfig = new ScheduledExecutorConfig("default")
                 .setMergePolicyConfig(mergePolicyConfig);
 
         Config config = new Config()
                 .addMapConfig(mapConfig)
-                .addAtomicReferenceConfig(atomicReferenceConfig)
                 .addScheduledExecutorConfig(scheduledExecutorConfig);
 
         try {
@@ -55,7 +50,6 @@ public class MergeIntegerValuesMergePolicyExample {
             // this works on all split-brain capable data structures, since MergingValue is provided by all of them
             // (the only exception is the CardinalityEstimator, which doesn't allow custom merge policies)
             hazelcastInstance.getMap("myMap");
-            hazelcastInstance.getAtomicReference("myAtomicReference");
             hazelcastInstance.getScheduledExecutorService("myScheduledExecutor");
         } finally {
             Hazelcast.shutdownAll();
