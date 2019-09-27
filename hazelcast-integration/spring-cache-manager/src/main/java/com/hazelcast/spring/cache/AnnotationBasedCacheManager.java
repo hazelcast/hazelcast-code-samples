@@ -9,8 +9,8 @@ public class AnnotationBasedCacheManager {
 
     public static void main(String[] args) throws Exception {
         Config config = new Config();
-        config.getGroupConfig().setName("grp");
-        config.getGroupConfig().setPassword("grp-pass");
+        config.setClusterName("grp");
+        config.setClusterPassword("grp-pass");
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().addMember("127.0.0.1:5701");

@@ -18,9 +18,9 @@ package com.hazelcast.examples.helper;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.instance.impl.HazelcastInstanceProxy;
+import com.hazelcast.internal.nio.EndpointManager;
 import com.hazelcast.internal.util.EmptyStatement;
 import com.hazelcast.internal.util.ExceptionUtil;
-import com.hazelcast.nio.EndpointManager;
 
 import java.io.Closeable;
 import java.io.IOException;

@@ -4,12 +4,11 @@ import com.hazelcast.collection.IList;
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.collection.ISet;
 import com.hazelcast.core.IExecutorService;
-import com.hazelcast.core.IdGenerator;
 import com.hazelcast.cp.IAtomicLong;
 import com.hazelcast.cp.IAtomicReference;
 import com.hazelcast.cp.ICountDownLatch;
 import com.hazelcast.cp.ISemaphore;
-import com.hazelcast.cp.lock.ILock;
+import com.hazelcast.cp.lock.FencedLock;
 import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import com.hazelcast.map.IMap;
 import com.hazelcast.multimap.MultiMap;
@@ -52,9 +51,6 @@ public class IoCDemonstration {
     private IExecutorService hzExecutorService;
 
     @Autowired
-    private IdGenerator hzIdGenerator;
-
-    @Autowired
     private FlakeIdGenerator hzFlakeIdGenerator;
 
     @Autowired
@@ -70,7 +66,7 @@ public class IoCDemonstration {
     private ISemaphore hzSemaphore;
 
     @Autowired
-    private ILock hzLock;
+    private FencedLock hzLock;
 
     @PostConstruct
     public void theProof() {
@@ -81,7 +77,6 @@ public class IoCDemonstration {
         Assert.notNull(this.hzSet);
         Assert.notNull(this.hzList);
         Assert.notNull(this.hzExecutorService);
-        Assert.notNull(this.hzIdGenerator);
         Assert.notNull(this.hzFlakeIdGenerator);
         Assert.notNull(this.hzAtomicLong);
         Assert.notNull(this.hzAtomicReference);
@@ -97,7 +92,6 @@ public class IoCDemonstration {
         System.out.println("hzSet = " + this.hzSet.getClass());
         System.out.println("hzList = " + this.hzList.getClass());
         System.out.println("hzExecutorService = " + this.hzExecutorService.getClass());
-        System.out.println("hzIdGenerator = " + this.hzIdGenerator.getClass());
         System.out.println("hzFlakeIdGenerator = " + this.hzFlakeIdGenerator.getClass());
         System.out.println("hzAtomicLong = " + this.hzAtomicLong.getClass());
         System.out.println("hzAtomicReference = " + this.hzAtomicReference.getClass());

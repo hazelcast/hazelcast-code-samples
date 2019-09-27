@@ -26,7 +26,7 @@ public class Cluster2 {
 
     public static void main(String[] args) {
         Config config = new Config();
-        config.getGroupConfig().setName("cluster2");
+        config.setClusterName("cluster2");
 
         NetworkConfig networkConfig = config.getNetworkConfig();
         JoinConfig join = networkConfig.getJoin();

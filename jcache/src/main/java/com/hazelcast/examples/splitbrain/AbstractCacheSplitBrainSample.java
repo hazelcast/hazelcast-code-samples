@@ -32,7 +32,7 @@ public abstract class AbstractCacheSplitBrainSample {
         Config config = new Config();
         config.setProperty("hazelcast.merge.first.run.delay.seconds", "5");
         config.setProperty("hazelcast.merge.next.run.delay.seconds", "3");
-        config.getGroupConfig().setName(generateRandomString(10));
+        config.setClusterName(generateRandomString(10));
         return config;
     }
 
@@ -41,7 +41,7 @@ public abstract class AbstractCacheSplitBrainSample {
             Config config = new XmlConfigBuilder("src/main/resources/hazelcast-splitbrain.xml").build();
             config.setProperty("hazelcast.merge.first.run.delay.seconds", "5");
             config.setProperty("hazelcast.merge.next.run.delay.seconds", "3");
-            config.getGroupConfig().setName(generateRandomString(10));
+            config.setClusterName(generateRandomString(10));
             return config;
         } catch (FileNotFoundException e) {
             throw ExceptionUtil.rethrow(e);

@@ -3,7 +3,6 @@ package com.hazelcast.pcf.integration;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
-import com.hazelcast.config.GroupConfig;
 import com.hazelcast.core.HazelcastInstance;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -39,8 +38,7 @@ public class Application {
         List<String> members = (List<String>) credentials.get("members");
 
         clientConfig = new ClientConfig();
-        GroupConfig groupConfig = clientConfig.getGroupConfig();
-        groupConfig.setName(groupName).setPassword(groupPassword);
+        clientConfig.setClusterName(groupName).setClusterPassword(groupPassword);
         ClientNetworkConfig networkConfig = clientConfig.getNetworkConfig();
         for (String member : members) {
             networkConfig.addAddress(member.replace('"', ' ').trim());

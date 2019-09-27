@@ -15,7 +15,6 @@
  */
 
 import com.hazelcast.config.Config;
-import com.hazelcast.config.GroupConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
@@ -32,7 +31,7 @@ public class PagingPredicateQuery {
 
     public static void main(String[] args) {
         Config config = new Config();
-        config.setGroupConfig(new GroupConfig(PagingPredicateQuery.class.getName()));
+        config.setClusterName(PagingPredicateQuery.class.getName());
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         IMap<Integer, Student> map = hz.getMap("map");
 

@@ -6,7 +6,7 @@ import com.hazelcast.config.HotRestartPersistenceConfig;
 import com.hazelcast.config.JoinConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.nio.IOUtil;
+import com.hazelcast.internal.nio.IOUtil;
 
 import javax.cache.Cache;
 import javax.cache.spi.CachingProvider;

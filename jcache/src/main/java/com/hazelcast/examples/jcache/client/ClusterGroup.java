@@ -21,16 +21,16 @@ public class ClusterGroup extends AbstractApp {
         Config config1 = new Config();
         config1.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config1.getNetworkConfig().setPort(5701);
-        config1.getGroupConfig().setName("cluster1");
-        config1.getGroupConfig().setPassword("cluster1pass");
+        config1.setClusterName("cluster1");
+        config1.setClusterPassword("cluster1pass");
 
         Hazelcast.newHazelcastInstance(config1);
 
         Config config2 = new Config();
         config2.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config2.getNetworkConfig().setPort(5702);
-        config2.getGroupConfig().setName("cluster2");
-        config2.getGroupConfig().setPassword("cluster2pass");
+        config2.setClusterName("cluster2");
+        config2.setClusterPassword("cluster2pass");
 
         Hazelcast.newHazelcastInstance(config2);
     }

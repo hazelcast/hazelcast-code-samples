@@ -8,6 +8,7 @@ import com.hazelcast.cp.CPSubsystemManagementService;
 import com.hazelcast.cp.IAtomicLong;
 
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -37,9 +38,9 @@ public class RemoveCrashedCPMembersManually {
         IAtomicLong counter = hz1.getCPSubsystem().getAtomicLong("counter");
         counter.incrementAndGet();
 
-        String hz3CPMemberUid = hz3.getCPSubsystem().getLocalCPMember().getUuid();
-        String hz4CPMemberUid = hz4.getCPSubsystem().getLocalCPMember().getUuid();
-        String hz5CPMemberUid = hz5.getCPSubsystem().getLocalCPMember().getUuid();
+        UUID hz3CPMemberUid = hz3.getCPSubsystem().getLocalCPMember().getUuid();
+        UUID hz4CPMemberUid = hz4.getCPSubsystem().getLocalCPMember().getUuid();
+        UUID hz5CPMemberUid = hz5.getCPSubsystem().getLocalCPMember().getUuid();
 
         // 2 CP members crash...
         hz3.getLifecycleService().terminate();

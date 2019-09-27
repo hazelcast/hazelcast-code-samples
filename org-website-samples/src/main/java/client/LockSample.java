@@ -10,7 +10,7 @@ public class LockSample {
         // Start the Hazelcast Client and connect to an already running Hazelcast Cluster on 127.0.0.1
         HazelcastInstance hz = HazelcastClient.newHazelcastClient();
         // Get a distributed lock called "my-distributed-lock"
-        Lock lock = hz.getLock("my-distributed-lock");
+        Lock lock = hz.getCPSubsystem().getLock("my-distributed-lock");
         // Now create a lock and execute some guarded code.
         lock.lock();
         try {

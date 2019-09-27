@@ -8,7 +8,7 @@ import com.hazelcast.monitor.NearCacheStats;
 import java.io.File;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepMillis;
-import static com.hazelcast.nio.IOUtil.deleteQuietly;
+import static com.hazelcast.internal.nio.IOUtil.deleteQuietly;
 
 public class ClientNearCacheWithPreloader extends NearCacheClientSupport {
 
