@@ -17,7 +17,7 @@ import com.hazelcast.examples.nearcache.ClientNearCacheUsageSupport;
 import com.hazelcast.internal.memory.HazelcastMemoryManager;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
-import com.hazelcast.nio.serialization.EnterpriseSerializationService;
+import com.hazelcast.internal.serialization.EnterpriseSerializationService;
 
 import javax.cache.spi.CachingProvider;
 
