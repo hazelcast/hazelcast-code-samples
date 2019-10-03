@@ -18,10 +18,6 @@
         <split-brain-protection-ref>twoNodeSplitBrainProtection</split-brain-protection-ref>
     </queue>
 
-    <lock name="lockWithSplitBrainProtection">
-        <split-brain-protection-ref>twoNodeSplitBrainProtection</split-brain-protection-ref>
-    </lock>
-
     <!--
       Hazelcast Split brain protection is supported in the following data-structures:
          - IMap
@@ -29,15 +25,10 @@
          - ICache
          - IQueue
          - TransactionalQueue
-         - ILock
          - ISet
          - TransactionalSet
          - IList
          - TransactionalList
-         - ISemaphore
-         - ICountDownLatch
-         - IAtomicLong
-         - IAtomicReference
          - ReplicatedMap
          - MultiMap
          - IExecutorService

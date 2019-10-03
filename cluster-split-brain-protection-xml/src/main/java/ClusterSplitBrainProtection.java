@@ -1,7 +1,6 @@
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.cp.lock.ILock;
 import com.hazelcast.splitbrainprotection.SplitBrainProtectionException;
 
 /**
@@ -16,15 +15,10 @@ import com.hazelcast.splitbrainprotection.SplitBrainProtectionException;
  * - ICache
  * - IQueue
  * - TransactionalQueue
- * - ILock
  * - ISet
  * - TransactionalSet
  * - IList
  * - TransactionalList
- * - ISemaphore
- * - ICountDownLatch
- * - IAtomicLong
- * - IAtomicReference
  * - ReplicatedMap
  * - MultiMap
  * - IExecutorService
@@ -39,7 +33,6 @@ public class ClusterSplitBrainProtection {
         final HazelcastInstance instance1 = Hazelcast.newHazelcastInstance();
         final HazelcastInstance instance2 = Hazelcast.newHazelcastInstance();
         final IQueue<String> queue = instance1.getQueue("queueWithSplitBrainProtection");
-        final ILock lock = instance1.getLock("lockWithSplitBrainProtection");
 
         // Split brain protection will succeed
         System.out.println("Split brain protection is satisfied, so the following methods will not throw an exception");
@@ -47,11 +40,6 @@ public class ClusterSplitBrainProtection {
 
         final String value = queue.poll();
         System.out.println("Fetched '" + value + "' from the queue");
-
-        System.out.println("Lock operates as expected");
-        lock.lock();
-        System.out.println("The lock is locked : " + lock.isLocked());
-        lock.unlock();
 
         // Split brain protection will fail
         System.out.println("Shutdown one instance, so there won't be enough members for split brain protection presence");
@@ -64,12 +52,6 @@ public class ClusterSplitBrainProtection {
             queue.add("will not succeed");
         } catch (SplitBrainProtectionException expected) {
             System.out.println("Queue operation failed with expected SplitBrainProtectionException: " + expected.getMessage());
-        }
-
-        try {
-            lock.lock();
-        } catch (SplitBrainProtectionException expected) {
-            System.out.println("Lock operation failed with expected SplitBrainProtectionException: " + expected.getMessage());
         }
 
         Hazelcast.shutdownAll();
