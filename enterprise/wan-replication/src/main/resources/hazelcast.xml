@@ -1,12 +1,12 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
-    <group>
+    <cluster>
         <name>clusterA</name>
         <password>clusterA-pass</password>
-    </group>
+    </cluster>
     <license-key>YOUR_LICENSE_KEY</license-key>
 
     <network>
@@ -20,16 +20,16 @@
     </network>
 
     <wan-replication name="AtoB">
-        <wan-publisher group-name="clusterB">
-            <class-name>com.hazelcast.enterprise.wan.replication.WanBatchReplication</class-name>
+        <batch-publisher>
+            <cluster-name>clusterB</cluster-name>
+
             <properties>
-                <property name="group.password">clusterB-pass</property>
                 <property name="endpoints">127.0.0.1:5702</property>
                 <!-- Acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE  -->
                 <property name="ack.type">ACK_ON_OPERATION_COMPLETE</property>
                 <!-- <property name="ack.type">ACK_ON_TRANSMIT</property> -->
             </properties>
-        </wan-publisher>
+        </batch-publisher>
     </wan-replication>
     <map name="default">
         <wan-replication-ref name="AtoB">

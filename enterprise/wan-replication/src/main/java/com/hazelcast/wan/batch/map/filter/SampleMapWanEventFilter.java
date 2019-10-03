@@ -2,7 +2,7 @@ package com.hazelcast.wan.batch.map.filter;
 
 import com.hazelcast.core.EntryView;
 import com.hazelcast.enterprise.wan.WanFilterEventType;
-import com.hazelcast.map.wan.filter.MapWanEventFilter;
+import com.hazelcast.map.wan.MapWanEventFilter;
 
 /**
  * Sample {@link MapWanEventFilter} implementation.

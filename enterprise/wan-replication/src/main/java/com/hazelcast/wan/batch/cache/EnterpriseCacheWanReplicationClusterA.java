@@ -3,17 +3,15 @@ package com.hazelcast.wan.batch.cache;
 import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.AbstractHazelcastCacheManager;
-import com.hazelcast.cache.merge.HigherHitsCacheMergePolicy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.WanAcknowledgeType;
-import com.hazelcast.config.WanPublisherConfig;
+import com.hazelcast.config.WanBatchReplicationPublisherConfig;
 import com.hazelcast.config.WanReplicationConfig;
 import com.hazelcast.config.WanReplicationRef;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.enterprise.wan.replication.WanBatchReplication;
-import com.hazelcast.enterprise.wan.replication.WanReplicationProperties;
+import com.hazelcast.spi.merge.HigherHitsMergePolicy;
 import com.hazelcast.wan.batch.cache.filter.SampleCacheWanEventFilter;
 
 import javax.cache.Caching;
@@ -113,7 +111,7 @@ public class EnterpriseCacheWanReplicationClusterA {
     private Config getConfigClusterA() {
         Config config = new Config();
         config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-        config.getGroupConfig().setName("clusterA").setPassword("clusterA-pass");
+        config.setClusterName("clusterA").setClusterPassword("clusterA-pass");
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5701");
         config.setInstanceName("clusterA");
@@ -122,23 +120,21 @@ public class EnterpriseCacheWanReplicationClusterA {
         WanReplicationConfig wanReplicationConfig = new WanReplicationConfig();
         wanReplicationConfig.setName("AtoB");
 
-        WanPublisherConfig publisherConfigClusterB = new WanPublisherConfig();
-        publisherConfigClusterB.setClassName(WanBatchReplication.class.getName());
-        publisherConfigClusterB.setGroupName("clusterB");
+        WanBatchReplicationPublisherConfig publisherConfigClusterB = new WanBatchReplicationPublisherConfig();
+        publisherConfigClusterB.setClusterName("clusterB");
+        publisherConfigClusterB.setEndpoint("127.0.0.1:5702");
         Map<String, Comparable> props = publisherConfigClusterB.getProperties();
-        props.put(WanReplicationProperties.ENDPOINTS.key(), "127.0.0.1:5702");
-        props.put(WanReplicationProperties.GROUP_PASSWORD.key(), "clusterB-pass");
 
         // setting acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE
-        props.put(WanReplicationProperties.ACK_TYPE.key(), WanAcknowledgeType.ACK_ON_OPERATION_COMPLETE.name());
-        wanReplicationConfig.addWanPublisherConfig(publisherConfigClusterB);
+        publisherConfigClusterB.setAcknowledgeType(WanAcknowledgeType.ACK_ON_OPERATION_COMPLETE);
+        wanReplicationConfig.addWanBatchReplicationPublisherConfig(publisherConfigClusterB);
 
         config.addWanReplicationConfig(wanReplicationConfig);
 
         WanReplicationRef wanReplicationRef = new WanReplicationRef();
         wanReplicationRef.setName("AtoB");
         config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-        wanReplicationRef.setMergePolicy(HigherHitsCacheMergePolicy.class.getName());
+        wanReplicationRef.setMergePolicy(HigherHitsMergePolicy.class.getName());
         wanReplicationRef.addFilter(SampleCacheWanEventFilter.class.getName());
         config.getCacheConfig("default").setWanReplicationRef(wanReplicationRef);
 

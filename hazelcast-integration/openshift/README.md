@@ -394,7 +394,7 @@ Then, use the External IP in `endpoints` in the WAN Configuration. For example,
 
 ```
 <wan-replication name="wan-replication-cluster">
-  <wan-publisher group-name="dev">
+  <wan-publisher cluster-name="dev">
       <class-name>com.hazelcast.enterprise.wan.replication.WanBatchReplication</class-name>
       <queue-full-behavior>THROW_EXCEPTION</queue-full-behavior>
       <queue-capacity>1000</queue-capacity>

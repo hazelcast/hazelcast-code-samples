@@ -2,7 +2,7 @@ package com.hazelcast.wan.batch.map;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 
 import java.util.Random;
 import java.util.Scanner;
