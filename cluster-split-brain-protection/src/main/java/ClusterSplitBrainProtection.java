@@ -18,15 +18,10 @@ import com.hazelcast.splitbrainprotection.SplitBrainProtectionException;
  * - ICache
  * - IQueue
  * - TransactionalQueue
- * - ILock
  * - ISet
  * - TransactionalSet
  * - IList
  * - TransactionalList
- * - ISemaphore
- * - ICountDownLatch
- * - IAtomicLong
- * - IAtomicReference
  * - ReplicatedMap
  * - MultiMap
  * - IExecutorService

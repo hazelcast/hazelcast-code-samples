@@ -3,7 +3,7 @@ import com.hazelcast.instance.impl.Node;
 import com.hazelcast.internal.memory.DefaultMemoryStats;
 import com.hazelcast.internal.memory.HazelcastMemoryManager;
 import com.hazelcast.internal.memory.MemoryStats;
-import com.hazelcast.nio.serialization.EnterpriseSerializationService;
+import com.hazelcast.internal.serialization.EnterpriseSerializationService;
 
 import static com.hazelcast.examples.helper.HazelcastUtils.getNode;
 

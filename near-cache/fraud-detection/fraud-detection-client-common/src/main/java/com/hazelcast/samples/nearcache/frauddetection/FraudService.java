@@ -1,7 +1,6 @@
 package com.hazelcast.samples.nearcache.frauddetection;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.cp.lock.ILock;
 import com.hazelcast.map.IMap;
 import com.hazelcast.projection.Projection;
 import com.hazelcast.projection.Projections;
@@ -18,6 +17,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 
 import static java.lang.Long.parseLong;
 import static java.lang.String.format;
@@ -88,8 +88,8 @@ public class FraudService {
         IMap<Integer, User> usersMap = hazelcastInstance.getMap(MyConstants.MAP_NAME_USERS);
 
         // Ensure only one clients run at a time as they interfere on usersMap
-        ILock iLock = hazelcastInstance.getLock("client");
-        if (!iLock.tryLock(1, TimeUnit.SECONDS)) {
+        Lock lock = hazelcastInstance.getCPSubsystem().getLock("client");
+        if (!lock.tryLock(1, TimeUnit.SECONDS)) {
             System.err.printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %n");
             System.err.printf("!!!           E R R O R           !!! %n");
             System.err.printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %n");
@@ -142,7 +142,7 @@ public class FraudService {
             } catch (Exception e) {
                 log.error("test()", e);
             } finally {
-                iLock.unlock();
+                lock.unlock();
             }
         }
     }
