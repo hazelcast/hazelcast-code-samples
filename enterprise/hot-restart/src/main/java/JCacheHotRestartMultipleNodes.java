@@ -40,11 +40,7 @@ public class JCacheHotRestartMultipleNodes {
         // Offloading to a thread.
         // Because all instances should start in parallel
         // to be able to do hot-restart cluster verification
-        new Thread() {
-            public void run() {
-                newHazelcastInstance(5701);
-            }
-        }.start();
+        new Thread(() -> newHazelcastInstance(5701)).start();
 
         instance2 = newHazelcastInstance(5702);
         instance2.getCluster().changeClusterState(ClusterState.ACTIVE);
@@ -78,7 +74,7 @@ public class JCacheHotRestartMultipleNodes {
         CachingProvider cachingProvider = HazelcastServerCachingProvider
             .createCachingProvider(instance);
 
-        CacheConfig<Integer, String> cacheConfig = new CacheConfig<Integer, String>("cache");
+        CacheConfig<Integer, String> cacheConfig = new CacheConfig<>("cache");
         cacheConfig.getHotRestartConfig().setEnabled(true);
 
         return cachingProvider.getCacheManager().createCache("cache", cacheConfig);
