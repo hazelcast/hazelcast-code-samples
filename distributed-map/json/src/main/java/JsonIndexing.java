@@ -1,5 +1,6 @@
 import com.hazelcast.config.Config;
-import com.hazelcast.config.MapIndexConfig;
+import com.hazelcast.config.IndexConfig;
+import com.hazelcast.config.IndexType;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastJsonValue;
@@ -13,7 +14,7 @@ public class JsonIndexing {
     public static void main(String[] args) {
 
         Config config = new Config();
-        config.getMapConfig("mapWithIndex").addMapIndexConfig(new MapIndexConfig("id", false));
+        config.getMapConfig("mapWithIndex").addIndexConfig(new IndexConfig(IndexType.HASH, "id"));
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         IMap<Integer, HazelcastJsonValue> mapWithoutIndex = instance.getMap("mapWithoutIndex");
         IMap<Integer, HazelcastJsonValue> mapWithIndex = instance.getMap("mapWithIndex");

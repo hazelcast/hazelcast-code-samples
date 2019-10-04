@@ -18,6 +18,7 @@ package com.hazelcast.demo;
 
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.IndexType;
 import com.hazelcast.core.EntryAdapter;
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.EntryListener;
@@ -558,7 +559,7 @@ public final class AllTest {
         addOperation(operations, new Runnable() {
             public void run() {
                 IMap map = hazelcast.getMap("myMap");
-                map.addIndex("year", true);
+                map.addIndex(IndexType.SORTED, "year");
             }
         }, 1);
         addOperation(operations, new Runnable() {

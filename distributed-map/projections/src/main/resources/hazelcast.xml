@@ -1,6 +1,6 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <network>
@@ -12,7 +12,11 @@
     <map name="cities">
         <time-to-live-seconds>4</time-to-live-seconds>
         <indexes>
-            <index>name</index>
+            <index>
+                <attributes>
+                    <attribute>name</attribute>
+                </attributes>
+            </index>
         </indexes>
         <backup-count>1</backup-count>
         <async-backup-count>1</async-backup-count>

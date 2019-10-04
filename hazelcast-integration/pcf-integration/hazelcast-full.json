@@ -173,20 +173,20 @@
           "className": "com.your-package.YourPartitionLostListener"
         }
       ],
-      "mapIndexConfigs": [
+      "indexConfigs": [
         {
-          "attribute": "name",
-          "ordered": false
+          "type": "HASH",
+          "attributes": [ "name" ]
         },
         {
-          "attribute": "age",
-          "ordered": true
+          "type": "SORTED",
+          "attributes": [ "age" ]
         }
       ],
-      "mapAttributeConfigs": [
+      "attributeConfigs": [
         {
           "name": "currency",
-          "extractor-class-name": "com.bank.CurrencyExtractor"
+          "extractorClassName": "com.bank.CurrencyExtractor"
         }
       ],
       "queryCacheConfigs": [
@@ -217,8 +217,8 @@
           ],
           "indexConfigs": [
             {
-              "attribute": "...",
-              "ordered": true
+              "type": "SORTED",
+              "attributes": ["name"]
             }
           ]
         }

@@ -17,7 +17,11 @@
         <!-- index definitions using custom attributes -->
         <indexes>
             <!-- custom attribute without an extraction parameter -->
-            <index ordered="true">age</index>
+            <index>
+                <attributes>
+                    <attribute>age</attribute>
+                </attributes>
+            </index>
         </indexes>
     </map>
 
@@ -31,9 +35,17 @@
         <!-- index definitions using custom attributes -->
         <indexes>
             <!-- custom attribute using an extraction parameter -->
-            <index ordered="true">attribute[name]</index>
+            <index>
+                <attributes>
+                    <attribute>attribute[name]</attribute>
+                </attributes>
+            </index>
             <!-- custom attribute without an extraction parameter -->
-            <index ordered="true">tripDistance</index>
+            <index>
+                <attributes>
+                    <attribute>tripDistance</attribute>
+                </attributes>
+            </index>
         </indexes>
     </map>
 

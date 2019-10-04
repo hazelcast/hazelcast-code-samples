@@ -1,6 +1,6 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
     <network>
         <join>
@@ -10,14 +10,27 @@
 
     <map name="personsWithIndex">
         <indexes>
-            <index ordered="false">name.forename</index>
-            <index ordered="false">name.surname</index>
+            <index type="HASH">
+                <attributes>
+                    <attribute>name.forename</attribute>
+                </attributes>
+            </index>
+            <index type="HASH">
+                <attributes>
+                    <attribute>name.surname</attribute>
+                </attributes>
+            </index>
         </indexes>
     </map>
 
     <map name="personsWithCompositeIndex">
         <indexes>
-            <index ordered="false">name.forename, name.surname</index>
+            <index type="HASH">
+                <attributes>
+                    <attribute>name.forename</attribute>
+                    <attribute>name.surname</attribute>
+                </attributes>
+            </index>
         </indexes>
     </map>
 
