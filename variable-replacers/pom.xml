@@ -97,7 +97,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>com.hazelcast.core.server.StartServer</mainClass>
+                            <mainClass>com.hazelcast.core.server.HazelcastMemberStarter</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>hazelcast.config</key>
@@ -122,7 +122,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>com.hazelcast.core.server.StartServer</mainClass>
+                            <mainClass>com.hazelcast.core.server.HazelcastMemberStarter</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>hazelcast.config</key>
@@ -147,7 +147,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>com.hazelcast.core.server.StartServer</mainClass>
+                            <mainClass>com.hazelcast.core.server.HazelcastMemberStarter</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>hazelcast.config</key>
@@ -172,7 +172,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>com.hazelcast.core.server.StartServer</mainClass>
+                            <mainClass>com.hazelcast.core.server.HazelcastMemberStarter</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>hazelcast.config</key>
