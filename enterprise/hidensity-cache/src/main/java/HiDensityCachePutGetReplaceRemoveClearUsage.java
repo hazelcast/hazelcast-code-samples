@@ -1,7 +1,5 @@
 import com.hazelcast.cache.ICache;
 
-import java.util.concurrent.Future;
-
 /**
  * HiDensity cache put/get/remove usage example.
  *
@@ -85,8 +83,10 @@ public class HiDensityCachePutGetReplaceRemoveClearUsage extends HiDensityCacheU
             System.out.println("Size of cache: " + cache.size());
 
             cache.put("key1", "value1");
-            Future future = cache.getAsync("key1");
-            System.out.println("Get value as async with key \"key1\": " + future.get());
+            cache.getAsync("key1")
+                 .thenAcceptAsync(v -> System.out.println("Get value as async with key \"key1\": " + v))
+                 // ensure the consumer in thenAcceptAsync is done before proceeding further
+                 .toCompletableFuture().join();
 
             cache.putAsync("key1", "value2");
             System.out.println("Put value \"value2\" as async with key \"key1\"");
@@ -94,29 +94,46 @@ public class HiDensityCachePutGetReplaceRemoveClearUsage extends HiDensityCacheU
             while (true) {
                 Object value = cache.get("key1");
                 if (value.equals("value2")) {
-                    System.out.println("Get value with key \"key1\": " + future.get());
+                    System.out.println("Put \"value2\" completed");
                     break;
                 }
                 Thread.sleep(100);
             }
 
-            future = cache.getAndPutAsync("key1", "value3");
-            System.out.println("Put value \"value3\" as async with key \"key1\" and get its old value: " + future.get());
 
-            future = cache.removeAsync("key2");
-            System.out.println("Remove as async from cache with key \"key2\": " + future.get());
+            cache.getAndPutAsync("key1", "value3")
+                 .thenAcceptAsync(v -> {
+                     System.out.println("Put value \"value3\" as async with key \"key1\" and get its old value: " + v);
+                 })
+                 .toCompletableFuture().join();
 
-            future = cache.removeAsync("key1");
-            System.out.println("Remove as async from cache with key \"key1\": " + future.get());
+
+            cache.removeAsync("key2")
+                 .thenAcceptAsync(v -> {
+                     System.out.println("Remove as async from cache with key \"key2\": " + v);
+                 })
+                 .toCompletableFuture().join();
+
+            cache.removeAsync("key1")
+                 .thenAcceptAsync(v -> {
+                     System.out.println("Remove as async from cache with key \"key1\": " + v);
+                 })
+                 .toCompletableFuture().join();
 
             cache.put("key1", "value4");
             System.out.println("Put value \"value4\" with key \"key1\"");
 
-            future = cache.getAndRemoveAsync("key2");
-            System.out.println("Remove as async with key \"key1\" and get its old value: " + future.get());
+            cache.getAndRemoveAsync("key2")
+                 .thenAcceptAsync(v -> {
+                     System.out.println("Remove as async with key \"key1\" and get its old value: " + v);
+                 })
+                 .toCompletableFuture().join();
 
-            future = cache.getAndRemoveAsync("key1");
-            System.out.println("Remove as async with key \"key1\" and get its old value: " + future.get());
+            cache.getAndRemoveAsync("key1")
+                 .thenAcceptAsync(v -> {
+                     System.out.println("Remove as async with key \"key1\" and get its old value: " + v);
+                 })
+                 .toCompletableFuture().join();
 
             cache.destroy();
         } catch (Throwable t) {
