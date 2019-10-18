@@ -1,32 +1,45 @@
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <license-key>PUT_YOUR_HAZELCAST_LICENSE_HERE</license-key>
 
     <security enabled="true">
-        <member-credentials-factory class-name="com.hazelcast.examples.CustomCredentialsFactory">
-            <properties>
-                <property name="token">aTokenForMembers</property>
-            </properties>
-        </member-credentials-factory>
-        <member-login-modules>
-            <login-module class-name="com.hazelcast.examples.CustomLoginModule" usage="REQUIRED">
-                <properties>
-                    <property name="token">aTokenForMembers</property>
-                    <property name="name">aNameForMembers</property>
-                </properties>
-            </login-module>
-        </member-login-modules>
-
-        <client-login-modules>
-            <login-module class-name="com.hazelcast.examples.CustomLoginModule">
-                <properties>
-                    <property name="token">aTokenForClients</property>
-                    <property name="name">aNameForClients</property>
-                </properties>
-            </login-module>
-        </client-login-modules>
+        <realms>
+            <realm name="memberRealm">
+                <authentication>
+                    <jaas>
+                        <login-module class-name="com.hazelcast.examples.CustomLoginModule" usage="REQUIRED">
+                            <properties>
+                                <property name="token">aTokenForMembers</property>
+                                <property name="name">aNameForMembers</property>
+                            </properties>
+                        </login-module>
+                    </jaas>
+                </authentication>
+                <identity>
+                    <credentials-factory class-name="com.hazelcast.examples.CustomCredentialsFactory">
+                        <properties>
+                            <property name="token">aTokenForMembers</property>
+                        </properties>
+                    </credentials-factory>
+                </identity>
+            </realm>
+            <realm name="clientRealm">
+                <authentication>
+                    <jaas>
+                        <login-module class-name="com.hazelcast.examples.CustomLoginModule">
+                            <properties>
+                                <property name="token">aTokenForClients</property>
+                                <property name="name">aNameForClients</property>
+                            </properties>
+                        </login-module>
+                    </jaas>
+                </authentication>
+            </realm>
+        </realms>
+        <client-authentication realm="clientRealm"/>
+        <member-authentication realm="memberRealm"/>
     </security>
 </hazelcast>

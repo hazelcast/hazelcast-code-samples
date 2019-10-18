@@ -38,7 +38,6 @@ public class Application {
         List<String> members = (List<String>) credentials.get("members");
 
         clientConfig = new ClientConfig();
-        clientConfig.setClusterName(clusterName).setClusterPassword(clusterPassword);
         ClientNetworkConfig networkConfig = clientConfig.getNetworkConfig();
         for (String member : members) {
             networkConfig.addAddress(member.replace('"', ' ').trim());

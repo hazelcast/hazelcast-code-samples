@@ -23,11 +23,13 @@ import com.hazelcast.security.SimpleTokenCredentials;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
+import javax.security.auth.callback.CallbackHandler;
+
 public  class CustomCredentialsFactory implements ICredentialsFactory {
     private byte[] token;
 
     @Override
-    public void configure(String clusterName, String clusterPassword, Properties properties) {
+    public void init(Properties properties) {
         token = properties.getProperty("token").getBytes(StandardCharsets.UTF_8);
     }
 
@@ -38,5 +40,9 @@ public  class CustomCredentialsFactory implements ICredentialsFactory {
 
     @Override
     public void destroy() {
+    }
+
+    @Override
+    public void configure(CallbackHandler arg0) {
     }
 }

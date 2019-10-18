@@ -64,12 +64,8 @@ public class Application {
         List hazelcast = (List) json.get("hazelcast");
         Map map = (Map) hazelcast.get(0);
         Map credentials = (Map) map.get("credentials");
-        String clusterName = (String) credentials.get("cluster_name");
-        String clusterPassword = (String) credentials.get("cluster_pass");
         List<String> members = (List<String>) credentials.get("members");
-
         clientConfig = new ClientConfig();
-        clientConfig.setClusterName(clusterName).setClusterPassword(clusterPassword);
         ClientNetworkConfig networkConfig = clientConfig.getNetworkConfig();
         for (String member : members) {
             networkConfig.addAddress(member.replace('"', ' ').trim());
