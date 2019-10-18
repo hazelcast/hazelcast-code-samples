@@ -61,7 +61,7 @@ public class EnterpriseMapWanReplicationClusterB {
     private static Config getConfigClusterB() {
         Config config = new Config();
         config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-        config.setClusterName("clusterB").setClusterPassword("clusterB-pass");
+        config.setClusterName("clusterB");
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5702");
         return config;

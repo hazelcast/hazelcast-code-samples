@@ -44,9 +44,6 @@ public class MyConfiguration {
     public ClientConfig clientConfig(DiscoveryServiceProvider discoveryServiceProvider) {
         ClientConfig clientConfig = new ClientConfig();
 
-        // Naming
-        clientConfig.setClusterName(Constants.CLUSTER_NAME);
-
         // Discovery
         clientConfig.setProperty("hazelcast.discovery.enabled", Boolean.TRUE.toString());
         clientConfig.getNetworkConfig().getDiscoveryConfig().setDiscoveryServiceProvider(discoveryServiceProvider);

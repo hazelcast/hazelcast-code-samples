@@ -32,13 +32,14 @@ public class ForceReleaseFencedByClosingSession {
         hz1.getLifecycleService().terminate();
 
         CPSessionManagementService sessionManagementService = hz2.getCPSubsystem().getCPSessionManagementService();
-        Collection<CPSession> sessions = sessionManagementService.getAllSessions(CPGroup.DEFAULT_GROUP_NAME).get();
+        Collection<CPSession> sessions = sessionManagementService.getAllSessions(CPGroup.DEFAULT_GROUP_NAME)
+                .toCompletableFuture().get();
         // There is only one active session and it belongs to the first instance
         assert sessions.size() == 1;
         CPSession session = sessions.iterator().next();
         // We know that the lock holding instance is crashed.
         // We are closing its session forcefully, hence releasing the lock...
-        sessionManagementService.forceCloseSession(CPGroup.DEFAULT_GROUP_NAME, session.id()).get();
+        sessionManagementService.forceCloseSession(CPGroup.DEFAULT_GROUP_NAME, session.id()).toCompletableFuture().get();
 
         FencedLock lock = hz2.getCPSubsystem().getLock("my-lock");
         assert !lock.isLocked();

@@ -37,7 +37,8 @@ public class StartCPSubsystem2 {
         }
 
         CPSubsystemManagementService cpSubsystemManagementService = hz1.getCPSubsystem().getCPSubsystemManagementService();
-        CPGroup metadataGroup = cpSubsystemManagementService.getCPGroup(CPGroup.METADATA_CP_GROUP_NAME).get();
+        CPGroup metadataGroup = cpSubsystemManagementService.getCPGroup(CPGroup.METADATA_CP_GROUP_NAME)
+                .toCompletableFuture().get();
         assert metadataGroup.members().size() == GROUP_SIZE;
         System.out.println("Metadata CP group has the following CP members: " + metadataGroup.members());
 
@@ -45,7 +46,7 @@ public class StartCPSubsystem2 {
 
         hz1.getCPSubsystem().getAtomicLong("counter1").incrementAndGet();
 
-        CPGroup defaultGroup = cpSubsystemManagementService.getCPGroup(CPGroup.DEFAULT_GROUP_NAME).get();
+        CPGroup defaultGroup = cpSubsystemManagementService.getCPGroup(CPGroup.DEFAULT_GROUP_NAME).toCompletableFuture().get();
         assert defaultGroup.members().size() == GROUP_SIZE;
         System.out.println("Default CP group has the following CP members: " + defaultGroup.members());
 
@@ -54,7 +55,7 @@ public class StartCPSubsystem2 {
         String customCPGroupName = "custom";
         hz1.getCPSubsystem().getAtomicLong("counter2@" + customCPGroupName).incrementAndGet();
 
-        CPGroup customGroup = cpSubsystemManagementService.getCPGroup(customCPGroupName).get();
+        CPGroup customGroup = cpSubsystemManagementService.getCPGroup(customCPGroupName).toCompletableFuture().get();
         assert customGroup.members().size() == GROUP_SIZE;
         System.out.println(customCPGroupName + " CP group has the following CP members: " + customGroup.members());
 

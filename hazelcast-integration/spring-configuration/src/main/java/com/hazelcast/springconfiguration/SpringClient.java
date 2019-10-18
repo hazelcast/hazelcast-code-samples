@@ -13,7 +13,6 @@ public class SpringClient {
     public static void main(String[] args) {
         Config config = new Config();
         config.setClusterName("name");
-        config.setClusterPassword("pwd");
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().addMember("127.0.0.1:5701");
