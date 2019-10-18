@@ -19,8 +19,7 @@ public class ClientExponentialBackoff {
                 .setInitialBackoffMillis(1000)
                 .setMaxBackoffMillis(60000)
                 .setMultiplier(2)
-                .setJitter(0.2)
-                .setEnabled(true);
+                .setJitter(0.2);
 
         HazelcastClient.newHazelcastClient(clientConfig);
 

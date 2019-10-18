@@ -27,11 +27,11 @@ public class ProgrammaticFailoverExample {
 
     public static void main(String[] args) {
         ClientConfig clientConfigForCluster1 = new ClientConfig();
-        clientConfigForCluster1.setClusterName("cluster1");
+        clientConfigForCluster1.setClientName("cluster1");
         clientConfigForCluster1.getNetworkConfig().addAddress("127.0.0.1:5701").addAddress("127.0.0.1:5702");
 
         ClientConfig clientConfigForCluster2 = new ClientConfig();
-        clientConfigForCluster2.setClusterName("cluster2");
+        clientConfigForCluster2.setClientName("cluster2");
         clientConfigForCluster2.getNetworkConfig().addAddress("127.0.0.1:5703").addAddress("127.0.0.1:5704");
 
         /*

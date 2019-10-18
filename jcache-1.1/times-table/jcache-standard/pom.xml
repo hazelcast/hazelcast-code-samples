@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-client</artifactId>
+            <artifactId>hazelcast</artifactId>
         </dependency>
 
         <dependency>

@@ -48,10 +48,11 @@ public class RemoveCrashedCPMembersManually {
 
         // Crashed CP members are removed.
         CPSubsystemManagementService cpSubsystemManagementService = hz1.getCPSubsystem().getCPSubsystemManagementService();
-        cpSubsystemManagementService.removeCPMember(hz3CPMemberUid).get();
-        cpSubsystemManagementService.removeCPMember(hz4CPMemberUid).get();
+        cpSubsystemManagementService.removeCPMember(hz3CPMemberUid).toCompletableFuture().get();
+        cpSubsystemManagementService.removeCPMember(hz4CPMemberUid).toCompletableFuture().get();
 
-        CPGroup metadataGroup = cpSubsystemManagementService.getCPGroup(CPGroup.METADATA_CP_GROUP_NAME).get();
+        CPGroup metadataGroup = cpSubsystemManagementService.getCPGroup(CPGroup.METADATA_CP_GROUP_NAME)
+                .toCompletableFuture().get();
         assert metadataGroup.members().size() == CP_MEMBER_COUNT - 2;
         System.out.println("Metadata CP group has the following CP members: " + metadataGroup.members());
 
@@ -61,18 +62,18 @@ public class RemoveCrashedCPMembersManually {
         System.out.println("THe CP Subsystem is still available with 2 CP members running.");
         counter.incrementAndGet();
 
-        cpSubsystemManagementService.removeCPMember(hz5CPMemberUid).get();
+        cpSubsystemManagementService.removeCPMember(hz5CPMemberUid).toCompletableFuture().get();
 
         // Let's start new members and promote them to the CP role
         HazelcastInstance hz6 = Hazelcast.newHazelcastInstance(config);
         HazelcastInstance hz7 = Hazelcast.newHazelcastInstance(config);
         HazelcastInstance hz8 = Hazelcast.newHazelcastInstance(config);
-        hz6.getCPSubsystem().getCPSubsystemManagementService().promoteToCPMember().get();
-        hz7.getCPSubsystem().getCPSubsystemManagementService().promoteToCPMember().get();
-        hz8.getCPSubsystem().getCPSubsystemManagementService().promoteToCPMember().get();
+        hz6.getCPSubsystem().getCPSubsystemManagementService().promoteToCPMember().toCompletableFuture().get();
+        hz7.getCPSubsystem().getCPSubsystemManagementService().promoteToCPMember().toCompletableFuture().get();
+        hz8.getCPSubsystem().getCPSubsystemManagementService().promoteToCPMember().toCompletableFuture().get();
 
         // Now all CP groups are recovered back to 5 CP members
-        metadataGroup = cpSubsystemManagementService.getCPGroup(CPGroup.METADATA_CP_GROUP_NAME).get();
+        metadataGroup = cpSubsystemManagementService.getCPGroup(CPGroup.METADATA_CP_GROUP_NAME).toCompletableFuture().get();
         assert metadataGroup.members().size() == CP_MEMBER_COUNT;
         System.out.println("Metadata CP group has the following CP members: " + metadataGroup.members());
 
