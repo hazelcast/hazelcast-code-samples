@@ -39,7 +39,7 @@ public class RemoveCrashedCPMemberAutomatically {
 
         // We add a new CP member to the cluster.
         HazelcastInstance hz6 = Hazelcast.newHazelcastInstance(config);
-        hz6.getCPSubsystem().getCPSubsystemManagementService().promoteToCPMember().get();
+        hz6.getCPSubsystem().getCPSubsystemManagementService().promoteToCPMember().toCompletableFuture().get();
 
         // A CP member crashes...
         hz5.getLifecycleService().terminate();
@@ -48,7 +48,8 @@ public class RemoveCrashedCPMemberAutomatically {
 
         // The crashed CP member will be automatically removed and substituted by the new CP member.
         while (true) {
-            CPGroup metadataGroup = cpSubsystemManagementService.getCPGroup(CPGroup.METADATA_CP_GROUP_NAME).get();
+            CPGroup metadataGroup = cpSubsystemManagementService.getCPGroup(CPGroup.METADATA_CP_GROUP_NAME)
+                    .toCompletableFuture().get();
             if (metadataGroup.members().size() == CP_MEMBER_COUNT
                     && metadataGroup.members().contains(hz6.getCPSubsystem().getLocalCPMember())) {
                 System.out.println("The promoted member has been added to the Metadata CP group member list: "

@@ -22,12 +22,12 @@ public class Client {
 
         awsConfig.setEnabled(true);
         awsConfig.setUsePublicIp(true);
-        awsConfig.setAccessKey("-- YOUR AMAZON ACCESS KEY --");
-        awsConfig.setSecretKey("-- YOUR AMAZON SECRET KEY --");
-        awsConfig.setRegion("us-east-1");
-        awsConfig.setSecurityGroupName("david-us-east-1-sg");
-        awsConfig.setTagKey("hazelcast_service");
-        awsConfig.setTagValue("true");
+        awsConfig.setProperty("access-key", "-- YOUR AMAZON ACCESS KEY --");
+        awsConfig.setProperty("secret-key", "-- YOUR AMAZON SECRET KEY --");
+        awsConfig.setProperty("region", "us-east-1");
+        awsConfig.setProperty("security-group-name", "david-us-east-1-sg");
+        awsConfig.setProperty("tag-key", "hazelcast_service");
+        awsConfig.setProperty("tag-value", "true");
 
         clientConfig.setNetworkConfig(clientNetworkConfig.setAwsConfig(awsConfig));
 

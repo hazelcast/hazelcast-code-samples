@@ -44,7 +44,7 @@ public class RestartCPSubsystem {
         HazelcastInstance hz5 = Hazelcast.newHazelcastInstance(config);
 
         CPSubsystemManagementService cpSubsystemManagementService = hz1.getCPSubsystem().getCPSubsystemManagementService();
-        cpSubsystemManagementService.restart().get();
+        cpSubsystemManagementService.reset().toCompletableFuture().get();
 
         for (HazelcastInstance hz : Arrays.asList(hz4, hz5)) {
             while (hz.getCPSubsystem().getLocalCPMember() == null) {
@@ -56,7 +56,7 @@ public class RestartCPSubsystem {
         }
 
         // The CP subsystem is formed by the new cluster members
-        Collection<CPMember> cpMembers = cpSubsystemManagementService.getCPMembers().get();
+        Collection<CPMember> cpMembers = cpSubsystemManagementService.getCPMembers().toCompletableFuture().get();
         assert cpMembers.size() == 3;
         assert cpMembers.contains(hz1.getCPSubsystem().getLocalCPMember());
         assert cpMembers.contains(hz4.getCPSubsystem().getLocalCPMember());

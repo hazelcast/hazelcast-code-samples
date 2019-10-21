@@ -31,14 +31,15 @@ public class FailWhenLockOwnershipIsLost {
         lock.lock();
 
         CPSessionManagementService sessionManagementService = hz2.getCPSubsystem().getCPSessionManagementService();
-        Collection<CPSession> sessions = sessionManagementService.getAllSessions(CPGroup.DEFAULT_GROUP_NAME).get();
+        Collection<CPSession> sessions = sessionManagementService.getAllSessions(CPGroup.DEFAULT_GROUP_NAME)
+                .toCompletableFuture().get();
 
         assert sessions.size() == 1;
         CPSession session = sessions.iterator().next();
         // There is only one active session and it belongs to the first instance.
         // We are closing its session forcefully to mimic that
         // its session was closed because of missing session heartbeats...
-        sessionManagementService.forceCloseSession(CPGroup.DEFAULT_GROUP_NAME, session.id()).get();
+        sessionManagementService.forceCloseSession(CPGroup.DEFAULT_GROUP_NAME, session.id()).toCompletableFuture().get();
 
         try {
             // The new lock acquire call of the lock holder

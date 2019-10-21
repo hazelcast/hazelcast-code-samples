@@ -20,7 +20,7 @@ public class Writer {
         while (true) {
             long sleepMs = 100;
             for (; ; ) {
-                long result = rb.addAsync(i, OverflowPolicy.FAIL).get();
+                long result = rb.addAsync(i, OverflowPolicy.FAIL).toCompletableFuture().get();
                 if (result != -1) {
                     break;
                 }

@@ -18,14 +18,8 @@
     </parent>
 
     <modules>
-        <module>backups</module>
-        <module>container</module>
         <module>discovery</module>
-        <module>getting-started</module>
-        <module>notification</module>
-        <module>partition-migration</module>
         <module>priority-queue</module>
-        <module>proxy</module>
         <module>split-brain</module>
         <module>tenant-control</module>
     </modules>
