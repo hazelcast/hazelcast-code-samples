@@ -16,4 +16,4 @@ You can find latest configuration options here: http://docs.hazelcast.org/docs/l
 
 <h1>Deployment</h1>
 Deploy `jclouds-0.1-SNAPSHOT-jar-with-dependencies.jar` to your cloud machines.<br />
-Run `java -cp jclouds-0.1-SNAPSHOT-jar-with-dependencies.jar StartServer` on your deployed machines.<br />
+Run `java -cp jclouds-0.1-SNAPSHOT-jar-with-dependencies.jar HazelcastMemberStarter on your deployed machines.<br />
