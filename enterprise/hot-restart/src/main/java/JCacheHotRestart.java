@@ -59,7 +59,7 @@ public class JCacheHotRestart {
         CachingProvider cachingProvider = HazelcastServerCachingProvider
             .createCachingProvider(instance);
 
-        CacheConfig<Integer, String> cacheConfig = new CacheConfig<Integer, String>("cache");
+        CacheConfig<Integer, String> cacheConfig = new CacheConfig<>("cache");
         cacheConfig.getHotRestartConfig().setEnabled(true);
 
         return cachingProvider.getCacheManager().createCache("cache", cacheConfig);
