@@ -2,7 +2,7 @@ package com.hazelcast.samples.nearcache.frauddetection;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
-import com.hazelcast.monitor.NearCacheStats;
+import com.hazelcast.nearcache.NearCacheStats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;

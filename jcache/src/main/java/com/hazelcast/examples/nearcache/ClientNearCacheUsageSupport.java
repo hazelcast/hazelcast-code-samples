@@ -17,7 +17,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.examples.Article;
 import com.hazelcast.internal.nearcache.NearCache;
-import com.hazelcast.monitor.NearCacheStats;
+import com.hazelcast.nearcache.NearCacheStats;
 
 import javax.cache.spi.CachingProvider;
 import java.util.LinkedList;

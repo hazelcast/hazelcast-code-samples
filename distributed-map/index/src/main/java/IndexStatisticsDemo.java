@@ -1,7 +1,7 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
-import com.hazelcast.monitor.LocalIndexStats;
+import com.hazelcast.query.LocalIndexStats;
 import com.hazelcast.query.Predicates;
 
 import java.util.Map;
