@@ -4,7 +4,7 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
-import com.hazelcast.monitor.NearCacheStats;
+import com.hazelcast.nearcache.NearCacheStats;
 
 import static com.hazelcast.core.Hazelcast.newHazelcastInstance;
 import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
