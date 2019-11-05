@@ -3,10 +3,9 @@
                                http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
-    <group>
-        <name>dev</name>
-        <password>dev-pass</password>
-    </group>
+    <cluster-name>
+        dev
+    </cluster-name>
 
     <network>
         <port auto-increment="true" port-count="100">5701</port>
@@ -29,12 +28,14 @@
         </join>
     </network>
 
-    <split-brain-protection enabled="true" name="cache-split-brain-protection">
+    <split-brain-protection enabled="true"
+                            name="cache-split-brain-protection">
         <minimum-cluster-size>2</minimum-cluster-size>
         <protect-on>READ_WRITE</protect-on>
     </split-brain-protection>
 
     <cache name="cache-with-split-brain-protection">
-        <split-brain-protection-ref>cache-split-brain-protection</split-brain-protection-ref>
+        <split-brain-protection-ref>cache-split-brain-protection
+        </split-brain-protection-ref>
     </cache>
 </hazelcast>

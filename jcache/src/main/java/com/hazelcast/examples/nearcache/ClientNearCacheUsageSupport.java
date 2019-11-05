@@ -12,6 +12,7 @@ import com.hazelcast.config.EvictionConfig;
 import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.JoinConfig;
+import com.hazelcast.config.MaxSizePolicy;
 import com.hazelcast.config.NearCacheConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -103,7 +104,7 @@ public abstract class ClientNearCacheUsageSupport {
     protected EvictionConfig createEvictionConfigWithEntryCountPolicy(int size) {
         return new EvictionConfig()
                 .setEvictionPolicy(EvictionPolicy.LRU)
-                .setMaximumSizePolicy(EvictionConfig.MaxSizePolicy.ENTRY_COUNT)
+                .setMaxSizePolicy(MaxSizePolicy.ENTRY_COUNT)
                 .setSize(size);
     }
 

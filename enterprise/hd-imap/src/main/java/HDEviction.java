@@ -1,8 +1,7 @@
 import com.hazelcast.config.Config;
-import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MaxSizeConfig;
+import com.hazelcast.config.MaxSizePolicy;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -11,7 +10,7 @@ import com.hazelcast.memory.MemoryUnit;
 
 import java.util.Map;
 
-import static com.hazelcast.config.MaxSizeConfig.MaxSizePolicy.PER_NODE;
+import static com.hazelcast.config.EvictionPolicy.LRU;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
@@ -36,15 +35,13 @@ public class HDEviction {
     }
 
     public static Config newConfig() {
-        MaxSizeConfig maxSizeConfig = new MaxSizeConfig();
-        maxSizeConfig.setMaxSizePolicy(PER_NODE);
-        maxSizeConfig.setSize(MAX_ENTRY_COUNT);
-
         MapConfig mapConfig = new MapConfig();
         mapConfig.setName("default");
         mapConfig.setInMemoryFormat(InMemoryFormat.NATIVE);
-        mapConfig.setEvictionPolicy(EvictionPolicy.LRU);
-        mapConfig.setMaxSizeConfig(maxSizeConfig);
+
+        mapConfig.getEvictionConfig()
+                .setMaxSizePolicy(MaxSizePolicy.PER_NODE)
+                .setSize(MAX_ENTRY_COUNT).setEvictionPolicy(LRU);
 
         MemorySize memorySize = new MemorySize(128, MemoryUnit.MEGABYTES);
         NativeMemoryConfig memoryConfig = new NativeMemoryConfig();

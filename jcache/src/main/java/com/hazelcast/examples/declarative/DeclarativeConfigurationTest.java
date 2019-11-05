@@ -52,7 +52,7 @@ public class DeclarativeConfigurationTest {
 
         EvictionConfig evictionConfig = cacheConfig.getEvictionConfig();
         System.out.println("max-size: " + evictionConfig.getSize());
-        System.out.println("max-size-policy: " + evictionConfig.getMaximumSizePolicy());
+        System.out.println("max-size-policy: " + evictionConfig.getMaxSizePolicy());
         System.out.println("eviction-policy: " + evictionConfig.getEvictionPolicy());
 
         System.exit(0);
