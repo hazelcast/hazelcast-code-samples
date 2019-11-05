@@ -9,7 +9,6 @@ import com.hazelcast.client.impl.clientside.HazelcastClientProxy;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.EvictionConfig;
-import com.hazelcast.config.EvictionConfig.MaxSizePolicy;
 import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.NativeMemoryConfig;
 import com.hazelcast.config.NearCacheConfig;
@@ -21,6 +20,7 @@ import com.hazelcast.memory.MemoryUnit;
 
 import javax.cache.spi.CachingProvider;
 
+import static com.hazelcast.config.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 @SuppressWarnings("unused")
@@ -57,7 +57,7 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
     @Override
     protected <K, V> CacheConfig<K, V> createCacheConfig(String cacheName, InMemoryFormat inMemoryFormat) {
         EvictionConfig evictionConfig = new EvictionConfig()
-                .setMaximumSizePolicy(MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE)
+                .setMaxSizePolicy(USED_NATIVE_MEMORY_PERCENTAGE)
                 .setSize(99);
 
         CacheConfig<K, V> cacheConfig = super.createCacheConfig(cacheName, inMemoryFormat);
@@ -70,7 +70,7 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
         NearCacheConfig nearCacheConfig = super.createNearCacheConfig(cacheName, inMemoryFormat);
         if (inMemoryFormat == InMemoryFormat.NATIVE) {
             EvictionConfig evictionConfig = new EvictionConfig()
-                    .setMaximumSizePolicy(MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE)
+                    .setMaxSizePolicy(USED_NATIVE_MEMORY_PERCENTAGE)
                     .setSize(99);
             nearCacheConfig.setEvictionConfig(evictionConfig);
         }

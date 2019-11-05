@@ -11,7 +11,7 @@
 
     <wan-replication name="wan-replication-cluster">
         <batch-publisher>
-            <cluster-name>dev</cluster-name>>
+            <cluster-name>dev</cluster-name>
             <queue-full-behavior>THROW_EXCEPTION</queue-full-behavior>
             <queue-capacity>1000</queue-capacity>
             <properties>
