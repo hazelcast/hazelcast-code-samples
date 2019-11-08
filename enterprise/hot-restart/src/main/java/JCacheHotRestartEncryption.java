@@ -8,12 +8,12 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.internal.nio.IOUtil;
 
 import javax.cache.Cache;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 
@@ -29,7 +29,6 @@ public class JCacheHotRestartEncryption {
             System.getProperty("java.io.tmpdir") + File.separatorChar + "hazelcast-hot-restart";
     private static final String KEYSTORE_FILE =
             System.getProperty("java.io.tmpdir") + File.separatorChar + "hazelcast-hot-restart-keystore.p12";
-    private static final byte[] MASTER_KEY = "1hundredandninetytwobits".getBytes(StandardCharsets.US_ASCII);
     private static final String KEYSTORE_TYPE = "PKCS12";
     private static final String KEYSTORE_PASSWORD = "password";
 
@@ -44,14 +43,15 @@ public class JCacheHotRestartEncryption {
         join.getMulticastConfig().setEnabled(false);
         join.getTcpIpConfig().setEnabled(true).clear().addMember("127.0.0.1");
 
-        JavaKeyStoreSecureStoreConfig keyStoreConfig = createKeyStore();
+        int maxKeySize = getAESMaxKeySize();
+        JavaKeyStoreSecureStoreConfig keyStoreConfig = createKeyStore(maxKeySize);
 
         HotRestartPersistenceConfig hotRestartConfig = config.getHotRestartPersistenceConfig();
         hotRestartConfig.setEnabled(true).setBaseDir(new File(HOT_RESTART_ROOT_DIR));
         EncryptionAtRestConfig encryptionAtRestConfig = hotRestartConfig.getEncryptionAtRestConfig();
         encryptionAtRestConfig.setEnabled(true)
                               .setAlgorithm("AES/CBC/PKCS5Padding")
-                              .setKeySize(128)
+                              .setKeySize(maxKeySize)
                               .setSalt("sugar")
                               .setSecureStoreConfig(keyStoreConfig);
 
@@ -74,13 +74,23 @@ public class JCacheHotRestartEncryption {
         Hazelcast.shutdownAll();
     }
 
-    private static JavaKeyStoreSecureStoreConfig createKeyStore() throws IOException, GeneralSecurityException {
+    private static int getAESMaxKeySize() throws GeneralSecurityException {
+        return Math.min(Cipher.getMaxAllowedKeyLength("AES"), 256);
+    }
+
+    private static SecretKey generateAESSecretKey(int keySize) throws GeneralSecurityException {
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(keySize);
+        return keyGen.generateKey();
+    }
+
+    private static JavaKeyStoreSecureStoreConfig createKeyStore(int maxKeySize) throws IOException, GeneralSecurityException {
         File keyStoreFile = new File(KEYSTORE_FILE);
         IOUtil.delete(keyStoreFile);
         KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
         ks.load(null, null);
-        SecretKey secretKey = new SecretKeySpec(MASTER_KEY, "AES");
-        KeyStore.SecretKeyEntry secret = new KeyStore.SecretKeyEntry(secretKey);
+        SecretKey masterKey = generateAESSecretKey(maxKeySize);
+        KeyStore.SecretKeyEntry secret = new KeyStore.SecretKeyEntry(masterKey);
         KeyStore.ProtectionParameter entryPassword = new KeyStore.PasswordProtection(KEYSTORE_PASSWORD.toCharArray());
         ks.setEntry("entry", secret, entryPassword);
         try (FileOutputStream out = new FileOutputStream(keyStoreFile)) {
