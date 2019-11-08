@@ -26,11 +26,15 @@ import com.hazelcast.logging.ILogger;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
+import javax.cache.Caching;
 import javax.cache.configuration.MutableConfiguration;
+import javax.cache.spi.CachingProvider;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static com.hazelcast.cache.HazelcastCachingProvider.propertiesByInstanceItself;
 
 /**
  * A simple benchmark test for JCache.
@@ -137,8 +141,9 @@ public final class SimpleCacheTest {
     }
 
     private void run(ExecutorService es) {
-        HazelcastServerCachingProvider cachingProvider = HazelcastServerCachingProvider.createCachingProvider(instance);
-        CacheManager cacheManager = cachingProvider.getCacheManager();
+        CachingProvider cachingProvider = Caching.getCachingProvider(HazelcastServerCachingProvider.class.getName());
+        CacheManager cacheManager = cachingProvider.getCacheManager(null, null,
+                propertiesByInstanceItself(instance));
 
         // configure the cache
         MutableConfiguration<String, Object> config = new MutableConfiguration<String, Object>();

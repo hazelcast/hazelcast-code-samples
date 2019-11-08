@@ -1,5 +1,3 @@
-import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
-import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.EncryptionAtRestConfig;
 import com.hazelcast.config.HotRestartPersistenceConfig;
@@ -10,7 +8,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.internal.nio.IOUtil;
 
 import javax.cache.Cache;
-import javax.cache.spi.CachingProvider;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
@@ -60,7 +57,7 @@ public class JCacheHotRestartEncryption {
 
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
 
-        Cache<Integer, String> cache = createCache(instance);
+        Cache<Integer, String> cache = JCacheHotRestart.createCache(instance);
         for (int i = 0; i < 10; i++) {
             cache.put(i, "value" + i);
         }
@@ -68,7 +65,7 @@ public class JCacheHotRestartEncryption {
         instance.shutdown();
 
         instance = Hazelcast.newHazelcastInstance(config);
-        cache = createCache(instance);
+        cache = JCacheHotRestart.createCache(instance);
 
         for (int i = 0; i < 10; i++) {
             System.out.println("cache.get(" + i + ") = " + cache.get(i));
@@ -90,15 +87,5 @@ public class JCacheHotRestartEncryption {
             ks.store(out, KEYSTORE_PASSWORD.toCharArray());
         }
         return new JavaKeyStoreSecureStoreConfig(keyStoreFile).setType(KEYSTORE_TYPE).setPassword(KEYSTORE_PASSWORD);
-    }
-
-    private static Cache<Integer, String> createCache(HazelcastInstance instance) {
-        CachingProvider cachingProvider = HazelcastServerCachingProvider
-                .createCachingProvider(instance);
-
-        CacheConfig<Integer, String> cacheConfig = new CacheConfig<>("cache");
-        cacheConfig.getHotRestartConfig().setEnabled(true);
-
-        return cachingProvider.getCacheManager().createCache("cache", cacheConfig);
     }
 }

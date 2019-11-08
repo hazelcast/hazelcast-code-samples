@@ -14,8 +14,10 @@ import com.hazelcast.memory.MemoryUnit;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
+import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
 
+import static com.hazelcast.cache.HazelcastCachingProvider.propertiesByInstanceItself;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
@@ -95,8 +97,9 @@ abstract class HiDensityCacheUsageSupport {
 
     static void init() {
         instance = createInstance(createConfig());
-        CachingProvider cachingProvider = HazelcastServerCachingProvider.createCachingProvider(instance);
-        cacheManager = cachingProvider.getCacheManager();
+        CachingProvider cachingProvider = Caching.getCachingProvider(HazelcastServerCachingProvider.class.getName());
+        cacheManager = cachingProvider.getCacheManager(null, null,
+                propertiesByInstanceItself(instance));
     }
 
     static void destroy() {

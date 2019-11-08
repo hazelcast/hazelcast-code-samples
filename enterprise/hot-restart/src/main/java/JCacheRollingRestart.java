@@ -1,6 +1,4 @@
-import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
 import com.hazelcast.cluster.ClusterState;
-import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.HotRestartPersistenceConfig;
 import com.hazelcast.config.JoinConfig;
@@ -9,7 +7,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.internal.nio.IOUtil;
 
 import javax.cache.Cache;
-import javax.cache.spi.CachingProvider;
 import java.io.File;
 
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
@@ -30,7 +27,7 @@ public class JCacheRollingRestart {
         HazelcastInstance instance1 = newHazelcastInstance(5701);
         HazelcastInstance instance2 = newHazelcastInstance(5702);
 
-        Cache<Integer, String> cache = createCache(instance2);
+        Cache<Integer, String> cache = JCacheHotRestart.createCache(instance2);
         for (int i = 0; i < 50; i++) {
             cache.put(i, "value" + i);
         }
@@ -65,15 +62,5 @@ public class JCacheRollingRestart {
         hotRestartConfig.setEnabled(true).setBaseDir(new File(HOT_RESTART_ROOT_DIR + port));
 
         return Hazelcast.newHazelcastInstance(config);
-    }
-
-    private static Cache<Integer, String> createCache(HazelcastInstance instance) {
-        CachingProvider cachingProvider = HazelcastServerCachingProvider
-            .createCachingProvider(instance);
-
-        CacheConfig<Integer, String> cacheConfig = new CacheConfig<>("cache");
-        cacheConfig.getHotRestartConfig().setEnabled(true);
-
-        return cachingProvider.getCacheManager().createCache("cache", cacheConfig);
     }
 }

@@ -1,14 +1,14 @@
 package com.hazelcast.examples.splitbrain.custom;
 
-import com.hazelcast.nio.ObjectDataInput;
-import com.hazelcast.nio.ObjectDataOutput;
-import com.hazelcast.spi.merge.MergingValue;
-import com.hazelcast.spi.merge.SplitBrainMergePolicy;
 import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.examples.splitbrain.AbstractCacheSplitBrainSample;
+import com.hazelcast.nio.ObjectDataInput;
+import com.hazelcast.nio.ObjectDataOutput;
+import com.hazelcast.spi.merge.MergingValue;
+import com.hazelcast.spi.merge.SplitBrainMergePolicy;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
@@ -22,9 +22,16 @@ import static com.hazelcast.examples.helper.CommonUtils.assertTrue;
 import static com.hazelcast.examples.helper.HazelcastUtils.generateKeyOwnedBy;
 
 /**
- * Base class for jcache split-brain sample based on `custom cache merge policy.
+ * Base class for jcache split-brain sample based on custom cache merge policy.
  *
  * Custom cache merge policy implements {@link com.hazelcast.spi.merge.SplitBrainMergePolicy} and handles its own logic.
+ * <p>
+ * <b>IMPORTANT</b>: this sample uses internal API {@code HazelcastServerCachingProvider} to
+ * start two separate {@code CachingProvider}s and associated {@code CacheManager}s with separate
+ * backing {@link HazelcastInstance}s. Application production code should never do that. Instead
+ * use JCache standard API methods as described in javadoc of {@link com.hazelcast.cache.HazelcastCachingProvider}
+ * or public Hazelcast API.
+ * </p>
  */
 abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
@@ -42,8 +49,8 @@ abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends A
 
             CountDownLatch splitBrainCompletedLatch = simulateSplitBrain(h1, h2);
 
-            CachingProvider cachingProvider1 = HazelcastServerCachingProvider.createCachingProvider(h1);
-            CachingProvider cachingProvider2 = HazelcastServerCachingProvider.createCachingProvider(h2);
+            CachingProvider cachingProvider1 = new HazelcastServerCachingProvider(h1);
+            CachingProvider cachingProvider2 = new HazelcastServerCachingProvider(h2);
 
             CacheManager cacheManager1 = cachingProvider1.getCacheManager();
             CacheManager cacheManager2 = cachingProvider2.getCacheManager();
