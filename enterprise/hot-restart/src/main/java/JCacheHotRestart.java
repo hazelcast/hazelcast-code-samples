@@ -8,9 +8,12 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.internal.nio.IOUtil;
 
 import javax.cache.Cache;
+import javax.cache.CacheManager;
+import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
 import java.io.File;
 
+import static com.hazelcast.cache.HazelcastCachingProvider.propertiesByInstanceItself;
 import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 
 /**
@@ -55,13 +58,14 @@ public class JCacheHotRestart {
         Hazelcast.shutdownAll();
     }
 
-    private static Cache<Integer, String> createCache(HazelcastInstance instance) {
-        CachingProvider cachingProvider = HazelcastServerCachingProvider
-            .createCachingProvider(instance);
+    static Cache<Integer, String> createCache(HazelcastInstance instance) {
+        CachingProvider cachingProvider = Caching.getCachingProvider(HazelcastServerCachingProvider.class.getName());
+        CacheManager cacheManager = cachingProvider.getCacheManager(null, null,
+                propertiesByInstanceItself(instance));
 
         CacheConfig<Integer, String> cacheConfig = new CacheConfig<>("cache");
         cacheConfig.getHotRestartConfig().setEnabled(true);
 
-        return cachingProvider.getCacheManager().createCache("cache", cacheConfig);
+        return cacheManager.createCache("cache", cacheConfig);
     }
 }

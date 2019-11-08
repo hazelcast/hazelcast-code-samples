@@ -11,7 +11,10 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICacheManager;
 
 import javax.cache.CacheManager;
+import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
+
+import static com.hazelcast.cache.HazelcastCachingProvider.propertiesByInstanceItself;
 
 /**
  * Demonstrates how to use JCache through `HazelcastInstance` rather than Hazelcast's `CacheManager`.
@@ -23,8 +26,9 @@ public class JCacheThroughHazelcastInstanceExample {
     public static void main(String[] args) {
         Config config = new Config().addCacheConfig(createCacheSimpleConfig(BASE_CACHE_NAME + "_1"));
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
-        CachingProvider cachingProvider = HazelcastServerCachingProvider.createCachingProvider(instance);
-        CacheManager cacheManager = cachingProvider.getCacheManager();
+        CachingProvider cachingProvider = Caching.getCachingProvider(HazelcastServerCachingProvider.class.getName());
+        CacheManager cacheManager = cachingProvider.getCacheManager(null, null,
+                propertiesByInstanceItself(instance));
 
         // ICacheManager is Hazelcast-specific interface, not to be confused with JCache's CacheManager.
         // An instance of the ICacheManager can be obtained from a HazelcastInstance and used to get

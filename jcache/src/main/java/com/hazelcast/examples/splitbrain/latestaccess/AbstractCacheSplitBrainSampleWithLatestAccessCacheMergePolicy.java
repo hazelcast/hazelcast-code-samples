@@ -17,10 +17,17 @@ import static com.hazelcast.examples.helper.CommonUtils.assertOpenEventually;
 import static com.hazelcast.examples.helper.CommonUtils.sleepAtLeastMillis;
 
 /**
- * Base class for jcache split-brain sample based on `LATEST_ACCESS` cache merge policy.
+ * Base class for jcache split-brain sample based on {@code LATEST_ACCESS} cache merge policy.
  *
- * `LATEST_ACCESS` cache merge policy merges cache entry from source to destination cache
+ * {@code LATEST_ACCESS} cache merge policy merges cache entry from source to destination cache
  * if source entry has been accessed more recently than the destination entry.
+ * <p>
+ * <b>IMPORTANT</b>: this sample uses internal API {@code HazelcastServerCachingProvider} to
+ * start two separate {@code CachingProvider}s and associated {@code CacheManager}s with separate
+ * backing {@link HazelcastInstance}s. Application production code should never do that. Instead
+ * use JCache standard API methods as described in javadoc of {@link com.hazelcast.cache.HazelcastCachingProvider}
+ * or public Hazelcast API.
+ * </p>
  */
 abstract class AbstractCacheSplitBrainSampleWithLatestAccessCacheMergePolicy extends AbstractCacheSplitBrainSample {
 
@@ -38,8 +45,8 @@ abstract class AbstractCacheSplitBrainSampleWithLatestAccessCacheMergePolicy ext
 
             CountDownLatch splitBrainCompletedLatch = simulateSplitBrain(h1, h2);
 
-            CachingProvider cachingProvider1 = HazelcastServerCachingProvider.createCachingProvider(h1);
-            CachingProvider cachingProvider2 = HazelcastServerCachingProvider.createCachingProvider(h2);
+            CachingProvider cachingProvider1 = new HazelcastServerCachingProvider(h1);
+            CachingProvider cachingProvider2 = new HazelcastServerCachingProvider(h2);
 
             CacheManager cacheManager1 = cachingProvider1.getCacheManager();
             CacheManager cacheManager2 = cachingProvider2.getCacheManager();

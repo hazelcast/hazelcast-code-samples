@@ -3,7 +3,6 @@ package com.hazelcast.examples.iterator;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.client.cache.impl.HazelcastClientCachingProvider;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
@@ -13,8 +12,11 @@ import com.hazelcast.core.HazelcastInstance;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
+import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
 import java.util.Iterator;
+
+import static com.hazelcast.cache.HazelcastCachingProvider.propertiesByInstanceItself;
 
 /**
  * Code sample to demonstrate iterator usage on cache.
@@ -25,20 +27,26 @@ public class CacheIteratorUsage {
 
     public static void main(String[] args) {
         CachingProvider cachingProvider;
+        HazelcastInstance hazelcastInstance;
+
         if (isClient) {
             Hazelcast.newHazelcastInstance(createConfig());
-            HazelcastInstance hazelcastClient = HazelcastClient.newHazelcastClient(createClientConfig());
-            cachingProvider = HazelcastClientCachingProvider.createCachingProvider(hazelcastClient);
+            hazelcastInstance = HazelcastClient.newHazelcastClient(createClientConfig());
+            cachingProvider = Caching.getCachingProvider();
         } else {
-            HazelcastInstance hazelcastServer = Hazelcast.newHazelcastInstance(createConfig());
-            cachingProvider = HazelcastServerCachingProvider.createCachingProvider(hazelcastServer);
+            hazelcastInstance = Hazelcast.newHazelcastInstance(createConfig());
+            cachingProvider = Caching.getCachingProvider(HazelcastServerCachingProvider.class.getName());
         }
 
         try {
-            CacheManager cacheManager = cachingProvider.getCacheManager();
-            CacheConfig cacheConfig = new CacheConfig();
-            ICache<Integer, String> cache =
-                    (ICache<Integer, String>) cacheManager.createCache("myCache", cacheConfig);
+            CacheManager cacheManager = cachingProvider.getCacheManager(null, null,
+                    propertiesByInstanceItself(hazelcastInstance));
+            CacheConfig<Integer, String> cacheConfig = new CacheConfig<>("myCache");
+            cacheConfig.setTypes(Integer.class, String.class);
+            ICache<Integer, String> cache = (ICache<Integer, String>) cacheManager
+                    .createCache("myCache", cacheConfig)
+                    .unwrap(ICache.class);
+
 
             for (int i = 0; i < 200; i++) {
                 cache.put(i, "Value of " + i);
@@ -60,12 +68,10 @@ public class CacheIteratorUsage {
                 System.out.println("\t- Key: " + entry.getKey() + ", Value: " + entry.getValue());
             }
         } finally {
-            if (cachingProvider != null) {
-                cachingProvider.close();
-            }
             if (isClient) {
-                Hazelcast.shutdownAll();
+                HazelcastClient.shutdownAll();
             }
+            Hazelcast.shutdownAll();
         }
     }
 
