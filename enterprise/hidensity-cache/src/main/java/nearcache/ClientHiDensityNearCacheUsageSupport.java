@@ -2,7 +2,6 @@ package nearcache;
 
 import com.hazelcast.cache.ICache;
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.client.cache.impl.HazelcastClientCacheManager;
 import com.hazelcast.client.cache.impl.HazelcastClientCachingProvider;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.impl.clientside.HazelcastClientProxy;
@@ -18,6 +17,7 @@ import com.hazelcast.internal.serialization.EnterpriseSerializationService;
 import com.hazelcast.memory.MemorySize;
 import com.hazelcast.memory.MemoryUnit;
 
+import javax.cache.CacheManager;
 import javax.cache.spi.CachingProvider;
 
 import static com.hazelcast.config.MaxSizePolicy.USED_NATIVE_MEMORY_PERCENTAGE;
@@ -99,11 +99,15 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
                 .addNearCacheConfig(nearCacheConfig);
 
         HazelcastClientProxy client = (HazelcastClientProxy) HazelcastClient.newHazelcastClient(clientConfig);
-        CachingProvider provider = HazelcastClientCachingProvider.createCachingProvider(client);
-        HazelcastClientCacheManager cacheManager = (HazelcastClientCacheManager) provider.getCacheManager();
+        // the code sample requires 2 separate CachingProviders backed by different
+        // HazelcastInstances, therefore using internal API to obtain a CachingProvider
+        // Do not use in production code
+        CachingProvider provider = new HazelcastClientCachingProvider(client);
+        CacheManager cacheManager = provider.getCacheManager();
 
         CacheConfig<K, V> cacheConfig = createCacheConfig(nearCacheConfig.getInMemoryFormat());
-        ICache<K, V> cache = cacheManager.createCache(cacheName, cacheConfig);
+        ICache<K, V> cache = (ICache<K, V>) cacheManager.createCache(cacheName, cacheConfig)
+                                        .unwrap(ICache.class);
 
         clients.add(client);
 
