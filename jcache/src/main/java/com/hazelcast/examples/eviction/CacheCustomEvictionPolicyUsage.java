@@ -28,7 +28,9 @@ public class CacheCustomEvictionPolicyUsage {
 
         // Use eviction policy comparator by its instance
         CacheConfig cacheConfig1 = createCacheConfig("MyCache_1", false);
-        ICache<Integer, String> cache1 = (ICache<Integer, String>) cacheManager.createCache("MyCache_1", cacheConfig1);
+        ICache<Integer, String> cache1 = (ICache<Integer, String>) cacheManager
+                .createCache("MyCache_1", cacheConfig1)
+                .unwrap(ICache.class);
 
         // Default max-size for eviction is 10K.
         // With partition based cluster wide approximation, after almost 15K elements (for default 271 partition),
@@ -39,7 +41,9 @@ public class CacheCustomEvictionPolicyUsage {
 
         // Use eviction policy comparator by its name
         CacheConfig cacheConfig2 = createCacheConfig("MyCache_2", true);
-        ICache<Integer, String> cache2 = (ICache<Integer, String>) cacheManager.createCache("MyCache_2", cacheConfig2);
+        ICache<Integer, String> cache2 = (ICache<Integer, String>) cacheManager
+                .createCache("MyCache_2", cacheConfig2)
+                .unwrap(ICache.class);
 
         // Default max-size for eviction is 10K.
         // With partition based cluster wide approximation, after almost 15K elements (for default 271 partition),
@@ -60,7 +64,7 @@ public class CacheCustomEvictionPolicyUsage {
                 .setEvictionConfig(evictionConfig);
     }
 
-    private static class MyEvictionPolicyComparator extends CacheEvictionPolicyComparator<Integer, String> {
+    private static class MyEvictionPolicyComparator implements CacheEvictionPolicyComparator<Integer, String> {
 
         @Override
         public int compare(CacheEntryView<Integer, String> e1, CacheEntryView<Integer, String> e2) {
@@ -72,13 +76,13 @@ public class CacheCustomEvictionPolicyUsage {
             }
             if (key2 > key1) {
                 // -1
-                return FIRST_ENTRY_HAS_HIGHER_PRIORITY_TO_BE_EVICTED;
+                return -1;
             } else if (key2 < key1) {
                 // +1
-                return SECOND_ENTRY_HAS_HIGHER_PRIORITY_TO_BE_EVICTED;
+                return 1;
             } else {
                 // 0
-                return BOTH_OF_ENTRIES_HAVE_SAME_PRIORITY_TO_BE_EVICTED;
+                return 0;
             }
         }
     }

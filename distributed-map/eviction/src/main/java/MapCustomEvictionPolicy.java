@@ -22,8 +22,9 @@ import com.hazelcast.core.EntryView;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
-import com.hazelcast.map.eviction.MapEvictionPolicy;
+import com.hazelcast.map.MapEvictionPolicyComparator;
 import com.hazelcast.map.listener.EntryEvictedListener;
+import com.hazelcast.spi.eviction.EvictionPolicyComparator;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -34,21 +35,22 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.concurrent.locks.LockSupport.parkNanos;
 
 /**
- * This sample shows custom-eviction-policy usage for IMap. IMap uses a sampling based approach to evict entries.
+ * This sample shows custom eviction policy usage for IMap. IMap uses a sampling based approach to evict entries.
  * For more info about sampling approach, please refer to hazelcast documentation.
  *
- * To plug a custom-eviction-policy {@link com.hazelcast.config.MapConfig#setMapEvictionPolicy(MapEvictionPolicy)} is used
- * in this example, it is also pluggable declaratively.
+ * To plug a custom eviction policy
+ * {@link com.hazelcast.config.EvictionConfig#setComparator(EvictionPolicyComparator)} is used
+ * in this example. Alternatively, custom eviction policy's class name can be also configured declaratively.
  */
 public class MapCustomEvictionPolicy {
 
     public static void main(String[] args) {
         Config config = new Config();
         MapConfig mapConfig = config.getMapConfig("test");
-        mapConfig.setMapEvictionPolicy(new OddEvictor());
         mapConfig.getEvictionConfig()
                 .setMaxSizePolicy(MaxSizePolicy.PER_NODE)
-                .setSize(10000);
+                .setSize(10000)
+                .setComparator(new OddEvictor());
 
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         IMap<Integer, Integer> map = instance.getMap("test");
@@ -86,11 +88,11 @@ public class MapCustomEvictionPolicy {
     /**
      * Odd evictor tries to evict odd keys first.
      */
-    private static class OddEvictor extends MapEvictionPolicy {
+    private static class OddEvictor implements MapEvictionPolicyComparator<Integer, Integer> {
 
         @Override
-        public int compare(EntryView o1, EntryView o2) {
-            Integer key = (Integer) o1.getKey();
+        public int compare(EntryView<Integer, Integer> o1, EntryView<Integer, Integer> o2) {
+            Integer key = o1.getKey();
             if (key % 2 != 0) {
                 return -1;
             }
