@@ -13,8 +13,8 @@ public class WildcardMember {
         map1.put("foo", "foo");
         map2.put("foo", "foo");
         for (; ; ) {
-            System.out.println("size:" + map1.size());
-            System.out.println("size2:" + map2.size());
+            System.out.println("size of map1:" + map1.size());
+            System.out.println("size of map2:" + map2.size());
             Thread.sleep(1000);
         }
     }

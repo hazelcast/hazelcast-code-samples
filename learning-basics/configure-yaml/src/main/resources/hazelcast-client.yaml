@@ -1,6 +1,4 @@
 hazelcast-client:
   import:
     - hazelcast-client-network-config.yaml
-  group:
-    name: dev-configured-from-yaml
-    password: 1234
+  cluster-name: dev-configured-from-yaml
