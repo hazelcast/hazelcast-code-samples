@@ -2,7 +2,7 @@ package com.hazelcast.samples.eureka.partition.groups;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
-import com.hazelcast.spi.properties.GroupProperty;
+import com.hazelcast.spi.properties.ClusterProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -34,8 +34,8 @@ public class TestDataLoader implements CommandLineRunner {
         IMap<Integer, String> safeMap = hazelcastInstance.getMap(Constants.MAP_NAME_SAFE);
         IMap<Integer, String> unsafeMap = hazelcastInstance.getMap(Constants.MAP_NAME_UNSAFE);
 
-        int partitionCount = Integer.valueOf(System.getProperty(GroupProperty.PARTITION_COUNT.getName(),
-                GroupProperty.PARTITION_COUNT.getDefaultValue()));
+        int partitionCount = Integer.valueOf(System.getProperty(ClusterProperty.PARTITION_COUNT.getName(),
+                ClusterProperty.PARTITION_COUNT.getDefaultValue()));
 
         log.info("\n--------------------------------------------------------------------------------");
 

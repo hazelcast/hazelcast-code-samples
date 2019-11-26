@@ -15,7 +15,7 @@ public class ClientExponentialBackoff {
         ConnectionRetryConfig connectionRetryConfig = clientConfig.getConnectionStrategyConfig().getConnectionRetryConfig();
 
         connectionRetryConfig
-                .setFailOnMaxBackoff(false)
+                .setClusterConnectTimeoutMillis(Long.MAX_VALUE)
                 .setInitialBackoffMillis(1000)
                 .setMaxBackoffMillis(60000)
                 .setMultiplier(2)
