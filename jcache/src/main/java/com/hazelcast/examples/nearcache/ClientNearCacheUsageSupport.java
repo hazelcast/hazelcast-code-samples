@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
-import static com.hazelcast.spi.properties.GroupProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
+import static com.hazelcast.spi.properties.ClusterProperty.CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS;
 import static java.lang.Integer.parseInt;
 
 @SuppressWarnings({"checkstyle:methodcount", "unused"})
