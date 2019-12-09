@@ -1,6 +1,5 @@
 package com.hazelcast.examples.splitbrain;
 
-import com.hazelcast.cluster.MemberAttributeEvent;
 import com.hazelcast.cluster.MembershipEvent;
 import com.hazelcast.cluster.MembershipListener;
 import com.hazelcast.config.CacheConfig;
@@ -88,9 +87,6 @@ public abstract class AbstractCacheSplitBrainSample {
             latch.countDown();
         }
 
-        @Override
-        public void memberAttributeChanged(MemberAttributeEvent memberAttributeEvent) {
-        }
     }
 
     protected static CountDownLatch simulateSplitBrain(HazelcastInstance h1, HazelcastInstance h2) {
