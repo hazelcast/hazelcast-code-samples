@@ -1,5 +1,4 @@
 import com.hazelcast.cluster.Member;
-import com.hazelcast.cluster.MemberAttributeEvent;
 import com.hazelcast.cluster.MembershipEvent;
 import com.hazelcast.cluster.MembershipListener;
 import com.hazelcast.internal.util.Clock;
@@ -36,11 +35,6 @@ public class CustomSplitBrainProtectionFunction implements SplitBrainProtectionF
     @Override
     public void memberRemoved(MembershipEvent membershipEvent) {
         lastHeartbeatReceived.remove(membershipEvent.getMember());
-    }
-
-    @Override
-    public void memberAttributeChanged(MemberAttributeEvent memberAttributeEvent) {
-        // this method has no effect on split-brain protection
     }
 
     @Override
