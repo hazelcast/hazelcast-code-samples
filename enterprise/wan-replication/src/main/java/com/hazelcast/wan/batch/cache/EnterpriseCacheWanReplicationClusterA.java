@@ -6,7 +6,7 @@ import com.hazelcast.cache.impl.AbstractHazelcastCacheManager;
 import com.hazelcast.config.CacheConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.WanAcknowledgeType;
-import com.hazelcast.config.WanBatchReplicationPublisherConfig;
+import com.hazelcast.config.WanBatchPublisherConfig;
 import com.hazelcast.config.WanReplicationConfig;
 import com.hazelcast.config.WanReplicationRef;
 import com.hazelcast.core.Hazelcast;
@@ -120,14 +120,14 @@ public class EnterpriseCacheWanReplicationClusterA {
         WanReplicationConfig wanReplicationConfig = new WanReplicationConfig();
         wanReplicationConfig.setName("AtoB");
 
-        WanBatchReplicationPublisherConfig publisherConfigClusterB = new WanBatchReplicationPublisherConfig();
+        WanBatchPublisherConfig publisherConfigClusterB = new WanBatchPublisherConfig();
         publisherConfigClusterB.setClusterName("clusterB");
         publisherConfigClusterB.setEndpoint("127.0.0.1:5702");
         Map<String, Comparable> props = publisherConfigClusterB.getProperties();
 
         // setting acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE
         publisherConfigClusterB.setAcknowledgeType(WanAcknowledgeType.ACK_ON_OPERATION_COMPLETE);
-        wanReplicationConfig.addWanBatchReplicationPublisherConfig(publisherConfigClusterB);
+        wanReplicationConfig.addBatchReplicationPublisherConfig(publisherConfigClusterB);
 
         config.addWanReplicationConfig(wanReplicationConfig);
 
