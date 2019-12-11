@@ -16,13 +16,10 @@
   -->
 <hazelcast-client xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
-                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config-4.0.xsd"
                   xmlns="http://www.hazelcast.com/schema/client-config">
 
-    <group>
-        <name>cache</name>
-        <password>dev-pass</password>
-    </group>
+    <cluster-name>cache</cluster-name>
 
     <network>
         <cluster-members>
@@ -30,11 +27,17 @@
         </cluster-members>
         <smart-routing>true</smart-routing>
         <redo-operation>true</redo-operation>
-        <connection-attempt-limit>1000</connection-attempt-limit>
     </network>
+
+    <connection-strategy>
+        <connection-retry>
+            <cluster-connect-timeout-millis>30000</cluster-connect-timeout-millis>
+        </connection-retry>
+    </connection-strategy>
 
     <serialization>
         <use-native-byte-order>true</use-native-byte-order>
         <allow-unsafe>true</allow-unsafe>
     </serialization>
+
 </hazelcast-client>

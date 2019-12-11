@@ -3,7 +3,7 @@ import com.hazelcast.config.EndpointConfig;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.SSLConfig;
 import com.hazelcast.config.ServerSocketEndpointConfig;
-import com.hazelcast.config.WanBatchReplicationPublisherConfig;
+import com.hazelcast.config.WanBatchPublisherConfig;
 import com.hazelcast.config.WanReplicationConfig;
 import com.hazelcast.config.WanReplicationRef;
 import com.hazelcast.core.Hazelcast;
@@ -39,7 +39,7 @@ public class MemberA {
         config.getAdvancedNetworkConfig().addWanEndpointConfig(createWanEndpointConfig());
 
         // setup WAN replication
-        WanBatchReplicationPublisherConfig wanBatchReplicationPublisherConfig = new WanBatchReplicationPublisherConfig()
+        WanBatchPublisherConfig wanBatchReplicationPublisherConfig = new WanBatchPublisherConfig()
                 .setClusterName("cluster-b")
                 .setClassName("com.hazelcast.enterprise.wan.replication.WanBatchReplication")
                 // refer to the WAN endpoint config by name
@@ -51,7 +51,7 @@ public class MemberA {
         config.addWanReplicationConfig(
                 new WanReplicationConfig()
                         .setName("active-wan-replication")
-                        .addWanBatchReplicationPublisherConfig(wanBatchReplicationPublisherConfig));
+                        .addBatchReplicationPublisherConfig(wanBatchReplicationPublisherConfig));
 
         config.addMapConfig(
                 new MapConfig("wan-map")

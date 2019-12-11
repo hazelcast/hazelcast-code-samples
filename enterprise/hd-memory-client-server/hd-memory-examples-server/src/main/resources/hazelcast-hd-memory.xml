@@ -16,13 +16,10 @@
   -->
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
-    <group>
-        <name>cache</name>
-        <password>dev-pass</password>
-    </group>
+    <cluster-name>cache</cluster-name>
 
     <!-- management center is disabled by default -->
     <management-center enabled="false" update-interval="3">http://localhost:8080/mancenter/</management-center>
