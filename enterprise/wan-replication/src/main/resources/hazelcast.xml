@@ -3,10 +3,7 @@
                                http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
-    <cluster>
-        <name>clusterA</name>
-        <password>clusterA-pass</password>
-    </cluster>
+    <cluster-name>clusterA</cluster-name>
     <license-key>YOUR_LICENSE_KEY</license-key>
 
     <network>
@@ -22,18 +19,27 @@
     <wan-replication name="AtoB">
         <batch-publisher>
             <cluster-name>clusterB</cluster-name>
-
-            <properties>
-                <property name="endpoints">127.0.0.1:5702</property>
-                <!-- Acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE  -->
-                <property name="ack.type">ACK_ON_OPERATION_COMPLETE</property>
-                <!-- <property name="ack.type">ACK_ON_TRANSMIT</property> -->
-            </properties>
+            <target-endpoints>127.0.0.1:5702</target-endpoints>
         </batch-publisher>
+        <!--
+        <custom-publisher>
+            <class-name>YOUR_PUBLISHER_CLASS_NAME</class-name>
+            <publisher-id>YOUR_PUBLISHER_ID</publisher-id>
+            <properties>
+                <property name="key">value</property>
+            </properties>
+        </custom-publisher>
+        <consumer>
+            <class-name>YOUR_CONSUMER_CLASS_NAME</class-name>
+            <properties>
+                <property name="key">value</property>
+            </properties>
+        </consumer>
+        -->
     </wan-replication>
     <map name="default">
         <wan-replication-ref name="AtoB">
-            <merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+            <merge-policy>com.hazelcast.spi.merge.PassThroughMergePolicy</merge-policy>
             <!-- Filters are optional -->
             <filters>
                 <filter-impl>com.hazelcast.wan.batch.map.filter.SampleMapWanEventFilter</filter-impl>
