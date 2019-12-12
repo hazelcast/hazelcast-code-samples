@@ -27,17 +27,6 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!-- Solace dependencies -->
-        <dependency>
-            <groupId>com.solacesystems</groupId>
-            <artifactId>sol-common</artifactId>
-            <version>10.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.solacesystems</groupId>
-            <artifactId>sol-jcsmp</artifactId>
-            <version>10.0.0</version>
-        </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
