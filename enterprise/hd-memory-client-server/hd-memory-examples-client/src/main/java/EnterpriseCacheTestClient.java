@@ -1,6 +1,6 @@
+import com.hazelcast.cache.HazelcastCachingProvider;
 import com.hazelcast.cache.ICache;
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.client.cache.impl.HazelcastClientCachingProvider;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.XmlClientConfigBuilder;
 import com.hazelcast.core.HazelcastInstance;
@@ -13,6 +13,8 @@ import org.HdrHistogram.AtomicHistogram;
 import org.HdrHistogram.Histogram;
 
 import javax.cache.CacheManager;
+import javax.cache.Caching;
+import javax.cache.spi.CachingProvider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
@@ -59,7 +61,8 @@ public final class EnterpriseCacheTestClient {
         ClientConfig clientConfig = new XmlClientConfigBuilder(configInputStream).build();
 
         this.instance = HazelcastClient.newHazelcastClient(clientConfig);
-        this.cacheManager = HazelcastClientCachingProvider.createCachingProvider(instance).getCacheManager();
+        CachingProvider provider = Caching.getCachingProvider(HazelcastCachingProvider.CLIENT_CACHING_PROVIDER);
+        this.cacheManager = provider.getCacheManager(null, null, HazelcastCachingProvider.propertiesByInstanceItself(instance));
         this.executorService = Executors.newFixedThreadPool(threadCount);
         this.logger = Logger.getLogger(getClass());
         this.allStats = new Stats[threadCount];
