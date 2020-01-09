@@ -134,7 +134,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         WanReplicationRef wanReplicationRef = new WanReplicationRef();
         wanReplicationRef.setName("AtoB");
         config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-        wanReplicationRef.setMergePolicy(HigherHitsMergePolicy.class.getName());
+        wanReplicationRef.setMergePolicyClassName(HigherHitsMergePolicy.class.getName());
         wanReplicationRef.addFilter(SampleCacheWanEventFilter.class.getName());
         config.getCacheConfig("default").setWanReplicationRef(wanReplicationRef);
 
