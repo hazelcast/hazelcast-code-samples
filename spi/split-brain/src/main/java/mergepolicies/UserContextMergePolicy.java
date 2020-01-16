@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentMap;
  * @param <V> the type of the returned merged value
  * @see com.hazelcast.spi.merge.SplitBrainMergeTypes
  */
-public class UserContextMergePolicy<V> implements SplitBrainMergePolicy<V, MergingValue<V>>, HazelcastInstanceAware {
+public class UserContextMergePolicy<V> implements SplitBrainMergePolicy<V, MergingValue<V>, V>, HazelcastInstanceAware {
 
     public static final String TRUTH_PROVIDER_ID = "truthProvider";
 
@@ -41,8 +41,8 @@ public class UserContextMergePolicy<V> implements SplitBrainMergePolicy<V, Mergi
     public V merge(MergingValue<V> mergingValue, MergingValue<V> existingValue) {
         // the in-memory format of the data structure maybe BINARY, but since we need to compare
         // the real value, we have to use getDeserializedValue() instead of getValue()
-        Object mergingUserValue = mergingValue.getDeserializedValue();
-        Object existingUserValue = existingValue == null ? null : existingValue.getDeserializedValue();
+        Object mergingUserValue = mergingValue.getValue();
+        Object existingUserValue = existingValue == null ? null : existingValue.getValue();
         boolean isMergeable = truthProvider.isMergeable(mergingUserValue, existingUserValue);
         System.out.println("========================== Merging..."
                 + "\n    mergingValue: " + mergingUserValue

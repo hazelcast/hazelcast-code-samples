@@ -33,14 +33,14 @@ import com.hazelcast.spi.merge.SplitBrainMergeTypes.MapMergeTypes;
  *
  * @see com.hazelcast.spi.merge.SplitBrainMergeTypes
  */
-public class MapEntryCostsMergePolicy implements SplitBrainMergePolicy<Data, MapMergeTypes> {
+public class MapEntryCostsMergePolicy implements SplitBrainMergePolicy<Data, MapMergeTypes<Data, Data>, Data> {
 
     @Override
-    public Data merge(MapMergeTypes mergingValue, MapMergeTypes existingValue) {
+    public Data merge(MapMergeTypes<Data, Data> mergingValue, MapMergeTypes<Data, Data> existingValue) {
         if (existingValue == null) {
             return mergingValue.getValue();
         }
-        System.out.println("========================== Merging key " + mergingValue.getDeserializedKey() + "..."
+        System.out.println("========================== Merging key " + mergingValue.getKey() + "..."
                 + "\n    mergingValue costs: " + mergingValue.getCost()
                 + "\n    existingValue costs: " + existingValue.getCost()
         );

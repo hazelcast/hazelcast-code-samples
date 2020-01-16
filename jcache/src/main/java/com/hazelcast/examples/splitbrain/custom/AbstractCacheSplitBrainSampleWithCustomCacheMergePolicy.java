@@ -23,7 +23,7 @@ import static com.hazelcast.examples.helper.HazelcastUtils.generateKeyOwnedBy;
 
 /**
  * Base class for jcache split-brain sample based on custom cache merge policy.
- *
+ * <p>
  * Custom cache merge policy implements {@link com.hazelcast.spi.merge.SplitBrainMergePolicy} and handles its own logic.
  * <p>
  * <b>IMPORTANT</b>: this sample uses internal API {@code HazelcastServerCachingProvider} to
@@ -80,7 +80,7 @@ abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends A
         }
     }
 
-    public static class CustomCacheMergePolicy implements SplitBrainMergePolicy<Object, MergingValue<Object>> {
+    public static class CustomCacheMergePolicy implements SplitBrainMergePolicy<Object, MergingValue<Object>, Object> {
 
         @Override
         public Object merge(MergingValue<Object> mergingValue, MergingValue<Object> existingValue) {

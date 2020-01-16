@@ -28,8 +28,8 @@ import com.hazelcast.spi.merge.SplitBrainMergePolicy;
  * This merge policy will work on all split-brain capable data structures
  * (except {@link CardinalityEstimator}, which doesn't allow custom merge policies).
  * <p>
- * For the {@link com.hazelcast.core.ISet}, {@link com.hazelcast.core.IList},
- * {@link com.hazelcast.core.IQueue} and {@link com.hazelcast.ringbuffer.Ringbuffer},
+ * For the {@link com.hazelcast.collection.ISet}, {@link com.hazelcast.collection.IList},
+ * {@link com.hazelcast.collection.IQueue} and {@link com.hazelcast.ringbuffer.Ringbuffer},
  * this policy will return {@code null} since these structures will provide the entire
  * collection to the merge policy instead of individual items and the type of the
  * collection is never an integer.
@@ -37,14 +37,14 @@ import com.hazelcast.spi.merge.SplitBrainMergePolicy;
  * @param <V> the type of the returned merged value
  * @see com.hazelcast.spi.merge.SplitBrainMergeTypes
  */
-public class MergeIntegerValuesMergePolicy<V> implements SplitBrainMergePolicy<V, MergingValue<V>> {
+public class MergeIntegerValuesMergePolicy<V> implements SplitBrainMergePolicy<V, MergingValue<V>, V> {
 
     @Override
     public V merge(MergingValue<V> mergingValue, MergingValue<V> existingValue) {
         // the in-memory format of the data structure maybe BINARY, but since we need to compare
         // the real value, we have to use getDeserializedValue() instead of getValue()
-        Object mergingUserValue = mergingValue.getDeserializedValue();
-        Object existingUserValue = existingValue == null ? null : existingValue.getDeserializedValue();
+        Object mergingUserValue = mergingValue.getRawValue();
+        Object existingUserValue = existingValue == null ? null : existingValue.getRawValue();
         System.out.println("========================== Merging..."
                 + "\n    mergingValue: " + mergingUserValue
                 + "\n    existingValue: " + existingUserValue
