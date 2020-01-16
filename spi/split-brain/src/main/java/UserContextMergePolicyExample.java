@@ -33,7 +33,7 @@ public final class UserContextMergePolicyExample {
 
     private static final String MAP_NAME = "myMap";
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         // for a custom merge policy we have to provide the FQCN, not just the simple classname
         MergePolicyConfig mergePolicyConfig = new MergePolicyConfig()
                 .setPolicy(UserContextMergePolicy.class.getName());
@@ -46,7 +46,7 @@ public final class UserContextMergePolicyExample {
                 .setMergePolicyConfig(mergePolicyConfig);
 
         // we use the user context to provide access to our TruthProvider in the merge policy
-        ConcurrentMap<String, Object> userContext = new ConcurrentHashMap<String, Object>();
+        ConcurrentMap<String, Object> userContext = new ConcurrentHashMap();
         userContext.put(TRUTH_PROVIDER_ID, new ExampleTruthProvider());
 
         final Config config = new Config()

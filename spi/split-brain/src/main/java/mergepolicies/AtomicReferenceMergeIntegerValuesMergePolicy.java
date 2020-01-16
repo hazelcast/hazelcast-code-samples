@@ -33,14 +33,14 @@ import com.hazelcast.spi.merge.SplitBrainMergeTypes.AtomicReferenceMergeTypes;
  *
  * @see com.hazelcast.spi.merge.SplitBrainMergeTypes
  */
-public class AtomicReferenceMergeIntegerValuesMergePolicy implements SplitBrainMergePolicy<Object, AtomicReferenceMergeTypes> {
+public class AtomicReferenceMergeIntegerValuesMergePolicy implements SplitBrainMergePolicy<Object, AtomicReferenceMergeTypes, Object> {
 
     @Override
     public Object merge(AtomicReferenceMergeTypes mergingValue, AtomicReferenceMergeTypes existingValue) {
         // the in-memory format of the data structure maybe BINARY, but since we need to compare
-        // the real value, we have to use getDeserializedValue() instead of getValue()
-        Object mergingUserValue = mergingValue.getDeserializedValue();
-        Object existingUserValue = existingValue == null ? null : existingValue.getDeserializedValue();
+        // the real value, we have to use getValue() instead of getRawValue()
+        Object mergingUserValue = mergingValue.getValue();
+        Object existingUserValue = existingValue == null ? null : existingValue.getValue();
         System.out.println("========================== Merging..."
                 + "\n    mergingValue: " + mergingUserValue
                 + "\n    existingValue: " + existingUserValue
