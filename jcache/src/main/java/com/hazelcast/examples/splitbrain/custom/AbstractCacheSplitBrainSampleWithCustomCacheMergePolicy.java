@@ -64,7 +64,7 @@ abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends A
             String key = generateKeyOwnedBy(h1);
             cache1.put(key, "value");
 
-            cache2.put(key, Integer.valueOf(1));
+            cache2.put(key, 1);
 
             assertOpenEventually(splitBrainCompletedLatch);
             assertClusterSizeEventually(2, h1);
@@ -80,12 +80,12 @@ abstract class AbstractCacheSplitBrainSampleWithCustomCacheMergePolicy extends A
         }
     }
 
-    public static class CustomCacheMergePolicy implements SplitBrainMergePolicy<Object, MergingValue<Object>> {
+    public static class CustomCacheMergePolicy implements SplitBrainMergePolicy<Object, MergingValue<Object>, Object> {
 
         @Override
         public Object merge(MergingValue<Object> mergingValue, MergingValue<Object> existingValue) {
-            if (mergingValue.getValue() instanceof Integer) {
-                return mergingValue.getValue();
+            if (mergingValue.getRawValue() instanceof Integer) {
+                return mergingValue.getRawValue();
             }
             return null;
         }
