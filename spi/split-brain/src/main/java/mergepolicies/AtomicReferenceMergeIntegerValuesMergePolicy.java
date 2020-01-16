@@ -33,7 +33,8 @@ import com.hazelcast.spi.merge.SplitBrainMergeTypes.AtomicReferenceMergeTypes;
  *
  * @see com.hazelcast.spi.merge.SplitBrainMergeTypes
  */
-public class AtomicReferenceMergeIntegerValuesMergePolicy implements SplitBrainMergePolicy<Object, AtomicReferenceMergeTypes, Object> {
+public class AtomicReferenceMergeIntegerValuesMergePolicy
+        implements SplitBrainMergePolicy<Object, AtomicReferenceMergeTypes, Object> {
 
     @Override
     public Object merge(AtomicReferenceMergeTypes mergingValue, AtomicReferenceMergeTypes existingValue) {
