@@ -18,14 +18,12 @@
   -->
 <hazelcast
         xsi:schemaLocation="http://www.hazelcast.com/schema/config
-        http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+        http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
         xmlns="http://www.hazelcast.com/schema/config"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <group>
-        <name>bootifulcluster</name>
-        <password>bootiful-pass</password>
-    </group>
+    <instance-name>hz-jcache-member</instance-name>
+    <cluster-name>bootifulcluster</cluster-name>
     <network>
         <join>
             <multicast enabled="true"/>
