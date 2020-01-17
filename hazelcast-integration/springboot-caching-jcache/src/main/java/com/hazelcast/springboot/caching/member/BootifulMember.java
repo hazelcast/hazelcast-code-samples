@@ -16,11 +16,9 @@
  *
  */
 
-package com.hazelcast.springboot.caching;
+package com.hazelcast.springboot.caching.member;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 
@@ -30,11 +28,7 @@ import org.springframework.cache.annotation.EnableCaching;
  * @author Viktor Gamov on 12/26/15.
  *         Twitter: @gamussa
  */
-@SpringBootApplication(scanBasePackages = "com.hazelcast.springboot.caching.BootifulMember")
-@EnableAutoConfiguration(exclude = {
-        // disable Hazelcast Auto Configuration, and use JCache configuration for the member example
-        HazelcastAutoConfiguration.class
-})
+@SpringBootApplication(scanBasePackages = "com.hazelcast.springboot.caching.member")
 @EnableCaching
 public class BootifulMember {
     public static void main(String[] args) {

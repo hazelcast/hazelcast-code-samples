@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -cp target/lib/*:target/classes com.hazelcast.springboot.caching.BootifulMember
+java -cp target/lib/*:target/classes com.hazelcast.springboot.caching.member.BootifulMember
