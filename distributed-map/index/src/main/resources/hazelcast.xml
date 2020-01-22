@@ -34,6 +34,30 @@
         </indexes>
     </map>
 
+    <map name="personsWithBitmapIndexOnHabits">
+        <indexes>
+            <index type="BITMAP">
+                <attributes>
+                    <attribute>habits[any]</attribute>
+                </attributes>
+            </index>
+        </indexes>
+        <!-- disable record caching for more precise index memory cost approximation -->
+        <cache-deserialized-values>NEVER</cache-deserialized-values>
+    </map>
+
+    <map name="personsWithHashIndexOnHabits">
+        <indexes>
+            <index type="HASH">
+                <attributes>
+                    <attribute>habits[any]</attribute>
+                </attributes>
+            </index>
+        </indexes>
+        <!-- disable record caching for more precise index memory cost approximation -->
+        <cache-deserialized-values>NEVER</cache-deserialized-values>
+    </map>
+
     <map name="personsWithoutIndex">
     </map>
 </hazelcast>
