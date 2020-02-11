@@ -71,7 +71,7 @@
     <repositories>
         <repository>
             <id>wasdev</id>
-            <url>http://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/maven/repository/</url>
+            <url>https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/maven/repository/</url>
         </repository>
     </repositories>
 </project>
