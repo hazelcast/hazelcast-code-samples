@@ -33,19 +33,23 @@ public class OffloadableEntryProcessorDemo {
         // EntryProcessor.process() will run on offloaded thread - a lock will be acquired for the given key
         String offloadedThread = (String) employees.executeOnKey("John", new OffloadableEntryProcessor());
         assertTrue(offloadedThread.contains("cached.thread"));
+        System.out.println("John salary after OffloadableEntryProcessor: " + employees.get("John").getSalary());
 
         // EntryProcessor.process() will run on offloaded thread - a lock won't be acquired for the given key, since
         // the EntryProcessor is ReadOnly
         offloadedThread = (String) employees.executeOnKey("John", new OffloadableReadOnlyEntryProcessor());
         assertTrue(offloadedThread.contains("cached.thread"));
+        System.out.println("John salary after OffloadableReadOnlyEntryProcessor: " + employees.get("John").getSalary());
 
         // EntryProcessor.process() will run on partition thread
         String partitionThread = (String) employees.executeOnKey("John", new ReadOnlyEntryProcessor());
         assertTrue(partitionThread.contains("partition-operation.thread"));
+        System.out.println("John salary after ReadOnlyEntryProcessor: " + employees.get("John").getSalary());
 
         // EntryProcessor.process() will run on partition thread
         partitionThread = (String) employees.executeOnKey("John", new OrdinaryEntryProcessor());
         assertTrue(partitionThread.contains("partition-operation.thread"));
+        System.out.println("John salary after OrdinaryEntryProcessor: " + employees.get("John").getSalary());
 
         Hazelcast.shutdownAll();
     }
