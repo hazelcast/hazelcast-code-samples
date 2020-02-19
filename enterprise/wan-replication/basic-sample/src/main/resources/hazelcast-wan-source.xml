@@ -43,9 +43,7 @@
           replicating this map. The name should match to the name set in the
           referenced `wan-replication` configuration element.
          -->
-        <wan-replication-ref name="wan-sample">
-            <merge-policy-class-name>PassThroughMergePolicy</merge-policy-class-name>
-        </wan-replication-ref>
+        <wan-replication-ref name="wan-sample"/>
     </map>
 
     <!--

@@ -11,7 +11,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * WAN target cluster member that the {@link WanSource} cluster is replicating to.
+ * The passive side of the WAN configuration. This main class starts the
+ * cluster member receiving and applying the map update events replicated
+ * from the active side started with {@link WanSource}.
  */
 public class WanTarget {
 

@@ -14,8 +14,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * WAN source cluster member replicating to the WAN target cluster started
- * with {@link WanTarget}.
+ * The active side of the WAN configuration. This main class starts the
+ * cluster member replicating to the passive side, the target cluster that
+ * is started with {@link WanTarget}.
  */
 public class WanSource {
 

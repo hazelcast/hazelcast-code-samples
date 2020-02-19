@@ -1,14 +1,17 @@
 ## ABOUT
 This project is prepared to serve as the most basic sample application for the WAN replication implementation built in
-Hazelcast Enterprise. The project configures WAN source and target members with either
-XML, YAML or programmatic configuration. All source- and target-side configurations are identical, so a source cluster member
-configured with XML configuration can connect to a target configured with programmatic or YAML configuration.
+Hazelcast Enterprise. The project creates two clusters in Active-Passive WAN replication mode where the members can be
+configured with either XML, YAML or programmatic configuration. All source- and target-side configurations are identical, 
+so a source cluster member configured with XML configuration can connect to a target configured with programmatic or YAML
+configuration.
  
 ## The Scenario
-There are two clusters, source and target formed by the members started with `WanSource` and `WanTarget` main classes
+There are two clusters replicating in Active-Passive mode. The active side is the source cluster where the write operations are
+done, in this simple case these are map puts. The passive side is the target cluster that receives the updates from the source
+cluster and applies them. The two clusters are formed by the members started with `WanSource` and `WanTarget` main classes
 respectively. Both clusters print the size of the map named `wan-replicated-map` in every second, but only the source cluster
-writes the map, it puts 10 new entries every second. If the `WanTarget` main class is started first, it prints 0 every second.
-After starting the `WanSource` cluster, eventually the source and the target cluster members start printing the same size
+calls `map.put()`, it puts 10 new entries in every second. If the `WanTarget` main class is started first, it prints 0 every
+second. After starting the `WanSource` cluster, eventually the source and the target cluster members start printing the same size
 for the map meaning the entries are replicated from the source cluster to the target cluster.   
  
 ## Running the Sample Applications

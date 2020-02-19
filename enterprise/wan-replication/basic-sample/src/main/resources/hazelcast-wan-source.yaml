@@ -32,8 +32,7 @@ hazelcast:
       # match to the name set in the referenced `wan-replication` configuration
       # element.
       wan-replication-ref:
-        wan-sample:
-          merge-policy-class-name: PassThroughMergePolicy
+        wan-sample: {}
 
   wan-replication:
     # The name of the WAN replication, to be referenced under the
