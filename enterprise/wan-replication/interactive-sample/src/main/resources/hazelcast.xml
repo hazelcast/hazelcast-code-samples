@@ -39,7 +39,7 @@
     </wan-replication>
     <map name="default">
         <wan-replication-ref name="AtoB">
-            <merge-policy>com.hazelcast.spi.merge.PassThroughMergePolicy</merge-policy>
+            <merge-policy-class-name>com.hazelcast.spi.merge.PassThroughMergePolicy</merge-policy-class-name>
             <!-- Filters are optional -->
             <filters>
                 <filter-impl>com.hazelcast.wan.batch.map.filter.SampleMapWanEventFilter</filter-impl>
