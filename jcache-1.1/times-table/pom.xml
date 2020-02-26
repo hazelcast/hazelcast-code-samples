@@ -22,7 +22,7 @@
 
         <!-- these versions are set by the build profile, see the bottom of this file -->
         <hazelcast.version>${profile.hazelcast.version}</hazelcast.version>
-        <javax-cache.version>${profile.jsr107.version}</javax-cache.version>
+        <javax-cache.version>1.1.1</javax-cache.version>
 
         <java.version>8</java.version>
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
