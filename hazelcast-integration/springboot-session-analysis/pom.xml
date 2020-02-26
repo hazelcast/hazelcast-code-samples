@@ -21,7 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<hazelcast.version>3.10.2</hazelcast.version>
-		<hazelcast-jet.version>0.6.1</hazelcast-jet.version>
+		<hazelcast-jet.version>3.2.2</hazelcast-jet.version>
 		<hazelcast-wm.version>3.8.3</hazelcast-wm.version>
 		<java.version>1.8</java.version>
 		<spring-boot.version>2.0.3.RELEASE</spring-boot.version>
