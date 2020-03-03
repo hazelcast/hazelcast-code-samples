@@ -1,8 +1,8 @@
 package com.hazelcast.samples.session.analysis;
 
+import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.core.JobStatus;
@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static com.hazelcast.jet.impl.JobRepository.INTERNAL_JET_OBJECTS_PREFIX;
 
 /**
  * <p>Additional commands for this application to augment those
@@ -36,7 +38,7 @@ public class ApplicationCLI {
      * </p>
      *
      * @param hazelcastInstance Spring {@code @Bean}
-     * @param jetInstance Spring {@code @Bean}
+     * @param jetInstance       Spring {@code @Bean}
      */
     public ApplicationCLI(HazelcastInstance hazelcastInstance, JetInstance jetInstance) {
         this.hazelcastInstance = hazelcastInstance;
@@ -50,12 +52,12 @@ public class ApplicationCLI {
         // Populate maps if needed, first member in cluster
         IMap<String, Integer> stockMap = this.hazelcastInstance.getMap(Constants.IMAP_NAME_STOCK);
         if (stockMap.isEmpty()) {
-                for (Object[] item : Constants.TESTDATA) {
-                    String key = item[0].toString();
-                    Integer value = Integer.valueOf(item[1].toString());
-                    stockMap.set(key, value);
-                }
-                log.info("Loaded {} into IMap '{}'", Constants.TESTDATA.length, stockMap.getName());
+            for (Object[] item : Constants.TESTDATA) {
+                String key = item[0].toString();
+                Integer value = Integer.valueOf(item[1].toString());
+                stockMap.set(key, value);
+            }
+            log.info("Loaded {} into IMap '{}'", Constants.TESTDATA.length, stockMap.getName());
         }
 
     }
@@ -98,18 +100,19 @@ public class ApplicationCLI {
      * is set on <b><i>write</i></b>.
      * </p>
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @ShellMethod(key = "LIST", value = "List map keys")
     public void listIMaps() {
         Set<String> iMapNames = this.hazelcastInstance.getDistributedObjects().stream()
-                .filter(distributedObject -> distributedObject instanceof IMap)
-                .filter(distributedObject -> !distributedObject.getName().startsWith(Jet.INTERNAL_JET_OBJECTS_PREFIX))
-                .map(distributedObject -> distributedObject.getName()).collect(Collectors.toCollection(TreeSet::new));
+                                                      .filter(distributedObject -> distributedObject instanceof IMap)
+                                                      .filter(distributedObject -> !distributedObject.getName().startsWith(INTERNAL_JET_OBJECTS_PREFIX))
+                                                      .map(DistributedObject::getName)
+                                                      .collect(Collectors.toCollection(TreeSet::new));
 
-        iMapNames.stream().forEach(name -> {
+        iMapNames.forEach(name -> {
             IMap<?, ?> iMap = this.hazelcastInstance.getMap(name);
 
-            System.out.println("");
+            System.out.println();
             System.out.printf("IMap: '%s'%n", name);
 
             // Sort if possible
@@ -118,14 +121,11 @@ public class ApplicationCLI {
                 keys = new TreeSet(keys);
             }
 
-            keys.stream().forEach(key -> {
-                System.out.printf("    -> '%s' -> %s%n", key, iMap.get(key));
-            });
+            keys.forEach(key -> System.out.printf("    -> '%s' -> %s%n", key, iMap.get(key)));
 
             System.out.printf("[%d entr%s]%n", iMap.size(), (iMap.size() == 1 ? "y" : "ies"));
         });
 
-        System.out.println("");
+        System.out.println();
     }
-
 }
