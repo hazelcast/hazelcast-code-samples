@@ -103,11 +103,12 @@ public class ApplicationCLI {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @ShellMethod(key = "LIST", value = "List map keys")
     public void listIMaps() {
-        Set<String> iMapNames = this.hazelcastInstance.getDistributedObjects().stream()
-                                                      .filter(distributedObject -> distributedObject instanceof IMap)
-                                                      .filter(distributedObject -> !distributedObject.getName().startsWith(INTERNAL_JET_OBJECTS_PREFIX))
-                                                      .map(DistributedObject::getName)
-                                                      .collect(Collectors.toCollection(TreeSet::new));
+        Set<String> iMapNames = this.hazelcastInstance
+                .getDistributedObjects().stream()
+                .filter(distributedObject -> distributedObject instanceof IMap)
+                .filter(distributedObject -> !distributedObject.getName().startsWith(INTERNAL_JET_OBJECTS_PREFIX))
+                .map(DistributedObject::getName)
+                .collect(Collectors.toCollection(TreeSet::new));
 
         iMapNames.forEach(name -> {
             IMap<?, ?> iMap = this.hazelcastInstance.getMap(name);
