@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hazelcast
-	xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-4.0.xsd"
-	xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                               http://www.hazelcast.com/schema/config/hazelcast-config-3.12.xsd"
+		   xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-	<cluster-name>
-		${my.group.name}
-	</cluster-name>
+	<group>
+		<name>${my.group.name}</name>
+	</group>
 
 	<network>
 		<join>

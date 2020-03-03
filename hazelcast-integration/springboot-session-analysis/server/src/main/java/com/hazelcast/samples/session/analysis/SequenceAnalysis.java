@@ -1,12 +1,11 @@
 package com.hazelcast.samples.session.analysis;
 
 import com.hazelcast.core.EntryEventType;
+import com.hazelcast.core.IMap;
 import com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder;
 import com.hazelcast.jet.core.processor.Processors;
 import com.hazelcast.jet.datamodel.Tuple2;
-import com.hazelcast.jet.function.DistributedFunction;
-import com.hazelcast.jet.function.DistributedFunctions;
-import com.hazelcast.jet.function.DistributedPredicate;
+import com.hazelcast.jet.function.FunctionEx;
 import com.hazelcast.jet.pipeline.JournalInitialPosition;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -22,6 +21,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static com.hazelcast.jet.function.Functions.wholeItem;
+
 /**
  * <p>Analyse the sequence of items being added to baskets.
  * Most of the work is in {@link #build()} which creates a
@@ -34,12 +35,7 @@ public class SequenceAnalysis {
     private static final SerializationService SERIALIZATION_SERVICE =
             new DefaultSerializationServiceBuilder().build();
 
-    private static final DistributedPredicate
-        <EventJournalMapEvent<String, SessionState>>
-            NO_SELECTION_FILTER = DistributedFunctions.alwaysTrue();
-    private static final DistributedFunction
-            <EventJournalMapEvent<String, SessionState>, EventJournalMapEvent<String, SessionState>>
-        NO_PROJECTION_FILTER = DistributedFunctions.wholeItem();
+    private static final FunctionEx<Object, Object> NO_PROJECTION_FILTER = wholeItem();
 
     /**
      * <p>A six processing pipeline, starting from the journal of <u>changes</u>
@@ -157,35 +153,35 @@ public class SequenceAnalysis {
      *
      * @return Processing to run in a Jet {@link com.hazelcast.jet.Job Job}.
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static Pipeline build() {
         Pipeline pipeline = Pipeline.create();
 
         pipeline
-        // (1)
-        .drawFrom(Sources.mapJournal(Constants.IMAP_NAME_JSESSIONID,
-            NO_SELECTION_FILTER,
-            NO_PROJECTION_FILTER,
-            JournalInitialPosition.START_FROM_OLDEST))
-        // (2)
-        .filter(eventJournalMapEvent -> eventJournalMapEvent.getType().equals(EntryEventType.UPDATED))
-        // (3)
-        .customTransform("beforeAndAfterBaskets", Processors.mapP(SequenceAnalysis::beforeAndAfterBaskets))
-        // (4)
-        .filter(tuple2 ->
-                ((Tuple2<Map<String, Integer>, Map<String, Integer>>) tuple2).f0().size()
-                < ((Tuple2<Map<String, Integer>, Map<String, Integer>>) tuple2).f1().size()
+                // (1)
+                .drawFrom(Sources.mapJournal(Constants.IMAP_NAME_JSESSIONID,
+                        eventJournalMapEvent -> eventJournalMapEvent.getType().equals(EntryEventType.UPDATED),
+                        NO_PROJECTION_FILTER,
+                        JournalInitialPosition.START_FROM_OLDEST))
+                // (2)
+                .withoutTimestamps()
+                // (3)
+                .customTransform("beforeAndAfterBaskets", Processors.mapP(SequenceAnalysis::beforeAndAfterBaskets))
+                // (4)
+                .filter(tuple2 ->
+                        ((Tuple2<Map<String, Integer>, Map<String, Integer>>) tuple2).f0().size()
+                                < ((Tuple2<Map<String, Integer>, Map<String, Integer>>) tuple2).f1().size()
                 )
-        // (5)
-        .customTransform("lastItem", Processors.mapP(SequenceAnalysis::lastItem))
-        // (6)
-        .drainTo(
-               Sinks.mapWithEntryProcessor(
-                Constants.IMAP_NAME_SEQUENCE,
-                   DistributedFunctions.wholeItem(),
-                    key -> ((EntryProcessor) new IncrementEntryProcessor())
-             )
-            )
+                // (5)
+                .customTransform("lastItem", Processors.mapP(SequenceAnalysis::lastItem))
+                // (6)
+                .drainTo(
+                        Sinks.mapWithEntryProcessor(
+                                Constants.IMAP_NAME_SEQUENCE,
+                                wholeItem(),
+                                key -> ((EntryProcessor) new IncrementEntryProcessor())
+                        )
+                )
         ;
 
         return pipeline;
@@ -203,19 +199,15 @@ public class SequenceAnalysis {
      * @return A pair of baskets, one each from before and after
      */
     private static Tuple2<Map<String, Integer>, Map<String, Integer>>
-        beforeAndAfterBaskets(EventJournalMapEvent<String, SessionState> eventJournalMapEvent) {
+    beforeAndAfterBaskets(EventJournalMapEvent<String, SessionState> eventJournalMapEvent) {
 
-        @SuppressWarnings("unchecked")
         Map<String, Integer> before
-        = (Map<String, Integer>)
-            SERIALIZATION_SERVICE.toObject(eventJournalMapEvent.getOldValue().getAttributes()
-            .get(Constants.SESSION_ATTRIBUTE_BASKET));
+                = SERIALIZATION_SERVICE.toObject(eventJournalMapEvent.getOldValue().getAttributes()
+                                                                     .get(Constants.SESSION_ATTRIBUTE_BASKET));
 
-        @SuppressWarnings("unchecked")
         Map<String, Integer> after
-        = (Map<String, Integer>)
-            SERIALIZATION_SERVICE.toObject(eventJournalMapEvent.getNewValue().getAttributes()
-            .get(Constants.SESSION_ATTRIBUTE_BASKET));
+                = SERIALIZATION_SERVICE.toObject(eventJournalMapEvent.getNewValue().getAttributes()
+                                                                     .get(Constants.SESSION_ATTRIBUTE_BASKET));
 
         return Tuple2.tuple2(before, after);
     }
@@ -233,7 +225,7 @@ public class SequenceAnalysis {
      * @return The item added to the basket
      */
     private static Tuple2<Integer, String>
-        lastItem(Tuple2<Map<String, Integer>, Map<String, Integer>> tuple2) {
+    lastItem(Tuple2<Map<String, Integer>, Map<String, Integer>> tuple2) {
 
         Set<String> before = tuple2.f0().keySet();
         TreeSet<String> after = new TreeSet<>(tuple2.f1().keySet());
@@ -245,7 +237,7 @@ public class SequenceAnalysis {
 
     /**
      * <p>Use an entry processor to make running totals visible in an
-     * {@link com.hazelcast.map.IMap IMap}. This way Jet can drain
+     * {@link IMap IMap}. This way Jet can drain
      * results into the map and keep the totals in step.
      * </p>
      */
@@ -253,9 +245,9 @@ public class SequenceAnalysis {
     static class IncrementEntryProcessor extends AbstractEntryProcessor<Tuple2<Integer, String>, Integer> {
         @Override
         public Integer process(Entry<Tuple2<Integer, String>, Integer> entry) {
-                Integer oldValue = entry.getValue();
-                Integer newValue = (oldValue == null ? 1 : oldValue + 1);
-                return entry.setValue(newValue);
+            Integer oldValue = entry.getValue();
+            Integer newValue = (oldValue == null ? 1 : oldValue + 1);
+            return entry.setValue(newValue);
         }
     }
 }
