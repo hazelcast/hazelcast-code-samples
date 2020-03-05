@@ -20,7 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
@@ -58,7 +57,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         }
         AbstractHazelcastCacheManager manager = (AbstractHazelcastCacheManager) provider.getCacheManager(cacheManagerName,
                 clusterA.getConfig().getClassLoader(), properties);
-        CacheConfig config = new CacheConfig(clusterA.getConfig().getCacheConfig("default"));
+        CacheConfig<Object, Object> config = new CacheConfig<>(clusterA.getConfig().getCacheConfig("default"));
         ICache<Object, Object> cache = manager.getOrCreateCache("default", config);
 
         System.out.println("Cluster is ready now.");
@@ -120,10 +119,9 @@ public class EnterpriseCacheWanReplicationClusterA {
         WanReplicationConfig wanReplicationConfig = new WanReplicationConfig();
         wanReplicationConfig.setName("AtoB");
 
-        WanBatchPublisherConfig publisherConfigClusterB = new WanBatchPublisherConfig();
-        publisherConfigClusterB.setClusterName("clusterB");
-        publisherConfigClusterB.setEndpoint("127.0.0.1:5702");
-        Map<String, Comparable> props = publisherConfigClusterB.getProperties();
+        WanBatchPublisherConfig publisherConfigClusterB = new WanBatchPublisherConfig()
+                .setClusterName("clusterB")
+                .setTargetEndpoints("127.0.0.1:5702");
 
         // setting acknowledge type is optional, defaults to ACK_ON_OPERATION_COMPLETE
         publisherConfigClusterB.setAcknowledgeType(WanAcknowledgeType.ACK_ON_OPERATION_COMPLETE);
@@ -146,7 +144,7 @@ public class EnterpriseCacheWanReplicationClusterA {
         return new CacheManagerClassLoader(currentClassLoader.getURLs(), currentClassLoader);
     }
 
-    private class CacheManagerClassLoader extends URLClassLoader {
+    private static class CacheManagerClassLoader extends URLClassLoader {
 
         CacheManagerClassLoader(URL[] urls, ClassLoader classLoader) {
             super(urls, classLoader);

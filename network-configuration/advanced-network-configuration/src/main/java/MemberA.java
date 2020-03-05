@@ -8,9 +8,9 @@ import com.hazelcast.config.WanReplicationConfig;
 import com.hazelcast.config.WanReplicationRef;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.spi.merge.PassThroughMergePolicy;
 
 import java.util.Collections;
-import java.util.Map;
 
 public class MemberA {
 
@@ -41,12 +41,9 @@ public class MemberA {
         // setup WAN replication
         WanBatchPublisherConfig wanBatchReplicationPublisherConfig = new WanBatchPublisherConfig()
                 .setClusterName("cluster-b")
-                .setClassName("com.hazelcast.enterprise.wan.replication.WanBatchReplication")
+                .setTargetEndpoints("147.102.1.10:8443,147.102.1.11:8443,147.102.1.12:8443")
                 // refer to the WAN endpoint config by name
                 .setEndpoint("active-wan");
-        Map<String, Comparable> props = wanBatchReplicationPublisherConfig.getProperties();
-        props.put("endpoints", "147.102.1.10:8443,147.102.1.11:8443,147.102.1.12:8443");
-        props.put("group.password", "clusterB-pass");
 
         config.addWanReplicationConfig(
                 new WanReplicationConfig()
@@ -55,11 +52,11 @@ public class MemberA {
 
         config.addMapConfig(
                 new MapConfig("wan-map")
-                    .setWanReplicationRef(
-                        new WanReplicationRef("active-wan-replication",
-                                "com.hazelcast.enterprise.wan.replication.WanBatchReplication",
-                                Collections.<String>emptyList(),
-                                false)));
+                        .setWanReplicationRef(
+                                new WanReplicationRef("active-wan-replication",
+                                        PassThroughMergePolicy.class.getName(),
+                                        Collections.emptyList(),
+                                        false)));
 
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
     }

@@ -71,20 +71,8 @@ Then, update the WAN Replication configuration in `publisher/hazelcast.xml` with
 ```xml
 <wan-replication name="wan-replication-cluster">
     <batch-publisher>
-       <cluster-name>dev</cluster-name>>
-        <queue-full-behavior>THROW_EXCEPTION</queue-full-behavior>
-        <queue-capacity>1000</queue-capacity>
-        <properties>
-            <property name="batch.size">1</property>
-            <property name="batch.max.delay.millis">1000</property>
-            <property name="snapshot.enabled">false</property>
-            <property name="response.timeout.millis">60000</property>
-            <property name="ack.type">ACK_ON_OPERATION_COMPLETE</property>
-            <property name="endpoints">35.184.122.109</property>
-            <property name="discovery.period">20</property>
-            <property name="executorThreadCount">2</property>
-        </properties>
-    
+        <cluster-name>dev</cluster-name>>
+        <target-endpoints>35.184.122.109</target-endpoints>
     </batch-publisher>
 </wan-replication>
 ```

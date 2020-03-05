@@ -1,6 +1,7 @@
 package com.hazelcast.wan.batch.map;
 
 import com.hazelcast.config.Config;
+import com.hazelcast.config.JoinConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
@@ -22,7 +23,7 @@ public class EnterpriseMapWanReplicationClusterB {
         initClusters();
         waitUntilClusterSafe();
         Scanner reader = new Scanner(System.in);
-        IMap map = clusterB.getMap("default");
+        IMap<String, String> map = clusterB.getMap("default");
         System.out.println("Cluster is ready now.");
         System.out.println("write \"help\" for the command lists:");
         while (true) {
@@ -59,11 +60,15 @@ public class EnterpriseMapWanReplicationClusterB {
     }
 
     private static Config getConfigClusterB() {
-        Config config = new Config();
-        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
-        config.setClusterName("clusterB");
-        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
-        config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1:5702");
+        Config config = new Config()
+                .setLicenseKey(ENTERPRISE_LICENSE_KEY)
+                .setClusterName("clusterB");
+        JoinConfig joinConfig = config.getNetworkConfig().getJoin();
+        joinConfig.getMulticastConfig()
+                  .setEnabled(false);
+        joinConfig.getTcpIpConfig()
+                  .setEnabled(true)
+                  .addMember("127.0.0.1:5702");
         return config;
     }
 }
