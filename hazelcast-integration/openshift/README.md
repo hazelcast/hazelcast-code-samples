@@ -390,27 +390,15 @@ public class Client {
 
 You need to expose your Hazelcast cluster with the `LoadBalancer` (or `NodePort`) service as described in the section "External Hazelcast Client".
 
-Then, use the External IP in `endpoints` in the WAN Configuration. For example,
+Then, use the External IP in `target-endpoints` in the WAN Configuration. For example,
 
 ```
 <wan-replication name="wan-replication-cluster">
-  <wan-publisher cluster-name="dev">
-      <class-name>com.hazelcast.enterprise.wan.replication.WanBatchReplication</class-name>
-      <queue-full-behavior>THROW_EXCEPTION</queue-full-behavior>
-      <queue-capacity>1000</queue-capacity>
-      <properties>
-          <property name="batch.size">500</property>
-          <property name="batch.max.delay.millis">1000</property>
-          <property name="snapshot.enabled">false</property>
-          <property name="response.timeout.millis">60000</property>
-          <property name="ack.type">ACK_ON_OPERATION_COMPLETE</property>
-          <property name="endpoints">EXTERNAL_IP:EXTERNAL_PORT</property>
-          <property name="discovery.period">20</property>
-          <property name="executorThreadCount">2</property>
-      </properties>
- 
-  </wan-publisher>
-</wan-replication>
+        <batch-publisher>
+            <cluster-name>dev</cluster-name>
+            <target-endpoints>EXTERNAL_IP:EXTERNAL_PORT</target-endpoints>
+        </batch-publisher>
+    </wan-replication>
 ```
 
 # Debugging

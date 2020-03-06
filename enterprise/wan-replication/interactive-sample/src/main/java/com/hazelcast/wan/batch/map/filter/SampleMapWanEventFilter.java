@@ -10,10 +10,9 @@ import com.hazelcast.map.wan.MapWanEventFilter;
  */
 public class SampleMapWanEventFilter implements MapWanEventFilter<String, String> {
     @Override
-    public boolean filter(String s, EntryView<String, String> entryView, WanFilterEventType wanFilterEventType) {
-        if (entryView.getValue().startsWith("filter")) {
-            return true;
-        }
-        return false;
+    public boolean filter(String s,
+                          EntryView<String, String> entryView,
+                          WanFilterEventType wanFilterEventType) {
+        return entryView.getValue().startsWith("filter");
     }
 }

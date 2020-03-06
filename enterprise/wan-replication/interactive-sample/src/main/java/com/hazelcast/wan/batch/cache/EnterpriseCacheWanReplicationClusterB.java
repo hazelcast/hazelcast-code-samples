@@ -50,7 +50,7 @@ public class EnterpriseCacheWanReplicationClusterB {
         }
         AbstractHazelcastCacheManager manager = (AbstractHazelcastCacheManager) provider.getCacheManager(cacheManagerName,
                 clusterB.getConfig().getClassLoader(), properties);
-        CacheConfig cacheConfig = new CacheConfig(clusterB.getConfig().getCacheConfig("default"));
+        CacheConfig<Object, Object> cacheConfig = new CacheConfig<>(clusterB.getConfig().getCacheConfig("default"));
         ICache<Object, Object> cache = manager.getOrCreateCache("default", cacheConfig);
 
         System.out.println("Cluster is ready now.");

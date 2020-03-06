@@ -37,8 +37,10 @@
         </consumer>
         -->
     </wan-replication>
+
     <map name="default">
         <wan-replication-ref name="AtoB">
+            <!-- Merge policy is optional -->
             <merge-policy-class-name>com.hazelcast.spi.merge.PassThroughMergePolicy</merge-policy-class-name>
             <!-- Filters are optional -->
             <filters>

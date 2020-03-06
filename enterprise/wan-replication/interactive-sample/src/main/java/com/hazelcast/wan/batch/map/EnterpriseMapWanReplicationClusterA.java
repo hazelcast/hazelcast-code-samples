@@ -21,7 +21,7 @@ public class EnterpriseMapWanReplicationClusterA {
         initClusters();
         waitUntilClusterSafe();
         Scanner reader = new Scanner(System.in);
-        IMap<Object, Object> map = clusterA.getMap("default");
+        IMap<String, String> map = clusterA.getMap("default");
         System.out.println("Cluster is ready now.");
         System.out.println("write \"help\" for the command lists:");
         while (true) {
