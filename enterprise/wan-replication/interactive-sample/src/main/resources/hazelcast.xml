@@ -21,6 +21,21 @@
             <cluster-name>clusterB</cluster-name>
             <target-endpoints>127.0.0.1:5702</target-endpoints>
         </batch-publisher>
+        <!--
+        <custom-publisher>
+            <class-name>YOUR_PUBLISHER_CLASS_NAME</class-name>
+            <publisher-id>YOUR_PUBLISHER_ID</publisher-id>
+            <properties>
+                <property name="key">value</property>
+            </properties>
+        </custom-publisher>
+        <consumer>
+            <class-name>YOUR_CONSUMER_CLASS_NAME</class-name>
+            <properties>
+                <property name="key">value</property>
+            </properties>
+        </consumer>
+        -->
     </wan-replication>
 
     <map name="default">
