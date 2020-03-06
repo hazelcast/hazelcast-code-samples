@@ -6,7 +6,7 @@ import com.hazelcast.map.IMap;
 
 public class Client {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         ClientConfig clientConfig = new ClientConfig();
         ClientUserCodeDeploymentConfig clientUserCodeDeploymentConfig = new ClientUserCodeDeploymentConfig();
         clientUserCodeDeploymentConfig.addClass("IncrementingEntryProcessor");
