@@ -19,7 +19,6 @@
 
     <modules>
         <module>discovery</module>
-        <module>priority-queue</module>
         <module>split-brain</module>
         <module>tenant-control</module>
     </modules>
