@@ -54,12 +54,8 @@ public final class EnterpriseCacheTestServer {
 
     public static void main(String[] input) {
         String memory = "3";
-        boolean master = false;
         if (input != null && input.length > 0) {
             memory = input[0];
-            if (input.length > 1 && input[1].equals("master")) {
-                master = true;
-            }
         }
 
         EnterpriseCacheTestServer test = new EnterpriseCacheTestServer(memory);
@@ -82,7 +78,7 @@ public final class EnterpriseCacheTestServer {
                 while (true) {
                     try {
                         Thread.sleep(STATS_SECONDS * 1000);
-                        System.out.println("");
+                        System.out.println();
                         System.out.println(memoryStats);
                     } catch (InterruptedException ignored) {
                         return;

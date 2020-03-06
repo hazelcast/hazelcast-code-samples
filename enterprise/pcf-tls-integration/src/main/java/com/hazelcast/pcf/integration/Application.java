@@ -61,9 +61,10 @@ public class Application {
         }
         BasicJsonParser parser = new BasicJsonParser();
         Map<String, Object> json = parser.parseMap(servicesJson);
-        List hazelcast = (List) json.get("hazelcast");
-        Map map = (Map) hazelcast.get(0);
-        Map credentials = (Map) map.get("credentials");
+        List<Map<String, Map<String, Object>>> hazelcast =
+                (List<Map<String, Map<String, Object>>>) json.get("hazelcast");
+        Map<String, Map<String, Object>> map = hazelcast.get(0);
+        Map<String, Object> credentials = map.get("credentials");
         String clusterName = (String) credentials.get("cluster_name");
         List<String> members = (List<String>) credentials.get("members");
         clientConfig = new ClientConfig();
