@@ -20,7 +20,7 @@ public class MyCacheListener<K, V> implements CacheEntryCreatedListener<K, V>, C
     @Override
     public void onCreated(Iterable<CacheEntryEvent<? extends K, ? extends V>> iterable)
             throws CacheEntryListenerException {
-        iterable.iterator().forEachRemaining(cacheEntryEvent -> this.log(cacheEntryEvent));
+        iterable.iterator().forEachRemaining(this::log);
     }
 
     /**
@@ -29,7 +29,7 @@ public class MyCacheListener<K, V> implements CacheEntryCreatedListener<K, V>, C
     @Override
     public void onUpdated(Iterable<CacheEntryEvent<? extends K, ? extends V>> iterable)
             throws CacheEntryListenerException {
-        iterable.iterator().forEachRemaining(cacheEntryEvent -> this.log(cacheEntryEvent));
+        iterable.iterator().forEachRemaining(this::log);
     }
 
     /**

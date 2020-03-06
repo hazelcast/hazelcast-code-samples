@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserDaoImpl implements UserDao {
 
-    private final Map<Integer, User> users = new ConcurrentHashMap<Integer, User>();
+    private final Map<Integer, User> users = new ConcurrentHashMap<>();
 
     public UserDaoImpl() {
         users.put(1, new User(1, "user1"));
@@ -47,6 +47,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Collection<Integer> allUserIds() {
-        return new ArrayList<Integer>(users.keySet());
+        return new ArrayList<>(users.keySet());
     }
 }

@@ -59,7 +59,7 @@ public class Util {
         try (InputStream inputStream =
                      Util.class.getResourceAsStream("/" + PROPERTIES_FILE_NAME);
              InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
+             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.startsWith(PROMPT_PREFIX)) {

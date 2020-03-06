@@ -8,7 +8,7 @@ import java.util.Collection;
 public class CacheListCommand implements Command {
 
     @Override
-    public void execute(Context context) throws Exception {
+    public void execute(Context context) {
         Collection<Integer> userIds = context.getUserDao().allUserIds();
         for (Integer userId : userIds) {
             User user = context.getUserCache().get(userId);

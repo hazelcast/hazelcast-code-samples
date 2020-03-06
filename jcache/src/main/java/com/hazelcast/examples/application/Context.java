@@ -61,7 +61,7 @@ public class Context {
     }
 
     public void newLine() {
-        output.println("");
+        output.println();
     }
 
     public int readInt() throws IOException {

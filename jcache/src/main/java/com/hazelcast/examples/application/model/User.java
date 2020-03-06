@@ -1,6 +1,7 @@
 package com.hazelcast.examples.application.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class User implements Serializable {
@@ -46,11 +47,7 @@ public class User implements Serializable {
         if (userId != user.userId) {
             return false;
         }
-        if (username != null ? !username.equals(user.username) : user.username != null) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(username, user.username);
     }
 
     @Override
