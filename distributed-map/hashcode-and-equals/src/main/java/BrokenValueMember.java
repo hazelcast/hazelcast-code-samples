@@ -9,7 +9,7 @@ public class BrokenValueMember {
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
 
-        Map<String, Pair> normalMap = new HashMap<String, Pair>();
+        Map<String, Pair> normalMap = new HashMap<>();
         Map<String, Pair> binaryMap = hz.getMap("binaryMap");
         Map<String, Pair> objectMap = hz.getMap("objectMap");
 

@@ -9,7 +9,7 @@ public class BrokenKeyMember {
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
 
-        Map<Pair, String> normalMap = new HashMap<Pair, String>();
+        Map<Pair, String> normalMap = new HashMap<>();
         Map<Pair, String> hzMap = hz.getMap("map");
 
         Pair key1 = new Pair("a", "1");

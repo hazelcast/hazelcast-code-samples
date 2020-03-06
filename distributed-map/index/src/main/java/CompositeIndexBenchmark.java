@@ -68,9 +68,9 @@ public class CompositeIndexBenchmark {
                 updateCount++;
             } else {
                 // alternatively, SqlPredicate may be used
-                Predicate forenamePredicate = Predicates.equal("name.forename", randomForename());
-                Predicate surnamePredicate = Predicates.equal("name.surname", randomSurname());
-                Predicate predicate = Predicates.and(forenamePredicate, surnamePredicate);
+                Predicate<Integer, Person> forenamePredicate = Predicates.equal("name.forename", randomForename());
+                Predicate<Integer, Person> surnamePredicate = Predicates.equal("name.surname", randomSurname());
+                Predicate<Integer, Person> predicate = Predicates.and(forenamePredicate, surnamePredicate);
 
                 personMap.values(predicate);
                 searchCount++;

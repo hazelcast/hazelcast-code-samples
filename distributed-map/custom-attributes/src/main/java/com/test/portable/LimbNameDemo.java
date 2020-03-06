@@ -15,7 +15,7 @@ import static com.test.portable.Limb.limb;
 
 public class LimbNameDemo {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         AttributeConfig attributeConfig = new AttributeConfig();
         attributeConfig.setName("limbName");
         attributeConfig.setExtractorClassName("com.test.portable.LimbNameExtractor");

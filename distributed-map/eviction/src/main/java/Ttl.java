@@ -2,8 +2,6 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 
-import java.util.Map;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class Ttl {
@@ -11,10 +9,10 @@ public class Ttl {
     public static void main(String[] args)
             throws InterruptedException {
         HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
-        Map<Integer, String> map = hazelcastInstance.getMap("default");
+        IMap<Integer, String> map = hazelcastInstance.getMap("default");
 
-        ((IMap<Integer, String>) map).put(1, "Number One", 5, SECONDS);
-        System.out.println("Entry expiration: " + ((IMap<Integer, String>) map).getEntryView(1).getExpirationTime());
+        map.put(1, "Number One", 5, SECONDS);
+        System.out.println("Entry expiration: " + map.getEntryView(1).getExpirationTime());
 
         // Entry expires
         Thread.sleep(SECONDS.toMillis(5));

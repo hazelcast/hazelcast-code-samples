@@ -17,7 +17,6 @@
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MaxSizePolicy;
-import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.EntryView;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -37,7 +36,7 @@ import static java.util.concurrent.locks.LockSupport.parkNanos;
 /**
  * This sample shows custom eviction policy usage for IMap. IMap uses a sampling based approach to evict entries.
  * For more info about sampling approach, please refer to hazelcast documentation.
- *
+ * <p>
  * To plug a custom eviction policy
  * {@link com.hazelcast.config.EvictionConfig#setComparator(EvictionPolicyComparator)} is used
  * in this example. Alternatively, custom eviction policy's class name can be also configured declaratively.
@@ -48,25 +47,22 @@ public class MapCustomEvictionPolicy {
         Config config = new Config();
         MapConfig mapConfig = config.getMapConfig("test");
         mapConfig.getEvictionConfig()
-                .setMaxSizePolicy(MaxSizePolicy.PER_NODE)
-                .setSize(10000)
-                .setComparator(new OddEvictor());
+                 .setMaxSizePolicy(MaxSizePolicy.PER_NODE)
+                 .setSize(10000)
+                 .setComparator(new OddEvictor());
 
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         IMap<Integer, Integer> map = instance.getMap("test");
 
-        final Queue<Integer> oddKeys = new ConcurrentLinkedQueue<Integer>();
-        final Queue<Integer> evenKeys = new ConcurrentLinkedQueue<Integer>();
+        final Queue<Integer> oddKeys = new ConcurrentLinkedQueue<>();
+        final Queue<Integer> evenKeys = new ConcurrentLinkedQueue<>();
 
-        map.addEntryListener(new EntryEvictedListener<Integer, Integer>() {
-            @Override
-            public void entryEvicted(EntryEvent<Integer, Integer> event) {
-                Integer key = event.getKey();
-                if (key % 2 == 0) {
-                    evenKeys.add(key);
-                } else {
-                    oddKeys.add(key);
-                }
+        map.addEntryListener((EntryEvictedListener<Integer, Integer>) event -> {
+            Integer key = event.getKey();
+            if (key % 2 == 0) {
+                evenKeys.add(key);
+            } else {
+                oddKeys.add(key);
             }
         }, false);
 

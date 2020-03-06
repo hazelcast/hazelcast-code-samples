@@ -69,9 +69,9 @@ public class BitmapIndexBenchmark {
                 updateCount++;
             } else {
                 // alternatively, SqlPredicate may be used
-                Predicate forenamePredicate = Predicates.equal("habits[any]", randomHabit());
-                Predicate surnamePredicate = Predicates.equal("habits[any]", randomHabit());
-                Predicate predicate = Predicates.and(forenamePredicate, surnamePredicate);
+                Predicate<Integer, Person> forenamePredicate = Predicates.equal("habits[any]", randomHabit());
+                Predicate<Integer, Person> surnamePredicate = Predicates.equal("habits[any]", randomHabit());
+                Predicate<Integer, Person> predicate = Predicates.and(forenamePredicate, surnamePredicate);
 
                 personMap.values(predicate);
                 searchCount++;

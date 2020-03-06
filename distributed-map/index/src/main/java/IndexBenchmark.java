@@ -63,7 +63,8 @@ public class IndexBenchmark {
                 personMap.put("" + id, new Person(new Name(forename, surname)));
                 updateCount++;
             } else {
-                Predicate predicate = Predicates.equal("name.surname", LAST_NAMES[random.nextInt(LAST_NAMES.length)]);
+                Predicate<String, Person> predicate =
+                        Predicates.equal("name.surname", LAST_NAMES[random.nextInt(LAST_NAMES.length)]);
 
                 personMap.values(predicate);
                 searchCount++;

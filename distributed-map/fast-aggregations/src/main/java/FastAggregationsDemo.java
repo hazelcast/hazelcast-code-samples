@@ -4,7 +4,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.query.Predicate;
 
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -54,7 +53,7 @@ public class FastAggregationsDemo {
         System.out.println("Calculating salary average");
 
         // execute the aggregation and print the result
-        double avgSalary = employees.aggregate(Aggregators.<Map.Entry<String, Employee>>integerAvg("salaryPerMonth"));
+        double avgSalary = employees.aggregate(Aggregators.integerAvg("salaryPerMonth"));
         System.out.println("Overall average salary: " + avgSalary);
         System.out.println("\n");
     }
@@ -67,28 +66,28 @@ public class FastAggregationsDemo {
 
         // execute the aggregation and print the result
         double avgSalary = employees
-                .aggregate(Aggregators.<Map.Entry<String, Employee>>integerAvg("salaryPerMonth"), companyPredicate);
+                .aggregate(Aggregators.integerAvg("salaryPerMonth"), companyPredicate);
         System.out.println("Hazelcast average salary: " + avgSalary);
         System.out.println("\n");
     }
 
     private static void salarySum(IMap<String, Employee> employees) {
         // execute the aggregation and print the result
-        long sumSalary = employees.aggregate(Aggregators.<Map.Entry<String, Employee>>integerSum("salaryPerMonth"));
+        long sumSalary = employees.aggregate(Aggregators.integerSum("salaryPerMonth"));
         System.out.println("Sum of all salaries: " + sumSalary);
         System.out.println("\n");
     }
 
     private static void countEmployees(IMap<String, Employee> employees) {
         // execute the aggregation and print the result
-        long countEmployee = employees.aggregate(Aggregators.<Map.Entry<String, Employee>>count());
+        long countEmployee = employees.aggregate(Aggregators.count());
         System.out.println("Number of employees: " + countEmployee);
         System.out.println("\n");
     }
 
     private static void distinctEmployeeFirstNames(IMap<String, Employee> employees) {
         // execute the aggregation and print the result
-        Set<String> allFirstNames = employees.aggregate(Aggregators.<Map.Entry<String, Employee>, String>distinct("firstName"));
+        Set<String> allFirstNames = employees.aggregate(Aggregators.distinct("firstName"));
         System.out.println("All first names: " + allFirstNames);
         System.out.println("\n");
     }
