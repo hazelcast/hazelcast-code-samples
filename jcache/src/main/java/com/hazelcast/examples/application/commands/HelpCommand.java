@@ -7,7 +7,7 @@ import java.util.Map;
 public class HelpCommand implements Command {
 
     @Override
-    public void execute(Context context) throws Exception {
+    public void execute(Context context) {
         Map<String, Command> commands = context.getCommands();
         context.writeln("Allowed commands");
         for (Map.Entry<String, Command> commandEntry : commands.entrySet()) {

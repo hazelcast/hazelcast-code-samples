@@ -8,7 +8,7 @@ import javax.cache.Cache;
 public class ExitCommand implements Command {
 
     @Override
-    public void execute(Context context) throws Exception {
+    public void execute(Context context) {
         Cache<Integer, User> userCache = context.getUserCache();
         userCache.getCacheManager().getCachingProvider().close();
         System.exit(0);

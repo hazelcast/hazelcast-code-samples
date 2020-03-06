@@ -6,13 +6,12 @@ import com.hazelcast.core.HazelcastInstance;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
-import java.net.URISyntaxException;
 
 public class SplitBrainProtectionExample {
 
     private static final String CACHE_NAME = "cache-with-split-brain-protection";
 
-    public static void main(String[] args) throws URISyntaxException {
+    public static void main(String[] args) {
         System.setProperty("hazelcast.jcache.provider.type", "server");
         System.setProperty("hazelcast.config", "classpath:hazelcast-split-brain-protection.xml");
 

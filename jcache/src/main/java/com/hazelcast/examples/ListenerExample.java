@@ -12,7 +12,7 @@ import static com.hazelcast.examples.helper.CommonUtils.sleepSeconds;
  * Listener example.
  *
  * Simple example how to register an async listener and
- * execute cache operations to see on console thath events are firing
+ * execute cache operations to see on console that events are firing
  */
 public class ListenerExample extends AbstractApp {
 
@@ -38,10 +38,10 @@ public class ListenerExample extends AbstractApp {
 
     private void registerListener(Cache<String, Integer> cache) {
         // create the EntryListener
-        MyCacheEntryListener<String, Integer> clientListener = new MyCacheEntryListener<String, Integer>();
+        MyCacheEntryListener<String, Integer> clientListener = new MyCacheEntryListener<>();
 
         // using our listener, let's create a configuration
-        CacheEntryListenerConfiguration<String, Integer> conf = new MutableCacheEntryListenerConfiguration<String, Integer>(
+        CacheEntryListenerConfiguration<String, Integer> conf = new MutableCacheEntryListenerConfiguration<>(
                 FactoryBuilder.factoryOf(clientListener), null, true, false);
 
         // register it to the cache at run-time
