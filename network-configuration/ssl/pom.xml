@@ -11,15 +11,40 @@
     </description>
 
     <parent>
-        <groupId>com.hazelcast.samples.network-configuration</groupId>
-        <artifactId>network-configuration</artifactId>
+        <groupId>com.hazelcast.samples</groupId>
+        <artifactId>code-samples</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <properties>
         <!-- needed for checkstyle/findbugs -->
-        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+        <main.basedir>${project.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>Hazelcast Private Snapshot Repository</id>
+            <url>https://repository.hazelcast.com/snapshot/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>Hazelcast Private Release Repository</id>
+            <url>https://repository.hazelcast.com/release/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-enterprise-all</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+    </dependencies>
 </project>

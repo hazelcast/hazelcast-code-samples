@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                               http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd"
+                               http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
     <config-replacers>
@@ -19,9 +18,7 @@
         <replacer class-name="com.hazelcast.sample.replacer.IdReplacer"/>
     </config-replacers>
 
-    <group>
-        <!-- Use EncryptionReplacer (provided in Hazelcast) and IdReplacer (from this code-sample) together-->
-        <name>$ENC{nnPgTqJCcCQ=:23000:B4y/nlp6M0t3q6YiKImW+w==} $ID{Test Group}</name>
-    </group>
+    <!-- Use EncryptionReplacer (provided in Hazelcast) and IdReplacer (from this code-sample) together-->
+    <cluster-name>$ENC{nnPgTqJCcCQ=:23000:B4y/nlp6M0t3q6YiKImW+w==} $ID{Test Group}</cluster-name>
 
 </hazelcast>
