@@ -11,9 +11,6 @@ spring:
 hazelcast:
   group:
     name: 'jsongrid'
-  management-center:
-    enabled: true
-    url: 'http://localhost:8080/hazelcast-mancenter'
   network:
     port:
       port: 9701

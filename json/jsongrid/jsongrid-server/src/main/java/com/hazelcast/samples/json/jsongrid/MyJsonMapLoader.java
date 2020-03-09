@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * <p>A {@link com.hazelcast.core.MapLoader MapLoader} provides a way to get data
- * in to a Hazelcast {@link com.hazelcast.core.IMap} from an external
+ * <p>A {@link com.hazelcast.map.MapLoader MapLoader} provides a way to get data
+ * in to a Hazelcast {@link com.hazelcast.map.IMap} from an external
  * store. Other ways exist.
  * </p>
  * <p>In this case the loader is generic, take the name of an SQL table as
@@ -125,10 +125,10 @@ public class MyJsonMapLoader implements MapLoader<Integer, HazelcastJsonValue> {
         log.debug("loadAll({})", keys);
 
         return keys
-        .stream()
-        .map(key -> new SimpleImmutableEntry<>(key, this.load(key)))
-        .filter(entry -> entry.getValue() != null)
-        .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+                .stream()
+                .map(key -> new SimpleImmutableEntry<>(key, this.load(key)))
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(SimpleImmutableEntry::getKey, SimpleImmutableEntry::getValue));
     }
 
     /**

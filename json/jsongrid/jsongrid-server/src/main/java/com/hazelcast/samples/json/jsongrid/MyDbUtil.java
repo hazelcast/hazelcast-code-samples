@@ -43,13 +43,11 @@ public class MyDbUtil {
 
             List<Map<String, Object>> resultSet = jdbcTemplate.queryForList(sql);
 
-            for (int i = 0; i < resultSet.size(); i++) {
-                Map<String, Object> map = resultSet.get(i);
-
+            for (Map<String, Object> map : resultSet) {
                 map.keySet().stream()
-                .filter(key -> key.equalsIgnoreCase("id"))
-                .map(key -> map.get(key).toString())
-                .forEach(value -> ids.add(value));
+                   .filter(key -> key.equalsIgnoreCase("id"))
+                   .map(key -> map.get(key).toString())
+                   .forEach(ids::add);
             }
 
             log.debug("[{} row{}]", resultSet.size(), (resultSet.size() == 1 ? "" : "s"));
@@ -57,7 +55,7 @@ public class MyDbUtil {
             // Convert to integer list, allow NumberFormatException
             return ids
             .stream()
-            .map(keyStr -> Integer.valueOf(keyStr))
+            .map(Integer::valueOf)
             .collect(Collectors.toCollection(TreeSet::new));
 
         } catch (Exception e) {
