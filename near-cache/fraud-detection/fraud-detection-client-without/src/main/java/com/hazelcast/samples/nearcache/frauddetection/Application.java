@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * This runs the client <b>without</b> a Near Cache configured
  * in its {@code hazelcast-client.xml} file.
  * <p>
- * All the work is done by the {@link FraudService.test()}
+ * All the work is done by the {@link FraudService#test()}
  * method so this is the same for both clients.
  * <p>
  * <b>Note:</b> This class {@code Application.java} is

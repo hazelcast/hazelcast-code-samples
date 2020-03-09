@@ -20,8 +20,8 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <java.version>8</java.version>
-        <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
+        <java.version>1.8</java.version>
+        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
     </properties>
 
     <modules>
