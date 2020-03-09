@@ -1,10 +1,10 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
-import com.hazelcast.nio.serialization.Data;
+import com.hazelcast.internal.serialization.Data;
+import com.hazelcast.internal.serialization.SerializationService;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.MyDataSerializableFactory;
-import com.hazelcast.spi.serialization.SerializationService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -24,12 +24,12 @@ import static org.junit.Assert.assertThat;
 public class V4FlightTest {
 
 	@Test
-	public void test_serialization() throws Exception {
+	public void test_serialization() {
 		V4Flight objectSent = FlightBuilder.buildV4();
 		Object objectReceived = null;
 		byte[] bytes;
 
-        SerializationService serializationService = 
+        SerializationService serializationService =
                 new com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder()
                 .addDataSerializableFactory(Constants.MY_DATASERIALIZABLE_FACTORY, new MyDataSerializableFactory())
                 .build();

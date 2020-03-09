@@ -1,6 +1,6 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines.ep;
 
-import com.hazelcast.map.AbstractEntryProcessor;
+import com.hazelcast.map.EntryProcessor;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
@@ -29,8 +29,7 @@ import java.util.Map.Entry;
  */
 @SuppressWarnings("serial")
 @EqualsAndHashCode(callSuper = false)
-public class SeatReservationEntryProcessor extends AbstractEntryProcessor<MyKey, AbstractFlight>
-    implements IdentifiedDataSerializable {
+public class SeatReservationEntryProcessor implements EntryProcessor<MyKey, AbstractFlight, String>, IdentifiedDataSerializable {
 
     private String name;
 
@@ -121,7 +120,7 @@ public class SeatReservationEntryProcessor extends AbstractEntryProcessor<MyKey,
      * <p>Implementing {@link com.hazelcast.nio.serialization.IdentifiedDataSerializable IdentifiedDataSerializable}.</p>
      */
     @Override
-    public int getId() {
+    public int getClassId() {
         return Constants.SEATRESERVERATIONENTRYPROCESSOR_ID;
     }
 

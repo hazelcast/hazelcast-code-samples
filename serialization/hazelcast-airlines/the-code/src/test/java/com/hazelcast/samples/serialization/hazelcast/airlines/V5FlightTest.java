@@ -2,9 +2,9 @@ package com.hazelcast.samples.serialization.hazelcast.airlines;
 
 import com.hazelcast.config.SerializationConfig;
 import com.hazelcast.config.SerializerConfig;
-import com.hazelcast.nio.serialization.Data;
+import com.hazelcast.internal.serialization.Data;
+import com.hazelcast.internal.serialization.SerializationService;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
-import com.hazelcast.spi.serialization.SerializationService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -24,9 +24,9 @@ import static org.junit.Assert.assertThat;
 public class V5FlightTest {
 
 	@Test
-	public void test_serialization() throws Exception {
+	public void test_serialization() {
 		V5Flight objectSent = FlightBuilder.buildV5();
-		Object objectReceived = null;
+		Object objectReceived;
 		byte[] bytes;
 
 		SerializerConfig serializerConfig = new SerializerConfig();
@@ -36,7 +36,7 @@ public class V5FlightTest {
 		SerializationConfig serializationConfig = new SerializationConfig();
 		serializationConfig.addSerializerConfig(serializerConfig);
 		
-		SerializationService serializationService = 
+		SerializationService serializationService =
                 new com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder()
                 .setConfig(serializationConfig)
                 .build();

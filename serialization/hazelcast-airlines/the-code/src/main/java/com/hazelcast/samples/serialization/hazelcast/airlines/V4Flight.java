@@ -74,7 +74,7 @@ public class V4Flight extends AbstractFlight implements IdentifiedDataSerializab
      * </p>
      */
     @Override
-    public int getId() {
+    public int getClassId() {
         return Constants.V4FLIGHT_ID;
     }
 
