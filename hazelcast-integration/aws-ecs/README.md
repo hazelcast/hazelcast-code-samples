@@ -57,7 +57,7 @@ public Config hazelcastConfig() {
 The equivalent XML configuration would look as follows:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd">
+<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-4.0.xsd">
   <network>
     <interfaces enabled="true">
       <interface>10.0.*.*</interface>

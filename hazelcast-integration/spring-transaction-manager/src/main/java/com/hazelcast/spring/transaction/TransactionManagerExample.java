@@ -9,7 +9,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 
 public class TransactionManagerExample {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
         HazelcastInstance instance = (HazelcastInstance) context.getBean("instance");
         ServiceWithTransactionalMethod service = (ServiceWithTransactionalMethod) context.getBean("transactionalService");

@@ -8,7 +8,7 @@ services:
     volumes:
         - ../resources:/configFolder
     environment:
-        - JAVA_OPTS=-Dhazelcast.client.config=/configFolder/hazelcast-client.xml -Dhazelcast.member.address=hazelcast -Dgroup.name=hz-compose -Dgroup.password=s3crEt
+        - JAVA_OPTS=-Dhazelcast.client.config=/configFolder/hazelcast-client.xml -Dhazelcast.member.address=hazelcast -Dcluster.name=hz-compose
 
   # hazelcast imdg
   hazelcast:
@@ -16,7 +16,7 @@ services:
     volumes:
         - ../resources:/configFolder
     environment:
-        - JAVA_OPTS=-Dhazelcast.config=/configFolder/hazelcast.xml -Dhazelcast.mancenter.url=http://mancenter:8080/mancenter -Dgroup.name=hz-compose -Dgroup.password=s3crEt
+        - JAVA_OPTS=-Dhazelcast.config=/configFolder/hazelcast.xml -Dcluster.name=hz-compose
 #        ports:
 #            - 5701:5701
     links:

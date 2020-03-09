@@ -62,7 +62,7 @@
         <cache-ri-impl.version>1.0.0</cache-ri-impl.version>
         <jackson.version>2.10.1</jackson.version>
         <slf4j.version>1.7.21</slf4j.version>
-        <spring.version>4.2.6.RELEASE</spring.version>
+        <spring.version>4.3.23.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -105,6 +105,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+            <version>3.12.6</version>
         </dependency>
     </dependencies>
 

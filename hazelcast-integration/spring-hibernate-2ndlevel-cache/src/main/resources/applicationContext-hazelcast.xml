@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	    http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.hazelcast.com/schema/spring
-        http://www.hazelcast.com/schema/spring/hazelcast-spring-3.11.xsd">
+        http://www.hazelcast.com/schema/spring/hazelcast-spring-4.0.xsd">
 
     <hz:map id="customerMap" name="customerMap" instance-ref="instance"/>
 
@@ -12,7 +12,7 @@
         <hz:config>
             <hz:instance-name>${hz.instance.name}</hz:instance-name>
 
-            <hz:group name="${hz.group.name}" password="${hz.group.password}"/>
+            <hz:cluster-name>${hz.group.name}</hz:cluster-name>
 
             <hz:network port="${hz.network.port}" port-auto-increment="${hz.network.port.auto.increment}">
                 <hz:join>

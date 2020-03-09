@@ -19,10 +19,10 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <java-version>1.6</java-version>
+        <java-version>1.8</java-version>
 
-        <org.springframework-version>3.2.8.RELEASE</org.springframework-version>
-        <spring.security.version>3.2.3.RELEASE</spring.security.version>
+        <org.springframework-version>4.3.23.RELEASE</org.springframework-version>
+        <spring.security.version>4.2.14.RELEASE</spring.security.version>
         <org.aspectj-version>1.6.10</org.aspectj-version>
         <org.slf4j-version>1.6.6</org.slf4j-version>
     </properties>

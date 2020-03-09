@@ -22,9 +22,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <java.version>1.8</java.version>
-        <spring-data-hazelcast.version>2.1</spring-data-hazelcast.version>
+        <spring-data-hazelcast.version>2.2.2</spring-data-hazelcast.version>
         <spring-shell.version>1.2.0.RELEASE</spring-shell.version>
-        <spring-boot.version>2.1.0.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
+        <org.springframework-version>4.3.23.RELEASE</org.springframework-version>
     </properties>
 
     <modules>
@@ -38,6 +39,11 @@
             <groupId>com.hazelcast</groupId>
             <artifactId>spring-data-hazelcast</artifactId>
             <version>${spring-data-hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+            <version>3.12.6</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -62,11 +68,6 @@
                         <artifactId>hazelcast</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.hazelcast</groupId>
-                <artifactId>hazelcast-client</artifactId>
-                <version>${hazelcast.version}</version>
             </dependency>
 
             <dependency>

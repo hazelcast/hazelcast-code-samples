@@ -24,7 +24,7 @@
 
     <hz:hazelcast id="instance">
         <hz:config>
-            <hz:group name="${name}" password="${password}"/>
+            <hz:cluster-name>${name}</hz:cluster-name>
             <hz:properties>
                 <hz:property name="hazelcast.merge.first.run.delay.seconds">5</hz:property>
                 <hz:property name="hazelcast.merge.next.run.delay.seconds">5</hz:property>
@@ -38,7 +38,7 @@
     </hz:hazelcast>
 
     <hz:client id="client">
-        <hz:group name="${name}" password="${password}"/>
+        <hz:cluster-name>${name}</hz:cluster-name>
         <hz:network>
             <hz:member>127.0.0.1:5705</hz:member>
         </hz:network>

@@ -1,15 +1,16 @@
 package com.hazelcast.samples.tricolor;
 
+import com.hazelcast.client.Client;
+import com.hazelcast.client.ClientListener;
 import com.hazelcast.config.ClasspathXmlConfig;
 import com.hazelcast.config.Config;
-import com.hazelcast.core.Client;
-import com.hazelcast.core.ClientListener;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +29,7 @@ public class MyServer implements Runnable {
      *
      * @param logFile Should be on the classpath
      */
-    public MyServer(String logFile, CountDownLatch countDownLatch) throws Exception {
+    public MyServer(String logFile, CountDownLatch countDownLatch) {
         Configurator.initialize(logFile, getClass().getClassLoader(), "classpath:" + logFile);
         log = LoggerFactory.getLogger(getClass());
         this.countDownLatch = countDownLatch;
@@ -54,7 +55,7 @@ public class MyServer implements Runnable {
             hazelcastInstance.getClientService().addClientListener(myClientListener);
 
             // confirm ready for clients
-            String uuid = hazelcastInstance.getCluster().getLocalMember().getUuid();
+            UUID uuid = hazelcastInstance.getCluster().getLocalMember().getUuid();
             log.info("Server {} is ready", uuid);
             countDownLatch.countDown();
 

@@ -37,9 +37,8 @@ public class ManageEmployee {
             System.out.print("[" + current + ". session] Enter command: ");
             String command = reader.nextLine();
             if (command.equals("list")) {
-                List employees = currentSession.createQuery("FROM Employee").list();
-                for (Object entry : employees) {
-                    Employee employee = (Employee) entry;
+                List<Employee> employees = currentSession.createQuery("FROM Employee").list();
+                for (Employee employee : employees) {
                     System.out.print("Id: " + employee.getId());
                     System.out.print(", first name: " + employee.getFirstName());
                     System.out.print(", last name: " + employee.getLastName());
@@ -63,7 +62,7 @@ public class ManageEmployee {
                 int employeeId = reader.nextInt();
                 reader.nextLine();
                 Employee employee;
-                employee = (Employee) currentSession.get(Employee.class, employeeId);
+                employee = currentSession.get(Employee.class, employeeId);
                 currentSession.delete(employee);
             } else if (command.equals("close")) {
                 currentTx.commit();

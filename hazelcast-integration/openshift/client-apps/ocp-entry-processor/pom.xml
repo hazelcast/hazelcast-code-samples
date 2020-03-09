@@ -22,4 +22,12 @@
         <main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+            <version>3.12.6</version>
+        </dependency>
+    </dependencies>
 </project>

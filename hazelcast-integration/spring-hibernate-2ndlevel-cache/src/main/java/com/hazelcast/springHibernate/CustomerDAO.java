@@ -39,19 +39,17 @@ public class CustomerDAO {
 
     @SuppressWarnings("unchecked")
     public List<Customer> getCustomers() {
-        List<Customer> list = sessionFactory.getCurrentSession().createQuery("from Customer").list();
-        return list;
+        return (List<Customer>) sessionFactory.getCurrentSession().createQuery("from Customer").list();
     }
 
     public Customer getCustomerById(String id) {
-        Customer customer = (Customer) sessionFactory.getCurrentSession()
-                .createQuery("from Customer where id=?")
-                .setParameter(0, id).uniqueResult();
-        return customer;
+        return (Customer) sessionFactory.getCurrentSession()
+                                        .createQuery("from Customer where id=?")
+                                        .setParameter(0, id).uniqueResult();
     }
 
     public Map<String, Customer> getCustomerMap(Collection<String> idCol) {
-        Map<String, Customer> customerMap = new HashMap<String, Customer>();
+        Map<String, Customer> customerMap = new HashMap<>();
         for (String id : idCol) {
             Customer customer = (Customer) sessionFactory
                     .getCurrentSession()
@@ -69,7 +67,7 @@ public class CustomerDAO {
                 .getCurrentSession()
                 .createQuery("select cus.id from Customer cus")
                 .list();
-        return new HashSet<String>(customerIdList);
+        return new HashSet<>(customerIdList);
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {

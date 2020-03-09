@@ -17,7 +17,7 @@ public class SomeTask implements Callable<String>, ApplicationContextAware, Seri
     @Autowired
     private transient IDummyBean dummyBean;
 
-    public String call() throws Exception {
+    public String call() {
         return dummyBean.getCity();
     }
 

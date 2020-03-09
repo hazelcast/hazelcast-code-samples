@@ -77,13 +77,10 @@ public class Customer implements Serializable {
             return false;
         }
         if (surname == null) {
-            if (other.surname != null) {
-                return false;
-            }
-        } else if (!surname.equals(other.surname)) {
-            return false;
+            return other.surname == null;
+        } else {
+            return surname.equals(other.surname);
         }
-        return true;
     }
 
     @Override

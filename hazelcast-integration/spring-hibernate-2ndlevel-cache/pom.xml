@@ -18,8 +18,8 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.version>4.0.6.RELEASE</spring.version>
-        <hibernate.version>3.5.4-Final</hibernate.version>
+        <spring.version>4.3.23.RELEASE</spring.version>
+        <hibernate.version>5.3.7.Final</hibernate.version>
         <apache-derby.version>10.10.2.0</apache-derby.version>
         <slf4j.version>1.7.7</slf4j.version>
         <javassist.version>3.12.1.GA</javassist.version>
@@ -65,6 +65,11 @@
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>${javassist.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-hibernate53</artifactId>
+            <version>2.0.0</version>
         </dependency>
     </dependencies>
 </project>

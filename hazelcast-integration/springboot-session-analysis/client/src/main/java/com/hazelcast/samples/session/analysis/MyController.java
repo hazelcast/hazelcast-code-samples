@@ -81,7 +81,7 @@ public class MyController {
         ModelAndView modelAndView = new ModelAndView(Constants.HTML_ACTION_INDEX);
 
         Map<String, Integer> stockMap = this.hazelcastInstance.getMap(Constants.IMAP_NAME_STOCK);
-        modelAndView.addObject(Constants.IMAP_NAME_STOCK, new TreeMap<String, Integer>(stockMap));
+        modelAndView.addObject(Constants.IMAP_NAME_STOCK, new TreeMap<>(stockMap));
 
         return modelAndView;
     }

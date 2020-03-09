@@ -17,6 +17,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.springframework-version>4.3.23.RELEASE</org.springframework-version>
     </properties>
 
     <dependencies>
@@ -42,6 +43,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
                 <executions>
                     <execution>
                         <goals>

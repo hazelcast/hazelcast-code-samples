@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 /**
@@ -14,7 +15,7 @@ import java.util.concurrent.Callable;
  * server's ID.
  */
 @SuppressWarnings("serial")
-public class MyCallable implements Callable<String>, HazelcastInstanceAware, Serializable {
+public class MyCallable implements Callable<UUID>, HazelcastInstanceAware, Serializable {
 
     private static Logger log = LoggerFactory.getLogger(MyCallable.class);
 
@@ -24,8 +25,8 @@ public class MyCallable implements Callable<String>, HazelcastInstanceAware, Ser
      * Return the name of the current Hazelcast instance.
      */
     @Override
-    public String call() throws Exception {
-        String uuid = hazelcastInstance.getCluster().getLocalMember().getUuid();
+    public UUID call() {
+        UUID uuid = hazelcastInstance.getCluster().getLocalMember().getUuid();
         log.info("call() runs on {}", uuid);
         return uuid;
     }

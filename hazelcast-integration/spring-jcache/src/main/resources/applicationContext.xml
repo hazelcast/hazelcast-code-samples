@@ -24,13 +24,13 @@
 		http://www.springframework.org/schema/cache
 		http://www.springframework.org/schema/cache/spring-cache.xsd
 		http://www.hazelcast.com/schema/spring
-		http://www.hazelcast.com/schema/spring/hazelcast-spring-3.11.xsd">
+		http://www.hazelcast.com/schema/spring/hazelcast-spring-4.0.xsd">
 
     <cache:annotation-driven/>
 
     <hz:hazelcast id="instance">
         <hz:config>
-            <hz:group name="grp" password="pass"/>
+            <hz:cluster-name>grp</hz:cluster-name>
             <hz:network port="5701" port-auto-increment="false">
                 <hz:join>
                     <hz:multicast enabled="false"/>
@@ -47,7 +47,7 @@
     </hz:hazelcast>
 
     <hz:client id="client" depends-on="instance">
-        <hz:group name="grp" password="pass"/>
+        <hz:cluster-name>grp</hz:cluster-name>
         <hz:network>
             <hz:member>127.0.0.1:5701</hz:member>
         </hz:network>

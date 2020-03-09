@@ -13,6 +13,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
     </properties>
 
     <dependencies>
@@ -41,7 +42,7 @@
                 <artifactId>spring-boot-starter-parent</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
-                <version>2.0.6.RELEASE</version>
+                <version>${spring-boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -51,7 +52,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.0.1.RELEASE</version>
+                <version>${spring-boot.version}</version>
                 <executions>
                     <execution>
                         <goals>

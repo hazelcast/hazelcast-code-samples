@@ -18,16 +18,14 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<spring-boot.version>2.2.5.RELEASE</spring-boot.version>
     </properties>
 
     <dependencies>
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast-client</artifactId>
+			<version>4.0</version>
 		</dependency>
 
 		<dependency>
@@ -54,7 +52,7 @@
                 <artifactId>spring-boot-starter-parent</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
-                <version>1.5.3.RELEASE</version>
+				<version>${spring-boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -66,7 +64,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.3.RELEASE</version>
+				<version>${spring-boot.version}</version>
 				<executions>
 					<execution>
 						<goals>

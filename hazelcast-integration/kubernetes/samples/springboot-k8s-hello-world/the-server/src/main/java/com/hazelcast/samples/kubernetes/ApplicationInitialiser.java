@@ -32,27 +32,25 @@ public class ApplicationInitialiser implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationInitialiser.class);
 
-    private static final String[][] GREETINGS = new String[][] {
-        { "english", "hello world" },
-        { "espanol", "hola mundo" },
-        { "deutsch", "hallo welt" },
-        { "italiano", "ciao mondo" },
-        { "francais", "bonjour le monde" },
+    private static final String[][] GREETINGS = new String[][]{
+            {"english", "hello world"},
+            {"espanol", "hola mundo"},
+            {"deutsch", "hallo welt"},
+            {"italiano", "ciao mondo"},
+            {"francais", "bonjour le monde"},
     };
 
     @Autowired
     private HazelcastInstance hazelcastInstance;
 
     @Override
-    public void run(String... arg0) throws Exception {
+    public void run(String... arg0) {
         IMap<String, String> helloMap = this.hazelcastInstance.getMap("hello");
 
         if (!helloMap.isEmpty()) {
             LOGGER.info("Skip loading '{}', not empty", helloMap.getName());
         } else {
-            Arrays.stream(GREETINGS).forEach(pair -> {
-                helloMap.set(pair[0], pair[1]);
-            });
+            Arrays.stream(GREETINGS).forEach(pair -> helloMap.set(pair[0], pair[1]));
             LOGGER.info("Loaded {} into '{}'", GREETINGS.length, helloMap.getName());
         }
     }

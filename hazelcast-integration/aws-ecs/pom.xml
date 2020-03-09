@@ -13,6 +13,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
     </properties>
 
     <!-- adding SpringBoot BOM -->
@@ -24,7 +25,7 @@
                 <artifactId>spring-boot-starter-parent</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
-                <version>2.0.1.RELEASE</version>
+                <version>${spring-boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -37,12 +38,12 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>3.11</version>
+            <version>4.0</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-aws</artifactId>
-            <version>2.3</version>
+            <version>3.1</version>
         </dependency>
     </dependencies>
 
@@ -51,7 +52,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.0.1.RELEASE</version>
+                <version>${spring-boot.version}</version>
                 <executions>
                     <execution>
                         <goals>

@@ -16,8 +16,6 @@ import com.hazelcast.map.IMap;
 import com.hazelcast.multimap.MultiMap;
 import com.hazelcast.replicatedmap.ReplicatedMap;
 import com.hazelcast.topic.ITopic;
-import com.hazelcast.topic.Message;
-import com.hazelcast.topic.MessageListener;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -98,12 +96,7 @@ public class HazelcastDataTypes {
     private static void executeTopic() {
         System.out.println("### Topic Execution Started... ###");
         ITopic<String> topic = (ITopic<String>) context.getBean("topic", ITopic.class);
-        topic.addMessageListener(new MessageListener<String>() {
-            @Override
-            public void onMessage(Message<String> message) {
-                System.out.println("Topic Received Message: " + message + "\n");
-            }
-        });
+        topic.addMessageListener(message -> System.out.println("Topic Received Message: " + message + "\n"));
         topic.publish("object");
     }
 

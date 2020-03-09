@@ -19,7 +19,7 @@
 package com.hazelcast.samples.amazon.elasticbeanstalk;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.map.IMap;
+import com.hazelcast.core.IMap;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 public class HazelcastController implements InitializingBean {
 
-    private static final ResponseEntity<Entry> EMPTY_RESPONSE = new ResponseEntity<Entry>(Entry.NULL_ENTRY, OK);
+    private static final ResponseEntity<Entry> EMPTY_RESPONSE = new ResponseEntity<>(Entry.NULL_ENTRY, OK);
 
     @Autowired
     private HazelcastInstance instance;
@@ -60,7 +60,7 @@ public class HazelcastController implements InitializingBean {
     @RequestMapping(method = POST, value = "/entries")
     public ResponseEntity<Entry> putIfAbsent(@RequestBody Entry entry) {
         if (entry == null) {
-            return new ResponseEntity<Entry>(BAD_REQUEST);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
         String oldValue = hzMap.putIfAbsent(entry.getKey(), entry.getValue());
         if (oldValue == null) {
@@ -73,7 +73,7 @@ public class HazelcastController implements InitializingBean {
     public ResponseEntity<Entry> remove(@PathVariable String key) {
         String value = hzMap.remove(key);
         if (value == null) {
-            return new ResponseEntity<Entry>(NOT_FOUND);
+            return new ResponseEntity<>(NOT_FOUND);
         }
         return createResponseEntity(key, value);
     }
@@ -82,7 +82,7 @@ public class HazelcastController implements InitializingBean {
     public ResponseEntity<Entry> get(@PathVariable String key) {
         String value = hzMap.get(key);
         if (value == null) {
-            return new ResponseEntity<Entry>(NOT_FOUND);
+            return new ResponseEntity<>(NOT_FOUND);
         }
         return createResponseEntity(key, value);
     }
@@ -90,14 +90,14 @@ public class HazelcastController implements InitializingBean {
     @RequestMapping(method = GET, value = "/entries")
     public ResponseEntity<Set<Entry>> entrySet() {
         Set<Map.Entry<String, String>> hzMapEntries = hzMap.entrySet();
-        Set<Entry> entrySet = new HashSet<Entry>(hzMapEntries.size());
+        Set<Entry> entrySet = new HashSet<>(hzMapEntries.size());
         for (Map.Entry<String, String> entry : hzMapEntries) {
             entrySet.add(new Entry(entry.getKey(), entry.getValue()));
         }
-        return new ResponseEntity<Set<Entry>>(entrySet, OK);
+        return new ResponseEntity<>(entrySet, OK);
     }
 
     private ResponseEntity<Entry> createResponseEntity(String key, String value) {
-        return new ResponseEntity<Entry>(new Entry(key, value), OK);
+        return new ResponseEntity<>(new Entry(key, value), OK);
     }
 }

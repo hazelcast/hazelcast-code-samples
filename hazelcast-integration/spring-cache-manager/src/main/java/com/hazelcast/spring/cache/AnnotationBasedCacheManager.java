@@ -2,17 +2,19 @@ package com.hazelcast.spring.cache;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.JoinConfig;
 import com.hazelcast.core.Hazelcast;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class AnnotationBasedCacheManager {
 
     public static void main(String[] args) throws Exception {
-        Config config = new Config();
-        config.setClusterName("grp");
-        config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
-        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
-        config.getNetworkConfig().getJoin().getTcpIpConfig().addMember("127.0.0.1:5701");
+        Config config = new Config()
+                .setClusterName("grp");
+        JoinConfig joinConfig = config.getNetworkConfig().getJoin();
+        joinConfig.getTcpIpConfig().setEnabled(true);
+        joinConfig.getMulticastConfig().setEnabled(false);
+        joinConfig.getTcpIpConfig().addMember("127.0.0.1:5701");
 
         Hazelcast.newHazelcastInstance(config);
 

@@ -7,7 +7,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		http://www.hazelcast.com/schema/spring
-		http://www.hazelcast.com/schema/spring/hazelcast-spring-3.11.xsd
+		http://www.hazelcast.com/schema/spring/hazelcast-spring-4.0.xsd
 		http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
@@ -16,7 +16,7 @@
     <hz:hazelcast id="instance">
         <hz:config>
             <hz:spring-aware/>
-            <hz:group name="grp" password="pass"/>
+            <hz:cluster-name>grp</hz:cluster-name>
             <hz:network port="5701" port-auto-increment="false">
                 <hz:join>
                     <hz:multicast enabled="false"/>

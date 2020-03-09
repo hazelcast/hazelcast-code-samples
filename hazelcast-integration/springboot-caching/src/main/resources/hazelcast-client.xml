@@ -16,17 +16,12 @@
   ~  limitations under the License.
   ~
   -->
-<hazelcast-client
-        xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
-        http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.11.xsd"
-        xmlns="http://www.hazelcast.com/schema/client-config"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<hazelcast-client xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
+                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config-4.0.xsd"
+                  xmlns="http://www.hazelcast.com/schema/client-config">
 
-    <group>
-        <name>bootifulcluster</name>
-        <password>bootiful-pass</password>
-    </group>
-
+    <cluster-name>bootifulcluster</cluster-name>
     <network>
         <cluster-members>
             <address>127.0.0.1</address>

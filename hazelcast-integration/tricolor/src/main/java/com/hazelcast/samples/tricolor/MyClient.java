@@ -3,14 +3,15 @@ package com.hazelcast.samples.tricolor;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.XmlClientConfigBuilder;
+import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IExecutorService;
-import com.hazelcast.core.Member;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
@@ -59,11 +60,11 @@ public class MyClient implements Runnable {
             hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
 
             IExecutorService executorService = hazelcastInstance.getExecutorService("default");
-            Callable<String> myCallable = new MyCallable();
+            Callable<UUID> myCallable = new MyCallable();
 
             log.info("Submitting callable");
-            Map<Member, Future<String>> results = executorService.submitToAllMembers(myCallable);
-            for (Future<String> result : results.values()) {
+            Map<Member, Future<UUID>> results = executorService.submitToAllMembers(myCallable);
+            for (Future<UUID> result : results.values()) {
                 log.info("Result from '{}'", result.get());
             }
         } catch (Exception exception) {
