@@ -10,7 +10,7 @@ import java.util.Properties;
 
 /**
  * <p>A factory method to create
- * {@link Open Declarationcom.hazelcast.core.MapLoader MapLoader}
+ * {@link com.hazelcast.map.MapLoader MapLoader}
  * instances that take the table name as parameter to indicate
  * the data source to load into the map.
  * </p>
@@ -28,7 +28,7 @@ public class MyMapLoaderFactory implements MapStoreFactory {
      * loader bean per map, and pass the table name as a parameter.
      * </p>
      *
-     * @param mapName The table name to use to populate the map
+     * @param mapName    The table name to use to populate the map
      * @param properties Not used
      */
     @Override

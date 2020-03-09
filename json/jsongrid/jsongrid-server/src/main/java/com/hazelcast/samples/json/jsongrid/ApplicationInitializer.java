@@ -46,7 +46,7 @@ public class ApplicationInitializer implements CommandLineRunner {
 
     /**
      * <p>Each table in the database is one map in
-     * Hazelcast (one {@link com.hazelcast.core.IMap IMap}).
+     * Hazelcast (one {@link com.hazelcast.map.IMap IMap}).
      * </p>
      * <p>Find the table names and access the maps of the
      * same names, which forces their creation if they
@@ -93,13 +93,11 @@ public class ApplicationInitializer implements CommandLineRunner {
         try {
             List<Map<String, Object>> resultSet = this.jdbcTemplate.queryForList(sql);
 
-            for (int i = 0; i < resultSet.size(); i++) {
-                Map<String, Object> map = resultSet.get(i);
-
+            for (Map<String, Object> map : resultSet) {
                 map.keySet().stream()
-                .filter(key -> key.equalsIgnoreCase("table_name"))
-                .map(key -> map.get(key).toString())
-                .forEach(value -> names.add(value));
+                   .filter(key -> key.equalsIgnoreCase("table_name"))
+                   .map(key -> map.get(key).toString())
+                   .forEach(names::add);
             }
 
         } catch (Exception e) {
