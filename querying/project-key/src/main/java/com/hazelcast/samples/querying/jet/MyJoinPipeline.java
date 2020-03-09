@@ -1,13 +1,14 @@
 package com.hazelcast.samples.querying.jet;
 
-import com.hazelcast.jet.ComputeStage;
-import com.hazelcast.jet.JoinClause;
-import com.hazelcast.jet.Pipeline;
-import com.hazelcast.jet.Sinks;
-import com.hazelcast.jet.Sources;
+import com.hazelcast.jet.Util;
 import com.hazelcast.jet.datamodel.Tuple2;
-import com.hazelcast.jet.function.DistributedFunction;
-import com.hazelcast.jet.function.DistributedFunctions;
+import com.hazelcast.jet.datamodel.Tuple3;
+import com.hazelcast.jet.function.Functions;
+import com.hazelcast.jet.pipeline.BatchStage;
+import com.hazelcast.jet.pipeline.JoinClause;
+import com.hazelcast.jet.pipeline.Pipeline;
+import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.jet.pipeline.Sources;
 import com.hazelcast.samples.querying.domain.LifeValue;
 import com.hazelcast.samples.querying.domain.PersonKey;
 import com.hazelcast.samples.querying.domain.PersonValue;
@@ -15,6 +16,8 @@ import com.hazelcast.samples.querying.domain.PersonValue;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map.Entry;
+
+import static com.hazelcast.jet.datamodel.Tuple3.tuple3;
 
 /**
  * <P>
@@ -135,43 +138,29 @@ public class MyJoinPipeline {
 
     public static Pipeline build() {
         Pipeline pipeline = Pipeline.create();
-
         // 1 - read a map
-        ComputeStage<Entry<PersonKey, PersonValue>> stage1 = pipeline
-                .drawFrom(Sources.<PersonKey, PersonValue>map("person"));
+        BatchStage<Entry<String, LocalDate>> births = pipeline
+                .drawFrom(Sources.<PersonKey, PersonValue>map("person"))
+                .map(entry -> Util.entry(entry.getKey().getFirstName(), entry.getValue().getDateOfBirth()));
 
-        // 2 - simplify output from step 1, smaller to transmit
-        ComputeStage<Tuple2<String, LocalDate>> stage2 = stage1
-                .map(entry -> Tuple2.tuple2(entry.getKey().getFirstName(), entry.getValue().getDateOfBirth()));
+        // 2 - read another map
+        BatchStage<Entry<String, LocalDate>> deaths = pipeline.drawFrom(Sources.map("deaths"));
 
-        // 3 - read another map
-        ComputeStage<Entry<String, LocalDate>> stage3 = pipeline.drawFrom(Sources.<String, LocalDate>map("deaths"));
-
-        // 4 - simplify output from step 3, smaller to transmit
-        ComputeStage<Tuple2<String, LocalDate>> stage4 = stage3
-                .map(entry -> Tuple2.tuple2(entry.getKey(), entry.getValue()));
-
-        // 5a - [optional] wrap existing entryKey() distributed function with types
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        DistributedFunction<Tuple2<String, LocalDate>, String> firstName =
-                (DistributedFunction<Tuple2<String, LocalDate>, String>)
-                (DistributedFunction) DistributedFunctions
-                .entryKey();
-
-        // 5b - join output from steps 2 and 4 (Tuple2 are map entries) on key
-        ComputeStage<Tuple2<Tuple2<String, LocalDate>, LocalDate>> stage5 = stage2.hashJoin(stage4,
-                JoinClause.joinMapEntries(firstName));
+        // 5 - join output from steps 2 and 4 (Tuple2 are map entries) on key
+        BatchStage<Tuple3<String, LocalDate, LocalDate>> stage5 = deaths.hashJoin(births,
+                JoinClause.joinMapEntries(Functions.entryKey()),
+                (nameAndBirth, death) -> tuple3(nameAndBirth.getKey(), nameAndBirth.getValue(), death));
 
         // 6 - filter out unjoined
-        ComputeStage<Tuple2<Tuple2<String, LocalDate>, LocalDate>> stage6 = stage5
+        BatchStage<Tuple3<String, LocalDate, LocalDate>> stage6 = stage5
                 .filter(tuple2 -> tuple2.f1() != null);
 
         // 7 - create a map entry from step 6 output
-        ComputeStage<Entry<String, LifeValue>> stage7 = stage6.map(trio -> {
+        BatchStage<SimpleImmutableEntry<String, LifeValue>> stage7 = stage6.map(trio -> {
             // Tuple2<Tuple2< key, date-of-birth>, date-of-death>
-            String key = trio.f0().f0();
-            LocalDate dob = trio.f0().f1();
-            LocalDate dod = trio.f1();
+            String key = trio.f0();
+            LocalDate dob = trio.f1();
+            LocalDate dod = trio.f2();
 
             LifeValue value = new LifeValue();
             value.setDateOfBirth(dob);
