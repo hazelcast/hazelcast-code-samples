@@ -1,7 +1,6 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines.ep;
 
 import com.hazelcast.core.ReadOnly;
-import com.hazelcast.map.EntryBackupProcessor;
 import com.hazelcast.map.EntryProcessor;
 import com.hazelcast.samples.serialization.hazelcast.airlines.AbstractFlight;
 import com.hazelcast.samples.serialization.hazelcast.airlines.MyKey;
@@ -25,7 +24,7 @@ import java.util.Map.Entry;
  * </p>
  */
 @SuppressWarnings("serial")
-public class FlightLoadingEntryProcessor implements EntryProcessor<MyKey, AbstractFlight>, ReadOnly {
+public class FlightLoadingEntryProcessor implements EntryProcessor<MyKey, AbstractFlight, Integer>, ReadOnly {
 
     /**
      * <p>Count how many seats are allocated.
@@ -47,8 +46,7 @@ public class FlightLoadingEntryProcessor implements EntryProcessor<MyKey, Abstra
      * </p>
      */
     @Override
-    public EntryBackupProcessor<MyKey, AbstractFlight> getBackupProcessor() {
+    public EntryProcessor<MyKey, AbstractFlight, Integer> getBackupProcessor() {
         return null;
     }
-
 }

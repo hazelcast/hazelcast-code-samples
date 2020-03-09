@@ -1,7 +1,7 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.hazelcast.samples.serialization.hazelcast.airlines.ep.FlightLoadingEntryProcessor;
 import com.hazelcast.samples.serialization.hazelcast.airlines.ep.SeatReservationEntryProcessor;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
