@@ -4,7 +4,7 @@ import com.hazelcast.aggregation.Aggregators;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.Pipeline;
+import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.projection.Projection;
 import com.hazelcast.projection.Projections;
 import com.hazelcast.query.Predicate;
@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * <P>
+ * <p>
  * Implement 4 extra commands for Spring Shell. Another is in
  * {@link com.hazelcast.samples.querying.testdata.TestDataLoader
  * TestDataLoader}.
@@ -31,36 +31,36 @@ import java.util.Set;
  *
  * <OL>
  * <LI><B>howard</B>
- * <P>
+ * <p>
  * Search by partial key. Find all entries in the map with the last name
  * "Howard" in the key.
  * </P>
  * </LI>
  * <LI><B>howard2</B>
- * <P>
+ * <p>
  * Search by partial key extended. Find all entries in the map with the last
  * name "Howard" in the key, but now only select certain fields from the key and
  * the value to be returned.
  * </P>
  * </LI>
  * <LI><B>join</B>
- * <P>
+ * <p>
  * Join the birth and death maps to produce the life map.
  * </P>
  * </LI>
  * <LI><B>list</B>
- * <P>
+ * <p>
  * Display the map content.
  * </P>
  * </LI>
  * <LI><B>location</B>
- * <P>
+ * <p>
  * Display the location of each entry. Which partition it is in and which server
  * JVM is hosting that partition.
  * </P>
  * </LI>
  * <LI><B>longevity</B>
- * <P>
+ * <p>
  * Find who lived the longest.
  * </P>
  * </LI>
@@ -75,17 +75,17 @@ public class MyCommands implements CommandMarker {
     private JetInstance jetInstance;
 
     /**
-     * <P>
+     * <p>
      * Search <U>keys</U> but return <U>values</U> from the <I>key-value</I> store.
      * </P>
-     * <P>
+     * <p>
      * The only way this differs from a normal query is the key field is prefixed by
      * "{@code __key}" to indicate it is a field in the key not the value.
      * </P>
-     * <P>
+     * <p>
      * "{@code __key}" refers to the whole key.
      * </P>
-     * <P>
+     * <p>
      * "{@code __key.lastName}" refers to one field in the key.
      * </P>
      */
@@ -111,19 +111,19 @@ public class MyCommands implements CommandMarker {
     }
 
     /**
-     * <P>
+     * <p>
      * Enhance the previous command.
      * </P>
-     * <P>
+     * <p>
      * Running the previous command "{@code howard}" isn't that useful. Values are
      * displayed but we don't know for which key they apply.
      * </P>
-     * <P>
+     * <p>
      * We could search {@code map.entrySet(predicate)} and this would return us the
      * fields we want, but also others. Since we know the key must contain the last
      * name "Howard" it's inefficient to include it in the result.
      * </P>
-     * <P>
+     * <p>
      * Instead, use a projection to specify which fields we require.
      * </P>
      */
@@ -155,7 +155,7 @@ public class MyCommands implements CommandMarker {
     }
 
     /**
-     * <P>
+     * <p>
      * Use a Jet pipeline to join two maps into a third. Essentially, materialising
      * a view.
      * </P>
@@ -184,7 +184,7 @@ public class MyCommands implements CommandMarker {
     }
 
     /**
-     * <P>
+     * <p>
      * List the contents of the maps.
      * </P>
      */
@@ -200,7 +200,7 @@ public class MyCommands implements CommandMarker {
             System.out.println("Map 'life' is empty, run 'join' first");
         }
 
-        String[] mapNames = { "person", "deaths", "life" };
+        String[] mapNames = {"person", "deaths", "life"};
 
         for (String mapName : mapNames) {
             IMap<?, ?> map = this.hazelcastInstance.getMap(mapName);
@@ -216,11 +216,11 @@ public class MyCommands implements CommandMarker {
     }
 
     /**
-     * <P>
+     * <p>
      * For each entry in the <I>key-value</I> store, display which partition it is
      * in, and which server JVM is currently hosting this partition.
      * </P>
-     * <P>
+     * <p>
      * Try varying the number of JVMs in the cluster and rerunning. Entries stay in
      * the same partition as they were, but this partition may move.
      * </P>
@@ -236,20 +236,19 @@ public class MyCommands implements CommandMarker {
 
         Set<PersonKey> keySet = personMap.keySet();
 
-        keySet.forEach(personKey -> {
-            System.out.printf("PERSON : '%s' : PARTITION '%s'%n", personKey,
-                    this.hazelcastInstance.getPartitionService().getPartition(personKey));
-        });
+        keySet.forEach(personKey ->
+                System.out.printf("PERSON : '%s' : PARTITION '%s'%n", personKey,
+                        this.hazelcastInstance.getPartitionService().getPartition(personKey)));
 
         return String.format("[%d row%s]", keySet.size(), (keySet.size() == 1 ? "" : "s"));
     }
 
     /**
-     * <P>
+     * <p>
      * Use built-in aggregations to find the life record with the greatest age --
      * who lived the longest.
      * </P>
-     * <P>
+     * <p>
      * This uses the "age" field, which is derived by
      * {@link com.hazelcast.samples.querying.domain.LifeAgeValueExtractor
      * LifeAgeValueExtractor} but acts as if it was a field in the
@@ -278,9 +277,7 @@ public class MyCommands implements CommandMarker {
 
         Set<String> keySet = lifeMap.keySet(predicate);
 
-        keySet.forEach(key -> {
-            System.out.printf("  => '%s' : '%s'%n", key, lifeMap.get(key));
-        });
+        keySet.forEach(key -> System.out.printf("  => '%s' : '%s'%n", key, lifeMap.get(key)));
 
         return String.format("[%d row%s]", keySet.size(), (keySet.size() == 1 ? "" : "s"));
 
