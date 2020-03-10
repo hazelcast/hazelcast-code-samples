@@ -13,12 +13,7 @@ public class LimbNameExtractor implements ValueExtractor<ValueReader, Object> {
 
         // just for debug - to print all the values read
         // remember that extractor may be invoked in attribute type examination too
-        valueReader.read("limbs[any].name", new ValueCallback<String>() {
-            @Override
-            public void onResult(String s) {
-                System.out.println(s);
-            }
-        });
+        valueReader.read("limbs[any].name", (ValueCallback<String>) System.out::println);
     }
 
 }

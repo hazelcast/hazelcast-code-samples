@@ -5,12 +5,11 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.query.Predicates;
 
-import java.text.ParseException;
 import java.util.Set;
 
 public class AgeExtractorDemo {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IMap<Integer, Customer> map = hz.getMap("customers");
 

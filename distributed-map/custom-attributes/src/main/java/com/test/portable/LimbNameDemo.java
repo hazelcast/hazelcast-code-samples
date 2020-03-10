@@ -8,14 +8,13 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.query.Predicates;
 
-import java.text.ParseException;
 import java.util.Set;
 
 import static com.test.portable.Limb.limb;
 
 public class LimbNameDemo {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         AttributeConfig attributeConfig = new AttributeConfig();
         attributeConfig.setName("limbName");
         attributeConfig.setExtractorClassName("com.test.portable.LimbNameExtractor");
