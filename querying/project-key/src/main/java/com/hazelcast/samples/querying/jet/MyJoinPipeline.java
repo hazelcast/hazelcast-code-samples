@@ -1,7 +1,6 @@
 package com.hazelcast.samples.querying.jet;
 
 import com.hazelcast.jet.Util;
-import com.hazelcast.jet.datamodel.Tuple2;
 import com.hazelcast.jet.datamodel.Tuple3;
 import com.hazelcast.jet.function.Functions;
 import com.hazelcast.jet.pipeline.BatchStage;
@@ -20,114 +19,114 @@ import java.util.Map.Entry;
 import static com.hazelcast.jet.datamodel.Tuple3.tuple3;
 
 /**
- * <P>
+ * <p>
  * Construct a map by streaming and joining (in memory) the contents of two
  * other maps. What we are trying to do is join the contents of the
  * "{@code person}" map with the "{@code deaths}" map.
  * </P>
- * <P>
+ * <p>
  * In relational database terms, it would look a bit like this.
  * </P>
  *
  * <PRE>
  * SELECT firstName, dateOfBirth, dateOfDeath
- *   FROM person, deaths
- *  WHERE person.firstName = deaths.key
+ * FROM person, deaths
+ * WHERE person.firstName = deaths.key
  * </PRE>
- * <P>
+ * <p>
  * In Jet, it looks more like this.
  * </P>
  *
  * <PRE>
- *          +----------+                +----------+
- *          |1 "Person"|                |3 "Deaths"|
- *          |  IMap    |                |  IMap    |
- *          +----------+                +----------+
- *               |                            |
- *               |                            |
- *          +----------+                +----------+
- *          |3 "Person"|                |4 "Deaths"|
- *          | to tuple |                | to tuple |
- *          +----------+                +----------+
- *                      \              /
- *                       \            /
- *                       +------------+
- *                       |5  Join     |
- *                       |on firstName|
- *                       +------------+
- *                              |
- *                              |
- *                        +----------+
- *                        |6 Filter  |
- *                        | unmatched|
- *                        +----------+
- *                              |
- *                              |
- *                        +----------+
- *                        |7 Convert |
- *                        | to Entry |
- *                        +----------+
- *                              |
- *                              |
- *                        +----------+
- *                        |8 "Life"  |
- *                        |   IMap   |
- *                        +----------+
+ * +----------+                +----------+
+ * |1 "Person"|                |3 "Deaths"|
+ * |  IMap    |                |  IMap    |
+ * +----------+                +----------+
+ * |                            |
+ * |                            |
+ * +----------+                +----------+
+ * |3 "Person"|                |4 "Deaths"|
+ * | to tuple |                | to tuple |
+ * +----------+                +----------+
+ * \              /
+ * \            /
+ * +------------+
+ * |5  Join     |
+ * |on firstName|
+ * +------------+
+ * |
+ * |
+ * +----------+
+ * |6 Filter  |
+ * | unmatched|
+ * +----------+
+ * |
+ * |
+ * +----------+
+ * |7 Convert |
+ * | to Entry |
+ * +----------+
+ * |
+ * |
+ * +----------+
+ * |8 "Life"  |
+ * |   IMap   |
+ * +----------+
  * </PRE>
- * <P>
+ * <p>
  * There are eight parts to this joining pipeline, numbered in the diagram
  * above.
  * </P>
  * <OL>
  * <LI>
- * <P>
+ * <p>
  * <B>{@code Person} map</B> Read from {@link com.hazelcast.core.IMap IMap}
  * named "{@code person}" and stream this a series of map entries into the
  * pipeline.
  * </P>
  * </LI>
  * <LI>
- * <P>
+ * <p>
  * <B>Reformat</B> Create a tuple of the only two fields we want from the
  * "{@code person}" map.
  * </P>
  * </LI>
  * <LI>
- * <P>
+ * <p>
  * <B>{@code Deaths} map</B> Same as for step 1, except the name is
  * "{@code deaths}"
  * </P>
  * </LI>
  * <LI>
- * <P>
+ * <p>
  * <B>Reformat</B> Create a tuple of the only two fields we want from the
  * "{@code deaths}" map.
  * </P>
  * </LI>
  * <LI>
- * <P>
+ * <p>
  * <B>Join</B> Join the output of stages 2 and 4 for matching key
  * ({@code firstName}
  * </P>
- * <P>
+ * <p>
  * The output of this stage is a pair of
  * {@code (String, LocalDate), (String, LocalDate)}
- * <P>
+ * <p>
  * </LI>
  * <LI>
- * <P>
+ * <p>
  * <B>Filter</B> Remove items from the join with only dates of birth, no dates
  * of death.
  * </P>
  * </LI>
  * <LI>
- * <P>
+ * <p>
  * <B>Reformat</B> Convert the output of the previous stage into a
  * {@code String} key and pair of {@code LocalDate} for value
  * </P>
  * </LI>
  * <LI>
- * <P>
+ * <p>
  * <B>{@code Life} map</B> Save the output from stage 4 into an
  * {@link com.hazelcast.core.IMap IMap}
  * </P>
