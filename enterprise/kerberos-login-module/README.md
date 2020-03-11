@@ -20,46 +20,12 @@ Kerberos assumes that client and servers are running in the `DOMAIN.COM` domain 
 * A user representing the Hazelcast cluster
 * A Service Principal Name for the Hazelcast cluster
 * A user running the Hazelcast client
-* A group of users who are authorized to access the cluster
 
 See the *Domain setup* appendix at the end of this document, for details on how to setup the domain.
 
 ## Client Configuration
 
-Kerberos authentication is currently supported by the .NET client exclusively.
-
-Configuring the client requires:
-
-* The service principal name of the cluster (`hz/cluster1234@DOMAIN.COM`)
-
-Security and credentials can be configured both from the Xml configuration file and from code. The Xml configuration file can contain the following fragment:
-
-```
-<security>
-  <credentials-factory class-name="Hazelcast.Security.KerberosCredentialsFactory">
-    <properties>
-      <property name="spn">hz/cluster1234@DOMAIN.COM</property>
-    </properties>
-  </credentials-factory>
-</security>
-
-```
-
-where `ServicePrincipalName` is the Service Principal Name of the Hazelcast cluster.
-
-Alternatively, from code:
-
-```
-public void ConfigureKerberos(ClientConfig config)
-{
-  string spn = "hz/cluster1234@DOMAIN.COM";
-
-  config.ConfigureSecurity(security
-    => security.ConfigureKerberosCredentials(spn));
-}
-```
-
-The client must run under the `hzclient@DOMAIN.COM` user which must belong to the authorized group.
+Kerberos authentication is currently supported by the .NET client exclusively. See the [client documentation](https://github.com/hazelcast/hazelcast-csharp-client/blob/master/README.md) section [6.2 Active Directory (Kerberos)](https://github.com/hazelcast/hazelcast-csharp-client/blob/master/README.md#62-active-directory-kerberos) for details.
 
 ## Server Configuration
 
@@ -68,7 +34,6 @@ Configuring the server requires:
 * The name of the domain (`DOMAIN.COM`) and its controller (`KDC.DOMAIN.COM`)
 * The service principal name of the cluster (`hz/cluster1234@DOMAIN.COM`)
 * The cluster keytab file (`hzcluster1234.keytab`)
-* The Sid of the authorized users group (`S-1-5-21-1680733150-2422849858-4203206891-1129`)
 
 The server must be launched with a few additional options:
 ```
@@ -82,7 +47,7 @@ The server must be launched with a few additional options:
 
 >The `max.message.bytes` is required as it is 1024 by default, and the first message containing the Kerberos token can be about 1600 bytes. This size may have to be adjusted to greater values if the token gets bigger.
 
-In addition, the `KerberosLoginModule.jar` file must be added to the `CLASSPATH`.
+In addition, the `kerberos-login-module.jar` file must be added to the `CLASSPATH`. This module is provided as source code in the [Hazelcast Code Samples](https://github.com/hazelcast/hazelcast-code-samples) repository on GitHub in the [kerberos-login-module](https://github.com/hazelcast/hazelcast-code-samples/tree/master/enterprise/kerberos-login-module) directory.
 
 File `gss-jaas.conf` contains:
 ```
@@ -128,8 +93,6 @@ The server configuration contains:
             <properties>
               <!-- relax flags check because .NET tokens contain too many things -->
               <property name="relaxFlagsCheck">true</property>
-              <!-- the SID of the group that controls access to the cluster -->
-              <property name="groupSid">S-1-5-21-1680733150-2422849858-4203206891-1129</property>
             </properties>
           </login-module>
         </jaas>
@@ -145,6 +108,8 @@ The server configuration contains:
   </client-permissions>
 </security>
 ```
+
+Each Active Directory group for the user is added as a role, identified by the group SID. Therefore, permissions can be assigned to groups in the server configuration.
 
 Finally, the `hzcluster1234.keytab` file must be present in the chosen location.
 
@@ -166,7 +131,7 @@ Create a user account to run the Hazelcast client, with the [New-AdUser](https:/
 PS> new-adUser -name hzclient -passwordNeverExpires $true -accountPassword (convertTo-secureString "pAssw0rd" -asPlainText -force) -passThru -enabled $true
 ```
 
-Create a user group to authorize users on the cluster, with the [New-AdGroup](https://docs.microsoft.com/en-us/powershell/module/addsadministration/new-adgroup) command:
+Create one or more user groups to authorize users on the cluster, with the [New-AdGroup](https://docs.microsoft.com/en-us/powershell/module/addsadministration/new-adgroup) command:
 
 ```
 PS> new-adGroup -name hzcluster1234users -groupScope DomainLocal -passThru
@@ -174,7 +139,7 @@ PS> new-adGroup -name hzcluster1234users -groupScope DomainLocal -passThru
 
 >Note the SID (e.g. "S-1-5-21-1680733150-2422849858-4203206891-1129") of the group, you will need it to configure the server. Note that you can always get the SID with the [Get-AdGroup](https://docs.microsoft.com/en-us/powershell/module/addsadministration/get-adgroup) command.
 
-Add the user to the group, to authorize the user to access the cluster, with the [Add-AdGroupMember](https://docs.microsoft.com/en-us/powershell/module/addsadministration/add-adgroupmember) command:
+Add the user to the relevant groups, to authorize the user to access the cluster, with the [Add-AdGroupMember](https://docs.microsoft.com/en-us/powershell/module/addsadministration/add-adgroupmember) command:
 
 ```
 PS> add-adGroupMember -identity hzcluster1234users -members hzclient -passThru
