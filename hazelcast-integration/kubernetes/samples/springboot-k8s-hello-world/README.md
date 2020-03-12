@@ -674,14 +674,21 @@ and password for the "_admin_" user.
  Once done you can log in
 and should see something like the below.
 
-![Image of Hazelcast management center showing connection configuration][Screenshot18b] 
+![Image of Hazelcast management center showing connection configuration choices][Screenshot18b]
 
-![Image of Hazelcast management center showing connection][Screenshot18c] 
+Now you need to create a cluster connection. The cluster name is still _"k8s"_.
+However, the member name is now _"service-hazelcast-server.service.default.svc.cluster.local"_
+the Kubernetes name for the group of Hazelcast server pods.
+
+![Image of Hazelcast management center showing connection to our cluster][Screenshot18c] 
+
+Once connected, you can see the connected processes in the cluster.
 
 ![Image of Hazelcast management center showing connected clients][Screenshot18d] 
 
 The only server in the "_k8s_" cluster is monitored by that Management
-Center.
+Center. The three clients are the Management Center and the two normal clients
+we requested from Kubernetes.
 
 #### Hazelcast Client on Kubernetes - start
 
@@ -779,11 +786,21 @@ So we called the load balancer 3 times, and saw
 the REST URL output from one client 2 times. So the
 load balancer sent the other call to the other client.
 
+If the load balancer is working correctly, the 3 calls to
+the _"index()_" function will be logged across the 2 clients.
+One client will do 1st and 3rd request and the other client
+does the 2nd.
+
+You can just see this in the logs here for the two clients,
+mixed in with logging of Kubernetes checking the application.
+
 ![Image of Hazelcast client 0 log][Screenshot25a] 
+
+The above client shows _"index()"_ running twice.
+
 ![Image of Hazelcast client 1 log][Screenshot25b] 
 
-Finally, if you go back the Hazelcast management center,
-you should now see two clients connected.
+The above client shows _"index()"_ running once.
 
 ![Image of Hazelcast management center with clients][Screenshot26] 
 
