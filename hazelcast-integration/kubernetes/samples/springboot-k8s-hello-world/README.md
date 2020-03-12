@@ -668,7 +668,10 @@ Management Center instance, so will need to set up a logon
 and password for the "_admin_" user. Once done you can log in
 and should see something like the below.
 
-![Image of Hazelcast management center showing server][Screenshot18] 
+![Image of Hazelcast management center showing login][Screenshot18a] 
+![Image of Hazelcast management center showing connection configuration][Screenshot18b] 
+![Image of Hazelcast management center showing connection][Screenshot18c] 
+![Image of Hazelcast management center showing connected clients][Screenshot18d] 
 
 The only server in the "_k8s_" cluster is monitored by that Management
 Center.
@@ -769,7 +772,8 @@ So we called the load balancer 3 times, and saw
 the REST URL output from one client 2 times. So the
 load balancer sent the other call to the other client.
 
-![Image of Hazelcast client log][Screenshot25] 
+![Image of Hazelcast client 0 log][Screenshot25a] 
+![Image of Hazelcast client 1 log][Screenshot25b] 
 
 Finally, if you go back the Hazelcast management center,
 you should now see two clients connected.
