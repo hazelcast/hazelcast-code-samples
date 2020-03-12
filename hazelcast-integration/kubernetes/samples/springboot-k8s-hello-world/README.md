@@ -506,9 +506,9 @@ with names containing the word *"kubernetes"*.
 In the same window, run these three commands.
 
 ```
-docker pull library/openjdk:8-jre
+docker pull library/openjdk:11-jre-slim
 docker pull library/busybox
-docker pull hazelcast/management-center:3.12.5
+docker pull hazelcast/management-center:4.0.1
 ```
 
 These command will "pull" (ie. download) three existing Docker images from the
