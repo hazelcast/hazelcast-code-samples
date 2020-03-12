@@ -62,22 +62,24 @@ spec:
     targetPort: 5701
 ---
 # =========================================================
-# 3rd action == Set of pods for Hazelcast Management Center
+# 3rd action == A pod for Hazelcast Management Center
 # =========================================================
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pod-hazelcast-management-center
 spec:
-  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-hazelcast-management-center
   template:
     metadata:
       labels:
         app: pod-hazelcast-management-center
     spec:
       containers:
-        - image: hazelcast/management-center:3.12.5
+        - image: hazelcast/management-center:4.0.1
           name: container-hazelcast-management-center
 ---
 # =========================================================

@@ -574,7 +574,7 @@ kubectl create -f deployment.yaml
 
 That's it! 
 
-Kubernetes does the rest.
+Kubernetes does the rest. We just wait.
 
 ![Image of Kubernetes creating a deployment][Screenshot14] 
 
@@ -583,7 +583,7 @@ things are handled for us.
 
 What will happen in the background is some pods will be created
 for 1 Hazelcast server, 1 Hazelcast Management Center
-and 2 Hazelcast clients. The numbers for each are in the `deployment.yaml`
+and 2 Hazelcast clients. The counts for each are in the `deployment.yaml`
 file.
 
 These pods will hold Docker containers that run on our only Kubernetes node
@@ -647,7 +647,7 @@ Use this command to ask Minikube for the routing to the Kubernetes
 service that fronts the Management Center pod.
 
 ```
-minikube service service-hazelcast-management-center --url --format "http://{{.IP}}:{{.Port}}/hazelcast-mancenter"
+minikube service service-hazelcast-management-center --url --format "http://{{.IP}}:{{.Port}}/"
 ```
 
 ![Image of Hazelcast management center url][Screenshot17] 
