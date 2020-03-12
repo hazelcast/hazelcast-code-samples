@@ -2,7 +2,9 @@
 
 [Screenshot01]: src/site/markdown/images/screenshot01.png "Image screenshot01.png"
 [Screenshot02]: src/site/markdown/images/screenshot02.png "Image screenshot02.png"
-[Screenshot03]: src/site/markdown/images/screenshot03.png "Image screenshot03.png"
+[Screenshot03a]: src/site/markdown/images/screenshot03a.png "Image screenshot03a.png"
+[Screenshot03b]: src/site/markdown/images/screenshot03b.png "Image screenshot03b.png"
+[Screenshot03c]: src/site/markdown/images/screenshot03c.png "Image screenshot03c.png"
 [Screenshot04]: src/site/markdown/images/screenshot04.png "Image screenshot04.png"
 [Screenshot05]: src/site/markdown/images/screenshot05.png "Image screenshot05.png"
 [Screenshot06]: src/site/markdown/images/screenshot06.png "Image screenshot06.png"
@@ -152,12 +154,12 @@ of 10, much less typing.
 
 #### Check the Management Center
 
-Refresh your Management Center web page, or log out and in. Look for the cluster named 
-"k8s".
+Now that the cluster (of 1 server) is running, you can connect to it
+from the Management Center.
 
-You should see that this cluster has 1 server member in the group:
-
-![Image of Hazelcast management center member count][Screenshot03] 
+![Image of Hazelcast management center configuration][Screenshot03a] 
+![Image of Hazelcast management center available connections][Screenshot03b] 
+![Image of Hazelcast management center member count][Screenshot03c] 
 
 ### Hazelcast Client : `java -Dserver.port=8082 -jar the-client/target/the-client.jar`
 
@@ -203,7 +205,8 @@ What we get back is _"Hello World_" in 5 languages, like this:
 #### Check the Management Center again
 
 On the Management Center, you should now see one server member
-and one client connected.
+and two clients connected. One of the clients is the Management
+Center, the other is the normal Hazelcast client just created.
 
 ![Image of Hazelcast management center client count][Screenshot06] 
 
