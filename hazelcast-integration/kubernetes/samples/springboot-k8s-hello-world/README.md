@@ -1,4 +1,4 @@
-# Hazelcast On Kubernetes Made Fairly Easy 
+# Hazelcast 4 On Kubernetes Made Fairly Easy 
 
 [Screenshot01]: src/site/markdown/images/screenshot01.png "Image screenshot01.png"
 [Screenshot02]: src/site/markdown/images/screenshot02.png "Image screenshot02.png"
@@ -30,7 +30,7 @@
 [Screenshot29]: src/site/markdown/images/screenshot29.png "Image screenshot29.png"
 [Screenshot30]: src/site/markdown/images/screenshot30.png "Image screenshot30.png"
 
-An step-by-step example to running Hazelcast on Kubernetes, the classic "_Hello World_"
+An step-by-step example to running Hazelcast 4 on Kubernetes, the classic "_Hello World_"
 style beginners introduction. 
 
 The sample includes instructions and screenshots for running on Mac.

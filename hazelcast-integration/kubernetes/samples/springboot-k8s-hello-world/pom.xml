@@ -25,10 +25,10 @@
 		<java.version>8</java.version>
 
 		<!-- Latest versions -->		
-		<dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
-		<hazelcast.version>3.12.2</hazelcast.version>
-		<hazelcast-kubernetes.version>1.5.1</hazelcast-kubernetes.version>
-		<spring-boot.version>2.1.7.RELEASE</spring-boot.version>
+		<dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+		<hazelcast.version>4.0</hazelcast.version>
+		<hazelcast-kubernetes.version>2.0.1</hazelcast-kubernetes.version>
+		<spring-boot.version>2.2.5.RELEASE</spring-boot.version>
 	</properties>
 
 	<modules>
@@ -37,15 +37,10 @@
 	</modules>
 
 	<dependencies>
-		<!-- Hazelcast bits, the server, the client and Kubernetes connectivity -->
+		<!-- The main Hazelcast client & server jar, and the Kubernetes connectivity module -->
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
-			<version>${hazelcast.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast-client</artifactId>
 			<version>${hazelcast.version}</version>
 		</dependency>
 		<dependency>
