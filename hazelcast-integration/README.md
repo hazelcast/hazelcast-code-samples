@@ -19,8 +19,6 @@
 	Implementation of filter based session replication integration of hazelcast.
 - <h3>hibernate-2ndlevel-cache</h3>
 	Implementation of hibernate 2nd level cache integration of hazelcast as employee managing application.
-- <h3>javascript/hazelcast-nodejs</h3>
-	Implementation of Hazelcast client integration with NodeJS
 - <h3>jca-ra</h3>
 	Implementation of jca resource adapter integration of hazelcast.
 - <h3>kubernetes</h3>
