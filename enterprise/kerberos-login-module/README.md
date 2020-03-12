@@ -109,6 +109,8 @@ The server configuration contains:
 </security>
 ```
 
+>The `relaxFlagsCheck` property (in the module properties) is a `true`/`false` flag which allows to relax checks for security level requirements present in the service token. E.g. the authentication passes even if the mutual authentication is requested by client's service token. The .Net client may generate such a token, but the module does not yet support mutual authentication.
+
 Each Active Directory group for the user is added as a role, identified by the group SID. Therefore, permissions can be assigned to groups in the server configuration.
 
 Finally, the `hzcluster1234.keytab` file must be present in the chosen location.
