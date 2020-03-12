@@ -1,4 +1,4 @@
-FROM openjdk:8-jre
+FROM openjdk:11-jre-slim
 
 # Copy from Maven build output
 ARG JAR_FILE

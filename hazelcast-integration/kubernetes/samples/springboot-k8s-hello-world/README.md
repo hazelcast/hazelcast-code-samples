@@ -157,9 +157,21 @@ of 10, much less typing.
 Now that the cluster (of 1 server) is running, you can connect to it
 from the Management Center.
 
-![Image of Hazelcast management center configuration][Screenshot03a] 
-![Image of Hazelcast management center available connections][Screenshot03b] 
+On the "Manage Clusters" page, create a connection to a cluster named _"k8s"_
+using localhost, and hit the *Save* button.
+
+![Image of Hazelcast management center configuration][Screenshot03a]
+
+Once this connection is saved, hit the *Select* button for that connection.
+
+![Image of Hazelcast management center available connections][Screenshot03b]
+
+Management Center should connect to your cluster.
+
 ![Image of Hazelcast management center member count][Screenshot03c] 
+
+On the left panel for this cluster, you should see 1 member (that you just started)
+and 1 client (the Management Center).
 
 ### Hazelcast Client : `java -Dserver.port=8082 -jar the-client/target/the-client.jar`
 
