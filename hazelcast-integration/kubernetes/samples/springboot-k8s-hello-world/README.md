@@ -520,7 +520,11 @@ This may take a minute or two depending on your network speed.
 If we don't download them now, Kubernetes will fetch them when we need
 them. Doing it now saves time later on.
 
-![Image of Docker pull][Screenshot12] 
+![Image before Docker pull][Screenshot11] 
+
+And once pulled, you should have 3 more images locally.
+
+![Image after Docker pull][Screenshot12] 
 
 #### `mvn install dockerfile:build`
 
