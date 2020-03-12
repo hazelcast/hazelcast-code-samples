@@ -22,7 +22,7 @@ import com.hazelcast.core.HazelcastInstance;
 import java.util.Properties;
 
 public class YamlConfigClasspath {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         // taking the member port from system properties
         System.setProperty("hazelcast.member.port", "5555");
         Config config = new ClasspathYamlConfig("hazelcast-sample.yaml");

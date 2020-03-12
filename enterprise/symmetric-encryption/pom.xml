@@ -5,16 +5,12 @@
 
     <artifactId>symmetric-encryption</artifactId>
     <name>Network Configuration - Symmetric Encryption</name>
-
-    <description>
-        Network Configuration - Symmetric Encryption
-    </description>
+    <description>Network Configuration - Symmetric Encryption</description>
 
     <parent>
-        <groupId>com.hazelcast.samples.network-configuration</groupId>
-        <artifactId>network-configuration</artifactId>
+        <artifactId>enterprise</artifactId>
+        <groupId>com.hazelcast.samples.enterprise</groupId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>
