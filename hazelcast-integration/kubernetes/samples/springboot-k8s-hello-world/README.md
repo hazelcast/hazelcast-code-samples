@@ -658,19 +658,25 @@ minikube service service-hazelcast-management-center --url --format "http://{{.I
 
 Now we know the Management Center's web address.
 
-In the screenshot above it is host 192.168.99.100 port 30549.
+In the screenshot above it is host 192.168.64.48 port 30885.
 
 The output of the Minikube service query is the full URL to paste
 into a browser to get access to the Management Center.
 
 When you do this, you'll be the first person to log into that
 Management Center instance, so will need to set up a logon
-and password for the "_admin_" user. Once done you can log in
-and should see something like the below.
+and password for the "_admin_" user.
 
 ![Image of Hazelcast management center showing login][Screenshot18a] 
+
+
+ Once done you can log in
+and should see something like the below.
+
 ![Image of Hazelcast management center showing connection configuration][Screenshot18b] 
+
 ![Image of Hazelcast management center showing connection][Screenshot18c] 
+
 ![Image of Hazelcast management center showing connected clients][Screenshot18d] 
 
 The only server in the "_k8s_" cluster is monitored by that Management
