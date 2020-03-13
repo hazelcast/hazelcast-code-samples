@@ -79,8 +79,21 @@ spec:
         app: pod-hazelcast-management-center
     spec:
       containers:
-        - image: hazelcast/management-center:4.0.1
+        - image: "springboot-k8s-hello-world/the-management-center"
+          # Always from local, never from Dockerhub
+          imagePullPolicy: Never
+          # Url to check every 10 seconds if the container is ok
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
           name: container-hazelcast-management-center
+          # Url to check the container is up
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 30
 ---
 # =========================================================
 # 4th action == HTTP to Hazelcast Management Center

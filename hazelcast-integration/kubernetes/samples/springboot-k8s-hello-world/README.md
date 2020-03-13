@@ -677,8 +677,10 @@ and should see something like the below.
 ![Image of Hazelcast management center showing connection configuration choices][Screenshot18b]
 
 Now you need to create a cluster connection. The cluster name is still _"k8s"_.
-However, the member name is now _"service-hazelcast-server.service.default.svc.cluster.local"_
-the Kubernetes name for the group of Hazelcast server pods.
+However, the member name is now _"service-hazelcast-server.default.svc.cluster.local"_
+the Kubernetes name for the group of Hazelcast server pods. Here _"service-hazelcast-server"_
+is the service name for the Hazelcast server pods in the `deployment.yaml` file, and
+we append  _".default.svc.cluster.local"_ for Minikube's default namespace.
 
 ![Image of Hazelcast management center showing connection to our cluster][Screenshot18c] 
 
