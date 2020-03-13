@@ -18,3 +18,4 @@ hibernateDB
 springHibernateDB
 osgi/felix-cache/
 .java-version
+*.code-workspace

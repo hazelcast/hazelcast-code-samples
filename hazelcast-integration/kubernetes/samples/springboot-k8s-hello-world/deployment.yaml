@@ -62,23 +62,38 @@ spec:
     targetPort: 5701
 ---
 # =========================================================
-# 3rd action == Set of pods for Hazelcast Management Center
+# 3rd action == A pod for Hazelcast Management Center
 # =========================================================
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pod-hazelcast-management-center
 spec:
-  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-hazelcast-management-center
   template:
     metadata:
       labels:
         app: pod-hazelcast-management-center
     spec:
       containers:
-        - image: hazelcast/management-center:3.12.5
+        - image: "springboot-k8s-hello-world/the-management-center"
+          # Always from local, never from Dockerhub
+          imagePullPolicy: Never
+          # Url to check every 10 seconds if the container is ok
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
           name: container-hazelcast-management-center
+          # Url to check the container is up
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 30
 ---
 # =========================================================
 # 4th action == HTTP to Hazelcast Management Center

@@ -5,7 +5,7 @@ import com.hazelcast.client.config.XmlClientConfigBuilder;
 import com.hazelcast.config.DiscoveryStrategyConfig;
 import com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategyFactory;
 import com.hazelcast.kubernetes.KubernetesProperties;
-import com.hazelcast.spi.properties.GroupProperty;
+import com.hazelcast.spi.properties.ClusterProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -72,7 +72,7 @@ public class ApplicationConfig {
                     HAZELCAST_SERVICE_NAME);
 
             // Step (2) in docs above
-            clientConfig.setProperty(GroupProperty.DISCOVERY_SPI_ENABLED.toString(), "true");
+            clientConfig.setProperty(ClusterProperty.DISCOVERY_SPI_ENABLED.toString(), "true");
             clientConfig
                 .getNetworkConfig()
                 .getDiscoveryConfig()

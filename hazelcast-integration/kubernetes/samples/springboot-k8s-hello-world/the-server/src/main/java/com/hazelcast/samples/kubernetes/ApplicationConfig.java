@@ -6,7 +6,7 @@ import com.hazelcast.config.DiscoveryStrategyConfig;
 import com.hazelcast.config.JoinConfig;
 import com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategyFactory;
 import com.hazelcast.kubernetes.KubernetesProperties;
-import com.hazelcast.spi.properties.GroupProperty;
+import com.hazelcast.spi.properties.ClusterProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,8 +24,7 @@ import java.util.Collections;
  * </p>
  * <p>
  * <i>If</i> we are not in Kubernetes, amend the configuration loaded from
- * "{@code hazelcast.xml}" to set discovery to use "{@code 127.0.0.1:5701}"
- * and leave the Management Center setting as it was originally in XML.
+ * "{@code hazelcast.xml}" to set discovery to use "{@code 127.0.0.1:5701}".
  * </p>
  * <p>
  * <i>If</i> we are in Kubernetes, it's a fraction more complicated, but
@@ -48,18 +47,6 @@ import java.util.Collections;
  * <li>Use Kubenetes Plugin
  * <p>Tell the Hazelcast server to use the Kubernetes discovery plugin set
  * up in step 1.</p>
- * </li>
- * <li>Configure Management Center
- * <p>Change the Management Center address from how it is set in the "{@code hazelcast.xml}"
- * file (ie. from localhost) to a Kubernetes DNS name. The value used here is
- * "{@code service-hazelcast-management-center}" which matches with the "{@code deployment.yaml}"
- * and resolves to whichever pod/container actually holds the Management Center.
- * </p>
- * <p>
- * There will be only one pod/container holding the Management Center, but if it is
- * down or you omit it to simplify the Kubernetes deployment, then the Hazelcast
- * server will moan about it not being found but it won't do any harm.
- * </p>
  * </li>
  * </ol>
  */
@@ -89,13 +76,8 @@ public class ApplicationConfig {
                     HAZELCAST_SERVICE_NAME);
 
             // Step (2) in docs above
-            config.setProperty(GroupProperty.DISCOVERY_SPI_ENABLED.toString(), "true");
+            config.setProperty(ClusterProperty.DISCOVERY_SPI_ENABLED.toString(), "true");
             joinConfig.getDiscoveryConfig().addDiscoveryStrategyConfig(discoveryStrategyConfig);
-
-            // Step (3) in docs above
-            config.getManagementCenterConfig()
-                 .setEnabled(true).setUrl("http://" + MANCENTER_SERVICE_NAME + ":8080/hazelcast-mancenter");
-
         } else {
             joinConfig.getTcpIpConfig().setEnabled(true).setMembers(Collections.singletonList("127.0.0.1:5701"));
         }

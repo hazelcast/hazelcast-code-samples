@@ -1,8 +1,10 @@
-# Hazelcast On Kubernetes Made Fairly Easy 
+# Hazelcast 4 On Kubernetes Made Fairly Easy 
 
 [Screenshot01]: src/site/markdown/images/screenshot01.png "Image screenshot01.png"
 [Screenshot02]: src/site/markdown/images/screenshot02.png "Image screenshot02.png"
-[Screenshot03]: src/site/markdown/images/screenshot03.png "Image screenshot03.png"
+[Screenshot03a]: src/site/markdown/images/screenshot03a.png "Image screenshot03a.png"
+[Screenshot03b]: src/site/markdown/images/screenshot03b.png "Image screenshot03b.png"
+[Screenshot03c]: src/site/markdown/images/screenshot03c.png "Image screenshot03c.png"
 [Screenshot04]: src/site/markdown/images/screenshot04.png "Image screenshot04.png"
 [Screenshot05]: src/site/markdown/images/screenshot05.png "Image screenshot05.png"
 [Screenshot06]: src/site/markdown/images/screenshot06.png "Image screenshot06.png"
@@ -10,27 +12,32 @@
 [Screenshot08]: src/site/markdown/images/screenshot08.png "Image screenshot08.png"
 [Screenshot09]: src/site/markdown/images/screenshot09.png "Image screenshot09.png"
 [Screenshot10]: src/site/markdown/images/screenshot10.png "Image screenshot10.png"
+[Screenshot11]: src/site/markdown/images/screenshot10.png "Image screenshot11.png"
 [Screenshot12]: src/site/markdown/images/screenshot12.png "Image screenshot12.png"
 [Screenshot13]: src/site/markdown/images/screenshot13.png "Image screenshot13.png"
 [Screenshot14]: src/site/markdown/images/screenshot14.png "Image screenshot14.png"
 [Screenshot15]: src/site/markdown/images/screenshot15.png "Image screenshot15.png"
 [Screenshot16]: src/site/markdown/images/screenshot16.png "Image screenshot16.png"
 [Screenshot17]: src/site/markdown/images/screenshot17.png "Image screenshot17.png"
-[Screenshot18]: src/site/markdown/images/screenshot18.png "Image screenshot18.png"
+[Screenshot18a]: src/site/markdown/images/screenshot18a.png "Image screenshot18a.png"
+[Screenshot18b]: src/site/markdown/images/screenshot18b.png "Image screenshot18b.png"
+[Screenshot18c]: src/site/markdown/images/screenshot18c.png "Image screenshot18c.png"
+[Screenshot18d]: src/site/markdown/images/screenshot18d.png "Image screenshot18d.png"
 [Screenshot19]: src/site/markdown/images/screenshot19.png "Image screenshot19.png"
 [Screenshot20]: src/site/markdown/images/screenshot20.png "Image screenshot20.png"
 [Screenshot21]: src/site/markdown/images/screenshot21.png "Image screenshot21.png"
 [Screenshot22]: src/site/markdown/images/screenshot22.png "Image screenshot22.png"
 [Screenshot23]: src/site/markdown/images/screenshot23.png "Image screenshot23.png"
 [Screenshot24]: src/site/markdown/images/screenshot24.png "Image screenshot24.png"
-[Screenshot25]: src/site/markdown/images/screenshot25.png "Image screenshot25.png"
+[Screenshot25a]: src/site/markdown/images/screenshot25a.png "Image screenshot25a.png"
+[Screenshot25b]: src/site/markdown/images/screenshot25b.png "Image screenshot25b.png"
 [Screenshot26]: src/site/markdown/images/screenshot26.png "Image screenshot26.png"
 [Screenshot27]: src/site/markdown/images/screenshot27.png "Image screenshot27.png"
 [Screenshot28]: src/site/markdown/images/screenshot28.png "Image screenshot28.png"
 [Screenshot29]: src/site/markdown/images/screenshot29.png "Image screenshot29.png"
 [Screenshot30]: src/site/markdown/images/screenshot30.png "Image screenshot30.png"
 
-An step-by-step example to running Hazelcast on Kubernetes, the classic "_Hello World_"
+An step-by-step example to running Hazelcast 4 on Kubernetes, the classic "_Hello World_"
 style beginners introduction. 
 
 The sample includes instructions and screenshots for running on Mac.
@@ -152,12 +159,24 @@ of 10, much less typing.
 
 #### Check the Management Center
 
-Refresh your Management Center web page, or log out and in. Look for the cluster named 
-"k8s".
+Now that the cluster (of 1 server) is running, you can connect to it
+from the Management Center.
 
-You should see that this cluster has 1 server member in the group:
+On the "Manage Clusters" page, create a connection to a cluster named _"k8s"_
+using localhost, and hit the *Save* button.
 
-![Image of Hazelcast management center member count][Screenshot03] 
+![Image of Hazelcast management center configuration][Screenshot03a]
+
+Once this connection is saved, hit the *Select* button for that connection.
+
+![Image of Hazelcast management center available connections][Screenshot03b]
+
+Management Center should connect to your cluster.
+
+![Image of Hazelcast management center member count][Screenshot03c] 
+
+On the left panel for this cluster, you should see 1 member (that you just started)
+and 1 client (the Management Center).
 
 ### Hazelcast Client : `java -Dserver.port=8082 -jar the-client/target/the-client.jar`
 
@@ -203,7 +222,8 @@ What we get back is _"Hello World_" in 5 languages, like this:
 #### Check the Management Center again
 
 On the Management Center, you should now see one server member
-and one client connected.
+and two clients connected. One of the clients is the Management
+Center, the other is the normal Hazelcast client just created.
 
 ![Image of Hazelcast management center client count][Screenshot06] 
 
@@ -491,9 +511,9 @@ with names containing the word *"kubernetes"*.
 In the same window, run these three commands.
 
 ```
-docker pull library/openjdk:8-jre
+docker pull library/openjdk:11-jre-slim
 docker pull library/busybox
-docker pull hazelcast/management-center:3.12.5
+docker pull hazelcast/management-center:4.0.1
 ```
 
 These command will "pull" (ie. download) three existing Docker images from the
@@ -505,7 +525,11 @@ This may take a minute or two depending on your network speed.
 If we don't download them now, Kubernetes will fetch them when we need
 them. Doing it now saves time later on.
 
-![Image of Docker pull][Screenshot12] 
+![Image before Docker pull][Screenshot11] 
+
+And once pulled, you should have 3 more images locally.
+
+![Image after Docker pull][Screenshot12] 
 
 #### `mvn install dockerfile:build`
 
@@ -528,10 +552,11 @@ the relevant executable Spring Boot application _Jar_.
 
 #### After
 
-If all has gone well, you should now have 5 extra Docker images,
-the three downloaded and the two made by Maven:
+If all has gone well, you should now have even more Docker images,
+the three downloaded and the new ones made by Maven, which we
+have named with the prefix _"springboot-k8s-hello-world"_:
 
-![Image of Docker images after pull][Screenshot13] 
+![Image of Docker images after build][Screenshot13] 
 
 There will be other images, the images that were there when we
 first started the environment plus any output from Maven builds
@@ -555,7 +580,7 @@ kubectl create -f deployment.yaml
 
 That's it! 
 
-Kubernetes does the rest.
+Kubernetes does the rest. We just wait.
 
 ![Image of Kubernetes creating a deployment][Screenshot14] 
 
@@ -564,7 +589,7 @@ things are handled for us.
 
 What will happen in the background is some pods will be created
 for 1 Hazelcast server, 1 Hazelcast Management Center
-and 2 Hazelcast clients. The numbers for each are in the `deployment.yaml`
+and 2 Hazelcast clients. The counts for each are in the `deployment.yaml`
 file.
 
 These pods will hold Docker containers that run on our only Kubernetes node
@@ -628,27 +653,45 @@ Use this command to ask Minikube for the routing to the Kubernetes
 service that fronts the Management Center pod.
 
 ```
-minikube service service-hazelcast-management-center --url --format "http://{{.IP}}:{{.Port}}/hazelcast-mancenter"
+minikube service service-hazelcast-management-center --url --format "http://{{.IP}}:{{.Port}}/"
 ```
 
 ![Image of Hazelcast management center url][Screenshot17] 
 
 Now we know the Management Center's web address.
 
-In the screenshot above it is host 192.168.99.100 port 30549.
+In the screenshot above it is host 192.168.64.51 port 31871.
 
 The output of the Minikube service query is the full URL to paste
 into a browser to get access to the Management Center.
 
 When you do this, you'll be the first person to log into that
 Management Center instance, so will need to set up a logon
-and password for the "_admin_" user. Once done you can log in
+and password for the "_admin_" user.
+
+![Image of Hazelcast management center showing login][Screenshot18a] 
+
+
+ Once done you can log in
 and should see something like the below.
 
-![Image of Hazelcast management center showing server][Screenshot18] 
+![Image of Hazelcast management center showing connection configuration choices][Screenshot18b]
+
+Now you need to create a cluster connection. The cluster name is still _"k8s"_.
+However, the member name is now _"service-hazelcast-server.default.svc.cluster.local"_
+the Kubernetes name for the group of Hazelcast server pods. Here _"service-hazelcast-server"_
+is the service name for the Hazelcast server pods in the `deployment.yaml` file, and
+we append  _".default.svc.cluster.local"_ for Minikube's default namespace.
+
+![Image of Hazelcast management center showing connection to our cluster][Screenshot18c] 
+
+Once connected, you can see the connected processes in the cluster.
+
+![Image of Hazelcast management center showing connected clients][Screenshot18d] 
 
 The only server in the "_k8s_" cluster is monitored by that Management
-Center.
+Center. The three clients are the Management Center and the two normal clients
+we requested from Kubernetes.
 
 #### Hazelcast Client on Kubernetes - start
 
@@ -746,14 +789,27 @@ So we called the load balancer 3 times, and saw
 the REST URL output from one client 2 times. So the
 load balancer sent the other call to the other client.
 
-![Image of Hazelcast client log][Screenshot25] 
+If the load balancer is working correctly, the 3 calls to
+the _"index()_" function will be logged across the 2 clients.
+One client will do 1st and 3rd request and the other client
+does the 2nd.
 
-Finally, if you go back the Hazelcast management center,
-you should now see two clients connected.
+You can just see this in the logs here for the two clients,
+mixed in with logging of Kubernetes checking the application.
+
+![Image of Hazelcast client 0 log][Screenshot25a] 
+
+The above client shows _"index()"_ running twice.
+
+![Image of Hazelcast client 1 log][Screenshot25b] 
+
+The above client shows _"index()"_ running once.
+
+And we can see these clients on the Management Center.
 
 ![Image of Hazelcast management center with clients][Screenshot26] 
 
-Remember, clients don't show by default. These ones are
+Remember, clients details don't show by default. These ones are
 visible as we've set `hazelcast.client.statistics.enabled` to "_true_"
 in the client's `hazelcast-client.xml` file.
 
