@@ -190,21 +190,20 @@ public class MyEurekaDiscoveryService implements DiscoveryService {
      */
     private String findPort(String startingPort) {
         try {
-            int startWebPort = Integer.parseInt(startingPort);
-            int startHazelcastPort = 5701;
-            int firstFreePort = 0;
+            int startPort = Integer.parseInt(startingPort);
+            int freePort = 0;
 
-            for (int port = startHazelcastPort; port < startHazelcastPort + 100; port++) {
+            for (int port = startPort; port < startPort + 100; port++) {
                 try {
                     new ServerSocket(port).close();
-                    firstFreePort = port;
+                    freePort = port;
                     break;
                 } catch (IOException portInUse) {
                     ignore(portInUse);
                 }
             }
 
-            return String.valueOf(startWebPort + (firstFreePort - startHazelcastPort) - 1);
+            return String.valueOf(freePort);
 
         } catch (NumberFormatException nfe) {
             log.error("Not a number, starting port '{}'", startingPort);
