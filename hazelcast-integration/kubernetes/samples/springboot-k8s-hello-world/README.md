@@ -552,10 +552,11 @@ the relevant executable Spring Boot application _Jar_.
 
 #### After
 
-If all has gone well, you should now have 5 extra Docker images,
-the three downloaded and the two made by Maven:
+If all has gone well, you should now have even more Docker images,
+the three downloaded and the new ones made by Maven, which we
+have named with the prefix _"springboot-k8s-hello-world"_:
 
-![Image of Docker images after pull][Screenshot13] 
+![Image of Docker images after build][Screenshot13] 
 
 There will be other images, the images that were there when we
 first started the environment plus any output from Maven builds
@@ -659,7 +660,7 @@ minikube service service-hazelcast-management-center --url --format "http://{{.I
 
 Now we know the Management Center's web address.
 
-In the screenshot above it is host 192.168.64.48 port 30885.
+In the screenshot above it is host 192.168.64.51 port 31871.
 
 The output of the Minikube service query is the full URL to paste
 into a browser to get access to the Management Center.
@@ -804,9 +805,11 @@ The above client shows _"index()"_ running twice.
 
 The above client shows _"index()"_ running once.
 
+And we can see these clients on the Management Center.
+
 ![Image of Hazelcast management center with clients][Screenshot26] 
 
-Remember, clients don't show by default. These ones are
+Remember, clients details don't show by default. These ones are
 visible as we've set `hazelcast.client.statistics.enabled` to "_true_"
 in the client's `hazelcast-client.xml` file.
 
