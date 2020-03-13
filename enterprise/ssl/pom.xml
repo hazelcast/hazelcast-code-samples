@@ -5,16 +5,12 @@
 
     <artifactId>ssl</artifactId>
     <name>Network Configuration - SSL</name>
-
-    <description>
-        Network Configuration - SSL
-    </description>
+    <description>Network Configuration - SSL</description>
 
     <parent>
-        <groupId>com.hazelcast.samples.network-configuration</groupId>
-        <artifactId>network-configuration</artifactId>
+        <artifactId>enterprise</artifactId>
+        <groupId>com.hazelcast.samples.enterprise</groupId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>
@@ -22,4 +18,5 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 </project>

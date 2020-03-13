@@ -4,7 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 
 public class Member {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance();
         HazelcastInstance hz2 = Hazelcast.newHazelcastInstance();
 

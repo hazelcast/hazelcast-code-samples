@@ -36,6 +36,8 @@
         <module>client-custom-credentials</module>
         <module>client-token-credentials</module>
         <module>client-failover-cluster</module>
+        <module>ssl</module>
+        <module>symmetric-encryption</module>
     </modules>
 
     <repositories>
