@@ -16,13 +16,15 @@
     <description>Project POM</description>
 
     <properties>
+    	<hazelcast.version>4.0</hazelcast.version>
+    
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <java.version>1.8</java.version>
-        <spring-boot.version>1.5.2.RELEASE</spring-boot.version>
-        <spring-cloud.version>Camden.SR5</spring-cloud.version>
+        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
     </properties>
 
     <modules>
@@ -36,9 +38,16 @@
     </modules>
 
     <dependencies>
+        <!-- https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-with-Java-9-and-above -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
+            <artifactId>hazelcast-all</artifactId>
+            <version>${hazelcast.version}</version>
         </dependency>
 
         <dependency>

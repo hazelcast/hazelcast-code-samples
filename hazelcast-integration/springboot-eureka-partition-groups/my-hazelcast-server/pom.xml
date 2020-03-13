@@ -15,6 +15,8 @@
     <description>Hazelcast Server</description>
 
     <properties>
+        <hazelcast.version>4.0</hazelcast.version>
+
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,20 +27,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>my-eureka-common</artifactId>
             <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.hazelcast</groupId>
-                    <artifactId>hazelcast</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.hazelcast</groupId>
-                    <artifactId>hazelcast-all</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.hazelcast</groupId>
-                    <artifactId>hazelcast-client</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
