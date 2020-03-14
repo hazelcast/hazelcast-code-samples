@@ -616,7 +616,7 @@ Here we do it from the Hazelcast server. If the maps "__eurekast_safe__"
 and "__eurekast_unsafe__" are empty, we put some data in them.
 
 The maps "__eurekast_safe__" and "__eurekast_unsafe__" are 
-[IMap](http://docs.hazelcast.org/docs/3.8/javadoc/com/hazelcast/core/IMap.html),
+[IMap](http://docs.hazelcast.org/docs/4.0/javadoc/com/hazelcast/map/IMap.html),
 meaning they are split into sections and those sections spread across
 the available servers. The default is for 271 such sections, named _partitions_,
 so we create 271 entries to try to put one data record entry into each.
@@ -861,14 +861,12 @@ What you should see is that the "__eurekast_safe__" map has survived
 this event unscathed. There are still 271 entries.
 
 What you should see is that the "__eurekast_unsafe__" map has lost
-some data. In the screenshot only 201 entries remain, so 70 have
+some data. In the screenshot only 196 entries remain, so 75 have
 gone.
 
-You should expect to lost about a quarter of the unsafe (no backup)
-data. Four servers, one is killed.
-
-The exact number lost will depend on how the map partitions have been
-allocated to the servers. This is not random, but difficult to predict.
+This seems intuititve to have lost about a quarter of the unsafe (no backup)
+data. Four servers, one is killed. However, it is not a correct belief
+as we will discover later on.
 
 ### 14. Kill another specific Hazelcast Server
 
@@ -895,8 +893,8 @@ The "__eurekast_safe__" map is still fine, all 271 entries are there.
 We have lost both the `odd` zone servers but the other copy of the data was
 in the `even` zone servers, so no data has been lost.
 
-With two servers gone, the "__eurekast_unsafe__" map will be about half the
-original size. Here it shows 149, you should have a roughly similar number.
+With two servers gone, the "__eurekast_unsafe__" map will be smaller still.
+Here it shows 74, you will probably have a different number.
 
 ### 16. Kill yet another Hazelcast Server
 
@@ -934,9 +932,20 @@ zone available it's better than nothing. Here it has saved us.
 
 Surprised 2 ?
 
-The "__eurekast_unsafe__" has dropped from 149 to 145 by the most recent loss of a server.
-We've lost 75% of the hosts but not 75% of the data, and that's because it's the partitions
-that are spread across the hosts.
+The "__eurekast_unsafe__" dropped from 271 to 196 when a server crashed, then down to 74
+when another crashed, then down to 1 !!
+
+What is going on ?
+
+What is going on is partitioning. Data is organised into groups based on their keys,
+and the groups are spread across the servers. With small data volumes the groups may
+be different sizes. So if you lose a server which is hosting larger than average
+groups, you lost more data.
+
+It's not really a problem. If you have much larger data volumes, millions or billions,
+the deviation in the group sizes becomes almost unnoticable.
+
+And if you're worried about losing data, turn on data safety.
 
 ## Hazelcasts Mancenter
 

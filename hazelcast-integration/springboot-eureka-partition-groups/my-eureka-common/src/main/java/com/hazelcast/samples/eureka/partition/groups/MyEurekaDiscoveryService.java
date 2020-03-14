@@ -1,6 +1,6 @@
 package com.hazelcast.samples.eureka.partition.groups;
 
-import com.hazelcast.nio.Address;
+import com.hazelcast.cluster.Address;
 import com.hazelcast.spi.discovery.DiscoveryNode;
 import com.hazelcast.spi.discovery.SimpleDiscoveryNode;
 import com.hazelcast.spi.discovery.integration.DiscoveryService;
@@ -11,11 +11,14 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static com.hazelcast.spi.partitiongroup.PartitionGroupMetaData.PARTITION_GROUP_ZONE;
 
 /**
@@ -41,6 +44,7 @@ public class MyEurekaDiscoveryService implements DiscoveryService {
 
     private static final String YML_SEPARATOR = ".";
 
+
     @Value("${eureka.client.registerWithEureka:true}")
     public boolean registerWithEureka;
 
@@ -62,8 +66,8 @@ public class MyEurekaDiscoveryService implements DiscoveryService {
      * @return A map with one entry, the partition group for this host.
      */
     @Override
-    public Map<String, Object> discoverLocalMetadata() {
-        HashMap<String, Object> result = new HashMap<>();
+    public Map<String, String> discoverLocalMetadata() {
+        HashMap<String, String> result = new HashMap<>();
 
         /* The metadata is only for partition groups, so we don't need this if we are
          * a Hazelcast client. Hazelcast servers register with Eureka, clients only read.
@@ -76,7 +80,7 @@ public class MyEurekaDiscoveryService implements DiscoveryService {
         log.info("discoverLocalMetadata(): Hazelcast lookup to Eureka : start");
 
         // Find the web port this process is using.
-        String port = String.valueOf(discoveryClient.getLocalServiceInstance().getPort());
+        String port = this.findPort(System.getProperty("my.web.port"));
         // Since this is a one machine example, we know which machine we are on.
         String hostPort = "localhost" + YML_SEPARATOR + port;
 
@@ -173,5 +177,37 @@ public class MyEurekaDiscoveryService implements DiscoveryService {
      */
     @Override
     public void destroy() {
+    }
+
+    /**
+     * We need to know the web port this process will use, but this module
+     * is triggered before Spring decides. Using the base port (as a String)
+     * determine which port is free, assuming Spring picks it as next in
+     * sequence.
+     *
+     * @param Starting port
+     * @return Next free port, starting port if free or greater
+     */
+    private String findPort(String startingPort) {
+        try {
+            int startPort = Integer.parseInt(startingPort);
+            int freePort = 0;
+
+            for (int port = startPort; port < startPort + 100; port++) {
+                try {
+                    new ServerSocket(port).close();
+                    freePort = port;
+                    break;
+                } catch (IOException portInUse) {
+                    ignore(portInUse);
+                }
+            }
+
+            return String.valueOf(freePort);
+
+        } catch (NumberFormatException nfe) {
+            log.error("Not a number, starting port '{}'", startingPort);
+        }
+        return "";
     }
 }

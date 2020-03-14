@@ -23,7 +23,13 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.springframework.cloud</groupId>
+            		<artifactId>spring-cloud-netflix-ribbon</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
