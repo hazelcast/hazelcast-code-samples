@@ -56,7 +56,7 @@ Log in as Username: "developer", Password: "developer".
 
 ## Step 2: Start Hazelcast cluster
 
-Note that, in case of Hazelcast Enterprise OpenShift (both [Centos](hazelcast-cluster/hazelcast-enterprise-openshift-centos/) and [RHEL](hazelcast-cluster/hazelcast-enterprise-openshift-rhel/), you will need a valid Hazelcast license key. If you don't have one, you can either use [Hazelcast OpenShift Origin](hazelcast-cluster/hazelcast-openshift-origin/) instead or get a trial key from [this link](https://hazelcast.com/hazelcast-enterprise-download/trial/).
+Note that, in case of Hazelcast Enterprise (and Hazelcast Enterprise RHEL), you will need a valid Hazelcast license key. If you don't have one, you can either use [Hazelcast OpenShift Origin](hazelcast-cluster/hazelcast/) instead or get a trial key from [this link](https://hazelcast.com/hazelcast-enterprise-download/trial/).
 
 **1) Create Project**
 
@@ -73,11 +73,11 @@ Then, you can create a new project.
 $ oc new-project hazelcast
 ```
 
-Note that, in case of [Hazelcast Enterprise OpenShift RHEL](hazelcast-cluster/hazelcast-enterprise-openshift-rhel/), you will need to authenticate to Red Hat Container Catalog as described [here](#authenticate-to-red-hat-container-catalog).
+Note that, in case of [Hazelcast Enterprise RHEL](hazelcast-cluster/hazelcast-enterprise-rhel/), you will need to authenticate to Red Hat Container Catalog as described [here](#authenticate-to-red-hat-container-catalog).
 
 **2) Start Hazelcast cluster**
 
-Change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-centos`), Hazelcast Enterprise RHEL (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-rhel`) or Hazelcast (`$ cd hazelcast-cluster/hazelcast-openshift-origin`).
+Change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise`), Hazelcast Enterprise RHEL (`$ cd hazelcast-cluster/hazelcast-enterprise-rhel`) or Hazelcast (`$ cd hazelcast-cluster/hazelcast`).
 
 Then, start the cluster with the following command.
 
@@ -89,7 +89,7 @@ $ oc new-app -f hazelcast.yaml \
 
 Used parameters:
 * `NAMESPACE`: must be the same as the OpenShift project's name
-* `ENTERPRISE_LICENSE_KEY`: Hazelcast Enterprise License (not needed for [Hazelcast OpenShift Origin](hazelcast-cluster/hazelcast-openshift-origin/))
+* `ENTERPRISE_LICENSE_KEY`: Hazelcast Enterprise License (not needed for [Hazelcast OpenShift Origin](hazelcast-cluster/hazelcast/))
 
 **3) Check that Hazelcast is running**
 
@@ -264,7 +264,7 @@ You can check that the application really works together with the Hazelcast clus
 
 If you want to play with "Entry Processor" from the code sample, you need to place the Entry Processor JAR into the `/data` directory of Hazelcast. Currently, you use ConfigMap with `hazelcast.xml` as the volume mounted to `/data`. However, if we want to copy the custom JAR, you need to change it and use OpenShift Persistent Volume.
 
-Let's first change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-centos`), Hazelcast Enterprise RHEL (`$ cd hazelcast-cluster/hazelcast-enterprise-openshift-rhel`) or Hazelcast (`$ cd hazelcast-cluster/hazelcast-openshift-origin`).
+Let's first change the directory to Hazelcast Enterprise (`$ cd hazelcast-cluster/hazelcast-enterprise`), Hazelcast Enterprise RHEL (`$ cd hazelcast-cluster/hazelcast-enterprise-rhel`) or Hazelcast (`$ cd hazelcast-cluster/hazelcast`).
 
 Then, replace ConfigMap with the Persistent Storage.
 
