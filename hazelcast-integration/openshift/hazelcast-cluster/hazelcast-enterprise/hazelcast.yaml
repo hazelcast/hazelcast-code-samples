@@ -12,7 +12,7 @@ labels:
 parameters:
 - name: HAZELCAST_IMAGE
   description: "Defines the location of Hazelcast image"
-  value: hazelcast/hazelcast-enterprise:3.12
+  value: hazelcast/hazelcast-enterprise:4.0
   required: true
 - name: SERVICE_NAME
   description: "Defines the service name of the POD to lookup of Kubernetes"
@@ -30,7 +30,7 @@ parameters:
   required": true
 - name: MANAGEMENT_CENTER_IMAGE
   description: "Defines the location of Hazelcast Management Center image"
-  value: hazelcast/management-center:3.12
+  value: hazelcast/management-center:4.0
   required: true
 - name: MANAGEMENT_CENTER_SERVICE_NAME
   description: "Defines the service name of Management Center"
@@ -43,19 +43,19 @@ objects:
   metadata:
     name: hazelcast-configuration
   data:
-    hazelcast.xml: |-
-      <?xml version="1.0" encoding="UTF-8"?>
-      <hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd"
-                     xmlns="http://www.hazelcast.com/schema/config"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <network>
-          <join>
-            <multicast enabled="false"/>
-            <kubernetes enabled="true"/>
-          </join>
-        </network>
-        <management-center enabled="true">http://management-center-service.${namespace}.svc:8080/hazelcast-mancenter</management-center>
-      </hazelcast>
+    hazelcast.yaml: |-
+      hazelcast:
+        network:
+          join:
+            multicast:
+              enabled: false
+            kubernetes:
+              enabled: true
+          rest-api:
+            enabled: true
+            endpoint-groups:
+              HEALTH_CHECK:
+                enabled: true
 
 - apiVersion: apps/v1
   kind: StatefulSet
@@ -108,7 +108,7 @@ objects:
           - name: HZ_LICENSE_KEY
             value: ${ENTERPRISE_LICENSE_KEY}
           - name: JAVA_OPTS
-            value: "-Dhazelcast.rest.enabled=true -Dhazelcast.config=/data/hazelcast/hazelcast.xml -Dnamespace=${NAMESPACE}"
+            value: "-Dhazelcast.config=/data/hazelcast/hazelcast.yaml -Dnamespace=${NAMESPACE}"
         volumes:
         - name: hazelcast-storage
           configMap:
@@ -168,7 +168,7 @@ objects:
             containerPort: 8080
           livenessProbe:
             httpGet:
-              path: /hazelcast-mancenter
+              path: /health
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -177,7 +177,7 @@ objects:
             failureThreshold: 10
           readinessProbe:
             httpGet:
-              path: /hazelcast-mancenter
+              path: /health
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -187,6 +187,9 @@ objects:
           volumeMounts:
           - name: mancenter-storage
             mountPath: /data
+          env:
+          - name: MC_INIT_CMD
+            value: "./mc-conf.sh cluster add -H /data -cn dev -ma ${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local"
         volumes:
         - name: mancenter-storage
           persistentVolumeClaim:

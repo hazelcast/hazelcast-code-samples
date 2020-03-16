@@ -1,0 +1,5 @@
+hazelcast-client:
+  network:
+    kubernetes:
+      enabled: true
+      service-dns: hazelcast-service.hazelcast.svc.cluster.local
