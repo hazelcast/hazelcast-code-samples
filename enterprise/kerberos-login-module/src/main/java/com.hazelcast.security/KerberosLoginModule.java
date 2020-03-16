@@ -96,18 +96,22 @@ public class KerberosLoginModule extends ClusterLoginModule {
         }
     }
 
-    private void validateAccess(GSSContext gssContext) throws LoginException {
+    private void registerRoles(GSSContext gssContext) throws LoginException {
 
+        // get the extended context - no extended context = no roles, just return
         if (!(gssContext instanceof ExtendedGSSContext)) {
-            throw new FailedLoginException("Internal error (not an extended context).");
+            logger.warning("Failed to get an extended context.");
+            return;
         }
 
         ExtendedGSSContext extendedContext = (ExtendedGSSContext) gssContext;
 
         try {
+            // get the authz data - no data = no roles, just return
             Object authzDataObject = extendedContext.inquireSecContext(InquireType.KRB5_GET_AUTHZ_DATA);
             if (authzDataObject == null) {
-                throw new FailedLoginException("Internal error (no authz data).");
+                logger.warning("Failed to retrieve authorization data.");
+                return;
             }
 
             com.sun.security.jgss.AuthorizationDataEntry[] authzEntries = (com.sun.security.jgss.AuthorizationDataEntry[]) authzDataObject;
@@ -133,12 +137,10 @@ public class KerberosLoginModule extends ClusterLoginModule {
                 pacAuthzEntry = null;
             }
 
-            if (authzEntry == null) {
-                throw new FailedLoginException("Internal error (no AD_IF_RELEVANT entry).");
-            }
-
-            if (pacAuthzEntry == null) {
-                throw new FailedLoginException("Internal error (no AD-WIN2K-PAC entry within the AD-IF-RELEVANT entry).");
+            //  no authz entries = no roles, just return
+            if (authzEntry == null || pacAuthzEntry == null) {
+                logger.warning("Failed to retrieve authorization entries.");
+                return;
             }
 
             // add all groups as roles
@@ -151,11 +153,15 @@ public class KerberosLoginModule extends ClusterLoginModule {
                 }
             }
             catch (Exception e) {
-                throw new FailedLoginException("Failed to register roles. " + e);
+                // if things go wrong, no roles, return
+                logger.warning("Failed to register roles.", e);
+                return;
             }
         }
         catch (GSSException | IOException | Asn1Exception e) {
-            throw new FailedLoginException("Failed to validate access. " + e.getMessage());
+            // if things go wrong, no roles, return
+            logger.warning("Failed to register roles.", e);
+            return;
         }
     }
 
@@ -167,8 +173,10 @@ public class KerberosLoginModule extends ClusterLoginModule {
         // accept the token
         GSSContext gssContext = acceptToken(token);
 
-        // validate access (throws if access is denied)
-        validateAccess(gssContext);
+        // register roles
+        // does not throw - if anything goes wrong, logs the problem
+        // and simply does not register any role
+        registerRoles(gssContext);
 
         // get the principal name
         try {

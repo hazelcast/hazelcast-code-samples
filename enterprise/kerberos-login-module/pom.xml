@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>kerberos-login-module</groupId>
-    <artifactId>kerberos-login-module</artifactId>
-    <version>0.1-SNAPSHOT</version>
-    <name>Kerberos Login Module</name>
-    <description>A Kerberos Login Module for Hazelcast.</description>
-    
-    <!--
     <packaging>jar</packaging>
-    -->
+
+    <artifactId>kerberos-login-module</artifactId>
+    <name>Kerberos Login Module</name>
 
     <parent>
         <artifactId>enterprise</artifactId>
@@ -27,23 +20,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
-    <build>
-      <plugins>
-        <plugin>
-          <!--
-          <groupId></groupId>
-          -->
-          <artifactId>kerberos-login-module</artifactId>
-          <version>${hazelcast.version}</version>
-          <configuration>
-            <archive>
-              <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-            </archive>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>

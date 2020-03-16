@@ -38,6 +38,7 @@
         <module>client-failover-cluster</module>
         <module>ssl</module>
         <module>symmetric-encryption</module>
+        <module>kerberos-login-module</module>
     </modules>
 
     <repositories>
