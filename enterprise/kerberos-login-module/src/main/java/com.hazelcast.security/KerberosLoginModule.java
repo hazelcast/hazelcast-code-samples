@@ -32,6 +32,7 @@ import sun.security.krb5.Asn1Exception;
 import sun.security.util.DerInputStream;
 import sun.security.util.DerValue;
 import uk.co.jtnet.datatypes.microsoft.windows.RpcSid;
+import uk.co.jtnet.security.kerberos.pac.Pac;
 
 import java.io.IOException;
 
@@ -146,7 +147,8 @@ public class KerberosLoginModule extends ClusterLoginModule {
             // add all groups as roles
             // note: these are SIDs, not group names - we don't have the names in the Kerberos ticket
             try {
-                RpcSid[] sids = new Pac(pacAuthzEntry.adData).getGroupMemberships();
+                // using null serverPrivateKey, the token has been validated already
+                RpcSid[] sids = new Pac(pacAuthzEntry.adData, null).getGroupMemberships();
                 for (int i = 0; i < sids.length; i++) {
                     //logger.info("sid[" + i + "]: " + sids[i].toString());
                     addRole(StringUtil.lowerCaseInternal(sids[i].toString()));

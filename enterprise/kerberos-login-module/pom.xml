@@ -32,14 +32,5 @@
             <artifactId>helper</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-        <dependency>
-          <groupId>KerberosUtils</groupId>
-          <artifactId>KerberosUtils</artifactId>
-          <version>0.0</version>
-          <scope>system</scope>
-          <systemPath>${project.basedir}/lib/KerberosUtils.jar</systemPath>
-        </dependency>
     </dependencies>
-
 </project>
