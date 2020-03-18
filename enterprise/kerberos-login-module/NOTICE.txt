@@ -1,0 +1,9 @@
+HAZELCAST CODE SAMPLES - KERBEROS LOGIN MODULE
+
+Copyright (c) 2019-2020, Hazelcast, Inc. All Rights Reserved.
+
+This sample login module includes code files (in the uk.co.jtnet
+package) developed by Jonathan Turner and published under the
+Apache Licence, v2, on GitHub at 
+
+https://github.com/jcmturner/java-kerberos-utils
