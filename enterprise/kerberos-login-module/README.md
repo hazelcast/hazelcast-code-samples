@@ -10,7 +10,7 @@ Demonstrates how to create a Kerberos Login Module for Hazelcast.
 
 The project builds and produces the `kerberos-login-module.jar` artifact. It relies on the [Java Kerberos Utilities library](https://github.com/jcmturner/java-kerberos-utils) which is available under the Apache License 2.0. The library is included in the project's `lib` directory, and embedded in the produced artifact.
 
-The module relies on Java GSS and therefore requires Oracle/OpenJDK JVM.
+The module relies on internal Java GSS implementation classes in `com.sun.security` and `sun.security` packages and therefore requires Oracle/OpenJDK JVM.
 
 >This module is a PREVIEW release for evaluation purposes only.  
 >It is not supported for production use.
