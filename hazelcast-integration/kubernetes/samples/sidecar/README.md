@@ -75,7 +75,7 @@ The next step is to configure Python application container and Hazelcast member 
 ```yaml
 containers:
   - name: hazelcast
-    image: hazelcast/hazelcast:3.11.2
+    image: hazelcast/hazelcast:3.12
     ports:
     - name: hazelcast
       containerPort: 5701

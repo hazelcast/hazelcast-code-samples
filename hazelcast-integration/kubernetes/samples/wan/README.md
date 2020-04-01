@@ -24,7 +24,7 @@ Hazelcast uses Kubernetes API for the member discovery and it therefore requires
 Then, you need to create a ConfigMap with the Hazelcast Configuration.
 
 ```
-(Receiver) $ kubectl create configmap hazelcast-configuration --from-file=receiver/hazelcast.xml
+(Receiver) $ kubectl create configmap hazelcast-configuration --from-file=receiver/hazelcast.yaml
 ```
 
 Then, create a secret with the Hazelcast Enterprise license key.
@@ -66,21 +66,21 @@ Again, we need to grant Kubernetes API resource permissions.
 (Publisher) $ kubectl apply -f rbac.yaml
 ```
 
-Then, update the WAN Replication configuration in `publisher/hazelcast.xml` with the external IP of the Receiver cluster.
+Then, update the WAN Replication configuration in `publisher/hazelcast.yaml` with the external IP of the Receiver cluster.
 
-```xml
-<wan-replication name="wan-replication-cluster">
-    <batch-publisher>
-        <cluster-name>dev</cluster-name>>
-        <target-endpoints>35.184.122.109</target-endpoints>
-    </batch-publisher>
-</wan-replication>
+```yaml
+wan-replication:
+  my-wan-replication:
+    batch-publisher:
+      my-publisher:
+        cluster-name: dev
+        target-endpoints: 35.184.122.109
 ```
 
 Create ConfigMap with the Hazelcast configuration.
 
 ```
-(Publisher) $ kubectl create configmap hazelcast-configuration --from-file=publisher/hazelcast.xml
+(Publisher) $ kubectl create configmap hazelcast-configuration --from-file=publisher/hazelcast.yaml
 ```
 
 Again, we need to create a secret with the Hazelcast Enterprise license key.

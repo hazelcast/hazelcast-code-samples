@@ -22,8 +22,8 @@ spec:
           - name: KEYSTORE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: keystore-password
-                key: password
+                name: keystore
+                key: keystorePassword
 
 ---
 

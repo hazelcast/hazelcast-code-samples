@@ -1,0 +1,9 @@
+hazelcast:
+  network:
+    join:
+      multicast:
+        enabled: false
+      kubernetes:
+        enabled: true
+    ssl:
+      enabled: true
