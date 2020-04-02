@@ -111,7 +111,7 @@ Then, to fetch Access Token, use the following command.
 
 ```
 $ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.token} | base64 --decode | xargs echo
-eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhbXBsZS1zZXJ2aWNlLWFjY291bnQtdG9rZW4tNnM5NGgiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoic2FtcGxlLXNlcnZpY2UtYWNjb3VudCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjI5OTI1NzBmLTI1NDQtMTFlOS1iNjg3LTQyMDEwYTgwMDI4YiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OnNhbXBsZS1zZXJ2aWNlLWFjY291bnQifQ.o-j4e-ducrMmQc23xYDnPr6TIyzlAs3pLNAmGLqPe9Vq1mwsxOh3ujcVKR90HAdkfHIF_Sw66qC9hXIDvxfqN_rLXlOKbvTX3gjDrAnyY_93Y3MpmSBj8yR9yHMb4O29a9UIwN5F2_VoCsc0IGumScU_EhPYc9mvEXlwp2bATQOEU-SVAGYPqvVPs9h5wjWZ7WUQa_-RBLMF6KRc9EP2i3c7dPSRVL9ZQ6k6OyUUOVEaPa1tqIxP7vOgx9Tg2C1KmYF5RDrlzrWkhEcjd4BLTiYDKEyaoBff9RqdPYlPwu0YcEH-F7yU8tTDN74KX5jvah3amg_zTiXeNoe5ZFcVdg
+eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImhhemVsY2FzdC1zZXJ2aWNlLWFjY291bnQtdG9rZW4tcTdoNDQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiaGF6ZWxjYXN0LXNlcnZpY2UtYWNjb3VudCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjA5NDNmZjVmLTc0MTktMTFlYS1hOGE3LTQyMDEwYTgwMDAyMCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmhhemVsY2FzdC1zZXJ2aWNlLWFjY291bnQifQ.GW6F6oNRjQ0z0jVWoMk-m5ePCbzm1pDGFoxINmAs6-KQaCh69PqQyjVU1uhrvue7ndPBaFqm0vs4OO969oeLt701ZIskyw5mEz8VBV-A53-zvx0TcOAOl_x6XNmk-mjX3pJa6D8WWWdnt_uFPw1L8_4GxDRiidaqFZULtS-50fcJERub7wLQUFlNf7DMR_c0rkZvWBlJqUQ5Wm41Y-EdmfTiv4Dsok0bKJQ9zhe9g2oNIPtEKmeO0No7C9v7Jqf5bxM8HzXzjp5AE0q9PK9XSRzn5CXaQzQspuLDaEwdagc8mDVUPx0jw703aQCFwfJw32r7VnC8URrXaaPatQcXug
 ```
 
 To fetch CA Certificate, use the following command.
@@ -119,65 +119,60 @@ To fetch CA Certificate, use the following command.
 ```
 $ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.ca\\.crt} | base64 --decode
 -----BEGIN CERTIFICATE-----
-MIIDCzCCAfOgAwIBAgIQVcTHv3jK6g1l7Ph9Xyd9DTANBgkqhkiG9w0BAQsFADAv
-MS0wKwYDVQQDEyQ4YjRhNjgwMS04NzJhLTQ2NDEtYjIwOC0zYjEyNDEwYWVkMTcw
-HhcNMTkwMTMxMDcyNDMxWhcNMjQwMTMwMDgyNDMxWjAvMS0wKwYDVQQDEyQ4YjRh
-NjgwMS04NzJhLTQ2NDEtYjIwOC0zYjEyNDEwYWVkMTcwggEiMA0GCSqGSIb3DQEB
-AQUAA4IBDwAwggEKAoIBAQCaty8l9aHeWE1r9yLWKJMa3YQotVclYoEHegB8y6Ke
-+zKqa06JKKrz3Qony97VdWR/NMpRYXouSF0owDv9BIoLTC682wlQtNB1c4pTVW7a
-AikoNtyNIT8gtA5w0MyjFrbNslUblXvuo0HIeSmJREUmT7BC3VaKgkg64mVdf0DJ
-NyrcL+qyCs1m03mi12hgzI72O3qgEtP91tu/oCUdOh39u13TB0fj5tgWURMFgkxo
-T0xiNfPueV3pe8uYxBntzFn/74ibiizLRP6d/hsuRdS7IA+bvRLKG/paYwyZuMFb
-BDA+kXXAIkOvCpIQCkAKMpyyDz9lBVCtl3eRSAJQLBefAgMBAAGjIzAhMA4GA1Ud
-DwEB/wQEAwICBDAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBP
-TBRY1IbkFJuboMKLW9tdpIzW7hf2qsTLOhtlaJbMXrWaXCTrl8qUgBUZ1sWAW9Uk
-qETwRoCMl1Ht7PhbnXEGDNt3Sw3Y3feR4PsffhcgWH0BK8pZVY0Q1zbZ6dVNbU82
-EUrrcnV0uiB/JFsJ3rg8qJurutro3uIzAhb9ixYRqYnXUR4q0bxahO04iSUHvtYQ
-JmWp1GCb/ny9MyeTkwh2Q+WIQBHsX4LfrKjPwJd6qZME7BmwryYBTkGa0FinmhRg
-SdSPEQKmuXmghPU5GLudiI2ooOaqOXIjVPfM/cw4uU9FCGM49qufccOOt6utk0SM
-DwupAKLLiaYs47a8JgUa
+MIIDDDCCAfSgAwIBAgIRAPAL3Bz0Bi8uGTDlb5n/3UIwDQYJKoZIhvcNAQELBQAw
+LzEtMCsGA1UEAxMkNTY5NWQxNDgtNjMxNS00MzQxLThiNTctZmQ0ZTU2MWVhY2Ux
+MB4XDTIwMDQwMTExMTAxNFoXDTI1MDMzMTEyMTAxNFowLzEtMCsGA1UEAxMkNTY5
+NWQxNDgtNjMxNS00MzQxLThiNTctZmQ0ZTU2MWVhY2UxMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEA3lsZmqurcoiXE0kGSoDyq/4P5YLx56uSfeRPZgPP
+fg8mkjLe2r360xZAqiO0cW6yufruKhRbTHesuJn+vmgLzUSYRMQibS9XFAuch6Qb
+y2Zvu+ysU3ixzhQ92NmU/gfU70lXiIcGtEAdmk/G+Y3DxIUHXxtGoBMN/HykXWR+
+Am9A3VfVm+uD9w4hquwWJyXHUgwXagU7uY8HNjPXygmWI+VuxtMIsNS8UrR9w4rh
+nZenp/JKSyCBdGp718287kgV6aCH2B1lxNrrHDMn4RyX3m0vVD1Gw/k1JlHoNmN2
+WZTwovnbQnle6iZkKOakhwRNq4Vgqq97nnm4O3EcdzQMoQIDAQABoyMwITAOBgNV
+HQ8BAf8EBAMCAgQwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEA
+mMRAUci+N67pjBSoCHkCfmeRC9RoWbbnG9k0ZeKkA+KYoyjH1hZYMmJU2RM5+RB9
+JiddivrF32S6uYelrCja433ghjfZav7sqdEhBoQpSrv+bWWDtOWUgqLQ5kIFawT3
+ZSvETCROnYCipghp8mMPtRBmXZzIkwYalHkK3Gh6+0JiZfSsvpP3yXA3Ne7hIWZD
+2zgWthaLEINvG8rsNKLAs/hoQzXZ2YeJ1lUpLvLgPOJX7h5TAmu0biHjim8I7RyC
+tk0ffDT2kI56cxbv9fxhSQRGRq7k83Ro/nCMzJ1jpP8CzGkJZhT9BpoZM9aTnFxu
+Jw0q61f9lLHqu3uuqOA5KQ==
 -----END CERTIFICATE-----
 ```
 
 ### 7. Configure Hazelcast Client
 
-Modify `src/main/resources/hazelcast-client.xml` to include your credentials.
+Modify `src/main/resources/hazelcast-client.yaml` to include your credentials.
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<hazelcast-client xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
-                               http://www.hazelcast.com/schema/client-config/hazelcast-client-config.xsd"
-                  xmlns="http://www.hazelcast.com/schema/client-config">
-    <network>
-        <kubernetes enabled="true">
-            <use-public-ip>true</use-public-ip>
-            <kubernetes-master>https://35.226.182.228</kubernetes-master>
-            <api-token>eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhbXBsZS1zZXJ2aWNlLWFjY291bnQtdG9rZW4tNnM5NGgiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoic2FtcGxlLXNlcnZpY2UtYWNjb3VudCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjI5OTI1NzBmLTI1NDQtMTFlOS1iNjg3LTQyMDEwYTgwMDI4YiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OnNhbXBsZS1zZXJ2aWNlLWFjY291bnQifQ.o-j4e-ducrMmQc23xYDnPr6TIyzlAs3pLNAmGLqPe9Vq1mwsxOh3ujcVKR90HAdkfHIF_Sw66qC9hXIDvxfqN_rLXlOKbvTX3gjDrAnyY_93Y3MpmSBj8yR9yHMb4O29a9UIwN5F2_VoCsc0IGumScU_EhPYc9mvEXlwp2bATQOEU-SVAGYPqvVPs9h5wjWZ7WUQa_-RBLMF6KRc9EP2i3c7dPSRVL9ZQ6k6OyUUOVEaPa1tqIxP7vOgx9Tg2C1KmYF5RDrlzrWkhEcjd4BLTiYDKEyaoBff9RqdPYlPwu0YcEH-F7yU8tTDN74KX5jvah3amg_zTiXeNoe5ZFcVdg</api-token>
-            <ca-certificate>
-                -----BEGIN CERTIFICATE-----
-                MIIDCzCCAfOgAwIBAgIQVcTHv3jK6g1l7Ph9Xyd9DTANBgkqhkiG9w0BAQsFADAv
-                MS0wKwYDVQQDEyQ4YjRhNjgwMS04NzJhLTQ2NDEtYjIwOC0zYjEyNDEwYWVkMTcw
-                HhcNMTkwMTMxMDcyNDMxWhcNMjQwMTMwMDgyNDMxWjAvMS0wKwYDVQQDEyQ4YjRh
-                NjgwMS04NzJhLTQ2NDEtYjIwOC0zYjEyNDEwYWVkMTcwggEiMA0GCSqGSIb3DQEB
-                AQUAA4IBDwAwggEKAoIBAQCaty8l9aHeWE1r9yLWKJMa3YQotVclYoEHegB8y6Ke
-                +zKqa06JKKrz3Qony97VdWR/NMpRYXouSF0owDv9BIoLTC682wlQtNB1c4pTVW7a
-                AikoNtyNIT8gtA5w0MyjFrbNslUblXvuo0HIeSmJREUmT7BC3VaKgkg64mVdf0DJ
-                NyrcL+qyCs1m03mi12hgzI72O3qgEtP91tu/oCUdOh39u13TB0fj5tgWURMFgkxo
-                T0xiNfPueV3pe8uYxBntzFn/74ibiizLRP6d/hsuRdS7IA+bvRLKG/paYwyZuMFb
-                BDA+kXXAIkOvCpIQCkAKMpyyDz9lBVCtl3eRSAJQLBefAgMBAAGjIzAhMA4GA1Ud
-                DwEB/wQEAwICBDAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBP
-                TBRY1IbkFJuboMKLW9tdpIzW7hf2qsTLOhtlaJbMXrWaXCTrl8qUgBUZ1sWAW9Uk
-                qETwRoCMl1Ht7PhbnXEGDNt3Sw3Y3feR4PsffhcgWH0BK8pZVY0Q1zbZ6dVNbU82
-                EUrrcnV0uiB/JFsJ3rg8qJurutro3uIzAhb9ixYRqYnXUR4q0bxahO04iSUHvtYQ
-                JmWp1GCb/ny9MyeTkwh2Q+WIQBHsX4LfrKjPwJd6qZME7BmwryYBTkGa0FinmhRg
-                SdSPEQKmuXmghPU5GLudiI2ooOaqOXIjVPfM/cw4uU9FCGM49qufccOOt6utk0SM
-                DwupAKLLiaYs47a8JgUa
-                -----END CERTIFICATE-----
-            </ca-certificate>
-        </kubernetes>
-    </network>
-</hazelcast-client>
+```yaml
+hazelcast-client:
+  network:
+    kubernetes:
+      enabled: true
+      namespace: default
+      use-public-ip: true
+      kubernetes-master: https://35.226.182.228
+      api-token: eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImhhemVsY2FzdC1zZXJ2aWNlLWFjY291bnQtdG9rZW4tcTdoNDQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiaGF6ZWxjYXN0LXNlcnZpY2UtYWNjb3VudCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjA5NDNmZjVmLTc0MTktMTFlYS1hOGE3LTQyMDEwYTgwMDAyMCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmhhemVsY2FzdC1zZXJ2aWNlLWFjY291bnQifQ.GW6F6oNRjQ0z0jVWoMk-m5ePCbzm1pDGFoxINmAs6-KQaCh69PqQyjVU1uhrvue7ndPBaFqm0vs4OO969oeLt701ZIskyw5mEz8VBV-A53-zvx0TcOAOl_x6XNmk-mjX3pJa6D8WWWdnt_uFPw1L8_4GxDRiidaqFZULtS-50fcJERub7wLQUFlNf7DMR_c0rkZvWBlJqUQ5Wm41Y-EdmfTiv4Dsok0bKJQ9zhe9g2oNIPtEKmeO0No7C9v7Jqf5bxM8HzXzjp5AE0q9PK9XSRzn5CXaQzQspuLDaEwdagc8mDVUPx0jw703aQCFwfJw32r7VnC8URrXaaPatQcXug
+      ca-certificate: |
+        -----BEGIN CERTIFICATE-----
+        MIIDDDCCAfSgAwIBAgIRAPAL3Bz0Bi8uGTDlb5n/3UIwDQYJKoZIhvcNAQELBQAw
+        LzEtMCsGA1UEAxMkNTY5NWQxNDgtNjMxNS00MzQxLThiNTctZmQ0ZTU2MWVhY2Ux
+        MB4XDTIwMDQwMTExMTAxNFoXDTI1MDMzMTEyMTAxNFowLzEtMCsGA1UEAxMkNTY5
+        NWQxNDgtNjMxNS00MzQxLThiNTctZmQ0ZTU2MWVhY2UxMIIBIjANBgkqhkiG9w0B
+        AQEFAAOCAQ8AMIIBCgKCAQEA3lsZmqurcoiXE0kGSoDyq/4P5YLx56uSfeRPZgPP
+        fg8mkjLe2r360xZAqiO0cW6yufruKhRbTHesuJn+vmgLzUSYRMQibS9XFAuch6Qb
+        y2Zvu+ysU3ixzhQ92NmU/gfU70lXiIcGtEAdmk/G+Y3DxIUHXxtGoBMN/HykXWR+
+        Am9A3VfVm+uD9w4hquwWJyXHUgwXagU7uY8HNjPXygmWI+VuxtMIsNS8UrR9w4rh
+        nZenp/JKSyCBdGp718287kgV6aCH2B1lxNrrHDMn4RyX3m0vVD1Gw/k1JlHoNmN2
+        WZTwovnbQnle6iZkKOakhwRNq4Vgqq97nnm4O3EcdzQMoQIDAQABoyMwITAOBgNV
+        HQ8BAf8EBAMCAgQwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEA
+        mMRAUci+N67pjBSoCHkCfmeRC9RoWbbnG9k0ZeKkA+KYoyjH1hZYMmJU2RM5+RB9
+        JiddivrF32S6uYelrCja433ghjfZav7sqdEhBoQpSrv+bWWDtOWUgqLQ5kIFawT3
+        ZSvETCROnYCipghp8mMPtRBmXZzIkwYalHkK3Gh6+0JiZfSsvpP3yXA3Ne7hIWZD
+        2zgWthaLEINvG8rsNKLAs/hoQzXZ2YeJ1lUpLvLgPOJX7h5TAmu0biHjim8I7RyC
+        tk0ffDT2kI56cxbv9fxhSQRGRq7k83Ro/nCMzJ1jpP8CzGkJZhT9BpoZM9aTnFxu
+        Jw0q61f9lLHqu3uuqOA5KQ==
+        -----END CERTIFICATE-----
+
 ```
 
 ### 8. Run Hazelcast Client application
@@ -190,10 +185,17 @@ mvn spring-boot:run
 
 Application is a web service that uses Hazelcast Client to connect to the Hazelcast cluster. 
 
-To check it works correctly, you can:
-* Open browser at: `http://localhost:8080/put?key=sampleKey&value=sampleValue` (you should see a reply `{"response":null}`)
-* Open browser at: `http://localhost:8080/get?key=sampleKey` (you should see a reply `{"response":"sampleValue"}`)
-* Check the application logs to find:
+To check it works correctly, you can execute the following commands:
+
+```
+$ curl localhost:8080/put?key=some-key\&value=some-value
+{"response":null}
+
+$ curl localhost:8080/get?key=some-key
+{"response":"some-value"}
+```
+
+You can also check the application logs to see:
 ```
 Members [3] {
         Member [10.16.1.10]:5701 - abab30fe-5a45-484d-bad5-e60c252572ca

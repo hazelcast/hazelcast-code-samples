@@ -17,10 +17,10 @@ The example also assumes you have a running Kubernetes cluster and the `kubectl`
 
 ## 1. Creating Hazelcast Cluster
 
-Hazelcast must have access to `hazelcast.xml` as well as `keystore` and `truststore`, so we'll store them as `ConfigMap`/`Secret`.
+Hazelcast must have access to `hazelcast.yaml` as well as `keystore` and `truststore`, so we'll store them as `ConfigMap`/`Secret`.
 
 ```bash
-$ kubectl create configmap hazelcast-configuration --from-file=server/hazelcast.xml
+$ kubectl create configmap hazelcast-configuration --from-file=server/hazelcast.yaml
 $ kubectl create secret generic keystore \
                  --from-file=server/keystore \
                  --from-file=server/truststore \
@@ -46,7 +46,7 @@ You can check in the the logs that Hazelcast cluster has been formed and that SS
 ```bash
 $ kubectl logs pod/hazelcast-0
 ...
-INFO: [10.16.0.17]:5701 [dev] [3.11] SSL is enabled
+INFO: [10.16.0.17]:5701 [dev] [4.0] SSL is enabled
 ...
 Members {size:3, ver:3} [
         Member [10.16.0.17]:5701 - 548dd674-e8b5-4bfc-9f29-972c1d6dc3c5 this
@@ -86,7 +86,7 @@ $ kubectl logs pod/hazelcast-client-74d9fd74cb-cgcb4
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::        (v2.0.1.RELEASE)
+ :: Spring Boot ::        (v2.2.6.RELEASE)
  
 ...
 
@@ -112,14 +112,15 @@ $ kubectl get all | grep service/hazelcast-client
 service/hazelcast-client   LoadBalancer   10.19.243.20   35.224.198.15   8080:30136/TCP   1m
 ```
 
-Now, to check that everything works fine, open your browser on http://35.224.198.15:8080/put?key=someKey&value=someValue and a value should be inserted into your Hazelcast cluster.
+Now, to check that everything works fine by executing the following commands.
 
-![Client](markdown/client-1.png)
+```
+$ curl 35.224.198.15:8080/put?key=some-key\&value=some-value
+{"response":null}
 
-You can then read the value with the following URL: http://35.224.198.15:8080/get?key=someKey.
-
-![Client](markdown/client-2.png)
-
+$ curl 35.224.198.15:8080/get?key=some-key
+{"response":"some-value"}
+```
 
 **Note**: *In the example, we didn't use Mutual Authentication, so Hazelcast client itself was not being authorized. For more information check [Mutual Authentication section](#mutual-authentication).*
 
@@ -188,10 +189,10 @@ SSL Mutual Authentication can be enabled to increase the security. To enable it,
 
 #### Hazelcast Server
 
-Add the following line to the `<ssl>` properties section (in `hazelcast.xml`):
+Add the following line to the `ssl` properties section (in `hazelcast.yaml`):
 
-```xml
-<property name="mutualAuthentication">REQUIRED</property>
+```yaml
+mutualAuthentication: REQUIRED
 ```
 
 #### Hazelcast Client

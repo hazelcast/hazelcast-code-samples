@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: hazelcast
-          image: hazelcast/hazelcast-enterprise:3.12-BETA-1
+          image: hazelcast/hazelcast-enterprise:4.0
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 5701
@@ -26,7 +26,7 @@ spec:
                 name: hz-license-key
                 key: license
           - name: JAVA_OPTS
-            value: "-Dhazelcast.config=/data/hazelcast/configuration/hazelcast.xml"
+            value: "-Dhazelcast.config=/data/hazelcast/configuration/hazelcast.yaml"
           volumeMounts:
           - name: hazelcast-configuration
             mountPath: /data/hazelcast/configuration

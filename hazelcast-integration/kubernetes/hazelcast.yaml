@@ -3,21 +3,21 @@ kind: StatefulSet
 metadata:
   name: hazelcast
   labels:
-    app: hazelcast
+    app.kubernetes.io/name: hazelcast
 spec:
   replicas: 3
   serviceName: hazelcast-service
   selector:
     matchLabels:
-      app: hazelcast
+      app.kubernetes.io/name: hazelcast
   template:
     metadata:
       labels:
-        app: hazelcast
+        app.kubernetes.io/name: hazelcast
     spec:
       containers:
       - name: hazelcast
-        image: hazelcast/hazelcast:3.10.3
+        image: hazelcast/hazelcast:4.0
         ports:
         - name: hazelcast
           containerPort: 5701
@@ -27,39 +27,25 @@ spec:
             port: 5701
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 5
+          timeoutSeconds: 10
           successThreshold: 1
-          failureThreshold: 3
+          failureThreshold: 10
         readinessProbe:
           httpGet:
             path: /hazelcast/health/node-state
             port: 5701
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
           successThreshold: 1
-          failureThreshold: 1
+          failureThreshold: 10
         volumeMounts:
         - name: hazelcast-storage
           mountPath: /data/hazelcast
         env:
         - name: JAVA_OPTS
-          value: "-Dhazelcast.rest.enabled=true -Dhazelcast.config=/data/hazelcast/hazelcast.xml"
+          value: "-Dhazelcast.config=/data/hazelcast/hazelcast.yaml"
       volumes:
       - name: hazelcast-storage
         configMap:
           name: hazelcast-configuration
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: hazelcast-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: hazelcast
-  ports:
-  - protocol: TCP
-    port: 5701

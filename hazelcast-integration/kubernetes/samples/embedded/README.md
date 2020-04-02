@@ -2,23 +2,16 @@
 
 This is a sample Spring Boot application with embedded Hazelcast, which presents forming a Hazelcast cluster on Kubernetes.
 
-This sample uses Kubernetes API for Hazelcast member discovery.
-
 ## 1. Configure Hazelcast to work on Kubernetes
 
-You can configure Hazelcast to work on Kubernetes using the [hazelcast-kubernetes](https://github.com/hazelcast/hazelcast-kubernetes) plugin.
+You can configure Hazelcast to work on Kubernetes using the [hazelcast-kubernetes](https://github.com/hazelcast/hazelcast-kubernetes) plugin which is included in `hazelcast-all`.
 
 Add the following Maven dependencies:
 ```xml
 <dependency>
     <groupId>com.hazelcast</groupId>
-    <artifactId>hazelcast</artifactId>
-    <version>3.11</version>
-</dependency>
-<dependency>
-    <groupId>com.hazelcast</groupId>
-    <artifactId>hazelcast-kubernetes</artifactId>
-    <version>1.3.1</version>
+    <artifactId>hazelcast-all</artifactId>
+    <version>4.0</version>
 </dependency>
 ```
 
@@ -33,20 +26,18 @@ public Config hazelcastConfig() {
 }
 ``` 
 
-The equivalent XML configuration would look as follows:
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.11.xsd">
-  <network>
-    <join>
-      <multicast enabled="false"/>
-      <kubernetes enabled="true"/>
-    </join>
-  </network>
-</hazelcast>
+The equivalent YAML configuration would look as follows:
+```yaml
+hazelcast:
+  network:
+    join:
+      multicast:
+        enabled: false
+      kubernetes:
+        enabled: true
 ```
 
-Note that this configuration will form a Hazelcast with all Hazelcast instances assigned to services in the current namespace. If you want to filter the instances, use the properties as described [here](https://github.com/hazelcast/hazelcast-kubernetes).
+Note that this configuration will form a Hazelcast with all Hazelcast instances in the current namespace. If you want to filter the instances, use the properties as described [here](https://github.com/hazelcast/hazelcast-kubernetes).
 
 ## 2. Build application and Docker image
 
@@ -56,7 +47,7 @@ The following command compiles the project, builds the Docker image, and pushes 
 mvn clean compile jib:build -Dimage=leszko/hazelcast-kubernetes-embedded-sample
 ```
 
-Please change `leszko` to your Docker Hub login. Then, make sure that your image in Docker Hub is public (you can do it on the [Docker Hub website](https://hub.docker.com/)).
+Please change `leszko` to your Docker Hub login. Then, make sure that your image in Docker Hub is **public** (you can do it on the [Docker Hub website](https://hub.docker.com/)).
 
 ## 3. Grant access to Kubernetes API
 
@@ -114,6 +105,10 @@ $ kubectl logs pod/hazelcast-embedded-57f84c545b-jjhcs
 
 Then, you can access the application, by its `EXTERNAL-IP`.
 
-![Verify Application](markdown/verify-application-1.png)
+```
+$ curl 104.154.43.142:8080/put?key=some-key\&value=some-value
+{"response":null}
 
-![Verify Application](markdown/verify-application-2.png)
+$ curl 104.154.43.142:8080/get?key=some-key
+{"response":"some-value"}
+```

@@ -1,0 +1,18 @@
+hazelcast:
+  network:
+    join:
+      multicast:
+        enabled: false
+      kubernetes:
+        enabled: true
+  wan-replication:
+    my-wan-replication:
+      batch-publisher:
+        my-publisher:
+          cluster-name: dev
+          target-endpoints: EXTERNAL_IP_OF_RECEIVER_CLUSTER
+  map:
+    rep:
+      wan-replication-ref:
+        my-wan-replication:
+          republishing-enabled: false
