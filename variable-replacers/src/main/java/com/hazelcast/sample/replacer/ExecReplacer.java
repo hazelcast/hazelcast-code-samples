@@ -23,11 +23,11 @@ import com.hazelcast.logging.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Properties;
 
 import static com.hazelcast.internal.nio.IOUtil.closeResource;
-import static com.hazelcast.internal.util.StringUtil.UTF8_CHARSET;
 import static com.hazelcast.internal.util.StringUtil.isNullOrEmpty;
 
 /**
@@ -151,7 +151,7 @@ public class ExecReplacer implements ConfigReplacer {
          * Returns all read bytes as String (with UTF-8 charset used).
          */
         public String getStreamContent() {
-            return new String(baos.toByteArray(), UTF8_CHARSET);
+            return new String(baos.toByteArray(), StandardCharsets.UTF_8);
         }
     }
 }
