@@ -13,6 +13,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jaxb.api.version>2.3.0</jaxb.api.version>
     </properties>
 
     <parent>
@@ -32,6 +33,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb.api.version}</version>
         </dependency>
     </dependencies>
 
