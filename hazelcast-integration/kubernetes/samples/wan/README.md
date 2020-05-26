@@ -2,6 +2,8 @@
 
 This a complete example presenting how to set two Hazelcast clusters (deployed in two different Kubernetes environments) with the WAN Replication in between them.
 
+**Note:** To follow this example your Kubernetes cluster must have an external IP, which is not the case for Minikube (and Docker for Desktop).
+
 ## Introduction
 
 This example focuses on the WAN Replication feature and assumes that you have some general knowledge about Hazelcast on Kubernetes. Here are some resources:
