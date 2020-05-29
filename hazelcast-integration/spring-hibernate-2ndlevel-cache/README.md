@@ -1,13 +1,56 @@
-<h1>Spring and Hibernate with Hazelcast</h1>
-In this repository, you can find a sample implementation of spring and hibernate with hazelcast maploaders. You can also find detailed explanation at http://hazelcast.org/
-<h2>Prerequisites</h2>
-- You should have installed Apache Maven(http://maven.apache.org/download.cgi).
-<h2>How to Run Sample Application</h2>
-- Compile the project using:
+
+# Prerequisites
+In order to run the code sample, make sure to have PostgresSQL database accessible and configured properly in `application.properties`.
+
+You can spin-up a PostgreSQL instance easily using Docker:
+
+`docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:13`
+
+# Configuration
+
+In order to enable JPA, you need to add a dedicated Spring Boot Starter:
+
 ```
-mvn compile
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
 ```
-- Run the project using:
+
+In order to configure Hazelcast as second-level cache provider, you need to add two dependencies:
+
 ```
-mvn exec:java -Dexec.mainClass="com.hazelcast.springHibernate.Application"
+<dependency>
+	<groupId>com.hazelcast</groupId>
+	<artifactId>hazelcast-hibernate53</artifactId>
+	<version>2.0.0</version>
+</dependency
+
+<dependency>
+	<groupId>com.hazelcast</groupId>
+	<artifactId>hazelcast</artifactId>
+	<version>4.0.1</version>
+</dependency>
 ```
+
+And then, we need to configure Hazelcast IMDG local member setting by adding a standard `hazelcast.xml` file into `src/main/resources`.
+
+This will also trigger autoconfiguration of the `HazelcastInstance` bean.
+
+The last step involves turning on second-level cache by adding two properties into `application.properties` file:
+
+```
+spring.jpa.properties.hibernate.cache.use_second_level_cache=true
+spring.jpa.properties.hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory
+```
+
+And now, once you annotate your entity as `@Cacheable`, it will be cached in a Hazelcast member:
+
+```
+@Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Book { ... }
+```
+
+If you want to experiment, it's convenient to add custom logic inside `Runner` class.

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+           http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd">
+
+    <cluster-name>dev</cluster-name>
+
+    <!-- Entity-specific cache configuration    -->
+    <map name="com.hazelcast.hibernate.springhibernate2lc.persistence.Book">
+        <time-to-live-seconds>30</time-to-live-seconds>
+    </map>
+</hazelcast>
