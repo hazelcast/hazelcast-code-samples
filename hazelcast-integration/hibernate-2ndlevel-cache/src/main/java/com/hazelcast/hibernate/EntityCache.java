@@ -8,7 +8,7 @@ import org.hibernate.Transaction;
 
 public class EntityCache {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         Session session;
         Transaction tx;
@@ -18,7 +18,7 @@ public class EntityCache {
         session = HibernateUtil.createNewSession();
         tx = session.getTransaction();
         tx.begin();
-        session.save(new Item("item-1",1));
+        session.save(new Item("item-1", 1));
         tx.commit();
         session.close();
 
@@ -30,7 +30,7 @@ public class EntityCache {
         // L2C miss & put are expected.
         session = HibernateUtil.createNewSession();
         session.beginTransaction();
-        session.get(Item.class,1);
+        session.get(Item.class, 1);
         session.close();
         System.out.println(HibernateUtil.getStats());
 
@@ -39,7 +39,7 @@ public class EntityCache {
         // L2C hit is expected.
         session = HibernateUtil.createNewSession();
         session.beginTransaction();
-        session.get(Item.class,1);
+        session.get(Item.class, 1);
         session.close();
         System.out.println(HibernateUtil.getStats());
 
@@ -49,8 +49,8 @@ public class EntityCache {
         // Data is expected to be fetched from database, not from L2C.
         // L2C miss & put are expected
         session = HibernateUtil.createNewSession();
-        session.beginTransaction();;
-        session.get(Item.class,1);
+        session.beginTransaction();
+        session.get(Item.class, 1);
         session.close();
         System.out.println(HibernateUtil.getStats());
 

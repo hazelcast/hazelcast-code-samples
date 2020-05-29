@@ -3,12 +3,16 @@ package com.hazelcast.hibernate.entity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Cache(region = "Item-Cache",usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(region = "Item-Cache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Item {
 
     @Id
@@ -19,8 +23,20 @@ public class Item {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
-    @Cache(region = "SubItems-Collection-Cache",usage = CacheConcurrencyStrategy.READ_WRITE)
+    @Cache(region = "SubItems-Collection-Cache", usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<SubItem> subItems = new ArrayList<SubItem>();
+
+    public Item() { }
+
+    public Item(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public Item addSubItem(SubItem s) {
+        this.subItems.add(s);
+        return this;
+    }
 
     public List<SubItem> getSubItems() {
         return subItems;
@@ -29,19 +45,6 @@ public class Item {
     public void setSubItems(List<SubItem> subItems) {
         this.subItems = subItems;
 
-    }
-
-    public Item(String name, int id) {
-        this.name = name;
-        this.id = id;
-    }
-
-    public Item() {
-    }
-
-    public Item addSubItem(SubItem s){
-        this.subItems.add(s);
-        return this;
     }
 
     public int getId() {

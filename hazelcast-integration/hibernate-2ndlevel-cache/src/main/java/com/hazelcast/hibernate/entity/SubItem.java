@@ -3,11 +3,14 @@ package com.hazelcast.hibernate.entity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 
 @Entity
-@Cache(region = "SubItem-Cache",usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(region = "SubItem-Cache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SubItem {
 
     @Id
@@ -17,10 +20,11 @@ public class SubItem {
     @Column(name = "SUBITEM_NAME", nullable = false)
     private String name;
 
-
     @ManyToOne
     @JoinColumn(name = "ITEM_ID")
     private Item item;
+
+    public SubItem() { }
 
     public SubItem(int id, String name, Item item) {
         this.id = id;
@@ -34,9 +38,6 @@ public class SubItem {
 
     public void setItem(Item item) {
         this.item = item;
-    }
-
-    public SubItem() {
     }
 
     public int getId() {
@@ -57,10 +58,10 @@ public class SubItem {
 
     @Override
     public String toString() {
-        return "SubItem{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", item=" + item +
-                '}';
+        return "SubItem{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", item=" + item
+                + '}';
     }
 }

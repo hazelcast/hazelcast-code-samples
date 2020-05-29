@@ -13,7 +13,7 @@ public class QueryCache {
     private static final String QUERY_STRING2 = "select i from Item i where i.id > 101";
     private static final String QUERY_CACHE_REGION = "Item-Query-Cache";
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         Session session;
         Transaction tx;
@@ -22,9 +22,9 @@ public class QueryCache {
         session = HibernateUtil.createNewSession();
         tx = session.getTransaction();
         tx.begin();
-        session.save(new Item("New Hazelcast Item-0",100));
-        session.save(new Item("New Hazelcast Item-1",101));
-        session.save(new Item("New Hazelcast Item-2",102));
+        session.save(new Item("New Hazelcast Item-0", 100));
+        session.save(new Item("New Hazelcast Item-1", 101));
+        session.save(new Item("New Hazelcast Item-2", 102));
         tx.commit();
         session.close();
 
@@ -59,12 +59,11 @@ public class QueryCache {
         Hazelcast.shutdownAll();
     }
 
-    private static List<Item> executeQuery(String query, Session session){
+    private static List<Item> executeQuery(String query, Session session) {
         Transaction tx;
         tx = session.getTransaction();
         tx.begin();
         return (List<Item>) session.createQuery(query)
                 .setMaxResults(10).setCacheable(true).setCacheRegion(QUERY_CACHE_REGION).list();
     }
-
 }

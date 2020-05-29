@@ -22,7 +22,7 @@ public class HibernateUtil {
         }
     }
 
-    public static Session createNewSession(){
+    public static Session createNewSession() {
         if (currentSession != null && currentSession.isOpen()) {
             currentSession.close();
         }
@@ -30,12 +30,12 @@ public class HibernateUtil {
         return currentSession;
     }
 
-    public static void evictAllRegions(){
+    public static void evictAllRegions() {
         sessionFactory.getCache().evictAllRegions();
         sessionFactory.getStatistics().clear();
     }
 
-    public static void closeFactory(){
+    public static void closeFactory() {
         sessionFactory.close();
     }
 
@@ -43,7 +43,7 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
-    public static String getStats(){
+    public static String getStats() {
         StringBuilder s = new StringBuilder();
         s.append(String.format("[L2C Hit]: %d\n", sessionFactory.getStatistics().getSecondLevelCacheHitCount()));
         s.append(String.format("[L2C Miss]: %d\n", sessionFactory.getStatistics().getSecondLevelCacheMissCount()));
@@ -51,7 +51,7 @@ public class HibernateUtil {
         return s.toString();
     }
 
-    public static String getQueryCacheStats(){
+    public static String getQueryCacheStats() {
         StringBuilder s = new StringBuilder();
         s.append(String.format("[Query Cache Hits]: %d\n", sessionFactory.getStatistics().getQueryCacheHitCount()));
         s.append(String.format("[Query Cache Miss]: %d\n", sessionFactory.getStatistics().getQueryCacheMissCount()));
@@ -59,7 +59,7 @@ public class HibernateUtil {
         return s.toString();
     }
 
-    public static String getCollectionCacheStats(){
+    public static String getCollectionCacheStats() {
         CacheRegionStatistics cs = HibernateUtil.getSessionFactory().getStatistics()
                 .getCacheRegionStatistics("SubItems-Collection-Cache");
         StringBuilder s = new StringBuilder();
