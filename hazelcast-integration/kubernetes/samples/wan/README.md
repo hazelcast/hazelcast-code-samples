@@ -2,8 +2,6 @@
 
 This a complete example presenting how to set two Hazelcast clusters (deployed in two different Kubernetes environments) with the WAN Replication in between them.
 
-**Note:** To follow this example your Kubernetes cluster must have an external IP, which is not the case for Minikube (and Docker for Desktop).
-
 ## Introduction
 
 This example focuses on the WAN Replication feature and assumes that you have some general knowledge about Hazelcast on Kubernetes. Here are some resources:
@@ -40,6 +38,8 @@ Then, you can create the cluster with the following command.
 ```
 (Receiver) $ kubectl apply -f statefulset.yaml
 ```
+
+**Note** that if you use Minikube, you need to execute `minikube tunnel` now in order to get LoadBalancer External IPs assigned.
 
 Check that cluster works correctly and note its External Load Balancer IP.
 
