@@ -4,8 +4,6 @@ This is a complete example presenting how to use Hazelcast cluster deployed on K
 
 This example assumes you have a running Kubernetes cluster (with external public IP) and the `kubectl` tool installed and configured. 
 
-**Note:** This example does not work on Minikube (and Docker for Desktop), since Minikube does not have an external IP assigned to the Kubernetes node.
-
 ## Configure Hazelcast cluster on Kubernetes
 
 As the first step, you need to start Hazelcast cluster in such a way that each member is exposed with a separate public IP/port. In Kubernetes PODs can be accessed from outside only via services, so the configuration requires creating a separate service (LoadBalancer or NodePort) for each Hazelcast member POD. The simplest way to achieve it is to use [Metacontroller](https://metacontroller.app/) plugin with [Service-Per-Pod](https://github.com/GoogleCloudPlatform/metacontroller/tree/master/examples/service-per-pod) Decorator Controller.
@@ -60,6 +58,8 @@ To install Hazelcast cluster, you need to include the Service-Per-Pod annotation
 kubectl apply -f hazelcast-cluster.yaml
 ``` 
 
+**Note** that if you use Minikube, you need to execute `minikube tunnel` now in order to get LoadBalancer External IPs assigned.
+
 You can check that for each Hazelcast Member POD there was a service created and that Hazelcast members formed a cluster.
 
 ```
@@ -112,14 +112,14 @@ hazelcast-service-account-token-6s94h   kubernetes.io/service-account-token   3 
 Then, to fetch Access Token, use the following command.
 
 ```
-$ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.token} | base64 --decode | xargs echo
+$ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath='{.data.token}' | base64 --decode | xargs echo
 eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImhhemVsY2FzdC1zZXJ2aWNlLWFjY291bnQtdG9rZW4tcTdoNDQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiaGF6ZWxjYXN0LXNlcnZpY2UtYWNjb3VudCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjA5NDNmZjVmLTc0MTktMTFlYS1hOGE3LTQyMDEwYTgwMDAyMCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmhhemVsY2FzdC1zZXJ2aWNlLWFjY291bnQifQ.GW6F6oNRjQ0z0jVWoMk-m5ePCbzm1pDGFoxINmAs6-KQaCh69PqQyjVU1uhrvue7ndPBaFqm0vs4OO969oeLt701ZIskyw5mEz8VBV-A53-zvx0TcOAOl_x6XNmk-mjX3pJa6D8WWWdnt_uFPw1L8_4GxDRiidaqFZULtS-50fcJERub7wLQUFlNf7DMR_c0rkZvWBlJqUQ5Wm41Y-EdmfTiv4Dsok0bKJQ9zhe9g2oNIPtEKmeO0No7C9v7Jqf5bxM8HzXzjp5AE0q9PK9XSRzn5CXaQzQspuLDaEwdagc8mDVUPx0jw703aQCFwfJw32r7VnC8URrXaaPatQcXug
 ```
 
 To fetch CA Certificate, use the following command.
 
 ```
-$ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath={.data.ca\\.crt} | base64 --decode
+$ kubectl get secret hazelcast-service-account-token-6s94h -o jsonpath='{.data.ca\.crt}' | base64 --decode
 -----BEGIN CERTIFICATE-----
 MIIDDDCCAfSgAwIBAgIRAPAL3Bz0Bi8uGTDlb5n/3UIwDQYJKoZIhvcNAQELBQAw
 LzEtMCsGA1UEAxMkNTY5NWQxNDgtNjMxNS00MzQxLThiNTctZmQ0ZTU2MWVhY2Ux
