@@ -2,7 +2,7 @@
 
 This is a complete example presenting how to use Hazelcast cluster deployed on Kubernetes with Hazelcast Smart Client running outside of Kubernetes.
 
-This example assumes you have a running Kubernetes cluster (with external public IP) and the `kubectl` tool installed and configured. 
+This example assumes you have a running Kubernetes cluster and the `kubectl` tool installed and configured. 
 
 ## Configure Hazelcast cluster on Kubernetes
 
