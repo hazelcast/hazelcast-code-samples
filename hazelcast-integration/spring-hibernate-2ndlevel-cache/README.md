@@ -33,7 +33,7 @@ In order to configure Hazelcast as second-level cache provider, you need to add 
 </dependency>
 ```
 
-And then, we need to configure Hazelcast IMDG local member setting by adding a standard `hazelcast.xml` file into `src/main/resources`.
+And then, we need to configure Hazelcast IMDG local member setting by adding a standard Hazelcast configuration file (`hazelcast.xml` or `hazelcast-client.xml`) file into `src/main/resources`. Spring will recognize the configuration file and autoconfigure either an embedded instance or a native client.
 
 This will also trigger autoconfiguration of the `HazelcastInstance` bean.
 
@@ -53,4 +53,4 @@ And now, once you annotate your entity as `@Cacheable`, it will be cached in a H
 public class Book { ... }
 ```
 
-If you want to experiment, it's convenient to add custom logic inside `Runner` class.
+If you want to experiment, it's convenient to add custom logic inside the `Runner` class.
