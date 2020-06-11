@@ -22,7 +22,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <java.version>1.8</java.version>
-        <spring-data-hazelcast.version>2.1</spring-data-hazelcast.version>
+        <!-- adding specific Hazelcast version, since spring-data-hazelcast do not support Hazelcast 4.1-SNAPSHOT version -->     
+        <hazelcast.version>3.11.7</hazelcast.version>
+        <spring-data-hazelcast.version>2.2.5</spring-data-hazelcast.version>
         <spring-shell.version>1.2.0.RELEASE</spring-shell.version>
         <spring-boot.version>2.1.0.RELEASE</spring-boot.version>
     </properties>
