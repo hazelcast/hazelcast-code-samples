@@ -13,7 +13,7 @@ In order to enable JPA, you need to add a dedicated Spring Boot Starter:
 ```
 <dependency>
     <groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-data-jpa</artifactId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
 </dependency>
 ```
 

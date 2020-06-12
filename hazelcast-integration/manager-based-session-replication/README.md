@@ -5,18 +5,20 @@ This project is prepared to serve as a sample application for Hazelcast, the lea
 <h3>Tomcat Configuration</h3>
 
 <h4>P2P Deployment</h4>
-Follow steps under "Sample P2P Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast-reference-manual/blob/master/src/TomcatSessionReplication.md
+Follow steps under "Deploying P2P for Tomcat" title at: 
+https://github.com/hazelcast/hazelcast-tomcat-sessionmanager/blob/master/README.md
 
 <h4>Client-Server Deployment</h4>
 
-Follow steps under "Sample Client/Server Configuration to use Hazelcast Session Replication" title at: https://github.com/hazelcast/hazelcast-reference-manual/blob/master/src/TomcatSessionReplication.md
+Follow steps under "Deploying Client-Server for Tomcat" title at: 
+https://github.com/hazelcast/hazelcast-tomcat-sessionmanager/blob/master/README.md
 
 
 <h3>Load Balancing With Tomcat</h3>
 To see how application works, you need to start two different tomcats at different ports. Also you have to connect these tomcats to a load balancer. You can use apache mod\_jk module for load balancing. Shortly, you have to enable mod\_jk module apache httpd.conf file and specify workers.properties file. You must enter tomcat server ports and configurations to workers.properties file.
 You can find detailed explanations at:
 </br>
-http://tomcat.apache.org/connectors-doc/generic_howto/quick.html
+https://tomcat.apache.org/connectors-doc/common_howto/quick.html
 
 <h3>Jetty Configuration</h3>
 

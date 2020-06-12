@@ -39,6 +39,8 @@ Then, you can create the cluster with the following command.
 (Receiver) $ kubectl apply -f statefulset.yaml
 ```
 
+**Note** that if you use Minikube, you need to execute `minikube tunnel` now in order to get LoadBalancer External IPs assigned.
+
 Check that cluster works correctly and note its External Load Balancer IP.
 
 ```
