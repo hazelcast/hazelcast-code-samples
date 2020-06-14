@@ -1,8 +1,6 @@
 package com.hazelcast.samples.serialization.murmur3;
 
 import java.io.Serializable;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -46,13 +44,16 @@ public class Application {
         config.setProperties(properties);
 
         // Create a 3 node cluster
-        for (int i = 0 ; i < 3 ; i++) {
+        for (int i = 0 ; i < 3; i++) {
             config.setInstanceName("node" + i);
             HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(config);
-            if (hazelcastInstance.getCluster().getMembers().size() == (i + 1)) {
-            	System.err.printf("Node '%s' in cluster, size now %d%n", hazelcastInstance.getName(), i);
+            int size = hazelcastInstance.getCluster().getMembers().size();
+            if (size == (i + 1)) {
+            	System.err.printf("Node '%s' in cluster, size now %d%n", hazelcastInstance.getName(), size);
             } else {
+            	System.err.println("************************************************");
             	System.err.printf("Node '%s' not connected, turn on logging and try again%n", hazelcastInstance.getName());
+            	System.err.println("************************************************");
             }
         }
         
@@ -62,7 +63,7 @@ public class Application {
         IMap iMap = anyInstance.getMap(MAP_NAME);
         
         // Predict and validate the placement of the first 25 integer keys.
-        for (int i = 0 ; i < 25 ; i++) {
+        for (int i = 0 ; i < 25; i++) {
             byte[] value = new byte[i];
             iMap.set(i,  value);
 
@@ -77,12 +78,14 @@ public class Application {
 
             // See if they are the same!
             if (predictedPartitionId == partition.getPartitionId()) {
-            	System.out.printf("Key '%d', hashcode %d, is in partition %d on node %s%n",
-            			i, predictedHashCode, predictedPartitionId, node);
+            	System.out.printf("Key '%d', hashcode %d, is in partition %d, hosted currently by node %s%n",
+            			i, predictedHashCode, predictedPartitionId, node.get());
             } else {
+            	System.err.println("************************************************");
             	System.err.printf("ERROR: Key '%d'%n", i);
             	System.err.printf("ERROR:   Predicted partition id '%d'%n", predictedPartitionId);
             	System.err.printf("ERROR:   Actual partition id '%d'%n", partition.getPartitionId());
+            	System.err.println("************************************************");
             }
         }
         
@@ -108,19 +111,11 @@ public class Application {
         }
     }
 
-    /* All keys must be serializable in a distributed system, so the serialized
-     * form (byte[]) is what the Murmur 3 Hash algorithm works on.
-     *
-     * For integers, we must decide whether to use BIG_ENDIAN or LITTLE_ENDIAN
-     * format, as this would otherwise vary with the hardware. We go for
-     * BIG_ENDIAN by default, the more significant bytes are put first. 
+    /* Calculate the hashcode and partition for a key 
      */
     static int[] predictedPartitionId(int key, int partitionCount) {
-
-    	// An integer is converted to a 4 byte byte array, BIG_ENDIAN format
-    	byte[] serializedKey = ByteBuffer.allocate(4).putInt(key).order(ByteOrder.BIG_ENDIAN).array();
     	
-    	int hashCode = murmur3(serializedKey);
+    	int hashCode = Math.abs(murmurHash3Int(key));
     	
     	int partitionId = hashCode % partitionCount;
     	
@@ -130,9 +125,42 @@ public class Application {
     	
     	return result;
     }
-    
-    
-    static int murmur3(byte[] key) {
-    	return 0;
+
+    /* Murmur Hash 3, for integer input only. Java integers are 4 bytes.
+     * This is the Hazelcast varient, for constants, and uses ">>>" in rotate not ">>".
+     * See https://en.wikipedia.org/wiki/MurmurHash and
+     * https://github.com/hazelcast/hazelcast/blob/master/hazelcast/src/main/java/com/hazelcast/internal/util/HashUtil.java
+     */
+    public static int murmurHash3Int(int i) {    	
+    	// Hazelcast seed
+        int h = 0x01000193;
+
+        // Hazelcast constants
+        int c1 = 0xcc9e2d51;
+        int c2 = 0x1b873593;
+    	
+    	// Byte order is Little Endian
+        int k = Integer.reverseBytes(i);
+    	
+        // Rotate 1
+        k *= c1;
+        k = (k << 15) | (k >>> 17);
+        k *= c2;
+
+        // Rotate 2
+        h ^= k;
+        h = (h << 13) | (h >>> 19);
+        h = h * 5 + 0xe6546b64;
+
+        // Finalize, uses 4 byte size and two Murmur3 constants
+        h ^= 4;
+    	h ^= h >>> 16;
+        h *= 0x85ebca6b;
+        h ^= h >>> 13;
+        h *= 0xc2b2ae35;
+        h ^= h >>> 16;
+
+        return h;
     }
+
 }
