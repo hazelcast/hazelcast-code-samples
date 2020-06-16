@@ -44,6 +44,9 @@ spring.jpa.properties.hibernate.cache.use_second_level_cache=true
 spring.jpa.properties.hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory
 ```
 
+If you want to use Hazelcast client, add `spring.jpa.properties.hibernate.cache.hazelcast.use_native_client=true
+`.
+
 And now, once you annotate your entity as `@Cacheable`, it will be cached in a Hazelcast member:
 
 ```
