@@ -6,6 +6,10 @@ You can spin-up a PostgreSQL instance easily using Docker:
 
 `docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:13`
 
+If you want to use Hazelcast client, you can start an IMDG instance in a Docker container easily:
+
+`docker run -p 5701:5701 hazelcast/hazelcast:4.0.1`
+
 # Configuration
 
 In order to enable JPA, you need to add a dedicated Spring Boot Starter:
