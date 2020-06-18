@@ -6,9 +6,11 @@ You can spin-up a PostgreSQL instance easily using Docker:
 
 `docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:13`
 
-If you want to use Hazelcast client, you can start an IMDG instance in a Docker container easily:
+If you want to use Hazelcast client, you can start an IMDG instance in a Docker container easily, and then connect to it:
 
-`docker run -p 5701:5701 hazelcast/hazelcast:4.0.1`
+`docker run -p 5701:5701 hazelcast/hazelcast`
+
+Remember to double-check if the version is supported by the client.
 
 # Configuration
 
