@@ -6,6 +6,12 @@ You can spin-up a PostgreSQL instance easily using Docker:
 
 `docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:13`
 
+If you want to use Hazelcast client, you can start an IMDG instance in a Docker container easily, and then connect to it:
+
+`docker run -p 5701:5701 hazelcast/hazelcast`
+
+Remember to double-check if the version is supported by the client.
+
 # Configuration
 
 In order to enable JPA, you need to add a dedicated Spring Boot Starter:
@@ -43,6 +49,9 @@ The last step involves turning on second-level cache by adding two properties in
 spring.jpa.properties.hibernate.cache.use_second_level_cache=true
 spring.jpa.properties.hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory
 ```
+
+If you want to use Hazelcast client, add `spring.jpa.properties.hibernate.cache.hazelcast.use_native_client=true
+`.
 
 And now, once you annotate your entity as `@Cacheable`, it will be cached in a Hazelcast member:
 
