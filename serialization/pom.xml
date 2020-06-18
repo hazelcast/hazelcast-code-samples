@@ -33,6 +33,7 @@
         <module>identified-data-serializable</module>
         <module>kryo-serializer</module>
         <module>managed-context</module>
+        <module>murmur3</module>
         <module>portable</module>
         <module>protobuf-serializer</module>
         <module>serializable</module>
