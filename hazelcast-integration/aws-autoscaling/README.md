@@ -1,8 +1,8 @@
-# AWS Autoscaling for Hazelcast
+# AWS EC2 Autoscaling for Hazelcast
 
-Hazelcast has specific requirements with regards to its AWS Autoscaling procedure. Read more [here](https://github.com/hazelcast/hazelcast-aws#aws-autoscaling). 
+Hazelcast has specific requirements for the AWS EC2 Autoscaling procedure. Read more [here](https://github.com/hazelcast/hazelcast-aws#autoscaling). 
 
-This code sample presents a sequence of steps which leads to a complete autoscaling Hazelcast autoscaled cluster.
+This code sample presents a sequence of steps which leads to a complete autoscaling Hazelcast cluster.
 
 ### Step 1: Create Amazon SQS (Simple Queue Service)
 
