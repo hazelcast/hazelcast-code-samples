@@ -37,8 +37,6 @@
     </properties>
 
     <modules>
-        <module>amazon-ec2-vagrant-chef</module>
-        <module>amazon-elasticbeanstalk</module>
         <module>aws-ecs</module>
         <module>dynacache</module>
         <module>docker-compose</module>
@@ -50,7 +48,6 @@
         <module>mongodb</module>
         <module>openshift</module>
         <module>pcf-integration</module>
-        <module>spark</module>
         <module>spring-cache-manager</module>
         <module>spring-configuration</module>
         <module>spring-data-hazelcast-chemistry-sample</module>
@@ -65,7 +62,6 @@
         <module>springboot-eureka-partition-groups</module>
         <module>springboot-http</module>
         <module>springboot-session-analysis</module>
-        <module>tricolor</module>
         <module>eureka</module>
     </modules>
 
