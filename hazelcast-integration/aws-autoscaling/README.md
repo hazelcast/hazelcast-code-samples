@@ -13,7 +13,24 @@ In this guide, you'll create an AWS AMI image with Hazelcast and set up an AWS E
 - ~20 minutes
 - AWS account
 
-## Create Amazon SQS (Simple Queue Service)
+## Understanding AWS EC2 Autoscaling
+
+The recommended solution is to use [Auto Scaling Lifecycle Hooks](https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html) with Amazon SQS and a custom Lifecycle Hook Listener script. Note however that, if your cluster is small and predictable, then you can try an alternative solution mentioned in the conclusion.
+
+We are going to build the following AWS Auto Scaling architecture.
+
+![AWS EC2 Auto Scaling Architecture](markdown/images/aws-autoscaling-architecture.png)
+
+Setting it up requires the following steps:
+* Create AWS SQS queue
+* Create Amazon Machine Image which includes Hazelcast and Lifecycle Hook Listener script
+* Create Auto Scaling Launch Configuration
+* Create Auto Scaling Group
+* Create Lifecycle Hooks
+
+## Step-by-step Guide
+
+### Create Amazon SQS (Simple Queue Service)
 
 As the first step you need to create an SQS queue which will be used for Autoscaling Group Lifecycle Hook events. Assuming you already executed `aws configure` and set your default region to `eu-central-1`, you can execute the following command.
 
@@ -53,7 +70,7 @@ You can check that the image was successfully created at https://eu-central-1.co
 
 ![AWS Images](markdown/images/aws_images.png)
 
-## Create Auto Scaling Launch Configuration
+### Create Auto Scaling Launch Configuration
 
 Before you create Auto Scaling Group, you need to prepare the configuration of how you want to start EC2 Instance. Proceed with the following steps:
 1. Open AWS Auto Scaling Launch Configuration console: https://eu-central-1.console.aws.amazon.com/ec2/autoscaling/home?region=eu-central-1#LaunchConfigurations
@@ -72,7 +89,7 @@ You should see that the Auto Scaling launch configuration has been created.
 ![Create Launch Configuration](markdown/images/create_launch_configuration.png)
 
 
-## Create Auto Scaling Group
+### Create Auto Scaling Group
 
 Finally, you can create Auto Scaling Group with the following steps.
 
@@ -92,7 +109,7 @@ The Autoscaling group should be visible in the AWS console.
 
 ![Autoscaling Group](markdown/images/autoscaling_group.png)
 
-## Create Lifecycle Hooks
+### Create Lifecycle Hooks
 
 As the last step, we need to create Lifecycle Hooks. Otherwise, Hazelcast members wouldn't wait before migrating its data, so we could experience data loss.
 
@@ -109,3 +126,30 @@ As the last step, we need to create Lifecycle Hooks. Otherwise, Hazelcast member
 The lifecycle hooks should be visible in the AWS console
 
 ![Lifecycle Hooks](markdown/images/lifecycle_hooks.png)
+
+## Conclusion
+The AWS Auto Scaling solution presented in this guide is complete and independent of the number of Hazelcast members and the amount of data stored. Nevertheless, there are also alternative approaches. They are simpler, but may fail under certain conditions. That is why you should use them with caution.
+
+### Cooldown Period
+[Cooldown Period](https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html) is a statically defined time interval that AWS Auto Scaling Group waits before the next Auto Scaling operation may take place. If your cluster is small and predictable, then you can use it instead of Lifecycle Hooks.
+
+#### Setting Up
+* Set Scaling Policy to Step scaling and increase/decrease always by adding/removing 1 instance
+* Se
+t Cooldown Period to a reasonable value (which depends on your cluster and data size)
+#### Drawbacks
+* If your cluster contains a significant amount of data, it may be impossible to define one static cooldown period
+* Even if your cluster comes back to the safe state quicker than the cooldown period, the next operation needs to wait
+
+### Graceful Shutdown
+A solution that may sound good and simple (but is actually not recommended) is to use Hazelcast Graceful Shutdown as a hook on the EC2 Instance Termination.
+
+#### Setting up
+Without any autoscaling-specific features, you could adapt the EC2 Instance to wait for the Hazelcast member to shut down before terminating the instance.
+
+#### Drawbacks
+Such solution may work correctly, however is definitely not recommended for the following reasons:
+
+* [AWS Auto Scaling documentation](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html) does not specify the instance termination process, so you can’t rely on anything
+* [Some sources](https://stackoverflow.com/questions/11208869/amazon-ec2-autoscaling-down-with-graceful-shutdown) specify that it’s possible to gracefully shut down the processes, however after 20 seconds AWS can kill them anyway
+* The [Amazon’s recommended way](https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html) to deal with graceful shutdowns is to use Lifecycle Hooks
