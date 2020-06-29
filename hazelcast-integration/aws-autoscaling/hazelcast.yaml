@@ -1,0 +1,14 @@
+hazelcast:
+  network:
+    join:
+      multicast:
+        enabled: false
+      aws:
+        enabled: true
+        access-key: YOUR_AWS_ACCESS_KEY
+        secret-key: YOUR_AWS_SECRET_KEY
+    rest-api:
+      enabled: true
+      endpoint-groups:
+        HEALTH_CHECK:
+          enabled: true
