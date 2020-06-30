@@ -75,6 +75,7 @@
         <module>spi</module>
         <module>transactions</module>
         <module>variable-replacers</module>
+        <module>generic-record</module>
     </modules>
 
     <build>

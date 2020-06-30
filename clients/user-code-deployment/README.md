@@ -11,6 +11,6 @@ mvn compile exec:java -Dexec.mainClass="Member"
 
 ```
 cd user-code-deployment-client
-mvn compile exec:exec
+mvn compile exec:exec -Dexec.mainClass="Client"
 ```
 
