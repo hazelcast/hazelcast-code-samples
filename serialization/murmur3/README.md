@@ -22,7 +22,7 @@ We’ll explore this in this blog by putting some number keys in a map, a common
 <h2>A Map</h2>
 A “map” is a data structure in Computer Science that is sometimes called a “key-value” store or a “dictionary.” Here’s one way to think of it:
 
-[caption id="attachment_754053" align="alignnone" width="400"]<img class="size-medium wp-image-754053" src="https://hazelcast.com/wp-content/uploads/2020/06/map1-400x269.jpg" alt="A Map" width="400" height="269" /> A logical view of a map[/caption]
+<img class="size-medium wp-image-754053" src="https://hazelcast.com/wp-content/uploads/2020/06/map1-400x269.jpg" alt="A Map" width="400" height="269" />
 
 Our map here is some sort of logical collection of data pairs. We’ve named it “numbers” to distinguish it from other data collections we may have. It contains some but not all numbers, and there’s no implication that these are stored in any particular order.
 
@@ -50,7 +50,7 @@ For example, with 3 processes, each has ⅓ of the map to look after but it migh
 <h2>⅓ Map != ⅓ Data</h2>
 Our “numbers” map if stored in Hazelcast might look like the below:
 
-[caption id="attachment_754054" align="alignnone" width="400"]<img class="size-medium wp-image-754054" src="https://hazelcast.com/wp-content/uploads/2020/06/map2-400x242.jpg" alt="An IMap" width="400" height="242" /> An IMap across three JVMs[/caption]
+<img class="size-medium wp-image-754054" src="https://hazelcast.com/wp-content/uploads/2020/06/map2-400x242.jpg" alt="An IMap" width="400" height="242" />
 
 One JVM process has 3 data records. The other two have 1 data record each.
 <h3>Counter-Intuitive</h3>
