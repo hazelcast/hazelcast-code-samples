@@ -167,7 +167,7 @@ They have different hash codes. When the hash code has modulus 271 applied, keys
 
 Since keys 15 and 16 are in the same partition, they will always be on the same node, regardless of the cluster size.
 <h3>Checkpoint</h3>
-As` a bonus, there is one last problem.
+As a bonus, there is one last problem.
 
 In the code,
 <pre>for (int i = 0 ; i &lt; 25 ; i++) {
