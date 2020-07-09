@@ -20,7 +20,7 @@ To use caching in your Spring Boot application, you need to:
 - add `@EnableCaching` annotation to your main class
 - add `@Cacheable("books")` annotation to every method you want to cache
 
-For more explanation on the Spring Boot cache topic, please check the official https://spring.io/guides/gs/caching/[Caching Data with Spring] guide.
+For more explanation on the Spring Boot cache topic, please check the official Spring Guide: https://spring.io/guides/gs/caching/[Caching Data with Spring].
 
 In our case, let's have a simple web service with two classes defined as follows.
 
@@ -62,17 +62,17 @@ public class BookService {
 }
 ----
 
-If we started the application, then every call to the endpoint `/books/<isbn>` would to the method `findBookNameByIsbn()` which in turn would first check the cache. Only if it does not find value in the cache, the method `findBookInSlowSource()` is executed.
+If we started the application, then every call to the endpoint `/books/<isbn>` would go to the method `findBookNameByIsbn()` which in turn would first check the cache. Only if it does not find value in the cache, the method `findBookInSlowSource()` would be executed.
 
 == Using Hazelcast as Cache Manager
 
 We want to use Hazelcast as the cache manager. The good news is that Hazelcast is well integrated into Spring Boot, so the only thing you need to do is one of the followings:
 
 - Add `hazelcast.yaml` configuration OR
-- Add `hazelcast.xml` configuraion OR
+- Add `hazelcast.xml` configuration OR
 - Define `@Bean` with Hazelcast configuration in the source code
 
-Let's do the first option and add the following file into `src/main/resources`.
+Let's use the first option and add the following file into `src/main/resources`.
 
 .hazelcast.yaml
 [source,yaml]
@@ -94,7 +94,7 @@ To start the application, run the following command.
 mvn spring-boot:run
 ----
 
-In the logs, you should see that embedded Hazelcast has started.
+You should see in the logs that embedded Hazelcast has started.
 
 ----
 Members {size:1, ver:1} [
@@ -111,7 +111,7 @@ curl locahost:8080/books/12345
 Sample Book Name
 ----
 
-First time you execute this command, it should take some time to get the response, but if you try it again, it should be instant.
+The first time you execute this command it should take some time to get the response. However, when you try it again, it should be instant. That means that the cache is used.
 
 ----
 curl locahost:8080/books/12345
