@@ -18,24 +18,14 @@
 
 package com.hazelcast.springboot.caching;
 
-import java.util.concurrent.TimeUnit;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
-public class DummyBean implements IDummyBean {
-
-    @Override
-    public String getCity() {
-        System.out.println("DummyBean.getCity() called!");
-        try {
-            // emulation of slow method
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return "Ankara";
-    }
-
-    @Override
-    public String setCity(String city) {
-        return city;
+@SpringBootApplication
+@EnableCaching
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
     }
 }
