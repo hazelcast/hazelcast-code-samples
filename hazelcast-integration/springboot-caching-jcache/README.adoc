@@ -31,7 +31,7 @@ This is an example of Spring Boot Caching Auto Configuration feature for Hazelca
 - `BootifulMember` uses Spring Boot auto configuration for Hazelcast.
 It scans classpath for `hazelcast.xml` and automatically instantiates Spring's `CacheManager` bean with `HazelcastInstance`. 
 Use `startBootifulMember.sh` to start a cluster member from command line.
-`BootifulClient` uses SpringBoot auto configuration for JCache.
+- `BootifulClient` uses SpringBoot auto configuration for JCache.
 It scans classpath for `jcache` jars and instantiates `JCacheCacheManager` backed by `Caching.getCachingProvider()`.
 Because Hazelcast client jar is in a classpath, by default, it uses the client caching provider and picks `hazelcast-client.xml` from classpath.
 Use `startBootifulClient.sh` to start client and connect to the cluster.
