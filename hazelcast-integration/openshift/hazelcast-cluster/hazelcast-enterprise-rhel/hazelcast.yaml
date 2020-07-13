@@ -12,7 +12,7 @@ labels:
 parameters:
 - name: HAZELCAST_IMAGE
   description: "Defines the location of Hazelcast image"
-  value: registry.connect.redhat.com/hazelcast/hazelcast-4-rhel8:4.0
+  value: registry.connect.redhat.com/hazelcast/hazelcast-enterprise-4-rhel8:4.0.2
   required: true
 - name: SERVICE_NAME
   description: "Defines the service name of the POD to lookup of Kubernetes"
@@ -30,7 +30,7 @@ parameters:
   required": true
 - name: MANAGEMENT_CENTER_IMAGE
   description: "Defines the location of Hazelcast Management Center image"
-  value: registry.connect.redhat.com/hazelcast/management-center-4-rhel8:4.0
+  value: registry.connect.redhat.com/hazelcast/management-center-4-rhel8:4.0.3-1
   required: true
 - name: MANAGEMENT_CENTER_SERVICE_NAME
   description: "Defines the service name of Management Center"
