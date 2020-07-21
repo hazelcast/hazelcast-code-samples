@@ -9,18 +9,17 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import java.util.concurrent.Future;
 
 /**
- * Example of enabling {@link com.hazelcast.spring.context.SpringAware}
- * with Java config.
+ * Example of enabling {@link com.hazelcast.spring.context.SpringAware} with Spring XML config.
  */
-public class SpringAwareAnnotationXMLConfig {
+public class SpringAwareAnnotationXmlConfig {
 
     public static void main(String[] args) throws Exception {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 
         HazelcastInstance hazelcastInstance = (HazelcastInstance) context.getBean("instance");
 
-        Future<String> future = hazelcastInstance.getExecutorService("test").submit(new SomeTask());
-        System.out.println(future.get());
+        Future<String> f = hazelcastInstance.getExecutorService("test").submit(new SpringAwareAwareTask());
+        System.out.println("Bean definition names are: " + f.get());
 
         HazelcastClient.shutdownAll();
         Hazelcast.shutdownAll();
