@@ -1,6 +1,0 @@
-logging:
-  level:
-    com.hazelcast: INFO
-    com.hazelcast.samples: TRACE
-    org.springframework: ERROR
-    org.springframework.boot.context.embedded.tomcat: INFO

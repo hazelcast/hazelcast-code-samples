@@ -57,7 +57,6 @@
         <module>spring-transaction-manager</module>
         <module>springaware-annotation</module>
         <module>springboot-caching-jcache</module>
-        <module>springboot-session-analysis</module>
         <module>eureka</module>
     </modules>
 
