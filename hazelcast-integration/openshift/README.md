@@ -171,9 +171,7 @@ Then, you can access Management Center by opening `management-center-service-haz
 
 If you're interested not only in setting up the Hazelcast cluster, but also in using it in the client application, you can follow the following guidelines.
 
-Note that OpenShift sample uses the [fabric8](https://fabric8.io/) maven plugin to build Docker image. Fabric8 requires 3.3.x or higher maven version, therefore make sure that you have proper maven version installed on your machine.
-
-Note also that the commands below are presented for the Minishift, because they use access to the Docker Registry provided with OpenShift. In case of OpenShift Online (in which you don't have access to the OpenShift's Docker Registry), you may use an external registry (for example, [Docker Hub](https://hub.docker.com/)).
+Note that OpenShift sample uses the [Eclipse JKube](https://www.eclipse.org/jkube/) OpenShift Maven Plugin to build the container image and deploy it into the cluster. JKube requires 3.3.x or higher maven version, therefore make sure that you have proper maven version installed on your machine.
 
 **1) Build Maven dependencies**
 
@@ -182,20 +180,14 @@ Make sure you're in the main `openshift` directory and install the snapshot JAR 
 $ mvn -f ../../pom.xml clean install
 ```
 
-**2) Build "ocp-demo-frontend" Docker image**
+**2) Build "ocp-demo-frontend" Container image**
 
-Note that in order to build the Docker image, you need to have your OpenShift Docker Engine configured. In case of Minishift, you can do it using the guidelines from the `minishift docker-env` command, so in case of Unix-based systems:
-
+Run the following command to build the container image in the cluster using S2I build strategy:
 ```
-$ eval $(minishift docker-env)
-```
-
-Run the following command to build the Docker image:
-```
-$ mvn -f client-apps/ocp-demo-frontend/pom.xml fabric8:build
+$ mvn -f client-apps/ocp-demo-frontend/pom.xml oc:build
 ```
 
-**3) Push Docker image to the local OpenShift registry**
+**3) Check container image exists in the local OpenShift registry**
 
 Check if your image is already in the OpenShift registry.
 
@@ -205,54 +197,52 @@ NAME                DOCKER REPO                                   TAGS      UPDA
 ocp-demo-frontend   172.30.1.1:5000/hazelcast/ocp-demo-frontend   latest    39 seconds ago
 ```
 
-In case you see the message `No resources found`, you need to manually push the image with the following commands:
-```
-$ docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
-$ docker tag client-apps/ocp-demo-frontend $(minishift openshift registry)/$(oc project -q)/ocp-demo-frontend
-$ docker push $(minishift openshift registry)/$(oc project -q)/ocp-demo-frontend
-```
-
-Then, you should see `oc-demo-frontend` in the output for `$ oc get is`.
-
-**4) Start "ocp-demo-frontend" application**
+**4) Deploy the "ocp-demo-frontend" application**
 
 To start the application, use the following command:
 ```
-$ oc new-app --image-stream=ocp-demo-frontend --name=hazelcast-client-app
+$ mvn -f client-apps/ocp-demo-frontend/pom.xml oc:resource oc:apply
 ```
 
 You can check that the application is running correctly:
 ```
-$ oc get all -l app=hazelcast-client-app
-NAME                                     REVISION   DESIRED   CURRENT   TRIGGERED BY
-deploymentconfigs/hazelcast-client-app   1          1         1         config,image(ocp-demo-frontend:latest)
+$ oc get all -l app=ocp-demo-frontend
+NAME                            READY     STATUS    RESTARTS   AGE
+pod/ocp-demo-frontend-1-6bjpz   1/1       Running   0          2m
 
-NAME                              READY     STATUS    RESTARTS   AGE
-po/hazelcast-client-app-1-rcrfx   1/1       Running   0          2m
+NAME                                        DESIRED   CURRENT   READY     AGE
+replicationcontroller/ocp-demo-frontend-1   1         1         1         2m
 
-NAME                        DESIRED   CURRENT   READY     AGE
-rc/hazelcast-client-app-1   1         1         1         2m
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/ocp-demo-frontend   ClusterIP   172.30.143.92   <none>        8080/TCP   2m
 
-NAME                       TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
-svc/hazelcast-client-app   ClusterIP   172.30.64.173   <none>        8080/TCP,8778/TCP,9779/TCP   2m
+NAME                                                   REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/ocp-demo-frontend   1          1         1         config,image(ocp-demo-frontend:latest)
+
+NAME                                                   TYPE      FROM      LATEST
+buildconfig.build.openshift.io/ocp-demo-frontend-s2i   Source    Binary    1
+
+NAME                                               TYPE      FROM      STATUS     STARTED         DURATION
+build.build.openshift.io/ocp-demo-frontend-s2i-1   Source    Binary    Complete   4 minutes ago   29s
+
+NAME                                               DOCKER REPO                                      TAGS      UPDATED
+imagestream.image.openshift.io/ocp-demo-frontend   172.30.39.149:5000/hazelcast/ocp-demo-frontend   latest    3 minutes ago
+
+NAME                                         HOST/PORT                                                    PATH      SERVICES            PORT      TERMINATION   WILDCARD
+route.route.openshift.io/ocp-demo-frontend   ocp-demo-frontend-hazelcast.b6ff.rh-idev.openshiftapps.com             ocp-demo-frontend   8080                    None
 ```
 
-**5) Expose the application**
+**5) Check the application**
 
-In order to make the application accessible from outside the OpenShift environment, you need to expose it using the following command:
-```
-$ oc expose svc/hazelcast-client-app
-```
-
-Then, you should be able to access the application via the exposed route. You can check the route using the following command:
+JKube should have created a route for your application. You can check the route using the following command:
 
 ```
 $ oc get routes
-NAME                   HOST/PORT                                             PATH      SERVICES               PORT       TERMINATION   WILDCARD
-hazelcast-client-app   hazelcast-client-app-hazelcast.192.168.2.123.nip.io             hazelcast-client-app   8080-tcp                 None
+NAME                HOST/PORT                                                    PATH      SERVICES            PORT      TERMINATION   WILDCARD
+ocp-demo-frontend   ocp-demo-frontend-hazelcast.b6ff.rh-idev.openshiftapps.com             ocp-demo-frontend   8080                    None
 ```
 
-Now, if you open in the browser `hazelcast-client-app-hazelcast.192.168.2.123.nip.io`, you should see the following home screen.
+Now, if you open in the browser `ocp-demo-frontend-hazelcast.b6ff.rh-idev.openshiftapps.com`, you should see the following home screen.
 
 ![welcome](markdown/images/welcome.png)
 
