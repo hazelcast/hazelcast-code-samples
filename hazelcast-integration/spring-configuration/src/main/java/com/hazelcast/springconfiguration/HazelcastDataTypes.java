@@ -10,7 +10,6 @@ import com.hazelcast.cp.IAtomicLong;
 import com.hazelcast.cp.IAtomicReference;
 import com.hazelcast.cp.ICountDownLatch;
 import com.hazelcast.cp.ISemaphore;
-import com.hazelcast.cp.lock.FencedLock;
 import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import com.hazelcast.map.IMap;
 import com.hazelcast.multimap.MultiMap;
@@ -49,7 +48,6 @@ public class HazelcastDataTypes {
         executeAtomicReference();
         executeCountDownLatch();
         executeSemaphore();
-        executeLock();
 
         Hazelcast.shutdownAll();
         HazelcastClient.shutdownAll();
@@ -181,17 +179,6 @@ public class HazelcastDataTypes {
         System.out.println("Available semaphore permits: " + semaphore.availablePermits() + "\n");
     }
 
-    private static void executeLock() {
-        System.out.println("### Lock Execution Started... ###");
-        FencedLock lock = context.getBean("lock", FencedLock.class);
-        lock.lock();
-        System.out.println("lock() call...");
-        System.out.println("is locked by current thread: " + lock.isLockedByCurrentThread());
-        lock.unlock();
-        System.out.println("unlock() call...");
-        System.out.println("is locked: " + lock.isLocked());
-    }
-
     private static class EchoTask implements Runnable, Serializable {
 
         private final String msg;
@@ -203,6 +190,20 @@ public class HazelcastDataTypes {
         @Override
         public void run() {
             System.out.println("echo: " + msg);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class TestBean {
+
+        private String result;
+
+        public String getResult() {
+            return result;
+        }
+
+        public void setResult(String result) {
+            this.result = result;
         }
     }
 }

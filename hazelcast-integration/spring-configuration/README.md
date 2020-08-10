@@ -1,31 +1,16 @@
-Hazelcast Spring Configuration
-==============================
+# Hazelcast Spring Configuration
 
-This application is intended to serve as an example of configuring Hazelcast project to use Spring Framework. Detailed information can be found at: http://hazelcast.org/docs/3.2/manual/html/springintegration.html#spring-integration/
+This is an example of configuring Hazelcast in your Spring Framework.
 
-Prerequisites
--------------
+## Hazelcast Data Types
 
-- Apache Maven ( http://maven.apache.org/download.cgi )
+This example presents how to configure different distributed data types using Spring XML configuration. You can execute it with the following command.
 
-Spring Framework dependencies can be added using the file: "pom.xml".
+    mvn compile exec:java -Dexec.mainClass="com.hazelcast.springconfiguration.HazelcastDataTypes" -Dexec.cleanupDaemonThreads=false
 
+## Hazelcast Spring Client
 
-Running Sample Application
---------------------------
+This example presents how to configure Hazelcast Client using Spring XML configuration. You can execute it with the following command.
 
-1) Clone the repository to your local using:
+    mvn compile exec:java -Dexec.mainClass="com.hazelcast.springconfiguration.HazelcastSpringClient" -Dexec.cleanupDaemonThreads=false
 
-    git clone git@github.com:hazelcast/hazelcast-code-samples.git
-
-2) Go to "spring-configuration" folder
-
-3) Compile the project with:
-
-    mvn compile
-    
-4) Run the following commands respectively:
-
-    mvn exec:java -Dexec.mainClass="com.hazelcast.springconfiguration.HazelcastDataTypes"
-    
-    mvn exec:java -Dexec.mainClass="com.hazelcast.springconfiguration.SpringClient"

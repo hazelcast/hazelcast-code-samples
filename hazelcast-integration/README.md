@@ -33,8 +33,6 @@
  	A Spring Boot application that uses Hazelcast Client to communicate with a Hazelcast Cluster that is deployed on a PCF installation using [Hazelcast for PCF](https://network.pivotal.io/hazelcast).
 - <h3>spark</h3>
 	Implementation of Spark Connector for Hazelcast.
-- <h3>spring-cache-manager</h3>
-	Implementation of spring cache provider integration of hazelcast as client-server application.
 - <h3>spring-configuration</h3>
 	Implementation of spring framework integration of hazelcast.
 - <h3>spring-data-hazelcast-chemistry-sample</h3>
@@ -43,12 +41,6 @@
 	Example of migrating from JPA to Hazelcast with Spring Data
 - <h3>spring-hibernate-2ndlevel-cache</h3>
 	Implementation of spring and hibernate 2nd level cache integration of hazelcast as customer managing application.
-- <h3>spring-jcache</h3>
-	Implementation of spring jcache integration with Hazelcast.
-- <h3>spring-security</h3>
-	Implementation of spring security integration with Hazelcast.
-- <h3>spring-transaction-manager</h3>
-	Implementation of Spring's `PlatformTransactionManager` to use Hazelcast's transactional data structures to demonstrate `HazelcastTransactionManager`.
 - <h3>springaware-annotation</h3>
 	Example usage of SpringAware annotation.
 - <h3>springaware-caching-jcache</h3>
