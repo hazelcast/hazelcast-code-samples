@@ -8,7 +8,7 @@ import com.hazelcast.map.IMap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-public class SpringClient {
+public class HazelcastSpringClient {
 
     public static void main(String[] args) {
         Config config = new Config();
