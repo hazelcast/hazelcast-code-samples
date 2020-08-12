@@ -1,0 +1,7 @@
+hazelcast:
+  license-key: ENTERPRISE_LICENSE
+  auditlog:
+    enabled: true
+    factory-class-name: auditlog.JsonAuditlogFactory
+    properties:
+      outputFile: auditlog-json.log
