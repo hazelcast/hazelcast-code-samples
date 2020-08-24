@@ -12,5 +12,5 @@ Execute the following command.
 
 Execute the following command.
 
-    mvn compile exec:java -Dexec.mainClass="com.hazelcast.spring.springaware.SpringAwareAnnotationXmlConfig" -Dexec.cleanupDaemonThreads=false
+    mvn compile exec:java -Dexec.mainClass="com.hazelcast.spring.springaware.SpringAwareAnnotationXMLConfig" -Dexec.cleanupDaemonThreads=false
 
