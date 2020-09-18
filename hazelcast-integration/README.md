@@ -29,8 +29,6 @@
 	Implementation of integration of MongoDB with hazelcast.
 - <h3>openshift</h3>
   	A guideline to start using Hazelcast on the Red Hat OpenShift platform.
-- <h3>pcf-integration</h3>
- 	A Spring Boot application that uses Hazelcast Client to communicate with a Hazelcast Cluster that is deployed on a PCF installation using [Hazelcast for PCF](https://network.pivotal.io/hazelcast).
 - <h3>spark</h3>
 	Implementation of Spark Connector for Hazelcast.
 - <h3>spring-configuration</h3>
