@@ -27,6 +27,7 @@
         <module>cp-atomiclong</module>
         <module>cp-atomicreference</module>
         <module>cp-countdownlatch</module>
+        <module>cp-listeners</module>
         <module>fenced-lock</module>
 		<module>fenced-lock-auto-release-on-session-close</module>
 		<module>fenced-lock-auto-release-on-shutdown</module>
