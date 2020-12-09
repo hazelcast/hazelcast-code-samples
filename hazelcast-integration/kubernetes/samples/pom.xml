@@ -21,10 +21,7 @@
     </properties>
 
     <modules>
-        <module>embedded</module>
-        <module>external-client</module>
         <module>springboot-k8s-hello-world</module>
-        <module>ssl</module>
     </modules>
 
 </project>
