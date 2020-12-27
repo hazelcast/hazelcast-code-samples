@@ -15,6 +15,10 @@ public class MultiTenantControl implements TenantControl {
     private String cacheName;
     private DestroyEventContext destroyEventContext;
 
+    public MultiTenantControl(String cacheName) {
+        this.cacheName = cacheName;
+    }
+
     @Override
     public Closeable setTenant() {
         ClassLoader original;
@@ -23,6 +27,7 @@ public class MultiTenantControl implements TenantControl {
             original = Thread.currentThread().getContextClassLoader();
             Thread.currentThread().setContextClassLoader(CLASS_LOADER_PER_PREFIX.get(cacheName));
         } else {
+            System.out.println("No Tenant in the thread context");
             original = null;
         }
         return new TenantCloseable(original)::close;
