@@ -15,7 +15,7 @@ public class MultiTenantControl implements TenantControl {
     private String cacheName;
     private DestroyEventContext destroyEventContext;
 
-    public MultiTenantControl(String cacheName) {
+    MultiTenantControl(String cacheName) {
         this.cacheName = cacheName;
     }
 
@@ -41,7 +41,7 @@ public class MultiTenantControl implements TenantControl {
     @Override
     public void unregisterObject() {
         destroyEventContext.tenantUnavailable();
-        destroyEventContext = () -> {};
+        destroyEventContext = () -> { };
     }
 
     @Override
