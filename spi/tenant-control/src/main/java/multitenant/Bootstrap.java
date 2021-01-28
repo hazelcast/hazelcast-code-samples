@@ -15,6 +15,7 @@ import static java.util.Collections.singletonList;
 public class Bootstrap {
     public static void main(String[] args) {
         ClassLoader parent = Bootstrap.class.getClassLoader();
+        MultiTenantControlFactory.TENANT_CACHE.set("apps.app1");
         MultiTenantClassLoader multitenantClassLoader = new MultiTenantClassLoader(parent);
         // app1 classloader excludes app2, defines apps.app1.* classes on its own
         multitenantClassLoader.addClassLoader("apps.app1", new TenantClassloader(
