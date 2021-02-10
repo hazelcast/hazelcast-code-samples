@@ -17,12 +17,12 @@ public class Person implements IdentifiedDataSerializable {
 
     @Override
     public void readData(ObjectDataInput in) throws IOException {
-        this.name = in.readUTF();
+        this.name = in.readString();
     }
 
     @Override
     public void writeData(ObjectDataOutput out) throws IOException {
-        out.writeUTF(name);
+        out.writeString(name);
     }
 
     @Override

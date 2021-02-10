@@ -82,14 +82,14 @@ public class PortableDomainObjectExample extends AbstractApp {
         @Override
         public void writePortable(PortableWriter portableWriter) throws IOException {
             System.out.println("Writing portable");
-            portableWriter.writeUTF("name", name);
+            portableWriter.writeString("name", name);
             portableWriter.writeLong("id", id);
         }
 
         @Override
         public void readPortable(PortableReader portableReader) throws IOException {
             System.out.println("Reading portable");
-            name = portableReader.readUTF("name");
+            name = portableReader.readString("name");
             id = portableReader.readLong("id");
         }
 

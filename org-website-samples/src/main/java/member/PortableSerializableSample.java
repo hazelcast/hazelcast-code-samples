@@ -32,14 +32,14 @@ public class PortableSerializableSample {
         @Override
         public void writePortable(PortableWriter writer) throws IOException {
             writer.writeInt("id", id);
-            writer.writeUTF("name", name);
+            writer.writeString("name", name);
             writer.writeLong("lastOrder", lastOrder.getTime());
         }
 
         @Override
         public void readPortable(PortableReader reader) throws IOException {
             id = reader.readInt("id");
-            name = reader.readUTF("name");
+            name = reader.readString("name");
             lastOrder = new Date(reader.readLong("lastOrder"));
         }
     }

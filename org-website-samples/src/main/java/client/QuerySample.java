@@ -54,14 +54,14 @@ public class QuerySample {
 
         @Override
         public void writePortable(PortableWriter writer) throws IOException {
-            writer.writeUTF("username", username);
+            writer.writeString("username", username);
             writer.writeInt("age", age);
             writer.writeBoolean("active", active);
         }
 
         @Override
         public void readPortable(PortableReader reader) throws IOException {
-            username = reader.readUTF("username");
+            username = reader.readString("username");
             age = reader.readInt("age");
             active = reader.readBoolean("active");
         }

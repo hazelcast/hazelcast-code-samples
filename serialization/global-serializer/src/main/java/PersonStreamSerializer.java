@@ -17,11 +17,11 @@ public class PersonStreamSerializer implements StreamSerializer<Person> {
 
     @Override
     public void write(ObjectDataOutput out, Person object) throws IOException {
-        out.writeUTF(object.getName());
+        out.writeString(object.getName());
     }
 
     @Override
     public Person read(ObjectDataInput in) throws IOException {
-        return new Person(in.readUTF());
+        return new Person(in.readString());
     }
 }

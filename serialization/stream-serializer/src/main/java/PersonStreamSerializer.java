@@ -13,12 +13,12 @@ public class PersonStreamSerializer implements StreamSerializer<Person> {
 
     @Override
     public void write(ObjectDataOutput out, Person object) throws IOException {
-        out.writeUTF(object.getName());
+        out.writeString(object.getName());
     }
 
     @Override
     public Person read(ObjectDataInput in) throws IOException {
-        String name = in.readUTF();
+        String name = in.readString();
         return new Person(name);
     }
 

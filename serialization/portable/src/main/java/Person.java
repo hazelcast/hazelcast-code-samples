@@ -28,13 +28,13 @@ public class Person implements Portable {
     @Override
     public void writePortable(PortableWriter writer) throws IOException {
         System.out.println("Serialize");
-        writer.writeUTF("name", name);
+        writer.writeString("name", name);
     }
 
     @Override
     public void readPortable(PortableReader reader) throws IOException {
         System.out.println("Deserialize");
-        this.name = reader.readUTF("name");
+        this.name = reader.readString("name");
     }
 
     @Override

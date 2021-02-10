@@ -14,13 +14,13 @@ public class CarStreamSerializer implements StreamSerializer<Car> {
     @Override
     public void write(ObjectDataOutput out, Car car) throws IOException {
         out.writeObject(car.getOwner());
-        out.writeUTF(car.getColor());
+        out.writeString(car.getColor());
     }
 
     @Override
     public Car read(ObjectDataInput in) throws IOException {
         Person owner = in.readObject();
-        String color = in.readUTF();
+        String color = in.readString();
         return new Car(owner, color);
     }
 

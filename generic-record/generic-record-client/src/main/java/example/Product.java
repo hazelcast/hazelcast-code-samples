@@ -31,13 +31,13 @@ public class Product implements Portable {
 
     @Override
     public void writePortable(PortableWriter writer) throws IOException {
-        writer.writeUTF("name", name);
+        writer.writeString("name", name);
         writer.writeInt("quantity", quantity);
     }
 
     @Override
     public void readPortable(PortableReader reader) throws IOException {
-        name = reader.readUTF("name");
+        name = reader.readString("name");
         quantity = reader.readInt("quantity");
     }
 
