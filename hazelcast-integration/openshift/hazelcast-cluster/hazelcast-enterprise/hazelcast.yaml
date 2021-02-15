@@ -27,7 +27,7 @@ parameters:
   required: true
 - name: ENTERPRISE_LICENSE_KEY
   description: "Defines Hazelcast Enterprise License Key, please enter your License"
-  required": true
+  required: true
 - name: MANAGEMENT_CENTER_IMAGE
   description: "Defines the location of Hazelcast Management Center image"
   value: hazelcast/management-center:4.0
