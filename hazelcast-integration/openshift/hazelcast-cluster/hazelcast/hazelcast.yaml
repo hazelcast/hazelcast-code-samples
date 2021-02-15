@@ -24,7 +24,7 @@ parameters:
 - name: HAZELCAST_REPLICAS
   description: "Number of Hazelcast members"
   value : "3"
-  required": true
+  required: true
 
 objects:
 - apiVersion: v1
