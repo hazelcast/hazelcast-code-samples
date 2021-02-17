@@ -30,14 +30,14 @@ public class User implements DataSerializable {
     @Override
     public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
         objectDataOutput.writeInt(this.userId);
-        objectDataOutput.writeUTF(this.lastCardUsePlace);
+        objectDataOutput.writeString(this.lastCardUsePlace);
         objectDataOutput.writeLong(this.lastCardUseTimestamp);
     }
 
     @Override
     public void readData(ObjectDataInput objectDataInput) throws IOException {
         this.userId = objectDataInput.readInt();
-        this.lastCardUsePlace = objectDataInput.readUTF();
+        this.lastCardUsePlace = objectDataInput.readString();
         this.lastCardUseTimestamp = objectDataInput.readLong();
     }
 }

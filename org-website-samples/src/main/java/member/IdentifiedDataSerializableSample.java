@@ -22,13 +22,13 @@ public class IdentifiedDataSerializableSample {
         @Override
         public void readData(ObjectDataInput in) throws IOException {
             id = in.readInt();
-            name = in.readUTF();
+            name = in.readString();
         }
 
         @Override
         public void writeData(ObjectDataOutput out) throws IOException {
             out.writeInt(id);
-            out.writeUTF(name);
+            out.writeString(name);
         }
 
         @Override

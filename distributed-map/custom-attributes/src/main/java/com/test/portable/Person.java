@@ -38,13 +38,13 @@ public class Person implements Portable {
 
     @Override
     public void writePortable(PortableWriter out) throws IOException {
-        out.writeUTF("name", name);
+        out.writeString("name", name);
         out.writePortableArray("limbs", limbs);
     }
 
     @Override
     public void readPortable(PortableReader in) throws IOException {
-        name = in.readUTF("name");
+        name = in.readString("name");
         limbs = in.readPortableArray("limbs");
     }
 }

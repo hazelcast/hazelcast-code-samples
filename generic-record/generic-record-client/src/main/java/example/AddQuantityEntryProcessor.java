@@ -22,17 +22,18 @@ public class AddQuantityEntryProcessor implements Serializable, EntryProcessor {
     @Override
     public Object process(Map.Entry entry) {
         GenericRecord genericRecord = (GenericRecord) entry.getValue();
-        String name = genericRecord.readUTF("name");
+        String name = genericRecord.getString("name");
         if (!name.equals(productName)) {
             return null;
         }
 
-        int quantity = genericRecord.readInt("quantity");
+        int quantity = genericRecord.getInt("quantity");
         quantity += additionalQuantity;
 
         GenericRecord newRecord = genericRecord.newBuilder()
-                .writeUTF("name", name)
-                .writeInt("quantity", quantity).build();
+                .setString("name", name)
+                .setInt("quantity", quantity)
+                .build();
 
         entry.setValue(newRecord);
         return null;

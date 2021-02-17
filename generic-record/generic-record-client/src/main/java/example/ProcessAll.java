@@ -27,7 +27,7 @@ public class ProcessAll implements HazelcastInstanceAware, Serializable, Callabl
             if (poll == null) {
                 break;
             }
-            int quantity = poll.readInt("quantity");
+            int quantity = poll.getInt("quantity");
             totalNumberOfItems += quantity;
         }
         return totalNumberOfItems;
