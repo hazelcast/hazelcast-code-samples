@@ -3,7 +3,9 @@ package com.hazelcast.samples.json.jsongrid;
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
-import com.hazelcast.query.Predicates;
+import com.hazelcast.sql.*;
+import com.hazelcast.query.*;
+import com.hazelcast.aggregation.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -30,29 +32,54 @@ public class ApplicationRunner implements CommandLineRunner {
     @Autowired
     private HazelcastInstance hazelcastInstance;
 
-    @Override
-    public void run(String... args) throws Exception {
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	@Override
+	public void run(String... args) throws Exception {
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-        this.confirmDataLoaded();
-           System.out.println("- - - - - - - - - - - - - -");
+		this.confirmDataLoaded();
+		System.out.println("- - - - - - - - - - - - - -");
 
-           if (!this.testIfIMapExists(POTUS_IMAP_NAME)) {
-               log.error("Cannot find IMap '{}', check server logs", POTUS_IMAP_NAME);
-           }
+		if (!this.testIfIMapExists(POTUS_IMAP_NAME)) {
+			log.error("Cannot find IMap '{}', check server logs", POTUS_IMAP_NAME);
+		}
 
-           if (!this.testIfIMapExists(VPOTUS_IMAP_NAME)) {
-               log.error("Cannot find IMap '{}', check server logs", VPOTUS_IMAP_NAME);
-           }
+		if (!this.testIfIMapExists(VPOTUS_IMAP_NAME)) {
+			log.error("Cannot find IMap '{}', check server logs", VPOTUS_IMAP_NAME);
+		}
 
-           this.marchFourth();
-           System.out.println("- - - - - - - - - - - - - -");
+		this.marchFourth();
+		System.out.println("- - - - - - - - - - - - - -");
 
-           this.johnForPresident();
-           System.out.println("- - - - - - - - - - - - - -");
+		this.johnForPresident();
+		System.out.println("- - - - - - - - - - - - - -");
 
-           System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-   }
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("AJ: Running predicate query");
+
+
+		IMap<?, ?> iMap = this.hazelcastInstance.getMap(POTUS_IMAP_NAME);
+
+		//PredicateBuilder builder = Predicates.newPredicateBuilder();
+		Predicate filter = Predicates.like( "FIRSTNAME", "John" );
+
+		/*
+
+		System.out.println(
+			iMap.aggregate(Aggregators.longSum("ID"), Predicates.like("FIRSTNAME", "John"))
+				);
+				*/
+
+
+		/*
+		// Collection<?> results = iMap.values(Predicates.sql(sql));
+		Collection<?> results = iMap.values(filter);
+
+		for (Object result : results) {
+			System.out.println(result);
+		}
+		*/
+
+	}
 
     /**
      * <p>Confirm data actually exists to query. We could sort by name
@@ -152,8 +179,7 @@ public class ApplicationRunner implements CommandLineRunner {
 
         IMap<?, ?> iMap = this.hazelcastInstance.getMap(iMapName);
 
-        Collection<?> results =
-                iMap.values(Predicates.sql(sql));
+        Collection<?> results = iMap.values(Predicates.sql(sql));
 
         for (Object result : results) {
             System.out.println(result);

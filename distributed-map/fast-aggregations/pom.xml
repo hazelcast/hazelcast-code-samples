@@ -12,6 +12,15 @@
     <name>Fast Aggregations</name>
     <description>Fast Aggregations Examples</description>
 
+	<dependencies>
+
+        <dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+        </dependency>
+
+    </dependencies>
+
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>

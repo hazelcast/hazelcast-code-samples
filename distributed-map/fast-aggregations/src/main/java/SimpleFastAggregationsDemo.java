@@ -4,8 +4,10 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class SimpleFastAggregationsDemo {
 
@@ -15,14 +17,18 @@ public class SimpleFastAggregationsDemo {
     private static final String[] LAST_NAMES
             = {"Veentjer", "Luck", "Engelbert", "Ozturk", "Malikov", "Matsumura", "Arslan", "Akar"};
 
+	static HazelcastInstance hz;
+
     public static void main(String[] args) {
         // build Hazelcast cluster
         System.out.println("Starting instance 1");
-        Hazelcast.newHazelcastInstance();
+        hz = Hazelcast.newHazelcastInstance();
         System.out.println("Starting instance 2");
         Hazelcast.newHazelcastInstance();
+		/*
         System.out.println("Starting instance 3");
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        Hazelcast.newHazelcastInstance();
+		*/
 
         // retrieve the Hazelcast IMap
         IMap<String, Employee> employees = hz.getMap("employees");
@@ -30,50 +36,59 @@ public class SimpleFastAggregationsDemo {
         // fill in demo data
         fillEmployeeMap(employees);
 
+
         // we simple calculate a average over all salaries on all employees
-        simpleCustomAverageAggregation(employees);
+        simpleCustomSumAggregation(employees);
 
         Hazelcast.shutdownAll();
     }
 
-    private static void simpleCustomAverageAggregation(IMap<String, Employee> employees) {
-        System.out.println("Calculating salary average");
+    private static void simpleCustomSumAggregation(IMap<String, Employee> employees) {
+        System.out.println("Calculating summed salary by lastname");
+		hz.getCluster().getMembers().forEach(i -> System.out.println("AJ: " + i));
 
-        double avgSalary = employees.aggregate(new Aggregator<Map.Entry<String, Employee>, Double>() {
 
-            protected long sum;
-            protected long count;
+		long startTime = System.nanoTime();
+        Map<String, Integer> sumSalaries = employees.aggregate(new Aggregator<Map.Entry<String, Employee>, Map<String, Integer>>() {
+
+			// Stores the sum of salary by lastname
+            protected HashMap<String, Integer> sumLastname = new HashMap<String, Integer>();
 
             @Override
             public void accumulate(Map.Entry<String, Employee> entry) {
-                count++;
-                sum += entry.getValue().getSalaryPerMonth();
+				String lastname = entry.getValue().getLastName();
+				Integer sum = sumLastname.getOrDefault(lastname, 0) + entry.getValue().getSalaryPerMonth();
+				sumLastname.put(lastname, sum);
             }
 
             @Override
             public void combine(Aggregator aggregator) {
 
-                this.sum += this.getClass().cast(aggregator).sum;
-                this.count += this.getClass().cast(aggregator).count;
+				//long startTime = System.nanoTime();
+				for(Map.Entry<String, Integer> entry: this.getClass().cast(aggregator).sumLastname.entrySet()) {
+					String lastname = entry.getKey();
+					Integer sum = entry.getValue() + this.sumLastname.getOrDefault(lastname, 0);
+					this.sumLastname.put(lastname, sum);
+				}
+				//double totalTime = (System.nanoTime() - startTime)/1E9;
+				//System.out.println("combined in : " + totalTime + "secs");
             }
 
             @Override
-            public Double aggregate() {
-                if (count == 0) {
-                    return null;
-                }
-                return ((double) sum / (double) count);
+            public Map<String, Integer> aggregate() {
+				// TODO can add ORDER BY and LIMIT in this step if needed
+                return sumLastname;
             }
 
         });
-
-        System.out.println("Overall average salary: " + avgSalary);
+		double totalTime = (System.nanoTime() - startTime)/1E9;
+        System.out.println("Overall summed salaries: " + sumSalaries + " in " + totalTime + "secs");
         System.out.println("\n");
     }
 
     private static void fillEmployeeMap(IMap<String, Employee> employees) {
         Random random = new Random();
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 2E6; i++) {
             String companyName = COMPANIES[random.nextInt(COMPANIES.length)];
             String firstName = FIRST_NAMES[random.nextInt(FIRST_NAMES.length)];
             String lastName = LAST_NAMES[random.nextInt(LAST_NAMES.length)];

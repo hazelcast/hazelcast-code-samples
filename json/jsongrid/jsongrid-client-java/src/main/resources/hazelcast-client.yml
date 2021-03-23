@@ -5,3 +5,10 @@ hazelcast-client:
   network:
     cluster-members:
       - 127.0.0.1:9701
+
+
+logging:
+  pattern:
+      console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  level:
+    root: DEBUG

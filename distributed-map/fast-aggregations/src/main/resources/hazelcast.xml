@@ -4,22 +4,16 @@
                                http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
 
-    <network>
+	<network>
         <join>
-            <multicast enabled="true"/>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="true">
+                <member-list>
+                    <member>127.0.0.1</member>
+                </member-list>
+            </tcp-ip>
         </join>
     </network>
 
-    <map name="cities">
-        <time-to-live-seconds>4</time-to-live-seconds>
-        <indexes>
-            <index>
-                <attributes>
-                    <attribute>name</attribute>
-                </attributes>
-            </index>
-        </indexes>
-        <backup-count>1</backup-count>
-        <async-backup-count>1</async-backup-count>
-    </map>
+
 </hazelcast>
