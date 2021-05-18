@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
             <artifactId>hazelcast-jet-kafka</artifactId>
-            <version>${project.version}</version>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>

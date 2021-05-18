@@ -37,7 +37,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.hazelcast.jet.examples.wordcount.WordCount</mainClass>
+                            <mainClass>com.hazelcast.samples.jet.wordcount.WordCount</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

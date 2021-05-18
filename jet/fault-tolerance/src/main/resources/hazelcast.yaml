@@ -1,5 +1,5 @@
 hazelcast:
-  cluster-name: jet
+  cluster-name: dev
   network:
     join:
       multicast:

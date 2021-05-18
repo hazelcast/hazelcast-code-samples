@@ -1,5 +1,5 @@
 {
-"namespace": "com.hazelcast.jet.examples.files.unifiedapi.generated",
+"namespace": "com.hazelcast.samples.jet.files.unifiedapi.generated",
   "type": "record",
   "name": "AvroTrade",
   "fields": [

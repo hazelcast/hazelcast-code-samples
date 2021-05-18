@@ -23,9 +23,10 @@
     <artifactId>jet-files-cloud</artifactId>
 
     <parent>
-        <groupId>com.hazelcast.jet.examples</groupId>
-        <artifactId>hazelcast-jet-examples</artifactId>
-        <version>4.6-SNAPSHOT</version>
+        <groupId>com.hazelcast.samples.jet</groupId>
+        <artifactId>jet</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <dependencies>
@@ -35,17 +36,17 @@
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
             <artifactId>hazelcast-jet-files-s3</artifactId>
-            <version>${project.version}</version>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
             <artifactId>hazelcast-jet-files-gcs</artifactId>
-            <version>${project.version}</version>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
             <artifactId>hazelcast-jet-files-azure</artifactId>
-            <version>${project.version}</version>
+            <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
 </project>

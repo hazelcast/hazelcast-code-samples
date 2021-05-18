@@ -29,8 +29,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hazelcast.jet.examples</groupId>
-            <artifactId>hazelcast-jet-examples-trade-source</artifactId>
+            <groupId>com.hazelcast.samples.jet</groupId>
+            <artifactId>jet-trade-source</artifactId>
             <version>${project.version}</version>
         </dependency>
 

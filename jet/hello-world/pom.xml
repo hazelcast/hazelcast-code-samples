@@ -37,7 +37,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.hazelcast.jet.examples.helloworld.HelloWorld</mainClass>
+                            <mainClass>com.hazelcast.samples.jet.helloworld.HelloWorld</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

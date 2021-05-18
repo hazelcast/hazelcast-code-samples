@@ -1,5 +1,5 @@
 {
-"namespace": "com.hazelcast.jet.examples.hadoop.generated",
+"namespace": "com.hazelcast.samples.jet.hadoop.generated",
   "type": "record",
   "name": "User",
   "fields": [

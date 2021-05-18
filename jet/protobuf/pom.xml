@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
             <artifactId>hazelcast-jet-protobuf</artifactId>
-            <version>${project.version}</version>
+            <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
 

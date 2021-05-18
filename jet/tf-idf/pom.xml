@@ -40,8 +40,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hazelcast.jet.examples</groupId>
-            <artifactId>hazelcast-jet-examples-wordcount</artifactId>
+            <groupId>com.hazelcast.samples.jet</groupId>
+            <artifactId>jet-wordcount</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

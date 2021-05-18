@@ -46,8 +46,8 @@
         <module>files-cloud</module>
         <module>grpc</module>
         <module>hadoop</module>
+        <module>hazelcast-connectors</module>
         <module>hello-world</module>
-        <module>imdg-connectors</module>
         <module>jdbc</module>
         <module>jms</module>
         <module>job-management</module>
@@ -61,35 +61,29 @@
         <module>sockets</module>
         <module>source-sink-builder</module>
         <module>sliding-windows</module>
-        <module>spring</module>
-        <module>spring-boot</module>
         <module>tf-idf</module>
         <module>trade-source</module>
         <module>wordcount</module>
     </modules>
 
     <properties>
-        <sonar.skip>true</sonar.skip>
-        <spotbugs.skip>true</spotbugs.skip>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.hazelcast.jet</groupId>
-            <artifactId>hazelcast-jet</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.0</version>
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

@@ -1,1 +1,1 @@
-com.hazelcast.jet.examples.protobuf.ProtobufSerializerHookAdapter$ProductSerializerHook
+com.hazelcast.samples.jet.protobuf.ProtobufSerializerHookAdapter$ProductSerializerHook

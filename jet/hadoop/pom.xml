@@ -60,14 +60,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hazelcast.jet.examples</groupId>
-            <artifactId>hazelcast-jet-examples-wordcount</artifactId>
+            <groupId>com.hazelcast.samples.jet</groupId>
+            <artifactId>jet-wordcount</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
             <artifactId>hazelcast-jet-hadoop</artifactId>
-            <version>${project.version}</version>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.parquet</groupId>

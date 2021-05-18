@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
             <artifactId>hazelcast-jet-python</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -50,7 +50,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.hazelcast.jet.examples.python.Python</mainClass>
+                            <mainClass>com.hazelcast.samples.jet.python.Python</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
