@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.core.JobStatus;
 import com.hazelcast.jet.kafka.KafkaSources;
@@ -99,7 +99,7 @@ public class KafkaJsonSource {
             createAndFillTopic();
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
 
             long start = System.nanoTime();
 

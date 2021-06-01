@@ -19,7 +19,7 @@ package com.hazelcast.samples.jet.files;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.aggregate.AggregateOperations;
 import com.hazelcast.jet.pipeline.BatchSource;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -60,7 +60,7 @@ public class SalesJsonAnalyzer {
         String sourceDir = args[0];
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         Pipeline p = buildPipeline(sourceDir);
 
         try {

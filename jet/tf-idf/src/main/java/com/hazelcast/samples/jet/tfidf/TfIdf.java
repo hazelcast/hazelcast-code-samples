@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.tfidf;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.Util;
 import com.hazelcast.jet.pipeline.BatchStage;
@@ -185,7 +185,7 @@ public class TfIdf {
     }
 
     private void buildInvertedIndex() {
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         Job job = jet.newJob(buildPipeline());
         long start = System.nanoTime();
         job.join();

@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.python;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Observable;
 import com.hazelcast.jet.Util;
 import com.hazelcast.jet.config.JobConfig;
@@ -72,7 +72,7 @@ public class Python {
         Pipeline p = buildPipeline(baseDir.toString());
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
             Observable<String> observable = jet.getObservable(RESULTS);
             observable.addObserver(System.out::println);

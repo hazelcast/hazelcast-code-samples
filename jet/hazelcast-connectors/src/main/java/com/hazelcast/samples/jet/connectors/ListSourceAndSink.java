@@ -19,7 +19,7 @@ package com.hazelcast.samples.jet.connectors;
 import com.hazelcast.collection.IList;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -42,7 +42,7 @@ public class ListSourceAndSink {
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
 
         try {
             IList<Integer> inputList = hz.getList(INPUT_LIST);

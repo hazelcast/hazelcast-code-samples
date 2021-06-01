@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.function.ComparatorEx;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.BatchSource;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -67,7 +67,7 @@ public class GCSWordCount {
 
         try {
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             System.out.print("\nCounting words from " + inputPath);
             long start = nanoTime();
             Pipeline p = new GCSWordCount().buildPipeline(inputPath);

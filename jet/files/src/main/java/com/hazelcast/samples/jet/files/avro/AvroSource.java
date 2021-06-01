@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.files.avro;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Util;
 import com.hazelcast.jet.avro.AvroSources;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -55,7 +55,7 @@ public class AvroSource {
     private void go() {
         try {
             setup();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             jet.newJob(buildPipeline()).join();
 
             IMap<String, User> map = hz.getMap(AvroSink.MAP_NAME);

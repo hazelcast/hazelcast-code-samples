@@ -19,7 +19,7 @@ package com.hazelcast.samples.jet.faulttolerance;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.aggregate.AggregateOperations;
 import com.hazelcast.jet.config.JobConfig;
@@ -92,8 +92,8 @@ public class FaultTolerance {
 
         // create a client and submit the price analyzer pipeline
         HazelcastInstance client = HazelcastClient.newHazelcastClient();
-        JetInstance jetClient = client.getJetInstance();
-        Job job = jetClient.newJob(buildPipeline(), config);
+        JetService jetFromClient = client.getJet();
+        Job job = jetFromClient.newJob(buildPipeline(), config);
 
         Thread.sleep(1000);
 

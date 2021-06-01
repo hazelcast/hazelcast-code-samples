@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.jobmanagement;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.JobAlreadyExistsException;
 import com.hazelcast.jet.config.JobConfig;
@@ -52,8 +52,8 @@ public class ExclusiveJobExecution {
 
         JobConfig jobConfig = new JobConfig().setName("namedJob");
 
-        JetInstance jet1 = hz1.getJetInstance();
-        JetInstance jet2 = hz2.getJetInstance();
+        JetService jet1 = hz1.getJet();
+        JetService jet2 = hz2.getJet();
 
         // Submit the same job from multiple Hazelcast instances
         Job job1 = jet1.newJobIfAbsent(p, jobConfig);

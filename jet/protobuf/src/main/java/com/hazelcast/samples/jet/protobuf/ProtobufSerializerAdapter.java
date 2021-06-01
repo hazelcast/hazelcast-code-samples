@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.protobuf;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -45,7 +45,7 @@ public class ProtobufSerializerAdapter {
     private void go() {
         try {
             setup();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             JobConfig config = new JobConfig()
                     .registerSerializer(Broker.class, BrokerSerializer.class);
             jet.newJob(buildPipeline(), config).join();

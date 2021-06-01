@@ -20,7 +20,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.function.BiFunctionEx;
 import com.hazelcast.function.FunctionEx;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.hadoop.HadoopSinks;
 import com.hazelcast.jet.hadoop.HadoopSources;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -76,7 +76,7 @@ public class HadoopWordCount {
     public static void executeSample(JobConf jobConf, Path inputPath, Path outputPath) {
         try {
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             System.out.print("\nCounting words from " + inputPath);
             long start = nanoTime();
             Pipeline p = buildPipeline(jobConf, inputPath, outputPath);

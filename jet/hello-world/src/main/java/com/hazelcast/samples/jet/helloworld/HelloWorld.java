@@ -19,7 +19,7 @@ package com.hazelcast.samples.jet.helloworld;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.function.ComparatorEx;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Observable;
 import com.hazelcast.jet.aggregate.AggregateOperations;
 import com.hazelcast.jet.config.JobConfig;
@@ -64,7 +64,7 @@ public class HelloWorld {
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
 
         Observable<List<Long>> observable = jet.getObservable(RESULTS);
         observable.addObserver(Observer.of(HelloWorld::printResults));

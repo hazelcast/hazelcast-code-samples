@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.files.unifiedapi;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.aggregate.AggregateOperations;
 import com.hazelcast.samples.jet.files.unifiedapi.generated.AvroTrade;
 import com.hazelcast.jet.pipeline.BatchSource;
@@ -117,9 +117,9 @@ public class TradeAnalyzerJob {
 
         Pipeline p = buildPipeline(Paths.get(sourceDir).toAbsolutePath().toString(), type);
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance instance = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
-            instance.newJob(p).join();
+            jet.newJob(p).join();
         } finally {
             Hazelcast.shutdownAll();
         }

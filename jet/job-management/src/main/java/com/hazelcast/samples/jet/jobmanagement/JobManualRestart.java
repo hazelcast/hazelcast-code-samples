@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.jobmanagement;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.core.JobStatus;
@@ -45,7 +45,7 @@ public class JobManualRestart {
                 .withoutTimestamps()
                 .writeTo(list("sink"));
 
-        JetInstance jet1 = hz1.getJetInstance();
+        JetService jet1 = hz1.getJet();
 
         // disable auto-scaling
         Job job = jet1.newJob(p, new JobConfig().setAutoScaling(false));

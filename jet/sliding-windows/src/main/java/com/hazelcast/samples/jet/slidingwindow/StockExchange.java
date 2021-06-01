@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.slidingwindow;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.samples.jet.tradesource.Trade;
 import com.hazelcast.samples.jet.tradesource.TradeSource;
@@ -66,7 +66,7 @@ public class StockExchange {
 
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
             Job job = jet.newJob(buildPipeline());
             SECONDS.sleep(JOB_DURATION);

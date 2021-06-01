@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.kafka;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.kafka.KafkaSinks;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -88,7 +88,7 @@ public class KafkaSink {
             createKafkaCluster();
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
 
             IMap<String, Integer> sourceMap = hz.getMap(SOURCE_NAME);
             fillIMap(sourceMap);

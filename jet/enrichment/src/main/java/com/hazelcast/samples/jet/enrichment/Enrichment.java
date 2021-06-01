@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.enrichment;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.datamodel.Tuple3;
 import com.hazelcast.samples.jet.enrichment.datamodel.Broker;
@@ -250,7 +250,7 @@ public final class Enrichment {
     }
 
     private void go() throws Exception {
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         EventGenerator eventGenerator = new EventGenerator(hz.getMap(TRADES));
         eventGenerator.start();
         try {

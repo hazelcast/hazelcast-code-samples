@@ -21,7 +21,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.function.BiFunctionEx;
 import com.hazelcast.function.FunctionEx;
 import com.hazelcast.function.SupplierEx;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.s3.S3Sinks;
 import com.hazelcast.jet.s3.S3Sources;
@@ -98,7 +98,7 @@ public class S3WordCount {
             System.out.println("Uploading books to bucket " + INPUT_BUCKET);
             uploadBooks(PREFIX);
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             System.out.print("\nCounting words from " + INPUT_BUCKET);
             long start = nanoTime();
             Pipeline p = buildPipeline();

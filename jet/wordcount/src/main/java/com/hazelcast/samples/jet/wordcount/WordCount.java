@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.wordcount;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -76,7 +76,7 @@ public class WordCount {
             System.out.println("\nCounting words... ");
             long start = System.nanoTime();
             Pipeline p = buildPipeline();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             jet.newJob(p).join();
             System.out.println("done in " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) + " milliseconds.");
             Map<String, Long> results = hz.getMap(COUNTS);

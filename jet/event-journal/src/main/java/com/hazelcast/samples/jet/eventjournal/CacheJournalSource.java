@@ -21,7 +21,7 @@ import com.hazelcast.config.CacheSimpleConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -45,7 +45,7 @@ public class CacheJournalSource {
         Config config = getConfig();
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         Hazelcast.newHazelcastInstance(config);
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
 
         try {
             Pipeline p = Pipeline.create();
@@ -56,7 +56,7 @@ public class CacheJournalSource {
 
             jet.newJob(p);
 
-            ICache<Integer, Integer> cache = jet.getCacheManager().getCache(CACHE_NAME);
+            ICache<Integer, Integer> cache = hz.getCacheManager().getCache(CACHE_NAME);
             for (int i = 0; i < 1000; i++) {
                 cache.put(i, i);
             }

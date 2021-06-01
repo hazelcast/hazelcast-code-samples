@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.elastic;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.elastic.ElasticClients;
 import com.hazelcast.jet.elastic.ElasticSinks;
 import com.hazelcast.jet.json.JsonUtil;
@@ -51,7 +51,7 @@ public class ElasticSinkExample {
                      map -> new IndexRequest("my-index").source(map)
              ));
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             jet.newJob(p).join();
         } finally {
             Hazelcast.shutdownAll();

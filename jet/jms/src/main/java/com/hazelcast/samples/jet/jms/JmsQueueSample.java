@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.jms;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -72,7 +72,7 @@ public class JmsQueueSample {
     private void go() throws Exception {
         try {
             setup();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             Job job = jet.newJob(buildPipeline());
             SECONDS.sleep(10);
             job.cancel();

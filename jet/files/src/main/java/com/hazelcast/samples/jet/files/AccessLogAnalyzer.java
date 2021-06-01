@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.files;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Traverser;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -82,7 +82,7 @@ public class AccessLogAnalyzer {
         Pipeline p = buildPipeline(sourceDir, targetDir);
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
 
         try {
             jet.newJob(p).join();

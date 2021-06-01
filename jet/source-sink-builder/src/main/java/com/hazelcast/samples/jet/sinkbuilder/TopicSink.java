@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.sinkbuilder;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sink;
 import com.hazelcast.jet.pipeline.Sources;
@@ -52,7 +52,7 @@ public class TopicSink {
 
     private static Sink<String> buildTopicSink() {
         return sinkBuilder("topicSink(" + TOPIC_NAME + ')',
-                        jet -> jet.jetInstance().getHazelcastInstance().<String>getTopic(TOPIC_NAME))
+                        ctx -> ctx.hazelcastInstance().<String>getTopic(TOPIC_NAME))
                 .<String>receiveFn((topic, message) -> topic.publish(message))
                 .build();
     }
@@ -63,7 +63,7 @@ public class TopicSink {
     public static void main(String[] args) {
         try {
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             System.out.println("Configure Topic Listener");
             ITopic<String> topic = hz.getTopic(TOPIC_NAME);
             addListener(topic, e -> System.out.println("Line starts with `The`: " + e));

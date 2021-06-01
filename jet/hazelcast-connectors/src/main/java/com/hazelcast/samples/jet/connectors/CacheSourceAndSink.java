@@ -21,7 +21,7 @@ import com.hazelcast.config.CacheSimpleConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -45,10 +45,10 @@ public class CacheSourceAndSink {
               .addCacheConfig(new CacheSimpleConfig().setName(SINK_NAME));
 
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
 
         try {
-            ICache<Integer, Integer> sourceCache = jet.getCacheManager().getCache(SOURCE_NAME);
+            ICache<Integer, Integer> sourceCache = hz.getCacheManager().getCache(SOURCE_NAME);
             for (int i = 0; i < ITEM_COUNT; i++) {
                 sourceCache.put(i, i);
             }
@@ -59,7 +59,7 @@ public class CacheSourceAndSink {
 
             jet.newJob(p).join();
 
-            ICache<Integer, Integer> sinkCache = jet.getCacheManager().getCache(SINK_NAME);
+            ICache<Integer, Integer> sinkCache = hz.getCacheManager().getCache(SINK_NAME);
             System.out.println("Sink cache entries: ");
             sinkCache.forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
         } finally {

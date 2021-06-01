@@ -21,7 +21,7 @@ import com.hazelcast.cluster.Address;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -60,7 +60,7 @@ public class RemoteMapJournalSource {
              .map(Entry::getValue)
              .writeTo(Sinks.list(SINK_NAME));
 
-            JetInstance jet = localHz.getJetInstance();
+            JetService jet = localHz.getJet();
             jet.newJob(p);
 
             IMap<Integer, Integer> map = remoteHz.getMap(MAP_NAME);

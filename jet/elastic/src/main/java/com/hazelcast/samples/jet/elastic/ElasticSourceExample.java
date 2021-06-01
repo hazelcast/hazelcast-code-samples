@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.elastic;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Observable;
 import com.hazelcast.jet.datamodel.Tuple2;
 import com.hazelcast.jet.elastic.ElasticSources;
@@ -70,7 +70,7 @@ public class ElasticSourceExample {
              .writeTo(Sinks.observable(ROLES_OBSERVABLE));
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
 
             Observable<Entry<String, List<String>>> roles = jet.getObservable(ROLES_OBSERVABLE);
             roles.addObserver(System.out::println);

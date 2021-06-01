@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.hadoop.parquet;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.samples.jet.hadoop.generated.User;
 import com.hazelcast.jet.hadoop.HadoopSinks;
 import com.hazelcast.jet.hadoop.HadoopSources;
@@ -80,7 +80,7 @@ public class HadoopParquet {
         try {
             createParquetFile();
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
 
             Configuration jobConfig = createJobConfig(Job.getInstance(), inputPath, outputPath);
             jet.newJob(buildPipeline(jobConfig)).join();
@@ -96,7 +96,7 @@ public class HadoopParquet {
 
         try {
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
 
             Configuration jobConfig = createJobConfig(jobWithS3AccessKeys(), inputPath, outputPath);
             jet.newJob(buildPipeline(jobConfig)).join();

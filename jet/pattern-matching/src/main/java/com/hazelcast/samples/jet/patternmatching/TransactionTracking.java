@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.patternmatching;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.samples.jet.patternmatching.support.TransactionEvent;
 import com.hazelcast.samples.jet.patternmatching.support.TransactionStatusGui;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -87,7 +87,7 @@ public final class TransactionTracking {
 
     public static void main(String[] args) {
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
             new TransactionStatusGui(hz.getMap(STATUS_MAP_NAME));
             jet.newJob(buildPipeline()).join();

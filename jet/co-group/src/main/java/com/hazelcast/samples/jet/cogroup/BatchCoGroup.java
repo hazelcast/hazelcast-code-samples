@@ -19,7 +19,7 @@ package com.hazelcast.samples.jet.cogroup;
 import com.hazelcast.collection.IList;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.datamodel.ItemsByTag;
 import com.hazelcast.jet.datamodel.Tag;
 import com.hazelcast.jet.datamodel.Tuple3;
@@ -137,7 +137,7 @@ public final class BatchCoGroup {
     private void go() {
         prepareSampleData();
         try {
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             jet.newJob(coGroupDirect()).join();
             validateCoGroupResults();
 

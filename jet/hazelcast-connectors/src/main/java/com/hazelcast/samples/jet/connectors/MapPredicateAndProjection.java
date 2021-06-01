@@ -20,7 +20,7 @@ import com.hazelcast.collection.IList;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -55,7 +55,7 @@ public class MapPredicateAndProjection {
                 TradePortableFactory.FACTORY_ID, new TradePortableFactory()
         );
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
             System.out.println("Creating " + ITEM_COUNT + " entries...");
             IMap<String, Trade> sourceMap = hz.getMap(SOURCE_NAME);

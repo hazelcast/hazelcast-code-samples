@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.cogroup;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.datamodel.ItemsByTag;
 import com.hazelcast.jet.datamodel.Tag;
@@ -59,7 +59,7 @@ public final class WindowedCoGroup {
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
         ProducerTask producer = new ProducerTask(hz);
 
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
             // uncomment one of these
 //            Pipeline p = aggregate();

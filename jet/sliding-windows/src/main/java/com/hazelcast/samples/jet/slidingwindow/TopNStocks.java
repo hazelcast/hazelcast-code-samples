@@ -19,7 +19,7 @@ package com.hazelcast.samples.jet.slidingwindow;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.function.ComparatorEx;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.aggregate.AggregateOperation1;
 import com.hazelcast.jet.datamodel.KeyedWindowResult;
@@ -90,7 +90,7 @@ public class TopNStocks {
 
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
             Job job = jet.newJob(buildPipeline());
             SECONDS.sleep(JOB_DURATION);

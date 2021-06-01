@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.earlyresults;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.samples.jet.tradesource.Trade;
 import com.hazelcast.samples.jet.tradesource.TradeSource;
@@ -75,7 +75,7 @@ public final class TradingVolumeOverTime {
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
         new TradingVolumeGui(hz.getList(VOLUME_LIST_NAME));
 
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
             Job job = jet.newJob(buildPipeline());
             SECONDS.sleep(DURATION_SECONDS);

@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.kafka.avro;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.core.JobStatus;
 import com.hazelcast.jet.kafka.KafkaSources;
@@ -99,7 +99,7 @@ public class KafkaAvroSource {
             createAndFillTopic();
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
 
             Job job = jet.newJob(buildPipeline());
             SECONDS.sleep(5);

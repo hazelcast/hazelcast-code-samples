@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.sourcebuilder;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.samples.jet.sourcebuilder.support.MemoryUsageMetric;
 import com.hazelcast.samples.jet.sourcebuilder.support.SystemMonitorGui;
 import com.hazelcast.samples.jet.sourcebuilder.support.SystemMonitorHttpService;
@@ -137,7 +137,7 @@ public class HttpSource {
         server.start();
         try {
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             new SystemMonitorGui(hz.getMap(MAP_NAME));
             runPipeline(jet);
         } finally {
@@ -146,7 +146,7 @@ public class HttpSource {
         }
     }
 
-    private static void runPipeline(JetInstance jet) {
+    private static void runPipeline(JetService jet) {
         System.out.println("\nRunning the pipeline ");
         Pipeline p = buildPipeline();
         jet.newJob(p).join();

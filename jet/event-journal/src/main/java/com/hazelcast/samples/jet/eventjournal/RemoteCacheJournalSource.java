@@ -23,7 +23,7 @@ import com.hazelcast.config.CacheSimpleConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -60,7 +60,7 @@ public class RemoteCacheJournalSource {
              .map(Entry::getValue)
              .writeTo(Sinks.list(SINK_NAME));
 
-            JetInstance jet = localHz.getJetInstance();
+            JetService jet = localHz.getJet();
             jet.newJob(p);
 
             ICache<Integer, Integer> cache = remoteHz.getCacheManager().getCache(CACHE_NAME);

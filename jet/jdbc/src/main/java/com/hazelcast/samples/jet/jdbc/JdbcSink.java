@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.jdbc;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -69,7 +69,7 @@ public class JdbcSink {
         try {
             setup();
             Pipeline p = buildPipeline(connectionUrl());
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             jet.newJob(p).join();
             printTable();
         } finally {

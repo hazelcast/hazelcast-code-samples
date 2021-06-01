@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.sessionwindow;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.aggregate.AggregateOperation1;
 import com.hazelcast.jet.datamodel.KeyedWindowResult;
 import com.hazelcast.jet.datamodel.Tuple2;
@@ -96,7 +96,7 @@ public class SessionWindow {
 
     public static void main(String[] args) throws Exception {
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         try {
             jet.newJob(buildPipeline());
             Thread.sleep(JOB_DURATION_MS);

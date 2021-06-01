@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.grpc;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.grpc.GrpcService;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -132,7 +132,7 @@ public final class GRPCEnrichment {
         EventGenerator eventGenerator = new EventGenerator(hz.getMap(TRADES));
         eventGenerator.start();
         try (Closeable server = startGRPCServer()) {
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             Pipeline p = enrichUsingGRPC();
             Job job = jet.newJob(p);
             eventGenerator.generateEventsForFiveSeconds();

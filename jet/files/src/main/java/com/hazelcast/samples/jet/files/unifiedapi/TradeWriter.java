@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.files.unifiedapi;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.avro.AvroSinks;
 import com.hazelcast.samples.jet.files.unifiedapi.generated.AvroTrade;
 import com.hazelcast.jet.hadoop.HadoopSinks;
@@ -71,14 +71,12 @@ public class TradeWriter {
               .setLocalParallelism(1);
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-        JetInstance jet = hz.getJetInstance();
+        JetService jet = hz.getJet();
         com.hazelcast.jet.Job jetJob = jet.newJob(p);
 
         Thread.sleep(1000);
 
         jetJob.cancel();
-        jet.shutdown();
-
+        hz.shutdown();
     }
-
 }

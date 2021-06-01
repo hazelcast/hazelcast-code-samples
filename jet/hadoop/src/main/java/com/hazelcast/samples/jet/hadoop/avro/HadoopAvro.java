@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.hadoop.avro;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.samples.jet.hadoop.generated.User;
 import com.hazelcast.jet.hadoop.HadoopSinks;
 import com.hazelcast.jet.hadoop.HadoopSources;
@@ -64,7 +64,7 @@ public class HadoopAvro {
     public static void executeSample(Configuration configuration) {
         try {
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             jet.newJob(buildPipeline(configuration)).join();
         } finally {
             Hazelcast.shutdownAll();

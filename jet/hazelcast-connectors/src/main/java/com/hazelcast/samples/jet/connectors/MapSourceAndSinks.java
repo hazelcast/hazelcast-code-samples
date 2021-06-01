@@ -18,7 +18,7 @@ package com.hazelcast.samples.jet.connectors;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -137,7 +137,7 @@ public class MapSourceAndSinks {
 
     private void go() {
         try {
-            JetInstance jet = hz.getJetInstance();
+            JetService jet = hz.getJet();
             System.out.println("----------Map Source and Sink ----------------");
             // insert sequence 0..9 into map as (0,0) , (1,1) .... ( 9,9)
             prepareSampleInput(hz, MAP_SOURCE);
