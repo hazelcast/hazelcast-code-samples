@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.hazelcast.samples.serialization.benchmarks";
+
+package com.hazelcast.samples.serialization.benchmarks;
+
+message PassportProtobuf {
+  string expiryDate = 1;
+  string issuingCountry = 2;
+  int64 issuingDate = 3;
+}
+
+message PersonProtobuf {
+  string firstName = 1;
+  string lastName = 2;
+  PassportProtobuf passport = 3;
+}

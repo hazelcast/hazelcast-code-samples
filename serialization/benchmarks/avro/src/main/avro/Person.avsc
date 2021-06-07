@@ -1,0 +1,20 @@
+[
+ {"namespace": "com.hazelcast.samples.serialization.benchmarks",
+  "type": "record",
+  "name": "PassportAvro",
+  "fields": [
+     {"name": "expiryDate", "type": "string"},
+     {"name": "issuingCountry", "type": "string"},
+     {"name": "issuingDate", "type": "long"}
+  ]
+ },
+ {"namespace": "com.hazelcast.samples.serialization.benchmarks",
+  "type": "record",
+  "name": "PersonAvro",
+  "fields": [
+     {"name": "firstName", "type": "string"},
+     {"name": "lastName", "type": "string"},
+     {"name": "passport", "type": ["null", "PassportAvro"], "default": null}
+  ]
+ }
+]
