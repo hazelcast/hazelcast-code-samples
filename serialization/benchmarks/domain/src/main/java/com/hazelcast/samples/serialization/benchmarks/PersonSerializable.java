@@ -12,30 +12,30 @@ public class PersonSerializable implements java.io.Serializable {
     private String firstName;
     private String lastName;
     private PassportSerializable passport;
-    
+
     // Java getters, setters and toString.
 
     public String getFirstName() {
-		return firstName;
-	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	public PassportSerializable getPassport() {
-		return passport;
-	}
-	public void setPassport(PassportSerializable passport) {
-		this.passport = passport;
-	}
-	@Override
-	public String toString() {
-		return "PersonSerializable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport + "]";
-	}
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public PassportSerializable getPassport() {
+        return passport;
+    }
+    public void setPassport(PassportSerializable passport) {
+        this.passport = passport;
+    }
+    @Override
+    public String toString() {
+        return "PersonSerializable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport + "]";
+    }
 
 }

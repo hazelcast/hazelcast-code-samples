@@ -29,10 +29,10 @@ public class PassportVersionedPortable implements com.hazelcast.nio.serializatio
         return MyConstants.PASSPORT_VERSIONED_PORTABLE_ID;
     }
 
-	@Override
-	public int getClassVersion() {
+    @Override
+    public int getClassVersion() {
         return MyConstants.PASSPORT_VERSIONED_PORTABLE_CLASS_VERSION;
-	}
+    }
 
     @Override
     public void writePortable(PortableWriter writer) throws IOException {
@@ -50,34 +50,34 @@ public class PassportVersionedPortable implements com.hazelcast.nio.serializatio
 
     // Java getters, setters and toString.
 
-	public String getExpiryDate() {
-		return expiryDate;
-	}
+    public String getExpiryDate() {
+        return expiryDate;
+    }
 
-	public void setExpiryDate(String expiryDate) {
-		this.expiryDate = expiryDate;
-	}
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
-	public String getIssuingCountry() {
-		return issuingCountry;
-	}
+    public String getIssuingCountry() {
+        return issuingCountry;
+    }
 
-	public void setIssuingCountry(String issuingCountry) {
-		this.issuingCountry = issuingCountry;
-	}
+    public void setIssuingCountry(String issuingCountry) {
+        this.issuingCountry = issuingCountry;
+    }
 
-	public long getIssuingDate() {
-		return issuingDate;
-	}
+    public long getIssuingDate() {
+        return issuingDate;
+    }
 
-	public void setIssuingDate(long issuingDate) {
-		this.issuingDate = issuingDate;
-	}
+    public void setIssuingDate(long issuingDate) {
+        this.issuingDate = issuingDate;
+    }
 
-	@Override
-	public String toString() {
-		return "PassportVersionedPortable [expiryDate=" + expiryDate + ", issuingCountry=" + issuingCountry
-				+ ", issuingDate=" + issuingDate + "]";
-	}
+    @Override
+    public String toString() {
+        return "PassportVersionedPortable [expiryDate=" + expiryDate + ", issuingCountry=" + issuingCountry
+                + ", issuingDate=" + issuingDate + "]";
+    }
 
 }

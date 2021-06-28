@@ -25,7 +25,7 @@ public class MyConstants {
     // Not using versioning here for sizing/timing
     public static final int PASSPORT_VERSIONED_PORTABLE_CLASS_VERSION = 1;
     public static final int PERSON_VERSIONED_PORTABLE_CLASS_VERSION = 1;
-    
+
     // For generating test data
     public static final List<String> FIRST_NAMES = Arrays.asList("William", "Patrick", "Jon", "Tom", "Peter", "Colin",
             "Sylvester", "Paul", "Christopher", "David", "Matt", "Peter", "Jodie", "Julie");

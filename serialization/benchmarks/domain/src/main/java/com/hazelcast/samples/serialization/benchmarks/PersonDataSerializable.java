@@ -35,34 +35,34 @@ public class PersonDataSerializable implements com.hazelcast.nio.serialization.D
 
     // Java getters, setters and toString.
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public PassportDataSerializable getPassport() {
-		return passport;
-	}
+    public PassportDataSerializable getPassport() {
+        return passport;
+    }
 
-	public void setPassport(PassportDataSerializable passport) {
-		this.passport = passport;
-	}
+    public void setPassport(PassportDataSerializable passport) {
+        this.passport = passport;
+    }
 
-	@Override
-	public String toString() {
-		return "PersonDataSerializable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport
-				+ "]";
-	}
+    @Override
+    public String toString() {
+        return "PersonDataSerializable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport
+                + "]";
+    }
 
 }

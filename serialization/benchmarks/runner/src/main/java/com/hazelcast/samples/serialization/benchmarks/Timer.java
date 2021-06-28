@@ -87,6 +87,10 @@ public class Timer {
             personCollection = null;
             break;
         }
+        this.processPersonCollection(personCollection);
+    }
+
+    private void processPersonCollection(PersonCollection personCollection) {
         if (personCollection != null) {
             this.deserialized = new Object[personCollection.getData().size()];
             this.serialized = new Data[this.deserialized.length];
@@ -120,84 +124,127 @@ public class Timer {
             String issuingCountry = "???";
             switch (kind) {
             case JAVA_SERIALIZABLE:
-            	PassportSerializable passportSerializable = 
-            		((PersonSerializable)o).getPassport();
-            	if (passportSerializable != null) {
-            		issuingCountry = passportSerializable.getIssuingCountry();
-            	}
+                this.deserializeJavaSerializable(o, issuingCountry);
                 break;
             case JAVA_EXTERNALIZABLE:
-            	PassportExternalizable passportExternalizable =
-            		((PersonExternalizable)o).getPassport();
-            	if (passportExternalizable != null) {
-            		issuingCountry = passportExternalizable.getIssuingCountry();
-            	}
+                this.deserializeJavaExternalizable(o, issuingCountry);
                 break;
             case HAZELCAST_DATA_SERIALIZABLE:
-            	PassportDataSerializable passportDataSerializable =
-            		((PersonDataSerializable)o).getPassport();
-            	if (passportDataSerializable != null) {
-            		issuingCountry = passportDataSerializable.getIssuingCountry();
-            	}
+                this.deserializeHazelcastDataSerializable(o, issuingCountry);
                 break;
             case HAZELCAST_IDENTIFIED_DATA_SERIALIZABLE:
-            	PassportIdentifiedDataSerializable passportIdentifiedDataSerializable =
-            		((PersonIdentifiedDataSerializable)o).getPassport();
-            	if (passportIdentifiedDataSerializable != null) {
-            		issuingCountry = passportIdentifiedDataSerializable.getIssuingCountry();
-            	}
+                this.deserializeHazelcastIdentifiedDataSerializable(o, issuingCountry);
                 break;
             case HAZELCAST_PORTABLE:
-            	PassportPortable passportPortable =
-            		((PersonPortable)o).getPassport();
-            	if (passportPortable != null) {
-            		issuingCountry = passportPortable.getIssuingCountry();
-            	}
+                this.deserializeHazelcastPortable(o, issuingCountry);
                 break;
             case HAZELCAST_VERSIONED_PORTABLE:
-            	PassportVersionedPortable passportVersionedPortable =
-            		((PersonVersionedPortable)o).getPassport();
-            	if (passportVersionedPortable != null) {
-            		issuingCountry = passportVersionedPortable.getIssuingCountry();
-            	}
+                this.deserializeHazelcastVersionedPortable(o, issuingCountry);
                 break;
             case HAZELCAST_JSON_VALUE:
-            	String person = 
-            		((HazelcastJsonValue)o).toString();
-            	if (person.contains("\"issuingCountry\":\"" + MyConstants.ISSUING_COUNTRY + "\"")) {
-            		issuingCountry = MyConstants.ISSUING_COUNTRY;
-            	}
+                this.deserializeHazelcastJson(o, issuingCountry);
                 break;
             case AVRO:
-            	PassportAvro passportAvro =
-            		((PersonAvro)o).getPassport();
-            	if (passportAvro != null) {
-            		issuingCountry = passportAvro.getIssuingCountry();
-            	}
+                this.deserializeAvro(o, issuingCountry);
                 break;
             case KRYO:
-            	PassportKryo passportKryo =
-            		((PersonKryo)o).getPassport();
-            	if (passportKryo != null) {
-            		issuingCountry = passportKryo.getIssuingCountry();
-            	}
+                this.deserializeKryo(o, issuingCountry);
                 break;
             case PROTOBUF:
-            	PassportProtobuf passportProtobuf =
-            		((PersonProtobuf)o).getPassport();
-            	if (passportProtobuf != null) {
-            		issuingCountry = passportProtobuf.getIssuingCountry();
-            	}
+                this.deserializeProtobuf(o, issuingCountry);
                 break;
             default:
-            	issuingCountry = null;
+                issuingCountry = null;
                 break;
             }
-            if (issuingCountry == null) {
-                System.err.println("issuingCountry.length() == null " + 
-                		this.kindStr + " on: " + o);
-            }
+            this.checkIssuingCountry(issuingCountry, o, this.kindStr);
         }
     }
 
+    private void checkIssuingCountry(String issuingCountry, Object o, String kindStr) {
+        if (issuingCountry == null) {
+            System.err.println("issuingCountry.length() == null "
+                      + kindStr + " on: " + o);
+        }
+    }
+
+    private void deserializeJavaSerializable(Object o, String issuingCountry) {
+        PassportSerializable passportSerializable =
+                ((PersonSerializable) o).getPassport();
+           if (passportSerializable != null) {
+                issuingCountry = passportSerializable.getIssuingCountry();
+           }
+    }
+
+    private void deserializeJavaExternalizable(Object o, String issuingCountry) {
+        PassportExternalizable passportExternalizable =
+                ((PersonExternalizable) o).getPassport();
+           if (passportExternalizable != null) {
+                issuingCountry = passportExternalizable.getIssuingCountry();
+           }
+    }
+
+    private void deserializeHazelcastDataSerializable(Object o, String issuingCountry) {
+        PassportDataSerializable passportDataSerializable =
+                ((PersonDataSerializable) o).getPassport();
+           if (passportDataSerializable != null) {
+                issuingCountry = passportDataSerializable.getIssuingCountry();
+           }
+    }
+
+    private void deserializeHazelcastIdentifiedDataSerializable(Object o, String issuingCountry) {
+        PassportIdentifiedDataSerializable passportIdentifiedDataSerializable =
+                ((PersonIdentifiedDataSerializable) o).getPassport();
+           if (passportIdentifiedDataSerializable != null) {
+                issuingCountry = passportIdentifiedDataSerializable.getIssuingCountry();
+           }
+    }
+
+    private void deserializeHazelcastPortable(Object o, String issuingCountry) {
+        PassportPortable passportPortable =
+                ((PersonPortable) o).getPassport();
+           if (passportPortable != null) {
+                issuingCountry = passportPortable.getIssuingCountry();
+           }
+    }
+
+    private void deserializeHazelcastVersionedPortable(Object o, String issuingCountry) {
+        PassportVersionedPortable passportVersionedPortable =
+                ((PersonVersionedPortable) o).getPassport();
+           if (passportVersionedPortable != null) {
+                issuingCountry = passportVersionedPortable.getIssuingCountry();
+           }
+    }
+
+    private void deserializeHazelcastJson(Object o, String issuingCountry) {
+        String person =
+                ((HazelcastJsonValue) o).toString();
+           if (person.contains("\"issuingCountry\":\"" + MyConstants.ISSUING_COUNTRY + "\"")) {
+                issuingCountry = MyConstants.ISSUING_COUNTRY;
+           }
+    }
+
+    private void deserializeAvro(Object o, String issuingCountry) {
+        PassportAvro passportAvro =
+                ((PersonAvro) o).getPassport();
+           if (passportAvro != null) {
+                issuingCountry = passportAvro.getIssuingCountry();
+           }
+    }
+
+    private void deserializeKryo(Object o, String issuingCountry) {
+        PassportKryo passportKryo =
+                ((PersonKryo) o).getPassport();
+           if (passportKryo != null) {
+                issuingCountry = passportKryo.getIssuingCountry();
+           }
+    }
+
+    private void deserializeProtobuf(Object o, String issuingCountry) {
+        PassportProtobuf passportProtobuf =
+                ((PersonProtobuf) o).getPassport();
+           if (passportProtobuf != null) {
+                issuingCountry = passportProtobuf.getIssuingCountry();
+           }
+    }
 }
