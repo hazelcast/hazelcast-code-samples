@@ -61,8 +61,10 @@ public class Util {
         return serializationService;
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     /**
-     * <p>See <a href="https://docs.hazelcast.com/imdg/4.1.2/serialization/implementing-portable-serialization.html#null-portable-serialization">
+     * <p>See
+     * <a href="https://docs.hazelcast.com/imdg/4.1.2/serialization/implementing-portable-serialization.html#null-portable-serialization">
      * here</a>, to correctly handle a null for a type it cannot be unknown to Hazelcast.
      * <p>
      */

@@ -34,34 +34,34 @@ public class PersonExternalizable implements java.io.Externalizable {
 
     // Java getters, setters and toString.
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public PassportExternalizable getPassport() {
-		return passport;
-	}
+    public PassportExternalizable getPassport() {
+        return passport;
+    }
 
-	public void setPassport(PassportExternalizable passport) {
-		this.passport = passport;
-	}
+    public void setPassport(PassportExternalizable passport) {
+        this.passport = passport;
+    }
 
-	@Override
-	public String toString() {
-		return "PersonExternalizable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport
-				+ "]";
-	}
+    @Override
+    public String toString() {
+        return "PersonExternalizable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport
+                + "]";
+    }
 
 }

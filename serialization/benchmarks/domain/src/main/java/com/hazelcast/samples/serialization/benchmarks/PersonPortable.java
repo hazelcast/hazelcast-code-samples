@@ -49,33 +49,33 @@ public class PersonPortable implements com.hazelcast.nio.serialization.Portable 
 
     // Java getters, setters and toString.
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public PassportPortable getPassport() {
-		return passport;
-	}
+    public PassportPortable getPassport() {
+        return passport;
+    }
 
-	public void setPassport(PassportPortable passport) {
-		this.passport = passport;
-	}
+    public void setPassport(PassportPortable passport) {
+        this.passport = passport;
+    }
 
-	@Override
-	public String toString() {
-		return "PersonPortable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport + "]";
-	}
+    @Override
+    public String toString() {
+        return "PersonPortable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport + "]";
+    }
 
 }

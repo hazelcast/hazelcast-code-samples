@@ -29,18 +29,18 @@ public class PersonVersionedPortable implements com.hazelcast.nio.serialization.
         return MyConstants.PERSON_VERSIONED_PORTABLE_ID;
     }
 
-	@Override
-	public int getClassVersion() {
+    @Override
+    public int getClassVersion() {
         return MyConstants.PERSON_VERSIONED_PORTABLE_CLASS_VERSION;
-	}
+    }
 
     @Override
     public void writePortable(PortableWriter writer) throws IOException {
         writer.writeString("firstName", this.firstName);
         writer.writeString("lastName", this.lastName);
         if (this.passport == null) {
-            writer.writeNullPortable("passport", 
-            		MyConstants.MY_VERSIONED_PORTABLE_FACTORY_ID, MyConstants.PASSPORT_VERSIONED_PORTABLE_ID);
+            writer.writeNullPortable("passport",
+                    MyConstants.MY_VERSIONED_PORTABLE_FACTORY_ID, MyConstants.PASSPORT_VERSIONED_PORTABLE_ID);
         } else {
             writer.writePortable("passport", this.passport);
         }
@@ -55,34 +55,34 @@ public class PersonVersionedPortable implements com.hazelcast.nio.serialization.
 
     // Java getters, setters and toString.
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public PassportVersionedPortable getPassport() {
-		return passport;
-	}
+    public PassportVersionedPortable getPassport() {
+        return passport;
+    }
 
-	public void setPassport(PassportVersionedPortable passport) {
-		this.passport = passport;
-	}
+    public void setPassport(PassportVersionedPortable passport) {
+        this.passport = passport;
+    }
 
-	@Override
-	public String toString() {
-		return "PersonVersionedPortable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport
-				+ "]";
-	}
+    @Override
+    public String toString() {
+        return "PersonVersionedPortable [firstName=" + firstName + ", lastName=" + lastName + ", passport=" + passport
+                + "]";
+    }
 
 }

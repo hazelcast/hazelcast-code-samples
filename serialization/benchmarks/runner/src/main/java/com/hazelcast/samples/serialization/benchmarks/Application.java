@@ -115,7 +115,7 @@ public class Application {
 
             // First object needs passport, as first object size reported == worst case
             Boolean hasPassport = i == 0 ? true : random.nextBoolean();
-            
+
             Object[] datum =
                 { MyConstants.FIRST_NAMES.get(firstNameIndex),
                     MyConstants.LAST_NAMES.get(lastNameIndex),
