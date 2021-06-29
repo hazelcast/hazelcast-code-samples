@@ -72,7 +72,7 @@ public class WordCount {
      */
     private void go() {
         try {
-            setup();
+            init();
             System.out.println("\nCounting words... ");
             long start = System.nanoTime();
             Pipeline p = buildPipeline();
@@ -87,7 +87,7 @@ public class WordCount {
         }
     }
 
-    private void setup() {
+    private void init() {
         hz = Hazelcast.bootstrappedInstance();
         System.out.println("Loading The Complete Works of William Shakespeare");
         try {

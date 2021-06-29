@@ -45,6 +45,7 @@ import java.util.concurrent.CancellationException;
 import java.util.stream.Stream;
 
 import static com.hazelcast.function.Functions.entryValue;
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static com.hazelcast.jet.Util.entry;
 import static com.hazelcast.jet.datamodel.Tuple2.tuple2;
 import static com.hazelcast.jet.datamodel.Tuple3.tuple3;
@@ -119,9 +120,12 @@ public final class Enrichment {
         // first enrich the trade by looking up the product from the IMap
         trades
                 .mapUsingIMap(
-                        productMap, // target map to lookup
-                        trade -> trade.productId(), // key to lookup in the map
-                        (t, product) -> tuple2(t, product.name()) // merge the value in the map with the trade
+                        // target map to lookup
+                        productMap,
+                        // key to lookup in the map
+                        trade -> trade.productId(),
+                        // merge the value in the map with the trade
+                        (t, product) -> tuple2(t, product.name())
                 )
                 // (trade, productName)
                 .mapUsingIMap(
@@ -170,9 +174,12 @@ public final class Enrichment {
         // first enrich the trade by looking up the product from the replicated map
         trades
                 .mapUsingReplicatedMap(
-                        productMap, // target map to lookup
-                        Trade::productId, // key to lookup in the map
-                        (t, product) -> tuple2(t, product.name()) // merge the value in the map with the trade
+                        // target map to lookup
+                        productMap,
+                        // key to lookup in the map
+                        Trade::productId,
+                        // merge the value in the map with the trade
+                        (t, product) -> tuple2(t, product.name())
                 )
                 // (trade, productName)
                 .mapUsingReplicatedMap(
@@ -264,6 +271,7 @@ public final class Enrichment {
             try {
                 job.join();
             } catch (CancellationException ignored) {
+                ignore(ignored);
             }
         } finally {
             eventGenerator.shutdown();

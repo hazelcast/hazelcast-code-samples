@@ -44,11 +44,14 @@ public class Trade implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        Trade that;
-        return obj instanceof Trade
-                && this.id == (that = (Trade) obj).id
-                && this.productId == that.productId
-                && this.brokerId == (that = (Trade) obj).brokerId;
+        if (obj instanceof Trade) {
+            Trade that = (Trade) obj;
+            return this.id == that.id
+                    && this.productId == that.productId
+                    && this.brokerId == that.brokerId;
+        } else {
+            return false;
+        }
     }
 
     @Override

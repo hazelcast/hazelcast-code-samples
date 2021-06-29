@@ -95,11 +95,11 @@ public class User implements Serializable, SpecificRecord {
 
     @Override
     public String toString() {
-        return "avro.model.User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", age=" + age +
-                ", status=" + status +
-                '}';
+        return "avro.model.User{"
+                + "username='" + username + '\''
+                + ", password='" + password + '\''
+                + ", age=" + age
+                + ", status=" + status
+                + '}';
     }
 }

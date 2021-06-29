@@ -44,7 +44,7 @@ public class ProtobufSerializerAdapter {
 
     private void go() {
         try {
-            setup();
+            init();
             JetService jet = hz.getJet();
             JobConfig config = new JobConfig()
                     .registerSerializer(Broker.class, BrokerSerializer.class);
@@ -54,7 +54,7 @@ public class ProtobufSerializerAdapter {
         }
     }
 
-    private void setup() {
+    private void init() {
         hz = Hazelcast.bootstrappedInstance();
     }
 

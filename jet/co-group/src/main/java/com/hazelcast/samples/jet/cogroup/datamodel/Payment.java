@@ -33,11 +33,14 @@ public class Payment extends Event {
 
     @Override
     public boolean equals(Object obj) {
-        final Payment that;
-        return obj instanceof Payment
-                && this.timestamp() == (that = (Payment) obj).timestamp()
-                && this.userId() == that.userId()
-                && this.amount == that.amount;
+        if (obj instanceof Payment) {
+            Payment that = (Payment) obj;
+            return this.timestamp() == that.timestamp()
+                    && this.userId() == that.userId()
+                    && this.amount == that.amount;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -51,10 +54,10 @@ public class Payment extends Event {
 
     @Override
     public String toString() {
-        return "Payment{" +
-                "amount=" + amount +
-                ", userId=" + userId() +
-                ", timestamp=" + Util.toLocalTime(timestamp()) +
-                '}';
+        return "Payment{"
+                + "amount=" + amount
+                + ", userId=" + userId()
+                + ", timestamp=" + Util.toLocalTime(timestamp())
+                + '}';
     }
 }

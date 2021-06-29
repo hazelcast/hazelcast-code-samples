@@ -31,6 +31,7 @@ import com.hazelcast.jet.pipeline.Sinks;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static com.hazelcast.jet.aggregate.AggregateOperations.allOf;
 import static com.hazelcast.jet.aggregate.AggregateOperations.linearTrend;
 import static com.hazelcast.jet.aggregate.AggregateOperations.topN;
@@ -97,6 +98,7 @@ public class TopNStocks {
             job.cancel();
             job.join();
         } catch (CancellationException ignored) {
+            ignore(ignored);
         } finally {
             Hazelcast.shutdownAll();
         }

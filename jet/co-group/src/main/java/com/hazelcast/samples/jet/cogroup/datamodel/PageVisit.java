@@ -33,11 +33,14 @@ public class PageVisit extends Event {
 
     @Override
     public boolean equals(Object obj) {
-        final PageVisit that;
-        return obj instanceof PageVisit
-                && this.timestamp() == (that = (PageVisit) obj).timestamp()
-                && this.userId() == that.userId()
-                && this.loadTime == that.loadTime;
+        if (obj instanceof PageVisit) {
+            PageVisit that = (PageVisit) obj;
+            return this.timestamp() == that.timestamp()
+                    && this.userId() == that.userId()
+                    && this.loadTime == that.loadTime;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -51,10 +54,10 @@ public class PageVisit extends Event {
 
     @Override
     public String toString() {
-        return "PageVisit{" +
-                "loadTime=" + loadTime +
-                ", userId=" + userId() +
-                ", timestamp=" + Util.toLocalTime(timestamp()) +
-                '}';
+        return "PageVisit{"
+                + "loadTime=" + loadTime
+                + ", userId=" + userId()
+                + ", timestamp=" + Util.toLocalTime(timestamp())
+                + '}';
     }
 }

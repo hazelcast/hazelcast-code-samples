@@ -28,6 +28,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import javax.jms.TextMessage;
 import java.util.concurrent.CancellationException;
 
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -71,7 +72,7 @@ public class JmsQueueSample {
 
     private void go() throws Exception {
         try {
-            setup();
+            init();
             JetService jet = hz.getJet();
             Job job = jet.newJob(buildPipeline());
             SECONDS.sleep(10);
@@ -79,13 +80,14 @@ public class JmsQueueSample {
             try {
                 job.join();
             } catch (CancellationException ignored) {
+                ignore(ignored);
             }
         } finally {
             cleanup();
         }
     }
 
-    private void setup() throws Exception {
+    private void init() throws Exception {
         broker = new ActiveMQBroker();
         producer = new JmsMessageProducer(INPUT_QUEUE, true);
         hz = Hazelcast.bootstrappedInstance();

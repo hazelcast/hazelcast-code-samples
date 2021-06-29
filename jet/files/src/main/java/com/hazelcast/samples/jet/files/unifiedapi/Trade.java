@@ -32,10 +32,10 @@ import java.util.Objects;
  */
 public class Trade implements Serializable {
 
-    public long time;
-    public String ticker;
-    public long quantity;
-    public long price;
+    private long time;
+    private String ticker;
+    private long quantity;
+    private long price;
 
     public Trade() {
     }

@@ -152,10 +152,10 @@ public class MapPredicateAndProjection {
         }
 
         @Override public String toString() {
-            return "Trade{" +
-                    "ticker='" + ticker + '\'' +
-                    ", price=" + price +
-                    '}';
+            return "Trade{"
+                    + "ticker='" + ticker + '\''
+                    + ", price=" + price
+                    + '}';
         }
     }
 

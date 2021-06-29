@@ -27,6 +27,7 @@ import com.hazelcast.jet.pipeline.Sources;
 
 import java.util.concurrent.CancellationException;
 
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static com.hazelcast.jet.pipeline.JournalInitialPosition.START_FROM_OLDEST;
 import static com.hazelcast.jet.pipeline.Sinks.list;
 
@@ -67,6 +68,7 @@ public class ExclusiveJobExecution {
             jet1.newJob(p, jobConfig);
             assert false;
         } catch (JobAlreadyExistsException ignored) {
+            ignore(ignored);
         }
 
         job1.cancel();
@@ -74,6 +76,7 @@ public class ExclusiveJobExecution {
         try {
             job1.join();
         } catch (CancellationException ignored) {
+            ignore(ignored);
         }
 
         // Now I can submit a new job with the same name because there is
@@ -87,6 +90,7 @@ public class ExclusiveJobExecution {
         try {
             job3.join();
         } catch (CancellationException ignored) {
+            ignore(ignored);
         }
 
         hz1.getCluster().shutdown();

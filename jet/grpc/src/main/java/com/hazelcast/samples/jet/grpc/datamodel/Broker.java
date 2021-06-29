@@ -18,8 +18,8 @@ package com.hazelcast.samples.jet.grpc.datamodel;
 
 import java.io.Serializable;
 
-public class Broker implements Serializable {
-
+public class
+Broker implements Serializable {
     private final int id;
     private final String name;
 
@@ -39,9 +39,9 @@ public class Broker implements Serializable {
 
     @Override
     public String toString() {
-        return "Broker{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "Broker{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + '}';
     }
 }

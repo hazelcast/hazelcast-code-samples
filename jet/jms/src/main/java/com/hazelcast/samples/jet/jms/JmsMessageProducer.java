@@ -24,6 +24,7 @@ import javax.jms.ConnectionFactory;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -48,6 +49,7 @@ public final class JmsMessageProducer {
                     SECONDS.sleep(1);
                 }
             } catch (InterruptedException ignored) {
+                ignore(ignored);
             } catch (Exception e) {
                 e.printStackTrace();
             }

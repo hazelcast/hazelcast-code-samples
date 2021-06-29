@@ -70,11 +70,11 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", age=" + age +
-                ", status=" + status +
-                '}';
+        return "User{"
+                + "username='" + username + '\''
+                + ", password='" + password + '\''
+                + ", age=" + age
+                + ", status=" + status
+                + '}';
     }
 }

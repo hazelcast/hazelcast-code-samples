@@ -135,7 +135,8 @@ public class TfIdf {
 
         // pairs (filename, map(word -> count))
         BatchStage<Entry<String, Map<String, Long>>> tf = bookWords
-                .groupingKey(entryValue()) // entry value is the word
+                // entry value is the word
+                .groupingKey(entryValue())
                 .aggregate(toMap(entryKey(), e -> 1L, Long::sum));
 
         // pairs (word, pairs (filename, score))

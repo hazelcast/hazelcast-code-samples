@@ -63,7 +63,7 @@ public class AvroSink {
 
     private void go() {
         try {
-            setup();
+            init();
             JetService jet = hz.getJet();
             jet.newJob(buildPipeline()).join();
         } finally {
@@ -71,7 +71,7 @@ public class AvroSink {
         }
     }
 
-    private void setup() {
+    private void init() {
         hz = Hazelcast.bootstrappedInstance();
         IMap<String, User> map = hz.getMap(MAP_NAME);
         for (int i = 0; i < 100; i++) {

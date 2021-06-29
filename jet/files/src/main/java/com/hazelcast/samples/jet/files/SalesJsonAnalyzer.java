@@ -92,17 +92,17 @@ public class SalesJsonAnalyzer {
 
         @Override
         public String toString() {
-            return "SalesRecord{" +
-                    "time=" + time +
-                    ", product='" + product + '\'' +
-                    ", price=" + price +
-                    ", paymentType='" + paymentType + '\'' +
-                    ", name='" + name + '\'' +
-                    ", address='" + address + '\'' +
-                    ", city='" + city + '\'' +
-                    ", state='" + state + '\'' +
-                    ", country='" + country + '\'' +
-                    '}';
+            return "SalesRecord{"
+                    + "time=" + time
+                    + ", product='" + product + '\''
+                    + ", price=" + price
+                    + ", paymentType='" + paymentType + '\''
+                    + ", name='" + name + '\''
+                    + ", address='" + address + '\''
+                    + ", city='" + city + '\''
+                    + ", state='" + state + '\''
+                    + ", country='" + country + '\''
+                    + '}';
         }
     }
 }

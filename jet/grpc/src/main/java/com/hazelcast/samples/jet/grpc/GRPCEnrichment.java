@@ -46,6 +46,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 import static com.hazelcast.function.Functions.entryValue;
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static com.hazelcast.jet.Util.entry;
 import static com.hazelcast.jet.datamodel.Tuple2.tuple2;
 import static com.hazelcast.jet.datamodel.Tuple3.tuple3;
@@ -140,6 +141,7 @@ public final class GRPCEnrichment {
             try {
                 job.join();
             } catch (CancellationException ignored) {
+                ignore(ignored);
             }
         } finally {
             eventGenerator.shutdown();

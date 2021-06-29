@@ -31,6 +31,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.concurrent.CancellationException;
 
+import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static com.hazelcast.jet.aggregate.AggregateOperations.counting;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -73,6 +74,7 @@ public class StockExchange {
             job.cancel();
             job.join();
         } catch (CancellationException ignored) {
+            ignore(ignored);
         } finally {
             Hazelcast.shutdownAll();
         }

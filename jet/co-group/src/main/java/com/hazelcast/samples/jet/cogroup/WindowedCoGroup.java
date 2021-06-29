@@ -44,7 +44,8 @@ import static com.hazelcast.jet.pipeline.JournalInitialPosition.START_FROM_OLDES
 import static com.hazelcast.jet.pipeline.WindowDefinition.sliding;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-@SuppressWarnings("Convert2MethodRef") // https://bugs.openjdk.java.net/browse/JDK-8154236
+// https://bugs.openjdk.java.net/browse/JDK-8154236
+@SuppressWarnings("Convert2MethodRef")
 public final class WindowedCoGroup {
     private static final String TOPIC = "topic";
     private static final String PAGE_VISIT = "pageVisit";
@@ -80,10 +81,10 @@ public final class WindowedCoGroup {
         Pipeline p = Pipeline.create();
         p.readFrom(Sources.<PageVisit, Integer, PageVisit>mapJournal(PAGE_VISIT,
                 START_FROM_OLDEST, mapEventNewValue(), mapPutEvents()))
-         .withTimestamps(pv -> pv.timestamp(), 100)
-         .window(sliding(10, 1))
-         .aggregate(counting())
-         .writeTo(Sinks.logger());
+                .withTimestamps(pv -> pv.timestamp(), 100)
+                .window(sliding(10, 1))
+                .aggregate(counting())
+                .writeTo(Sinks.logger());
         return p;
     }
 
@@ -91,11 +92,11 @@ public final class WindowedCoGroup {
         Pipeline p = Pipeline.create();
         p.readFrom(Sources.<PageVisit, Integer, PageVisit>mapJournal(PAGE_VISIT,
                 START_FROM_OLDEST, mapEventNewValue(), mapPutEvents()))
-         .withTimestamps(pv -> pv.timestamp(), 100)
-         .window(sliding(10, 1))
-         .groupingKey(pv -> pv.userId())
-         .aggregate(toList())
-         .writeTo(Sinks.logger());
+                .withTimestamps(pv -> pv.timestamp(), 100)
+                .window(sliding(10, 1))
+                .groupingKey(pv -> pv.userId())
+                .aggregate(toList())
+                .writeTo(Sinks.logger());
         return p;
     }
 
@@ -155,10 +156,10 @@ public final class WindowedCoGroup {
                 .writeTo(Sinks.logger(r -> {
                     ItemsByTag items = r.result();
                     return String.format(
-                            "window(%s..%s): id %d%n" +
-                            "pageVisits %s%n" +
-                            "addToCarts %s%n" +
-                            "payments %s",
+                            "window(%s..%s): id %d%n"
+                                    + "pageVisits %s%n"
+                                    + "addToCarts %s%n"
+                                    + "payments %s",
                             Util.toLocalTime(r.start()),
                             Util.toLocalTime(r.end()),
                             r.getKey(),

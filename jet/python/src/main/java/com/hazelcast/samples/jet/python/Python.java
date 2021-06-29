@@ -56,7 +56,8 @@ public class Python {
          .apply(mapUsingPython(new PythonServiceConfig()
                  .setBaseDir(baseDir)
                  .setHandlerModule("take_sqrt")))
-         .setLocalParallelism(1) // controls how many Python processes will be used
+         // controls how many Python processes will be used
+         .setLocalParallelism(1)
          .writeTo(Sinks.observable(RESULTS));
         return p;
     }

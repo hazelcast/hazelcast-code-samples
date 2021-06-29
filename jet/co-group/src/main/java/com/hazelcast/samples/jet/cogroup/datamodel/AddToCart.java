@@ -33,11 +33,14 @@ public class AddToCart extends Event {
 
     @Override
     public boolean equals(Object obj) {
-        final AddToCart that;
-        return obj instanceof AddToCart
-                && this.timestamp() == (that = (AddToCart) obj).timestamp()
-                && this.userId() == that.userId()
-                && this.quantity == that.quantity;
+        if (obj instanceof AddToCart) {
+            AddToCart that = (AddToCart) obj;
+            return this.timestamp() == that.timestamp()
+                    && this.userId() == that.userId()
+                    && this.quantity == that.quantity;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -51,10 +54,10 @@ public class AddToCart extends Event {
 
     @Override
     public String toString() {
-        return "AddToCart{" +
-                "quantity=" + quantity +
-                ", userId=" + userId() +
-                ", timestamp=" + Util.toLocalTime(timestamp()) +
-                '}';
+        return "AddToCart{"
+                + "quantity=" + quantity
+                + ", userId=" + userId()
+                + ", timestamp=" + Util.toLocalTime(timestamp())
+                + '}';
     }
 }

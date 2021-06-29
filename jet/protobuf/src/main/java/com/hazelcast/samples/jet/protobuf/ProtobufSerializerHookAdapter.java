@@ -44,7 +44,7 @@ public class ProtobufSerializerHookAdapter {
 
     private void go() {
         try {
-            setup();
+            init();
             JetService jet = hz.getJet();
             jet.newJob(buildPipeline()).join();
         } finally {
@@ -52,7 +52,7 @@ public class ProtobufSerializerHookAdapter {
         }
     }
 
-    private void setup() {
+    private void init() {
         hz = Hazelcast.bootstrappedInstance();
     }
 

@@ -37,7 +37,10 @@ public class SystemMonitorHttpService {
     private final Runtime runtime = getRuntime();
     private final BlockingQueue<MemoryUsageMetric> queue = new LinkedBlockingQueue<>();
 
-    {
+    public SystemMonitorHttpService() {
+        runDaemon();
+    }
+    private void runDaemon() {
         Thread t = new Thread(() -> {
             while (true) {
                 long monitoredValue = runtime.totalMemory() - runtime.freeMemory();

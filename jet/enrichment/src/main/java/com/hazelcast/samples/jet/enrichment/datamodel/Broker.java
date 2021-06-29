@@ -39,9 +39,9 @@ public class Broker implements Serializable {
 
     @Override
     public String toString() {
-        return "Broker{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "Broker{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + '}';
     }
 }

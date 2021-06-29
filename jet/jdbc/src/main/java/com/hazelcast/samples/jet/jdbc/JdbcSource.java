@@ -61,7 +61,7 @@ public class JdbcSource {
 
     private void go() throws Exception {
         try {
-            setup();
+            init();
             Pipeline p = buildPipeline(connectionUrl());
             JetService jet = hz.getJet();
             jet.newJob(p).join();
@@ -71,7 +71,7 @@ public class JdbcSource {
         }
     }
 
-    private void setup() throws Exception {
+    private void init() throws Exception {
         dbDirectory = Files.createTempDirectory(JdbcSource.class.getName()).toString();
         createAndFillTable();
         hz = Hazelcast.bootstrappedInstance();

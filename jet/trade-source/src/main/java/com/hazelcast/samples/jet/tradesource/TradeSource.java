@@ -157,7 +157,8 @@ public final class TradeSource {
                     .collect(toMap(t -> t, t -> new LongLongAccumulator(50 * MONEY_SCALE_FACTOR,
                             MONEY_SCALE_FACTOR / 10)));
             this.emitPeriodNanos = SECONDS.toNanos(1) / tradesPerSec;
-            this.startTimeNanos = this.scheduledTimeNanos = System.nanoTime();
+            this.startTimeNanos = System.nanoTime();
+            this.scheduledTimeNanos = startTimeNanos;
             this.startTimeMillis = System.currentTimeMillis();
         }
 

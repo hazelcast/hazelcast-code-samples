@@ -141,16 +141,16 @@ public class SalesCsvAnalyzer {
 
         @Override
         public String toString() {
-            return "SalesRecordLine{" +
-                    "time=" + time +
-                    ", product='" + product + '\'' +
-                    ", price=" + price +
-                    ", paymentType='" + paymentType + '\'' +
-                    ", name='" + name + '\'' +
-                    ", city='" + city + '\'' +
-                    ", state='" + state + '\'' +
-                    ", country='" + country + '\'' +
-                    '}';
+            return "SalesRecordLine{"
+                    + "time=" + time
+                    + ", product='" + product + '\''
+                    + ", price=" + price
+                    + ", paymentType='" + paymentType + '\''
+                    + ", name='" + name + '\''
+                    + ", city='" + city + '\''
+                    + ", state='" + state + '\''
+                    + ", country='" + country + '\''
+                    + '}';
         }
     }
 }

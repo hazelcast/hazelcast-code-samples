@@ -87,11 +87,16 @@ public class SessionWindow {
     @Nonnull
     private static String sessionToString(KeyedWindowResult<String, Tuple2<Long, Set<String>>> wr) {
         return String.format("Session{userId=%s, start=%s, duration=%2ds, value={viewed=%2d, purchases=%s}",
-                wr.key(), // userId
-                Instant.ofEpochMilli(wr.start()).atZone(ZoneId.systemDefault()).toLocalTime(), // session start
-                Duration.ofMillis(wr.end() - wr.start()).getSeconds(), // session duration
-                wr.result().f0(),  // number of viewed listings
-                wr.result().f1()); // set of purchased products
+                // userId
+                wr.key(),
+                // session start
+                Instant.ofEpochMilli(wr.start()).atZone(ZoneId.systemDefault()).toLocalTime(),
+                // session duration
+                Duration.ofMillis(wr.end() - wr.start()).getSeconds(),
+                // number of viewed listings
+                wr.result().f0(),
+                // set of purchased products
+                wr.result().f1());
     }
 
     public static void main(String[] args) throws Exception {

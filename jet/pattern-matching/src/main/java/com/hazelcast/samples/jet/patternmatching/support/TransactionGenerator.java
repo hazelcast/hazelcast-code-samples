@@ -39,7 +39,8 @@ public final class TransactionGenerator {
 
     private TransactionGenerator(int tradesPerSec) {
         this.emitPeriodNanos = SECONDS.toNanos(1) / tradesPerSec;
-        this.startTimeNanos = this.scheduledTimeNanos = System.nanoTime();
+        this.startTimeNanos = System.nanoTime();
+        this.scheduledTimeNanos = this.startTimeNanos;
     }
 
     public static StreamSource<TransactionEvent> transactionEventSource(int txPerSec) {

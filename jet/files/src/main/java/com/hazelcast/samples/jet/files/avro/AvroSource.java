@@ -18,12 +18,14 @@ package com.hazelcast.samples.jet.files.avro;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.function.SupplierEx;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Util;
 import com.hazelcast.jet.avro.AvroSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.map.IMap;
+import org.apache.avro.io.DatumReader;
 import org.apache.avro.reflect.ReflectDatumReader;
 
 import java.nio.file.Paths;
@@ -39,7 +41,7 @@ public class AvroSource {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
 
-        p.readFrom(AvroSources.filesBuilder(AvroSink.DIRECTORY_NAME, ReflectDatumReader<User>::new)
+        p.readFrom(AvroSources.filesBuilder(AvroSink.DIRECTORY_NAME, (SupplierEx<DatumReader<User>>) ReflectDatumReader::new)
                               //Both Jet members share the same local file system
                               .sharedFileSystem(true)
                               .build())
@@ -54,7 +56,7 @@ public class AvroSource {
 
     private void go() {
         try {
-            setup();
+            init();
             JetService jet = hz.getJet();
             jet.newJob(buildPipeline()).join();
 
@@ -66,10 +68,10 @@ public class AvroSource {
         }
     }
 
-    private void setup() {
+    private void init() {
         if (!Paths.get(AvroSink.DIRECTORY_NAME).toFile().exists()) {
-            System.out.println("Avro files directory does not exist, please run " +
-                    AvroSink.class.getSimpleName() + " first to create it.");
+            System.out.println("Avro files directory does not exist, please run "
+                    + AvroSink.class.getSimpleName() + " first to create it.");
             System.exit(0);
         }
         hz = Hazelcast.bootstrappedInstance();

@@ -67,7 +67,7 @@ public class JdbcSink {
 
     private void go() throws Exception {
         try {
-            setup();
+            init();
             Pipeline p = buildPipeline(connectionUrl());
             JetService jet = hz.getJet();
             jet.newJob(p).join();
@@ -77,7 +77,7 @@ public class JdbcSink {
         }
     }
 
-    private void setup() throws Exception {
+    private void init() throws Exception {
         dbDirectory = Files.createTempDirectory(JdbcSink.class.getName()).toString();
 
         createTable();

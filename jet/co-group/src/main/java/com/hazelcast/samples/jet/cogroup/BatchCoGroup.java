@@ -51,7 +51,8 @@ import static com.hazelcast.jet.datamodel.Tuple3.tuple3;
  * joins two or more streams on a common key and performs a user-specified
  * aggregate operation on the co-grouped items.
  */
-@SuppressWarnings("Convert2MethodRef") // https://bugs.openjdk.java.net/browse/JDK-8154236
+// https://bugs.openjdk.java.net/browse/JDK-8154236
+@SuppressWarnings("Convert2MethodRef")
 public final class BatchCoGroup {
     private static final String PAGE_VISIT = "pageVisit";
     private static final String ADD_TO_CART = "addToCart";
