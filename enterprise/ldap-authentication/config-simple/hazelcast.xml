@@ -1,0 +1,23 @@
+<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-config-4.2.xsd">
+
+     <security enabled="true">
+          <realms>
+               <realm name="ldapRealm">
+                    <authentication>
+                         <ldap>
+                              <url>ldap://127.0.0.1:10389</url>
+                              <role-mapping-attribute>cn</role-mapping-attribute>
+                              <role-mapping-mode>attribute</role-mapping-mode>
+                              <user-name-attribute>uid</user-name-attribute>
+                              <system-user-dn>uid=admin,ou=system</system-user-dn>
+                              <system-user-password>secret</system-user-password>
+                         </ldap>
+                    </authentication>
+               </realm>
+          </realms>
+          <client-authentication realm="ldapRealm"/>
+          <client-permissions>
+               <all-permissions principal="Best IMDG"/>
+          </client-permissions>
+     </security>
+</hazelcast>

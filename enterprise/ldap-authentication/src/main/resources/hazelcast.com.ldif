@@ -1,0 +1,74 @@
+version: 1
+
+dn: dc=hazelcast,dc=com
+dc: hazelcast
+objectClass: top
+objectClass: domain
+
+dn: ou=Users,dc=hazelcast,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: Users
+
+dn: uid=jduke,ou=Users,dc=hazelcast,dc=com
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+cn: Java Duke
+sn: duke
+uid: jduke
+userPassword: theduke
+
+dn: uid=hazelcast,ou=Users,dc=hazelcast,dc=com
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+cn: Best IMDG
+sn: Hazelcast
+uid: hazelcast
+description: cn=Role1,ou=Roles,dc=hazelcast,dc=com
+userPassword: imdg
+
+dn: ou=Roles,dc=hazelcast,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: Roles
+
+dn: cn=Admin,ou=Roles,dc=hazelcast,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: Admin
+member: uid=jduke,ou=Users,dc=hazelcast,dc=com
+
+dn: cn=Dev,ou=Roles,dc=hazelcast,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: Dev
+member: uid=hazelcast,ou=Users,dc=hazelcast,dc=com
+member: cn=Admin,ou=Roles,dc=hazelcast,dc=com
+
+dn: cn=Role1,ou=Roles,dc=hazelcast,dc=com
+objectClass: top
+objectClass: groupOfNames
+description: cn=Role2,cn=RoleParent,ou=Roles,dc=hazelcast,dc=com
+member:
+cn: Role1
+
+dn: cn=RoleParent,ou=Roles,dc=hazelcast,dc=com
+objectClass: top
+objectClass: groupOfNames
+member:
+cn: RoleParent
+
+dn: cn=Role2,cn=RoleParent,ou=Roles,dc=hazelcast,dc=com
+objectClass: top
+objectClass: groupOfNames
+description: cn=Role3,ou=Roles,dc=hazelcast,dc=com
+member:
+cn: Role2
+
+dn: cn=Role3,ou=Roles,dc=hazelcast,dc=com
+objectClass: top
+objectClass: groupOfNames
+member:
+cn: Role3
