@@ -40,6 +40,7 @@
         <module>client-failover-cluster</module>
         <module>ssl</module>
         <module>symmetric-encryption</module>
+        <module>simple-authentication</module>
     </modules>
 
     <repositories>

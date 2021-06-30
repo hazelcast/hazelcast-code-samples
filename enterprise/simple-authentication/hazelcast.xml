@@ -1,0 +1,26 @@
+<hazelcast xmlns="http://www.hazelcast.com/schema/config"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-config-5.0.xsd">
+
+    <security enabled="true">
+        <realms>
+            <realm name="simpleRealm">
+                <authentication>
+                    <simple>
+                        <user username="test" password="a1234">
+                            <role>monitor</role>
+                            <role>hazelcast</role>
+                        </user>
+                        <user username="root" password="secret">
+                            <role>admin</role>
+                        </user>
+                    </simple>
+                </authentication>
+            </realm>
+        </realms>
+        <client-authentication realm="simpleRealm" />
+        <client-permissions>
+            <all-permissions principal="admin" />
+        </client-permissions>
+    </security>
+</hazelcast>
