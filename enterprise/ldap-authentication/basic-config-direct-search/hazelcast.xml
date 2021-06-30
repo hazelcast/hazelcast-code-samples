@@ -1,0 +1,22 @@
+<hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-config-4.2.xsd">
+
+     <security enabled="true">
+          <realms>
+               <realm name="ldapRealm">
+                    <authentication>
+                         <ldap>
+                              <url>ldap://127.0.0.1:10389</url>
+                              <role-mapping-attribute>description</role-mapping-attribute>
+                              <role-mapping-mode>direct</role-mapping-mode>
+                              <role-name-attribute>cn</role-name-attribute>
+                              <role-recursion-max-depth>5</role-recursion-max-depth>
+                         </ldap>
+                    </authentication>
+               </realm>
+          </realms>
+          <client-authentication realm="ldapRealm"/>
+          <client-permissions>
+               <all-permissions principal="Role3"/>
+          </client-permissions>
+     </security>
+</hazelcast>
