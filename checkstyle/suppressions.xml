@@ -17,6 +17,17 @@
     <suppress checks="NPathComplexity" files="com/hazelcast/examples/iterator/CacheIteratorUsage"/>
     <suppress checks="VisibilityModifierCheck" files="member/*" />
     <suppress checks="VisibilityModifierCheck" files="client/*" />
+    <suppress checks="VisibilityModifierCheck" files="jet/cdc/Customer" />
+    <suppress checks="VisibilityModifierCheck" files="jet/files/SalesJsonAnalyzer" />
     <suppress checks="EmptyBlock" files="member/LockSample" />
     <suppress checks="EmptyBlock" files="client/LockSample" />
+    <suppress checks="InnerAssignment" files="jet/jobmanagement/JobSuspendResume" />
+    <suppress checks="InnerAssignment" files="jet/sessionwindow/GenerateEventsP" />
+    <suppress checks="InnerAssignment" files="jet/sockets/StreamTextSocket" />
+    <suppress checks="GenericWhitespace" files="jet/returnresults" />
+    <suppress checks="GenericWhitespace" files="jet/wordcount" />
+    <suppress checks="GenericWhitespace" files="jet/slidingwindow" />
+
+    <suppress checks="[a-zA-Z0-9]*" files="jet/files/unifiedapi/generated/AvroTrade" />
+    <suppress checks="[a-zA-Z0-9]*" files="jet/hadoop/generated/User" />
 </suppressions>

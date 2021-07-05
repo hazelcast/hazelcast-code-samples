@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2008-2021, Hazelcast, Inc. All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <name>Jet</name>
+    <description>Jet code samples</description>
+
+    <groupId>com.hazelcast.samples.jet</groupId>
+    <artifactId>jet</artifactId>
+
+    <parent>
+        <groupId>com.hazelcast.samples</groupId>
+        <artifactId>code-samples</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modules>
+        <module>cdc</module>
+        <module>co-group</module>
+        <module>early-window-results</module>
+        <module>elastic</module>
+        <module>enrichment</module>
+        <module>event-journal</module>
+        <module>fault-tolerance</module>
+        <module>files</module>
+        <module>files-cloud</module>
+        <module>grpc</module>
+        <module>hadoop</module>
+        <module>hazelcast-connectors</module>
+        <module>hello-world</module>
+        <module>jdbc</module>
+        <module>jms</module>
+        <module>job-management</module>
+        <module>kafka</module>
+        <module>pattern-matching</module>
+        <module>protobuf</module>
+        <module>python</module>
+        <module>return-results</module>
+        <module>rolling-aggregation</module>
+        <module>session-windows</module>
+        <module>sockets</module>
+        <module>source-sink-builder</module>
+        <module>sliding-windows</module>
+        <module>tf-idf</module>
+        <module>trade-source</module>
+        <module>wordcount</module>
+    </modules>
+
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -20,8 +20,21 @@
         <jdk.integration.version>1.8</jdk.integration.version>
 
         <hazelcast.version>5.0-SNAPSHOT</hazelcast.version>
-        <hazelcast-jet.version>3.2.2</hazelcast-jet.version>
         <hazelcast-jclouds.version>3.7.2</hazelcast-jclouds.version>
+
+        <!--Used in jet code samples-->
+        <jsr107.api.version>1.0.0</jsr107.api.version>
+        <avro.version>1.10.2</avro.version>
+        <jackson.version>2.11.2</jackson.version>
+        <hadoop.version>3.3.0</hadoop.version>
+        <parquet.version>1.12.0</parquet.version>
+        <scala.version>2.12</scala.version>
+        <zookeeper.version>3.5.8</zookeeper.version>
+        <kafka.version>2.2.2</kafka.version>
+        <grpc.version>1.34.0</grpc.version>
+        <protobuf.version>3.13.0</protobuf.version>
+        <maven.os.plugin.version>1.6.2</maven.os.plugin.version>
+        <maven.protobuf.plugin.version>0.6.1</maven.protobuf.plugin.version>
 
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
@@ -59,6 +72,7 @@
         <module>helper</module>
         <module>jcache</module>
         <module>jcache-1.1</module>
+        <module>jet</module>
         <module>jmx</module>
         <module>json</module>
         <module>learning-basics</module>
