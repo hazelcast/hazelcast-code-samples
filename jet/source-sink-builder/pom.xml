@@ -29,16 +29,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>../wordcount/src/main/resources</directory>
-            </resource>
-        </resources>
-    </build>
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
