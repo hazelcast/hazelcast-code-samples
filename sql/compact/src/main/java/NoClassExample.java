@@ -24,6 +24,10 @@ public class NoClassExample {
 
         SqlService sqlService = hazelcast.getSql();
 
+        //Create a table called myMap with the columns listed.
+        // For the key, the chosen format is integer.
+        // For the value, we choose the `compact` format(as set in `valueFormat`)
+        // where the typename of it will be `person`(as set in `valueCompactTypeName`)
         sqlService.execute("CREATE MAPPING myMap ( "
                 + "__key INT , "
                 + "name VARCHAR ,"
@@ -39,6 +43,8 @@ public class NoClassExample {
 
         //Query map with sql
         SqlResult sqlRows = sqlService.execute("SELECT * FROM myMap");
+        //Following statements prints:
+        //[__key INTEGER=1, name VARCHAR=John, surname VARCHAR=Stone, id INTEGER=1]
         for (SqlRow sqlRow : sqlRows) {
             System.out.println(sqlRow);
         }
@@ -46,8 +52,12 @@ public class NoClassExample {
         //read all entries from the map
         //Since we don't have the class in our local, GenericRecord is returned instead
         Set<Map.Entry<Integer, GenericRecord>> entries = myMap.entrySet();
+        //Following statements prints:
+        //KEY = 1
+        //VALUE = {"person": {"id": 1, "name": "John", "surname": "Stone"}}
         for (Map.Entry<Integer, GenericRecord> entry : entries) {
-            System.out.println(entry);
+            System.out.println("KEY : " + entry.getKey());
+            System.out.println("VALUE : " + entry.getValue());
         }
 
         hazelcast.shutdown();

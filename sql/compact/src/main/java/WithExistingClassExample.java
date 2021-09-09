@@ -27,6 +27,12 @@ public class WithExistingClassExample {
 
         SqlService sqlService = hazelcast.getSql();
 
+        //Create a table called myMap with the columns listed.
+        // For the key, the chosen format is integer.
+        // For the value, we choose the `compact` format(as set in `valueFormat`)
+        // where the typename of it will be `Person`(as set in `valueCompactTypeName`)
+        // Note that our column list exactly matches fieldNames of `Person` class. This is to make sure that the
+        // values inserted via IMap API above can be queried with sql statements correctly.
         sqlService.execute("CREATE MAPPING myMap ( "
                 + "__key INT, "
                 + "name VARCHAR ,"
