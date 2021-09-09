@@ -19,7 +19,7 @@ public class CompactFullConfig {
         //This config is needed only during BETA phase.
         CompactSerializationConfig compactSerializationConfig = config.getSerializationConfig().getCompactSerializationConfig();
         compactSerializationConfig.setEnabled(true);
-        //Here we register a typename and a serializer against the PersonDTO class so that any client from any language
+        //Here we register a typename `person` and a serializer against the PersonDTO class so that any client from any language
         //can use same typename abd field names to match
         compactSerializationConfig.register(PersonDTO.class, "person", new CompactSerializer<PersonDTO>() {
             @Override
