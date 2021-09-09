@@ -24,16 +24,16 @@ public class NoClassExample {
 
         SqlService sqlService = hazelcast.getSql();
 
-        sqlService.execute("CREATE MAPPING myMap ( " +
-                "__key INT , " +
-                "name VARCHAR ," +
-                "surname VARCHAR," +
-                "id INT ) " +
-                "TYPE IMap " +
-                "OPTIONS (" +
-                "    'keyFormat' = 'int', " +
-                "    'valueFormat' = 'compact', " +
-                "    'valueCompactTypeName' = 'person' )");
+        sqlService.execute("CREATE MAPPING myMap ( "
+                + "__key INT , "
+                + "name VARCHAR ,"
+                + "surname VARCHAR,"
+                + "id INT ) "
+                + "TYPE IMap "
+                + "OPTIONS ("
+                + "    'keyFormat' = 'int', "
+                + "    'valueFormat' = 'compact', "
+                + "    'valueCompactTypeName' = 'person' )");
 
         sqlService.execute("INSERT INTO myMap (__key, name, surname, id) VALUES (1, ?, ?, 1)", "John", "Stone");
 

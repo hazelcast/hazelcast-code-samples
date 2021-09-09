@@ -22,7 +22,7 @@ public class CompactZeroConfig {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         Map<String, PersonDTO> map = hz.getMap("map");
 
-        map.put("Peter", new PersonDTO("Peter","Stone",35));
+        map.put("Peter", new PersonDTO("Peter", "Stone", 35));
 
         PersonDTO person = map.get("Peter");
         System.out.println(person);

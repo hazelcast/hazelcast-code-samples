@@ -27,16 +27,16 @@ public class WithExistingClassExample {
 
         SqlService sqlService = hazelcast.getSql();
 
-        sqlService.execute("CREATE MAPPING myMap ( " +
-                "__key INT, " +
-                "name VARCHAR ," +
-                "surname VARCHAR," +
-                "id INT ) " +
-                "TYPE IMap " +
-                "OPTIONS (" +
-                "    'keyFormat'='int', " +
-                "    'valueFormat'='compact', " +
-                "    'valueCompactTypeName'='" + Person.class.getName() + "' ) ");
+        sqlService.execute("CREATE MAPPING myMap ( "
+                + "__key INT, "
+                + "name VARCHAR ,"
+                + "surname VARCHAR,"
+                + "id INT ) "
+                + "TYPE IMap "
+                + "OPTIONS ("
+                + "    'keyFormat'='int', "
+                + "    'valueFormat'='compact', "
+                + "    'valueCompactTypeName'='" + Person.class.getName() + "' ) ");
 
         sqlService.execute("INSERT INTO myMap (__key, name, surname, id) VALUES (2, ?, ?, 2)", "Jack", "Sparrow");
 

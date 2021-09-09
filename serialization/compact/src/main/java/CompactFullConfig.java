@@ -6,7 +6,6 @@ import com.hazelcast.nio.serialization.compact.CompactReader;
 import com.hazelcast.nio.serialization.compact.CompactSerializer;
 import com.hazelcast.nio.serialization.compact.CompactWriter;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -21,7 +20,7 @@ public class CompactFullConfig {
         CompactSerializationConfig compactSerializationConfig = config.getSerializationConfig().getCompactSerializationConfig();
         compactSerializationConfig.setEnabled(true);
         //Here we register a typename and a serializer against the PersonDTO class so that any client from any language
-        // can use same typename abd field names to match 
+        //can use same typename abd field names to match
         compactSerializationConfig.register(PersonDTO.class, "person", new CompactSerializer<PersonDTO>() {
             @Override
             public PersonDTO read(CompactReader compactReader) {
