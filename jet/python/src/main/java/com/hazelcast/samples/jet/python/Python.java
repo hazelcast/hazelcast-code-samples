@@ -16,6 +16,7 @@
 
 package com.hazelcast.samples.jet.python;
 
+import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
@@ -72,7 +73,10 @@ public class Python {
         Path baseDir = Util.getFilePathOfClasspathResource("python");
         Pipeline p = buildPipeline(baseDir.toString());
 
-        HazelcastInstance hz = Hazelcast.bootstrappedInstance();
+        Config hzConfig = new Config();
+        hzConfig.getJetConfig().setEnabled(true);
+        hzConfig.getJetConfig().setResourceUploadEnabled(true);
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance(hzConfig);
         JetService jet = hz.getJet();
         try {
             Observable<String> observable = jet.getObservable(RESULTS);

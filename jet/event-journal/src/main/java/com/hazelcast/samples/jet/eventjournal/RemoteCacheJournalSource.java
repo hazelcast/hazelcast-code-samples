@@ -102,6 +102,7 @@ public class RemoteCacheJournalSource {
               .setEnabled(true)
               .setCapacity(10_000)
               .setTimeToLiveSeconds(10);
+        config.getJetConfig().setEnabled(true);
         return config;
     }
 

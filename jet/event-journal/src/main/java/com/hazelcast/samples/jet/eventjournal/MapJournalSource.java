@@ -76,6 +76,7 @@ public class MapJournalSource {
            .setEnabled(true)
            .setCapacity(10_000)
            .setTimeToLiveSeconds(10);
+        cfg.getJetConfig().setEnabled(true);
         return cfg;
     }
 

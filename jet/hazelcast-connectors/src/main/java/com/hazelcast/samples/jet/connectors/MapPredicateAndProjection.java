@@ -54,6 +54,7 @@ public class MapPredicateAndProjection {
         config.getSerializationConfig().addPortableFactory(
                 TradePortableFactory.FACTORY_ID, new TradePortableFactory()
         );
+        config.getJetConfig().setEnabled(true);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         JetService jet = hz.getJet();
         try {
