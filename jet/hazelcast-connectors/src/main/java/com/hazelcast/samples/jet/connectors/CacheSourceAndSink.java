@@ -44,6 +44,8 @@ public class CacheSourceAndSink {
         config.addCacheConfig(new CacheSimpleConfig().setName(SOURCE_NAME))
               .addCacheConfig(new CacheSimpleConfig().setName(SINK_NAME));
 
+        config.getJetConfig().setEnabled(true);
+
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         JetService jet = hz.getJet();
 

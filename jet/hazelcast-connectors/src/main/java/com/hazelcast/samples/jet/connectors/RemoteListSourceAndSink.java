@@ -41,7 +41,9 @@ public class RemoteListSourceAndSink {
     private static final String LIST_2 = "list-2";
 
     public static void main(String[] args) {
-        HazelcastInstance localHz = Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        config.getJetConfig().setEnabled(true);
+        HazelcastInstance localHz = Hazelcast.newHazelcastInstance(config);
         JetService localJet = localHz.getJet();
         try {
             HazelcastInstance externalHz = startExternalHazelcast();
@@ -77,6 +79,7 @@ public class RemoteListSourceAndSink {
         System.out.println("Creating and populating remote Hazelcast instance...");
         Config config = new Config();
         config.getNetworkConfig().setPort(6701);
+        config.getJetConfig().setEnabled(true);
         return Hazelcast.newHazelcastInstance(config);
     }
 
