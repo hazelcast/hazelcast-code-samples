@@ -82,8 +82,10 @@ public class RemoteMapJournalSource {
     }
 
     private static HazelcastInstance startLocalHzCluster() {
-        HazelcastInstance localHz = Hazelcast.newHazelcastInstance();
-        Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        config.getJetConfig().setEnabled(true);
+        HazelcastInstance localHz = Hazelcast.newHazelcastInstance(config);
+        Hazelcast.newHazelcastInstance(config);
         return localHz;
     }
 
