@@ -39,6 +39,7 @@ public class RemoteMapSourceAndSink {
     public static void main(String[] args) {
         Config config = new Config();
         config.getJetConfig().setEnabled(true);
+        config.setClusterName("jet");
         HazelcastInstance localHz = Hazelcast.newHazelcastInstance(config);
         JetService localJet = localHz.getJet();
         try {
@@ -75,6 +76,7 @@ public class RemoteMapSourceAndSink {
         Config config = new Config();
         config.getNetworkConfig().setPort(6701);
         config.getJetConfig().setEnabled(true);
+        config.setClusterName("dev");
         return Hazelcast.newHazelcastInstance(config);
     }
 
