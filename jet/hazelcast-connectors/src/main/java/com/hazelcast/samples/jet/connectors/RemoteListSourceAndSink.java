@@ -43,6 +43,7 @@ public class RemoteListSourceAndSink {
     public static void main(String[] args) {
         Config config = new Config();
         config.getJetConfig().setEnabled(true);
+        config.setClusterName("jet");
         HazelcastInstance localHz = Hazelcast.newHazelcastInstance(config);
         JetService localJet = localHz.getJet();
         try {
@@ -71,7 +72,6 @@ public class RemoteListSourceAndSink {
             System.out.println("Remote list-2 contents: " + new ArrayList<>(externalHz.getList(LIST_2)));
         } finally {
             Hazelcast.shutdownAll();
-            Hazelcast.shutdownAll();
         }
     }
 
@@ -80,6 +80,7 @@ public class RemoteListSourceAndSink {
         Config config = new Config();
         config.getNetworkConfig().setPort(6701);
         config.getJetConfig().setEnabled(true);
+        config.setClusterName("dev");
         return Hazelcast.newHazelcastInstance(config);
     }
 
