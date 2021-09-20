@@ -33,10 +33,5 @@
             <artifactId>jcache</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-enterprise</artifactId>
-            <version>${hazelcast.version}</version>
-        </dependency>
     </dependencies>
 </project>
