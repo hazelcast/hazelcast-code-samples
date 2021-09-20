@@ -32,10 +32,11 @@ import java.util.Objects;
  */
 public class Trade implements Serializable {
 
-    private long time;
-    private String ticker;
-    private long quantity;
-    private long price;
+    // they need to be public since they are accessed from field mappers
+    public long time;
+    public String ticker;
+    public long quantity;
+    public long price;
 
     public Trade() {
     }
