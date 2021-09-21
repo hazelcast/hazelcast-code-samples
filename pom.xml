@@ -22,6 +22,8 @@
         <hazelcast.version>5.0-SNAPSHOT</hazelcast.version>
         <hazelcast-jclouds.version>3.7.2</hazelcast-jclouds.version>
 
+        <!-- Used in ClientConsole application-->
+        <jline.version>3.19.0</jline.version>
         <!--Used in jet code samples-->
         <jsr107.api.version>1.0.0</jsr107.api.version>
         <avro.version>1.10.2</avro.version>

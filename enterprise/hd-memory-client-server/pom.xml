@@ -7,8 +7,8 @@
     <artifactId>hd-memory-client-server</artifactId>
     <name>Enterprise - HD Memory Client / Server</name>
     <description>
-        Demonstrates Hazelcast HD Memory
-        by running a small heap JVM cluster server and referencing 3gb of native memory.
+        Demonstrates Hazelcast HD Memory by running a small heap
+        JVM cluster server and referencing 3 GB of native memory.
     </description>
 
     <parent>
