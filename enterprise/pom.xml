@@ -63,7 +63,7 @@
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-enterprise-all</artifactId>
+            <artifactId>hazelcast-enterprise</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
