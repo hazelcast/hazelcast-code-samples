@@ -24,8 +24,8 @@ public class CopyMapFromHz3Example {
                     + "<hazelcast-client xmlns=\"http://www.hazelcast.com/schema/client-config\"\n"
                     + "                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "                  xsi:schemaLocation=\"http://www.hazelcast.com/schema/client-config\n"
-                    + "                  http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.12" +
-                    ".xsd\">\n"
+                    + "                  http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.12"
+                    + ".xsd\">\n"
                     + "\n"
                     + "    <network>\n"
                     + "        <cluster-members>\n"
@@ -69,7 +69,7 @@ public class CopyMapFromHz3Example {
 
         IMap<Object, Object> map = hz.getMap(targetMap);
 
-        System.out.println("After copying all the items from the source map " +
-                "the target map contains " + map.size() + " items in total.");
+        System.out.println("After copying all the items from the source map "
+                + "the target map contains " + map.size() + " items in total.");
     }
 }

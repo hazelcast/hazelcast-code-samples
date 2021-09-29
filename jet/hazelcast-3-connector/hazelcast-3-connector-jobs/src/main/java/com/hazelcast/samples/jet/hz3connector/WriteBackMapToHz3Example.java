@@ -24,8 +24,8 @@ public class WriteBackMapToHz3Example {
                     + "<hazelcast-client xmlns=\"http://www.hazelcast.com/schema/client-config\"\n"
                     + "                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "                  xsi:schemaLocation=\"http://www.hazelcast.com/schema/client-config\n"
-                    + "                  http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.12" +
-                    ".xsd\">\n"
+                    + "                  http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.12"
+                    + ".xsd\">\n"
                     + "\n"
                     + "    <network>\n"
                     + "        <cluster-members>\n"

@@ -6,7 +6,6 @@ import com.hazelcast.connector.map.Hz3MapAdapter;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.function.BiFunctionEx;
-import com.hazelcast.function.FunctionEx;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.datamodel.Tuple3;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -31,8 +30,8 @@ public class EnrichUsingMapFromHz3Example {
                     + "<hazelcast-client xmlns=\"http://www.hazelcast.com/schema/client-config\"\n"
                     + "                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "                  xsi:schemaLocation=\"http://www.hazelcast.com/schema/client-config\n"
-                    + "                  http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.12" +
-                    ".xsd\">\n"
+                    + "                  http://www.hazelcast.com/schema/client-config/hazelcast-client-config-3.12"
+                    + ".xsd\">\n"
                     + "\n"
                     + "    <network>\n"
                     + "        <cluster-members>\n"
