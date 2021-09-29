@@ -178,7 +178,7 @@ public class TfIdf {
     }
 
     private void go() {
-        System.out.println("Creating Jet instance 1");
+        System.out.println("Creating Hazelcast instance 1");
         hz = Hazelcast.bootstrappedInstance();
         buildInvertedIndex();
         System.out.println("size=" + hz.getMap(INVERTED_INDEX).size());

@@ -32,7 +32,7 @@ import static com.hazelcast.jet.pipeline.JournalInitialPosition.START_FROM_OLDES
 import static java.util.Objects.requireNonNull;
 
 /**
- * We demonstrate how submitted jobs can be fetched and tracked via any Jet
+ * We demonstrate how submitted jobs can be fetched and tracked via any Hazelcast
  * instance.
  */
 public class JobTracking {
@@ -57,7 +57,7 @@ public class JobTracking {
         jet1.newJob(p, jobConfig);
 
         JetService jet2 = hz2.getJet();
-        // jobs can be also tracked via other Jet nodes
+        // jobs can be also tracked via other Hazelcast members
         List<Job> jobs = jet2.getJobs();
         Job trackedJob1 = jobs.get(0);
 

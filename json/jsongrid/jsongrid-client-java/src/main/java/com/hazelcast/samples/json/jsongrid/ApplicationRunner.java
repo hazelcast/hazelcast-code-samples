@@ -154,7 +154,6 @@ public class ApplicationRunner implements CommandLineRunner {
 
         Collection<?> results =
                 iMap.values(Predicates.sql(sql));
-
         for (Object result : results) {
             System.out.println(result);
         }
