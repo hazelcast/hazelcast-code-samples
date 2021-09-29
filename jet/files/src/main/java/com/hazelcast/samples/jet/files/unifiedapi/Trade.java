@@ -32,11 +32,10 @@ import java.util.Objects;
  */
 public class Trade implements Serializable {
 
-    // they need to be public since they are accessed from field mappers
-    public long time;
-    public String ticker;
-    public long quantity;
-    public long price;
+    private long time;
+    private String ticker;
+    private long quantity;
+    private long price;
 
     public Trade() {
     }
@@ -76,6 +75,36 @@ public class Trade implements Serializable {
      */
     public long getPrice() {
         return price;
+    }
+
+    // these setters are accessed from the field mappers
+
+    /**
+     * Set the event time of the trade.
+     */
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    /**
+     * Set the name of the trade instrument.
+     */
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
+    }
+
+    /**
+     * Set the quantity of the trade.
+     */
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
+    /**
+     * Set the price of trade.
+     */
+    public void setPrice(long price) {
+        this.price = price;
     }
 
     @Override

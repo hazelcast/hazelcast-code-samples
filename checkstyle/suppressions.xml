@@ -19,7 +19,6 @@
     <suppress checks="VisibilityModifierCheck" files="client/*" />
     <suppress checks="VisibilityModifierCheck" files="jet/cdc/Customer" />
     <suppress checks="VisibilityModifierCheck" files="jet/files/SalesJsonAnalyzer" />
-    <suppress checks="VisibilityModifierCheck" files="jet/files/unifiedapi/Trade" />
     <suppress checks="EmptyBlock" files="member/LockSample" />
     <suppress checks="EmptyBlock" files="client/LockSample" />
     <suppress checks="InnerAssignment" files="jet/jobmanagement/JobSuspendResume" />
