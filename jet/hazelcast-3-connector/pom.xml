@@ -37,8 +37,4 @@
         <module>hazelcast-3-member</module>
         <module>hazelcast-3-connector-jobs</module>
     </modules>
-
-    <properties>
-
-    </properties>
 </project>

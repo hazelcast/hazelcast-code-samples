@@ -52,8 +52,9 @@ public class WriteBackMapToHz3Example {
 
         HazelcastInstance hz = Hazelcast.bootstrappedInstance();
 
+        IMap<Object, Object> map = hz.getMap(sourceMap);
         BatchSource<Entry<Object, Object>> source = Sources.map(sourceMap);
-        Sink<Entry<Object, Object>> sink = Hz3Sinks.map(targetMap, HZ3_CLIENT_CONFIG);
+        Sink<Entry<Object, Object>> sink = Hz3Sinks.remoteMap(targetMap, HZ3_CLIENT_CONFIG);
 
         Pipeline p = Pipeline.create();
         p.readFrom(source)
@@ -66,5 +67,7 @@ public class WriteBackMapToHz3Example {
 
         Job job = hz.getJet().newJob(p, config);
         job.join();
+
+        System.out.println(map.size() + " items copied from source to target map");
     }
 }

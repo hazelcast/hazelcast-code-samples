@@ -32,7 +32,6 @@
             <artifactId>hazelcast</artifactId>
             <version>3.12.12</version>
         </dependency>
-
     </dependencies>
 
     <properties>

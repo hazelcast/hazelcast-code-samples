@@ -6,6 +6,8 @@ import java.util.Objects;
 
 public class Trade implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private final long time;
     private final String ticker;
     private final long quantity;

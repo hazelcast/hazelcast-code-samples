@@ -64,9 +64,6 @@ public class EnrichUsingMapFromHz3Example {
                         (trade, o) -> tuple3(o, trade.getTicker(), trade.getPrice())
                 );
 
-//        BiFunctionEx<? super Map<String, String>, ? super Trade, Tuple3<String, String, Long>> mapFn =
-//                (kvMap, t) -> ((BiFunctionEx<? super Trade, ? super String, ? extends Tuple3<String, String, Long>>) (trade, o) -> tuple3(o, trade.getTicker(), trade.getPrice())).apply(t, kvMap.get(((FunctionEx<? super Trade, ? extends String>) Trade::getTicker).apply(t)));
-
         StreamStage<Tuple3<String, String, Long>> mapStage =
                 p.readFrom(tradesSource)
                  .withoutTimestamps()
@@ -81,6 +78,7 @@ public class EnrichUsingMapFromHz3Example {
         config.addCustomClasspath(mapStage.name(), "hazelcast-3-connector-impl-5.0-SNAPSHOT.jar");
         hz.getJet().newJob(p, config);
 
+        System.out.println("Enrichment job started, see the output in the member log.");
     }
 
     public static StreamSource<Trade> tradeStream(int tradesPerSec, int maxLag) {
