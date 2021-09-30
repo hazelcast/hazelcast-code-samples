@@ -77,6 +77,36 @@ public class Trade implements Serializable {
         return price;
     }
 
+    // these setters are accessed from the field mappers
+
+    /**
+     * Set the event time of the trade.
+     */
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    /**
+     * Set the name of the trade instrument.
+     */
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
+    }
+
+    /**
+     * Set the quantity of the trade.
+     */
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
+    /**
+     * Set the price of trade.
+     */
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "Trade{time=" + time + ", ticker='" + ticker + '\'' + ", quantity=" + quantity

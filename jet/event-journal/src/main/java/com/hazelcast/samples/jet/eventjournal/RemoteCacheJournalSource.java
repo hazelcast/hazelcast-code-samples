@@ -81,8 +81,11 @@ public class RemoteCacheJournalSource {
     }
 
     private static HazelcastInstance startLocalHzCluster() {
-        HazelcastInstance localHz = Hazelcast.newHazelcastInstance();
-        Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        config.getJetConfig().setEnabled(true);
+        config.setClusterName("jet");
+        HazelcastInstance localHz = Hazelcast.newHazelcastInstance(config);
+        Hazelcast.newHazelcastInstance(config);
         return localHz;
     }
 
@@ -102,6 +105,8 @@ public class RemoteCacheJournalSource {
               .setEnabled(true)
               .setCapacity(10_000)
               .setTimeToLiveSeconds(10);
+        config.getJetConfig().setEnabled(true);
+        config.setClusterName("dev");
         return config;
     }
 

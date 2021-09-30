@@ -37,7 +37,10 @@ public class RemoteMapSourceAndSink {
     private static final int ITEM_COUNT = 10;
 
     public static void main(String[] args) {
-        HazelcastInstance localHz = Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        config.getJetConfig().setEnabled(true);
+        config.setClusterName("jet");
+        HazelcastInstance localHz = Hazelcast.newHazelcastInstance(config);
         JetService localJet = localHz.getJet();
         try {
             HazelcastInstance externalHz = startExternalHazelcast();
@@ -72,6 +75,8 @@ public class RemoteMapSourceAndSink {
         System.out.println("Creating and populating remote Hazelcast instance...");
         Config config = new Config();
         config.getNetworkConfig().setPort(6701);
+        config.getJetConfig().setEnabled(true);
+        config.setClusterName("dev");
         return Hazelcast.newHazelcastInstance(config);
     }
 

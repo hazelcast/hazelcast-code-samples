@@ -40,12 +40,13 @@
         <module>serializable</module>
         <module>stream-serializer</module>
         <module>user-context</module>
+        <module>compact</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-all</artifactId>
+            <artifactId>hazelcast</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>

@@ -45,7 +45,7 @@ import com.hazelcast.jet.pipeline.StreamSource;
  * </pre>
  * <p>
  * The map written into by this pipeline's sink can be read from other Jet jobs
- * or IMDG clients as any other {@code IMap}.
+ * or Hazelcast clients as any other {@code IMap}.
  */
 public class Cache {
 

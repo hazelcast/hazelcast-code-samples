@@ -17,6 +17,7 @@
 package com.hazelcast.samples.jet.connectors;
 
 import com.hazelcast.collection.IList;
+import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
@@ -41,7 +42,9 @@ public class ListSourceAndSink {
     private static final String RESULT_LIST = "resultList";
 
     public static void main(String[] args) {
-        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        config.getJetConfig().setEnabled(true);
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         JetService jet = hz.getJet();
 
         try {

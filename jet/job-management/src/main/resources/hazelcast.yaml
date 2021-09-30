@@ -14,3 +14,7 @@ hazelcast:
       event-journal:
         enabled: true
         capacity: 100000
+
+  jet:
+    enabled: true
+

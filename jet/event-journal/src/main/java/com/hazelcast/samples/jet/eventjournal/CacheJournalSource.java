@@ -34,7 +34,7 @@ import static com.hazelcast.jet.pipeline.JournalInitialPosition.START_FROM_OLDES
 /**
  * A pipeline which streams events from an ICache. The
  * values for new entries are extracted and then written
- * to a local IList in the Jet cluster.
+ * to a local IList in the Hazelcast cluster.
  */
 public class CacheJournalSource {
 
@@ -76,6 +76,7 @@ public class CacheJournalSource {
               .setEnabled(true)
               .setCapacity(10_000)
               .setTimeToLiveSeconds(10);
+        config.getJetConfig().setEnabled(true);
         return config;
     }
 
