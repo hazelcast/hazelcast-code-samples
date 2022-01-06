@@ -24,7 +24,7 @@ public class CompactFullConfig {
         compactSerializationConfig.register(PersonDTO.class, "person", new CompactSerializer<PersonDTO>() {
             @Override
             public PersonDTO read(CompactReader compactReader) {
-                int age = compactReader.readInt("age");
+                int age = compactReader.readInt32("age");
                 String name = compactReader.readString("name");
                 String surname = compactReader.readString("surname");
                 return new PersonDTO(name, surname, age);
@@ -32,7 +32,7 @@ public class CompactFullConfig {
 
             @Override
             public void write(CompactWriter compactWriter, PersonDTO personDTO) {
-                compactWriter.writeInt("age", personDTO.getAge());
+                compactWriter.writeInt32("age", personDTO.getAge());
                 compactWriter.writeString("name", personDTO.getName());
                 compactWriter.writeString("surname", personDTO.getSurname());
             }
