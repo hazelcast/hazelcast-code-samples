@@ -28,14 +28,14 @@ public class ClientWithoutDomainObjectExample {
 
         GenericRecord wally = GenericRecordBuilder.portable(classDefinition)
                 .setString("name", "Wally")
-                .setInt("age", 30)
+                .setInt32("age", 30)
                 .build();
 
         map.put(1, wally);
 
         GenericRecord kermit = GenericRecordBuilder.portable(classDefinition)
                 .setString("name", "Kermit The Frog")
-                .setInt("age", 12)
+                .setInt32("age", 12)
                 .build();
 
         map.put(2, kermit);

@@ -27,12 +27,12 @@ public class AddQuantityEntryProcessor implements Serializable, EntryProcessor {
             return null;
         }
 
-        int quantity = genericRecord.getInt("quantity");
+        int quantity = genericRecord.getInt32("quantity");
         quantity += additionalQuantity;
 
         GenericRecord newRecord = genericRecord.newBuilder()
                 .setString("name", name)
-                .setInt("quantity", quantity)
+                .setInt32("quantity", quantity)
                 .build();
 
         entry.setValue(newRecord);
