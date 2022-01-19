@@ -405,7 +405,6 @@ prepareClientKeyMaterialExt() {
   # Create a CSR request
   openssl req -new -config ${OPENSSL_CONF} -keyform PEM -key $1-key.pem -outform PEM -out $1-cert.csr -subj "/C=US/O=Hazelcast/CN=$1"
   # Issue a certificate
-  # openssl x509 -req -extensions v3_req -extfile ${OPENSSL_CONF} -inform DER -in $1-cert.csr -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -outform DER -out $1-cert.crt
   if [ -z "$3" ]; then
     openssl ca -config ${OPENSSL_CONF} -extensions $2 -extfile ${OPENSSL_CONF} -batch -keyfile ca-key.pem -cert ca-cert.pem -out $1-cert.pem -days 365 -infiles $1-cert.csr
   else

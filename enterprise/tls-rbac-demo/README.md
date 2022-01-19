@@ -13,7 +13,7 @@ The lite-member has the `on-join-operation` attribute configured to value `SEND`
   config.getSecurityConfig().setOnJoinPermissionOperation(SEND);
 ```
 
-[Look into the documentation](https://docs.hazelcast.com/imdg/4.1/security/native-client-security#handling-permissions-when-a-new-member-joins) for more details about handling permissions when a new member joins.
+[Look into the documentation](https://docs.hazelcast.com/hazelcast/5.0/security/native-client-security#handling-permissions-when-a-new-member-joins) for more details about handling permissions when a new member joins.
 
 The demo uses native TLS (BoringSSL).
 
