@@ -3,9 +3,17 @@
 This code sample demonstrates a dynamic reconfiguration of role-based access control in Hazelcast.
 
 The project contains three runnable classes:
-* `Server`: runs a Hazelcast IMDG server instance embedded inside a simple Java wrapper application;
-* `TimestampClient`: puts and gets sample data into an `IMap`;
-* `ReplacePermissions`: changes the RBAC configuration dynamically. It gets a new permission configuration XML file path as the argument.
+* `Server`: runs a Hazelcast server instance embedded inside a simple Java wrapper application;
+* `TimestampClient`: runs a Hazelcast client that puts and gets timestamps into an `IMap`;
+* `ReplacePermissions`: dynamically changes the RBAC configuration by starting a new lite-member with a new permissions configuration. It gets a new permission configuration XML file path as the argument.
+
+The lite-member has the `on-join-operation` attribute configured to value `SEND` to distribute the new set of permissions.
+
+```java
+  config.getSecurityConfig().setOnJoinPermissionOperation(SEND);
+```
+
+[Look into the documentation](https://docs.hazelcast.com/imdg/4.1/security/native-client-security#handling-permissions-when-a-new-member-joins) for more details about handling permissions when a new member joins.
 
 The demo uses native TLS (BoringSSL).
 
