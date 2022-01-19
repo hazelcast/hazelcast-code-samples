@@ -8,6 +8,9 @@ import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.examples.helper.LicenseUtils;
 
+/**
+ * Starts hazelcast member with configuration loaded from the {@code resources/hazelcast.xml} file.
+ */
 public class Server {
 
     public static Config config() throws FileNotFoundException {

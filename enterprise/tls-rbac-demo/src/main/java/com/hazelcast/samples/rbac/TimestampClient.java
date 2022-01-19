@@ -5,6 +5,8 @@ import static java.util.Objects.requireNonNull;
 import java.io.File;
 import java.io.IOException;
 import java.security.AccessControlException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 import com.hazelcast.client.HazelcastClient;
@@ -13,10 +15,16 @@ import com.hazelcast.client.config.XmlClientConfigBuilder;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 
+/**
+ * The executable TimestampClient class starts a Hazelcast client and tries repeatedly in a loop to read and write from/to a
+ * protected {@code "timestamps"} {@link IMap}.
+ */
 public class TimestampClient {
 
+    private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("com.hazelcast");
+
     private final File clientConfigFile;
-    
+
     public TimestampClient(String fileName) {
         clientConfigFile = new File(requireNonNull(fileName));
         if (!clientConfigFile.isFile()) {
@@ -36,7 +44,7 @@ public class TimestampClient {
 
     public void demo() throws IOException {
         HazelcastInstance client = createClientInstance();
-        IMap map = null;
+        IMap<String, String> map = null;
         while (map == null) {
             try {
                 map = client.getMap("timestamps");
@@ -56,7 +64,8 @@ public class TimestampClient {
                 }
                 System.out.print("Setting new timestamp: ");
                 try {
-                    map.put("timestamp", System.currentTimeMillis());
+                    LocalDateTime localDateTime = LocalDateTime.now();
+                    map.put("timestamp", localDateTime.format(DateTimeFormatter.ISO_DATE_TIME));
                     System.out.println("passed");
                 } catch (AccessControlException ae) {
                     System.out.println(ae.getMessage());
@@ -72,6 +81,7 @@ public class TimestampClient {
         try {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -90,11 +100,10 @@ public class TimestampClient {
         new TimestampClient(fileName).demo();
     }
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger("com.hazelcast");
     static {
         java.util.logging.ConsoleHandler ch = new java.util.logging.ConsoleHandler();
         ch.setLevel(java.util.logging.Level.WARNING);
-        logger.addHandler(ch);
-        logger.setLevel(java.util.logging.Level.WARNING);
+        LOGGER.addHandler(ch);
+        LOGGER.setLevel(java.util.logging.Level.WARNING);
     }
 }

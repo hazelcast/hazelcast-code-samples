@@ -14,8 +14,22 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 
-public class ReplacePermissions {
+/**
+ * The executable ReplacePermissions class takes a XML-snippet file with the Hazelcast client permission configuration as an
+ * argument. A new Hazelcast litemember is started to broadcast the new permissions. After the member joins successfully the
+ * cluster it's stopped.
+ */
+
+public final class ReplacePermissions {
     private final File permissionsFile;
+
+    private ReplacePermissions(String permissionFile) {
+        permissionsFile = new File(requireNonNull(permissionFile));
+        if (!permissionsFile.isFile()) {
+            System.err.println("Unable to find the permission file " + permissionFile);
+            System.exit(2);
+        }
+    }
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -36,20 +50,11 @@ public class ReplacePermissions {
         }
     }
 
-    private ReplacePermissions(String permissionFile) {
-        permissionsFile = new File(requireNonNull(permissionFile));
-        if (!permissionsFile.isFile()) {
-            System.err.println("Unable to find the permission file " + permissionFile);
-            System.exit(2);
-        }
-    }
-
     private void changePerms() throws FileNotFoundException {
         Config config = Server.config();
         try {
-            String xml = "<hazelcast xmlns='http://www.hazelcast.com/schema/config'><security enabled='true'>\n" //
-                    + new String(readAllBytes(permissionsFile.toPath()), UTF_8) //
-                    + "</security></hazelcast>\n";
+            String xml = "<hazelcast xmlns='http://www.hazelcast.com/schema/config'><security enabled='true'>\n"
+                    + new String(readAllBytes(permissionsFile.toPath()), UTF_8) + "</security></hazelcast>\n";
             Config customSecurity = new XmlConfigBuilder(new ByteArrayInputStream(xml.getBytes(UTF_8))).build();
             config.setSecurityConfig(customSecurity.getSecurityConfig());
         } catch (IOException e) {

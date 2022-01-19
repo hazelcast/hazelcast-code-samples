@@ -435,24 +435,4 @@ echo ">>> Generate Valid clients key material"
 prepareClientKeyMaterial admin_user
 prepareClientKeyMaterial regular_user
 
-#echo ">>> Generate Revoked client key material"
-#prepareClientKeyMaterial revoked-client
-#openssl ca -config ${OPENSSL_CONF} -keyfile ca-key.pem -cert ca-cert.pem -revoke revoked-client-cert.pem
-#
-#echo ">>> Generate Expired client key material"
-#prepareClientKeyMaterialExt expired v3_req 2000
-#
-#echo ">>> Generate NotYetValid client key material"
-#prepareClientKeyMaterialExt notYetValid v3_req 2030
-#
-#
-#echo ">>> Generate OCSP responder key material"
-#openssl genpkey -outform PEM -out ocsp-key.pem -algorithm RSA -pkeyopt rsa_keygen_bits:2048
-#openssl req -new -config ${OPENSSL_CONF} -keyform PEM -key ocsp-key.pem -outform PEM -out ocsp-cert.csr -days 365 -subj "/C=US/O=Hazelcast/CN=${HOSTNAME_OCSP}"
-#openssl ca -config ${OPENSSL_CONF} -extensions v3_OCSP -extfile ${OPENSSL_CONF} -batch -keyfile ca-key.pem -cert ca-cert.pem -out ocsp-cert.pem -infiles ocsp-cert.csr
-#exportKeystores ocsp
-#
-#echo ">>> Generate client without SAN key material"
-#prepareClientKeyMaterialExt nosan-client v3_req_nosan
-
 popd
