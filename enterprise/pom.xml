@@ -41,6 +41,7 @@
         <module>ssl</module>
         <module>symmetric-encryption</module>
         <module>simple-authentication</module>
+        <module>tls-rbac-demo</module>
     </modules>
 
     <repositories>

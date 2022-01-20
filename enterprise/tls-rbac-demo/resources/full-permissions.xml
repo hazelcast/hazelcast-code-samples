@@ -1,0 +1,9 @@
+<client-permissions>
+    <all-permissions principal="admin_user"/>
+
+    <map-permission name="timestamps" principal="regular_user">
+        <actions>
+            <action>all</action>
+        </actions>
+    </map-permission>
+</client-permissions>
