@@ -27,7 +27,7 @@
 		<!-- Latest versions -->		
 		<dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
                 <!-- Do not increase minor version without also changing 'the-management-center/Dockerfile' -->
-		<hazelcast.version>4.0</hazelcast.version>
+		<hazelcast.version>4.0.5</hazelcast.version>
 		<hazelcast-kubernetes.version>2.0.1</hazelcast-kubernetes.version>
 		<spring-boot.version>2.2.5.RELEASE</spring-boot.version>
 	</properties>
