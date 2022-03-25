@@ -27,15 +27,12 @@ import com.hazelcast.jet.kafka.KafkaSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.map.IMap;
-import kafka.admin.RackAwareMode;
+import com.hazelcast.samples.jet.kafka.TopicUtil;
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServer;
 import kafka.utils.MockTime;
 import kafka.utils.TestUtils;
-import kafka.utils.ZKStringSerializer$;
-import kafka.utils.ZkUtils;
 import kafka.zk.EmbeddedZookeeper;
-import org.I0Itec.zkclient.ZkClient;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
@@ -53,7 +50,6 @@ import static com.hazelcast.jet.Util.entry;
 import static com.hazelcast.jet.impl.util.Util.uncheckRun;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static kafka.admin.AdminUtils.createTopic;
 
 /**
  * A sample which demonstrates how to consume items using custom JSON
@@ -63,16 +59,14 @@ public class KafkaJsonSource {
 
     private static final String ZK_HOST = "127.0.0.1";
     private static final String BROKER_HOST = "127.0.0.1";
-    private static final int SESSION_TIMEOUT = 30000;
-    private static final int CONNECTION_TIMEOUT = 30000;
     private static final String AUTO_OFFSET_RESET = "earliest";
     private static final String TOPIC = "topic";
     private static final String SINK_MAP_NAME = "users";
 
     private EmbeddedZookeeper zkServer;
-    private ZkUtils zkUtils;
     private KafkaServer kafkaServer;
     private int brokerPort;
+    private TopicUtil topicUtil;
 
     private Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
@@ -125,7 +119,7 @@ public class KafkaJsonSource {
     }
 
     private void createAndFillTopic() {
-        createTopic(zkUtils, TOPIC, 4, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
+        topicUtil.createTopic(TOPIC, 4);
         Properties props = props(
                 "bootstrap.servers", BROKER_HOST + ':' + brokerPort,
                 "key.serializer", IntegerSerializer.class.getName(),
@@ -144,8 +138,6 @@ public class KafkaJsonSource {
         System.setProperty("zookeeper.preAllocSize", Integer.toString(128));
         zkServer = new EmbeddedZookeeper();
         String zkConnect = ZK_HOST + ':' + zkServer.port();
-        ZkClient zkClient = new ZkClient(zkConnect, SESSION_TIMEOUT, CONNECTION_TIMEOUT, ZKStringSerializer$.MODULE$);
-        zkUtils = ZkUtils.apply(zkClient, false);
         brokerPort = randomPort();
 
         KafkaConfig config = new KafkaConfig(props(
@@ -157,12 +149,13 @@ public class KafkaJsonSource {
                 "offsets.topic.num.partitions", "1"));
         Time mock = new MockTime();
         kafkaServer = TestUtils.createServer(config, mock);
+        topicUtil = new TopicUtil(BROKER_HOST + ':' + brokerPort);
     }
 
 
     private void shutdownKafkaCluster() {
         kafkaServer.shutdown();
-        zkUtils.close();
+        topicUtil.close();
         zkServer.shutdown();
     }
 

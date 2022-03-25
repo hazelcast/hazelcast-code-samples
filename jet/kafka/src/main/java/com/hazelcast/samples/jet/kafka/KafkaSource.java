@@ -24,15 +24,11 @@ import com.hazelcast.jet.kafka.KafkaSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.map.IMap;
-import kafka.admin.RackAwareMode;
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServer;
 import kafka.utils.MockTime;
 import kafka.utils.TestUtils;
-import kafka.utils.ZKStringSerializer$;
-import kafka.utils.ZkUtils;
 import kafka.zk.EmbeddedZookeeper;
-import org.I0Itec.zkclient.ZkClient;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
@@ -46,7 +42,6 @@ import java.nio.file.Files;
 import java.util.Properties;
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
-import static kafka.admin.AdminUtils.createTopic;
 
 /**
  * A sample which consumes two Kafka topics and writes
@@ -61,8 +56,8 @@ public class KafkaSource {
     private static final String SINK_NAME = "sink";
 
     private EmbeddedZookeeper zkServer;
-    private ZkUtils zkUtils;
     private KafkaServer kafkaServer;
+    private TopicUtil topicUtil;
 
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
@@ -114,8 +109,6 @@ public class KafkaSource {
     private void createKafkaCluster() throws IOException {
         zkServer = new EmbeddedZookeeper();
         String zkConnect = "localhost:" + zkServer.port();
-        ZkClient zkClient = new ZkClient(zkConnect, 30000, 30000, ZKStringSerializer$.MODULE$);
-        zkUtils = ZkUtils.apply(zkClient, false);
 
         KafkaConfig config = new KafkaConfig(props(
                 "zookeeper.connect", zkConnect,
@@ -125,12 +118,14 @@ public class KafkaSource {
                 "listeners", "PLAINTEXT://localhost:9092"));
         Time mock = new MockTime();
         kafkaServer = TestUtils.createServer(config, mock);
+        topicUtil = new TopicUtil("localhost:9092");
+
     }
 
     // Creates 2 topics (t1, t2) with different partition counts (32, 64) and fills them with items
     private void fillTopics() {
-        createTopic(zkUtils, "t1", 32, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
-        createTopic(zkUtils, "t2", 64, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
+        topicUtil.createTopic("t1", 32);
+        topicUtil.createTopic("t2", 64);
 
         System.out.println("Filling Topics");
         Properties props = props(
@@ -149,13 +144,13 @@ public class KafkaSource {
 
     private void shutdownKafkaCluster() {
         kafkaServer.shutdown();
-        zkUtils.close();
         zkServer.shutdown();
+        topicUtil.close();
     }
 
     private static Properties props(String... kvs) {
         final Properties props = new Properties();
-        for (int i = 0; i < kvs.length;) {
+        for (int i = 0; i < kvs.length; ) {
             props.setProperty(kvs[i++], kvs[i++]);
         }
         return props;
