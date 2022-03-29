@@ -28,26 +28,23 @@ import kafka.server.KafkaConfig;
 import kafka.server.KafkaServer;
 import kafka.utils.MockTime;
 import kafka.utils.TestUtils;
-import kafka.utils.ZKStringSerializer$;
-import kafka.utils.ZkUtils;
 import kafka.zk.EmbeddedZookeeper;
-import org.I0Itec.zkclient.ZkClient;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.security.auth.SecurityProtocol;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Time;
-import scala.Option;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Properties;
 
+import static java.util.Collections.emptyMap;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 /**
@@ -58,15 +55,13 @@ public class KafkaSink {
 
     private static final int MESSAGE_COUNT = 50_000;
     private static final String BOOTSTRAP_SERVERS = "localhost:9092";
-    private static final String AUTO_OFFSET_RESET = "earliest";
 
     private static final String SOURCE_NAME = "source";
     private static final String SINK_TOPIC_NAME = "t1";
 
     private EmbeddedZookeeper zkServer;
-    private ZkUtils zkUtils;
     private KafkaServer kafkaServer;
-    private KafkaConsumer kafkaConsumer;
+    private KafkaConsumer<String, Integer> kafkaConsumer;
 
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
@@ -100,19 +95,8 @@ public class KafkaSink {
             Job job = jet.newJob(p);
 
             System.out.println("Consuming Topics");
-            kafkaConsumer = TestUtils.createConsumer(
-                    BOOTSTRAP_SERVERS,
-                    "verification-consumer",
-                    AUTO_OFFSET_RESET,
-                    true,
-                    true,
-                    4096,
-                    SecurityProtocol.PLAINTEXT,
-                    Option.<File>empty(),
-                    Option.<Properties>empty(),
-                    new StringDeserializer(),
-                    new IntegerDeserializer());
-            kafkaConsumer.subscribe(Collections.singleton(SINK_TOPIC_NAME));
+
+            kafkaConsumer = createConsumer(SINK_TOPIC_NAME);
 
             int totalMessagesSeen = 0;
             while (true) {
@@ -132,12 +116,35 @@ public class KafkaSink {
         }
     }
 
+    public KafkaConsumer<String, Integer> createConsumer(String... topicIds) {
+        return createConsumer(StringDeserializer.class, IntegerDeserializer.class, emptyMap(), topicIds);
+    }
+
+    public <K, V> KafkaConsumer<K, V> createConsumer(
+            Class<? extends Deserializer<K>> keyDeserializerClass,
+            Class<? extends Deserializer<V>> valueDeserializerClass,
+            Map<String, String> properties,
+            String... topicIds
+    ) {
+        Properties consumerProps = new Properties();
+        consumerProps.setProperty("bootstrap.servers", BOOTSTRAP_SERVERS);
+        consumerProps.setProperty("group.id", "verification-consumer");
+        consumerProps.setProperty("client.id", "consumer0");
+        consumerProps.setProperty("key.deserializer", keyDeserializerClass.getCanonicalName());
+        consumerProps.setProperty("value.deserializer", valueDeserializerClass.getCanonicalName());
+        consumerProps.setProperty("isolation.level", "read_committed");
+        // to make sure the consumer starts from the beginning of the topic
+        consumerProps.setProperty("auto.offset.reset", "earliest");
+        consumerProps.putAll(properties);
+        KafkaConsumer<K, V> consumer = new KafkaConsumer<>(consumerProps);
+        consumer.subscribe(Arrays.asList(topicIds));
+        return consumer;
+    }
+
     // Creates an embedded zookeeper server and a kafka broker
     private void createKafkaCluster() throws IOException {
         zkServer = new EmbeddedZookeeper();
         String zkConnect = "localhost:" + zkServer.port();
-        ZkClient zkClient = new ZkClient(zkConnect, 30000, 30000, ZKStringSerializer$.MODULE$);
-        zkUtils = ZkUtils.apply(zkClient, false);
 
         KafkaConfig config = new KafkaConfig(props(
                 "zookeeper.connect", zkConnect,
@@ -160,7 +167,6 @@ public class KafkaSink {
     private void shutdownKafkaCluster() {
         kafkaServer.shutdown();
         kafkaConsumer.close();
-        zkUtils.close();
         zkServer.shutdown();
     }
 
