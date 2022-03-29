@@ -23,7 +23,7 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.version>5.2.7.RELEASE</spring.version>
+        <spring.version>5.3.14</spring.version>
     </properties>
 
     <dependencies>
