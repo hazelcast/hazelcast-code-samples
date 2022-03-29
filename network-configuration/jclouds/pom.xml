@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <jclouds.version>1.9.1</jclouds.version>
-        <hazelcast.version>3.12.6</hazelcast.version>
+        <hazelcast.version>5.1</hazelcast.version>
     </properties>
 
     <dependencies>
