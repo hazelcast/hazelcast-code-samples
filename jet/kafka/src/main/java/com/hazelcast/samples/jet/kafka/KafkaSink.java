@@ -165,8 +165,8 @@ public class KafkaSink {
     }
 
     private void shutdownKafkaCluster() {
-        kafkaServer.shutdown();
         kafkaConsumer.close();
+        kafkaServer.shutdown();
         zkServer.shutdown();
     }
 
