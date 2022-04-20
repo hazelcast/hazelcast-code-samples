@@ -60,23 +60,24 @@ public class KafkaAvroSource {
     private static final String BROKER_HOST = "127.0.0.1";
     private static final String AUTO_OFFSET_RESET = "earliest";
     private static final String TOPIC = "topic";
+    private static final boolean USE_EMBEDDED_KAFKA = Boolean.parseBoolean(System.getProperty("use.embedded.kafka", "true"));
 
+    private String bootstrapServers = "localhost:9092";
     private EmbeddedZookeeper zkServer;
     private KafkaServer kafkaServer;
     private Server server;
-    private int brokerPort;
     private TopicUtil topicUtil;
 
     private Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
         p.readFrom(KafkaSources.kafka(props(
-                "bootstrap.servers", BROKER_HOST + ':' + brokerPort,
-                "key.deserializer", IntegerDeserializer.class.getName(),
-                "value.deserializer", KafkaAvroDeserializer.class.getName(),
-                "specific.avro.reader", "true",
-                "schema.registry.url", "http://localhost:8081",
-                "auto.offset.reset", AUTO_OFFSET_RESET
-        ), TOPIC))
+                        "bootstrap.servers", bootstrapServers,
+                        "key.deserializer", IntegerDeserializer.class.getName(),
+                        "value.deserializer", KafkaAvroDeserializer.class.getName(),
+                        "specific.avro.reader", "true",
+                        "schema.registry.url", "http://localhost:8081",
+                        "auto.offset.reset", AUTO_OFFSET_RESET
+                ), TOPIC))
          .withoutTimestamps()
          .writeTo(Sinks.logger());
         return p;
@@ -88,8 +89,12 @@ public class KafkaAvroSource {
 
     private void go() throws Exception {
         try {
-            createKafkaCluster();
-            startSchemaRegistryServer();
+            if (USE_EMBEDDED_KAFKA) {
+                createKafkaCluster();
+                startSchemaRegistryServer();
+            }
+            topicUtil = new TopicUtil(bootstrapServers);
+
             createAndFillTopic();
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
@@ -99,16 +104,20 @@ public class KafkaAvroSource {
             SECONDS.sleep(5);
             cancel(job);
         } finally {
-            server.stop();
             Hazelcast.shutdownAll();
-            shutdownKafkaCluster();
+            topicUtil.deleteTopic(TOPIC);
+            topicUtil.close();
+            if (USE_EMBEDDED_KAFKA) {
+                server.stop();
+                shutdownKafkaCluster();
+            }
         }
     }
 
     private void createAndFillTopic() {
         topicUtil.createTopic(TOPIC, 4);
         Properties props = props(
-                "bootstrap.servers", BROKER_HOST + ':' + brokerPort,
+                "bootstrap.servers", bootstrapServers,
                 "key.serializer", IntegerSerializer.class.getName(),
                 "value.serializer", KafkaAvroSerializer.class.getName(),
                 "schema.registry.url", "http://localhost:8081");
@@ -122,17 +131,18 @@ public class KafkaAvroSource {
     }
 
     private void createKafkaCluster() throws IOException {
+        System.out.println("Creating an embedded zookeeper server and a kafka broker");
         System.setProperty("zookeeper.preAllocSize", Integer.toString(128));
         zkServer = new EmbeddedZookeeper();
         String zkConnect = ZK_HOST + ':' + zkServer.port();
-        brokerPort = randomPort();
-        topicUtil = new TopicUtil(BROKER_HOST + ':' + brokerPort);
+        int brokerPort = randomPort();
+        bootstrapServers = BROKER_HOST + ':' + brokerPort;
 
         KafkaConfig config = new KafkaConfig(props(
                 "zookeeper.connect", zkConnect,
                 "broker.id", "0",
                 "log.dirs", Files.createTempDirectory("kafka-").toAbsolutePath().toString(),
-                "listeners", "PLAINTEXT://" + BROKER_HOST + ':' + brokerPort,
+                "listeners", "PLAINTEXT://" + bootstrapServers,
                 "offsets.topic.replication.factor", "1",
                 "offsets.topic.num.partitions", "1"));
         Time mock = new MockTime();

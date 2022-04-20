@@ -51,6 +51,7 @@ public class KafkaSource {
 
     private static final int MESSAGE_COUNT_PER_TOPIC = 1_000_000;
     private static final String BOOTSTRAP_SERVERS = "localhost:9092";
+    private static final boolean USE_EMBEDDED_KAFKA = Boolean.parseBoolean(System.getProperty("use.embedded.kafka", "true"));
     private static final String AUTO_OFFSET_RESET = "earliest";
 
     private static final String SINK_NAME = "sink";
@@ -78,7 +79,11 @@ public class KafkaSource {
 
     private void run() throws Exception {
         try {
-            createKafkaCluster();
+            if (USE_EMBEDDED_KAFKA) {
+                createKafkaCluster();
+            }
+            topicUtil = new TopicUtil(BOOTSTRAP_SERVERS);
+
             fillTopics();
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
@@ -101,12 +106,18 @@ public class KafkaSource {
             }
         } finally {
             Hazelcast.shutdownAll();
-            shutdownKafkaCluster();
+            topicUtil.deleteTopic("t1");
+            topicUtil.deleteTopic("t2");
+            topicUtil.close();
+            if (USE_EMBEDDED_KAFKA) {
+                shutdownKafkaCluster();
+            }
         }
     }
 
     // Creates an embedded zookeeper server and a kafka broker
     private void createKafkaCluster() throws IOException {
+        System.out.println("Creating an embedded zookeeper server and a kafka broker");
         zkServer = new EmbeddedZookeeper();
         String zkConnect = "localhost:" + zkServer.port();
 
@@ -118,7 +129,6 @@ public class KafkaSource {
                 "listeners", "PLAINTEXT://localhost:9092"));
         Time mock = new MockTime();
         kafkaServer = TestUtils.createServer(config, mock);
-        topicUtil = new TopicUtil("localhost:9092");
 
     }
 
@@ -145,7 +155,6 @@ public class KafkaSource {
     private void shutdownKafkaCluster() {
         kafkaServer.shutdown();
         zkServer.shutdown();
-        topicUtil.close();
     }
 
     private static Properties props(String... kvs) {

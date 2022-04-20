@@ -44,6 +44,10 @@ public class TopicUtil implements Closeable {
         }
     }
 
+    public void deleteTopic(String topicId) {
+        admin.deleteTopics(Collections.singletonList(topicId));
+    }
+
     @Override
     public void close() {
         admin.close();
