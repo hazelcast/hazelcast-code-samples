@@ -24,6 +24,8 @@ import com.hazelcast.jet.core.JobStatus;
 import com.hazelcast.jet.kafka.KafkaSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.logging.ILogger;
+import com.hazelcast.logging.Logger;
 import com.hazelcast.samples.jet.kafka.TopicUtil;
 import io.confluent.kafka.schemaregistry.rest.SchemaRegistryConfig;
 import io.confluent.kafka.schemaregistry.rest.SchemaRegistryRestApplication;
@@ -56,6 +58,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class KafkaAvroSource {
 
+    private static final ILogger LOGGER = Logger.getLogger(KafkaAvroSource.class);
     private static final String ZK_HOST = "127.0.0.1";
     private static final String BROKER_HOST = "127.0.0.1";
     private static final String AUTO_OFFSET_RESET = "earliest";
@@ -131,7 +134,7 @@ public class KafkaAvroSource {
     }
 
     private void createKafkaCluster() throws IOException {
-        System.out.println("Creating an embedded zookeeper server and a kafka broker");
+        LOGGER.info("Creating an embedded zookeeper server and a kafka broker");
         System.setProperty("zookeeper.preAllocSize", Integer.toString(128));
         zkServer = new EmbeddedZookeeper();
         String zkConnect = ZK_HOST + ':' + zkServer.port();

@@ -23,6 +23,8 @@ import com.hazelcast.jet.Job;
 import com.hazelcast.jet.kafka.KafkaSinks;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sources;
+import com.hazelcast.logging.ILogger;
+import com.hazelcast.logging.Logger;
 import com.hazelcast.map.IMap;
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServer;
@@ -53,6 +55,7 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  **/
 public class KafkaSink {
 
+    private static final ILogger LOGGER = Logger.getLogger(KafkaSink.class);
     private static final int MESSAGE_COUNT = 50_000;
     private static final String BOOTSTRAP_SERVERS = "localhost:9092";
     private static final String SOURCE_NAME = "source";
@@ -96,7 +99,7 @@ public class KafkaSink {
             long start = System.nanoTime();
             Job job = jet.newJob(p);
 
-            System.out.println("Consuming Topics");
+            LOGGER.info("Consuming Topics");
 
             kafkaConsumer = createConsumer(SINK_TOPIC_NAME);
 
@@ -147,7 +150,7 @@ public class KafkaSink {
     }
 
     private void createKafkaCluster() throws IOException {
-        System.out.println("Creating an embedded zookeeper server and a kafka broker");
+        LOGGER.info("Creating an embedded zookeeper server and a kafka broker");
         zkServer = new EmbeddedZookeeper();
         String zkConnect = "localhost:" + zkServer.port();
 
@@ -162,11 +165,11 @@ public class KafkaSink {
     }
 
     private void fillIMap(IMap<String, Integer> sourceMap) {
-        System.out.println("Filling IMap");
+        LOGGER.info("Filling IMap");
         for (int i = 1; i <= MESSAGE_COUNT; i++) {
             sourceMap.put("t1-" + i, i);
         }
-        System.out.println("Published " + MESSAGE_COUNT + " messages to IMap -> " + SOURCE_NAME);
+        LOGGER.info("Published " + MESSAGE_COUNT + " messages to IMap -> " + SOURCE_NAME);
     }
 
     private void shutdownKafkaCluster() {
