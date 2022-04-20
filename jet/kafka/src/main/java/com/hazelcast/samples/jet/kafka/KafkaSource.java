@@ -23,6 +23,8 @@ import com.hazelcast.jet.Job;
 import com.hazelcast.jet.kafka.KafkaSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.logging.ILogger;
+import com.hazelcast.logging.Logger;
 import com.hazelcast.map.IMap;
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServer;
@@ -49,8 +51,10 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  **/
 public class KafkaSource {
 
+    private static final ILogger LOGGER = Logger.getLogger(KafkaSource.class);
     private static final int MESSAGE_COUNT_PER_TOPIC = 1_000_000;
     private static final String BOOTSTRAP_SERVERS = "localhost:9092";
+    private static final boolean USE_EMBEDDED_KAFKA = Boolean.parseBoolean(System.getProperty("use.embedded.kafka", "true"));
     private static final String AUTO_OFFSET_RESET = "earliest";
 
     private static final String SINK_NAME = "sink";
@@ -78,7 +82,11 @@ public class KafkaSource {
 
     private void run() throws Exception {
         try {
-            createKafkaCluster();
+            if (USE_EMBEDDED_KAFKA) {
+                createKafkaCluster();
+            }
+            topicUtil = new TopicUtil(BOOTSTRAP_SERVERS);
+
             fillTopics();
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
@@ -101,12 +109,18 @@ public class KafkaSource {
             }
         } finally {
             Hazelcast.shutdownAll();
-            shutdownKafkaCluster();
+            topicUtil.deleteTopic("t1");
+            topicUtil.deleteTopic("t2");
+            topicUtil.close();
+            if (USE_EMBEDDED_KAFKA) {
+                shutdownKafkaCluster();
+            }
         }
     }
 
     // Creates an embedded zookeeper server and a kafka broker
     private void createKafkaCluster() throws IOException {
+        LOGGER.info("Creating an embedded zookeeper server and a kafka broker");
         zkServer = new EmbeddedZookeeper();
         String zkConnect = "localhost:" + zkServer.port();
 
@@ -118,7 +132,6 @@ public class KafkaSource {
                 "listeners", "PLAINTEXT://localhost:9092"));
         Time mock = new MockTime();
         kafkaServer = TestUtils.createServer(config, mock);
-        topicUtil = new TopicUtil("localhost:9092");
 
     }
 
@@ -127,7 +140,7 @@ public class KafkaSource {
         topicUtil.createTopic("t1", 32);
         topicUtil.createTopic("t2", 64);
 
-        System.out.println("Filling Topics");
+        LOGGER.info("Filling Topics");
         Properties props = props(
                 "bootstrap.servers", "localhost:9092",
                 "key.serializer", StringSerializer.class.getName(),
@@ -137,15 +150,14 @@ public class KafkaSource {
                 producer.send(new ProducerRecord<>("t1", "t1-" + i, i));
                 producer.send(new ProducerRecord<>("t2", "t2-" + i, i));
             }
-            System.out.println("Published " + MESSAGE_COUNT_PER_TOPIC + " messages to topic t1");
-            System.out.println("Published " + MESSAGE_COUNT_PER_TOPIC + " messages to topic t2");
+            LOGGER.info("Published " + MESSAGE_COUNT_PER_TOPIC + " messages to topic t1");
+            LOGGER.info("Published " + MESSAGE_COUNT_PER_TOPIC + " messages to topic t2");
         }
     }
 
     private void shutdownKafkaCluster() {
         kafkaServer.shutdown();
         zkServer.shutdown();
-        topicUtil.close();
     }
 
     private static Properties props(String... kvs) {

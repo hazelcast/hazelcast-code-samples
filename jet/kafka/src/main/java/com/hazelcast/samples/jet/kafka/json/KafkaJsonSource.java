@@ -26,6 +26,8 @@ import com.hazelcast.jet.core.JobStatus;
 import com.hazelcast.jet.kafka.KafkaSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.logging.ILogger;
+import com.hazelcast.logging.Logger;
 import com.hazelcast.map.IMap;
 import com.hazelcast.samples.jet.kafka.TopicUtil;
 import kafka.server.KafkaConfig;
@@ -57,24 +59,26 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class KafkaJsonSource {
 
+    private static final ILogger LOGGER = Logger.getLogger(KafkaJsonSource.class);
     private static final String ZK_HOST = "127.0.0.1";
     private static final String BROKER_HOST = "127.0.0.1";
     private static final String AUTO_OFFSET_RESET = "earliest";
     private static final String TOPIC = "topic";
     private static final String SINK_MAP_NAME = "users";
+    private static final boolean USE_EMBEDDED_KAFKA = Boolean.parseBoolean(System.getProperty("use.embedded.kafka", "true"));
 
+    private String bootstrapServers = "localhost:9092";
     private EmbeddedZookeeper zkServer;
     private KafkaServer kafkaServer;
-    private int brokerPort;
     private TopicUtil topicUtil;
 
     private Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
         p.readFrom(KafkaSources.<Integer, JsonNode>kafka(props(
-                "bootstrap.servers", BROKER_HOST + ':' + brokerPort,
-                "key.deserializer", IntegerDeserializer.class.getName(),
-                "value.deserializer", JsonDeserializer.class.getName(),
-                "auto.offset.reset", AUTO_OFFSET_RESET), TOPIC))
+                        "bootstrap.servers", bootstrapServers,
+                        "key.deserializer", IntegerDeserializer.class.getName(),
+                        "value.deserializer", JsonDeserializer.class.getName(),
+                        "auto.offset.reset", AUTO_OFFSET_RESET), TOPIC))
          .withoutTimestamps()
          .peek()
          .map(e -> entry(e.getKey(), e.getValue().toString()))
@@ -89,7 +93,11 @@ public class KafkaJsonSource {
 
     private void go() throws Exception {
         try {
-            createKafkaCluster();
+            if (USE_EMBEDDED_KAFKA) {
+                createKafkaCluster();
+            }
+            topicUtil = new TopicUtil(bootstrapServers);
+
             createAndFillTopic();
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
@@ -114,14 +122,18 @@ public class KafkaJsonSource {
             }
         } finally {
             Hazelcast.shutdownAll();
-            shutdownKafkaCluster();
+            topicUtil.deleteTopic(TOPIC);
+            topicUtil.close();
+            if (USE_EMBEDDED_KAFKA) {
+                shutdownKafkaCluster();
+            }
         }
     }
 
     private void createAndFillTopic() {
         topicUtil.createTopic(TOPIC, 4);
         Properties props = props(
-                "bootstrap.servers", BROKER_HOST + ':' + brokerPort,
+                "bootstrap.servers", bootstrapServers,
                 "key.serializer", IntegerSerializer.class.getName(),
                 "value.serializer", JsonSerializer.class.getName());
 
@@ -135,27 +147,27 @@ public class KafkaJsonSource {
     }
 
     private void createKafkaCluster() throws IOException {
+        LOGGER.info("Creating an embedded zookeeper server and a kafka broker");
         System.setProperty("zookeeper.preAllocSize", Integer.toString(128));
         zkServer = new EmbeddedZookeeper();
         String zkConnect = ZK_HOST + ':' + zkServer.port();
-        brokerPort = randomPort();
+        int brokerPort = randomPort();
+        bootstrapServers = BROKER_HOST + ':' + brokerPort;
 
         KafkaConfig config = new KafkaConfig(props(
                 "zookeeper.connect", zkConnect,
                 "broker.id", "0",
                 "log.dirs", Files.createTempDirectory("kafka-").toAbsolutePath().toString(),
-                "listeners", "PLAINTEXT://" + BROKER_HOST + ':' + brokerPort,
+                "listeners", "PLAINTEXT://" + bootstrapServers,
                 "offsets.topic.replication.factor", "1",
                 "offsets.topic.num.partitions", "1"));
         Time mock = new MockTime();
         kafkaServer = TestUtils.createServer(config, mock);
-        topicUtil = new TopicUtil(BROKER_HOST + ':' + brokerPort);
     }
 
 
     private void shutdownKafkaCluster() {
         kafkaServer.shutdown();
-        topicUtil.close();
         zkServer.shutdown();
     }
 
