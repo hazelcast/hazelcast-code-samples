@@ -52,3 +52,17 @@ src/main/scripts/docker-hazelcast-management-center.sh
 
 and then you can access on [http://127.0.0.1:8081](http://127.0.0.1:8081)
 
+## Running on Kubernetes
+
+If you have Kubernetes, run the three scripts
+
+```
+kubectl create -f src/main/resources/kubernetes-1.yaml
+kubectl create -f src/main/resources/kubernetes-2.yaml
+kubectl create -f src/main/resources/kubernetes-3.yaml
+```
+
+You may need to adjust the `image:` and `imagePullPolicy:` sections appropriate to your Kubernetes variant.
+
+
+
