@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+
+<body>
+	<div th:include="fragments :: header">?</div>
+
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+    	<div class="major_pane" id="root"></div>
+    	<script src="built/bundle.js"></script>
+    
+	<div th:include="fragments :: footer">?</div>
+</body>
+
+</html>

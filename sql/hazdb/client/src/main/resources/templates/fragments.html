@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head">
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+	<title th:text="'@my.webapp.title@'">?</title>
+</head>
+
+<body th:fragment="header">
+	<div class="headerfooter">
+		<div>
+			<center><img th:src="@{/images/hazelcast-horz-flat-rev-sm.png}"
+			             alt="Hazelcast logo" width="200" height="42"></img></center>
+			<h5><a href="https://github.com/hazelcast/hazelcast-code-samples/tree/master/sql/hazdb">https://github.com/hazelcast/hazelcast-code-samples/tree/master/sql/hazdb</a></h5>
+			<h6><a th:href="@{swagger-ui.html/#}">REST</a></h6>
+		</div>
+		<hr class="headerfooterline"/>
+	</div>
+</body>
+
+<body th:fragment="footer">
+	<div class="headerfooter">
+		<hr class="headerfooterline"/>
+		<h5>Build @build.timestamp@</h5>
+		<p th:text="'&copy; Hazelcast ' + ${#dates.year(#dates.createNow())}" />
+	</div>
+</body>
+
+</html>

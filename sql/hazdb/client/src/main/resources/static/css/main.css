@@ -1,0 +1,105 @@
+:root {
+	--hazelcast-blue: #012168;
+	--hazelcast-blue-dark: #0b2a35;
+	--hazelcast-blue-light: #2e7de1;
+	--hazelcast-orange: #ff5f00;
+}
+
+body {
+	background: var(--hazelcast-blue-light);
+}
+
+h1 {
+    text-align: center;
+}
+h2, h3, h4, h5, h6 {
+    text-align: center;
+}
+
+.headerfooter {
+        color: var(--hazelcast-blue-dark);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 80%;
+        text-align: center;
+}
+.headerfooterline {
+        color: var(--hazelcast-orange);
+}
+
+.major_pane {
+	background: white;
+	border-style: solid;
+    border-color: var(--hazelcast-blue);
+    padding: 5px 5px 5px 5px;
+}
+
+.minor_pane {
+	background: black;
+	color: chartreuse;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: scroll;
+    vertical-align: top;
+}
+
+.pane_separator {
+    border-top: 1px solid var(--hazelcast-orange);
+}
+
+/* ===================== */
+/* For react-collapsible */
+/* ===================== */
+
+/* When closed */
+.Collapsible {
+  background-color: var(--hazelcast-blue-light);
+}
+
+/* When opened */
+.Collapsible-opened {
+  background-color: var(--hazelcast-blue-light);
+}
+
+/* Trigger when closed */
+.Collapsible__trigger {
+  background-color: var(--hazelcast-blue-light);
+  border: 2px solid navy;
+  color:   teal;
+  text-align: center;
+  text-decoration: underline overline;
+}
+.Collapsible__trigger::before {
+  content: "\21CA \21CA \21CA ";
+  text-align: center;
+}
+.Collapsible__trigger::after {
+  content: " \21CA \21CA \21CA";
+  text-align: center;
+}
+
+/* Trigger when opened */
+.Collapsible__trigger-opened {
+  background-color: var(--hazelcast-blue-light);
+  color: var(--hazelcast-blue-dark);
+  text-align: center;
+}
+.Collapsible__trigger-opened::before {
+  content: "\21C8 \21C8 \21C8 ";
+  text-align: center;
+}
+.Collapsible__trigger-opened::after {
+  content: " \21C8 \21C8 \21C8";
+  text-align: center;
+}
+
+/* Inner */
+.Collapsible__contentInner {
+  background-color: yellow;
+  color: red;
+}
+
+/* Outer */
+.Collapsible__contentOuter {
+  background-color: red;
+  color: yellow;
+}

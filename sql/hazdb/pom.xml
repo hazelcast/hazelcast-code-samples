@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hazelcast.samples.sql</groupId>
+		<artifactId>sql</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>hazdb</artifactId>
+	<packaging>pom</packaging>
+
+	<name>SQL: Hazelcast DB</name>
+	<description>When is a DB not a DB?</description>
+
+	<modules>
+		<module>client</module>
+		<module>common</module>
+		<module>management-center</module>
+		<module>server</module>
+	</modules>
+
+	<properties>
+		<!-- needed for checkstyle/findbugs -->
+		<main.basedir>${project.parent.parent.basedir}</main.basedir>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<build.timestamp>${maven.build.timestamp}</build.timestamp>
+		<docker.image.prefix>hazdb</docker.image.prefix>
+		<dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+		<dockerfile.skip>true</dockerfile.skip>
+		<frontend-maven-plugin.version>1.9.1</frontend-maven-plugin.version>
+		<hazelcast.version>5.1</hazelcast.version>
+		<java.version>11</java.version>
+		<!-- for ../../pom.xml maven-compiler-plugin -->
+		<jdk.version>${java.version}</jdk.version>
+		<maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss</maven.build.timestamp.format>
+		<my.cluster.name>${docker.image.prefix}</my.cluster.name>
+		<node.version>v17.8.0</node.version>
+		<npm.version>8.5.4</npm.version>
+		<springdoc.version>1.6.7</springdoc.version>
+		<spring-boot.version>2.6.6</spring-boot.version>
+	</properties>
+
+	<dependencies>
+		<!-- Needed for Log4j2 config in YAML -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-yaml</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-parent</artifactId>
+				<type>pom</type>
+				<scope>import</scope>
+				<version>${spring-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-ui</artifactId>
+				<version>${springdoc.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>${dockerfile-maven-plugin.version}</version>
+				<configuration>
+					<buildArgs>
+						<JAR_FILE>${docker.jar.file}</JAR_FILE>
+					</buildArgs>
+					<dockerfile>Dockerfile</dockerfile>
+					<pullNewerImage>false</pullNewerImage>
+					<repository>${docker.image.prefix}/${docker.image.name}</repository>
+					<tag>latest</tag>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<!-- Tidy up NODE.JS build artifacts -->
+					<artifactId>maven-clean-plugin</artifactId>
+					<configuration>
+						<filesets>
+							<fileset>
+								<directory>src/main/app/build</directory>
+							</fileset>
+							<fileset>
+								<directory>src/main/app/node_modules</directory>
+							</fileset>
+							<fileset>
+								<directory>src/main/app/static</directory>
+							</fileset>
+						</filesets>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
