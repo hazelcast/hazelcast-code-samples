@@ -1,0 +1,52 @@
+---
+# Service DNS for Hazelcast grid will be "hazdb-hazelcast.default.svc.cluster.local".
+---
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# $$$$$$$$$$$$$$$$$$$$$ SERVICE DEFINITIONS $$$$$$$$$$$$$$$$$$$$$
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+---
+# Service for Hazelcast grid
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazdb-hazelcast
+spec:
+  clusterIP: None
+  selector:
+    app: hazdb-hazelcast
+  ports:
+  - port: 5701
+---
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# $$$$$$$$$$$$$$$$$$$$$$$ POD DEFINITIONS $$$$$$$$$$$$$$$$$$$$$$$
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hazdb-hazelcast
+spec:
+  replicas: 2
+  serviceName: hazdb-hazelcast
+  selector:
+    matchLabels:
+      app: hazdb-hazelcast
+  template:
+    metadata:
+      labels:
+        app: hazdb-hazelcast
+    spec:
+      containers:
+        - image: "hazdb/hazelcast-server"
+          imagePullPolicy: Never
+          livenessProbe:
+            httpGet:
+              path: /hazelcast/health/node-state
+              port: 5701
+          name: hazdb-hazelcast-container
+          readinessProbe:
+            httpGet:
+              path: /hazelcast/health/ready
+              port: 5701
+---

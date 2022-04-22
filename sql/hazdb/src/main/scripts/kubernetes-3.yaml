@@ -1,0 +1,55 @@
+---
+# Service DNS for Webapp will be "hazdb-hazelcast-client.default.svc.cluster.local".
+---
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# $$$$$$$$$$$$$$$$$$$$$ SERVICE DEFINITIONS $$$$$$$$$$$$$$$$$$$$$
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+---
+# Service for hazelcast-client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazdb-hazelcast-client
+spec:
+  selector:
+    app: hazdb-hazelcast-client
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  type: LoadBalancer
+---
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# $$$$$$$$$$$$$$$$$$$$$$$ POD DEFINITIONS $$$$$$$$$$$$$$$$$$$$$$$
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+---
+# Pod for hazelcast-client
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hazdb-hazelcast-client
+spec:
+  selector:
+    matchLabels:
+      app: hazdb-hazelcast-client
+  template:
+    metadata:
+      labels:
+        app: hazdb-hazelcast-client
+    spec:
+      containers:
+        - image: "hazdb/hazelcast-client"
+          imagePullPolicy: Never
+          livenessProbe:
+            httpGet:
+              path: /rest/k8s
+              port: 8080
+          name: hazdb-hazelcast-client-container
+          readinessProbe:
+            httpGet:
+              path: /rest/k8s
+              port: 8080
+            initialDelaySeconds: 30
+---
