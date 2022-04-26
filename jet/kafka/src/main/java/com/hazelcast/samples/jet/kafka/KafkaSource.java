@@ -33,8 +33,6 @@ import kafka.utils.TestUtils;
 import kafka.zk.EmbeddedZookeeper;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.IntegerDeserializer;
-import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Time;
@@ -66,10 +64,10 @@ public class KafkaSource {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
         p.readFrom(KafkaSources.kafka(props(
-                "bootstrap.servers", BOOTSTRAP_SERVERS,
-                "key.deserializer", StringDeserializer.class.getCanonicalName(),
-                "value.deserializer", IntegerDeserializer.class.getCanonicalName(),
-                "auto.offset.reset", AUTO_OFFSET_RESET)
+                                "bootstrap.servers", BOOTSTRAP_SERVERS,
+                                "key.deserializer", StringDeserializer.class.getCanonicalName(),
+                                "value.deserializer", StringDeserializer.class.getCanonicalName(),
+                                "auto.offset.reset", AUTO_OFFSET_RESET)
                 , "t1", "t2"))
          .withoutTimestamps()
          .writeTo(Sinks.map(SINK_NAME));
@@ -91,7 +89,7 @@ public class KafkaSource {
 
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
             JetService jet = hz.getJet();
-            IMap<String, Integer> sinkMap = hz.getMap(SINK_NAME);
+            IMap<String, String> sinkMap = hz.getMap(SINK_NAME);
 
             Pipeline p = buildPipeline();
 
@@ -144,11 +142,11 @@ public class KafkaSource {
         Properties props = props(
                 "bootstrap.servers", "localhost:9092",
                 "key.serializer", StringSerializer.class.getName(),
-                "value.serializer", IntegerSerializer.class.getName());
-        try (KafkaProducer<String, Integer> producer = new KafkaProducer<>(props)) {
+                "value.serializer", StringSerializer.class.getName());
+        try (KafkaProducer<String, String> producer = new KafkaProducer<>(props)) {
             for (int i = 1; i <= MESSAGE_COUNT_PER_TOPIC; i++) {
-                producer.send(new ProducerRecord<>("t1", "t1-" + i, i));
-                producer.send(new ProducerRecord<>("t2", "t2-" + i, i));
+                producer.send(new ProducerRecord<>("t1", "t1-" + i, String.valueOf(i)));
+                producer.send(new ProducerRecord<>("t2", "t2-" + i, String.valueOf(i)));
             }
             LOGGER.info("Published " + MESSAGE_COUNT_PER_TOPIC + " messages to topic t1");
             LOGGER.info("Published " + MESSAGE_COUNT_PER_TOPIC + " messages to topic t2");
