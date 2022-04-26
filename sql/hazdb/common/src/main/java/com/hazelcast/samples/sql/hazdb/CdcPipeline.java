@@ -58,7 +58,7 @@ public class CdcPipeline {
                     if (before.equals(after)) {
                         return null;
                     }
-                        
+
                     return Tuple3.tuple3(mapName, eventJournalMapEvent.getType().toString(),
                             Utils.makeText(eventJournalMapEvent.getKey()) + ","
                                     + Utils.makeText(eventJournalMapEvent.getNewValue()));

@@ -139,7 +139,7 @@ public class ApplicationInitializer {
                 + "    \"this\" VARCHAR" + ")"
                 + " TYPE IMap "
                 + " OPTIONS ( " + " 'keyFormat' = 'java',"
-                + " 'keyJavaClass' = '" + String.class.getCanonicalName() + "'," 
+                + " 'keyJavaClass' = '" + String.class.getCanonicalName() + "',"
                 + " 'valueFormat' = 'java',"
                 + " 'valueJavaClass' = '" + String.class.getCanonicalName() + "'"
                 + " )";

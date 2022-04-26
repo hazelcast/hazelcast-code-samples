@@ -45,7 +45,7 @@ public class LeagueLeaderUpdateRunnable implements HazelcastInstanceAware, Runna
     @Override
     public void run() {
         LOGGER.info("run()");
-        
+
         Integer key = Integer.valueOf(0);
 
         String sql1 = "SELECT a.*, b.__key, MAX(b.points)"
@@ -70,7 +70,7 @@ public class LeagueLeaderUpdateRunnable implements HazelcastInstanceAware, Runna
         .forEach(entry -> {
             LOGGER.trace("'{}', before SQL2: '{}'", MyConstants.IMAP_NAME_LEADER, entry);
         });
-        
+
         // "INSERT" will not overwrite, needs to "SINK"
         String sql2 = "SINK INTO " + MyConstants.IMAP_NAME_LEADER
                 + " VALUES (?, ?, ?)";
@@ -78,7 +78,7 @@ public class LeagueLeaderUpdateRunnable implements HazelcastInstanceAware, Runna
         params2[0] = sqlRow.getObject(0);
         params2[1] = sqlRow.getObject(1);
         params2[2] = sqlRow.getObject(2);
-        
+
         try {
             this.hazelcastInstance.getSql().execute(sql2, params2);
         } catch (Exception e) {
