@@ -34,7 +34,7 @@
 		<dockerfile.skip>true</dockerfile.skip>
 		<frontend-maven-plugin.version>1.9.1</frontend-maven-plugin.version>
 		<hazelcast.version>5.1</hazelcast.version>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 		<!-- for ../../pom.xml maven-compiler-plugin -->
 		<jdk.version>${java.version}</jdk.version>
 		<maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss</maven.build.timestamp.format>
