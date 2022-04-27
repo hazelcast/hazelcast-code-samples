@@ -19,7 +19,7 @@ package com.hazelcast.samples.sql.hazdb;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,8 +77,8 @@ public class ApplicationInitializer {
         // Destination needs to match Cdc.js
         String destination = "/" + MyLocalConstants.WEBSOCKET_TOPICS_PREFIX + "/cdc";
 
-        for (String mapName : List.of(MyConstants.IMAP_NAME_BUNDESLIGA, MyConstants.IMAP_NAME_HEARTBEAT,
-                MyConstants.IMAP_NAME_LEADER)) {
+        for (String mapName : Arrays.asList(new String[] {MyConstants.IMAP_NAME_BUNDESLIGA, MyConstants.IMAP_NAME_HEARTBEAT,
+                MyConstants.IMAP_NAME_LEADER, })) {
             Observable<Tuple3<String, String, String>> observable = this.hazelcastInstance.getJet().newObservable();
             observable.addObserver(tuple3 -> {
                 try {

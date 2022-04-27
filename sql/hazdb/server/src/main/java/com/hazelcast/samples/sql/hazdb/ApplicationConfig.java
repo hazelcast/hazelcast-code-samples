@@ -16,7 +16,7 @@
 
 package com.hazelcast.samples.sql.hazdb;
 
-import java.util.List;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,8 @@ public class ApplicationConfig {
             // Assume Docker
             joinConfig.getKubernetesConfig().setEnabled(false);
             joinConfig.getTcpIpConfig().setEnabled(true)
-                    .setMembers(List.of(hostIp + ":5701", hostIp + ":5702", hostIp + ":5703"));
+                    .setMembers(Arrays.asList(new String[] {hostIp + ":5701", hostIp + ":5702",
+                            hostIp + ":5703", }));
 
             LOGGER.info("Non-Kubernetes configuration: member-list: {}", joinConfig.getTcpIpConfig().getMembers());
         } else {

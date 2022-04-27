@@ -16,6 +16,7 @@
 
 package com.hazelcast.samples.sql.hazdb;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MyConstants {
@@ -25,8 +26,9 @@ public class MyConstants {
     public static final String IMAP_NAME_LEADER = "leader";
     public static final String IMAP_NAME_STADIUM = "stadium";
 
-    public static final List<String> IMAP_NAMES = List.of(IMAP_NAME_BUNDESLIGA, IMAP_NAME_HEARTBEAT, IMAP_NAME_LEADER,
-            IMAP_NAME_STADIUM);
+    public static final List<String> IMAP_NAMES = Arrays.asList(
+                new String[] { IMAP_NAME_BUNDESLIGA, IMAP_NAME_HEARTBEAT, IMAP_NAME_LEADER,
+            IMAP_NAME_STADIUM, });
 
     public static final String VIEW_SUFFIX = "_v";
 }

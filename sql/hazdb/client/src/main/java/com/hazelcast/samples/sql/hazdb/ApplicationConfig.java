@@ -17,7 +17,7 @@
 package com.hazelcast.samples.sql.hazdb;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,8 @@ public class ApplicationConfig {
         if (hostIp.length() > 0) {
             // Assume Docker
             clientNetworkConfig.getKubernetesConfig().setEnabled(false);
-            clientNetworkConfig.setAddresses(List.of(hostIp + ":5701", hostIp + ":5702", hostIp + ":5703"));
+            clientNetworkConfig.setAddresses(Arrays.asList(new String[] {hostIp + ":5701", hostIp + ":5702",
+                    hostIp + ":5703", }));
 
             LOGGER.info("Non-Kubernetes configuration: member-list: {}", clientNetworkConfig.getAddresses());
         } else {
@@ -68,7 +69,8 @@ public class ApplicationConfig {
             });
         }
 
-        for (String s : List.of("spring.datasource.url", "spring.datasource.driver-class-name")) {
+        for (String s : Arrays.asList(new String[] {"spring.datasource.url",
+                "spring.datasource.driver-class-name", })) {
             LOGGER.info("{}={}", s, System.getProperty(s));
         }
 

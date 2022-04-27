@@ -16,8 +16,8 @@
 
 package com.hazelcast.samples.sql.hazdb;
 
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -317,7 +317,7 @@ public class ApplicationInitializer {
                 + "LEFT JOIN " + MyConstants.IMAP_NAME_BUNDESLIGA + " AS b "
                 + "ON a.this = b.__key";
 
-        for (String sql : List.of(sql1, sql2, sql3, sql4, sql5)) {
+        for (String sql : Arrays.asList(new String[] {sql1, sql2, sql3, sql4, sql5, })) {
             try {
                 LOGGER.debug("=====================================================");
                 LOGGER.debug("----");
