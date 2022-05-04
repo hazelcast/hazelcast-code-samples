@@ -25,6 +25,7 @@
 
     <modules>
         <module>compact</module>
+        <module>hazdb</module>
     </modules>
 
     <dependencies>

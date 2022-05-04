@@ -1,0 +1,47 @@
+hazelcast:
+  cluster-name: '@my.cluster.name@'
+
+  properties:
+    # Graceful shutdown is helpful for Kubernetes scale-down.
+    hazelcast.shutdownhook.policy: GRACEFUL
+
+  # Kubernetes only
+  network:
+    join:
+      auto-detection:
+        enabled: false
+      multicast:
+        enabled: false
+      kubernetes:
+        enabled: true
+        service-dns: '@docker.image.prefix@-hazelcast.default.svc.cluster.local'
+    rest-api:
+      enabled: true
+      endpoint-groups:
+        # For src/main/scripts/rest-example.sh
+        CLUSTER_READ:
+          enabled: true
+        # For src/main/scripts/rest-example.sh
+        DATA:
+          enabled: true
+        # For Liveness/Readiness probes in Kubernetes
+        HEALTH_CHECK:
+          enabled: true
+
+  # Config for any non-standard maps
+  # A journal is enabled to read change history
+  map:
+    'bundes*':
+      event-journal:
+        enabled: true      
+    'h*':
+      event-journal:
+        enabled: true      
+    'l*':
+      event-journal:
+        enabled: true      
+
+  # For SQL
+  jet:
+    enabled: true
+    resource-upload-enabled: true

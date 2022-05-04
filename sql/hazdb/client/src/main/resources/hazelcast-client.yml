@@ -1,0 +1,12 @@
+hazelcast-client:
+  cluster-name: '@my.cluster.name@'
+  network:
+    auto-detection:
+      enabled: false
+    kubernetes:
+      enabled: true
+      service-dns: '@docker.image.prefix@-hazelcast.default.svc.cluster.local'
+  connection-strategy:
+    reconnect-mode: OFF
+    connection-retry:
+      cluster-connect-timeout-millis: 5000

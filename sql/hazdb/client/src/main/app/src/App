@@ -1,0 +1,31 @@
+import React, { Component } from 'react';
+import Cdc from './components/cdc/Cdc'
+import Jdbc from './components/jdbc/Jdbc'
+import Sql from './components/sql/Sql'
+import Sql2 from './components/sql2/Sql2'
+
+class App extends Component {
+    render() {
+                return (
+                        <div>
+                            <div class="minor_pane">
+                                <Jdbc/>
+                            </div>
+                            <div class="minor_pane">
+                                <Sql/>
+                            </div>
+                            <div>
+                                <hr class="pane_separator"/>
+                            </div>
+                            <div class="minor_pane">
+                                <Cdc/>
+                            </div>
+                            <div class="minor_pane">
+                                <Sql2/>
+                            </div>
+                        </div>
+                )
+        }
+}
+
+export default App;
