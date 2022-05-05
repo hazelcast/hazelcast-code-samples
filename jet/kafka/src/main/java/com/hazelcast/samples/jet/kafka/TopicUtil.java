@@ -15,6 +15,8 @@
  */
 package com.hazelcast.samples.jet.kafka;
 
+import com.hazelcast.logging.ILogger;
+import com.hazelcast.logging.Logger;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -26,6 +28,8 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 public class TopicUtil implements Closeable {
+    private static final ILogger LOGGER = Logger.getLogger(TopicUtil.class);
+
     private final Admin admin;
 
     public TopicUtil(String broker) {
@@ -45,11 +49,23 @@ public class TopicUtil implements Closeable {
     }
 
     public void deleteTopic(String topicId) {
-        admin.deleteTopics(Collections.singletonList(topicId));
+        try {
+            admin.deleteTopics(Collections.singletonList(topicId)).all().get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void close() {
         admin.close();
+    }
+
+    void forceTopicDeletion(String topicId) {
+        try {
+            deleteTopic(topicId);
+        } catch (Exception ex) {
+            LOGGER.fine("Exception while deleting topic " + topicId + ": " + ex.getMessage());
+        }
     }
 }

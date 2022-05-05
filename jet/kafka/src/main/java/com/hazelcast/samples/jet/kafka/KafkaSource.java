@@ -135,6 +135,8 @@ public class KafkaSource {
 
     // Creates 2 topics (t1, t2) with different partition counts (32, 64) and fills them with items
     private void fillTopics() {
+        topicUtil.forceTopicDeletion("t1");
+        topicUtil.forceTopicDeletion("t2");
         topicUtil.createTopic("t1", 32);
         topicUtil.createTopic("t2", 64);
 
