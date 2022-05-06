@@ -34,8 +34,6 @@ import kafka.zk.EmbeddedZookeeper;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.Deserializer;
-import org.apache.kafka.common.serialization.IntegerDeserializer;
-import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Time;
@@ -64,7 +62,7 @@ public class KafkaSink {
 
     private EmbeddedZookeeper zkServer;
     private KafkaServer kafkaServer;
-    private KafkaConsumer<String, Integer> kafkaConsumer;
+    private KafkaConsumer<String, String> kafkaConsumer;
 
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
@@ -72,7 +70,7 @@ public class KafkaSink {
          .writeTo(KafkaSinks.kafka(props(
                          "bootstrap.servers", BOOTSTRAP_SERVERS,
                          "key.serializer", StringSerializer.class.getCanonicalName(),
-                         "value.serializer", IntegerSerializer.class.getCanonicalName()),
+                         "value.serializer", StringSerializer.class.getCanonicalName()),
                  SINK_TOPIC_NAME));
         return p;
     }
@@ -90,7 +88,7 @@ public class KafkaSink {
             HazelcastInstance hz = Hazelcast.bootstrappedInstance();
             JetService jet = hz.getJet();
 
-            IMap<String, Integer> sourceMap = hz.getMap(SOURCE_NAME);
+            IMap<String, String> sourceMap = hz.getMap(SOURCE_NAME);
             fillIMap(sourceMap);
 
 
@@ -124,8 +122,8 @@ public class KafkaSink {
         }
     }
 
-    public KafkaConsumer<String, Integer> createConsumer(String... topicIds) {
-        return createConsumer(StringDeserializer.class, IntegerDeserializer.class, emptyMap(), topicIds);
+    public KafkaConsumer<String, String> createConsumer(String... topicIds) {
+        return createConsumer(StringDeserializer.class, StringDeserializer.class, emptyMap(), topicIds);
     }
 
     public <K, V> KafkaConsumer<K, V> createConsumer(
@@ -164,10 +162,10 @@ public class KafkaSink {
         kafkaServer = TestUtils.createServer(config, mock);
     }
 
-    private void fillIMap(IMap<String, Integer> sourceMap) {
+    private void fillIMap(IMap<String, String> sourceMap) {
         LOGGER.info("Filling IMap");
         for (int i = 1; i <= MESSAGE_COUNT; i++) {
-            sourceMap.put("t1-" + i, i);
+            sourceMap.put("t1-" + i, String.valueOf(i));
         }
         LOGGER.info("Published " + MESSAGE_COUNT + " messages to IMap -> " + SOURCE_NAME);
     }
