@@ -20,9 +20,7 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
-import com.hazelcast.jet.kafka.KafkaSources;
 import com.hazelcast.jet.pipeline.Pipeline;
-import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.logging.ILogger;
 import com.hazelcast.logging.Logger;
 import com.hazelcast.map.IMap;
@@ -33,16 +31,19 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
+import static com.hazelcast.jet.kafka.KafkaSources.kafka;
+import static com.hazelcast.jet.pipeline.Sinks.map;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 /**
  * A sample which consumes two Kafka topics and writes
  * the received items to an {@code IMap}.
- *
+ * <p>
  * This test requires a dockerized Hazelcast instance along with dockerized Confluent Platform:
  * - Download https://raw.githubusercontent.com/confluentinc/cp-all-in-one/7.1.0-post/cp-all-in-one/docker-compose.yml
- * - docker-compose together with jet-kafka/hazelcast.yml:
- * docker-compose -f docker-compose.yml -f hazelcast.yml up
+ * and rename it to confluence.yml
+ * - Run docker-compose using confluence.yml and jet/kafka/hazelcast.yml:
+ * docker-compose -f confluence.yml -f hazelcast.yml up
  **/
 public class KafkaSourceWithStandaloneHZAndKafka {
 
@@ -59,14 +60,14 @@ public class KafkaSourceWithStandaloneHZAndKafka {
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
         //we need to use an internal broker address as the pipeline will be executed in the HZ container
-        p.readFrom(KafkaSources.kafka(props(
+        p.readFrom(kafka(props(
                                 "bootstrap.servers", INTERNAL_DOCKER_BROKER_ADDRESS,
                                 "key.deserializer", StringDeserializer.class.getCanonicalName(),
                                 "value.deserializer", StringDeserializer.class.getCanonicalName(),
                                 "auto.offset.reset", AUTO_OFFSET_RESET)
                         , "t1", "t2"))
                 .withoutTimestamps()
-                .writeTo(Sinks.map(SINK_NAME));
+                .writeTo(map(SINK_NAME));
         return p;
     }
 
