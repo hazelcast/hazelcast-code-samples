@@ -16,80 +16,74 @@
 
 package com.hazelcast.samples.jet.kafka;
 
-import com.hazelcast.core.Hazelcast;
+import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
-import com.hazelcast.jet.kafka.KafkaSources;
 import com.hazelcast.jet.pipeline.Pipeline;
-import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.logging.ILogger;
 import com.hazelcast.logging.Logger;
 import com.hazelcast.map.IMap;
-import kafka.server.KafkaConfig;
-import kafka.server.KafkaServer;
-import kafka.utils.MockTime;
-import kafka.utils.TestUtils;
-import kafka.zk.EmbeddedZookeeper;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.apache.kafka.common.utils.Time;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Properties;
 
+import static com.hazelcast.jet.kafka.KafkaSources.kafka;
+import static com.hazelcast.jet.pipeline.Sinks.map;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 /**
  * A sample which consumes two Kafka topics and writes
  * the received items to an {@code IMap}.
+ * <p>
+ * This test requires a dockerized Hazelcast instance along with dockerized Confluent Platform:
+ * - Download https://raw.githubusercontent.com/confluentinc/cp-all-in-one/7.1.0-post/cp-all-in-one/docker-compose.yml
+ * and rename it to confluence.yml
+ * - Run docker-compose using confluence.yml and jet/kafka/hazelcast.yml:
+ * docker-compose -f confluence.yml -f hazelcast.yml up
  **/
-public class KafkaSource {
+public class KafkaSourceWithStandaloneHZAndKafka {
 
-    private static final ILogger LOGGER = Logger.getLogger(KafkaSource.class);
+    private static final ILogger LOGGER = Logger.getLogger(KafkaSourceWithStandaloneHZAndKafka.class);
     private static final int MESSAGE_COUNT_PER_TOPIC = 1_000_000;
-    private static final String BOOTSTRAP_SERVERS = "localhost:9092";
-    private static final boolean USE_EMBEDDED_KAFKA = Boolean.parseBoolean(System.getProperty("use.embedded.kafka", "true"));
     private static final String AUTO_OFFSET_RESET = "earliest";
 
     private static final String SINK_NAME = "sink";
+    private static final String INTERNAL_DOCKER_BROKER_ADDRESS = "broker:29092";
+    private static final String EXTERNAL_DOCKER_BROKER_ADDRESS = "localhost:9092";
 
-    private EmbeddedZookeeper zkServer;
-    private KafkaServer kafkaServer;
     private TopicUtil topicUtil;
 
     private static Pipeline buildPipeline() {
         Pipeline p = Pipeline.create();
-        p.readFrom(KafkaSources.kafka(props(
-                                "bootstrap.servers", BOOTSTRAP_SERVERS,
+        //we need to use an internal broker address as the pipeline will be executed in the HZ container
+        p.readFrom(kafka(props(
+                                "bootstrap.servers", INTERNAL_DOCKER_BROKER_ADDRESS,
                                 "key.deserializer", StringDeserializer.class.getCanonicalName(),
                                 "value.deserializer", StringDeserializer.class.getCanonicalName(),
                                 "auto.offset.reset", AUTO_OFFSET_RESET)
-                , "t1", "t2"))
-         .withoutTimestamps()
-         .writeTo(Sinks.map(SINK_NAME));
+                        , "t1", "t2"))
+                .withoutTimestamps()
+                .writeTo(map(SINK_NAME));
         return p;
     }
 
-    public static void main(String[] args) throws Exception {
-        new KafkaSource().run();
+    public static void main(String[] args) {
+        new KafkaSourceWithStandaloneHZAndKafka().run();
     }
 
-    private void run() throws Exception {
+    private void run() {
         try {
-            if (USE_EMBEDDED_KAFKA) {
-                createKafkaCluster();
-            }
-            topicUtil = new TopicUtil(BOOTSTRAP_SERVERS);
+            topicUtil = new TopicUtil(EXTERNAL_DOCKER_BROKER_ADDRESS);
 
             fillTopics();
-
-            HazelcastInstance hz = Hazelcast.bootstrappedInstance();
+            HazelcastInstance hz = HazelcastClient.newHazelcastClient();
             JetService jet = hz.getJet();
             IMap<String, String> sinkMap = hz.getMap(SINK_NAME);
+            sinkMap.clear();
 
             Pipeline p = buildPipeline();
 
@@ -105,32 +99,14 @@ public class KafkaSource {
                 }
                 Thread.sleep(100);
             }
+        } catch (Exception ex) {
+            LOGGER.warning(ex);
         } finally {
-            Hazelcast.shutdownAll();
+            HazelcastClient.shutdownAll();
             topicUtil.deleteTopic("t1");
             topicUtil.deleteTopic("t2");
             topicUtil.close();
-            if (USE_EMBEDDED_KAFKA) {
-                shutdownKafkaCluster();
-            }
         }
-    }
-
-    // Creates an embedded zookeeper server and a kafka broker
-    private void createKafkaCluster() throws IOException {
-        LOGGER.info("Creating an embedded zookeeper server and a kafka broker");
-        zkServer = new EmbeddedZookeeper();
-        String zkConnect = "localhost:" + zkServer.port();
-
-        KafkaConfig config = new KafkaConfig(props(
-                "zookeeper.connect", zkConnect,
-                "broker.id", "0",
-                "log.dirs", Files.createTempDirectory("kafka-").toAbsolutePath().toString(),
-                "offsets.topic.replication.factor", "1",
-                "listeners", "PLAINTEXT://localhost:9092"));
-        Time mock = new MockTime();
-        kafkaServer = TestUtils.createServer(config, mock);
-
     }
 
     // Creates 2 topics (t1, t2) with different partition counts (32, 64) and fills them with items
@@ -142,7 +118,7 @@ public class KafkaSource {
 
         LOGGER.info("Filling Topics");
         Properties props = props(
-                "bootstrap.servers", "localhost:9092",
+                "bootstrap.servers", EXTERNAL_DOCKER_BROKER_ADDRESS,
                 "key.serializer", StringSerializer.class.getName(),
                 "value.serializer", StringSerializer.class.getName());
         try (KafkaProducer<String, String> producer = new KafkaProducer<>(props)) {
@@ -153,11 +129,6 @@ public class KafkaSource {
             LOGGER.info("Published " + MESSAGE_COUNT_PER_TOPIC + " messages to topic t1");
             LOGGER.info("Published " + MESSAGE_COUNT_PER_TOPIC + " messages to topic t2");
         }
-    }
-
-    private void shutdownKafkaCluster() {
-        kafkaServer.shutdown();
-        zkServer.shutdown();
     }
 
     private static Properties props(String... kvs) {

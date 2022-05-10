@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  hazelcast:
+    image: hazelcast/hazelcast:5.1.1
+    ports:
+    - "5701:5701"
+  management-center:
+    image: hazelcast/management-center:5.1.3
+    ports:
+    - "8080:8080"
+    environment:
+    - MC_DEFAULT_CLUSTER=dev
+    - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast
