@@ -41,9 +41,9 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  * <p>
  * This test requires a dockerized Hazelcast instance along with dockerized Confluent Platform:
  * - Download https://raw.githubusercontent.com/confluentinc/cp-all-in-one/7.1.0-post/cp-all-in-one/docker-compose.yml
- * and rename it to confluence.yml
- * - Run docker-compose using confluence.yml and jet/kafka/hazelcast.yml:
- * docker-compose -f confluence.yml -f hazelcast.yml up
+ * and rename it to confluent.yml
+ * - Run docker-compose using confluent.yml and jet/kafka/hazelcast.yml:
+ * docker-compose -f confluent.yml -f hazelcast-compose.yml up
  **/
 public class KafkaSourceWithStandaloneHZAndKafka {
 
