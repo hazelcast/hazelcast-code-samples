@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+@SuppressWarnings("checkstyle:VisibilityModifier")
 public class Order implements Serializable {
 
     public int id;
@@ -48,8 +49,12 @@ public class Order implements Serializable {
     }
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Order order = (Order) o;
         return id == order.id
                 && purchaser == order.purchaser

@@ -42,9 +42,6 @@
         <property name="file" value="${main.basedir}/checkstyle/suppressions.xml"/>
     </module>
 
-    <!-- Enable suppression of file contents using //CHECKSTYLE:[ON|OFF] comments -->
-    <module name="SuppressionCommentFilter"/>
-
     <!-- Enable the suppression annotation @SuppressWarnings("checkstyle:lowercasecheckname"} -->
     <module name="SuppressWarningsFilter"/>
 
@@ -79,6 +76,12 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
+    <!-- Checks for Size Violations.                    -->
+    <!-- See http://checkstyle.sf.net/config_sizes.html -->
+    <module name="LineLength">
+        <property name="max" value="130"/>
+    </module>
+
     <!-- Checks for Headers                                -->
     <!-- See http://checkstyle.sf.net/config_header.html   -->
     <!--
@@ -89,11 +92,11 @@
     -->
 
     <module name="TreeWalker">
-        <!-- Activate comment suppression filters -->
-        <module name="FileContentsHolder"/>
-
         <!-- Needed for SuppressWarningsFilter to work -->
         <module name="SuppressWarningsHolder"/>
+
+        <!-- Enable suppression of file contents using //CHECKSTYLE:[ON|OFF] comments -->
+        <module name="SuppressionCommentFilter"/>
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
@@ -143,9 +146,6 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength">
-            <property name="max" value="130"/>
-        </module>
         <module name="MethodLength">
             <property name="tokens" value="METHOD_DEF"/>
             <property name="max" value="60"/>
@@ -233,7 +233,6 @@
             <property name="tokens" value="PARAMETER_DEF, METHOD_DEF"/>
         </module>
         <module name="InnerAssignment"/>
-        <module name="JUnitTestCase"/>
         <module name="ReturnCount">
             <property name="max" value="8"/>
         </module>

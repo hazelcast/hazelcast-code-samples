@@ -13,12 +13,13 @@ import com.hazelcast.jet.pipeline.Sinks;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 import static com.hazelcast.jet.Traversers.singleton;
 import static com.hazelcast.jet.Traversers.traverseItems;
-import static com.hazelcast.jet.cdc.Operation.*;
+import static com.hazelcast.jet.cdc.Operation.DELETE;
+import static com.hazelcast.jet.cdc.Operation.INSERT;
+import static com.hazelcast.jet.cdc.Operation.SYNC;
 import static com.hazelcast.jet.cdc.postgres.PostgresCdcSources.postgres;
 import static com.hazelcast.jet.datamodel.Tuple2.tuple2;
 import static com.hazelcast.jet.pipeline.Sources.jdbc;
@@ -33,7 +34,8 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
 
     private static final long LAG = TimeUnit.DAYS.toMillis(1);
 
-    public static void main(String[] args) throws SQLException {
+    @SuppressWarnings({ "resource", "checkstyle:MethodLength", "checkstyle:NeedBraces", "checkstyle:NPathComplexity" })
+    public static void main(String[] args) {
         var config = new Config();
         config.getJetConfig().setEnabled(true);
         config.getSerializationConfig()
@@ -44,9 +46,9 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         JetService jet = hz.getJet();
         DriverManager.getDrivers();
-        hz.getMap("CustomerStatsReport"); // trigger initialization
+        // trigger initialization
+        hz.getMap("CustomerStatsReport");
 
-        //noinspection resource
         hz.getSql().execute(
           """
                   create mapping CustomerStatsReport (
@@ -69,7 +71,8 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                 jdbc(
                         () -> DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "cdcpwd1337"),
                         (connection, parallelism, index) -> {
-                            PreparedStatement stmt = connection.prepareStatement("select * from inventory.orders where id % ? = ?");
+                            String sql = "select * from inventory.orders where id % ? = ?";
+                            PreparedStatement stmt = connection.prepareStatement(sql);
                             stmt.setInt(1, parallelism);
                             stmt.setInt(2, index);
                             return stmt.executeQuery();
@@ -146,7 +149,7 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
         return record.table().equalsIgnoreCase("Orders");
     }
 
-    public record ReportEvent<E> (int customerId, Operation operation, E event) {
+    public record ReportEvent<E>(int customerId, Operation operation, E event) {
         static ReportEvent<Order> orderEvent(Order order, Operation operation) {
             return new ReportEvent<>(order.getPurchaser(), operation, order);
         }

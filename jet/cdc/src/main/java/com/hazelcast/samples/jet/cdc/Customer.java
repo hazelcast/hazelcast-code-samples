@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Objects;
 
+@SuppressWarnings("checkstyle:VisibilityModifier")
 public class Customer implements Serializable {
 
     @JsonProperty("id")

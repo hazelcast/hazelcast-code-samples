@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class CustomerStatsReport implements Serializable {
 
+    Set<Integer> processedOrderIds = new HashSet<>();
     private int customerId;
     private String customerFirstName;
     private String customerLastName;
@@ -14,8 +15,6 @@ public class CustomerStatsReport implements Serializable {
     private int ordersTotal;
     private int itemsTotal;
     private double itemsAvg;
-
-    Set<Integer> processedOrderIds = new HashSet<>();
 
     public int getCustomerId() {
         return customerId;
@@ -67,10 +66,19 @@ public class CustomerStatsReport implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CustomerStatsReport that = (CustomerStatsReport) o;
-        return customerId == that.customerId && ordersTotal == that.ordersTotal && itemsTotal == that.itemsTotal && Double.compare(that.itemsAvg, itemsAvg) == 0 && Objects.equals(customerFirstName, that.customerFirstName) && Objects.equals(customerLastName, that.customerLastName);
+        return customerId == that.customerId
+                && ordersTotal == that.ordersTotal
+                && itemsTotal == that.itemsTotal
+                && Double.compare(that.itemsAvg, itemsAvg) == 0
+                && Objects.equals(customerFirstName, that.customerFirstName)
+                && Objects.equals(customerLastName, that.customerLastName);
     }
 
     @Override
@@ -79,6 +87,7 @@ public class CustomerStatsReport implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:OperatorWrap")
     public String toString() {
         return "{" +
                 "customerId=" + customerId +

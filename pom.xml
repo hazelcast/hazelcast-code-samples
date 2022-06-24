@@ -39,7 +39,7 @@
         <maven.protobuf.plugin.version>0.6.1</maven.protobuf.plugin.version>
 
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
-        <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
+        <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
         <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
         
         <lombok.version>1.16.22</lombok.version>
@@ -179,6 +179,13 @@
                             <enableRulesSummary>true</enableRulesSummary>
                             <propertyExpansion>main.basedir=${main.basedir}</propertyExpansion>
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.puppycrawl.tools</groupId>
+                                <artifactId>checkstyle</artifactId>
+                                <version>10.1</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>

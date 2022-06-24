@@ -35,6 +35,7 @@ import static com.hazelcast.samples.jet.cdc.CdcRealTimeAnalysisDemo.ReportEvent.
  */
 public class CdcRealTimeAnalysisDemo {
 
+    @SuppressWarnings({ "resource", "checkstyle:MethodLength" })
     public static void main(String[] args) {
         var config = new Config();
         config.getJetConfig().setEnabled(true);
@@ -45,9 +46,9 @@ public class CdcRealTimeAnalysisDemo {
 
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         JetService jet = hz.getJet();
-        hz.getMap("CustomerStatsReport"); // trigger initialization
+        // trigger initialization
+        hz.getMap("CustomerStatsReport");
 
-        //noinspection resource
         hz.getSql().execute(
           """
                   create mapping CustomerStatsReport (
@@ -122,7 +123,7 @@ public class CdcRealTimeAnalysisDemo {
         return record.table().equalsIgnoreCase("Orders");
     }
 
-    public record ReportEvent<E> (int customerId, Operation operation, E event) {
+    public record ReportEvent<E>(int customerId, Operation operation, E event) {
         static ReportEvent<Order> orderEvent(Order order, Operation operation) {
             return new ReportEvent<>(order.getPurchaser(), operation, order);
         }
