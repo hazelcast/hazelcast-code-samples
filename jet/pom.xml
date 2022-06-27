@@ -35,7 +35,6 @@
     </parent>
 
     <modules>
-        <module>cdc</module>
         <module>co-group</module>
         <module>early-window-results</module>
         <module>elastic</module>
@@ -72,6 +71,15 @@
         <main.basedir>${project.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>cdc</id>
+            <modules>
+                <module>cdc</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
