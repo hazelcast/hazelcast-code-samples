@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class CustomerStatsReport implements Serializable {
 
-    Set<Integer> processedOrderIds = new HashSet<>();
+    private Set<Integer> processedOrderIds = new HashSet<>();
     private int customerId;
     private String customerFirstName;
     private String customerLastName;
@@ -15,6 +15,17 @@ public class CustomerStatsReport implements Serializable {
     private int ordersTotal;
     private int itemsTotal;
     private double itemsAvg;
+
+    public Set<Integer> getProcessedOrderIds() {
+        return processedOrderIds;
+    }
+    public boolean addProcessedOrderId(Integer id) {
+        return processedOrderIds.add(id);
+    }
+
+    public void setProcessedOrderIds(Set<Integer> processedOrderIds) {
+        this.processedOrderIds = processedOrderIds;
+    }
 
     public int getCustomerId() {
         return customerId;

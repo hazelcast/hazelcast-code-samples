@@ -30,6 +30,8 @@ import static com.hazelcast.samples.jet.cdc.CdcRealTimeAnalysisDemo.ReportEvent.
  *      -e POSTGRES_PASSWORD=cdcpwd1337 debezium/example-postgres:1.9.3.Final
  * </pre>
  *
+ * The image comes with some data already filled. Later you can add more data manually to test the queries.
+ *
  * Results of the pipeline are visible in the {@code CustomerStatsReport} IMap or via {@code CustomerStatsReport} SQL
  * mapping.
  */

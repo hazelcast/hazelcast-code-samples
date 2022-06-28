@@ -124,7 +124,11 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                         var order = (Order) record.event();
                         var operation = record.operation();
                         if (operation == Operation.SYNC || operation == INSERT) {
-                            if (!state.processedOrderIds.add(order.getId())) return state;
+                            // the order data may come from both JDBC and Debezium CDC source
+                            // here we deduplicate the data, each order may be processed only one
+                            // for production usage it's recommended to rethink this step and carefully pick
+                            // which events will be taken.
+                            if (!state.addProcessedOrderId(order.getId())) return state;
                             state.setCustomerId(order.getPurchaser());
                             state.setItemsTotal(state.getItemsTotal() + order.getQuantity());
                             state.setOrdersTotal(state.getOrdersTotal() + 1);
