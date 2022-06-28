@@ -78,14 +78,15 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                             return stmt.executeQuery();
                         },
                         rs -> {
-                            Order order = new Order();
-                            order.setId(rs.getInt("id"));
-                            order.setOrderDate(rs.getDate("order_date"));
-                            order.setPurchaser(rs.getInt("purchaser"));
-                            order.setProductId(rs.getInt("product_id"));
-                            order.setQuantity(rs.getInt("quantity"));
+                            Order order = new Order(
+                                    rs.getInt("id"),
+                                    rs.getDate("order_date"),
+                                    rs.getInt("purchaser"),
+                                    rs.getInt("product_id"),
+                                    rs.getInt("quantity")
+                            );
                             return orderEvent(order, Operation.SYNC);
-                        })).addTimestamps(o -> o.event.getOrderDate().getTime(), LAG);
+                        })).addTimestamps(o -> o.event.orderDate().getTime(), LAG);
 
         var cdc = pipeline.readFrom(
                         postgres("inventory-db")
@@ -116,9 +117,9 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                 .groupingKey(ReportEvent::customerId)
                 .mapStateful(CustomerStatsReport::new, (state, key, record) -> {
                     if (record.event() instanceof Customer customer) {
-                        state.setCustomerFirstName(customer.firstName);
-                        state.setCustomerLastName(customer.lastName);
-                        state.setCustomerId(customer.id);
+                        state.setCustomerFirstName(customer.firstName());
+                        state.setCustomerLastName(customer.lastName());
+                        state.setCustomerId(customer.id());
 
                     } else  {
                         var order = (Order) record.event();
@@ -128,13 +129,13 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                             // here we deduplicate the data, each order may be processed only one
                             // for production usage it's recommended to rethink this step and carefully pick
                             // which events will be taken.
-                            if (!state.addProcessedOrderId(order.getId())) return state;
-                            state.setCustomerId(order.getPurchaser());
-                            state.setItemsTotal(state.getItemsTotal() + order.getQuantity());
+                            if (!state.addProcessedOrderId(order.id())) return state;
+                            state.setCustomerId(order.purchaser());
+                            state.setItemsTotal(state.getItemsTotal() + order.quantity());
                             state.setOrdersTotal(state.getOrdersTotal() + 1);
                             state.setItemsAvg(state.getItemsTotal() * 1.0d / state.getOrdersTotal());
                         } else if (operation == DELETE) {
-                            state.setItemsTotal(state.getItemsTotal() - order.getQuantity());
+                            state.setItemsTotal(state.getItemsTotal() - order.quantity());
                             state.setOrdersTotal(state.getOrdersTotal() - 1);
                             state.setItemsAvg(state.getItemsTotal() * 1.0d / state.getOrdersTotal());
                         }
@@ -155,10 +156,10 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
 
     public record ReportEvent<E>(int customerId, Operation operation, E event) {
         static ReportEvent<Order> orderEvent(Order order, Operation operation) {
-            return new ReportEvent<>(order.getPurchaser(), operation, order);
+            return new ReportEvent<>(order.purchaser(), operation, order);
         }
         static ReportEvent<Customer> customerEvent(Customer customer, Operation operation) {
-            return new ReportEvent<>(customer.id, operation, customer);
+            return new ReportEvent<>(customer.id(), operation, customer);
         }
         static Traverser<ReportEvent<?>> eventFor(ChangeRecord record, Operation operation) {
             return singleton(

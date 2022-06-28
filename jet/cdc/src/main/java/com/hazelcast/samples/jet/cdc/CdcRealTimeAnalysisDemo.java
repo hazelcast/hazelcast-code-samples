@@ -93,20 +93,20 @@ public class CdcRealTimeAnalysisDemo {
                 .mapStateful(CustomerStatsReport::new, (state, key, record) -> {
 
                     if (record.event() instanceof Customer customer) {
-                        state.setCustomerFirstName(customer.firstName);
-                        state.setCustomerLastName(customer.lastName);
-                        state.setCustomerId(customer.id);
+                        state.setCustomerFirstName(customer.firstName());
+                        state.setCustomerLastName(customer.lastName());
+                        state.setCustomerId(customer.id());
 
                     } else  {
                         var order = (Order) record.event();
                         var operation = record.operation();
                         if (operation == Operation.SYNC || operation == INSERT) {
-                            state.setCustomerId(order.getPurchaser());
-                            state.setItemsTotal(state.getItemsTotal() + order.getQuantity());
+                            state.setCustomerId(order.purchaser());
+                            state.setItemsTotal(state.getItemsTotal() + order.quantity());
                             state.setOrdersTotal(state.getOrdersTotal() + 1);
                             state.setItemsAvg(state.getItemsTotal() * 1.0d / state.getOrdersTotal());
                         } else if (operation == DELETE) {
-                            state.setItemsTotal(state.getItemsTotal() - order.getQuantity());
+                            state.setItemsTotal(state.getItemsTotal() - order.quantity());
                             state.setOrdersTotal(state.getOrdersTotal() - 1);
                             state.setItemsAvg(state.getItemsTotal() * 1.0d / state.getOrdersTotal());
                         }
@@ -127,10 +127,10 @@ public class CdcRealTimeAnalysisDemo {
 
     public record ReportEvent<E>(int customerId, Operation operation, E event) {
         static ReportEvent<Order> orderEvent(Order order, Operation operation) {
-            return new ReportEvent<>(order.getPurchaser(), operation, order);
+            return new ReportEvent<>(order.purchaser(), operation, order);
         }
         static ReportEvent<Customer> customerEvent(Customer customer, Operation operation) {
-            return new ReportEvent<>(customer.id, operation, customer);
+            return new ReportEvent<>(customer.id(), operation, customer);
         }
         static Traverser<ReportEvent<?>> eventFor(ChangeRecord record, Operation operation) {
             return singleton(

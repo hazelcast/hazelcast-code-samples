@@ -75,6 +75,9 @@
     <profiles>
         <profile>
             <id>cdc</id>
+            <activation>
+                <jdk>[17,)</jdk>
+            </activation>
             <modules>
                 <module>cdc</module>
             </modules>
