@@ -63,7 +63,7 @@ public class CdcRealTimeAnalysisDemo {
                     customerFirstName VARCHAR,
                     customerLastName VARCHAR,
                     ordersTotal INT,
-                    itemsTotal VARCHAR,
+                    itemsTotal INT,
                     itemsAvg DOUBLE)
                   TYPE IMap OPTIONS (
                     'keyFormat' = 'int',
@@ -88,17 +88,16 @@ public class CdcRealTimeAnalysisDemo {
                     if (isOrder(record) && record.operation() == Operation.UPDATE) {
                         return traverseItems(
                                 orderEvent(toObject(record.oldValue(), Order.class), DELETE),
-                                orderEvent(toObject(record.newValue() ,Order.class), INSERT)
+                                orderEvent(toObject(record.newValue(), Order.class), INSERT)
                         );
                     } else {
                         return eventFor(record, record.operation());
                     }
                 })
                 .groupingKey(ReportEvent::customerId)
-                .mapStateful(CustomerStatsReport::new, (oldState, key, record) -> {
-                    var state = CustomerStatsReport.copy(oldState);
+                .mapStateful(CustomerStatsReport::new, (state, key, record) -> {
                     if (record.event() instanceof Customer customer) {
-                       state.updateCustomerData(customer);
+                        state.updateCustomerData(customer);
                     } else  {
                         var order = (Order) record.event();
                         var operation = record.operation();
@@ -108,7 +107,9 @@ public class CdcRealTimeAnalysisDemo {
                            state.updateWithDeleted(order);
                         }
                     }
-                    return state;
+                    // we return state copy, so that we are sure it includes only changes from this
+                    // map operation (not done after the map is done)
+                    return CustomerStatsReport.copy(state);
                 })
                 .peek(s -> "State: \n" + s)
                 .map(state -> tuple2(state.getCustomerId(), state))

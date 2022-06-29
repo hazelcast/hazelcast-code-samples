@@ -115,20 +115,20 @@ public class CustomerStatsReport implements Serializable {
                 '}';
     }
 
-    public void updateWithNew(Order order) {
+    public synchronized void updateWithNew(Order order) {
         customerId = order.purchaser();
         ordersTotal++;
         itemsTotal = itemsTotal + order.quantity();
         itemsAvg = itemsTotal * 1.0d / ordersTotal;
     }
 
-    public void updateWithDeleted(Order order) {
+    public synchronized void updateWithDeleted(Order order) {
         itemsTotal = itemsTotal - order.quantity();
         ordersTotal = ordersTotal - 1;
         itemsAvg = itemsTotal * 1.0d / ordersTotal;
     }
 
-    public void updateCustomerData(Customer customer) {
+    public synchronized void updateCustomerData(Customer customer) {
         customerFirstName = customer.firstName();
         customerLastName = customer.lastName();
         customerId = customer.id();

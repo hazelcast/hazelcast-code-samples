@@ -18,9 +18,6 @@ package com.hazelcast.samples.jet.cdc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 @SuppressWarnings("checkstyle:VisibilityModifier")
 public record Customer (
         @JsonProperty("id")
