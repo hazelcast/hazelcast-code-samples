@@ -28,7 +28,9 @@ import static com.hazelcast.samples.jet.cdc.CdcRealTimeAnalysisWithParallelSnaps
 
 /**
  * Same analytics scenario as in {@linkplain CdcRealTimeAnalysisDemo}, but with added reading from JDBC source
- * to speed up initial snapshot loading.
+ * to speed up initial snapshot loading. This example is very simplified - the Debezium's snapshot
+ * will be done in parallel to reading from JDBC source, which will increase load on the database.
+ * However, if the volumes are very big, this will decrease time for the data to be ready.
  */
 public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
 
@@ -50,20 +52,20 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
         hz.getMap("CustomerStatsReport");
 
         hz.getSql().execute(
-          """
-                  create mapping CustomerStatsReport (
-                    customerId int,
-                    customerFirstName varchar,
-                    customerLastName varchar,
-                    ordersTotal int,
-                    itemsTotal int,
-                    itemsAvg double)
-                  type IMap options (
-                    'keyFormat' = 'int',
-                    'valueFormat' = 'compact',
-                    'valueCompactTypeName'='CustomerStatsReport'
-                  );
-                  """
+                """
+                        CREATE MAPPING CustomerStatsReport (
+                          customerId INT,
+                          customerFirstName VARCHAR,
+                          customerLastName VARCHAR,
+                          ordersTotal INT,
+                          itemsTotal V,
+                          itemsAvg DOUBLE)
+                        TYPE IMap OPTIONS (
+                          'keyFormat' = 'int',
+                          'valueFormat' = 'compact',
+                          'valueCompactTypeName'='CustomerStatsReport'
+                        );
+                        """
         );
 
         Pipeline pipeline = Pipeline.create();
@@ -105,8 +107,8 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                     if (isOrder && record.operation() == SYNC) return Traversers.empty();
                     if (isOrder && record.operation() == Operation.UPDATE) {
                         return traverseItems(
-                                orderEvent(record.newValue().toObject(Order.class), INSERT),
-                                orderEvent(record.oldValue().toObject(Order.class), DELETE)
+                                orderEvent(record.oldValue().toObject(Order.class), DELETE),
+                                orderEvent(record.newValue().toObject(Order.class), INSERT)
                         );
                     } else {
                         return eventFor(record, record.operation());
@@ -115,12 +117,10 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
 
         cdc.merge(orderJdbc)
                 .groupingKey(ReportEvent::customerId)
-                .mapStateful(CustomerStatsReport::new, (state, key, record) -> {
+                .mapStateful(CustomerStatsReport::new, (oldState, key, record) -> {
+                    var state = CustomerStatsReport.copy(oldState);
                     if (record.event() instanceof Customer customer) {
-                        state.setCustomerFirstName(customer.firstName());
-                        state.setCustomerLastName(customer.lastName());
-                        state.setCustomerId(customer.id());
-
+                        state.updateCustomerData(customer);
                     } else  {
                         var order = (Order) record.event();
                         var operation = record.operation();
@@ -130,14 +130,9 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                             // for production usage it's recommended to rethink this step and carefully pick
                             // which events will be taken.
                             if (!state.addProcessedOrderId(order.id())) return state;
-                            state.setCustomerId(order.purchaser());
-                            state.setItemsTotal(state.getItemsTotal() + order.quantity());
-                            state.setOrdersTotal(state.getOrdersTotal() + 1);
-                            state.setItemsAvg(state.getItemsTotal() * 1.0d / state.getOrdersTotal());
+                            state.updateWithNew(order);
                         } else if (operation == DELETE) {
-                            state.setItemsTotal(state.getItemsTotal() - order.quantity());
-                            state.setOrdersTotal(state.getOrdersTotal() - 1);
-                            state.setItemsAvg(state.getItemsTotal() * 1.0d / state.getOrdersTotal());
+                            state.updateWithDeleted(order);
                         }
                     }
                     return state;

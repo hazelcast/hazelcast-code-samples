@@ -16,6 +16,18 @@ public class CustomerStatsReport implements Serializable {
     private int itemsTotal;
     private double itemsAvg;
 
+    public static CustomerStatsReport copy(CustomerStatsReport other) {
+        var newInstance = new CustomerStatsReport();
+        newInstance.customerId = other.customerId;
+        newInstance.customerFirstName = other.customerFirstName;
+        newInstance.customerLastName = other.customerLastName;
+        newInstance.ordersTotal = other.ordersTotal;
+        newInstance.itemsTotal = other.itemsTotal;
+        newInstance.itemsAvg = other.itemsAvg;
+        newInstance.processedOrderIds.addAll(other.processedOrderIds);
+        return newInstance;
+    }
+
     public boolean addProcessedOrderId(Integer id) {
         return processedOrderIds.add(id);
     }
@@ -101,5 +113,24 @@ public class CustomerStatsReport implements Serializable {
                 ", itemsTotal=" + itemsTotal +
                 ", itemsAvg=" + itemsAvg +
                 '}';
+    }
+
+    public void updateWithNew(Order order) {
+        customerId = order.purchaser();
+        ordersTotal++;
+        itemsTotal = itemsTotal + order.quantity();
+        itemsAvg = itemsTotal * 1.0d / ordersTotal;
+    }
+
+    public void updateWithDeleted(Order order) {
+        itemsTotal = itemsTotal - order.quantity();
+        ordersTotal = ordersTotal - 1;
+        itemsAvg = itemsTotal * 1.0d / ordersTotal;
+    }
+
+    public void updateCustomerData(Customer customer) {
+        customerFirstName = customer.firstName();
+        customerLastName = customer.lastName();
+        customerId = customer.id();
     }
 }

@@ -53,14 +53,14 @@ public class CdcRealTimeAnalysisDemo {
 
         hz.getSql().execute(
           """
-                  create mapping CustomerStatsReport (
-                    customerId int,
-                    customerFirstName varchar,
-                    customerLastName varchar,
-                    ordersTotal int,
-                    itemsTotal int,
-                    itemsAvg double)
-                  type IMap options (
+                  CREATE MAPPING CustomerStatsReport (
+                    customerId INT,
+                    customerFirstName VARCHAR,
+                    customerLastName VARCHAR,
+                    ordersTotal INT,
+                    itemsTotal V,
+                    itemsAvg DOUBLE)
+                  TYPE IMap OPTIONS (
                     'keyFormat' = 'int',
                     'valueFormat' = 'compact',
                     'valueCompactTypeName'='CustomerStatsReport'
@@ -82,33 +82,25 @@ public class CdcRealTimeAnalysisDemo {
                 .flatMap(record -> {
                     if (isOrder(record) && record.operation() == Operation.UPDATE) {
                         return traverseItems(
-                                orderEvent(record.newValue().toObject(Order.class), INSERT),
-                                orderEvent(record.oldValue().toObject(Order.class), DELETE)
+                                orderEvent(record.oldValue().toObject(Order.class), DELETE),
+                                orderEvent(record.newValue().toObject(Order.class), INSERT)
                         );
                     } else {
                         return eventFor(record, record.operation());
                     }
                 })
                 .groupingKey(ReportEvent::customerId)
-                .mapStateful(CustomerStatsReport::new, (state, key, record) -> {
-
+                .mapStateful(CustomerStatsReport::new, (oldState, key, record) -> {
+                    var state = CustomerStatsReport.copy(oldState);
                     if (record.event() instanceof Customer customer) {
-                        state.setCustomerFirstName(customer.firstName());
-                        state.setCustomerLastName(customer.lastName());
-                        state.setCustomerId(customer.id());
-
+                       state.updateCustomerData(customer);
                     } else  {
                         var order = (Order) record.event();
                         var operation = record.operation();
                         if (operation == Operation.SYNC || operation == INSERT) {
-                            state.setCustomerId(order.purchaser());
-                            state.setItemsTotal(state.getItemsTotal() + order.quantity());
-                            state.setOrdersTotal(state.getOrdersTotal() + 1);
-                            state.setItemsAvg(state.getItemsTotal() * 1.0d / state.getOrdersTotal());
+                            state.updateWithNew(order);
                         } else if (operation == DELETE) {
-                            state.setItemsTotal(state.getItemsTotal() - order.quantity());
-                            state.setOrdersTotal(state.getOrdersTotal() - 1);
-                            state.setItemsAvg(state.getItemsTotal() * 1.0d / state.getOrdersTotal());
+                           state.updateWithDeleted(order);
                         }
                     }
                     return state;

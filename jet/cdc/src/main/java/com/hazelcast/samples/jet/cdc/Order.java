@@ -2,7 +2,6 @@ package com.hazelcast.samples.jet.cdc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import java.util.Date;
 
 public record Order (
@@ -13,5 +12,5 @@ public record Order (
         int quantity,
         @JsonProperty("product_id")
         int productId
-) implements Serializable {
+) {
 }

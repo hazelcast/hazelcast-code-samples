@@ -35,6 +35,6 @@ public record Customer (
         @JsonProperty("email")
         String email
 
-) implements Serializable {
+) {
 
 }
