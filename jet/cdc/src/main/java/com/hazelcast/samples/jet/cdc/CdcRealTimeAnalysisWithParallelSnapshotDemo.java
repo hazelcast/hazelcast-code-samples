@@ -1,5 +1,7 @@
 package com.hazelcast.samples.jet.cdc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -8,6 +10,7 @@ import com.hazelcast.jet.Traverser;
 import com.hazelcast.jet.Traversers;
 import com.hazelcast.jet.cdc.ChangeRecord;
 import com.hazelcast.jet.cdc.Operation;
+import com.hazelcast.jet.cdc.RecordPart;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 
@@ -34,6 +37,8 @@ import static com.hazelcast.samples.jet.cdc.CdcRealTimeAnalysisWithParallelSnaps
  */
 public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     private static final long LAG = TimeUnit.DAYS.toMillis(1);
 
     @SuppressWarnings({ "resource", "checkstyle:MethodLength", "checkstyle:NeedBraces", "checkstyle:NPathComplexity" })
@@ -58,7 +63,7 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                           customerFirstName VARCHAR,
                           customerLastName VARCHAR,
                           ordersTotal INT,
-                          itemsTotal V,
+                          itemsTotal VARCHAR,
                           itemsAvg DOUBLE)
                         TYPE IMap OPTIONS (
                           'keyFormat' = 'int',
@@ -107,8 +112,8 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
                     if (isOrder && record.operation() == SYNC) return Traversers.empty();
                     if (isOrder && record.operation() == Operation.UPDATE) {
                         return traverseItems(
-                                orderEvent(record.oldValue().toObject(Order.class), DELETE),
-                                orderEvent(record.newValue().toObject(Order.class), INSERT)
+                                orderEvent(toObject(record.oldValue(), Order.class), DELETE),
+                                orderEvent(toObject(record.newValue() ,Order.class), INSERT)
                         );
                     } else {
                         return eventFor(record, record.operation());
@@ -159,9 +164,17 @@ public class CdcRealTimeAnalysisWithParallelSnapshotDemo {
         static Traverser<ReportEvent<?>> eventFor(ChangeRecord record, Operation operation) {
             return singleton(
                     isOrder(record)
-                            ? orderEvent(record.value().toObject(Order.class), operation)
-                            : customerEvent(record.value().toObject(Customer.class), operation)
+                            ? orderEvent(toObject(record.value(), Order.class), operation)
+                            : customerEvent(toObject(record.value(), Customer.class), operation)
             );
+        }
+    }
+
+    private static <T> T toObject(RecordPart part, Class<T> type) {
+        try {
+            return OBJECT_MAPPER.readValue(part.toJson(), type);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
