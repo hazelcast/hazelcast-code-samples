@@ -128,7 +128,7 @@ public class CustomerStatsReport implements Serializable {
         itemsAvg = itemsTotal * 1.0d / ordersTotal;
     }
 
-    public synchronized void updateCustomerData(Customer customer) {
+    public void updateCustomerData(Customer customer) {
         customerFirstName = customer.firstName();
         customerLastName = customer.lastName();
         customerId = customer.id();
