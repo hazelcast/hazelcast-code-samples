@@ -3,7 +3,7 @@ package example;
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
-import com.hazelcast.nio.serialization.GenericRecord;
+import com.hazelcast.nio.serialization.genericrecord.GenericRecord;
 
 import java.io.Serializable;
 import java.util.concurrent.Callable;

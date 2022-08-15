@@ -6,8 +6,8 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.nio.serialization.ClassDefinition;
 import com.hazelcast.nio.serialization.ClassDefinitionBuilder;
-import com.hazelcast.nio.serialization.GenericRecord;
-import com.hazelcast.nio.serialization.GenericRecordBuilder;
+import com.hazelcast.nio.serialization.genericrecord.GenericRecord;
+import com.hazelcast.nio.serialization.genericrecord.GenericRecordBuilder;
 
 import java.util.Collection;
 
