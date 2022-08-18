@@ -13,12 +13,9 @@ public class CompactZeroConfig {
 
     public static void main(String[] args) {
         Config config = new Config();
-        //This config is needed only during BETA phase.
-        CompactSerializationConfig compactSerializationConfig = config.getSerializationConfig().getCompactSerializationConfig();
-        compactSerializationConfig.setEnabled(true);
         //If PersonDTO were implementing Java Serializable interface, then you would need to add the following config do
         // that the object is serialized using the Compact serialization. Otherwise, it defaults to Java serialization.
-        // compactSerializationConfig.register(PersonDTO.class);
+        // config.getSerializationConfig().getCompactSerializationConfig().addClass(PersonDTO.class);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         Map<String, PersonDTO> map = hz.getMap("map");
 

@@ -18,7 +18,6 @@ public class NoClassExample {
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
         config.getJetConfig().setEnabled(true);
-        config.getSerializationConfig().getCompactSerializationConfig().setEnabled(true);
         HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance(config);
         IMap<Integer, GenericRecord> myMap = hazelcast.getMap("myMap");
 

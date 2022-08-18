@@ -17,8 +17,6 @@ public class WithExistingClassExample {
 
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
-        CompactSerializationConfig compactSerializationConfig = config.getSerializationConfig().getCompactSerializationConfig();
-        compactSerializationConfig.setEnabled(true);
         config.getJetConfig().setEnabled(true);
         HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance(config);
 
