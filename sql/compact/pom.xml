@@ -7,7 +7,7 @@
     <name>Sql Compact</name>
 
     <description>
-        Code sample for using Compact(BETA) Serialization with SQL
+        Code sample for using Compact Serialization with SQL
     </description>
 
     <parent>
