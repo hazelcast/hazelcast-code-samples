@@ -5,7 +5,7 @@ import com.hazelcast.core.HazelcastInstance;
 import java.util.Map;
 
 /**
- * Demonstrates how to use Compact(BETA) serialization with java only setup
+ * Demonstrates how to use Compact serialization with java only setup.
  * If all hazelcast clients and members are java, then you can use Compact format without any config.
  */
 public class CompactZeroConfig {

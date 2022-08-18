@@ -9,7 +9,7 @@ import com.hazelcast.nio.serialization.compact.CompactWriter;
 import java.util.Map;
 
 /**
- * Demonstrates how to use Compact(BETA) serialization from java in a polyglot setup where hazelcast clients written in
+ * Demonstrates how to use Compact serialization from java in a polyglot setup where hazelcast clients written in
  * different languages needs to be used.
  */
 public class CompactFullConfig {

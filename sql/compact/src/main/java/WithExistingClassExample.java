@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Demonstrates usage of Compact(BETA) format with SQL Service with an existing DTO class
+ * Demonstrates usage of Compact format with SQL Service with an existing DTO class
  */
 public class WithExistingClassExample {
 
