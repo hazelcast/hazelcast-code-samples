@@ -1,4 +1,3 @@
-import com.hazelcast.config.CompactSerializationConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -11,14 +10,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Demonstrates usage of Compact(BETA) format with SQL Service with an existing DTO class
+ * Demonstrates usage of Compact format with SQL Service with an existing DTO class
  */
 public class WithExistingClassExample {
 
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
-        CompactSerializationConfig compactSerializationConfig = config.getSerializationConfig().getCompactSerializationConfig();
-        compactSerializationConfig.setEnabled(true);
         config.getJetConfig().setEnabled(true);
         HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance(config);
 

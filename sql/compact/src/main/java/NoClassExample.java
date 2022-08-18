@@ -11,14 +11,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Demonstrates usage of Compact(BETA) format with SQL Service without an existing DTO class
+ * Demonstrates usage of Compact format with SQL Service without an existing DTO class
  */
 public class NoClassExample {
 
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
         config.getJetConfig().setEnabled(true);
-        config.getSerializationConfig().getCompactSerializationConfig().setEnabled(true);
         HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance(config);
         IMap<Integer, GenericRecord> myMap = hazelcast.getMap("myMap");
 

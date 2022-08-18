@@ -9,16 +9,14 @@ import com.hazelcast.nio.serialization.compact.CompactWriter;
 import java.util.Map;
 
 /**
- * Demonstrates how to use Compact(BETA) serialization from java in a polyglot setup where hazelcast clients written in
+ * Demonstrates how to use Compact serialization from java in a polyglot setup where hazelcast clients written in
  * different languages needs to be used.
  */
 public class CompactFullConfig {
 
     public static void main(String[] args) {
         Config config = new Config();
-        //This config is needed only during BETA phase.
         CompactSerializationConfig compactSerializationConfig = config.getSerializationConfig().getCompactSerializationConfig();
-        compactSerializationConfig.setEnabled(true);
         //Here we register a typename `person` and a serializer against the PersonDTO class so that any client from any language
         //can use same typename and field names to match
         compactSerializationConfig.addSerializer(new CompactSerializer<PersonDTO>() {
