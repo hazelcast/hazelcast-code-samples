@@ -6,7 +6,7 @@
     <artifactId>compact</artifactId>
     <name>Serialization: Compact</name>
     <description>
-        Compact(BETA) Serialization Example
+        Compact Serialization Example
     </description>
 
     <parent>
