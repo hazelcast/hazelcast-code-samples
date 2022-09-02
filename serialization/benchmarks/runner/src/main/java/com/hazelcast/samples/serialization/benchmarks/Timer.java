@@ -36,6 +36,7 @@ public class Timer {
         "com.hazelcast.nio.serialization.IdentifiedDataSerializable",
         "com.hazelcast.nio.serialization.Portable",
         "com.hazelcast.nio.serialization.VersionedPortable",
+        "com.hazelcast.nio.serialization.Compact",
         "com.hazelcast.core.HazelcastJsonValue",
         "https://avro.apache.org",
         "https://github.com/EsotericSoftware/kryo",
@@ -70,6 +71,9 @@ public class Timer {
             break;
         case HAZELCAST_VERSIONED_PORTABLE:
             personCollection = Application.getVersionedPortable();
+            break;
+        case HAZELCAST_COMPACT:
+            personCollection = Application.getCompact();
             break;
         case HAZELCAST_JSON_VALUE:
             personCollection = Application.getHazelcastJson();
@@ -140,6 +144,9 @@ public class Timer {
                 break;
             case HAZELCAST_VERSIONED_PORTABLE:
                 this.deserializeHazelcastVersionedPortable(o, issuingCountry);
+                break;
+            case HAZELCAST_COMPACT:
+                this.deserializedHazelcastCompact(o, issuingCountry);
                 break;
             case HAZELCAST_JSON_VALUE:
                 this.deserializeHazelcastJson(o, issuingCountry);
@@ -216,6 +223,13 @@ public class Timer {
            }
     }
 
+    private void deserializedHazelcastCompact(Object o, String issuingCountry) {
+        PassportCompact passportCompact =
+                ((PersonCompact) o).getPassport();
+        if (passportCompact != null) {
+            issuingCountry = passportCompact.getIssuingCountry();
+        }
+    }
     private void deserializeHazelcastJson(Object o, String issuingCountry) {
         String person =
                 ((HazelcastJsonValue) o).toString();

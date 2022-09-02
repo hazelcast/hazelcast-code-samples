@@ -40,6 +40,7 @@ public class MyConstants {
         HAZELCAST_IDENTIFIED_DATA_SERIALIZABLE("com.hazelcast.nio.serialization.IdentifiedDataSerializable"),
         HAZELCAST_PORTABLE("com.hazelcast.nio.serialization.Portable"),
         HAZELCAST_VERSIONED_PORTABLE("com.hazelcast.nio.serialization.VersionedPortable"),
+        HAZELCAST_COMPACT("com.hazelcast.nio.serialization.Compact"),
         HAZELCAST_JSON_VALUE("com.hazelcast.core.HazelcastJsonValue"),
         AVRO("https://avro.apache.org"),
         KRYO("https://github.com/EsotericSoftware/kryo"),

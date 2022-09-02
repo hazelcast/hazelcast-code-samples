@@ -2,11 +2,15 @@ package com.hazelcast.samples.serialization.benchmarks;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.hazelcast.config.SerializationConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.internal.serialization.SerializationService;
 import com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder;
+import com.hazelcast.internal.serialization.impl.compact.Schema;
+import com.hazelcast.internal.serialization.impl.compact.SchemaService;
 
 public class Util {
     private static NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault());
@@ -38,6 +42,32 @@ public class Util {
         serializationConfig.addSerializerConfig(personKryoSerializerConfig);
         serializationConfig.addSerializerConfig(personProtobufSerializerConfig);
 
+        // Taken from CompactTestUtil.createInMemorySchemaService
+        SchemaService simpleSchemaService = new SchemaService() {
+            private final Map<Long, Schema> schemas = new ConcurrentHashMap<>();
+
+            @Override
+            public Schema get(long schemaId) {
+                return schemas.get(schemaId);
+            }
+
+            @Override
+            public void put(Schema schema) {
+                long schemaId = schema.getSchemaId();
+                Schema existingSchema = schemas.putIfAbsent(schemaId, schema);
+                if (existingSchema != null && !schema.equals(existingSchema)) {
+                    throw new IllegalStateException("Schema with schemaId " + schemaId + " already exists. "
+                            + "existing schema " + existingSchema
+                            + "new schema " + schema);
+                }
+            }
+
+            @Override
+            public void putLocal(Schema schema) {
+                put(schema);
+            }
+        };
+
         SerializationService serializationService =
                 new DefaultSerializationServiceBuilder()
                 .addDataSerializableFactory(MyConstants.MY_IDENTIFIED_DATA_SERIALIZABLE_FACTORY_ID,
@@ -47,6 +77,7 @@ public class Util {
                 .addPortableFactory(MyConstants.MY_VERSIONED_PORTABLE_FACTORY_ID,
                         new MyVersionedPortableFactory())
                 .setConfig(serializationConfig)
+                .setSchemaService(simpleSchemaService)
                 .build();
 
         preRegisterNullTypes(serializationService);
