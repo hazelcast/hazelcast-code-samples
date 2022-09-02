@@ -37,10 +37,15 @@ public class Util {
         personProtobufSerializerConfig.setTypeClass(PersonProtobuf.class);
         personProtobufSerializerConfig.setClass(PersonProtobufSerializer.class);
 
+
+
         SerializationConfig serializationConfig = new SerializationConfig();
         serializationConfig.addSerializerConfig(personAvroSerializerConfig);
         serializationConfig.addSerializerConfig(personKryoSerializerConfig);
         serializationConfig.addSerializerConfig(personProtobufSerializerConfig);
+        serializationConfig.getCompactSerializationConfig()
+                .addSerializer(new PassportCompactSerializer())
+                .addSerializer(new PersonCompactSerializer());
 
         // Taken from CompactTestUtil.createInMemorySchemaService
         SchemaService simpleSchemaService = new SchemaService() {
