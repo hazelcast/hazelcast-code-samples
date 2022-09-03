@@ -15,6 +15,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("checkstyle:classdataabstractioncoupling")
 public class Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 

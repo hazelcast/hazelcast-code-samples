@@ -121,6 +121,7 @@ public class Timer {
      * considered.
      */
     @Benchmark
+    @SuppressWarnings("checkstyle:cyclomaticcomplexity")
     public void deserialize() {
         Kind kind = Kind.lookup(this.kindStr);
         for (int i = 0 ; i < this.serialized.length ; i++) {
