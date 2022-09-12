@@ -15,6 +15,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("checkstyle:classdataabstractioncoupling")
 public class Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
@@ -32,6 +33,7 @@ public class Application {
         PersonCollection identifiedDataSerializable = getIdentifiedDataSerializable();
         PersonCollection portable = getPortable();
         PersonCollection versionedPortable = getVersionedPortable();
+        PersonCollection compact = getCompact();
         PersonCollection hazelcastJson = getHazelcastJson();
         PersonCollection avro = getAvro();
         PersonCollection kryo = getKryo();
@@ -39,7 +41,7 @@ public class Application {
 
         List<PersonCollection> personsInDifferentFormats
             = Arrays.asList(serializable, externalizable, dataSerializable,
-                    identifiedDataSerializable, portable, versionedPortable, hazelcastJson,
+                    identifiedDataSerializable, portable, versionedPortable, compact, hazelcastJson,
                     avro, kryo, protobuf);
 
         System.out.println();
@@ -146,6 +148,9 @@ public class Application {
     }
     public static PersonCollection getVersionedPortable() {
         return new PersonVersionedPortableCollectionBuilder().addData(RAW_DATA).build();
+    }
+    public static PersonCollection getCompact() {
+        return new PersonCompactCollectionBuilder().addData(RAW_DATA).build();
     }
     public static PersonCollection getHazelcastJson() {
         return new PersonJsonCollectionBuilder().addData(RAW_DATA).build();
