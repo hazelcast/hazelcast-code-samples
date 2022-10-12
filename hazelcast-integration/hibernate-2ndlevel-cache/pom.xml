@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hibernate.version>5.4.10.Final</hibernate.version>
         <hazelcast.hibernate.version>2.0.0</hazelcast.hibernate.version>
-        <h2db.version>1.4.194</h2db.version>
+        <h2db.version>2.1.210</h2db.version>
     </properties>
 
     <dependencies>
