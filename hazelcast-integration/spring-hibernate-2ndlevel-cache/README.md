@@ -4,9 +4,10 @@ In order to run the code sample, make sure to have PostgresSQL database accessib
 
 You can spin-up a PostgreSQL instance easily using Docker:
 
-`docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:13`
+`docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres:15`
 
-If you want to use Hazelcast client, you can start an IMDG instance in a Docker container easily, and then connect to it:
+If you want to use Hazelcast client, you can start an IMDG instance in a Docker container easily, and then connect to
+it:
 
 `docker run -p 5701:5701 hazelcast/hazelcast`
 
@@ -29,13 +30,13 @@ In order to configure Hazelcast as second-level cache provider, you need to add 
 <dependency>
 	<groupId>com.hazelcast</groupId>
 	<artifactId>hazelcast-hibernate53</artifactId>
-	<version>2.0.0</version>
+	<version>2.2.2-SNAPSHOT</version>
 </dependency
 
 <dependency>
 	<groupId>com.hazelcast</groupId>
 	<artifactId>hazelcast</artifactId>
-	<version>4.0.1</version>
+	<version>5.3.0-SNAPSHOT</version>
 </dependency>
 ```
 
