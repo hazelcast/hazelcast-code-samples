@@ -6,12 +6,6 @@ This guide will get you started to setting up Hazelcast cluster using Docker Com
 
 In this guide, you'll deploy Hazelcast member together with Hazelcast Management Center.
 
-== Prerequisites
-
-- ~10 minutes
-- https://docs.docker.com/install/[Docker] (https://www.docker.com/products/docker-desktop[Docker for Desktop] is good enough)
-- https://docs.docker.com/compose/[Docker Compose] tool
-
 == Starting Hazelcast cluster and Management Center
 
 Docker Compose allows you to define a multi-container application with all of its dependencies in a single file, then spin your application and dependencies up in a single command. In our case, our `docker-compose.yaml` starts two Docker containers:
@@ -31,7 +25,7 @@ Two containers are started.
     docker-compose-management-center-1   "bash ./bin/mc-start…"   management-center   running             8081/tcp, 0.0.0.0:8080->8080/tcp, :::8080->8080/tcp, 8443/tcp
 
 
-You can now open your browser at http://localhost:8080 and you should see the Management Center application.
+You can now open your browser at http://localhost:8080 and you should see the Management Center application. The username is `admin` and the password `hazelcast12`. 
 
 image::images/mancenter.png[]
 
