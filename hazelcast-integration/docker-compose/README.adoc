@@ -4,7 +4,7 @@ This guide will get you started to setting up Hazelcast cluster using Docker Com
 
 == What You’ll Learn
 
-In this guide, you'll deploy and scale Hazelcast cluster together with Hazelcast Management Center.
+In this guide, you'll deploy Hazelcast member together with Hazelcast Management Center.
 
 == Prerequisites
 
@@ -21,51 +21,29 @@ Docker Compose allows you to define a multi-container application with all of it
 
 To start both of them, execute the following command.
 
-    docker-compose up -d
+    docker compose up -d
 
 Two containers are started.
 
-    $ docker-compose ps
-                   Name                           Command         State             Ports
-    ----------------------------------------------------------------------------------------
-    docker-compose_hazelcast_1         /opt/hazelcast/start-hazel Up   0.0.0.0:32770->5701/tcp
-    docker-compose_management-center_1 bash /mc-start.sh          Up   0.0.0.0:8080->8080/tcp, 8081/tcp, 8443/tcp
+    $ docker compose ps
+    NAME                                 COMMAND                  SERVICE             STATUS              PORTS
+    docker-compose-hazelcast-1           "hz start"               hazelcast           running             0.0.0.0:49153->5701/tcp, :::49153->5701/tcp
+    docker-compose-management-center-1   "bash ./bin/mc-start…"   management-center   running             8081/tcp, 0.0.0.0:8080->8080/tcp, :::8080->8080/tcp, 8443/tcp
+
 
 You can now open your browser at http://localhost:8080 and you should see the Management Center application.
 
 image::images/mancenter.png[]
 
-Note that Management Center displays one Hazelcast member. In the next step, we will scale it up.
-
-== Scaling Hazelcast
-
-To scale up the Hazelcast cluster, execute the following command.
-
-    docker-compose scale hazelcast=3
-
-Then, you should see that two additional containers are created.
-
-    $ docker-compose ps
-                   Name                           Command         State             Ports
-    ----------------------------------------------------------------------------------------
-    docker-compose_hazelcast_1         /opt/hazelcast/start-hazel Up   0.0.0.0:32770->5701/tcp
-    docker-compose_hazelcast_2         /opt/hazelcast/start-hazel Up   0.0.0.0:32772->5701/tcp
-    docker-compose_hazelcast_3         /opt/hazelcast/start-hazel Up   0.0.0.0:32771->5701/tcp
-    docker-compose_management-center_1 bash /mc-start.sh          Up   0.0.0.0:8080->8080/tcp, 8081/tcp, 8443/tcp
-
-The same is visible in Management Center.
-
-image::images/mancenter-scaled-up.png[]
-
 == Tearing Down
 
 To terminate the Hazelcast cluster and Management Center, execute the following command.
 
-    docker-compose down
+    docker compose down
 
 == Summary
 
-In this guide, we deployed and scaled Hazelcast cluster using Docker Compose. If you want to use the cluster with Hazelcast client, then read the resources mentioned below.
+In this guide, we deployed Hazelcast environment using Docker Compose. If you want to use the cluster with Hazelcast client, then read the resources mentioned below.
 
 == See Also
 
