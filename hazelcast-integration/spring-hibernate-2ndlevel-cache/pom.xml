@@ -3,20 +3,34 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.0.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<artifactId>hazelcast-integration</artifactId>
+		<groupId>com.hazelcast.samples</groupId>
+		<version>0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>com.hazelcast.hibernate</groupId>
+
 	<artifactId>spring-hibernate-2lc</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-hibernate-2lc</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
+		<!-- needed for checkstyle/findbugs -->
+		<main.basedir>${project.parent.parent.basedir}</main.basedir>
 		<java.version>1.8</java.version>
+		<spring.boot.version>2.7.5</spring.boot.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -28,35 +42,30 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast-hibernate53</artifactId>
-			<version>2.0.0</version>
+			<version>${hazelcast.hibernate.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
-			<version>4.0.1</version>
+			<version>${hazelcast.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.4.200</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 
@@ -65,6 +74,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
 			</plugin>
 		</plugins>
 	</build>
