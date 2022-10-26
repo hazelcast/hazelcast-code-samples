@@ -19,7 +19,6 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hibernate.version>5.6.12.Final</hibernate.version>
-        <hazelcast.hibernate.version>2.2.2-SNAPSHOT</hazelcast.hibernate.version>
         <h2db.version>2.1.214</h2db.version>
     </properties>
 
