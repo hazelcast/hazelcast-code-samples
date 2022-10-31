@@ -1,16 +1,8 @@
 # SQL over Kerberos protected Kafka
 
-This Docker compose example is based on the "SQL over Kafka" tutorial in the Hazelcast documentation: https://docs.hazelcast.com/hazelcast/5.2/sql/learn-sql
+This Docker compose example is based on the "SQL over Kafka" tutorial in the Hazelcast documentation: https://docs.hazelcast.com/hazelcast/latest/sql/learn-sql
 
 It extends the basic scenario and configures Kerberos authentication on Kafka.
-
-## Quickstart
-
-To start all the services, run the following command:
-
-```bash
-docker compose up
-```
 
 ## Containers in the compose
 
@@ -22,6 +14,16 @@ There are the following containers started in this Docker compose:
 * `kerberos-key-material-generator` - helper container used to generate Kerberos KeyTab files
 * `hazelcast` - Hazelcast member
 * `management-centers` - Hazelcast management center
+
+## Quickstart
+
+To start all the services, run the following command in this directory:
+
+```bash
+docker compose up
+```
+
+The command will use the [`docker-compose.yml`](docker-compose.yml) file to read service configurations.
 
 ## Hazelcast SQL
 
@@ -55,7 +57,14 @@ OPTIONS (
 );
 ```
 
-Once the mapping is created we can start a streaming query
+See the [GSSAPI authentication](https://docs.confluent.io/platform/current/kafka/authentication_sasl/authentication_sasl_gssapi.html#clients) section in the Kafka documentation 
+for more details about the security options.
+
+The [Krb5LoginModule configuration](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.security.auth/com/sun/security/auth/module/Krb5LoginModule.html) in the
+`sasl.jaas.config` client property authenticates Hazelcast against the Kerberos KDC server with name `jduke@KERBEROS.EXAMPLE` and credentials stored in the keytab file `/mnt/jduke.keytab`.
+Once authenticated to KDC, Hazelcast can ask KDC to issue a service ticket to access Kafka. The service principal name (SPN) is `kafka/broker.kerberos.example@KERBEROS.EXAMPLE`.
+
+Once the SQL mapping is created we can start a streaming query
 
 ```sql
 SELECT ticker, ROUND(price * 100) AS price_cents, amount
