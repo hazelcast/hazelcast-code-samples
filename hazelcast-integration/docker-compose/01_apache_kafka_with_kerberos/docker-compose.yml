@@ -1,0 +1,88 @@
+version: '2'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.2
+    hostname: zookeeper.kerberos.example
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kerberos-kdc:
+    image: kwart/kerberos-server:1.1.0
+    hostname: kdc.kerberos.example
+    container_name: kerberos-kdc
+    volumes:
+      - ./krb5.conf:/etc/krb5.conf
+      - ./data.ldif:/mnt/data.ldif
+    command: [ "-lp", "389", "-kp", "88", "-b", "0.0.0.0",  "/mnt/data.ldif" ]
+
+  kerberos-key-material-generator:
+    image: kwart/kerberos-server:1.1.0
+    hostname: kmg.kerberos.example
+    container_name: kerberos-key-material-generator
+    entrypoint:
+      - sh
+      - -c
+    volumes:
+      - key-material:/mnt
+    command:
+      - |
+        java -classpath /kerberos-server.jar com.github.kwart.kerberos.CreateKeytab kafka/broker.kerberos.example@KERBEROS.EXAMPLE kafkapwd /mnt/broker.keytab
+        java -classpath /kerberos-server.jar com.github.kwart.kerberos.CreateKeytab jduke@KERBEROS.EXAMPLE theduke /mnt/jduke.keytab
+
+  kafka-broker:
+    image: confluentinc/cp-kafka:7.2.2
+    hostname: broker.kerberos.example
+    container_name: kafka-broker
+    depends_on:
+      - zookeeper
+      - kerberos-kdc
+      - kerberos-key-material-generator
+    volumes:
+      - key-material:/mnt
+      - ./krb5.conf:/etc/krb5.conf
+      - ./kafka_server_jaas.conf:/etc/kafka/kafka_server_jaas.conf
+      - ./kafka-client.properties:/etc/kafka/kafka-client.properties
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_SASL_ENABLED_MECHANISMS: GSSAPI
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: GSSAPI
+      KAFKA_SECURITY_INTER_BROKER_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_LISTENERS: SASL_PLAINTEXT://broker.kerberos.example:9092
+      KAFKA_ADVERTISED_LISTENERS: SASL_PLAINTEXT://broker.kerberos.example:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_SASL_KERBEROS_SERVICE_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper.kerberos.example:2181'
+      ZOOKEEPER_SASL_ENABLED: "false"
+      KAFKA_OPTS: '-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf'
+      # -Dsun.security.krb5.debug=true -Dcom.ibm.security.jgss.debug=all -Dcom.ibm.security.krb5.Krb5Debug=all -Dsun.security.jgss.debug=true'
+
+  hazelcast:
+    image: hazelcast/hazelcast:5.2.0
+    hostname: hazelcast.kerberos.example
+    container_name: hazelcast
+    depends_on:
+      - kafka-broker
+    volumes:
+      - key-material:/mnt
+      - ./krb5.conf:/etc/krb5.conf
+
+  management-center:
+    image: hazelcast/management-center:5.2.0
+    hostname: management-center.kerberos.example
+    container_name: management-center
+    ports:
+    - "8080:8080"
+    environment:
+    - MC_DEFAULT_CLUSTER=dev
+    - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast.kerberos.example
+    - MC_ALLOW_MULTIPLE_LOGIN=true
+    - MC_ADMIN_USER=admin
+    - MC_ADMIN_PASSWORD=hazelcast12
+
+volumes:
+  key-material:
