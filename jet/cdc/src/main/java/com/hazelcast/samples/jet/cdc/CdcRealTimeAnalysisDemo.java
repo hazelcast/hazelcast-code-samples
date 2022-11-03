@@ -48,8 +48,7 @@ public class CdcRealTimeAnalysisDemo {
         config.getJetConfig().setEnabled(true);
         config.getSerializationConfig()
                 .getCompactSerializationConfig()
-                .register(CustomerStatsReport.class)
-                .setEnabled(true);
+                .addClass(CustomerStatsReport.class);
 
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         JetService jet = hz.getJet();
