@@ -1,0 +1,17 @@
+version: "3"
+services:
+  hazelcast:
+    image: hazelcast/hazelcast:5.2.0
+    ports:
+      - 5701
+
+  management-center:
+    image: hazelcast/management-center:5.2.0
+    environment:
+      - MC_DEFAULT_CLUSTER=dev
+      - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast:5701
+      - MC_ALLOW_MULTIPLE_LOGIN=true
+      - MC_ADMIN_USER=admin
+      - MC_ADMIN_PASSWORD=hazelcast12
+    ports:
+      - 8080:8080

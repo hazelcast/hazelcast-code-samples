@@ -1,11 +1,11 @@
 # Hibernate 2nd Level Cache with Hazelcast
 
 In this repository, you can find a sample usage of Hibernate 2nd level cache with Hazelcast. You can also find 
-detailed explanation about the plugin at the [repository](https://github.com/hazelcast/hazelcast-hibernate5). 
+detailed explanation about the plugin at the [repository](https://github.com/hazelcast/hazelcast-hibernate). 
 
 ## Prerequisites
 
-You need Apache Maven(http://maven.apache.org/download.cgi) installed.
+You need [Apache Maven](http://maven.apache.org/download.cgi) installed.
 
 
 ## How to Run

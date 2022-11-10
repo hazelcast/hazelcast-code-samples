@@ -5,8 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableScheduling // needed just for the sake of SecondLevelCacheVisualizer
-@SpringBootApplication(exclude = HazelcastAutoConfiguration.class) // in order to avoid autoconfiguring an extra Hazelcast instance
+// needed just for the sake of SecondLevelCacheVisualizer
+@EnableScheduling
+// in order to avoid autoconfiguring an extra Hazelcast instance
+@SpringBootApplication(exclude = HazelcastAutoConfiguration.class)
 public class SpringHibernate2lcApplication {
 
     public static void main(String[] args) {

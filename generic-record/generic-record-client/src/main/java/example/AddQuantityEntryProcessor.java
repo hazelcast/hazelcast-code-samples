@@ -1,7 +1,7 @@
 package example;
 
 import com.hazelcast.map.EntryProcessor;
-import com.hazelcast.nio.serialization.GenericRecord;
+import com.hazelcast.nio.serialization.genericrecord.GenericRecord;
 
 import java.io.Serializable;
 import java.util.Map;
