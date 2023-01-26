@@ -13,7 +13,7 @@ You can use an `EntryProcessor`.
 
 ## Detail
 
-Ideally to solve the issue, we can do write after each read. But that
+To solve the issue, we can naively do write after each read. But that
 would be too expensive. To improve, we can try to do write only if the
 entry is close to expire. This is better, but we would need to do two
 calls from the client if we need to write. To further improve, we can

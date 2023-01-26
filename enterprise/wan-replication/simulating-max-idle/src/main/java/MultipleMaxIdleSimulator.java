@@ -30,6 +30,8 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
 
             if (entryView == null) {
                 return null;
+                // Before https://github.com/hazelcast/hazelcast/pull/23279 to access
+                // last-update-time, per-entry-stats of map-config should be enabled.
             } else if (Clock.currentTimeMillis() - entryView.getLastUpdateTime() > ttlToMaxIdle((int) entryView.getTtl() / 1000)) {
                 readOnly = false;
                 ExtendedMapEntry<K, V> extendedEntry = (ExtendedMapEntry<K, V>) entry;

@@ -28,6 +28,8 @@ class SingleMaxIdleSimulator extends AbstractMaxIdleSimulator {
             if (entryView == null) {
                 // we can reach here if there is a network partition or member crash
                 return null;
+                // Before https://github.com/hazelcast/hazelcast/pull/23279 to access
+                // last-update-time, per-entry-stats of map-config should be enabled.
             } else if (Clock.currentTimeMillis() - entryView.getLastUpdateTime() > MAX_IDLE_SECONDS) {
                 readOnly = false;
                 return entry.setValue(entry.getValue());
