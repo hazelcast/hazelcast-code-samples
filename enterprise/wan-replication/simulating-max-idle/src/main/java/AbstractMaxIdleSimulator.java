@@ -21,6 +21,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 abstract class AbstractMaxIdleSimulator {
+    static final String MAP_NAME = "replicated-map-name";
+    static final Random RANDOM = new Random(42);
+    static ILogger loggerA;
+    static ILogger loggerB;
+
     /**
      * This number indicates buffer period needed for an entry to replicate
      * via WAN Replication. An entry will almost replicate in this amount
@@ -50,17 +55,13 @@ abstract class AbstractMaxIdleSimulator {
      * @see AbstractMaxIdleSimulator#simulateGetWithTracking(IMap, String, boolean)
      */
     private static final int GET_LOG_THRESHOLD_MILLIS = 10;
-    static final String MAP_NAME = "replicated-map-name";
-    static final Random RANDOM = new Random(42);
 
     /**
      * You need to enter a license key to run simulations.
      */
     private static final String LICENCE_KEY = "";
 
-    static ILogger loggerA;
-    static ILogger loggerB;
-
+    @SuppressWarnings("checkstyle:methodlength")
     final void simulate() {
         // configuration for cluster A
         Config configA = new Config()

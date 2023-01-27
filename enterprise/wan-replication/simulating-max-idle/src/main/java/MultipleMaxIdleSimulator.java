@@ -24,6 +24,7 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
         private transient HazelcastInstance instance;
         private transient volatile boolean readOnly = true;
 
+        @SuppressWarnings("checkstyle:linelength")
         @Override
         public V process(Entry<K, V> entry) {
             EntryView<K, V> entryView = instance.<K, V>getMap(MAP_NAME).getEntryView(entry.getKey());
@@ -32,6 +33,7 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
                 return null;
                 // Before https://github.com/hazelcast/hazelcast/pull/23279 to access
                 // last-update-time, per-entry-stats of map-config should be enabled.
+                // https://docs.hazelcast.com/hazelcast/5.2/data-structures/reading-map-metrics#getting-statistics-about-a-specific-map-entry
             } else if (Clock.currentTimeMillis() - entryView.getLastUpdateTime() > ttlToMaxIdle((int) entryView.getTtl() / 1000)) {
                 readOnly = false;
                 ExtendedMapEntry<K, V> extendedEntry = (ExtendedMapEntry<K, V>) entry;
