@@ -22,6 +22,7 @@
     <modules>
         <module>interactive-sample</module>
         <module>basic-sample</module>
+        <module>simulating-max-idle</module>
     </modules>
 
 </project>
