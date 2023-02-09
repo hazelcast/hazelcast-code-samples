@@ -20,6 +20,10 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
         simulator.simulate();
     }
 
+    // You may want to consider using IdentifiedDataSerializable instead
+    // of default java serialization for better performance. If you do so,
+    // EntryProcessor, key and value should extend IdentifiedDataSerializable.
+    // https://docs.hazelcast.com/hazelcast/5.2/serialization/implementing-dataserializable#identifieddataserializable
     private static class MaxIdleSimulatingGet<K, V> implements EntryProcessor<K, V, V>, HazelcastInstanceAware {
         private transient HazelcastInstance instance;
         private transient boolean readOnly = true;
