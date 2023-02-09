@@ -22,7 +22,7 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
 
     private static class MaxIdleSimulatingGet<K, V> implements EntryProcessor<K, V, V>, HazelcastInstanceAware {
         private transient HazelcastInstance instance;
-        private transient volatile boolean readOnly = true;
+        private transient boolean readOnly = true;
 
         @SuppressWarnings("checkstyle:linelength")
         @Override
