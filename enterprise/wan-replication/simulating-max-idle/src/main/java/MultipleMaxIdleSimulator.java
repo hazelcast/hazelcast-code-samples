@@ -20,9 +20,13 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
         simulator.simulate();
     }
 
+    // You may want to consider using IdentifiedDataSerializable instead
+    // of default java serialization for better performance. If you do so,
+    // EntryProcessor should extend IdentifiedDataSerializable.
+    // https://docs.hazelcast.com/hazelcast/5.2/serialization/implementing-dataserializable#identifieddataserializable
     private static class MaxIdleSimulatingGet<K, V> implements EntryProcessor<K, V, V>, HazelcastInstanceAware {
         private transient HazelcastInstance instance;
-        private transient volatile boolean readOnly = true;
+        private transient boolean readOnly = true;
 
         @SuppressWarnings("checkstyle:linelength")
         @Override
@@ -30,11 +34,17 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
             EntryView<K, V> entryView = instance.<K, V>getMap(MAP_NAME).getEntryView(entry.getKey());
 
             if (entryView == null) {
+                // We can reach here if there is a network partition or member crash.
+                // Also, because backup entry processor is the same as this processor,
+                // we can reach here if there is any discrepancies between backup and
+                // primary. However, this isn't a problem. See the note here:
+                // https://docs.hazelcast.com/hazelcast/5.2/computing/entry-processor#processing-backup-entries
                 return null;
-                // Before https://github.com/hazelcast/hazelcast/pull/23279 to access
-                // last-update-time, per-entry-stats of map-config should be enabled.
-                // https://docs.hazelcast.com/hazelcast/5.2/data-structures/reading-map-metrics#getting-statistics-about-a-specific-map-entry
             } else if (Clock.currentTimeMillis() - entryView.getLastUpdateTime() > ttlToMaxIdle((int) entryView.getTtl() / 1000)) {
+                // Before https://github.com/hazelcast/hazelcast/pull/23279 to access
+                // last-update-time (entryView.getLastUpdateTime() used here),
+                // per-entry-stats of map-config should be enabled.
+                // https://docs.hazelcast.com/hazelcast/5.2/data-structures/reading-map-metrics#getting-statistics-about-a-specific-map-entry
                 readOnly = false;
                 ExtendedMapEntry<K, V> extendedEntry = (ExtendedMapEntry<K, V>) entry;
                 return extendedEntry.setValue(entry.getValue(), entryView.getTtl(), TimeUnit.MILLISECONDS);
