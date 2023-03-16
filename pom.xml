@@ -19,7 +19,7 @@
         <jdk.version>1.8</jdk.version>
         <jdk.integration.version>1.8</jdk.integration.version>
 
-        <hazelcast.version>5.2.3-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>5.2.4-SNAPSHOT</hazelcast.version>
         <hazelcast-jclouds.version>3.7.2</hazelcast-jclouds.version>
 
         <!-- Used in ClientConsole application-->
