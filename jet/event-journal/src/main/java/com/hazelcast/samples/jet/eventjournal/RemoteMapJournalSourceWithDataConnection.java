@@ -97,12 +97,12 @@ public class RemoteMapJournalSourceWithDataConnection {
         DataConnectionConfig dataConnectionConfig = new DataConnectionConfig(HZ_CLIENT_DATA_CONNECTION_REF);
         dataConnectionConfig.setType("HZ");
 
-        String yamlString = "hazelcast-client:\n" +
-                            "  cluster-name: " + REMOTE_CLUSTER_NAME + "\n" +
-                            "  network:\n" +
-                            "    cluster-members:\n" +
-                            "      - 127.0.0.1:5701\n" +
-                            "\n";
+        String yamlString = "hazelcast-client:\n"
+                            + "  cluster-name: " + REMOTE_CLUSTER_NAME + "\n"
+                            + "  network:\n"
+                            + "    cluster-members:\n"
+                            + "      - 127.0.0.1:5701\n"
+                            + "\n";
         dataConnectionConfig.setProperty(HazelcastDataConnection.CLIENT_YML, yamlString);
 
         config.addDataConnectionConfig(dataConnectionConfig);
