@@ -83,11 +83,7 @@ public class RemoteMapJournalSourceWithDataConnection {
 
     private static HazelcastInstance startLocalHzCluster() {
         Config localClusterConfig = getLocalClusterConfig();
-
-        // Local cluster with two members
-        HazelcastInstance localHz = Hazelcast.newHazelcastInstance(localClusterConfig);
-        Hazelcast.newHazelcastInstance(localClusterConfig);
-        return localHz;
+        return Hazelcast.newHazelcastInstance(localClusterConfig);
     }
 
     private static Config getLocalClusterConfig() {
@@ -115,10 +111,7 @@ public class RemoteMapJournalSourceWithDataConnection {
 
     private static HazelcastInstance startRemoteHzCluster() {
         Config remoteClusterConfig = getRemoteClusterConfig();
-        // Remote cluster with two members
-        HazelcastInstance remoteHz = Hazelcast.newHazelcastInstance(remoteClusterConfig);
-        Hazelcast.newHazelcastInstance(remoteClusterConfig);
-        return remoteHz;
+        return Hazelcast.newHazelcastInstance(remoteClusterConfig);
     }
 
     private static Config getRemoteClusterConfig() {
