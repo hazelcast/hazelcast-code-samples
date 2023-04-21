@@ -37,15 +37,14 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <java-version>1.6</java-version>
-        <mongo-java-driver.version>3.0.4</mongo-java-driver.version>
+        <java-version>17</java-version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>${mongo-java-driver.version}</version>
+            <groupId>com.hazelcast.jet</groupId>
+            <artifactId>hazelcast-jet-mongodb</artifactId>
+            <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
 </project>

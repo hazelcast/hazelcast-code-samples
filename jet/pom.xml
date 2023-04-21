@@ -74,12 +74,13 @@
 
     <profiles>
         <profile>
-            <id>cdc</id>
+            <id>java17</id>
             <activation>
                 <jdk>[17,)</jdk>
             </activation>
             <modules>
                 <module>cdc</module>
+                <module>mongodb</module>
             </modules>
         </profile>
     </profiles>

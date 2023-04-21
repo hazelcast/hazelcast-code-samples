@@ -44,7 +44,6 @@
         <module>jca-ra</module>
         <module>kubernetes</module>
         <module>manager-based-session-replication</module>
-        <module>mongodb</module>
         <module>openshift</module>
         <module>spring-configuration</module>
         <module>spring-data-hazelcast-chemistry-sample</module>
