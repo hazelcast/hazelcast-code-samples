@@ -34,7 +34,9 @@ import java.util.Properties;
  */
 public class KafkaConnectSample {
 
+    //This is the last JDK8-compatible version of the Neo4j connector
     //You can download the newer version from https://www.confluent.io/hub/neo4j/kafka-connect-neo4j/
+    //To be updated after migration to JDK11 https://github.com/hazelcast/hazelcast-code-samples/issues/570
     private static final String CONNECTOR_URL = "https://repository.hazelcast.com/download"
             + "/tests/neo4j-kafka-connect-neo4j-2.0.1.zip";
 
