@@ -61,6 +61,11 @@
             <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-sql</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.hazelcast.samples</groupId>
             <artifactId>helper</artifactId>
             <version>0.1-SNAPSHOT</version>
