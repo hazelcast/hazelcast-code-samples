@@ -4,6 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JobConfig;
+import com.hazelcast.jet.json.JsonUtil;
 import com.hazelcast.jet.kafka.connect.KafkaConnectSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -14,7 +15,9 @@ import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
 import org.neo4j.driver.Session;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.Properties;
 
 
@@ -52,12 +55,12 @@ public class KafkaConnectSample {
         connectorProperties.setProperty("neo4j.streaming.property", "timestamp");
         connectorProperties.setProperty("neo4j.streaming.from", "ALL");
         connectorProperties.setProperty("neo4j.source.query",
-                "MATCH (ts:TestSource) WHERE ts.timestamp > $lastCheck RETURN ts.name AS name, ts.value AS value, ts.timestamp AS timestamp");
+                "MATCH (p:Person) WHERE p.timestamp > $lastCheck RETURN p.firstName AS firstName, p.lastName AS lastName, p.role AS role, p.timestamp AS timestamp");
 
         insertNodes("items-1");
 
         Pipeline pipeline = Pipeline.create();
-        StreamStage<SourceRecord> streamStage = pipeline.readFrom(KafkaConnectSources.connect(connectorProperties))
+        StreamStage<Person> streamStage = pipeline.readFrom(KafkaConnectSources.connect(connectorProperties, Person::from))
                 .withoutTimestamps()
                 .setLocalParallelism(2);
         streamStage.writeTo(Sinks.logger());
@@ -82,9 +85,37 @@ public class KafkaConnectSample {
     private static void insertNodes(String prefix) {
         try (Driver driver = GraphDatabase.driver(BOLT_URL, AuthTokens.none()); Session session = driver.session()) {
             for (int i = 0; i < 100; i++) {
-                session.run("CREATE (:TestSource {name: '" + prefix + "-name-" + i + "', value: '"
-                        + prefix + "-value-" + i + "', timestamp: datetime().epochMillis});");
+                session.run("CREATE (:Person {firstName: 'firstName-" + prefix + "-" + i + "', lastName: 'lastName"
+                        + prefix + "-" + i + "', role: 'role-" + prefix + "-" + i + "', timestamp: datetime().epochMillis});");
             }
         }
     }
+
+    static class Person {
+        final String firstName;
+        final String lastName;
+
+        Person(String firstName, String lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+
+        static Person from(SourceRecord rec) {
+            try {
+                Map<String, Object> map = JsonUtil.mapFrom(rec.value());
+                return new Person(map.get("firstName").toString(), map.get("lastName").toString());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Person{" +
+                    "firstName='" + firstName + '\'' +
+                    ", lastName='" + lastName + '\'' +
+                    '}';
+        }
+    }
+
 }
