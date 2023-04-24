@@ -16,9 +16,6 @@
 package com.hazelcast.samples.jet.mongodb;
 
 import com.hazelcast.examples.helper.CommonUtils;
-import com.hazelcast.sql.SqlColumnMetadata;
-import com.hazelcast.sql.SqlResult;
-import com.hazelcast.sql.SqlRowMetadata;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -31,15 +28,11 @@ import org.bson.types.ObjectId;
 import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toCollection;
-
+/**
+ * Simple utility methods to be used in tests.
+ */
 final class Utils {
 
     private static final String[] FAKE_CARD_NUMBERS = generateNumbers();
