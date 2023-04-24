@@ -59,7 +59,7 @@ public class MongoSourceExample {
         if (args.length > 0) {
             new MongoSourceExample().run(args[0]);
         } else {
-            try (MongoDBContainer mongoContainer = new MongoDBContainer("mongo:latest")) {
+            try (var mongoContainer = new MongoDBContainer("mongo:latest")) {
                 mongoContainer.start();
                 new MongoSourceExample().run(mongoContainer.getConnectionString());
             }
@@ -107,12 +107,12 @@ public class MongoSourceExample {
                 .aggregate(topN(5, comparing(Payment::amount)))
 
                 .writeTo(Sinks.logger(windowResult -> {
-                    StringBuilder sb = new StringBuilder();
+                    var sb = new StringBuilder();
                     sb.append("\nTop payments in last two seconds\n");
                     sb.append(String.format(FORMAT_STRING, "no", "paymentId", "cardNo", "city", "amount", "successful"))
                       .append("\n");
                     int index = 1;
-                    for (Payment payment : windowResult.result()) {
+                    for (var payment : windowResult.result()) {
                         sb.append(payment.asRow(index++)).append("\n");
                     }
                     return sb.toString();

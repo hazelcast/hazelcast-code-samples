@@ -98,7 +98,7 @@ public class MongoSQLExample {
                 )
                 """.formatted(connectionString, startAt)).close();
 
-        try (SqlResult res = sql.execute("""
+        try (var result = sql.execute("""
                  select window_end, city, avg(amount) as avgAmount
                  from table(tumble((
                     select * from table(impose_order(table payments, descriptor(wallTime), interval '2' second))
@@ -106,10 +106,13 @@ public class MongoSQLExample {
                  ), descriptor(wallTime), interval '2' second))
                  group by window_end, city
                 """)) {
-            print(res);
+            print(result);
         }
     }
 
+    /**
+     * Pretty print (almost) any SqlResult.
+     */
     static void print(SqlResult r) {
         AtomicInteger counter = new AtomicInteger(0);
         SqlRowMetadata rowMetadata = r.getRowMetadata();

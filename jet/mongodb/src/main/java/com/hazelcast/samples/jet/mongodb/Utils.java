@@ -49,8 +49,8 @@ final class Utils {
      */
     static void initMongoDatabase(String connectionString) {
         try (MongoClient client = MongoClients.create(connectionString)) {
-            CreateCollectionOptions options = new CreateCollectionOptions();
-            ValidationOptions validationOptions = new ValidationOptions();
+            var options = new CreateCollectionOptions();
+            var validationOptions = new ValidationOptions();
             validationOptions.validator(BsonDocument.parse(
                     """
                             {
@@ -69,7 +69,7 @@ final class Utils {
                             """
             ));
             options.validationOptions(validationOptions);
-            MongoDatabase database = client.getDatabase("shop");
+            var database = client.getDatabase("shop");
             database.createCollection("payments", options);
         }
     }
@@ -79,8 +79,8 @@ final class Utils {
      */
     static void startDataIngestionThread(String connectionString) {
         new Thread(() -> {
-            try (MongoClient client = MongoClients.create(connectionString)) {
-                MongoDatabase database = client.getDatabase("shop");
+            try (var client = MongoClients.create(connectionString)) {
+                var database = client.getDatabase("shop");
                 MongoCollection<Document> collection = database.getCollection("payments");
                 while (!Thread.interrupted()) {
                     collection.insertOne(new Document("cardNo", fakeCardNo())
