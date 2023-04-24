@@ -23,22 +23,10 @@ import com.hazelcast.sql.SqlColumnMetadata;
 import com.hazelcast.sql.SqlResult;
 import com.hazelcast.sql.SqlRowMetadata;
 import com.hazelcast.sql.SqlService;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.CreateCollectionOptions;
-import com.mongodb.client.model.ValidationOptions;
-import org.bson.BsonDocument;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
@@ -63,20 +51,15 @@ import static java.util.stream.Collectors.toCollection;
  * </ol>
  *
  */
-public class MongoSQL {
-    private static final String[] FAKE_CARD_NUMBERS = generateNumbers();
-    private static final String[] CITIES = new String[] {
-            "Wrocław", "Warszawa", "London", "Białystok", "Brno", "Praga", "Ankara", "Instambuł", "Kyyiv"
-    };
-    private static final Random RANDOM = new Random();
+public class MongoSQLExample {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            new MongoSQL().run(args[0]);
+            new MongoSQLExample().run(args[0]);
         } else {
             try (MongoDBContainer mongoContainer = new MongoDBContainer("mongo:latest")) {
                 mongoContainer.start();
-                new MongoSQL().run(mongoContainer.getConnectionString());
+                new MongoSQLExample().run(mongoContainer.getConnectionString());
             }
         }
     }
@@ -90,24 +73,9 @@ public class MongoSQL {
 
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
 
-        initMongoDatabase(connectionString);
+        Utils.initMongoDatabase(connectionString);
 
-        new Thread(() -> {
-            try (MongoClient client = MongoClients.create(connectionString)) {
-                MongoDatabase database = client.getDatabase("shop");
-                MongoCollection<Document> collection = database.getCollection("payments");
-                while (!Thread.interrupted()) {
-                    collection.insertOne(new Document("cardNo", fakeCardNo())
-                            .append("city", randomCity())
-                            .append("amount", new BigDecimal(RANDOM.nextInt(10000)))
-                            .append("successful", RANDOM.nextInt(100) % 4 > 0)
-                            .append("paymentId", ObjectId.get())
-                    );
-                    CommonUtils.sleepMillis(100 + RANDOM.nextInt(500));
-                }
-
-            }
-        }).start();
+        Utils.startDataIngestionThread(connectionString);
 
         CommonUtils.sleepSeconds(2);
 
@@ -142,7 +110,7 @@ public class MongoSQL {
         }
     }
 
-    private static void print(SqlResult r) {
+    static void print(SqlResult r) {
         AtomicInteger counter = new AtomicInteger(0);
         SqlRowMetadata rowMetadata = r.getRowMetadata();
         int colCount = rowMetadata.getColumnCount();
@@ -162,45 +130,4 @@ public class MongoSQL {
         });
     }
 
-    private void initMongoDatabase(String connectionString) {
-        try (MongoClient client = MongoClients.create(connectionString)) {
-            CreateCollectionOptions options = new CreateCollectionOptions();
-            ValidationOptions validationOptions = new ValidationOptions();
-            validationOptions.validator(BsonDocument.parse(
-                    """
-                            {
-                                $jsonSchema: {
-                                  bsonType: "object",
-                                  title: "Payment Object Validation",
-                                  properties: {
-                                    "paymentId": { "bsonType": "objectId" }
-                                    "cardNo": { "bsonType": "string" }
-                                    "city": { "bsonType": "string" }
-                                    "amount": { "bsonType": "decimal" }
-                                    "successful": { "bsonType": "bool" }
-                                  }
-                                }
-                              }
-                            """
-            ));
-            options.validationOptions(validationOptions);
-            MongoDatabase database = client.getDatabase("shop");
-            database.createCollection("payments", options);
-        }
-    }
-
-    private static String fakeCardNo() {
-        return FAKE_CARD_NUMBERS[RANDOM.nextInt(FAKE_CARD_NUMBERS.length)];
-    }
-    private static String randomCity() {
-        return CITIES[RANDOM.nextInt(CITIES.length)];
-    }
-
-    private static String[] generateNumbers() {
-        String[] numbers = new String[1000];
-        for (int i = 0; i < numbers.length; i++) {
-            numbers[i] = RandomStringUtils.random(20, false, true);
-        }
-        return numbers;
-    }
 }

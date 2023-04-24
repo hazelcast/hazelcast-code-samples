@@ -18,7 +18,6 @@ package com.hazelcast.samples.jet.mongodb;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.examples.helper.CommonUtils;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.mongodb.MongoSources;
@@ -26,26 +25,17 @@ import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamSource;
 import com.hazelcast.jet.pipeline.WindowDefinition;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.CreateCollectionOptions;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.ValidationOptions;
-import org.bson.BsonDocument;
 import org.bson.BsonTimestamp;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
 import java.math.BigDecimal;
-import java.util.Random;
 
 import static com.hazelcast.function.ComparatorEx.comparing;
 import static com.hazelcast.jet.aggregate.AggregateOperations.topN;
-import static com.hazelcast.samples.jet.mongodb.MongoSource.Payment.FORMAT_STRING;
+import static com.hazelcast.samples.jet.mongodb.MongoSourceExample.Payment.FORMAT_STRING;
+import static com.mongodb.client.model.Filters.eq;
 
 /**
  * Simple example that continuously reads from Mongo, picks top 5 payments in last 2 seconds and prints the results into the console.
@@ -63,20 +53,15 @@ import static com.hazelcast.samples.jet.mongodb.MongoSource.Payment.FORMAT_STRIN
  * </ol>
  *
  */
-public class MongoSource {
-    private static final String[] FAKE_CARD_NUMBERS = generateNumbers();
-    private static final String[] CITIES = new String[] {
-            "Wrocław", "Warszawa", "London", "Białystok", "Brno", "Praga", "Ankara", "Instambuł", "Kyyiv"
-    };
-    private static final Random RANDOM = new Random();
+public class MongoSourceExample {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            new MongoSource().run(args[0]);
+            new MongoSourceExample().run(args[0]);
         } else {
             try (MongoDBContainer mongoContainer = new MongoDBContainer("mongo:latest")) {
                 mongoContainer.start();
-                new MongoSource().run(mongoContainer.getConnectionString());
+                new MongoSourceExample().run(mongoContainer.getConnectionString());
             }
         }
     }
@@ -102,30 +87,15 @@ public class MongoSource {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         JetService jet = hz.getJet();
 
-        initMongoDatabase(connectionString);
+        Utils.initMongoDatabase(connectionString);
 
-        new Thread(() -> {
-            try (MongoClient client = MongoClients.create(connectionString)) {
-                MongoDatabase database = client.getDatabase("shop");
-                MongoCollection<Document> collection = database.getCollection("payments");
-                while (!Thread.interrupted()) {
-                    collection.insertOne(new Document("cardNo", fakeCardNo())
-                            .append("city", randomCity())
-                            .append("amount", new BigDecimal(RANDOM.nextInt(10000)))
-                            .append("successful", RANDOM.nextInt(100) % 4 > 0)
-                            .append("paymentId", ObjectId.get())
-                    );
-                    CommonUtils.sleepMillis(100 + RANDOM.nextInt(500));
-                }
-
-            }
-        }).start();
+        Utils.startDataIngestionThread(connectionString);
 
         Pipeline pipeline = Pipeline.create();
         StreamSource<Payment> streamSource = MongoSources
                 .stream(() -> MongoClients.create(connectionString))
                 .database("shop")
-                .filter(Filters.eq("fullDocument.successful", true))
+                .filter(eq("fullDocument.successful", true))
                 .collection("payments", Payment.class)
                 .throwOnNonExisting(false)
                 .startAtOperationTime(new BsonTimestamp())
@@ -150,47 +120,5 @@ public class MongoSource {
 
         Job job = jet.newJob(pipeline);
         job.join();
-    }
-
-    private void initMongoDatabase(String connectionString) {
-        try (MongoClient client = MongoClients.create(connectionString)) {
-            CreateCollectionOptions options = new CreateCollectionOptions();
-            ValidationOptions validationOptions = new ValidationOptions();
-            validationOptions.validator(BsonDocument.parse(
-                    """
-                            {
-                                $jsonSchema: {
-                                  bsonType: "object",
-                                  title: "Payment Object Validation",
-                                  properties: {
-                                    "paymentId": { "bsonType": "objectId" }
-                                    "cardNo": { "bsonType": "string" }
-                                    "city": { "bsonType": "string" }
-                                    "amount": { "bsonType": "decimal" }
-                                    "successful": { "bsonType": "bool" }
-                                  }
-                                }
-                              }
-                            """
-            ));
-            options.validationOptions(validationOptions);
-            MongoDatabase database = client.getDatabase("shop");
-            database.createCollection("payments", options);
-        }
-    }
-
-    private static String fakeCardNo() {
-        return FAKE_CARD_NUMBERS[RANDOM.nextInt(FAKE_CARD_NUMBERS.length)];
-    }
-    private static String randomCity() {
-        return CITIES[RANDOM.nextInt(CITIES.length)];
-    }
-
-    private static String[] generateNumbers() {
-        String[] numbers = new String[1000];
-        for (int i = 0; i < numbers.length; i++) {
-            numbers[i] = RandomStringUtils.random(20, false, true);
-        }
-        return numbers;
     }
 }
