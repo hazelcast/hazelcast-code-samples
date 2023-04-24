@@ -55,8 +55,8 @@ public class KafkaConnectSample {
         connectorProperties.setProperty("neo4j.streaming.property", "timestamp");
         connectorProperties.setProperty("neo4j.streaming.from", "ALL");
         connectorProperties.setProperty("neo4j.source.query",
-                "MATCH (p:Person) WHERE p.timestamp > $lastCheck RETURN p.firstName AS firstName, p.lastName AS lastName," +
-                        " p.role AS role, p.timestamp AS timestamp");
+                "MATCH (p:Person) WHERE p.timestamp > $lastCheck RETURN p.firstName AS firstName, p.lastName AS lastName,"
+                        + " p.role AS role, p.timestamp AS timestamp");
 
         insertNodes("items-1");
 
