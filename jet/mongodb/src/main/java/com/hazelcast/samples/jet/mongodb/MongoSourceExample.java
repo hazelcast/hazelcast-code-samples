@@ -102,7 +102,6 @@ public class MongoSourceExample {
                 .build();
         pipeline.readFrom(streamSource)
                 .withIngestionTimestamps()
-
                 .window(WindowDefinition.tumbling(2000))
                 .aggregate(topN(5, comparing(Payment::amount)))
 
