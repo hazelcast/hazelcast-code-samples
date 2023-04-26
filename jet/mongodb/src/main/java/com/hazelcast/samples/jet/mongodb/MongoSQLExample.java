@@ -83,28 +83,33 @@ public class MongoSQLExample {
 
         long startAt = System.currentTimeMillis();
         sql.execute("""
-                create mapping payments external name shop.payments (
-                    paymentId varchar external name "fullDocument.paymentId",
-                    cardNo varchar external name "fullDocument.cardNo",
-                    city varchar external name "fullDocument.city",
-                    amount decimal external name "fullDocument.amount",
-                    successful boolean external name "fullDocument.successful",
-                    wallTime timestamp
+                CRAETE MAPPING payments EXTERNAL NAME shop.payments (
+                    paymentId VARCHAR EXTERNAL NAME "fullDocument.paymentId",
+                    cardNo VARCHAR EXTERNAL NAME "fullDocument.cardNo",
+                    city VARCHAR EXTERNAL NAME "fullDocument.city",
+                    amount DECIMAL EXTERNAL NAME "fullDocument.amount",
+                    successful BOOLEAN VARCHAR EXTERNAL NAME "fullDocument.successful",
+                    wallTime TIMESTAMP
                 )
-                connector type MongoStream
-                options (
+                CONNECTOR TYPE MongoStream
+                OPTIONS (
                     'connectionString' = '%s',
                     'startAt' = '%s'
                 )
                 """.formatted(connectionString, startAt)).close();
 
         try (var result = sql.execute("""
-                 select window_end, city, avg(amount) as avgAmount
-                 from table(tumble((
-                    select * from table(impose_order(table payments, descriptor(wallTime), interval '2' second))
-                    where successful = true
-                 ), descriptor(wallTime), interval '2' second))
-                 group by window_end, city
+                 SELECT window_end, city, AVG(amount) AS avgAmount
+                 FROM TABLE(
+                    TUMBLE((
+                            SELECT * FROM TABLE(IMPOSE_ORDER(table payments, descriptor(wallTime), interval '2' second))
+                            WHERE successful = true
+                        ),
+                        DESCRIPTOR(wallTime),
+                        INTERVAL '2' SECOND
+                    )
+                 )
+                 GROUP BY window_end, city
                 """)) {
             print(result);
         }

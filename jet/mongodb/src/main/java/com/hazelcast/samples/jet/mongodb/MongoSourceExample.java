@@ -35,7 +35,9 @@ import java.math.BigDecimal;
 import static com.hazelcast.function.ComparatorEx.comparing;
 import static com.hazelcast.jet.aggregate.AggregateOperations.topN;
 import static com.hazelcast.samples.jet.mongodb.MongoSourceExample.Payment.FORMAT_STRING;
+import static com.hazelcast.samples.jet.mongodb.MongoSourceExample.Payment.FORMAT_STRING_HEADER;
 import static com.mongodb.client.model.Filters.eq;
+import static java.lang.String.format;
 
 /**
  * Simple example that continuously reads from Mongo, picks top 5 payments in last 2 seconds and prints the results into the console.
@@ -68,10 +70,11 @@ public class MongoSourceExample {
 
     public record Payment (ObjectId paymentId, String cardNo, String city, BigDecimal amount, boolean successful) {
 
-        public static final String FORMAT_STRING = "%-3s %-30s %-20s %-12s %-8s %-8s";
+        public static final String FORMAT_STRING = "%-3s %-30s %-20s %-12s %-8.2f %-8s";
+        public static final String FORMAT_STRING_HEADER = "%-3s %-30s %-20s %-12s %-8s %-8s";
 
         String asRow(int index) {
-            return String.format(FORMAT_STRING, index, paymentId.toString(), cardNo, city, amount, successful);
+            return format(FORMAT_STRING, index, paymentId.toString(), cardNo, city, amount, successful);
         }
     }
 
@@ -109,7 +112,7 @@ public class MongoSourceExample {
                 .writeTo(Sinks.logger(windowResult -> {
                     var sb = new StringBuilder();
                     sb.append("\nTop payments in last two seconds\n");
-                    sb.append(String.format(FORMAT_STRING, "no", "paymentId", "cardNo", "city", "amount", "successful"))
+                    sb.append(format(FORMAT_STRING_HEADER, "no", "paymentId", "cardNo", "city", "amount", "successful"))
                       .append("\n");
                     int index = 1;
                     for (var payment : windowResult.result()) {
