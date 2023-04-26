@@ -42,7 +42,9 @@ import static java.util.stream.Collectors.toCollection;
  * <ol>
  *      <li> Before running this example you can start a MongoDB instance, e.g. using Docker. Remember to configure
  *          replica sets, as streaming queries replicas! In this mode you should manually compose the {@code connectionString}
- *          using your Mongo instance coordinates and pass it as first argument of this example.
+ *          using your Mongo instance coordinates and pass it as first argument of this example. For setting up
+ *          Mongo in replica set mode, you can follow
+ *          <a href="https://www.mongodb.com/compatibility/deploying-a-mongodb-cluster-with-docker">official tutorial</a>
  *      </li>
  *      <li>
  *          If you don't provide any arguments, the example will start a TestContainer with Mongo and will automatically
