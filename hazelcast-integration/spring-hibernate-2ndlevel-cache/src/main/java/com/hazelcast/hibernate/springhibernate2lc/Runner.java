@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Component
 class Runner implements CommandLineRunner {
-    private static final Logger logger = LoggerFactory.getLogger(Runner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Runner.class);
 
     private final BookRepository repository;
 
@@ -50,7 +50,7 @@ class Runner implements CommandLineRunner {
 
 
         List<Book> people = List.of(book1, book2);
-        logger.info("Inserting people {}", people);
+        LOGGER.info("Inserting people {}", people);
         transactionTemplate.executeWithoutResult(status -> repository.saveAll(people)); // 2 cache puts
 
         getBookById(1L); // cache put, cache hit
@@ -76,27 +76,27 @@ class Runner implements CommandLineRunner {
 
     private void printCachesFromCacheManager() {
         Collection<String> cacheNames = cacheManager.getCacheNames();
-        logger.info("Caches from cacheManager:");
+        LOGGER.info("Caches from cacheManager:");
         for (String cacheName : cacheNames) {
-            logger.info(" - " + cacheName);
+            LOGGER.info(" - " + cacheName);
         }
     }
 
     private void printCachesFromHazelcast() {
-        logger.info("Caches from hazelcast:");
+        LOGGER.info("Caches from hazelcast:");
         for (DistributedObject distributedObject : hazelcastInstance.getDistributedObjects()) {
-            logger.info(" - " + distributedObject.getName());
+            LOGGER.info(" - " + distributedObject.getName());
         }
     }
 
     private void findAllBooks() {
         Iterable<Book> people = transactionTemplate.execute(status -> repository.findAll());
-        logger.info("Loaded all people: " + people);
+        LOGGER.info("Loaded all people: " + people);
     }
 
     private Optional<Book> getBookById(long id) {
         Optional<Book> book = transactionTemplate.execute(status -> repository.findById(id));
-        book.ifPresent(p -> logger.info("Loaded book: {}", p));
+        book.ifPresent(p -> LOGGER.info("Loaded book: {}", p));
         return book;
     }
 }
