@@ -4,17 +4,20 @@ import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.hibernate.springhibernate2lc.persistence.Book;
 import com.hazelcast.hibernate.springhibernate2lc.persistence.BookRepository;
+import com.hazelcast.instance.BuildInfoProvider;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
+import org.hibernate.Version;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -42,6 +45,10 @@ class SpringHibernate2lcApplicationTests {
 
 	@Test
 	void testCaching() {
+		logger.warn("Hazelcast: " + BuildInfoProvider.getBuildInfo().getVersion());
+		logger.warn("Hibernate: " + Version.getVersionString());
+		logger.warn("Spring: " + SpringBootVersion.getVersion());
+
 		//see Runner class for the data
 		printCachesFromHazelcast();
 
@@ -55,7 +62,7 @@ class SpringHibernate2lcApplicationTests {
 		assertThat(statistics.getQueryCacheHitCount()).isEqualTo(1);
 		assertThat(statistics.getQueryCachePutCount()).isEqualTo(1);
 		assertThat(statistics.getQueryCacheMissCount()).isEqualTo(1);
-		assertThat(statistics.getSecondLevelCacheHitCount()).isEqualTo(5);
+		assertThat(statistics.getSecondLevelCacheHitCount()).isEqualTo(3);
 		assertThat(statistics.getSecondLevelCacheMissCount()).isEqualTo(1);
 		assertThat(statistics.getSecondLevelCachePutCount()).isEqualTo(2);
 

@@ -4,6 +4,7 @@ import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.hibernate.springhibernate2lc.persistence.Book;
 import com.hazelcast.hibernate.springhibernate2lc.persistence.BookRepository;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.stat.Statistics;
 import org.slf4j.Logger;
@@ -13,7 +14,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -48,20 +48,20 @@ class Runner implements CommandLineRunner {
         Book book2 = new Book();
         book2.setName("");
 
+
         List<Book> people = List.of(book1, book2);
         logger.info("Inserting people {}", people);
-        transactionTemplate.executeWithoutResult(status -> repository.saveAll(people));
+        transactionTemplate.executeWithoutResult(status -> repository.saveAll(people)); // 2 cache puts
 
-        getBookById(1L); // cache put
-        getBookById(2L); // cache put
+        getBookById(1L); // cache put, cache hit
+        getBookById(2L); // cache put, cache hit
         getBookById(2L); // cache hit
 
 
         getBookById(3L); // cache miss
 
-
-        findAllBooks(); // 2 cache hits, query cache miss, query cache put
-        findAllBooks(); // 2 cache hits, query cache hit
+        findAllBooks(); // query cache miss, query cache put (WITH entities instead of ids only)
+        findAllBooks(); // query cache hit
 
         printCachesFromHazelcast();
 
