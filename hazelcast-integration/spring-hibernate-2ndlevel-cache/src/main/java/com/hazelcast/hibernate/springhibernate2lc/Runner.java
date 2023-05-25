@@ -51,17 +51,27 @@ class Runner implements CommandLineRunner {
 
         List<Book> people = List.of(book1, book2);
         LOGGER.info("Inserting people {}", people);
-        transactionTemplate.executeWithoutResult(status -> repository.saveAll(people)); // 2 cache puts
 
-        getBookById(1L); // cache put, cache hit
-        getBookById(2L); // cache put, cache hit
-        getBookById(2L); // cache hit
+        // 2 cache puts
+        transactionTemplate.executeWithoutResult(status -> repository.saveAll(people));
 
+        //cache put, cache hit:
+        getBookById(1L);
 
-        getBookById(3L); // cache miss
+        // cache put, cache hit
+        getBookById(2L);
 
-        findAllBooks(); // query cache miss, query cache put (WITH entities instead of ids only)
-        findAllBooks(); // query cache hit
+        // cache hit
+        getBookById(2L);
+
+        // cache miss
+        getBookById(3L);
+
+        // query cache miss, query cache put (WITH entities instead of ids only)
+        findAllBooks();
+
+        // query cache hit
+        findAllBooks();
 
         printCachesFromHazelcast();
 
