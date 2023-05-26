@@ -16,7 +16,7 @@
 	<properties>
 		<!-- needed for checkstyle/findbugs -->
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<spring.boot.version>3.0.4</spring.boot.version>
 	</properties>
 
