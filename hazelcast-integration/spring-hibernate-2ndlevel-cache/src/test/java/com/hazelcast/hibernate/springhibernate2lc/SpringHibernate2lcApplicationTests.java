@@ -2,7 +2,6 @@ package com.hazelcast.hibernate.springhibernate2lc;
 
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.hibernate.springhibernate2lc.persistence.Book;
 import com.hazelcast.hibernate.springhibernate2lc.persistence.BookRepository;
 import com.hazelcast.instance.BuildInfoProvider;
 import jakarta.persistence.EntityManager;
@@ -16,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Collection;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,9 +30,6 @@ class SpringHibernate2lcApplicationTests {
 
 	@Autowired
 	BookRepository bookRepository;
-
-	@Autowired
-	private TransactionTemplate transactionTemplate;
 
 	@Autowired
 	private CacheManager cacheManager;
@@ -65,8 +59,6 @@ class SpringHibernate2lcApplicationTests {
 		assertThat(statistics.getSecondLevelCacheHitCount()).isEqualTo(3);
 		assertThat(statistics.getSecondLevelCacheMissCount()).isEqualTo(1);
 		assertThat(statistics.getSecondLevelCachePutCount()).isEqualTo(2);
-
-
 	}
 
 	private void printCachesFromCacheManager() {
@@ -82,17 +74,6 @@ class SpringHibernate2lcApplicationTests {
 		for (DistributedObject distributedObject : hazelcastInstance.getDistributedObjects()) {
 			logger.info(" - " + distributedObject.getName());
 		}
-	}
-
-	private void findAllBooks() {
-		Iterable<Book> people = transactionTemplate.execute(status -> bookRepository.findAll());
-		logger.info("Loaded all people: " + people);
-	}
-
-	private Optional<Book> getBookById(long id) {
-		Optional<Book> book = transactionTemplate.execute(status -> bookRepository.findById(id));
-		book.ifPresent(p -> logger.info("Loaded book: {}", p));
-		return book;
 	}
 
 }
