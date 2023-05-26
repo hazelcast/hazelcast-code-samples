@@ -53,7 +53,7 @@ class Runner implements CommandLineRunner {
         LOGGER.info("Inserting people {}", people);
 
         // 2 cache puts
-        transactionTemplate.executeWithoutResult(status -> repository.saveAll(people));
+        repository.saveAll(people);
 
         //cache put, cache hit:
         getBookById(1L);
@@ -83,7 +83,6 @@ class Runner implements CommandLineRunner {
         statistics.logSummary();
     }
 
-
     private void printCachesFromCacheManager() {
         Collection<String> cacheNames = cacheManager.getCacheNames();
         LOGGER.info("Caches from cacheManager:");
@@ -100,12 +99,12 @@ class Runner implements CommandLineRunner {
     }
 
     private void findAllBooks() {
-        Iterable<Book> people = transactionTemplate.execute(status -> repository.findAll());
+        Iterable<Book> people = repository.findAll();
         LOGGER.info("Loaded all people: " + people);
     }
 
     private Optional<Book> getBookById(long id) {
-        Optional<Book> book = transactionTemplate.execute(status -> repository.findById(id));
+        Optional<Book> book = repository.findById(id);
         book.ifPresent(p -> LOGGER.info("Loaded book: {}", p));
         return book;
     }
