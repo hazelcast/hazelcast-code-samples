@@ -48,7 +48,6 @@ class Runner implements CommandLineRunner {
         Book book2 = new Book();
         book2.setName("");
 
-
         List<Book> books = List.of(book1, book2);
         LOGGER.info("Inserting books {}", books);
 
