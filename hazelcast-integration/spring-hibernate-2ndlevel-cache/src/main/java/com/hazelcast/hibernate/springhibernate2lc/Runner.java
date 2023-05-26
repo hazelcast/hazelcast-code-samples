@@ -49,11 +49,11 @@ class Runner implements CommandLineRunner {
         book2.setName("");
 
 
-        List<Book> people = List.of(book1, book2);
-        LOGGER.info("Inserting people {}", people);
+        List<Book> books = List.of(book1, book2);
+        LOGGER.info("Inserting books {}", books);
 
         // 2 cache puts
-        repository.saveAll(people);
+        repository.saveAll(books);
 
         //cache put, cache hit:
         getBookById(1L);
@@ -99,8 +99,8 @@ class Runner implements CommandLineRunner {
     }
 
     private void findAllBooks() {
-        Iterable<Book> people = repository.findAll();
-        LOGGER.info("Loaded all people: " + people);
+        Iterable<Book> books = repository.findAll();
+        LOGGER.info("Loaded all books: " + books);
     }
 
     private Optional<Book> getBookById(long id) {
