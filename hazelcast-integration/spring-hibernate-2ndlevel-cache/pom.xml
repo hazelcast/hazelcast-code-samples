@@ -16,8 +16,8 @@
 	<properties>
 		<!-- needed for checkstyle/findbugs -->
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
-		<java.version>1.8</java.version>
-		<spring.boot.version>2.7.5</spring.boot.version>
+		<java.version>17</java.version>
+		<spring.boot.version>3.0.4</spring.boot.version>
 	</properties>
 
 	<dependencyManagement>
@@ -53,6 +53,12 @@
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
+			<version>${hazelcast.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast-spring</artifactId>
 			<version>${hazelcast.version}</version>
 		</dependency>
 
