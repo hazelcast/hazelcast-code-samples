@@ -5,6 +5,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JobConfig;
+import com.hazelcast.jet.core.JobStatus;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
@@ -14,6 +15,8 @@ import java.util.concurrent.CancellationException;
 import static com.hazelcast.jet.pipeline.JournalInitialPosition.START_FROM_OLDEST;
 
 public class JobSuspendResumeListener {
+
+    private static int restartCount = -1;
 
     public static void main(String[] args) throws InterruptedException {
         // create two instances
@@ -33,12 +36,12 @@ public class JobSuspendResumeListener {
         Job job = jet1.newJob(p, jobConfig);
 
         // Register JobStatusListener
-        job.addStatusListener(event ->
-                System.out.printf("Job status changed: %s -> %s. User requested? %b%n",
-                    event.getPreviousStatus(),
-                    event.getNewStatus(),
-                    event.isUserRequested())
-        );
+        job.addStatusListener(event -> {
+            System.out.printf("Job status changed: %s -> %s. User requested? %b%n",
+                    event.getPreviousStatus(), event.getNewStatus(), event.isUserRequested());
+
+            if (event.getNewStatus() == JobStatus.RUNNING) restartCount++;
+        });
 
         // printing the job name
         System.out.println("Job '" + job.getName() + "' is submitted.");
@@ -47,11 +50,18 @@ public class JobSuspendResumeListener {
         Thread.sleep(1000);
         System.out.println("Suspending the job...");
         job.suspend();
+        waitForStatus(job, JobStatus.SUSPENDED);
 
         // now, the job is not running and can be resumed later
-        Thread.sleep(1000);
         System.out.println("Resuming the job...");
         job.resume();
+        waitForStatus(job, JobStatus.RUNNING);
+        assert restartCount == 1;
+
+        // We can restart the job and track the number of restarts via the listener
+        System.out.println("Restarting the job...");
+        job.restart();
+        while (restartCount != 2) Thread.sleep(100);
 
         // we can cancel the job
         Thread.sleep(1000);
@@ -68,5 +78,11 @@ public class JobSuspendResumeListener {
         }
 
         hz1.getCluster().shutdown();
+    }
+
+    private static void waitForStatus(Job job, JobStatus status) throws InterruptedException {
+        while (job.getStatus() != status) {
+            Thread.sleep(100);
+        }
     }
 }
