@@ -16,7 +16,7 @@ import static com.hazelcast.jet.pipeline.JournalInitialPosition.START_FROM_OLDES
 
 public class JobSuspendResumeListener {
 
-    private static int restartCount = -1;
+    private static int runCount = 1;
 
     public static void main(String[] args) throws InterruptedException {
         // create two instances
@@ -35,13 +35,11 @@ public class JobSuspendResumeListener {
         jobConfig.setName(jobName);
         Job job = jet1.newJob(p, jobConfig);
 
-        // Register JobStatusListener
-        job.addStatusListener(event -> {
-            System.out.printf("Job status changed: %s -> %s. User requested? %b%n",
-                    event.getPreviousStatus(), event.getNewStatus(), event.isUserRequested());
-
-            if (event.getNewStatus() == JobStatus.RUNNING) restartCount++;
-        });
+        // Register JobStatusListeners
+        job.addStatusListener(event -> System.out.printf("Job status changed: %s -> %s. User requested? %b%n",
+                event.getPreviousStatus(), event.getNewStatus(), event.isUserRequested()));
+        waitForStatus(job, JobStatus.RUNNING);
+        job.addStatusListener(event -> { if (event.getNewStatus() == JobStatus.RUNNING) runCount++; });
 
         // printing the job name
         System.out.println("Job '" + job.getName() + "' is submitted.");
@@ -56,12 +54,12 @@ public class JobSuspendResumeListener {
         System.out.println("Resuming the job...");
         job.resume();
         waitForStatus(job, JobStatus.RUNNING);
-        assert restartCount == 1;
+        assert runCount == 2;
 
         // We can restart the job and track the number of restarts via the listener
         System.out.println("Restarting the job...");
         job.restart();
-        while (restartCount != 2) Thread.sleep(100);
+        while (runCount != 3) Thread.sleep(100);
 
         // we can cancel the job
         Thread.sleep(1000);
