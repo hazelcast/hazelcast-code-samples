@@ -35,14 +35,16 @@ public class JobSuspendResumeListener {
         jobConfig.setName(jobName);
         Job job = jet1.newJob(p, jobConfig);
 
-        // Register JobStatusListeners
+        // Register JobStatusListener showing status changes
         job.addStatusListener(event -> System.out.printf("Job status changed: %s -> %s. User requested? %b%n",
                 event.getPreviousStatus(), event.getNewStatus(), event.isUserRequested()));
-        waitForStatus(job, JobStatus.RUNNING);
-        job.addStatusListener(event -> { if (event.getNewStatus() == JobStatus.RUNNING) runCount++; });
 
         // printing the job name
         System.out.println("Job '" + job.getName() + "' is submitted.");
+
+        // Register JobStatusListener for tracking the number of runs
+        waitForStatus(job, JobStatus.RUNNING);
+        job.addStatusListener(event -> { if (event.getNewStatus() == JobStatus.RUNNING) runCount++; });
 
         // we can suspend the job
         Thread.sleep(1000);
