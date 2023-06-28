@@ -44,7 +44,11 @@ public class JobSuspendResumeListener {
 
         // Register JobStatusListener for tracking the number of runs
         waitForStatus(job, JobStatus.RUNNING);
-        job.addStatusListener(event -> { if (event.getNewStatus() == JobStatus.RUNNING) runCount++; });
+        job.addStatusListener(event -> {
+            if (event.getNewStatus() == JobStatus.RUNNING) {
+                runCount++;
+            }
+        });
 
         // we can suspend the job
         Thread.sleep(1000);
@@ -61,7 +65,9 @@ public class JobSuspendResumeListener {
         // We can restart the job and track the number of restarts via the listener
         System.out.println("Restarting the job...");
         job.restart();
-        while (runCount != 3) Thread.sleep(100);
+        while (runCount != 3) {
+            Thread.sleep(100);
+        }
 
         // we can cancel the job
         Thread.sleep(1000);
