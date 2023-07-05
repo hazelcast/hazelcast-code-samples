@@ -35,13 +35,13 @@ import java.util.Properties;
  *     CREATE (:TestSource {name: 'my-name', value: 'my-value', timestamp: datetime().epochMillis})
  * </pre>
  */
-public class KafkaConnectSample {
+public class KafkaConnectNeo4jSample {
 
     //This is the last JDK8-compatible version of the Neo4j connector
     //You can download the newer version from https://www.confluent.io/hub/neo4j/kafka-connect-neo4j/
     //To be updated after migration to JDK11 https://github.com/hazelcast/hazelcast-code-samples/issues/570
     private static final String CONNECTOR_URL = "https://repository.hazelcast.com/download"
-            + "/tests/neo4j-kafka-connect-neo4j-2.0.1.zip";
+                                                + "/tests/neo4j-kafka-connect-neo4j-2.0.1.zip";
 
     private static final String BOLT_URL = "bolt://localhost:7687";
 
