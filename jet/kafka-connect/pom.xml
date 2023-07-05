@@ -44,7 +44,7 @@
             <!-- Required by neo4j connector, but missing in its zip -->
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>32.0.0-jre</version>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
