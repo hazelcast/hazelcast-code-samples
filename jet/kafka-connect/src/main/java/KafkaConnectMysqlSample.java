@@ -2,7 +2,6 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.config.JobConfig;
-import com.hazelcast.jet.kafka.connect.KafkaConnectSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import org.apache.kafka.connect.source.SourceRecord;
@@ -15,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import static com.hazelcast.jet.kafka.connect.KafkaConnectSources.connect;
 import static org.apache.kafka.connect.data.Values.convertToString;
 
 
@@ -52,7 +52,7 @@ public class KafkaConnectMysqlSample {
 
         // Define the pipeline
         Pipeline pipeline = Pipeline.create();
-        pipeline.readFrom(KafkaConnectSources.connect(properties, (SourceRecord rec) -> convertToString(rec.valueSchema(), rec.value())))
+        pipeline.readFrom(connect(properties, (SourceRecord rec) -> convertToString(rec.valueSchema(), rec.value())))
                 .withoutTimestamps()
                 .writeTo(Sinks.list("items-list"));
 
