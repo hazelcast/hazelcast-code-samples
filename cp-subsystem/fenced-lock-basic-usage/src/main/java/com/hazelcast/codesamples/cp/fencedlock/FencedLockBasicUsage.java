@@ -34,7 +34,7 @@ public class FencedLockBasicUsage {
         assert lockedByHz3;
 
         // always destroy CP Subsystem data structures otherwise it can lead to a memory leak
-        lock.destroy();
+        hz1Lock.destroy();
 
         hz1.getLifecycleService().terminate();
         hz2.getLifecycleService().terminate();
