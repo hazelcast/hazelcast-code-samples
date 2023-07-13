@@ -48,6 +48,9 @@ public class CPMember {
 
         Thread.sleep(SECONDS.toMillis(30));
 
+        // always destroy CP Subsystem data structures otherwise it can lead to a memory leak
+        semaphore.destroy();
+
         hz.getLifecycleService().terminate();
 
     }
