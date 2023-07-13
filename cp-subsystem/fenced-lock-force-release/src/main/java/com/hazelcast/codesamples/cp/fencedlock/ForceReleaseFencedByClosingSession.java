@@ -44,6 +44,9 @@ public class ForceReleaseFencedByClosingSession {
         FencedLock lock = hz2.getCPSubsystem().getLock("my-lock");
         assert !lock.isLocked();
 
+        // always destroy CP Subsystem data structures otherwise it can lead to a memory leak
+        lock.destroy();
+
         hz2.getLifecycleService().terminate();
         hz3.getLifecycleService().terminate();
     }
