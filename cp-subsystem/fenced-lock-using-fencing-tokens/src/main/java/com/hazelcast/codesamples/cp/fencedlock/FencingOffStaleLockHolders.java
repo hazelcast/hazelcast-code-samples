@@ -132,7 +132,6 @@ public class FencingOffStaleLockHolders {
 
         // always destroy CP Subsystem data structures otherwise it can lead to a memory leak
         hz1Lock.destroy();
-        hz2Lock.destroy();
 
         hz1.getLifecycleService().terminate();
         hz2.getLifecycleService().terminate();
