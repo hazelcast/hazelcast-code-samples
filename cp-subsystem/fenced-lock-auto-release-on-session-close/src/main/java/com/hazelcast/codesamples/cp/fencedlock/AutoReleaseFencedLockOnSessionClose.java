@@ -41,7 +41,7 @@ public class AutoReleaseFencedLockOnSessionClose {
 
         // always destroy CP Subsystem data structures otherwise it can lead to a memory leak
         lock.destroy();
-        
+
         hz1.getLifecycleService().terminate();
         hz2.getLifecycleService().terminate();
         hz3.getLifecycleService().terminate();
