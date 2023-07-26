@@ -17,12 +17,12 @@
 package com.hazelcast.samples.jet.jms;
 
 import com.hazelcast.jet.impl.util.ExceptionUtil;
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
+import jakarta.jms.Connection;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.MessageProducer;
+import jakarta.jms.Session;
 
 import static com.hazelcast.internal.util.EmptyStatement.ignore;
 import static java.util.concurrent.TimeUnit.SECONDS;
