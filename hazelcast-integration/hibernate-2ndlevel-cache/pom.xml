@@ -19,7 +19,7 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hibernate.version>5.6.12.Final</hibernate.version>
-        <h2db.version>2.1.214</h2db.version>
+        <h2db.version>2.2.220</h2db.version>
     </properties>
 
     <dependencies>
