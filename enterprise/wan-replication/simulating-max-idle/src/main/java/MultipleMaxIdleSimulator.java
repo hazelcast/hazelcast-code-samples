@@ -23,7 +23,7 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
     // You may want to consider using IdentifiedDataSerializable instead
     // of default java serialization for better performance. If you do so,
     // EntryProcessor should extend IdentifiedDataSerializable.
-    // https://docs.hazelcast.com/hazelcast/5.2/serialization/implementing-dataserializable#identifieddataserializable
+    // https://docs.hazelcast.com/hazelcast/latest/serialization/implementing-dataserializable#identifieddataserializable
     private static class MaxIdleSimulatingGet<K, V> implements EntryProcessor<K, V, V>, HazelcastInstanceAware {
         private transient HazelcastInstance instance;
         private transient boolean readOnly = true;
@@ -38,13 +38,13 @@ class MultipleMaxIdleSimulator extends AbstractMaxIdleSimulator {
                 // Also, because backup entry processor is the same as this processor,
                 // we can reach here if there is any discrepancies between backup and
                 // primary. However, this isn't a problem. See the note here:
-                // https://docs.hazelcast.com/hazelcast/5.2/computing/entry-processor#processing-backup-entries
+                // https://docs.hazelcast.com/hazelcast/latest/computing/entry-processor#processing-backup-entries
                 return null;
             } else if (Clock.currentTimeMillis() - entryView.getLastUpdateTime() > ttlToMaxIdle((int) entryView.getTtl() / 1000)) {
                 // Before https://github.com/hazelcast/hazelcast/pull/23279 to access
                 // last-update-time (entryView.getLastUpdateTime() used here),
                 // per-entry-stats of map-config should be enabled.
-                // https://docs.hazelcast.com/hazelcast/5.2/data-structures/reading-map-metrics#getting-statistics-about-a-specific-map-entry
+                // https://docs.hazelcast.com/hazelcast/latest/data-structures/reading-map-metrics#getting-statistics-about-a-specific-map-entry
                 readOnly = false;
                 ExtendedMapEntry<K, V> extendedEntry = (ExtendedMapEntry<K, V>) entry;
                 return extendedEntry.setValue(entry.getValue(), entryView.getTtl(), TimeUnit.MILLISECONDS);
