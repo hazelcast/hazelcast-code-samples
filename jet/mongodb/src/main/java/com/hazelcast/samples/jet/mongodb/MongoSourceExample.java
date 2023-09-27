@@ -21,6 +21,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.mongodb.MongoSources;
+import com.hazelcast.jet.mongodb.ResourceChecks;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamSource;
@@ -100,7 +101,7 @@ public class MongoSourceExample {
                 .database("shop")
                 .filter(eq("fullDocument.successful", true))
                 .collection("payments", Payment.class)
-                .throwOnNonExisting(false)
+                .checkResourceExistence(ResourceChecks.NEVER)
                 .startAtOperationTime(new BsonTimestamp())
                 .build();
         pipeline.readFrom(streamSource)
