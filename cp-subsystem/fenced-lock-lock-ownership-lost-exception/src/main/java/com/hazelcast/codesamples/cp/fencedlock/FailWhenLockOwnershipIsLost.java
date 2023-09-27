@@ -50,6 +50,9 @@ public class FailWhenLockOwnershipIsLost {
             System.out.println("The previous lock holder is notified that it has lost ownership of the lock!");
         }
 
+        // always destroy CP Subsystem data structures otherwise it can lead to a memory leak
+        lock.destroy();
+
         hz1.getLifecycleService().terminate();
         hz2.getLifecycleService().terminate();
         hz3.getLifecycleService().terminate();

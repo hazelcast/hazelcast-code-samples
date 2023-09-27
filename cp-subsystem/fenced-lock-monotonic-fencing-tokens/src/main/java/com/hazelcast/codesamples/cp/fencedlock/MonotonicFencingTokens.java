@@ -51,6 +51,10 @@ public class MonotonicFencingTokens {
 
         assert fence4 > fence3;
 
+        // always destroy CP Subsystem data structures otherwise it can lead to a memory leak
+        hz1Lock.destroy();
+        // no need to call hz2Lock.destroy() because hz2Lock refers to the same distributed Lock as hz1Lock
+
         hz1.getLifecycleService().terminate();
         hz2.getLifecycleService().terminate();
         hz3.getLifecycleService().terminate();
