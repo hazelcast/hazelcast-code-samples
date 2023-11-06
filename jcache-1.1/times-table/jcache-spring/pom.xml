@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.hazelcast.samples.jcache.timestable</groupId>
         <artifactId>pom</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
     </parent>
 
     <artifactId>jcache-spring</artifactId>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.hazelcast.samples.jcache.timestable</groupId>
             <artifactId>jcache-common</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>5.3.6-SNAPSHOT</version>
         </dependency>
 
         <dependency>

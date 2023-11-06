@@ -8,14 +8,14 @@
 
     <artifactId>HazelcastSpring</artifactId>
     <groupId>HazelcastSpring</groupId>
-    <version>0.1-SNAPSHOT</version>
+    <version>5.3.6-SNAPSHOT</version>
     <name>Hazelcast Spring Configuration Example</name>
     <url>http://hazelcast.org/</url>
 
     <parent>
         <artifactId>hazelcast-integration</artifactId>
         <groupId>com.hazelcast.samples</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
     </parent>
 
     <properties>

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.hazelcast.samples.spring.data.migration</groupId>
         <artifactId>spring-data-jpa-hazelcast-migration</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 

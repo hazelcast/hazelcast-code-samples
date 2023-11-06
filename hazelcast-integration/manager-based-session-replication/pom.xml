@@ -7,14 +7,14 @@
 
     <artifactId>manager-based-session-replication</artifactId>
     <groupId>com</groupId>
-    <version>0.1-SNAPSHOT</version>
+    <version>5.3.6-SNAPSHOT</version>
     <name>Manager Based Session Replication Example</name>
     <url>http://maven.apache.org</url>
 
     <parent>
         <artifactId>hazelcast-integration</artifactId>
         <groupId>com.hazelcast.samples</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
     </parent>
 
     <properties>

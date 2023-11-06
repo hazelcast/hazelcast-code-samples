@@ -12,7 +12,7 @@
     <parent>
         <artifactId>transactions</artifactId>
         <groupId>com.hazelcast.samples.transactions</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

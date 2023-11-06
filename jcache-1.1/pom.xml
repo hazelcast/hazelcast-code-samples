@@ -7,7 +7,7 @@
     <parent>
         <artifactId>code-samples</artifactId>
         <groupId>com.hazelcast.samples</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
     </parent>
 
     <groupId>com.hazelcast.samples.jcache</groupId>

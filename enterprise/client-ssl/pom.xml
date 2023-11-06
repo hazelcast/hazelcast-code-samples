@@ -9,7 +9,7 @@
     <parent>
         <artifactId>enterprise</artifactId>
         <groupId>com.hazelcast.samples.enterprise</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

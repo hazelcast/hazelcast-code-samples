@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.hazelcast.samples.nearcache</groupId>
         <artifactId>fraud-detection</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.hazelcast.samples.replicated-map</groupId>
         <artifactId>replicated-map</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

@@ -13,7 +13,7 @@
     <parent>
         <groupId>chapter-distributed-executor</groupId>
         <artifactId>distributed-executor</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

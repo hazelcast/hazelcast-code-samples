@@ -4,12 +4,12 @@
     <artifactId>ocp-demo-frontend</artifactId>
     <name>ocp-demo-frontend</name>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>5.3.6-SNAPSHOT</version>
 
     <parent>
         <artifactId>client-apps</artifactId>
         <groupId>com.hazelcast.samples.openshift.client-apps</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.hazelcast.samples.openshift.client-apps</groupId>
             <artifactId>ocp-entry-processor</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>5.3.6-SNAPSHOT</version>
         </dependency>
 
         <dependency>

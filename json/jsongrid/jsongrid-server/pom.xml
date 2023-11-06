@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.hazelcast.samples.json</groupId>
 		<artifactId>jsongrid</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>5.3.6-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 

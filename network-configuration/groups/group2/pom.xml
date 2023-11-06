@@ -13,7 +13,7 @@
     <parent>
         <groupId>com.hazelcast.samples.network-configuration</groupId>
         <artifactId>groups</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
