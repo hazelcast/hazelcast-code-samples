@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.hazelcast.samples.sql</groupId>
 		<artifactId>hazdb</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>5.3.6-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>hazdb-server</artifactId>

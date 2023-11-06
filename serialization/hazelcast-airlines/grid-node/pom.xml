@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hazelcast.samples.serialization.hazelcast.airlines</groupId>
 		<artifactId>pom</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>5.3.6-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>grid-node</artifactId>
@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>com.hazelcast.samples.serialization.hazelcast.airlines</groupId>
 			<artifactId>the-code</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>5.3.6-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

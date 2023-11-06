@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>springboot-k8s-hello-world</artifactId>
 		<groupId>com.hazelcast.samples.kubernetes</groupId>
-		<version>0.1-SNAPSHOT</version>
+		<version>5.3.6-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>the-client</artifactId>

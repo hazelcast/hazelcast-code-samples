@@ -5,7 +5,7 @@
     <parent>
         <artifactId>clients</artifactId>
         <groupId>book.hazelcast.client</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>5.3.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
