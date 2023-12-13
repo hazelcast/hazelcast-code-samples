@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class SpringHibernate2lcApplicationTest {
 
-	private static Logger logger = LoggerFactory.getLogger(SpringHibernate2lcApplicationTests.class);
+	private static Logger logger = LoggerFactory.getLogger(SpringHibernate2lcApplicationTest.class);
 
 	@Autowired
 	private HazelcastInstance hazelcastInstance;
