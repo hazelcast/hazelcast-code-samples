@@ -16,8 +16,6 @@
 	<properties>
 		<!-- needed for checkstyle/findbugs -->
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
-		<java.version>1.8</java.version>
-		<spring.boot.version>2.7.5</spring.boot.version>
 	</properties>
 
 	<dependencyManagement>
