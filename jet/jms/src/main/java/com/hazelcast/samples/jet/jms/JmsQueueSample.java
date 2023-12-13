@@ -23,9 +23,10 @@ import com.hazelcast.jet.Job;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
-import javax.jms.TextMessage;
+import jakarta.jms.TextMessage;
+
 import java.util.concurrent.CancellationException;
 
 import static com.hazelcast.internal.util.EmptyStatement.ignore;

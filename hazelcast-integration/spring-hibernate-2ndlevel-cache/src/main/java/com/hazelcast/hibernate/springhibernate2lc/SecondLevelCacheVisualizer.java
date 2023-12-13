@@ -16,14 +16,14 @@ class SecondLevelCacheVisualizer {
     @Scheduled(fixedDelay = 10000)
     public void cachePeek() {
 
-        IMap<Object, com.hazelcast.hibernate.serialization.Value> fooCache =
-          Stream.concat(Hazelcast.getAllHazelcastInstances().stream(), HazelcastClient.getAllHazelcastClients().stream())
-          .findAny().orElseThrow(IllegalStateException::new)
-          .getMap(Book.class.getName());
+        IMap<Object, com.hazelcast.hibernate.serialization.Value> bookCache =
+                Stream.concat(Hazelcast.getAllHazelcastInstances().stream(), HazelcastClient.getAllHazelcastClients().stream())
+                        .findAny().orElseThrow(IllegalStateException::new)
+                        .getMap(Book.class.getName());
 
         System.out.println(LocalTime.now());
-        System.out.println("size: " + fooCache.size());
-        fooCache.forEach((k, v) -> System.out.println("    " + k.toString() + ":" + v.getValue()));
+        System.out.println("size: " + bookCache.size());
+        bookCache.forEach((k, v) -> System.out.println("    " + k.toString() + ":" + v.getValue()));
         System.out.println();
     }
 }

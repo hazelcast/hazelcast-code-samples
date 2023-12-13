@@ -16,7 +16,7 @@
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <hazelcast.version>5.3.0-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>5.4.0-SNAPSHOT</hazelcast.version>
         <java.version>17</java.version>
         <hazelcast-jclouds.version>3.7.2</hazelcast-jclouds.version>
         <hazelcast.hibernate.version>5.1.0</hazelcast.hibernate.version>
@@ -36,6 +36,7 @@
         <protobuf.version>3.21.2</protobuf.version>
         <maven.os.plugin.version>1.6.2</maven.os.plugin.version>
         <maven.protobuf.plugin.version>0.6.1</maven.protobuf.plugin.version>
+        <maven.surefire.plugin.version>3.0.0</maven.surefire.plugin.version>
         <version.war.plugin>3.3.2</version.war.plugin>
 
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
@@ -140,6 +141,10 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
         </plugins>
         <pluginManagement>
             <plugins>
@@ -151,6 +156,10 @@
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${version.war.plugin}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

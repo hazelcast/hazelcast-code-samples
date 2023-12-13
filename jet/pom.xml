@@ -52,6 +52,7 @@
         <module>jms</module>
         <module>job-management</module>
         <module>kafka</module>
+        <module>kafka-connect</module>
         <module>pattern-matching</module>
         <module>protobuf</module>
         <module>python</module>
@@ -74,12 +75,13 @@
 
     <profiles>
         <profile>
-            <id>cdc</id>
+            <id>java17</id>
             <activation>
                 <jdk>[17,)</jdk>
             </activation>
             <modules>
                 <module>cdc</module>
+                <module>mongodb</module>
             </modules>
         </profile>
     </profiles>

@@ -1,4 +1,4 @@
-= Google ProtoBuf with Hazelcat Example
+= Google ProtoBuf with Hazelcast Example
 Viktor Gamov <viktor@hazelcast.com>, © 2017 Hazelcast, Inc.
 2017-05-17
 :revdate: 2017-05-17 8:34:42 -0600

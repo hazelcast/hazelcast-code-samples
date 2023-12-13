@@ -1,6 +1,9 @@
-
 # Prerequisites
-In order to run the code sample, make sure to have PostgresSQL database accessible and configured properly in `application.properties`.
+
+Spring Boot 3 requires JDK17+
+
+In order to run the code sample, make sure to have PostgresSQL database accessible and configured properly
+in `application.properties`.
 
 You can spin-up a PostgreSQL instance easily using Docker:
 
@@ -34,13 +37,13 @@ In order to configure Hazelcast as second-level cache provider, you need to add 
 <dependency>
     <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast-hibernate53</artifactId>
-    <version>2.2.2-SNAPSHOT</version>
+    <version>5.0.1-SNAPSHOT</version>
 </dependency>
 
 <dependency>
     <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast</artifactId>
-    <version>5.3.0-SNAPSHOT</version>
+    <version>5.4.0-SNAPSHOT</version>
 </dependency>
 ```
 

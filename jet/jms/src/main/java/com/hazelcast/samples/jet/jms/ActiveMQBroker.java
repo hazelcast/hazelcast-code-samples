@@ -16,7 +16,8 @@
 
 package com.hazelcast.samples.jet.jms;
 
-import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.artemis.core.config.impl.ConfigurationImpl;
+import org.apache.activemq.artemis.core.server.embedded.EmbeddedActiveMQ;
 
 /**
  * Utility class to start/stop an ActiveMQ Broker instance
@@ -25,17 +26,20 @@ public final class ActiveMQBroker {
 
     public static final String BROKER_URL = "tcp://localhost:61616";
 
-    private BrokerService broker;
+    private EmbeddedActiveMQ broker;
 
     ActiveMQBroker() throws Exception {
-        broker = new BrokerService();
-        broker.setPersistent(false);
-        broker.addConnector(BROKER_URL);
+        ConfigurationImpl configuration = new ConfigurationImpl();
+        configuration.setSecurityEnabled(false);
+        configuration.setPersistenceEnabled(false);
+        configuration.addAcceptorConfiguration("my-acceptor", BROKER_URL);
+
+        broker = new EmbeddedActiveMQ();
+        broker.setConfiguration(configuration);
         broker.start();
     }
 
     public void stop() throws Exception {
         broker.stop();
-        broker.waitUntilStopped();
     }
 }
