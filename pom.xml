@@ -40,7 +40,8 @@
         <version.war.plugin>3.3.2</version.war.plugin>
 
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-        <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
+        <checkstyle.version>10.12.2</checkstyle.version>
+        <maven.checkstyle.plugin.version>3.3.1</maven.checkstyle.plugin.version>
         <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
 
         <lombok.version>1.18.30</lombok.version>
@@ -228,7 +229,6 @@
                             <configLocation>${main.basedir}/checkstyle/checkstyle.xml</configLocation>
                             <suppressionsLocation>${main.basedir}/checkstyle/suppressions.xml</suppressionsLocation>
                             <headerLocation>${main.basedir}/checkstyle/ClassHeader.txt</headerLocation>
-                            <enableRSS>false</enableRSS>
                             <linkXRef>true</linkXRef>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>true</failsOnError>
@@ -237,6 +237,13 @@
                             <enableRulesSummary>true</enableRulesSummary>
                             <propertyExpansion>main.basedir=${main.basedir}</propertyExpansion>
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.puppycrawl.tools</groupId>
+                                <artifactId>checkstyle</artifactId>
+                                <version>${checkstyle.version}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
