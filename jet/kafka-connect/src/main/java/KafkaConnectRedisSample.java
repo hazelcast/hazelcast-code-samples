@@ -6,7 +6,6 @@ import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import com.hazelcast.jet.pipeline.StreamStage;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
@@ -15,6 +14,7 @@ import org.apache.kafka.connect.source.SourceRecord;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -56,36 +56,41 @@ public class KafkaConnectRedisSample {
 
     public static void main(String[] args) throws Exception {
         Properties connectorProperties = new Properties();
-        connectorProperties.setProperty("name", "redis");
-        connectorProperties.setProperty("connector.class", "com.redis.kafka.connect.RedisKeysSourceConnector");
-        connectorProperties.setProperty("redis.uri", REDIS_URI);
-        connectorProperties.setProperty("redis.keys.pattern", "*");
-        connectorProperties.setProperty("topic", "some-topic");
+        connectorProperties.putAll(Map.of(
+                "name", "redis",
+                "connector.class", "com.redis.kafka.connect.RedisKeysSourceConnector",
+                "redis.uri", REDIS_URI,
+                "redis.keys.pattern", "*",
+                "topic", "some-topic"
+        ));
 
-        var t = new Thread(KafkaConnectRedisSample::insertData);
-        t.start();
-
-        Pipeline pipeline = Pipeline.create();
-        StreamStage<CityTemp> streamStage = pipeline.readFrom(connect(connectorProperties, CityTemp::parse))
+        var pipeline = Pipeline.create();
+        pipeline.readFrom(connect(connectorProperties, CityTemp::parse))
                 .withIngestionTimestamps()
-                .setLocalParallelism(2);
+                .setLocalParallelism(2)
 
-        streamStage.groupingKey(CityTemp::city)
-                   .rollingAggregate(averagingDouble(CityTemp::temperature))
-                   .writeTo(Sinks.logger());
+                .groupingKey(CityTemp::city)
+                .rollingAggregate(averagingDouble(CityTemp::temperature))
+
+                .writeTo(Sinks.logger());
 
         JobConfig jobConfig = new JobConfig();
         jobConfig.addJarsInZip(new URL(CONNECTOR_URL));
 
-        Config hzConfig = new Config();
+        var hzConfig = new Config();
         hzConfig.setProperty("hazelcast.logging.type", "log4j2");
-        hzConfig.getJetConfig().setEnabled(true);
-        hzConfig.getJetConfig().setResourceUploadEnabled(true);
+        hzConfig.getJetConfig()
+                .setEnabled(true)
+                .setResourceUploadEnabled(true);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(hzConfig);
         JetService jet = hz.getJet();
+
         System.out.println("Downloading the connector jar and submitting the job...");
         Job job = jet.newJob(pipeline, jobConfig);
         System.out.println("Job submitted");
+
+        new Thread(KafkaConnectRedisSample::insertData).start();
+
         job.join();
     }
 
