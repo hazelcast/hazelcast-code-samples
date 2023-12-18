@@ -49,7 +49,7 @@ public class PagingPredicateQuery {
         Comparator<Map.Entry<Integer, Student>> descendingComparator = new DescendingIdComparator();
 
         // a predicate which filters out non ClassA students, sort them descending order and fetches 4 students for each page
-        PagingPredicate pagingPredicate = Predicates.pagingPredicate(equalPredicate, descendingComparator, 4);
+        PagingPredicate<Integer, Student> pagingPredicate = Predicates.pagingPredicate(equalPredicate, descendingComparator, 4, null);
 
         // expected result:
         // Page 1 -> Student-18, Student-16, Student-14, Student-12
