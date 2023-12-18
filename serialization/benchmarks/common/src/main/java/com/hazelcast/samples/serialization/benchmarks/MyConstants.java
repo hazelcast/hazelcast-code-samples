@@ -48,7 +48,7 @@ public class MyConstants {
 
         private final String klass;
 
-        private Kind(String arg0) {
+        Kind(String arg0) {
             this.klass = arg0;
         }
 
