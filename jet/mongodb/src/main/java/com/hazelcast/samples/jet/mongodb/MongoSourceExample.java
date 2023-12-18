@@ -41,8 +41,7 @@ import static com.mongodb.client.model.Filters.eq;
 import static java.lang.String.format;
 
 /**
- * Simple example that continuously reads from Mongo, picks top 5 payments in last 2 seconds and prints the results into
- * the console.
+ * Simple example that continuously reads from Mongo, picks top 5 payments in last 2 seconds and prints the results into the console.
  * <p>
  * You can run this example using one of two modes:
  * <ol>
@@ -70,7 +69,7 @@ public class MongoSourceExample {
         }
     }
 
-    public record Payment(ObjectId paymentId, String cardNo, String city, BigDecimal amount, boolean successful) {
+    public record Payment (ObjectId paymentId, String cardNo, String city, BigDecimal amount, boolean successful) {
 
         public static final String FORMAT_STRING = "%-3s %-30s %-20s %-12s %-8.2f %-8s";
         public static final String FORMAT_STRING_HEADER = "%-3s %-30s %-20s %-12s %-8s %-8s";

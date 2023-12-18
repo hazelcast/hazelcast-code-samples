@@ -181,7 +181,7 @@ Spring Data JPA to associate them with database tables.
 @Entity
 public class Verb implements Serializable {
 	
-	@jakarta.persistence.Id
+	@javax.persistence.Id
 	@org.springframework.data.annotation.Id
 	private int		id;
 	
@@ -296,7 +296,7 @@ So, "*Noun*" changes from
 @Entity
 public class Noun implements Serializable {
 	
-	@jakarta.persistence.Id
+	@javax.persistence.Id
 	@org.springframework.data.annotation.Id
 	private int		id;
 	private String	english;
@@ -309,7 +309,7 @@ to
 <b>@KeySpace</b>
 public class Noun implements Serializable {
 	
-	@jakarta.persistence.Id
+	@javax.persistence.Id
 	@org.springframework.data.annotation.Id
 	private int		id;
 	private String	english;
