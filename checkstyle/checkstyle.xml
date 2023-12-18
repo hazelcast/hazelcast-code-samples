@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE module PUBLIC
-    "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
-    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <!--
   Checkstyle configuration that checks the sun coding conventions from:
@@ -43,9 +43,7 @@
     </module>
 
     <!-- Enable suppression of file contents using //CHECKSTYLE:[ON|OFF] comments -->
-    <!--
     <module name="SuppressionCommentFilter"/>
-    -->
 
     <!-- Enable the suppression annotation @SuppressWarnings("checkstyle:lowercasecheckname"} -->
     <module name="SuppressWarningsFilter"/>
@@ -56,9 +54,7 @@
 
     <!-- Checks whether files end with a new line.                        -->
     <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
-    <module name="NewlineAtEndOfFile">
-        <property name="lineSeparator" value="lf"/>
-    </module>
+    <module name="NewlineAtEndOfFile"/>
 
     <!-- Checks that property files contain the same keys.         -->
     <!-- See http://checkstyle.sf.net/config_misc.html#Translation -->
@@ -83,11 +79,19 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
-    <module name="LineLength">
-        <property name="max" value="130"/>
+    <!-- Checks for Headers                                -->
+    <!-- See http://checkstyle.sf.net/config_header.html   -->
+    <!--
+    <module name="Header">
+        <property name="headerFile" value="${main.basedir}/checkstyle/ClassHeader.txt"/>
+        <property name="fileExtensions" value="java"/>
     </module>
+    -->
 
     <module name="TreeWalker">
+        <!-- Activate comment suppression filters -->
+        <module name="FileContentsHolder"/>
+
         <!-- Needed for SuppressWarningsFilter to work -->
         <module name="SuppressWarningsHolder"/>
 
@@ -131,9 +135,7 @@
             <property name="excludes" value="java.awt,javax.swing"/>
         </module>
         <!-- defaults to sun.* packages -->
-        <module name="IllegalImport">
-            <property name="illegalPkgs" value="sun,org.jetbrains.annotations"/>
-        </module>
+        <module name="IllegalImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports">
             <property name="processJavadoc" value="true"/>
@@ -141,6 +143,9 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
+        <module name="LineLength">
+            <property name="max" value="130"/>
+        </module>
         <module name="MethodLength">
             <property name="tokens" value="METHOD_DEF"/>
             <property name="max" value="60"/>
@@ -204,6 +209,7 @@
 
         <!-- Checks for common coding problems               -->
         <!-- See http://checkstyle.sf.net/config_coding.html -->
+        <module name="ArrayTrailingComma"/>
         <module name="CovariantEquals"/>
         <module name="DeclarationOrder"/>
         <module name="ExplicitInitialization"/>
@@ -227,9 +233,9 @@
             <property name="tokens" value="PARAMETER_DEF, METHOD_DEF"/>
         </module>
         <module name="InnerAssignment"/>
+        <module name="JUnitTestCase"/>
         <module name="ReturnCount">
             <property name="max" value="8"/>
-            <property name="maxForVoid" value="8"/>
         </module>
         <module name="NestedIfDepth">
             <property name="max" value="2"/>
@@ -237,15 +243,32 @@
         <module name="NestedTryDepth">
             <property name="max" value="2"/>
         </module>
+        <!--
+        <module name="PackageDeclaration"/>
+        -->
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
         <module name="SuperClone"/>
         <module name="SuperFinalize"/>
+        <!--
+        <module name="MagicNumber">
+            <property name="ignoreHashCodeMethod" value="true"/>
+            <property name="ignoreAnnotation" value="true"/>
+            <property name="ignoreNumbers" value="-1, 0, 1, 2, 3"/>
+        </module>
+        -->
         <module name="EqualsHashCode"/>
         <module name="IllegalInstantiation"/>
+        <module name="InnerAssignment"/>
         <module name="MissingSwitchDefault"/>
 
+        <!-- Checks for class design                         -->
+        <!-- See http://checkstyle.sf.net/config_design.html -->
+        <module name="FinalClass"/>
+        <!--
+        <module name="HideUtilityClassConstructor"/>
+        -->
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier">
             <property name="packageAllowed" value="true"/>
@@ -266,11 +289,22 @@
             <property name="severity" value="error"/>
             <property name="max" value="12"/>
         </module>
-        <module name="NPathComplexity"/>
+        <module name="NPathComplexity">
+            <property name="max" value="50"/>
+        </module>
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->
         <module name="ArrayTypeStyle"/>
         <module name="UpperEll"/>
+
+        <!-- Check for usage of UuidUtil instead of UUID -->
+        <!--
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="(import static java\.util\.UUID\.randomUUID|UUID\.randomUUID\(\))"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="message" value="Please use UuidUtil.buildRandomUUID() instead of UUID.randomUUID()!"/>
+        </module>
+        -->
     </module>
 </module>

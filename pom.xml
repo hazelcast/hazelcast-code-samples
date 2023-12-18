@@ -16,10 +16,12 @@
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <jdk.version>1.8</jdk.version>
+        <jdk.integration.version>1.8</jdk.integration.version>
+
         <hazelcast.version>5.4.0-SNAPSHOT</hazelcast.version>
-        <java.version>17</java.version>
         <hazelcast-jclouds.version>3.7.2</hazelcast-jclouds.version>
-        <hazelcast.hibernate.version>5.1.0</hazelcast.hibernate.version>
+        <hazelcast.hibernate.version>5.0.1-SNAPSHOT</hazelcast.hibernate.version>
 
         <!-- Used in ClientConsole application-->
         <jline.version>3.19.0</jline.version>
@@ -39,13 +41,11 @@
         <maven.surefire.plugin.version>3.0.0</maven.surefire.plugin.version>
         <version.war.plugin>3.3.2</version.war.plugin>
 
-        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-        <checkstyle.version>10.12.2</checkstyle.version>
-        <maven.checkstyle.plugin.version>3.3.1</maven.checkstyle.plugin.version>
+        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
+        <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
         <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
 
-        <lombok.version>1.18.30</lombok.version>
-        <spring.boot.version>3.2.0</spring.boot.version>
+        <lombok.version>1.16.22</lombok.version>
     </properties>
 
     <repositories>
@@ -105,21 +105,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
-                    <release>${java.version}</release>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <!-- args needed for modules using lombok -->
-                    <compilerArgs>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
-                        <arg>--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED</arg>
-                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -176,38 +164,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>3.24.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
     <profiles>
         <profile>
             <id>checkstyle</id>
@@ -229,6 +185,7 @@
                             <configLocation>${main.basedir}/checkstyle/checkstyle.xml</configLocation>
                             <suppressionsLocation>${main.basedir}/checkstyle/suppressions.xml</suppressionsLocation>
                             <headerLocation>${main.basedir}/checkstyle/ClassHeader.txt</headerLocation>
+                            <enableRSS>false</enableRSS>
                             <linkXRef>true</linkXRef>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>true</failsOnError>
@@ -237,13 +194,6 @@
                             <enableRulesSummary>true</enableRulesSummary>
                             <propertyExpansion>main.basedir=${main.basedir}</propertyExpansion>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.puppycrawl.tools</groupId>
-                                <artifactId>checkstyle</artifactId>
-                                <version>${checkstyle.version}</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
