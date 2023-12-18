@@ -4,9 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 
 import java.util.concurrent.BlockingQueue;
 
-public final class Client {
-    private Client() {
-    }
+public class Client {
 
     public static void main(String[] args) throws Exception {
         ClientConfig clientConfig = new ClientConfig();

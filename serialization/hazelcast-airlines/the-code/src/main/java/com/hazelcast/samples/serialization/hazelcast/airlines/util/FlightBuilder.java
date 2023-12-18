@@ -12,7 +12,6 @@ import com.hazelcast.samples.serialization.hazelcast.airlines.V5Flight;
  * <p>Build flight objects.
  * </p>
  */
-@SuppressWarnings("FileTabCharacter")
 public class FlightBuilder {
 
     /**

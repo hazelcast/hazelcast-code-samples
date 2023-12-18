@@ -3,7 +3,7 @@ package com.hazelcast.samples.spring.data.migration;
 import lombok.Data;
 import org.springframework.data.keyvalue.annotation.KeySpace;
 
-import jakarta.persistence.Entity;
+import javax.persistence.Entity;
 import java.io.Serializable;
 
 /**
@@ -29,7 +29,7 @@ import java.io.Serializable;
 @KeySpace
 public class Verb implements Serializable {
 
-    @jakarta.persistence.Id
+    @javax.persistence.Id
     @org.springframework.data.annotation.Id
     private int id;
     private String english;
