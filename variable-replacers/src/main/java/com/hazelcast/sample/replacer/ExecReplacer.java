@@ -125,7 +125,7 @@ public class ExecReplacer implements ConfigReplacer {
         private final boolean copy;
         private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        StdStreamReader(InputStream is, boolean copy) {
+        public StdStreamReader(InputStream is, boolean copy) {
             this.is = is;
             this.copy = copy;
         }
@@ -151,7 +151,7 @@ public class ExecReplacer implements ConfigReplacer {
          * Returns all read bytes as String (with UTF-8 charset used).
          */
         public String getStreamContent() {
-            return baos.toString(StandardCharsets.UTF_8);
+            return new String(baos.toByteArray(), StandardCharsets.UTF_8);
         }
     }
 }

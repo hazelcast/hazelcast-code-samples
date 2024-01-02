@@ -32,7 +32,7 @@ class Runner implements CommandLineRunner {
 
     private final EntityManager entityManager;
 
-    Runner(BookRepository repository, HazelcastInstance hazelcastInstance,
+    public Runner(BookRepository repository, HazelcastInstance hazelcastInstance,
                   TransactionTemplate transactionTemplate, CacheManager cacheManager, EntityManager entityManager) {
         this.repository = repository;
         this.hazelcastInstance = hazelcastInstance;
