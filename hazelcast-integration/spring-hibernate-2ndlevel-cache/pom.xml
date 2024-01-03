@@ -16,8 +16,6 @@
 	<properties>
 		<!-- needed for checkstyle/findbugs -->
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
-		<java.version>17</java.version>
-		<spring.boot.version>3.0.4</spring.boot.version>
 	</properties>
 
 	<dependencyManagement>
@@ -28,6 +26,12 @@
 				<version>${spring.boot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

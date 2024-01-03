@@ -18,8 +18,8 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hibernate.version>5.6.12.Final</hibernate.version>
-        <h2db.version>2.2.220</h2db.version>
+        <hibernate.version>6.1.3.Final</hibernate.version>
+        <h2db.version>2.2.224</h2db.version>
     </properties>
 
     <dependencies>
