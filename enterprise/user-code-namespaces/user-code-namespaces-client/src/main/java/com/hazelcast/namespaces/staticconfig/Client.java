@@ -15,5 +15,6 @@ public class Client {
 
         //will increment the value from the map and print it.
         System.out.println(client.getMap("map1").get("key"));
+        client.shutdown();
     }
 }

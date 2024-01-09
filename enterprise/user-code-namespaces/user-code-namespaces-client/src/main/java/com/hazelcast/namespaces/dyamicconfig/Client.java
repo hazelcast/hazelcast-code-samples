@@ -22,5 +22,6 @@ public class Client {
 
         //will print incremented value
         System.out.println(client.getMap("map1").get("key"));
+        client.shutdown();
     }
 }
