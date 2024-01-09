@@ -4,6 +4,7 @@ import com.hazelcast.client.config.ClientUserCodeDeploymentConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 
+@Deprecated
 public class Client {
 
     public static void main(String[] args) {

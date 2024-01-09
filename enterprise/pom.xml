@@ -43,6 +43,7 @@
         <module>simple-authentication</module>
         <module>tls-rbac-demo</module>
         <module>tls-custom-login-module</module>
+        <module>user-code-namespaces</module>
     </modules>
 
     <repositories>
