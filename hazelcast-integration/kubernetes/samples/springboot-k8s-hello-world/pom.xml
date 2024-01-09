@@ -22,14 +22,11 @@
 
 		<docker.image.prefix>${project.artifactId}</docker.image.prefix>
 
-		<java.version>8</java.version>
-
 		<!-- Latest versions -->		
 		<dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
                 <!-- Do not increase minor version without also changing 'the-management-center/Dockerfile' -->
 		<hazelcast.version>4.0</hazelcast.version>
 		<hazelcast-kubernetes.version>2.0.1</hazelcast-kubernetes.version>
-		<spring-boot.version>2.2.5.RELEASE</spring-boot.version>
 	</properties>
 
 	<modules>
@@ -73,7 +70,7 @@
 				<artifactId>spring-boot-starter-parent</artifactId>
 				<type>pom</type>
 				<scope>import</scope>
-				<version>${spring-boot.version}</version>
+				<version>${spring.boot.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -84,7 +81,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
+                    <version>${spring.boot.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
