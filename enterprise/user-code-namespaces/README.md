@@ -14,7 +14,7 @@ mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespace.staticconfi
 
 **Member code walkthrough:**
 
-- Enables user code deployment feature on Config.
+- Enables user code namespaces feature on Config.
 - Creates a new `UserCodeNamespaceConfig` with name `ucn1` and adds the external JAR URL.
 - Adds the `UserCodeNamespaceConfig` to the `Config`.
 - Creates a `MapConfig` referencing the namespace `ucn1`.
@@ -44,7 +44,7 @@ mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespace.staticconfi
 **Member code walkthrough:**
 
 - Loads the class `IncrementingEntryProcessor` from outside the classpath.
-- Enables user code deployment feature on config.
+- Enables user code namespaces feature on config.
 - Creates a new `UserCodeNamespaceConfig` and adds the loaded `IncrementingEntryProcessor` class to it.
 - Adds the `UserCodeNamespaceConfig` to the `Config`.
 - Creates a `MapConfig` referencing the namespace.

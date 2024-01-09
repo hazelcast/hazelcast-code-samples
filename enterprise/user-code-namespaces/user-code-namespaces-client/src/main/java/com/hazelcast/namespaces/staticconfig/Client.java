@@ -13,7 +13,7 @@ public class Client {
         EntryProcessor entryProcessor = new IncrementingEntryProcessor();
         client.getMap("map1").executeOnKey("key", entryProcessor);
 
-        //will increment the value from the map and print it.
+        // will print incremented value
         System.out.println(client.getMap("map1").get("key"));
         client.shutdown();
     }

@@ -15,12 +15,12 @@ public class Client {
         UserCodeNamespaceConfig namespaceConfig = new UserCodeNamespaceConfig("ucn1");
         namespaceConfig.addClass(IncrementingEntryProcessor.class);
 
-        //dynamically add the namespace config
+        // dynamically add the namespace config
         client.getConfig().getNamespacesConfig().addNamespaceConfig(namespaceConfig);
-        //execute the entry processor
+        // execute the entry processor
         client.getMap("map1").executeOnKey("key", entryProcessor);
 
-        //will print incremented value
+        // will print incremented value
         System.out.println(client.getMap("map1").get("key"));
         client.shutdown();
     }

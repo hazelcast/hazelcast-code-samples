@@ -11,15 +11,15 @@ public class Member {
         Config config = new Config();
         config.getNamespacesConfig().setEnabled(true);
 
-        //construct a namespace configuration with no resources
+        // construct a namespace configuration with no resources
         UserCodeNamespaceConfig userCodeNamespaceConfig = new UserCodeNamespaceConfig("ucn1");
         config.getNamespacesConfig().addNamespaceConfig(userCodeNamespaceConfig);
 
-        //referencing the new UserCodeNamespaceConfig in a map config
+        // referencing the new UserCodeNamespaceConfig in a map config
         config.getMapConfig("map1").setUserCodeNamespace("ucn1");
 
         HazelcastInstance member = Hazelcast.newHazelcastInstance(config);
-        //putting key/value in the map that client can execute on
+        // putting key/value in the map that client can execute on
         member.getMap("map1").put("key", 0);
     }
 }
