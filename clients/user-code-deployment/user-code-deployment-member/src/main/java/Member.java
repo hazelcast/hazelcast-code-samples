@@ -2,6 +2,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.UserCodeDeploymentConfig;
 import com.hazelcast.core.Hazelcast;
 
+@Deprecated
 public class Member {
 
     public static void main(String[] args) {
