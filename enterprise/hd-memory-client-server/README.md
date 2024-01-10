@@ -2,7 +2,7 @@
 
 Requires a Hazelcast Enterprise licence.  Download a trial key from
 
-http://hazelcast.com/hazelcast-enterprise-trial/
+https://hazelcast.com/get-started/
 
 ## Introduction
 

@@ -1,5 +1,7 @@
 Client user code deployment code sample consist of two different mvn projects. This is to be able to demonstrate class deployment from client to server.  
 
+⚠️ **NOTE:** This feature has been deprecated in favour of User Code Namespaces.
+
 1. Run hazelcast member with user code deployment enabled. Note that, it does not contain the `IncrementingEntryProcessor` class that will be deployed from client.
 
 ```
