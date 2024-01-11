@@ -26,6 +26,7 @@
     <modules>
         <module>auditlog</module>
         <module>client-ssl</module>
+        <module>cp-map</module>
         <module>hd-imap</module>
         <module>hd-memory-client-server</module>
         <module>hidensity-cache</module>

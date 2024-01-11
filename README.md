@@ -22,7 +22,7 @@ Included sample folders
 *   **/distributed-map** — An extensive code samples folder that includes many features of the Hazelcast distributed map in action.
 *   **/distributed-primitives** — Includes Distributed AtomicLong, AtomicReference, CountDownLatch, IdGenerator, FlakeIdGenerator, CardinalityEstimator, Condition, Semaphore and Lock code samples.
 *   **/distributed-topic** — Code samples to see publish/subscriber messaging model.
-*   **/enterprise** — Includes socket and security interceptor, HD store and hot restart code samples.
+*   **/enterprise** — Includes socket and security interceptor, CPMap, HD store and hot restart code samples.
 *   **/hazelcast-integration** — Code samples to show how you can integrate Hazelcast with Hibernate 2nd Level Cache and Spring. It also includes code samples for web session replication and resource adapter implementation.
 *   **/jcache** — An extensive code samples folder for operations including creating a cache and writing entries to it, creating listeners and clients.
 *   **/jet** — Code samples to demonstrate building stream and batch processing applications using Hazelcast's Jet engine.
