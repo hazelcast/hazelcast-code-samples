@@ -56,7 +56,6 @@ public class CPMember {
 
         // always destroy CP Subsystem data structures otherwise it can lead to a memory leak
         cpMap.destroy();
-        lock.destroy();
 
         hz.getLifecycleService().terminate();
     }
