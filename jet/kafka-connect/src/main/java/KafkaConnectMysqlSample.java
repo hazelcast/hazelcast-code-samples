@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import static com.hazelcast.jet.kafka.connect.KafkaConnectSources.connect;
@@ -25,8 +26,14 @@ import static org.apache.kafka.connect.data.Values.convertToString;
  * <pre>
  * docker run --rm -it -p 3306:3306 -e MYSQL_ROOT_PASSWORD=mysql -e MYSQL_DATABASE=test mysql:8
  * </pre>
+ *
+ * 3 seconds after execution started code will print items
+ * added to test table and then copied (as pipeline defines) to Hazelcast's {@link com.hazelcast.collection.IList}.
  */
 public class KafkaConnectMysqlSample {
+
+    private static final String CONNECTOR_URL
+            = "https://repository.hazelcast.com/download/tests/confluentinc-kafka-connect-jdbc-10.6.3.zip";
 
     public static void main(String[] args) throws Exception {
         // Prepare MySQL table
@@ -40,18 +47,20 @@ public class KafkaConnectMysqlSample {
         // The properties are described on the connector website:
         // https://docs.confluent.io/kafka-connectors/jdbc/current/source-connector/source_config_options.html#jdbc-source-configs
         Properties properties = new Properties();
-        properties.setProperty("name", "my-mysql");
-        properties.setProperty("connector.class", "io.confluent.connect.jdbc.JdbcSourceConnector");
-        properties.setProperty("connection.url", "jdbc:mysql://localhost:3306/test");
-        properties.setProperty("connection.user", "root");
-        properties.setProperty("connection.password", "mysql");
-        properties.setProperty("table.whitelist", "test_table");
-        properties.setProperty("table.poll.interval.ms", "1000");
-        properties.setProperty("mode", "incrementing");
-        properties.setProperty("incrementing.column.name", "id");
+        properties.putAll(Map.of(
+                "name", "my-mysql",
+                "connector.class", "io.confluent.connect.jdbc.JdbcSourceConnector",
+                "connection.url", "jdbc:mysql://localhost:3306/test",
+                "connection.user", "root",
+                "connection.password", "mysql",
+                "table.whitelist", "test_table",
+                "table.poll.interval.ms", "1000",
+                "mode", "incrementing",
+                "incrementing.column.name", "id"
+        ));
 
         // Define the pipeline
-        Pipeline pipeline = Pipeline.create();
+        var pipeline = Pipeline.create();
         pipeline.readFrom(connect(properties, (SourceRecord rec) -> convertToString(rec.valueSchema(), rec.value())))
                 .withoutTimestamps()
                 .writeTo(Sinks.list("items-list"));
@@ -61,8 +70,7 @@ public class KafkaConnectMysqlSample {
         // Add connector Jar to the job
         JobConfig jobConfig = new JobConfig();
         //Mirrored from https://www.confluent.io/hub/confluentinc/kafka-connect-jdbc/
-        jobConfig.addJarsInZip(new URL("https://repository.hazelcast.com/download"
-                                       + "/tests/confluentinc-kafka-connect-jdbc-10.6.3.zip"));
+        jobConfig.addJarsInZip(new URL(CONNECTOR_URL));
 
         //Submit the job
         System.out.println("Downloading the connector jar and submitting the job...");
