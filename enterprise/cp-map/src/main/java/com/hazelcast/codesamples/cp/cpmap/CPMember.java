@@ -27,15 +27,7 @@ public class CPMember {
         FencedLock lock = hz.getCPSubsystem().getLock("lock");
 
         String key = "key";
-        // Use FencedLock to set the initial value in an atomic way
-        lock.lock();
-        try {
-            if (cpMap.get(key) == null) {
-                cpMap.set(key, 0);
-            }
-        } finally {
-            lock.unlock();
-        }
+        cpMap.putIfAbsent(key, 0);
 
         for (int i = 0; i < NUMBER_OF_INCREMENTS; i++) {
             while (true) {
