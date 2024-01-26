@@ -23,7 +23,6 @@ public class CPMember {
         config.getCPSubsystemConfig().setCPMemberCount(CP_MEMBER_COUNT);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         CPMap<String, Integer> cpMap = hz.getCPSubsystem().getMap("cp-map");
-        FencedLock lock = hz.getCPSubsystem().getLock("lock");
 
         String key = "key";
         cpMap.putIfAbsent(key, 0);
