@@ -1,4 +1,4 @@
-package com.hazelcast.namespaces.dyamicconfig;
+package com.hazelcast.namespaces.dynamicconfig.classconfig;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.config.UserCodeNamespaceConfig;

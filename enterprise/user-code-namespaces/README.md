@@ -61,7 +61,7 @@ Observe the value for key is incremented by 1 each time the client executes.
 
 -----
 
-### 3. Dynamically configured namespace with a jar containing a single class. 
+### 3. Dynamically configured namespace with a single class.
 
 
 Run Member:
@@ -85,7 +85,7 @@ Run Client:
 
 ```
 cd user-code-namespaces-client
-mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespaces.dyamicconfig.Client
+mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespaces.dynamicconfig.classconfig.Client
 ```
 
 **Client Code walkthrough:**
@@ -93,6 +93,44 @@ mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespaces.dyamicconf
 - Starts the client.
 - Creates a new `UserCodeNamespaceConfig` with `ucn1` as the name.
 - Adds the `IncrementingEntryProcessor` class from the classpath to the `UserCodeNamespaceConfig`.
+- Gets the hazelcast config from the client instance and adds the `UserCodeNamespaceConfig` to the `Config`.
+
+
+Observe the value for key is incremented by 1 each time the client executes.
+
+-----
+
+### 4. Dynamically configured namespace with a JAR containing a single class.
+
+
+Run Member:
+
+```
+cd user-code-namespaces-member
+mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespace.dynamic.Member
+```
+
+**Member code walkthrough:**
+
+- Enables user code namespaces feature on config.
+- Creates a new `UserCodeNamespaceConfig` named `ucn1` with no resources.
+*Note - this config must exist on the running instance before the client can add to it.*
+- Creates a `MapConfig` referencing the namespace.
+- Puts K,V (key, 0) into the map.
+- Starts the member.
+
+
+Run Client:
+
+```
+cd user-code-namespaces-client
+mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespaces.dynamicconfig.jar.Client
+```
+
+**Client Code walkthrough:**
+
+- Starts the client.
+- Creates a new `UserCodeNamespaceConfig` with name `ucn1` and adds the external JAR URL.
 - Gets the hazelcast config from the client instance and adds the `UserCodeNamespaceConfig` to the `Config`.
 
 
