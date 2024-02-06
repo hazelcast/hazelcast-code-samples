@@ -7,7 +7,7 @@ import com.hazelcast.map.EntryProcessor;
 import usercodenamespaces.IncrementingEntryProcessor;
 
 import java.io.File;
-import java.net.URL;
+
 public class Client {
 
     public static void main(String[] args) throws Exception {
@@ -15,7 +15,8 @@ public class Client {
 
         EntryProcessor entryProcessor = new IncrementingEntryProcessor();
         UserCodeNamespaceConfig namespaceConfig = new UserCodeNamespaceConfig("ucn1");
-        namespaceConfig.addJar(getJarURL(), "jar_id");
+        String jarPath = "src/main/java/com/hazelcast/namespaces/IncrementingEntryProcessor.jar";
+        namespaceConfig.addJar(new File(jarPath).toURI().toURL(), "jar_id");
 
         // dynamically add the namespace config
         client.getConfig().getNamespacesConfig().addNamespaceConfig(namespaceConfig);
@@ -27,15 +28,4 @@ public class Client {
         client.shutdown();
     }
 
-    /**
-     * Helper code to load the example jar from outside the classpath
-     * @return the URL of the jar.
-     */
-    private static URL getJarURL() throws Exception {
-        String basePath = System.getProperty("user.dir");
-        String directoryPath = basePath + "/src/main/java/com/hazelcast/namespaces/";
-
-        File jar = new File(directoryPath + "IncrementingEntryProcessor.jar");
-        return jar.toURI().toURL();
-    }
 }

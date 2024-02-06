@@ -112,9 +112,8 @@ mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespace.dynamic.Mem
 
 **Member code walkthrough:**
 
-- Enables user code namespaces feature on config.
+- Enables user code namespaces feature on `Config`.
 - Creates a new `UserCodeNamespaceConfig` named `ucn1` with no resources.
-*Note - this config must exist on the running instance before the client can add to it.*
 - Creates a `MapConfig` referencing the namespace.
 - Puts K,V (key, 0) into the map.
 - Starts the member.
@@ -131,7 +130,7 @@ mvn clean compile exec:java -Dexec.mainClass=com.hazelcast.namespaces.dynamiccon
 
 - Starts the client.
 - Creates a new `UserCodeNamespaceConfig` with name `ucn1` and adds the external JAR URL.
-- Gets the hazelcast config from the client instance and adds the `UserCodeNamespaceConfig` to the `Config`.
+- Gets the Hazelcast config from the client instance and adds the `UserCodeNamespaceConfig` to the `Config`.
 
 
 Observe the value for key is incremented by 1 each time the client executes.
