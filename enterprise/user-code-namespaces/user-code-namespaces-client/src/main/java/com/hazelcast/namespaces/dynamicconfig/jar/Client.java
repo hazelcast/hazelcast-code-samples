@@ -1,4 +1,4 @@
-package com.hazelcast.namespaces.dyamicconfig;
+package com.hazelcast.namespaces.dynamicconfig.jar;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.config.UserCodeNamespaceConfig;
@@ -6,14 +6,17 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.EntryProcessor;
 import usercodenamespaces.IncrementingEntryProcessor;
 
+import java.io.File;
+
 public class Client {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         HazelcastInstance client = HazelcastClient.newHazelcastClient();
 
         EntryProcessor entryProcessor = new IncrementingEntryProcessor();
         UserCodeNamespaceConfig namespaceConfig = new UserCodeNamespaceConfig("ucn1");
-        namespaceConfig.addClass(IncrementingEntryProcessor.class);
+        String jarPath = "src/main/java/com/hazelcast/namespaces/IncrementingEntryProcessor.jar";
+        namespaceConfig.addJar(new File(jarPath).toURI().toURL(), "jar_id");
 
         // dynamically add the namespace config
         client.getConfig().getNamespacesConfig().addNamespaceConfig(namespaceConfig);
@@ -24,4 +27,5 @@ public class Client {
         System.out.println(client.getMap("map1").get("key"));
         client.shutdown();
     }
+
 }
