@@ -46,7 +46,6 @@
         <module>grpc</module>
         <module>hadoop</module>
         <module>hazelcast-connectors</module>
-        <module>hazelcast-3-connector</module>
         <module>hello-world</module>
         <module>jdbc</module>
         <module>jms</module>
