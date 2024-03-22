@@ -41,7 +41,7 @@
             <version>1.3.2</version>
             <scope>provided</scope>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf.version}</version>
@@ -79,7 +79,7 @@
     </build>
 
     <properties>
-	<!-- needed for checkstyle/findbugs -->
+        <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
