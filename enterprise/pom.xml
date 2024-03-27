@@ -45,6 +45,7 @@
         <module>tls-rbac-demo</module>
         <module>tls-custom-login-module</module>
         <module>user-code-namespaces</module>
+        <module>tiered-store</module>
     </modules>
 
     <repositories>
