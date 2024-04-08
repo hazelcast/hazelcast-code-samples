@@ -5,6 +5,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.cp.CPMap;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -12,6 +13,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * class, it will form the CP subsystem. Then, it fetches
  * a CP {@link CPMap} proxy and increments the integer value with
  * CAS {@link #NUMBER_OF_INCREMENTS} times.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class CPMember {
 
@@ -20,6 +24,7 @@ public class CPMember {
 
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(CP_MEMBER_COUNT);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         CPMap<String, Integer> cpMap = hz.getCPSubsystem().getMap("cp-map");

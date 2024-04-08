@@ -6,15 +6,21 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.cp.lock.FencedLock;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This code sample demonstrates how fencing tokens returned by the FencedLock
  * increases every time the lock switches from the available state to the held
  * state.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class MonotonicFencingTokens {
 
     public static void main(String[] args) {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         CPSubsystemConfig cpSubsystemConfig = config.getCPSubsystemConfig();
         cpSubsystemConfig.setCPMemberCount(3);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);

@@ -28,6 +28,7 @@
         <module>cp-atomicreference</module>
         <module>cp-countdownlatch</module>
         <module>cp-listeners</module>
+        <module>cp-map</module>
         <module>fenced-lock</module>
 		<module>fenced-lock-auto-release-on-session-close</module>
 		<module>fenced-lock-auto-release-on-shutdown</module>
@@ -48,7 +49,7 @@
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
+            <artifactId>hazelcast-enterprise</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
 

@@ -8,6 +8,7 @@ import com.hazelcast.cp.ISemaphore;
 import java.util.Date;
 import java.util.Random;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -18,6 +19,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * {@link #NUMBER_OF_ROUNDS} times. At any time, {@code CP_MEMBER_COUNT - 1}
  * CP members will be holding a permit and the last member will be waiting for
  * one of them to release a permit.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class CPMember {
 
@@ -26,6 +30,7 @@ public class CPMember {
 
     public static void main(String[] args) throws Exception {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(CP_MEMBER_COUNT);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         ISemaphore semaphore = hz.getCPSubsystem().getSemaphore("semaphore");

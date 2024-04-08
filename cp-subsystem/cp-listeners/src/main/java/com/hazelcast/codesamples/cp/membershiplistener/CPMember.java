@@ -4,6 +4,8 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * Configures a CP subsystem of 3 CP members. When you run 3 instances of this
  * class, it will form the CP subsystem. After leader election is completed
@@ -12,6 +14,9 @@ import com.hazelcast.core.HazelcastInstance;
  * If you terminate one of the processes, after some time that CP member will be
  * automatically removed from CP subsystem and remaining members will print
  * the removed CP member to the console.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class CPMember {
 
@@ -20,6 +25,7 @@ public class CPMember {
 
     public static void main(String[] args) {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig()
                 .setCPMemberCount(CP_MEMBER_COUNT)
                 .setSessionTimeToLiveSeconds(AUTO_REMOVE_MISSING_MEMBER_SEC)

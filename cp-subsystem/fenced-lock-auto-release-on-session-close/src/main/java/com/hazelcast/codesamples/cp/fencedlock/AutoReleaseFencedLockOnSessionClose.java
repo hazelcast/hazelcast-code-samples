@@ -8,14 +8,20 @@ import com.hazelcast.cp.lock.FencedLock;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This code sample demonstrates that a FencedLock is eventually released when
  * its holder does not commit CP session heartbeats.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class AutoReleaseFencedLockOnSessionClose {
 
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         CPSubsystemConfig cpSubsystemConfig = config.getCPSubsystemConfig();
         cpSubsystemConfig.setCPMemberCount(3);
         cpSubsystemConfig.setSessionHeartbeatIntervalSeconds(1);

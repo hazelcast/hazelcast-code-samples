@@ -7,8 +7,13 @@ import com.hazelcast.core.HazelcastInstance;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * In this demo, we start a cluster with both CP members and AP members.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class StartCPSubsystem1 {
 
@@ -16,6 +21,7 @@ public class StartCPSubsystem1 {
 
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(CP_MEMBER_COUNT);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);
         HazelcastInstance hz2 = Hazelcast.newHazelcastInstance(config);

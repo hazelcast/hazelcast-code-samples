@@ -6,14 +6,20 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.cp.lock.FencedLock;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This code sample demonstrates that a Hazelcast instance releases the lock
  * instances it holds during shutdown.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class AutoReleaseFencedLockOnShutdown {
 
     public static void main(String[] args) {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         CPSubsystemConfig cpSubsystemConfig = config.getCPSubsystemConfig();
         cpSubsystemConfig.setCPMemberCount(3);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);

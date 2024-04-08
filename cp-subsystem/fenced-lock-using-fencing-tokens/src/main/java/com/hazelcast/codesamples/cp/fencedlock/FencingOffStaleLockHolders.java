@@ -20,10 +20,15 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This code sample demonstrates how monotonic fencing tokens
  * can be used for ordering lock holders and their operations
  * on external services.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class FencingOffStaleLockHolders {
 
@@ -92,6 +97,7 @@ public class FencingOffStaleLockHolders {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         CPSubsystemConfig cpSubsystemConfig = config.getCPSubsystemConfig();
         cpSubsystemConfig.setCPMemberCount(3);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);

@@ -11,8 +11,13 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * In this demo, we remove crashed CP members from the CP Subsystem automatically
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class RemoveCrashedCPMemberAutomatically {
 
@@ -20,6 +25,7 @@ public class RemoveCrashedCPMemberAutomatically {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         CPSubsystemConfig cpSubsystemConfig = config.getCPSubsystemConfig();
         cpSubsystemConfig.setCPMemberCount(CP_MEMBER_COUNT);
         cpSubsystemConfig.setSessionHeartbeatIntervalSeconds(1);

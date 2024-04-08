@@ -8,6 +8,7 @@ import com.hazelcast.cp.lock.FencedLock;
 import java.util.Date;
 import java.util.Random;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -16,6 +17,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * a CP {@link FencedLock} proxy. Each CP member acquires the lock 2 times and
  * releases it afterwards. Between acquires and releases, it prints the fencing
  * tokens assigned to itself.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class CPMember {
 
@@ -23,6 +27,7 @@ public class CPMember {
 
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(CP_MEMBER_COUNT);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         FencedLock lock = hz.getCPSubsystem().getLock("lock");

@@ -5,6 +5,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.cp.ICountDownLatch;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -13,6 +14,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * a CP {@link ICountDownLatch} proxy. Each CP member performs some dummy work
  * and decrements the count value. After that, it waits for all CP members to
  * complete their work.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class CPMember {
 
@@ -20,6 +24,7 @@ public class CPMember {
 
     public static void main(String[] args) throws Exception {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(CP_MEMBER_COUNT);
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
         ICountDownLatch latch = hz.getCPSubsystem().getCountDownLatch("latch");

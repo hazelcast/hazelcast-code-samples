@@ -12,15 +12,21 @@ import com.hazelcast.cp.session.CPSessionManagementService;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This code sample demonstrates that a FencedLock can be released when
  * the CP session of its current holder is closed via the API. We can use this
  * API when we know for sure that the current lock holder is crashed.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class ForceReleaseFencedByClosingSession {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         CPSubsystemConfig cpSubsystemConfig = config.getCPSubsystemConfig();
         cpSubsystemConfig.setCPMemberCount(3);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);

@@ -14,7 +14,7 @@
         <groupId>com.hazelcast.samples.enterprise</groupId>
         <artifactId>enterprise</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../enterprise/pom.xml</relativePath>
     </parent>
 
     <properties>

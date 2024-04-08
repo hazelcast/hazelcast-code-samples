@@ -10,9 +10,14 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * In this demo, we start the CP subsystem with a group size
  * different than the CP member count
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class StartCPSubsystem2 {
 
@@ -21,6 +26,7 @@ public class StartCPSubsystem2 {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(CP_MEMBER_COUNT);
         config.getCPSubsystemConfig().setGroupSize(GROUP_SIZE);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);
