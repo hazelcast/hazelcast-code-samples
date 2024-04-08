@@ -66,7 +66,7 @@ public class StartCPSubsystem2 {
         System.out.println(customCPGroupName + " CP group has the following CP members: " + customGroup.members());
 
         for (HazelcastInstance hz : Arrays.asList(hz1, hz2, hz3, hz4, hz5)) {
-            hz.getLifecycleService().terminate();
+            hz.shutdown();
         }
     }
 }

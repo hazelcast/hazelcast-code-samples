@@ -40,7 +40,7 @@ public class StartCPSubsystem1 {
         System.out.println(hz4.getCPSubsystem().getAtomicLong("counter").incrementAndGet());
 
         for (HazelcastInstance hz : Arrays.asList(hz1, hz2, hz3, hz4)) {
-            hz.getLifecycleService().terminate();
+            hz.shutdown();
         }
     }
 }

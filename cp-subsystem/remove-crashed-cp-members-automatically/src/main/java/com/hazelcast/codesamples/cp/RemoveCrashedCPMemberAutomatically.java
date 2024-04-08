@@ -67,7 +67,7 @@ public class RemoveCrashedCPMemberAutomatically {
         }
 
         for (HazelcastInstance hz : Arrays.asList(hz1, hz2, hz3, hz4, hz6)) {
-            hz.getLifecycleService().terminate();
+            hz.shutdown();
         }
     }
 }

@@ -84,7 +84,7 @@ public class RemoveCrashedCPMembersManually {
         System.out.println("Metadata CP group has the following CP members: " + metadataGroup.members());
 
         for (HazelcastInstance hz : Arrays.asList(hz1, hz2, hz6, hz7, hz8)) {
-            hz.getLifecycleService().terminate();
+            hz.shutdown();
         }
     }
 }

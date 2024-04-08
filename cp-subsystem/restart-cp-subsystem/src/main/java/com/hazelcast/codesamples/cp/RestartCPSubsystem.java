@@ -69,7 +69,7 @@ public class RestartCPSubsystem {
         assert cpMembers.contains(hz5.getCPSubsystem().getLocalCPMember());
 
         for (HazelcastInstance hz : Arrays.asList(hz1, hz4, hz5)) {
-            hz.getLifecycleService().terminate();
+            hz.shutdown();
         }
     }
 }
