@@ -4,15 +4,15 @@
     <packaging>jar</packaging>
 
     <artifactId>cp-map</artifactId>
-    <name>Enterprise - CP Subsystem CPMap</name>
+    <name>Enterprise Advanced - CP Subsystem CPMap</name>
 
     <description>
-        Enterprise - CP Subsystem CPMap
+        Enterprise Advanced - CP Subsystem CPMap
     </description>
 
     <parent>
-        <groupId>com.hazelcast.samples.enterprise</groupId>
-        <artifactId>enterprise</artifactId>
+        <groupId>com.hazelcast.samples.cp</groupId>
+        <artifactId>cp-subsystem</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
