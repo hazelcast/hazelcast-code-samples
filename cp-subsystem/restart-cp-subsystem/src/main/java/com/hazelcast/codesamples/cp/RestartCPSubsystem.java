@@ -12,8 +12,13 @@ import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * In this demo, we restart the CP Subsystem when its majority crashes
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class RestartCPSubsystem {
 
@@ -21,6 +26,7 @@ public class RestartCPSubsystem {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         CPSubsystemConfig cpSubsystemConfig = config.getCPSubsystemConfig();
         cpSubsystemConfig.setCPMemberCount(CP_MEMBER_COUNT);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);
@@ -63,7 +69,7 @@ public class RestartCPSubsystem {
         assert cpMembers.contains(hz5.getCPSubsystem().getLocalCPMember());
 
         for (HazelcastInstance hz : Arrays.asList(hz1, hz4, hz5)) {
-            hz.getLifecycleService().terminate();
+            hz.shutdown();
         }
     }
 }

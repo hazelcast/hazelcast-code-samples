@@ -7,9 +7,14 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.cp.lock.FencedLock;
 import com.hazelcast.cp.lock.exception.LockAcquireLimitReachedException;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This code sample demonstrates how a FencedLock can be used
  * as a non-reentrant mutex.
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class NonReentrantMutex {
 
@@ -17,6 +22,7 @@ public class NonReentrantMutex {
         FencedLockConfig lockConfig = new FencedLockConfig("my-lock");
         lockConfig.disableReentrancy();
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(3);
         config.getCPSubsystemConfig().addLockConfig(lockConfig);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);
