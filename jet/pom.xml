@@ -64,6 +64,7 @@
         <module>tf-idf</module>
         <module>trade-source</module>
         <module>wordcount</module>
+        <module>wordcount-compute-isolation</module>
     </modules>
 
     <properties>
