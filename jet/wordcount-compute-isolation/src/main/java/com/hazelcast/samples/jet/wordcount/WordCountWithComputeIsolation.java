@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2021, Hazelcast, Inc. All Rights Reserved.
+ * Copyright (c) 2008-2024, Hazelcast, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,10 +41,11 @@ import static com.hazelcast.jet.aggregate.AggregateOperations.counting;
 import static java.util.Comparator.comparingLong;
 
 /**
- * Demonstrates a simple Word Count job in the Pipeline API with member selector.
+ * Demonstrates a simple Word Count job in the Pipeline API with a member selector.
  * Inserts the text of The Complete Works of William Shakespeare into a Hazelcast
  * IMap, then lets Jet count the words in it and write its findings to
- * another IMap. The example looks at Jet's output and prints the 100 most
+ * another IMap. This execution takes place on selected members instead of all
+ * available members. The example looks at Jet's output and prints the 100 most
  * frequent words.
  */
 public class WordCountWithComputeIsolation {
@@ -79,25 +80,28 @@ public class WordCountWithComputeIsolation {
         hz[1] = Hazelcast.newHazelcastInstance(liteMemberConfig);
         hz[2] = Hazelcast.newHazelcastInstance(liteMemberConfig);
 
-        new WordCountWithComputeIsolation().go(hz);
+        try {
+            new WordCountWithComputeIsolation().go(hz);
+        } finally {
+            Hazelcast.shutdownAll();
+
+        }
     }
 
     private void go(HazelcastInstance[] hz) {
-        try {
-            init(hz);
-            System.out.println("\nCounting words... ");
-            long start = System.nanoTime();
-            Pipeline p = buildPipeline();
-            JetService jet = hz[0].getJet();
-            // New in 5.5: use JetMemberSelector.ALL_LITE_MEMBERS to run the job on all lite members only.
-            jet.newJobBuilder(p).withMemberSelector(JetMemberSelector.ALL_LITE_MEMBERS).start().join();
-            System.out.println("done in " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) + " milliseconds.");
-            Map<String, Long> results = hz[0].getMap(COUNTS);
-            checkResults(results);
-            printResults(results);
-        } finally {
-            Hazelcast.shutdownAll();
-        }
+        init(hz);
+        System.out.println("\nCounting words... ");
+        long start = System.nanoTime();
+        Pipeline p = buildPipeline();
+        JetService jet = hz[0].getJet();
+
+        // New in 5.5: use JetMemberSelector.ALL_LITE_MEMBERS to run the job on all lite members only.
+        jet.newJobBuilder(p).withMemberSelector(JetMemberSelector.ALL_LITE_MEMBERS).start().join();
+        System.out.println("Finished in " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) + " milliseconds.");
+
+        Map<String, Long> results = hz[0].getMap(COUNTS);
+        checkResults(results);
+        printResults(results);
     }
 
     private void init(HazelcastInstance[] hz) {
