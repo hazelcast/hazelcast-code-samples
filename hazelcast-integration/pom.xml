@@ -50,19 +50,8 @@
         <module>spring-data-jpa-hazelcast-migration</module>
         <module>springaware-annotation</module>
         <module>eureka</module>
+        <module>spring-hibernate-2ndlevel-cache</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>java17</id>
-            <activation>
-                <jdk>[17,)</jdk>
-            </activation>
-            <modules>
-                <module>spring-hibernate-2ndlevel-cache</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <dependencies>
         <dependency>

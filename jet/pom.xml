@@ -65,6 +65,8 @@
         <module>trade-source</module>
         <module>wordcount</module>
         <module>wordcount-compute-isolation</module>
+        <module>cdc</module>
+        <module>mongodb</module>
     </modules>
 
     <properties>
@@ -72,19 +74,6 @@
         <main.basedir>${project.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <profiles>
-        <profile>
-            <id>java17</id>
-            <activation>
-                <jdk>[17,)</jdk>
-            </activation>
-            <modules>
-                <module>cdc</module>
-                <module>mongodb</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <dependencies>
         <dependency>
