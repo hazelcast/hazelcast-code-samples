@@ -20,7 +20,6 @@
 		<main.basedir>${project.parent.parent.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<hazelcast.version>4.0</hazelcast.version>
 		<kryo.version>4.0.0</kryo.version>
 		<spring-shell.version>1.2.0.RELEASE</spring-shell.version>
 	</properties>
@@ -40,7 +39,6 @@
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
-			<version>${hazelcast.version}</version>
 		</dependency>
 
 		<dependency>
