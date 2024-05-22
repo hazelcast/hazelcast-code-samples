@@ -3,7 +3,7 @@ package com.hazelcast.samples.spring.data.migration;
 import lombok.Data;
 import org.springframework.data.keyvalue.annotation.KeySpace;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import java.io.Serializable;
 
 /**
@@ -25,7 +25,7 @@ import java.io.Serializable;
 @KeySpace
 public class Noun implements Serializable {
 
-    @javax.persistence.Id
+    @jakarta.persistence.Id
     @org.springframework.data.annotation.Id
     private int id;
     private String english;

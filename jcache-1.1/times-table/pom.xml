@@ -24,8 +24,6 @@
         <hazelcast.version>${profile.hazelcast.version}</hazelcast.version>
         <javax-cache.version>${profile.jsr107.version}</javax-cache.version>
 
-        <java.version>1.8</java.version>
-        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
         <spring-shell.version>1.2.0.RELEASE</spring-shell.version>
     </properties>
 
@@ -101,22 +99,13 @@
                 <artifactId>spring-boot-starter-parent</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
-                <version>${spring-boot.version}</version>
+                <version>${spring.boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
             <!-- Reduces "Artifact has not been packaged yet" issue -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

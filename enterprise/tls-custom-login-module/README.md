@@ -28,7 +28,7 @@ In addition, the Subject name attribute can be used as a role-provider.
 ```xml
 <hazelcast xmlns="http://www.hazelcast.com/schema/config"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-config-5.2.xsd">
+    xsi:schemaLocation="http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-config-5.5.xsd">
 
      <license-key>YOUR_LICENSE_KEY</license-key>
      <network>
@@ -91,7 +91,7 @@ In addition, the Subject name attribute can be used as a role-provider.
 <hazelcast-client
     xmlns="http://www.hazelcast.com/schema/client-config"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.hazelcast.com/schema/client-config http://www.hazelcast.com/schema/client-config/hazelcast-client-config-5.2.xsd">
+    xsi:schemaLocation="http://www.hazelcast.com/schema/client-config http://www.hazelcast.com/schema/client-config/hazelcast-client-config-5.5.xsd">
 
   <network>
     <ssl enabled="true">

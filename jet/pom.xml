@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2008-2021, Hazelcast, Inc. All Rights Reserved.
+  ~ Copyright (c) 2008-2024, Hazelcast, Inc. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -46,7 +46,6 @@
         <module>grpc</module>
         <module>hadoop</module>
         <module>hazelcast-connectors</module>
-        <module>hazelcast-3-connector</module>
         <module>hello-world</module>
         <module>jdbc</module>
         <module>jms</module>
@@ -65,6 +64,7 @@
         <module>tf-idf</module>
         <module>trade-source</module>
         <module>wordcount</module>
+        <module>wordcount-compute-isolation</module>
     </modules>
 
     <properties>

@@ -21,6 +21,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.mongodb.MongoSources;
+import com.hazelcast.jet.mongodb.ResourceChecks;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamSource;
@@ -40,7 +41,8 @@ import static com.mongodb.client.model.Filters.eq;
 import static java.lang.String.format;
 
 /**
- * Simple example that continuously reads from Mongo, picks top 5 payments in last 2 seconds and prints the results into the console.
+ * Simple example that continuously reads from Mongo, picks top 5 payments in last 2 seconds and prints the results into
+ * the console.
  * <p>
  * You can run this example using one of two modes:
  * <ol>
@@ -68,7 +70,7 @@ public class MongoSourceExample {
         }
     }
 
-    public record Payment (ObjectId paymentId, String cardNo, String city, BigDecimal amount, boolean successful) {
+    public record Payment(ObjectId paymentId, String cardNo, String city, BigDecimal amount, boolean successful) {
 
         public static final String FORMAT_STRING = "%-3s %-30s %-20s %-12s %-8.2f %-8s";
         public static final String FORMAT_STRING_HEADER = "%-3s %-30s %-20s %-12s %-8s %-8s";
@@ -100,7 +102,7 @@ public class MongoSourceExample {
                 .database("shop")
                 .filter(eq("fullDocument.successful", true))
                 .collection("payments", Payment.class)
-                .throwOnNonExisting(false)
+                .checkResourceExistence(ResourceChecks.NEVER)
                 .startAtOperationTime(new BsonTimestamp())
                 .build();
         pipeline.readFrom(streamSource)

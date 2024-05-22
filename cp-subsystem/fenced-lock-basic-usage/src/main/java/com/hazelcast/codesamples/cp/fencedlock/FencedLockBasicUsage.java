@@ -7,14 +7,20 @@ import com.hazelcast.cp.lock.FencedLock;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * This code sample demonstrates basic usage of the locking methods available
  * in the {@link FencedLock} interface
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class FencedLockBasicUsage {
 
     public static void main(String[] args) {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(3);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);
         HazelcastInstance hz2 = Hazelcast.newHazelcastInstance(config);

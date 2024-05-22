@@ -28,6 +28,7 @@
         <module>cp-atomicreference</module>
         <module>cp-countdownlatch</module>
         <module>cp-listeners</module>
+        <module>cp-map</module>
         <module>fenced-lock</module>
 		<module>fenced-lock-auto-release-on-session-close</module>
 		<module>fenced-lock-auto-release-on-shutdown</module>
@@ -45,10 +46,27 @@
         <module>restart-cp-subsystem</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>Hazelcast Private Snapshot Repository</id>
+            <url>https://repository.hazelcast.com/snapshot/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>Hazelcast Private Release Repository</id>
+            <url>https://repository.hazelcast.com/release/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
+            <artifactId>hazelcast-enterprise</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
 

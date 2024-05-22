@@ -12,8 +12,13 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import static com.hazelcast.examples.helper.LicenseUtils.ENTERPRISE_LICENSE_KEY;
+
 /**
  * In this demo, we remove crashed CP members from the CP Subsystem manually
+ *
+ * You have to set your Hazelcast Enterprise license key to make this code sample work.
+ * Please have a look at {@link com.hazelcast.examples.helper.LicenseUtils} for details.
  */
 public class RemoveCrashedCPMembersManually {
 
@@ -21,6 +26,7 @@ public class RemoveCrashedCPMembersManually {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Config config = new Config();
+        config.setLicenseKey(ENTERPRISE_LICENSE_KEY);
         config.getCPSubsystemConfig().setCPMemberCount(CP_MEMBER_COUNT);
         HazelcastInstance hz1 = Hazelcast.newHazelcastInstance(config);
         HazelcastInstance hz2 = Hazelcast.newHazelcastInstance(config);
@@ -78,7 +84,7 @@ public class RemoveCrashedCPMembersManually {
         System.out.println("Metadata CP group has the following CP members: " + metadataGroup.members());
 
         for (HazelcastInstance hz : Arrays.asList(hz1, hz2, hz6, hz7, hz8)) {
-            hz.getLifecycleService().terminate();
+            hz.shutdown();
         }
     }
 }

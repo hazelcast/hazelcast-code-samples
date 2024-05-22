@@ -2,13 +2,11 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
-import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.json.JsonUtil;
 import com.hazelcast.jet.kafka.connect.KafkaConnectSources;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
-import com.hazelcast.jet.pipeline.StreamStage;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -37,11 +35,8 @@ import java.util.Properties;
  */
 public class KafkaConnectNeo4jSample {
 
-    //This is the last JDK8-compatible version of the Neo4j connector
-    //You can download the newer version from https://www.confluent.io/hub/neo4j/kafka-connect-neo4j/
-    //To be updated after migration to JDK11 https://github.com/hazelcast/hazelcast-code-samples/issues/570
     private static final String CONNECTOR_URL = "https://repository.hazelcast.com/download"
-                                                + "/tests/neo4j-kafka-connect-neo4j-2.0.1.zip";
+                                                + "/tests/neo4j-kafka-connect-neo4j-5.0.2.zip";
 
     private static final String BOLT_URL = "bolt://localhost:7687";
 
@@ -61,25 +56,26 @@ public class KafkaConnectNeo4jSample {
         insertNodes("items-1");
 
         Pipeline pipeline = Pipeline.create();
-        StreamStage<Person> streamStage = pipeline.readFrom(KafkaConnectSources.connect(connectorProperties, Person::from))
+        pipeline.readFrom(KafkaConnectSources.connect(connectorProperties, Person::from))
                 .withoutTimestamps()
-                .setLocalParallelism(2);
-        streamStage.writeTo(Sinks.logger());
+                .setLocalParallelism(2)
+                .writeTo(Sinks.logger());
 
-        JobConfig jobConfig = new JobConfig();
+        var jobConfig = new JobConfig();
         jobConfig.addJarsInZip(new URL(CONNECTOR_URL));
 
         Config hzConfig = new Config();
-        hzConfig.getJetConfig().setEnabled(true);
-        hzConfig.getJetConfig().setResourceUploadEnabled(true);
+        hzConfig.getJetConfig()
+                .setEnabled(true)
+                .setResourceUploadEnabled(true);
+
         HazelcastInstance hz = Hazelcast.newHazelcastInstance(hzConfig);
         JetService jet = hz.getJet();
         System.out.println("Downloading the connector jar and submitting the job...");
-        Job job = jet.newJob(pipeline, jobConfig);
+        var job = jet.newJob(pipeline, jobConfig);
         System.out.println("Job submitted");
 
         insertNodes("items-2");
-
         job.join();
     }
 
@@ -92,30 +88,15 @@ public class KafkaConnectNeo4jSample {
         }
     }
 
-    static class Person {
-        final String firstName;
-        final String lastName;
-
-        Person(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
-
+    record Person(String firstName, String lastName) {
         static Person from(SourceRecord rec) {
-            try {
-                Map<String, Object> map = JsonUtil.mapFrom(rec.value());
-                return new Person(map.get("firstName").toString(), map.get("lastName").toString());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                try {
+                    Map<String, Object> map = JsonUtil.mapFrom(rec.value());
+                    assert map != null;
+                    return new Person(map.get("firstName").toString(), map.get("lastName").toString());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
-
-        @Override
-        public String toString() {
-            return "Person{"
-                    + "firstName='" + firstName + '\''
-                    + ", lastName='" + lastName + '\''
-                    + '}';
-        }
-    }
 }
