@@ -1,81 +1,81 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<artifactId>samples</artifactId>
-		<groupId>com.hazelcast.samples.kubernetes</groupId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <artifactId>samples</artifactId>
+        <groupId>com.hazelcast.samples.kubernetes</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>springboot-k8s-hello-world</artifactId>
-	<packaging>pom</packaging>
+    <artifactId>springboot-k8s-hello-world</artifactId>
+    <packaging>pom</packaging>
 
-	<name>Kubernetes: Samples: SpringBoot HelloWorld</name>
-	<description>Project POM</description>
+    <name>Kubernetes: Samples: SpringBoot HelloWorld</name>
+    <description>Project POM</description>
 
-	<properties>
-		<!-- needed for checkstyle/findbugs -->
-		<main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<docker.image.prefix>${project.artifactId}</docker.image.prefix>
+        <docker.image.prefix>${project.artifactId}</docker.image.prefix>
 
-		<!-- Latest versions -->		
-		<dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+        <!-- Latest versions -->        
+        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
                 <!-- Do not increase minor version without also changing 'the-management-center/Dockerfile' -->
-		<hazelcast.version>4.0</hazelcast.version>
-		<hazelcast-kubernetes.version>2.0.1</hazelcast-kubernetes.version>
-	</properties>
+        <hazelcast.version>4.0</hazelcast.version>
+        <hazelcast-kubernetes.version>2.0.1</hazelcast-kubernetes.version>
+    </properties>
 
-	<modules>
-		<module>the-client</module>
-		<module>the-server</module>
-		<!-- Temporary until https://github.com/hazelcast/management-center-docker/issues/22 but mentioned in README.md -->
-		<module>the-management-center</module>
-	</modules>
+    <modules>
+        <module>the-client</module>
+        <module>the-server</module>
+        <!-- Temporary until https://github.com/hazelcast/management-center-docker/issues/22 but mentioned in README.md -->
+        <module>the-management-center</module>
+    </modules>
 
-	<dependencies>
-		<!-- The main Hazelcast client & server jar, and the Kubernetes connectivity module -->
-		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast</artifactId>
-			<version>${hazelcast.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast-kubernetes</artifactId>
-			<version>${hazelcast-kubernetes.version}</version>
-		</dependency>
+    <dependencies>
+        <!-- The main Hazelcast client & server jar, and the Kubernetes connectivity module -->
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-kubernetes</artifactId>
+            <version>${hazelcast-kubernetes.version}</version>
+        </dependency>
 
-		<!-- For logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
+        <!-- For logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
 
-		<!-- All executable jars are HTTP port 8080 enabled -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-	</dependencies>
+        <!-- All executable jars are HTTP port 8080 enabled -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
 
-	<!-- Pull in versions from Spring Boot -->
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-parent</artifactId>
-				<type>pom</type>
-				<scope>import</scope>
-				<version>${spring.boot.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <!-- Pull in versions from Spring Boot -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>${spring.boot.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<build>
+    <build>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -85,17 +85,17 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-		<!-- Define docker plugin for all modules to use, skip per module when not needed -->
-		<plugins>
-			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>dockerfile-maven-plugin</artifactId>
-				<version>${dockerfile-maven-plugin.version}</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+        <!-- Define docker plugin for all modules to use, skip per module when not needed -->
+        <plugins>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

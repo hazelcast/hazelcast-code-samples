@@ -30,14 +30,14 @@
         <module>cp-listeners</module>
         <module>cp-map</module>
         <module>fenced-lock</module>
-		<module>fenced-lock-auto-release-on-session-close</module>
-		<module>fenced-lock-auto-release-on-shutdown</module>
-		<module>fenced-lock-basic-usage</module>
-		<module>fenced-lock-force-release</module>
-		<module>fenced-lock-monotonic-fencing-tokens</module>
-		<module>fenced-lock-non-reentrant-mutex</module>
-		<module>fenced-lock-using-fencing-tokens</module>
-		<module>fenced-lock-lock-ownership-lost-exception</module>
+        <module>fenced-lock-auto-release-on-session-close</module>
+        <module>fenced-lock-auto-release-on-shutdown</module>
+        <module>fenced-lock-basic-usage</module>
+        <module>fenced-lock-force-release</module>
+        <module>fenced-lock-monotonic-fencing-tokens</module>
+        <module>fenced-lock-non-reentrant-mutex</module>
+        <module>fenced-lock-using-fencing-tokens</module>
+        <module>fenced-lock-lock-ownership-lost-exception</module>
         <module>cp-semaphore</module>
         <module>start-cp-subsystem-1</module>
         <module>start-cp-subsystem-2</module>
