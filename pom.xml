@@ -232,6 +232,35 @@
                             </dependency>
                         </dependencies>
                     </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>xml-maven-plugin</artifactId>
+                        <version>1.1.0</version>
+                        <configuration>
+                            <indentSize>4</indentSize>
+                            <useDefaultFormatFileSet>false</useDefaultFormatFileSet>
+                            <formatFileSets>
+                                <formatFileSet>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>**/pom.xml</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </formatFileSet>
+                            </formatFileSets>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>validate</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check-format</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

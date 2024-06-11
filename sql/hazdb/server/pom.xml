@@ -1,59 +1,59 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.hazelcast.samples.sql</groupId>
-		<artifactId>hazdb</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>com.hazelcast.samples.sql</groupId>
+        <artifactId>hazdb</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>hazdb-server</artifactId>
+    <artifactId>hazdb-server</artifactId>
 
-	<name>SQL: Hazelcast DB: Server</name>
-	<description>Code for one or more Hazelcast server nodes</description>
+    <name>SQL: Hazelcast DB: Server</name>
+    <description>Code for one or more Hazelcast server nodes</description>
 
-	<properties>
-		<!-- needed for checkstyle/findbugs -->
-		<main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
 
-		<dockerfile.skip>false</dockerfile.skip>
-		<docker.image.name>hazelcast-server</docker.image.name>
-		<docker.jar.file>${project.artifactId}-${project.version}.jar</docker.jar.file>
-	</properties>
+        <dockerfile.skip>false</dockerfile.skip>
+        <docker.image.name>hazelcast-server</docker.image.name>
+        <docker.jar.file>${project.artifactId}-${project.version}.jar</docker.jar.file>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>hazdb-common</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>hazdb-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast-sql</artifactId>
-			<version>${hazelcast.version}</version>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-sql</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>dockerfile-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
