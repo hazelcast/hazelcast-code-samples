@@ -67,7 +67,7 @@ the storage need is irrelevant.
 * Network behaviour is linked to size. When you send or retrieve data, it passes across the network in blocks.
 A large object may need more blocks so take longer. But the block size can be tuned so perhaps all serialization
 mechanisms produce an object that fits in one block and so network time is constant. Or you use a
-https://docs.hazelcast.com/imdg/4.2/performance/near-cache.html[near-cache] and network transfer rarely happens.
+https://docs.hazelcast.com/hazelcast/latest/cluster-performance/best-practices#near-cache[near-cache] and network transfer rarely happens.
 
 * Serialization is the process of turning the object into bytes, and can be CPU intensive.
 ** In client-server topology this occurs on the client when sending the data, and on the server if writing the data in-situ. Client machines often have less CPUs than server host machines.
