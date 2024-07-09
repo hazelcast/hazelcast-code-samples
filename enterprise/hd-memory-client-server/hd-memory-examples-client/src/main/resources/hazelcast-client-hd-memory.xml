@@ -25,7 +25,7 @@
         <cluster-members>
             <address>127.0.0.1</address>
         </cluster-members>
-        <smart-routing>true</smart-routing>
+        <cluster-routing mode="ALL_MEMBERS"/>
         <redo-operation>true</redo-operation>
     </network>
 
