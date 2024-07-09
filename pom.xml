@@ -16,7 +16,7 @@
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <hazelcast.version>5.4.1-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>5.4.2-SNAPSHOT</hazelcast.version>
         <java.version>17</java.version>
         <hazelcast-jclouds.version>3.7.2</hazelcast-jclouds.version>
         <hazelcast.hibernate.version>5.1.0</hazelcast.hibernate.version>
@@ -56,6 +56,17 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
+        </repository>
+        <repository>
+            <id>private-repository</id>
+            <name>Jfrog Snapshot Internal</name>
+            <url>https://hazelcast.jfrog.io/artifactory/snapshot-internal</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
