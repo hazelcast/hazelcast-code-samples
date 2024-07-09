@@ -57,6 +57,17 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>private-repository</id>
+            <name>Jfrog Snapshot Internal</name>
+            <url>https://hazelcast.jfrog.io/artifactory/snapshot-internal</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <modules>
