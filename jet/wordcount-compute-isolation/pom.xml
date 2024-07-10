@@ -55,8 +55,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-enterprise</artifactId>
-            <!-- TODO Once Hazelcast v5.5 is released, can revert to ${hazelcast.version} -->
-            <version>5.5.0-SNAPSHOT</version>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast.samples</groupId>
@@ -85,5 +84,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- TODO Once Hazelcast v5.5 is released, can become non-SNAPSHOT -->
+        <hazelcast.version>5.5.0-SNAPSHOT</hazelcast.version>
     </properties>
 </project>
