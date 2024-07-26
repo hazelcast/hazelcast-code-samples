@@ -16,7 +16,7 @@
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <hazelcast.version>5.5.0-SNAPSHOT</hazelcast.version>
+        <hazelcast.version>5.5.0</hazelcast.version>
         <java.version>17</java.version>
         <hazelcast-jclouds.version>3.7.2</hazelcast-jclouds.version>
         <hazelcast.hibernate.version>5.1.0</hazelcast.hibernate.version>
