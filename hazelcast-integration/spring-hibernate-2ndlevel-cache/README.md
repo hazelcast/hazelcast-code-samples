@@ -43,7 +43,7 @@ In order to configure Hazelcast as second-level cache provider, you need to add 
 <dependency>
     <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast</artifactId>
-    <version>5.5</version>
+    <version>5.5.0</version>
 </dependency>
 ```
 
