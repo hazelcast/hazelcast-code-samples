@@ -32,7 +32,7 @@
         <cluster-members>
             <address>127.0.0.1:5701</address>
         </cluster-members>
-        <smart-routing>true</smart-routing>
+        <cluster-routing mode="ALL_MEMBERS"/>
         <redo-operation>true</redo-operation>
         <connection-timeout>60000</connection-timeout>
         <connection-attempt-period>3000</connection-attempt-period>
