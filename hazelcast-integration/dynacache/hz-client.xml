@@ -17,7 +17,7 @@
 
 <hazelcast-client xmlns="http://www.hazelcast.com/schema/client-config"
                   xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
-                                      http://www.hazelcast.com/schema/client-config/hazelcast-client-config-5.4.xsd"
+                                      http://www.hazelcast.com/schema/client-config/hazelcast-client-config-5.5.xsd"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <properties>
         <property name="hazelcast.client.shuffle.member.list">true</property>
@@ -32,7 +32,7 @@
         <cluster-members>
             <address>127.0.0.1:5701</address>
         </cluster-members>
-        <smart-routing>true</smart-routing>
+        <cluster-routing mode="ALL_MEMBERS"/>
         <redo-operation>true</redo-operation>
         <connection-timeout>60000</connection-timeout>
         <connection-attempt-period>3000</connection-attempt-period>
