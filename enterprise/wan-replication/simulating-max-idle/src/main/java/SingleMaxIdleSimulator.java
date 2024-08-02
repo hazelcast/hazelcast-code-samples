@@ -35,7 +35,7 @@ class SingleMaxIdleSimulator extends AbstractMaxIdleSimulator {
                 // Also, because backup entry processor is the same as this processor,
                 // we can reach here if there is any discrepancies between backup and
                 // primary. However, this isn't a problem. See the note here:
-                // https://docs.hazelcast.com/hazelcast/latest/computing/entry-processor#processing-backup-entries
+                // https://docs.hazelcast.com/hazelcast/latest/data-structures/entry-processor#processing-backup-entries
                 return null;
             } else if (Clock.currentTimeMillis() - entryView.getLastUpdateTime() > MAX_IDLE_SECONDS) {
                 // Before https://github.com/hazelcast/hazelcast/pull/23279 to access
