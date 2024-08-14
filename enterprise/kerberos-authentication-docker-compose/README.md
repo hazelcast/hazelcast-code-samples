@@ -4,12 +4,12 @@ This Docker compose example shows how Kerberos can be used for member-to-member 
 
 ## Containers in the compose
 
-There are the following containers started in this Docker compose:
+There are the following containers started in this [Docker compose](docker-compose.yml):
 
 * `kerberos-kdc` - Simple Kerberos server / Key Distribution Center (uses [`data.ldif`](data.ldif) file to populate objects)
 * `kerberos-key-material-generator` - helper container used to generate Kerberos KeyTab files
-* `member1`, `member2` - Hazelcast members with Kerberos authentication (and identity) configured (full configuration used)
-* `member3` - Hazelcast member with Kerberos authentication (and identity) configured - using the simplified configuration
+* `member1`, `member2` - Hazelcast members with Kerberos authentication (and identity) configured ([full configuration](hazelcast.xml) used)
+* `member3` - Hazelcast member with Kerberos authentication (and identity) configured - using the [simplified configuration](hazelcast-simple-kerberos.xml)
 * `hzclient` - Simple Hazelcast client that reads and writes to `timestamps` IMap data structure
 
 ## How to run the example
@@ -18,7 +18,7 @@ There are the following containers started in this Docker compose:
 
 Use Apache Maven to build the [`timestamp-client`](timestamp-client/src/main/java/TimestampClient.java) application.
 
-```
+```bash
 mvn clean install -f timestamp-client/pom.xml
 ```
 
@@ -26,7 +26,7 @@ mvn clean install -f timestamp-client/pom.xml
 
 The license key environment variable should be placed in the [`env.properties`](env.properties) file.
 
-```
+```bash
 echo "HZ_LICENSEKEY=PutTheProperLicenseKeyHere" > env.properties
 ```
 
