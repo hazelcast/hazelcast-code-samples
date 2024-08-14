@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hazelcast xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+           http://www.hazelcast.com/schema/config/hazelcast-config-5.5.xsd">
+
+    <cluster-name>kerberos</cluster-name>
+
+    <network>
+        <port auto-increment="true" port-count="100">5701</port>
+        <join>
+            <auto-detection enabled="false"/>
+            <tcp-ip enabled="true">
+                <member-list>
+                    <member>member1.kerberos.example</member>
+                    <member>member2.kerberos.example</member>
+                    <member>member3.kerberos.example</member>
+                </member-list>
+            </tcp-ip>
+        </join>
+    </network>
+
+    <security enabled="true">
+        <client-permissions>
+            <map-permission name="timestamps" principal="jduke@KERBEROS.EXAMPLE">
+                <actions>
+                    <action>all</action>
+                </actions>
+            </map-permission>
+        </client-permissions>
+        <realms>
+            <realm name="kerberosRealm">
+                <identity>
+                    <kerberos>
+                        <realm>KERBEROS.EXAMPLE</realm>
+                        <security-realm>krb5Initiator</security-realm>
+                    </kerberos>
+                </identity>
+                <authentication>
+                    <kerberos>
+                        <security-realm>krb5Acceptor</security-realm>
+                    </kerberos>
+                </authentication>
+            </realm>            
+            <realm name="krb5Initiator">
+                <authentication>
+                    <jaas>
+                        <login-module class-name="com.sun.security.auth.module.Krb5LoginModule" usage="REQUIRED">
+                            <properties>
+                                <property name="isInitiator">true</property>
+                                <property name="useKeyTab">true</property>
+                                <property name="refreshKrb5Config">true</property>
+                                <property name="doNotPrompt">true</property>
+                                <property name="storeKey">true</property>
+                                <property name="keyTab">/mnt/${hazelcast.hostname}.keytab</property>
+                                <property name="principal">hz/${hazelcast.hostname}.kerberos.example@KERBEROS.EXAMPLE</property>
+                            </properties>
+                        </login-module>
+                    </jaas>
+                </authentication>
+            </realm>
+            <realm name="krb5Acceptor">
+                <authentication>
+                    <jaas>
+                        <login-module class-name="com.sun.security.auth.module.Krb5LoginModule" usage="REQUIRED">
+                            <properties>
+                                <property name="isInitiator">false</property>
+                                <property name="useTicketCache">false</property>
+                                <property name="doNotPrompt">true</property>
+                                <property name="useKeyTab">true</property>
+                                <property name="storeKey">true</property>
+                                <property name="keyTab">/mnt/${hazelcast.hostname}.keytab</property>
+                                <property name="principal">hz/${hazelcast.hostname}.kerberos.example@KERBEROS.EXAMPLE</property>
+                            </properties>
+                        </login-module>
+                    </jaas>
+                </authentication>
+            </realm>
+        </realms>
+        <member-authentication realm="kerberosRealm"/>
+        <client-authentication realm="kerberosRealm"/>
+    </security>
+</hazelcast>

@@ -1,0 +1,87 @@
+services:
+  kerberos-kdc:
+    image: kwart/kerberos-server:1.1.0
+    hostname: kdc.kerberos.example
+    container_name: kerberos-kdc
+    volumes:
+      - ./krb5.conf:/etc/krb5.conf
+      - ./data.ldif:/mnt/data.ldif
+    command: [ "-lp", "389", "-kp", "88", "-b", "0.0.0.0",  "/mnt/data.ldif" ]
+
+  kerberos-key-material-generator:
+    image: kwart/kerberos-server:1.1.0
+    hostname: kmg.kerberos.example
+    container_name: kerberos-key-material-generator
+    entrypoint:
+      - sh
+      - -c
+    volumes:
+      - key-material:/mnt
+    command:
+      - |
+        java -classpath /kerberos-server.jar com.github.kwart.kerberos.CreateKeytab hz/member1.kerberos.example@KERBEROS.EXAMPLE hazelcast /mnt/member1.keytab
+        java -classpath /kerberos-server.jar com.github.kwart.kerberos.CreateKeytab hz/member2.kerberos.example@KERBEROS.EXAMPLE hazelcast /mnt/member2.keytab
+        java -classpath /kerberos-server.jar com.github.kwart.kerberos.CreateKeytab hz/member3.kerberos.example@KERBEROS.EXAMPLE hazelcast /mnt/member3.keytab
+        java -classpath /kerberos-server.jar com.github.kwart.kerberos.CreateKeytab jduke@KERBEROS.EXAMPLE theduke /mnt/jduke.keytab
+
+  member1:
+    image: hazelcast/hazelcast-enterprise:5.5.0-slim
+    hostname: member1.kerberos.example
+    container_name: member1
+    depends_on:
+      - kerberos-kdc
+      - kerberos-key-material-generator
+    env_file: env.properties
+    environment:
+      - JAVA_OPTS=-Dhazelcast.hostname=member1
+    volumes:
+      - key-material:/mnt
+      - ./krb5.conf:/etc/krb5.conf
+      - ./hazelcast.xml:/opt/hazelcast/config/hazelcast-docker.xml
+
+  member2:
+    image: hazelcast/hazelcast-enterprise:5.5.0-slim
+    hostname: member2.kerberos.example
+    container_name: member2
+    depends_on:
+      - kerberos-kdc
+      - kerberos-key-material-generator
+    env_file: env.properties
+    environment:
+      - JAVA_OPTS=-Dhazelcast.hostname=member2
+    volumes:
+      - key-material:/mnt
+      - ./krb5.conf:/etc/krb5.conf
+      - ./hazelcast.xml:/opt/hazelcast/config/hazelcast-docker.xml
+
+  member3:
+    image: hazelcast/hazelcast-enterprise:5.5.0-slim
+    hostname: member3.kerberos.example
+    container_name: member3
+    env_file: env.properties
+    depends_on:
+      - kerberos-kdc
+      - kerberos-key-material-generator
+    volumes:
+      - key-material:/mnt
+      - ./krb5.conf:/etc/krb5.conf
+      - ./hazelcast-simple-kerberos.xml:/opt/hazelcast/config/hazelcast-docker.xml
+
+  hzclient:
+    image: hazelcast/hazelcast-enterprise:5.5.0-slim
+    hostname: hzclient.kerberos.example
+    container_name: hzclient
+    depends_on:
+      - kerberos-kdc
+      - kerberos-key-material-generator
+      - member1
+    volumes:
+      - key-material:/mnt
+      - ./krb5.conf:/etc/krb5.conf
+      - ./hazelcast-client.xml:/opt/hazelcast/config/hazelcast-client.xml
+      - ./timestamp-client/target/timestamp-client.jar:/opt/hazelcast/lib/timestamp-client.jar
+    command: >
+        java -cp '/opt/hazelcast/lib/*' -Dhazelcast.client.config=config/hazelcast-client.xml TimestampClient
+
+volumes:
+  key-material:

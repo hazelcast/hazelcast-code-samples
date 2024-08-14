@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hazelcast-client xmlns="http://www.hazelcast.com/schema/client-config"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.hazelcast.com/schema/client-config
+                  http://www.hazelcast.com/schema/client-config/hazelcast-client-config-5.5.xsd">
+
+    <cluster-name>kerberos</cluster-name>
+
+    <network>
+        <cluster-members>
+            <address>member1.kerberos.example</address>
+            <address>member2.kerberos.example</address>
+            <address>member3.kerberos.example</address>
+        </cluster-members>
+    </network>
+
+    <security>
+        <kerberos>
+            <realm>KERBEROS.EXAMPLE</realm>
+            <security-realm>krb5Initiator</security-realm>
+        </kerberos>
+        <realms>
+            <realm name="krb5Initiator">
+                <authentication>
+                    <jaas>
+                        <login-module class-name="com.sun.security.auth.module.Krb5LoginModule" usage="REQUIRED">
+                            <properties>
+                                <property name="isInitiator">true</property>
+                                <property name="useTicketCache">false</property>
+                                <property name="doNotPrompt">true</property>
+                                <property name="useKeyTab">true</property>
+                                <property name="storeKey">true</property>
+                                <property name="keyTab">/mnt/jduke.keytab</property>
+                                <property name="principal">jduke@KERBEROS.EXAMPLE</property>
+                            </properties>
+                        </login-module>
+                    </jaas>
+                </authentication>
+            </realm>
+        </realms>
+    </security>
+</hazelcast-client>

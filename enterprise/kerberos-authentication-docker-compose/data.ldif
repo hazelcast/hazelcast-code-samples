@@ -1,0 +1,107 @@
+version: 1
+
+dn: dc=kerberos,dc=example
+dc: kerberos
+objectClass: top
+objectClass: domain
+
+dn: ou=Users,dc=kerberos,dc=example
+objectClass: organizationalUnit
+objectClass: top
+ou: Users
+
+dn: uid=hnelson,ou=Users,dc=kerberos,dc=example
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: Horatio Nelson
+sn: Nelson
+uid: hnelson
+userPassword: secret
+krb5PrincipalName: hnelson@${realm}
+krb5KeyVersionNumber: 0
+
+dn: uid=jduke,ou=Users,dc=kerberos,dc=example
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: Java Duke
+sn: duke
+uid: jduke
+userPassword: theduke
+krb5PrincipalName: jduke@${realm}
+krb5KeyVersionNumber: 0
+
+dn: ou=Services,dc=kerberos,dc=example
+objectClass: organizationalUnit
+objectClass: top
+ou: Services
+
+dn: uid=krbtgt,ou=Services,dc=kerberos,dc=example
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: KDC Service
+sn: Service
+uid: krbtgt
+userPassword: secret
+krb5PrincipalName: krbtgt/${realm}@${realm}
+krb5KeyVersionNumber: 0
+
+dn: uid=ldap,ou=Services,dc=kerberos,dc=example
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: LDAP
+sn: Service
+uid: ldap
+userPassword: randall
+krb5PrincipalName: ldap/kdc.kerberos.example@${realm}
+krb5KeyVersionNumber: 0
+
+dn: uid=member1,ou=Services,dc=kerberos,dc=example
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: Member 1
+sn: Service
+uid: member1
+userPassword: hazelcast
+krb5PrincipalName: hz/member1.kerberos.example@${realm}
+krb5KeyVersionNumber: 0
+
+dn: uid=member2,ou=Services,dc=kerberos,dc=example
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: Member 2
+sn: Service
+uid: member2
+userPassword: hazelcast
+krb5PrincipalName: hz/member2.kerberos.example@${realm}
+krb5KeyVersionNumber: 0
+
+dn: uid=member3,ou=Services,dc=kerberos,dc=example
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: Member 3
+sn: Service
+uid: member3
+userPassword: hazelcast
+krb5PrincipalName: hz/member3.kerberos.example@${realm}
+krb5KeyVersionNumber: 0
