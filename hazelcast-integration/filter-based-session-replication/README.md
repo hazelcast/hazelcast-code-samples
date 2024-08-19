@@ -21,6 +21,7 @@ https://tomcat.apache.org/connectors-doc/reference/workers.html
 
 # Tomcat Deployment
 
+* Use Tomcat 9 or below as javax.servlet is not compatible for higher Tomcat version
 * `cp target/session-replication.war $CATALINA_HOME/webapps/` - Copy war to Tomcat
 * Browse to `http://localhost:8080/session-replication/hazelcast`
 
