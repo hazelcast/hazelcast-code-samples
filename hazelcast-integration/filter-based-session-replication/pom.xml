@@ -29,6 +29,12 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
+        
+         <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-wm</artifactId>
+            <version>5.0</version>
+        </dependency>
     </dependencies>
 
     <build>
