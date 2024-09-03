@@ -1,3 +1,3 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 mvn compile exec:java -Dexec.mainClass="Member"
