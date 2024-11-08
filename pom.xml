@@ -48,17 +48,6 @@
         <spring.boot.version>3.2.0</spring.boot.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>snapshot-repository</id>
-            <name>Maven2 Snapshot Repository</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
     <modules>
         <module>clients</module>
         <module>cluster</module>
