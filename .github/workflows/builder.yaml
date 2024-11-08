@@ -20,5 +20,4 @@ jobs:
       - name: Build and test
         run: |
           set -x
-          mvn -V -B clean package "-Dhazelcast.enterprise.license.key=$HZ_LICENSEKEY" -DskipTests
-    
+          mvn --version --batch-mode --no-transfer-progress --quiet clean package "-Dhazelcast.enterprise.license.key=$HZ_LICENSEKEY" -DskipTests
