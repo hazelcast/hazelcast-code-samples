@@ -7,20 +7,16 @@ on:
   pull_request:
 
 jobs:
-  prepare:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      - name: Set up Java and JFrog credentials
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: temurin
-  build:
-    runs-on: ubuntu-latest
-    needs: prepare
-    steps:
       - name: Build and test
         run: |
           set -x
