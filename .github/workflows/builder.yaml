@@ -22,6 +22,5 @@ jobs:
             --errors \
             --no-transfer-progress \
             ${RUNNER_DEBUG:+--show-version} \
+            "-Dhazelcast.enterprise.license.key=${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}" \
            package
-        env:
-          HZ_LICENSEKEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}
