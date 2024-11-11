@@ -1,10 +1,10 @@
 name: Builder
 
 on:
-  pull_request:
+  pull_request_target:
 
 jobs:
-  default:
+  pr-builder:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -15,8 +15,6 @@ jobs:
           java-version: 17
           distribution: temurin
       - name: Build and test
-        env:
-          HZ_LICENSEKEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}
         run: |
           set ${RUNNER_DEBUG:+-x}
           mvn \
@@ -24,5 +22,5 @@ jobs:
             --errors \
             --no-transfer-progress \
             ${RUNNER_DEBUG:+--show-version} \
-            "-Dhazelcast.enterprise.license.key=${{ env.HZ_LICENSEKEY }}" \
+            "-Dhazelcast.enterprise.license.key=${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}" \
            package
