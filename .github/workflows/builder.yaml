@@ -4,31 +4,9 @@ on:
   pull_request:
 
 jobs:
-  check_for_membership:
-    runs-on: ubuntu-latest
-    name: Check membership of given user
-    outputs:
-      check-result: ${{ steps.composite.outputs.check-result }}
-
-    steps:
-      - name: Action for membership check
-        id: composite
-        uses: hazelcast/hazelcast-tpm/membership@main
-        with:
-          organization-name: 'hazelcast'
-          member-name: ${{ github.event.pull_request.head.repo.owner.login }}
-          token: ${{ secrets.GITHUB_TOKEN }}
   default:
-    needs: [check_for_membership]
     runs-on: ubuntu-latest
     steps:
-      - name: Detect untrusted community PR
-        if: ${{ needs.check_for_membership.outputs.check-result == 'false' }}
-        run: |
-          echo "::error::ERROR: Untrusted external PR. Must be reviewed by Hazelcast" 1>&2;
-          exit 1
-        env:
-          GH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Set up Java
@@ -45,5 +23,5 @@ jobs:
             --no-transfer-progress \
             ${RUNNER_DEBUG:+--show-version} \
            package
-          env:
-            HZ_LICENSEKEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}
+        env:
+          HZ_LICENSEKEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}
