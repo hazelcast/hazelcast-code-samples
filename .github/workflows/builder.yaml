@@ -21,7 +21,7 @@ jobs:
           organization-name: 'hazelcast'
           member-name: ${{ github.event.pull_request.head.repo.owner.login }}
           token: ${{ secrets.GITHUB_TOKEN }}
-  build:
+  default:
     needs: [check_for_membership]
     if: needs.check_for_membership.outputs.check-result == 'true'
     runs-on: ubuntu-latest
