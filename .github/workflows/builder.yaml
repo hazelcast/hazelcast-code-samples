@@ -43,4 +43,11 @@ jobs:
             HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}
         run: |
           set -x
-          mvn --version --batch-mode --no-transfer-progress --quiet clean package -DskipTests
+          mvn \
+            --batch-mode \
+            --errors \
+            --no-transfer-progress \
+            ${RUNNER_DEBUG:+--show-version} \
+           package
+          env:
+            HZ_LICENSEKEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}
