@@ -16,7 +16,7 @@ jobs:
           distribution: temurin
       - name: Build and test
         run: |
-          set ${RUNNER_DEBUG:+-x}
+          ${RUNNER_DEBUG:+set -x}
           mvn \
             --batch-mode \
             --errors \
