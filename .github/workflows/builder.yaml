@@ -20,7 +20,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   default:
     needs: [check_for_membership]
-    if: needs.check_for_membership.outputs.check-result == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Detect untrusted community PR
