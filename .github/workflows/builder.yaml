@@ -38,8 +38,6 @@ jobs:
           java-version: 17
           distribution: temurin
       - name: Build and test
-        env:
-            HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}
         run: |
           set ${RUNNER_DEBUG:+-x}
           mvn \
