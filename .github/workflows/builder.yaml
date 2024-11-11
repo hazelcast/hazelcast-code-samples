@@ -25,8 +25,7 @@ jobs:
       - name: Detect untrusted community PR
         if: ${{ needs.check_for_membership.outputs.check-result == 'false' }}
         run: |
-          gh pr comment ${{ github.event.number }} \
-            --body "👽 Untrusted non Hazelcast PR, \`${GITHUB_JOB}\` must be [run manually](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})."
+          echo "::error::ERROR: Untrusted external PR. Must be reviewed by Hazelcast" 1>&2;
           exit 1
         env:
           GH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
