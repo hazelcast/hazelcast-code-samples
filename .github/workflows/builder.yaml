@@ -42,7 +42,7 @@ jobs:
         env:
             HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}
         run: |
-          set -x
+          set ${RUNNER_DEBUG:+-x}
           mvn \
             --batch-mode \
             --errors \
