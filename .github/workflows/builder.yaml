@@ -36,4 +36,10 @@ jobs:
       - name: Build and test
         run: |
           ${RUNNER_DEBUG:+set -x}
-          ls -al
+          mvn \
+            --batch-mode \
+            --errors \
+            --no-transfer-progress \
+            ${RUNNER_DEBUG:+--show-version} \
+            "-Dhazelcast.enterprise.license.key=${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}" \
+           package
