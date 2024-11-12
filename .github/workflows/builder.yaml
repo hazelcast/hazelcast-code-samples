@@ -19,7 +19,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
   pr-builder:
     runs-on: ubuntu-latest
-    needs: [check_for_membership]
+    needs: check_for_membership
     steps:
       - name: Detect untrusted community PR
         if: ${{ needs.check_for_membership.outputs.check-result == 'false' }}
