@@ -87,6 +87,7 @@
                 <version>${spring.boot.version}</version>
             </plugin>
             <plugin>
+                <!-- See https://hazelcast.atlassian.net/browse/DI-338 -->
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <skipTests>true</skipTests>
