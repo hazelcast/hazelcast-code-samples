@@ -50,7 +50,7 @@
         <module>spring-data-jpa-hazelcast-migration</module>
         <module>springaware-annotation</module>
         <module>eureka</module>
-        <module>spring-hibernate-2ndlevel-cache</module>
+        <!-- <module>spring-hibernate-2ndlevel-cache</module> -->
     </modules>
 
     <dependencies>
