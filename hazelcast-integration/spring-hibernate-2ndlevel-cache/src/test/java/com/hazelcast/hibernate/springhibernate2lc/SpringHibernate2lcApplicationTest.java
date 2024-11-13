@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Version;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.Test;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
