@@ -26,8 +26,9 @@ jobs:
         run: |
           echo "::error::ERROR: Untrusted external PR. Must be reviewed and executed by Hazelcast" 1>&2;
           exit 1
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
