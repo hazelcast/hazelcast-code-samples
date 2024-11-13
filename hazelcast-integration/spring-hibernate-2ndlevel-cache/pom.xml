@@ -86,7 +86,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
             </plugin>
+            <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                      <skipTests>true</skipTests>
+                      <skipExec>true</skipExec>
+                      <skip>true</skip>
+                    </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>

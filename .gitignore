@@ -20,3 +20,4 @@ osgi/felix-cache/
 .java-version
 *.code-workspace
 /enterprise/tls-rbac-demo/keymaterial/
+*.testss
