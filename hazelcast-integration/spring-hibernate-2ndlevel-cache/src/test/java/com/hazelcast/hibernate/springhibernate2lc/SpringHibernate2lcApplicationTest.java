@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.Version;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import java.util.Collection;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Disabled("See https://hazelcast.atlassian.net/browse/DI-338")
 class SpringHibernate2lcApplicationTest {
 
 	private static Logger logger = LoggerFactory.getLogger(SpringHibernate2lcApplicationTest.class);
