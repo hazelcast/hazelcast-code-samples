@@ -12,10 +12,10 @@
     </map>
     <network>
         <join>
-    		<!--
-			Prevent Azure detection on Azure-powered GitHub Runner PR builder
-			DI-338 - Fix Code Samples test
-    		-->
+    	    <!--
+	    Prevent Azure detection on Azure-powered GitHub Runner PR builder
+	    DI-338 - Fix Code Samples test
+    	    -->
             <auto-detection enabled="false" />
         </join>
     </network>
