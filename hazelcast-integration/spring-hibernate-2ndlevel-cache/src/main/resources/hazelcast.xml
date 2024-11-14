@@ -10,4 +10,13 @@
     <map name="com.hazelcast.hibernate.springhibernate2lc.persistence.Book">
         <time-to-live-seconds>30</time-to-live-seconds>
     </map>
+    <network>
+        <join>
+    		<!--
+			Prevent Azure detection on Azure-powered GitHub Runner PR builder
+			DI-338 - Fix Code Samples test
+    		-->
+            <auto-detection enabled="false" />
+        </join>
+    </network>
 </hazelcast>
