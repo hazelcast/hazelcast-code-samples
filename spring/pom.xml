@@ -21,7 +21,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hazelcast-integration</artifactId>
+    <artifactId>spring</artifactId>
     <packaging>pom</packaging>
 
     <parent>
@@ -37,15 +37,11 @@
     </properties>
 
     <modules>
-        <module>aws-ecs</module>
-        <module>dynacache</module>
-        <module>filter-based-session-replication</module>
-        <module>hibernate-2ndlevel-cache</module>
-        <module>jca-ra</module>
-        <module>kubernetes</module>
-        <module>manager-based-session-replication</module>
-        <module>openshift</module>
-        <module>eureka</module>
+        <module>spring-configuration</module>
+        <module>spring-data-hazelcast-chemistry-sample</module>
+        <module>spring-data-jpa-hazelcast-migration</module>
+        <module>spring-hibernate-2ndlevel-cache</module>
+        <module>springaware-annotation</module>
     </modules>
 
     <dependencies>
