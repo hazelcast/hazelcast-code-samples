@@ -1,3 +1,3 @@
-# Caching with Spring Boot and Hazelcast
+# Caching with Spring Boot, JCache and Hazelcast
 
-Moved to https://github.com/hazelcast-guides/springboot-jcache
+See the link:https://docs.hazelcast.com/tutorials/caching-springboot-jcache[tutorial].
