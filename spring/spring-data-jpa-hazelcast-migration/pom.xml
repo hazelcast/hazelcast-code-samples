@@ -3,17 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>hazelcast-integration</artifactId>
+        <artifactId>spring</artifactId>
         <groupId>com.hazelcast.samples</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.hazelcast.samples.spring.data.chemistry</groupId>
-    <artifactId>spring-data-hazelcast-chemistry-sample</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <groupId>com.hazelcast.samples.spring.data.migration</groupId>
+    <artifactId>spring-data-jpa-hazelcast-migration</artifactId>
     <packaging>pom</packaging>
 
-    <name>Spring Data Hazelcast Chemistry Parent (${project.packaging})</name>
+    <name>Spring Data JPA to Hazelcast</name>
     <description>Project POM</description>
 
     <properties>
@@ -21,32 +20,61 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- adding specific Hazelcast version, since spring-data-hazelcast do not support Hazelcast 4.1-SNAPSHOT version -->     
-        <hazelcast.version>3.12.7</hazelcast.version>
-        <spring-data-hazelcast.version>2.2.5</spring-data-hazelcast.version>
+        <spring-data-hazelcast.version>2.1</spring-data-hazelcast.version>
         <spring-shell.version>1.2.0.RELEASE</spring-shell.version>
     </properties>
 
     <modules>
-        <module>common</module>
-        <module>server</module>
-        <module>client</module>
+        <module>shared</module>
+        <module>database</module>
+        <module>before</module>
+        <module>after</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>spring-data-hazelcast</artifactId>
-            <version>${spring-data-hazelcast.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.jboss.spec.javax.annotation</groupId>
-            <artifactId>jboss-annotations-api_1.2_spec</artifactId>
-            <version>1.0.2.Final</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell</artifactId>
+            <version>${spring-shell.version}</version>
+        </dependency>
+
+        <!-- <scope>test</scope> -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- <scope>test</scope> -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
         </dependency>
     </dependencies>
 
@@ -63,16 +91,11 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
             <dependency>
                 <groupId>com.hazelcast</groupId>
                 <artifactId>hazelcast-client</artifactId>
                 <version>${hazelcast.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.shell</groupId>
-                <artifactId>spring-shell</artifactId>
-                <version>${spring-shell.version}</version>
             </dependency>
 
             <!-- adding SpringBoot BOM -->
@@ -86,16 +109,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring.boot.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>

@@ -13,7 +13,7 @@
     <url>http://hazelcast.org/</url>
 
     <parent>
-        <artifactId>hazelcast-integration</artifactId>
+        <artifactId>spring</artifactId>
         <groupId>com.hazelcast.samples</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>

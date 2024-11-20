@@ -8,7 +8,7 @@ in `application.properties`.
 You can spin-up a PostgreSQL instance easily using Docker:
 
 ```shell
-docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres:15
+docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres
 ```
 
 If you want to use Hazelcast client, you can start an IMDG instance in a Docker container easily, and then connect to

@@ -81,6 +81,7 @@
         <module>querying</module>
         <module>serialization</module>
         <module>spi</module>
+        <module>spring</module>
         <module>transactions</module>
         <module>variable-replacers</module>
         <module>generic-record</module>
