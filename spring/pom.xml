@@ -37,6 +37,7 @@
     </properties>
 
     <modules>
+        <module>spring-boot-session-replication-webfilter</module>
         <module>spring-configuration</module>
         <module>spring-data-hazelcast-chemistry-sample</module>
         <module>spring-data-jpa-hazelcast-migration</module>
