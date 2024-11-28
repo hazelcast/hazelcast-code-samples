@@ -42,7 +42,7 @@
         <module>spring-data-jpa-hazelcast-migration</module>
         <module>spring-hibernate-2ndlevel-cache</module>
         <module>springaware-annotation</module>
-        <module>springboot-caching-jcache</module>
+        <module>spring-boot-caching-jcache</module>
     </modules>
 
     <dependencies>
