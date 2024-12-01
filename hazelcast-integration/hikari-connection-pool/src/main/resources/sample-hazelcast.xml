@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast>
+
+    <!--Sample map config XML-->
+    <map name="empaloyee_map">
+        <map-store enabled="true">
+            <class-name>com.demo.maps.EmployeeMapStore</class-name>
+        </map-store>
+    </map>
+
+</hazelcast>
+
