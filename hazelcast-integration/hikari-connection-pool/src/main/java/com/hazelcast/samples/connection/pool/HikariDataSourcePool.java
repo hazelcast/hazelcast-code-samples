@@ -2,12 +2,10 @@ package com.hazelcast.samples.connection.pool;
 
 import com.hazelcast.shaded.com.zaxxer.hikari.HikariConfig;
 import com.hazelcast.shaded.com.zaxxer.hikari.HikariDataSource;
-import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@Slf4j
 public class HikariDataSourcePool {
     private static HikariDataSource hikariDataSource = null;
 
