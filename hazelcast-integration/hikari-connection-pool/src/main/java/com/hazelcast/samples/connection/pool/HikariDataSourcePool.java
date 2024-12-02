@@ -42,8 +42,8 @@ public class HikariDataSourcePool {
             } else {
                 throw new RuntimeException("Ops! Hikari datasource not available.");
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Exception while creating database connection." + e);
+        } catch (SQLException exception) {
+            throw new RuntimeException("Exception while creating database connection." + exception);
         }
     }
 }
