@@ -4,10 +4,7 @@ import com.hazelcast.map.MapLoader;
 import com.hazelcast.map.MapStore;
 import com.hazelcast.samples.model.Employee;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,8 +41,7 @@ public class EmployeeMapStore implements MapLoader<Integer, Employee>, MapStore<
         String query = "SELECT EMPID, NAME, SALARY FROM EMPLOYEE WHERE EMPID=?";
         Employee.EmployeeBuilder employeeBuilder = Employee.builder();
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
-        ) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -101,6 +97,7 @@ public class EmployeeMapStore implements MapLoader<Integer, Employee>, MapStore<
                     preparedStatement.setInt(1, employee.getEmpId());
                     preparedStatement.setString(2, employee.getName());
                     preparedStatement.setDouble(3, employee.getSalary());
+                    preparedStatement.addBatch();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -119,10 +116,31 @@ public class EmployeeMapStore implements MapLoader<Integer, Employee>, MapStore<
     }
 
     @Override
-    public void delete(Integer integer) {
+    public void delete(Integer empId) {
+        String deleteQuery = "DELETE FROM EMPLOYEE WHERE EMPID=?";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+            preparedStatement.setInt(1, empId);
+
+            preparedStatement.executeUpdate();
+        } catch (Exception exception) {
+            System.out.println("Exception : " + exception.getMessage());
+            throw new RuntimeException(exception.getMessage());
+        }
     }
 
     @Override
-    public void deleteAll(Collection<Integer> collection) {
+    public void deleteAll(Collection<Integer> empIds) {
+        String deleteQuery = "DELETE FROM EMPLOYEE WHERE EMPID IN (?)";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+            Array empIdsInArray = connection.createArrayOf("integer", empIds.toArray());
+            preparedStatement.setArray(1, empIdsInArray);
+
+            preparedStatement.executeUpdate();
+        } catch (Exception exception) {
+            System.out.println("Exception : " + exception.getMessage());
+            throw new RuntimeException(exception.getMessage());
+        }
     }
 }
