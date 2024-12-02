@@ -5,7 +5,6 @@ import com.hazelcast.shaded.com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Objects;
 
 public class HikariDataSourcePool {
     private static HikariDataSource hikariDataSource = null;
@@ -34,11 +33,6 @@ public class HikariDataSourcePool {
         hikariDataSource = new HikariDataSource(hikariConfig);
 
         System.out.println("Datasource Created..");
-    }
-
-    public static synchronized HikariDataSourcePool getDataSourcePoolInstance() {
-        return Objects.requireNonNullElseGet(hikariDataSourcePool, HikariDataSourcePool::new);
-
     }
 
     public static synchronized Connection getConnection() {
