@@ -1,14 +1,5 @@
 package com.hazelcast.samples.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+public record Employee(Integer empId, String name, Double salary) {
 
-@Getter
-@Setter
-@Builder
-public class Employee {
-    private Integer empId;
-    private String name;
-    private Double salary;
 }

@@ -39,23 +39,20 @@ public class EmployeeMapStore implements MapLoader<Integer, Employee>, MapStore<
     @Override
     public Employee load(Integer empId) {
         String query = "SELECT EMPID, NAME, SALARY FROM EMPLOYEE WHERE EMPID=?";
-        Employee.EmployeeBuilder employeeBuilder = Employee.builder();
+        Employee employee = null;
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                employeeBuilder
-                        .empId(resultSet.getInt(1))
-                        .name(resultSet.getString(2))
-                        .salary(resultSet.getDouble(3));
+                employee = new Employee(resultSet.getInt(1), resultSet.getString(2), resultSet.getDouble(3));
             }
         } catch (SQLException exception) {
             throw new RuntimeException("Error on load key : " + exception);
         }
 
-        return employeeBuilder.build();
+        return employee;
     }
 
     @Override
@@ -72,9 +69,9 @@ public class EmployeeMapStore implements MapLoader<Integer, Employee>, MapStore<
         String storeQuery = "INSERT INTO EMPLOYEE(EMPID, NAME, SALARY) VALUES(?, ?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(storeQuery)) {
-            preparedStatement.setInt(1, employee.getEmpId());
-            preparedStatement.setString(2, employee.getName());
-            preparedStatement.setDouble(3, employee.getSalary());
+            preparedStatement.setInt(1, employee.empId());
+            preparedStatement.setString(2, employee.name());
+            preparedStatement.setDouble(3, employee.salary());
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -94,9 +91,9 @@ public class EmployeeMapStore implements MapLoader<Integer, Employee>, MapStore<
             map.forEach((identity, employee) -> {
 
                 try {
-                    preparedStatement.setInt(1, employee.getEmpId());
-                    preparedStatement.setString(2, employee.getName());
-                    preparedStatement.setDouble(3, employee.getSalary());
+                    preparedStatement.setInt(1, employee.empId());
+                    preparedStatement.setString(2, employee.name());
+                    preparedStatement.setDouble(3, employee.salary());
                     preparedStatement.addBatch();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
