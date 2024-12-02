@@ -83,8 +83,6 @@ public class EmployeeMapStore implements MapLoader<Integer, Employee>, MapStore<
 
     @Override
     public void storeAll(Map<Integer, Employee> map) {
-        //map.forEach(this::store);
-        //or
         String storeQuery = "INSERT INTO EMPLOYEE(EMPID, NAME, SALARY) VALUES(?, ?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(storeQuery)) {
@@ -101,11 +99,6 @@ public class EmployeeMapStore implements MapLoader<Integer, Employee>, MapStore<
             });
 
             int[] batchResults = preparedStatement.executeBatch();
-
-            // Handle the results if needed
-            for (int result : batchResults) {
-                //TODO: add this if needed
-            }
         } catch (SQLException exception) {
             System.out.println("Exception : " + exception.getMessage());
             throw new RuntimeException(exception.getMessage());

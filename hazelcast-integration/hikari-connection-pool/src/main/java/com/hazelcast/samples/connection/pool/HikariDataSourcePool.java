@@ -5,11 +5,13 @@ import com.hazelcast.shaded.com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class HikariDataSourcePool {
     private static HikariDataSource hikariDataSource = null;
+    private static final HikariDataSourcePool hikariDataSourcePool = null;
 
-    public HikariDataSourcePool() {
+    private HikariDataSourcePool() {
         if (null != hikariDataSource) {
             System.out.println("Hikari data source already created. existing connection can be used.");
         } else {
@@ -34,7 +36,12 @@ public class HikariDataSourcePool {
         System.out.println("Datasource Created..");
     }
 
-    public static Connection getConnection() {
+    public static synchronized HikariDataSourcePool getDataSourcePoolInstance() {
+        return Objects.requireNonNullElseGet(hikariDataSourcePool, HikariDataSourcePool::new);
+
+    }
+
+    public static synchronized Connection getConnection() {
         try {
             if (null != hikariDataSource) {
                 System.err.println("\nGetting....! SQL Connection from HIKARI POOL.\n");
