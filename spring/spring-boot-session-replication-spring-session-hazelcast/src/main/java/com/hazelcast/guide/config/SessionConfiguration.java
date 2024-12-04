@@ -18,6 +18,7 @@ import org.springframework.session.hazelcast.HazelcastSessionSerializer;
 import org.springframework.session.hazelcast.PrincipalNameExtractor;
 import org.springframework.session.hazelcast.config.annotation.SpringSessionHazelcastInstance;
 import org.springframework.session.hazelcast.config.annotation.web.http.EnableHazelcastHttpSession;
+import java.time.Duration;
 
 @Configuration
 @EnableHazelcastHttpSession
@@ -31,7 +32,7 @@ class SessionConfiguration {
             repository.setFlushMode(FlushMode.IMMEDIATE);
             repository.setSaveMode(SaveMode.ALWAYS);
             repository.setSessionMapName(SESSIONS_MAP_NAME);
-            repository.setDefaultMaxInactiveInterval(900);
+            repository.setDefaultMaxInactiveInterval(Duration.ofSeconds(900));
         };
     }
 
@@ -61,17 +62,5 @@ class SessionConfiguration {
 
         return Hazelcast.newHazelcastInstance(config);
     }
-
-    /* Hazelcast Client Instance Bean
-    @Bean
-    @SpringSessionHazelcastInstance
-    public HazelcastInstance hazelcastInstance() {
-        ClientConfig clientConfig = new ClientConfig();
-        clientConfig.getNetworkConfig().addAddress("127.0.0.1:5701");
-        clientConfig.getUserCodeDeploymentConfig().setEnabled(true).addClass(Session.class)
-                .addClass(MapSession.class).addClass(SessionUpdateEntryProcessor.class);
-        return HazelcastClient.newHazelcastClient(clientConfig);
-    }
-    */
 
 }
