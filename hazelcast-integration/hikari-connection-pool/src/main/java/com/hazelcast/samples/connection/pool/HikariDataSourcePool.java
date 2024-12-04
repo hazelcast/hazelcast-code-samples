@@ -6,6 +6,10 @@ import com.hazelcast.shaded.com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Connection pool data source class
+ * Implement this class as thread-safe in multithreading environment
+ */
 public class HikariDataSourcePool {
     private static HikariDataSource hikariDataSource = null;
     private static final HikariDataSourcePool hikariDataSourcePool = null;
@@ -35,6 +39,10 @@ public class HikariDataSourcePool {
         System.out.println("Datasource Created..");
     }
 
+    /**
+     *
+     * Implementation should be thread-safe
+     */
     public static synchronized Connection getConnection() {
         try {
             if (null != hikariDataSource) {
