@@ -29,7 +29,7 @@ public class CommandControllerTest {
     @Test
     public void testPutRequest() {
         //when
-        WebTestClient.ResponseSpec responseSpec = makePostRequest("/put?key={key}&value={value}", "key1", "value1");
+        WebTestClient.ResponseSpec responseSpec = makePutRequest("key1", "value1");
 
         //then
         responseSpec.expectStatus()
@@ -45,7 +45,7 @@ public class CommandControllerTest {
     @Test
     public void testGetRequest() {
         //given
-        makePostRequest("/put?key={key}&value={value}", "key1", "value1");
+        makePutRequest("key1", "value1");
 
         //when
         WebTestClient.ResponseSpec responseSpec = webTestClient
@@ -63,10 +63,10 @@ public class CommandControllerTest {
                     .jsonPath("$.value").isEqualTo("value1");
     }
 
-    private WebTestClient.ResponseSpec makePostRequest(String uri, Object... parameters) {
+    private WebTestClient.ResponseSpec makePutRequest(Object... parameters) {
         return webTestClient
                 .post()
-                .uri(uri, parameters)
+                .uri("/put?key={key}&value={value}", parameters)
                 .header(ACCEPT, APPLICATION_JSON_VALUE)
                 .exchange();
     }
