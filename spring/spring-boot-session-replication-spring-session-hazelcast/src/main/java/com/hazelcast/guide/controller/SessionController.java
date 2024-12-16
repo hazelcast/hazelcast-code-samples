@@ -3,6 +3,7 @@ package com.hazelcast.guide.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.MediaType;
+import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 import org.springframework.session.hazelcast.HazelcastIndexedSessionRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +23,9 @@ public class SessionController {
     private static final String principalIndexName = HazelcastIndexedSessionRepository.PRINCIPAL_NAME_INDEX_NAME;
     private static final DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 
-    final HazelcastIndexedSessionRepository sessionRepository;
+    final FindByIndexNameSessionRepository<?> sessionRepository;
 
-    public SessionController(HazelcastIndexedSessionRepository sessionRepository) {
+    public SessionController(FindByIndexNameSessionRepository<?> sessionRepository) {
         this.sessionRepository = sessionRepository;
     }
 
@@ -50,7 +51,7 @@ public class SessionController {
     /**
      * Lists all the sessions with the same {@link #principalIndexName} of the request's session.
      *
-     * @return All sessions associated with this session's {@linzk #principalIndexName}.
+     * @return All sessions associated with this session's {@link #principalIndexName}.
      */
     @GetMapping(value = "/list", produces = MediaType.TEXT_HTML_VALUE)
     public String listSessionsByPrincipal(HttpServletRequest request) {
@@ -77,7 +78,7 @@ public class SessionController {
         if (session == null) {
             return "<html>No session found.</html>";
         }
-        Map<String, Object> attributes = new LinkedHashMap();
+        Map<String, Object> attributes = new LinkedHashMap<>();
         attributes.put("sessionId", session.getId());
         attributes.put("principal", session.getAttribute(principalIndexName));
         attributes.put("created", formatter.format(new Date(session.getCreationTime())));

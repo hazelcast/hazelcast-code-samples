@@ -18,6 +18,7 @@ import org.springframework.session.hazelcast.HazelcastSessionSerializer;
 import org.springframework.session.hazelcast.PrincipalNameExtractor;
 import org.springframework.session.hazelcast.config.annotation.SpringSessionHazelcastInstance;
 import org.springframework.session.hazelcast.config.annotation.web.http.EnableHazelcastHttpSession;
+
 import java.time.Duration;
 
 @Configuration
