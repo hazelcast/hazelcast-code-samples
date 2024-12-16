@@ -1,6 +1,7 @@
 package com.hazelcast.guide.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.MediaType;
 import org.springframework.session.FindByIndexNameSessionRepository;
@@ -41,7 +42,7 @@ public class SessionController {
      *
      */
     @GetMapping("/create")
-    public String createSession(@RequestParam("principal") String principal, HttpServletRequest request) {
+    public String createSession(@RequestParam("principal") String principal, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         if (session == null) {
             session = request.getSession();

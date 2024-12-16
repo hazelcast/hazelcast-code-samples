@@ -43,6 +43,8 @@ class SessionConfiguration {
         Config config = new Config();
         config.setClusterName("spring-session-cluster");
 
+        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(true);
+
         // Add this attribute to be able to query sessions by their PRINCIPAL_NAME_ATTRIBUTE's
         AttributeConfig attributeConfig = new AttributeConfig()
                 .setName(HazelcastIndexedSessionRepository.PRINCIPAL_NAME_ATTRIBUTE)
