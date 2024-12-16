@@ -1,6 +1,8 @@
 package com.hazelcast.guide;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +17,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HazelcastSpringSessionApplicationTests {
+
+	private static final Logger logger = LoggerFactory.getLogger(HazelcastSpringSessionApplicationTests.class);
 
 	static final String COOKIE_NAME = "SESSION";
 
@@ -31,7 +35,9 @@ class HazelcastSpringSessionApplicationTests {
 
 		// then
 		ResponseEntity<?> response2 = makeRequest(port2, "create", sessionCookie1, principalMap);
-		assertTrue(response2.getBody().toString().contains("Session already exists"));
+		String body = response2.getBody().toString();
+        logger.info("Body contains: {}", body);
+		assertTrue(body.contains("Session already exists"));
 
 	}
 
