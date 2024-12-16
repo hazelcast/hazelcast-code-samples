@@ -23,6 +23,10 @@ public class SessionController {
     private static final String principalIndexName = HazelcastIndexedSessionRepository.PRINCIPAL_NAME_INDEX_NAME;
     private static final DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 
+    /**
+     * Alternatively you can use {@link HazelcastIndexedSessionRepository} directly, then you need to define
+     * a bean of this type in {@code com.hazelcast.guide.config.SessionConfiguration}.
+     */
     final FindByIndexNameSessionRepository<?> sessionRepository;
 
     public SessionController(FindByIndexNameSessionRepository<?> sessionRepository) {
