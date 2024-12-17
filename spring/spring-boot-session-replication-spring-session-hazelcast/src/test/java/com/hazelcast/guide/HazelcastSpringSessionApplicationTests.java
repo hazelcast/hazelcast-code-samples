@@ -14,7 +14,6 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -95,13 +94,11 @@ class HazelcastSpringSessionApplicationTests {
 		var restTemplate = new RestTemplate();
 		var requestEntity = new HttpEntity<>(new HttpHeaders());
 
-		var attempts = new AtomicInteger(0);
 		await()
 				.atMost(Duration.ofMinutes(5))
 				.pollInterval(Duration.ofSeconds(1))
+				.logging(logger::info)
 				.until(() -> {
-					attempts.incrementAndGet();
-					logger.info("Waiting for cluster size, attempt no {} failed", attempts);
 					ResponseEntity<Integer> clusterSize = restTemplate.exchange(url, GET, requestEntity, Integer.class);
 					return clusterSize.getBody() == 2;
 				});
