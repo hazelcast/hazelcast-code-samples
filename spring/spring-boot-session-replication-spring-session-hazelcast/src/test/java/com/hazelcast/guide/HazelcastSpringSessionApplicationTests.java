@@ -10,13 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.springframework.http.HttpMethod.GET;
 
 @SuppressWarnings("DataFlowIssue")
@@ -93,24 +95,16 @@ class HazelcastSpringSessionApplicationTests {
 		var restTemplate = new RestTemplate();
 		var requestEntity = new HttpEntity<>(new HttpHeaders());
 
-		long now = System.currentTimeMillis();
-		long timeout = TimeUnit.MINUTES.toMillis(5);
-		int attempts = 0;
-		while (System.currentTimeMillis() - now < timeout) {
-			logger.info("attempt no {}, remaining time {}", attempts + 1, System.currentTimeMillis() - now);
-			ResponseEntity<Integer> clusterSize = restTemplate.exchange(url, GET, requestEntity, Integer.class);
-			if (clusterSize.getBody() == 2) {
-				return;
-			}
-			attempts++;
-			logger.info("Waiting for cluster size, attempt no {} failed", attempts);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-		throw new IllegalStateException("Cluster has incorrect size");
+		var attempts = new AtomicInteger(0);
+		await()
+				.atMost(Duration.ofMinutes(5))
+				.pollInterval(Duration.ofSeconds(1))
+				.until(() -> {
+					attempts.incrementAndGet();
+					logger.info("Waiting for cluster size, attempt no {} failed", attempts);
+					ResponseEntity<Integer> clusterSize = restTemplate.exchange(url, GET, requestEntity, Integer.class);
+					return clusterSize.getBody() == 2;
+				});
 	}
 
 }
