@@ -46,6 +46,7 @@
         <module>manager-based-session-replication</module>
         <module>openshift</module>
         <module>eureka</module>
+        <module>hikari-connection-pool</module>
     </modules>
 
     <dependencies>

@@ -1,0 +1,4 @@
+hazelcast-client:
+  network:
+    cluster-members:
+      - 127.0.0.1

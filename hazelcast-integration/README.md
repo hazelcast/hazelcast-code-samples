@@ -25,3 +25,5 @@
 	Implementation of integration of MongoDB with hazelcast.
 - <h3>openshift</h3>
   	A guideline to start using Hazelcast on the Red Hat OpenShift platform.
+- <h3>hikari-connection-pool</h3>
+  A sample demo code integrate Hazelcast with Hikari connection pool.
