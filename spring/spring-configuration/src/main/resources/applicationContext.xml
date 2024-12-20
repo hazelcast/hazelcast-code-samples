@@ -6,7 +6,7 @@
                "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
               http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
               http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-              http://www.hazelcast.com/schema/spring http://www.hazelcast.com/schema/spring/hazelcast-spring.xsd">
+              http://www.hazelcast.com/schema/spring https://www.hazelcast.com/schema/spring/hazelcast-spring-5.5.xsd">
 
     <context:component-scan base-package="com.hazelcast.springconfiguration.annotated"/>
 
@@ -52,10 +52,4 @@
     <hz:set id="set" instance-ref="instance" name="Set"/>
     <hz:list id="list" instance-ref="instance" name="List"/>
     <hz:executorService id="executorService" instance-ref="instance" name="ExecutorService"/>
-    <hz:flakeIdGenerator id="flakeIdGenerator" instance-ref="instance" name="FlakeIdGenerator"/>
-    <hz:atomicLong id="atomicLong" instance-ref="instance" name="atomicLong"/>
-    <hz:atomicReference id="atomicReference" instance-ref="instance" name="atomicReference"/>
-    <hz:countDownLatch id="countDownLatch" instance-ref="instance" name="countDownLatch"/>
-    <hz:semaphore id="semaphore" instance-ref="instance" name="semaphore"/>
-    <hz:lock id="lock" instance-ref="instance" name="lock"/>
 </beans>
