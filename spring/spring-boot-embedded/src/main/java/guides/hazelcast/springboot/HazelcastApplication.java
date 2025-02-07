@@ -14,8 +14,10 @@ public class HazelcastApplication {
         SpringApplication.run(HazelcastApplication.class, args);
     }
 
+    //tag::imap-bean[]
     @Bean
-    public IMap<String, String> keyValueMap(@Autowired HazelcastInstance hazelcast) {
-        return hazelcast.getMap("keyValueMap");
+    public IMap<String, String> map(@Autowired HazelcastInstance hazelcast) {
+        return hazelcast.getMap("map");
     }
+    //end::imap-bean[]
 }

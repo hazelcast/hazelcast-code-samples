@@ -123,6 +123,23 @@
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
             <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.5.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                    <argLine>-Djava.net.preferIPv4Stack=true</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>3.5.0</version>
@@ -191,23 +208,23 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
-        </dependency>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>5.11.4</version>
+                <scope>test</scope>
+            </dependency>
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
-            <version>5.10.0</version>
+            <version>5.11.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.0</version>
+            <version>5.11.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
