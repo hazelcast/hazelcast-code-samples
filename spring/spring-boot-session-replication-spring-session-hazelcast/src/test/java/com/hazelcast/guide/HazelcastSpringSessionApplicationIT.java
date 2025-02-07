@@ -21,9 +21,9 @@ import static org.awaitility.Awaitility.await;
 import static org.springframework.http.HttpMethod.GET;
 
 @SuppressWarnings("DataFlowIssue")
-class HazelcastSpringSessionApplicationTests {
+class HazelcastSpringSessionApplicationIT {
 
-	private static final Logger logger = LoggerFactory.getLogger(HazelcastSpringSessionApplicationTests.class);
+	private static final Logger logger = LoggerFactory.getLogger(HazelcastSpringSessionApplicationIT.class);
 
 	static final String COOKIE_NAME = "SESSION";
 
@@ -31,7 +31,9 @@ class HazelcastSpringSessionApplicationTests {
 	void contextLoads() {
 		// given
 		String port1 = startApplication();
+		System.out.println("Started 1st on port: " + port1);
 		String port2 = startApplication();
+		System.out.println("Started 2nd on port: " + port2);
 		Map<String, String> principalMap = Collections.singletonMap("principal", "hazelcast2020");
 
 		waitForCluster(port1);
@@ -39,14 +41,12 @@ class HazelcastSpringSessionApplicationTests {
 		// when
 		ResponseEntity<?> response1 = makeRequest(port1, "create", null, principalMap);
 		String sessionCookie1 = extractSessionCookie(response1);
-		logger.info("First request headers: {}", response1.getHeaders());
-		logger.info("First request body: {}", response1.getBody().toString());
 		logger.info("First session cookie: {}", sessionCookie1);
 
 		// then
 		ResponseEntity<?> response2 = makeRequest(port2, "create", sessionCookie1, principalMap);
 		String body = response2.getBody().toString();
-        logger.info("Body contains: {}", body);
+        logger.info("Body of second query contains: {}", body);
 
 		assertThat(body).contains("Session already exists");
 	}
@@ -95,9 +95,10 @@ class HazelcastSpringSessionApplicationTests {
 		var requestEntity = new HttpEntity<>(new HttpHeaders());
 
 		await()
-				.atMost(Duration.ofMinutes(5))
-				.pollInterval(Duration.ofSeconds(1))
+				.atMost(Duration.ofMinutes(2))
+				.pollInterval(Duration.ofSeconds(2))
 				.logging(logger::info)
+				.alias("Waiting for correct cluster size")
 				.until(() -> {
 					ResponseEntity<Integer> clusterSize = restTemplate.exchange(url, GET, requestEntity, Integer.class);
 					return clusterSize.getBody() == 2;

@@ -59,7 +59,7 @@
         <module>spring-hibernate-2ndlevel-cache</module>
         <module>springaware-annotation</module>
         <module>spring-boot-caching-jcache</module>
-<!--        <module>spring-boot-session-replication-spring-session-hazelcast</module>-->
+        <module>spring-boot-session-replication-spring-session-hazelcast</module>
     </modules>
 
     <dependencies>
