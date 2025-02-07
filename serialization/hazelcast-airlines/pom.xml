@@ -20,9 +20,9 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <hazelcast.version>4.0</hazelcast.version>
+        <hazelcast.version>5.5.0</hazelcast.version>
         <kryo.version>4.0.0</kryo.version>
-        <spring-shell.version>1.2.0.RELEASE</spring-shell.version>
+        <spring-shell.version>3.4.0</spring-shell.version>
     </properties>
 
     <modules>
