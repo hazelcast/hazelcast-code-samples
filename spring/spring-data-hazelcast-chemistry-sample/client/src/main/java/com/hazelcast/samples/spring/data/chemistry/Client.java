@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Run a Hazelcast client as a REST application. Data can be inspected
  * using simple URL calls in a browser.
- *
+ * <p>
  * Use <a href="http://localhost:8080/">http://localhost:8080/</a>
  * to discover what URLs are available.
  */
