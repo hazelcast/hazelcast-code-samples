@@ -27,11 +27,11 @@
         <module>client-near-cache</module>
         <module>client-rest</module>
         <module>client-statistics</module>
+        <module>client-standalone</module>
         <module>user-code-deployment</module>
         <module>client-labels</module>
         <module>client-connection-strategy</module>
     </modules>
-
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
