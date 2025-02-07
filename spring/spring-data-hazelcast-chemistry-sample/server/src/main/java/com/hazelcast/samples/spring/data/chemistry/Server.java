@@ -1,13 +1,15 @@
 package com.hazelcast.samples.spring.data.chemistry;
 
-import org.springframework.shell.Bootstrap;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.shell.command.annotation.CommandScan;
+import org.springframework.shell.command.annotation.EnableCommand;
 
 /**
  * Run a Hazelcast server embedded in a command line interpreter.
- *
- * Use Spring Shell to provide the framework of the command line interpreter, and
+ * <p>
  * extend this with extra commands for this example.
- *
+ * <p>
  * <b><u>Commands</u></b>
  * <ol>
  * <li><b>help</b>List available commands.<i>[built-in]</i>
@@ -30,21 +32,18 @@ import org.springframework.shell.Bootstrap;
  *
  * @see <a href="https://github.com/spring-projects/spring-shell#readme"/>
  */
+@EnableCommand(ServerCommands.class)
+@SpringBootApplication
 public class Server {
 
     /**
      * Launch Spring Shell, pulling in Spring beans for Hazelcast and added
      * command line interpreter commands.
      *
-     * Spring Shell expects XML style config, in
-     * {@code classpath:/META-INF/spring/spring-shell-plugin.xml}.
-     *
      * @param args From the O/s to pass on
-     * @throws Exception Allow failure
      */
-    // TODO: Convert to Spring Boot
-    public static void main(String[] args) throws Exception {
-        System.setProperty("hazelcast.logging.type", "slf4j");
-        Bootstrap.main(args);
+    public static void main(String[] args) {
+        System.setProperty("hazelcast.logging.type", "log4j2");
+        SpringApplication.run(Server.class, args);
     }
 }

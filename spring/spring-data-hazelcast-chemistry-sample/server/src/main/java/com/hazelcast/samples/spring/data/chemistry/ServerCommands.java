@@ -1,10 +1,8 @@
 package com.hazelcast.samples.spring.data.chemistry;
 
 import com.hazelcast.samples.spring.data.chemistry.service.ChemistryService;
-import org.springframework.shell.core.CommandMarker;
-import org.springframework.shell.core.annotation.CliCommand;
-import org.springframework.shell.core.annotation.CliOption;
-import org.springframework.stereotype.Component;
+import org.springframework.shell.command.annotation.Command;
+import org.springframework.shell.command.annotation.Option;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -13,15 +11,15 @@ import java.util.Set;
 /**
  * Define commands to manipulate the test data from the command line.
  */
-@Component
-public class ServerCommands implements CommandMarker {
+@Command(group = "Server Commands")
+public class ServerCommands {
 
     @Resource
     private ChemistryService chemistyService;
 
     /**
      * List all test data present in the cluster.
-     *
+     * <p>
      * <b><i>Usage</i></b>
      * <ul>
      * <li><b>list</b></li>
@@ -29,7 +27,7 @@ public class ServerCommands implements CommandMarker {
      *
      * @return A string displayed in the shell
      */
-    @CliCommand(value = "count", help = "Count the Chemistry test data in the cluster")
+    @Command(command = "count", description = "Count the Chemistry test data in the cluster")
     public String count() {
         Map<String, Long> items = this.chemistyService.count();
 
@@ -38,7 +36,7 @@ public class ServerCommands implements CommandMarker {
 
     /**
      * List all test data present in the cluster.
-     *
+     * <p>
      * <b><i>Usage</i></b>
      * <ul>
      * <li><b>list</b></li>
@@ -46,7 +44,7 @@ public class ServerCommands implements CommandMarker {
      *
      * @return A string displayed in the shell
      */
-    @CliCommand(value = "list", help = "Display the Chemistry test data in the cluster")
+    @Command(description = "Display the Chemistry test data in the cluster")
     public String list() {
         Map<String, Set<Integer>> elements = this.chemistyService.neutrons();
 
@@ -54,8 +52,8 @@ public class ServerCommands implements CommandMarker {
     }
 
     /**
-     * Insert the predefined test data in {@link example.springdata.keyvalue.chemistry.utils.PeriodicTable} into the cluster.
-     *
+     * Insert the predefined test data in {@link Constants#PERIODIC_TABLE} into the cluster.
+     * <p>
      * <b><i>Usage</i></b>
      * <ul>
      * <li><b>load</b></li>
@@ -63,7 +61,7 @@ public class ServerCommands implements CommandMarker {
      *
      * @return A string displayed in the shell
      */
-    @CliCommand(value = "load", help = "Insert Chemistry test data into the cluster")
+    @Command(description = "Insert Chemistry test data into the cluster")
     public String load() {
         int count = this.chemistyService.load();
 
@@ -72,7 +70,7 @@ public class ServerCommands implements CommandMarker {
 
     /**
      * Remove data from the cluster.
-     *
+     * <p>
      * <b><i>Usage</i></b>
      * <ul>
      * <li><b>unload</b>
@@ -87,13 +85,11 @@ public class ServerCommands implements CommandMarker {
      *
      * @return A string displayed in the shell
      */
-    @CliCommand(value = "unload", help = "Remove Chemistry test data from the cluster")
+    @Command(description = "Remove Chemistry test data from the cluster")
     public String unload(
-            @CliOption(key = {"isotope"}
-                    , mandatory = false
-                    , help = "Optionally '--isotope true' or '--isotope false' to only unload isotopes"
-                    , specifiedDefaultValue = "false"
-                    , unspecifiedDefaultValue = "true"
+            @Option(
+                    label = "isotope",
+                    description = "Optionally '--isotope true' or '--isotope false' to only unload isotopes"
             )
             final boolean onlyIsotopes
     ) {

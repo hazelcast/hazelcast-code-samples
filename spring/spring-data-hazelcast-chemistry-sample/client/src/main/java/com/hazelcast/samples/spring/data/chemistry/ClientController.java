@@ -2,7 +2,7 @@ package com.hazelcast.samples.spring.data.chemistry;
 
 import com.hazelcast.samples.spring.data.chemistry.domain.Element;
 import com.hazelcast.samples.spring.data.chemistry.service.ChemistryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,18 +33,19 @@ import java.util.Set;
 @RestController
 public class ClientController {
 
-    @Autowired
-    private ChemistryService chemistryService;
+    private final ChemistryService chemistryService;
+
+    public ClientController(ChemistryService chemistryService) {
+        this.chemistryService = chemistryService;
+    }
 
     /**
      * Return the other URLs supported by this controller.
-     *
+     * <p>
      * HATEOAS or Swagger would be an alternative mechanism here,
      * although unrelated to the purpose of the example.
-     *
-     * @throws MalformedURLException
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping("/")
     public List<URL> index() throws MalformedURLException {
 
         List<URL> urls = new ArrayList<URL>();
@@ -64,7 +65,7 @@ public class ClientController {
      *
      * @return A list of elements that form salt compounds
      */
-    @RequestMapping(value = "/halogens", method = RequestMethod.GET)
+    @GetMapping("/halogens")
     public List<Element> halogens() {
         return this.chemistryService.findElementsByGroupSorted(17);
     }
@@ -94,8 +95,8 @@ public class ClientController {
      * @param weight atomic weight to find
      * @return A possibly empty, non-null list
      */
-    @RequestMapping(value = "/weight/{weight}", method = RequestMethod.GET)
-    public List<Element> weight(@PathVariable final int weight) {
+    @GetMapping("/weight/{weight}")
+    public List<Element> weight(@PathVariable(name = "weight") int weight) {
 
         List<Element> elements = this.chemistryService.findElementsByAtomicWeight(weight);
 
