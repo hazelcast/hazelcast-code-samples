@@ -6,7 +6,7 @@ import com.hazelcast.samples.serialization.hazelcast.airlines.util.Constants;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.MyDataSerializableFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
