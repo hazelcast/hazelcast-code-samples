@@ -103,7 +103,7 @@ public class SessionController {
                 """;
         String rows = attributes.entrySet().stream()
                                 .map(e -> addHtmlTableRow(e.getKey(), e.getValue()))
-                                .collect(Collectors.joining("\n"));
+                                .collect(Collectors.joining("%n"));
         return html.formatted(rows);
     }
 
