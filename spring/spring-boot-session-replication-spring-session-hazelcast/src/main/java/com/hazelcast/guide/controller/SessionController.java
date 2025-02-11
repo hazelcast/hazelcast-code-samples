@@ -101,8 +101,9 @@ public class SessionController {
                     </body>
                 </html>
                 """;
-        StringBuilder rows = new StringBuilder("<html><body>");
-        attributes.forEach((k, v) -> rows.append(addHtmlTableRow(k, v)));
+        String rows = attributes.entrySet().stream()
+                                .map(e -> addHtmlTableRow(e.getKey(), e.getValue()))
+                                .collect(Collectors.joining("\n"));
         return html.formatted(rows);
     }
 

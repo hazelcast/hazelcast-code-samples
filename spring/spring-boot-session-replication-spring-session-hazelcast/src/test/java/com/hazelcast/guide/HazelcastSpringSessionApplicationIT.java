@@ -31,9 +31,9 @@ class HazelcastSpringSessionApplicationIT {
 	void contextLoads() {
 		// given
 		String port1 = startApplication();
-		System.out.println("Started 1st on port: " + port1);
+		logger.info("Started 1st on port: {}", port1);
 		String port2 = startApplication();
-		System.out.println("Started 2nd on port: " + port2);
+		logger.info("Started 2nd on port: {}", port2);
 		Map<String, String> principalMap = Collections.singletonMap("principal", "hazelcast2020");
 
 		waitForCluster(port1);
