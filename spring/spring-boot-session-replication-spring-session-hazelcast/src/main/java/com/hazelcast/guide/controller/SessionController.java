@@ -92,18 +92,27 @@ public class SessionController {
     }
 
     private String toHtmlTable(Map<String, Object> attributes) {
-        StringBuilder html = new StringBuilder("<html><body>");
-        html.append("<table style=\"border-spacing: 5px; border: 1px solid black;\">");
-        attributes.forEach((k, v) -> addHtmlTableRow(html, k, v));
-        html.append("</table></body></html>");
-        return html.toString();
+        String html = """
+                <html>
+                    <body>
+                        <table style="border-spacing: 5px; border: 1px solid black;">
+                        %s
+                        </table>
+                    </body>
+                </html>
+                """;
+        StringBuilder rows = new StringBuilder("<html><body>");
+        attributes.forEach((k, v) -> rows.append(addHtmlTableRow(k, v)));
+        return html.formatted(rows);
     }
 
-    private void addHtmlTableRow(StringBuilder content, String key, Object value) {
-        content.append("<tr>")
-               .append("<th style=\"padding: 5px;\">").append(key).append("</th>")
-               .append("<td style=\"padding: 5px;\">").append(value).append("</td>")
-               .append("</tr>");
+    private String addHtmlTableRow(String key, Object value) {
+        return """
+                <tr>
+                    <td style="padding: 5px;">%s</td>
+                    <td style="padding: 5px;">%s</td>
+                </tr>
+                """.formatted(key, value);
     }
 
 }
