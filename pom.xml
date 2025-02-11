@@ -213,7 +213,7 @@
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
                 <version>5.11.4</version>
-                <scope>impo</scope>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
