@@ -1,6 +1,17 @@
 hazelcast:
   cluster-name: hazelcast-cluster
+  properties:
+    hazelcast.logging.type: log4j2
+    # for faster execution of tests
+    hazelcast.partition.count: 11
+    hazelcast.operation.thread.count: 2
+    hazelcast.operation.generic.thread.count: 2
+    hazelcast.event.thread.count: 1
+  metrics:
+    enabled: false
+
   network:
     join:
       multicast:
         enabled: true
+        loopbackModeEnabled: true

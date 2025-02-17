@@ -4,6 +4,7 @@ import com.hazelcast.config.AttributeConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.IndexConfig;
 import com.hazelcast.config.IndexType;
+import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -43,7 +44,8 @@ class SessionConfiguration {
         Config config = new Config();
         config.setClusterName("spring-session-cluster");
 
-        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(true);
+        NetworkConfig networkConf = config.getNetworkConfig();
+        networkConf.getJoin().getMulticastConfig().setEnabled(true);
 
         // Add this attribute to be able to query sessions by their PRINCIPAL_NAME_ATTRIBUTE's
         AttributeConfig attributeConfig = new AttributeConfig()

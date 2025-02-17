@@ -1,5 +1,6 @@
 package guides.hazelcast.springboot;
 
+import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import org.junit.jupiter.api.Test;
@@ -7,15 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.time.Duration;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CommandControllerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = HazelcastApplication.class)
+public class CommandControllerIT {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -74,10 +77,16 @@ public class CommandControllerTest {
     @Test
     public void testHazelcastCluster() {
         //given
-        Hazelcast.newHazelcastInstance();
+        Config config = Config.load();
+        var hz = Hazelcast.newHazelcastInstance(config);
 
         //then
-        assertThat(hazelcastInstance.getCluster().getMembers())
-                .hasSize(2);
+        try {
+            await()
+                    .atMost(Duration.ofMinutes(2))
+                    .until(() -> hazelcastInstance.getCluster().getMembers().size() == 2);
+        } finally {
+            hz.shutdown();
+        }
     }
 }

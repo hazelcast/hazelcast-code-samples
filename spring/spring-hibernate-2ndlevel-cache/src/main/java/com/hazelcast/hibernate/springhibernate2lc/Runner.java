@@ -42,7 +42,7 @@ class Runner implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         Book book1 = new Book();
         book1.setName("Alice in Wonderland");
         Book book2 = new Book();
@@ -93,18 +93,17 @@ class Runner implements CommandLineRunner {
     private void printCachesFromHazelcast() {
         LOGGER.info("Caches from hazelcast:");
         for (DistributedObject distributedObject : hazelcastInstance.getDistributedObjects()) {
-            LOGGER.info(" - " + distributedObject.getName());
+            LOGGER.info(" - {}", distributedObject.getName());
         }
     }
 
     private void findAllBooks() {
         Iterable<Book> books = repository.findAll();
-        LOGGER.info("Loaded all books: " + books);
+        LOGGER.info("Loaded all books: {}", books);
     }
 
-    private Optional<Book> getBookById(long id) {
+    private void getBookById(long id) {
         Optional<Book> book = repository.findById(id);
         book.ifPresent(p -> LOGGER.info("Loaded book: {}", p));
-        return book;
     }
 }

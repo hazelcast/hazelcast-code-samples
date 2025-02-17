@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>spring</artifactId>
         <groupId>com.hazelcast.samples</groupId>
+        <artifactId>spring</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
@@ -21,10 +21,8 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- adding specific Hazelcast version, since spring-data-hazelcast do not support Hazelcast 4.1-SNAPSHOT version -->     
-        <hazelcast.version>3.12.7</hazelcast.version>
-        <spring-data-hazelcast.version>2.2.5</spring-data-hazelcast.version>
-        <spring-shell.version>1.2.0.RELEASE</spring-shell.version>
+        <spring-data-hazelcast.version>2.4.0</spring-data-hazelcast.version>
+        <spring-shell.version>3.4.0</spring-shell.version>
     </properties>
 
     <modules>
@@ -33,60 +31,6 @@
         <module>client</module>
     </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>spring-data-hazelcast</artifactId>
-            <version>${spring-data-hazelcast.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.annotation</groupId>
-            <artifactId>jboss-annotations-api_1.2_spec</artifactId>
-            <version>1.0.2.Final</version>
-        </dependency>
-    </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.hazelcast</groupId>
-                <artifactId>spring-data-hazelcast</artifactId>
-                <version>${spring-data-hazelcast.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.hazelcast</groupId>
-                        <artifactId>hazelcast</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.hazelcast</groupId>
-                <artifactId>hazelcast-client</artifactId>
-                <version>${hazelcast.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.shell</groupId>
-                <artifactId>spring-shell</artifactId>
-                <version>${spring-shell.version}</version>
-            </dependency>
-
-            <!-- adding SpringBoot BOM -->
-            <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html#using-boot-maven-without-a-parent-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <type>pom</type>
-                <scope>import</scope>
-                <version>${spring.boot.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-    
     <build>
         <pluginManagement>
             <plugins>
@@ -98,4 +42,47 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- adding SpringBoot BOM -->
+            <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html#using-boot-maven-without-a-parent-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.shell</groupId>
+                <artifactId>spring-shell-dependencies</artifactId>
+                <version>${spring-shell.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>spring-data-hazelcast</artifactId>
+            <version>${spring-data-hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.annotation</groupId>
+            <artifactId>jboss-annotations-api_1.2_spec</artifactId>
+            <version>1.0.2.Final</version>
+        </dependency>
+    </dependencies>
 </project>

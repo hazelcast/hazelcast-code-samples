@@ -2,7 +2,7 @@ package com.hazelcast.samples.serialization.hazelcast.airlines;
 
 import com.hazelcast.samples.serialization.hazelcast.airlines.util.FlightBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

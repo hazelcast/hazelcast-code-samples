@@ -97,12 +97,13 @@ class ClientCertCheckingLoginModuleTest {
                 .setProperty("hazelcast.phone.home.enabled", "false");
         JoinConfig joinConfig = config.getNetworkConfig().getJoin();
         joinConfig.getTcpIpConfig().setEnabled(true).addMember("127.0.0.1");
-        config.getNetworkConfig().setSSLConfig(new SSLConfig()).getSSLConfig().setEnabled(true)
-                .setProperty("mutualAuthentication", "REQUIRED") //
-                .setProperty("keyStore", "src/" + storeName + ".p12") //
-                .setProperty("keyStorePassword", "123456") //
-                .setProperty("trustStore", "src/ca.p12") //
-                .setProperty("trustStorePassword", "123456");
+        SSLConfig sslConf = config.getNetworkConfig().setSSLConfig(new SSLConfig()).getSSLConfig();
+        sslConf.setEnabled(true)
+                 .setProperty("mutualAuthentication", "REQUIRED") //
+                 .setProperty("keyStore", "src/" + storeName + ".p12") //
+                 .setProperty("keyStorePassword", "123456") //
+                 .setProperty("trustStore", "src/ca.p12") //
+                 .setProperty("trustStorePassword", "123456");
         SecurityConfig securityConfig = config.getSecurityConfig().setEnabled(true);
         securityConfig.setMemberRealmConfig("memberRealm",
                 new RealmConfig().setJaasAuthenticationConfig(new JaasAuthenticationConfig().addLoginModuleConfig(

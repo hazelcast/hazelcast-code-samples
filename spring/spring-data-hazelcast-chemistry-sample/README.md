@@ -100,8 +100,5 @@ Try `http://localhost:8080`, as this lists the other available URLs.
 Experiment with running the `load` and `unload` command on the server to populate and depopulate the test data, to see how the web page responses change. Really though this should be fairly obvious, it's how little coding is required that's the area to focus on.
 
 ## Potential improvements
-### Spring Shell
-The server site uses _spring-shell_ to make an executable Jar file that takes command line input. This should not be too difficult to convert to be a _spring-boot_ `CommandLineRunner` that bootstraps into the command line shell.
-
 ### Controller URLs
 For simplicity, on the `ClientController` module the landing page returns a list of the other URLs that the controller supports. Adding HATEOAS (_spring-hateoas_), Swagger or `@RepositoryRestController` would be simple steps to make this self-generate.

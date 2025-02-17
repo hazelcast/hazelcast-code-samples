@@ -1,7 +1,7 @@
 package com.hazelcast.samples.serialization.hazelcast.airlines;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.shell.Bootstrap;
 
 /**
  * <p>Use Spring Boot and Spring Shell to build a Hazelcast
@@ -19,9 +19,9 @@ public class Application {
      *
      * @param args From command line
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         System.setProperty("hazelcast.logging.type", "slf4j");
-        Bootstrap.main(args);
+        SpringApplication.run(Application.class, args);
     }
 
 }
