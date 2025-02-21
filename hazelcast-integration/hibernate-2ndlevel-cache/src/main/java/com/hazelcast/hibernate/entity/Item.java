@@ -24,7 +24,7 @@ public class Item {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
     @Cache(region = "SubItems-Collection-Cache", usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<SubItem> subItems = new ArrayList<SubItem>();
+    private List<SubItem> subItems = new ArrayList<>();
 
     public Item() { }
 

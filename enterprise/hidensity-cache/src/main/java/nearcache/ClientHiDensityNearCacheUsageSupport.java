@@ -114,7 +114,7 @@ abstract class ClientHiDensityNearCacheUsageSupport extends ClientNearCacheUsage
         EnterpriseSerializationService enterpriseSerializationService =
                 (EnterpriseSerializationService) client.getSerializationService();
 
-        return new HiDensityNearCacheSupportContext<K, V>(cache, enterpriseSerializationService.getMemoryManager());
+        return new HiDensityNearCacheSupportContext<>(cache, enterpriseSerializationService.getMemoryManager());
     }
 
     class HiDensityNearCacheSupportContext<K, V> {

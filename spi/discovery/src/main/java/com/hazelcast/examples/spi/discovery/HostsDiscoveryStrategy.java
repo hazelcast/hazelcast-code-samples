@@ -74,7 +74,7 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
         // read all lines
         List<String> lines = readLines(hosts);
 
-        List<String> assignments = new ArrayList<String>();
+        List<String> assignments = new ArrayList<>();
         for (String line : lines) {
             // example:
             // 192.168.0.1   host1.cluster.local
@@ -86,7 +86,7 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
     }
 
     private Iterable<DiscoveryNode> mapToDiscoveryNodes(List<String> assignments) {
-        Collection<DiscoveryNode> discoveredNodes = new ArrayList<DiscoveryNode>();
+        Collection<DiscoveryNode> discoveredNodes = new ArrayList<>();
 
         for (String assignment : assignments) {
             String address = sliceAddress(assignment);
@@ -104,7 +104,7 @@ public class HostsDiscoveryStrategy extends AbstractDiscoveryStrategy {
 
     private List<String> readLines(File hosts) {
         try {
-            List<String> lines = new ArrayList<String>();
+            List<String> lines = new ArrayList<>();
             BufferedReader reader = new BufferedReader(new FileReader(hosts));
 
             String line;

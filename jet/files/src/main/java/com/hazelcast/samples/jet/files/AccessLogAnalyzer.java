@@ -106,7 +106,7 @@ public class AccessLogAnalyzer {
         int qmarkPos = logLine.getEndpoint().indexOf('?');
         String endpoint = qmarkPos < 0 ? logLine.getEndpoint() : logLine.getEndpoint().substring(0, qmarkPos);
 
-        return new Traverser<String>() {
+        return new Traverser<>() {
             private int indexOfSlash;
 
             @Override

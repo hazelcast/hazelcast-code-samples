@@ -37,7 +37,7 @@ public class PortableDomainObjectExample extends AbstractApp {
     }
 
     private Cache<String, DomainObject> getCache(CacheManager cacheManager1) {
-        MutableConfiguration<String, DomainObject> config = new MutableConfiguration<String, DomainObject>();
+        MutableConfiguration<String, DomainObject> config = new MutableConfiguration<>();
         config.setStoreByValue(true)
                 .setTypes(String.class, DomainObject.class)
                 .setStatisticsEnabled(false);

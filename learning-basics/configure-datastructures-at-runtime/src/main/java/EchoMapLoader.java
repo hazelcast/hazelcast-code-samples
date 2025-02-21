@@ -31,7 +31,7 @@ public class EchoMapLoader implements MapLoader<String, String> {
 
     @Override
     public Map<String, String> loadAll(Collection<String> keys) {
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, String> result = new HashMap<>();
         for (String key : keys) {
             result.put(key, key);
         }

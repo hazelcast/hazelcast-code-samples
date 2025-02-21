@@ -52,7 +52,7 @@ public class PredicateMember {
     }
 
     private Set<Person> getWithNameNaive(String name) {
-        Set<Person> result = new HashSet<Person>();
+        Set<Person> result = new HashSet<>();
         for (Person person : personMap.values()) {
             if (person.getName().equals(name)) {
                 result.add(person);

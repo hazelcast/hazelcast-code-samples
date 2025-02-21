@@ -62,7 +62,7 @@ public class CustomSplitBrainProtectionFunctionTest {
         splitBrainProtectionFunction.memberAdded(mockEvent(members.get(0)));
         splitBrainProtectionFunction.memberAdded(mockEvent(members.get(1)));
 
-        List<Member> splitCluster = new ArrayList<Member>();
+        List<Member> splitCluster = new ArrayList<>();
         splitCluster.add(members.get(0));
         assertFalse(splitBrainProtectionFunction.apply(splitCluster));
     }

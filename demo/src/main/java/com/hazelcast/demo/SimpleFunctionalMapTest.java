@@ -78,7 +78,7 @@ public final class SimpleFunctionalMapTest {
      * Map statistics class
      */
     private static class Stats {
-        Map<String, AtomicLong> mapStats = new ConcurrentHashMap<String, AtomicLong>(10);
+        Map<String, AtomicLong> mapStats = new ConcurrentHashMap<>(10);
 
         Stats() {
             mapStats.put("put", new AtomicLong(0));

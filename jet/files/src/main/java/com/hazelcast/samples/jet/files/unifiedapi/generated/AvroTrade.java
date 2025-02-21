@@ -20,10 +20,10 @@ public class AvroTrade extends org.apache.avro.specific.SpecificRecordBase imple
   private static SpecificData MODEL$ = new SpecificData();
 
   private static final BinaryMessageEncoder<AvroTrade> ENCODER =
-      new BinaryMessageEncoder<AvroTrade>(MODEL$, SCHEMA$);
+      new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
 
   private static final BinaryMessageDecoder<AvroTrade> DECODER =
-      new BinaryMessageDecoder<AvroTrade>(MODEL$, SCHEMA$);
+      new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
@@ -37,7 +37,7 @@ public class AvroTrade extends org.apache.avro.specific.SpecificRecordBase imple
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
   public static BinaryMessageDecoder<AvroTrade> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<AvroTrade>(MODEL$, SCHEMA$, resolver);
+    return new BinaryMessageDecoder<>(MODEL$, SCHEMA$, resolver);
   }
 
   /** Serializes this AvroTrade to a ByteBuffer. */

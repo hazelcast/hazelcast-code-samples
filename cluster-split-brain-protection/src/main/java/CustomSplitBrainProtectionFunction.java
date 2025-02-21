@@ -23,7 +23,7 @@ public class CustomSplitBrainProtectionFunction implements SplitBrainProtectionF
     static final long HEARTBEAT_TOLERANCE_MILLIS = 3000;
     static final int SPLIT_BRAIN_PROTECTION_SIZE = 2;
 
-    private Map<Member, Long> lastHeartbeatReceived = new HashMap<Member, Long>();
+    private Map<Member, Long> lastHeartbeatReceived = new HashMap<>();
 
     @Override
     public void memberAdded(MembershipEvent membershipEvent) {

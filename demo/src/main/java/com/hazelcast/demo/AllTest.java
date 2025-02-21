@@ -60,7 +60,7 @@ public final class AllTest {
 
     private final HazelcastInstance hazelcast;
     private final int nThreads;
-    private final List<Runnable> operations = new ArrayList<Runnable>();
+    private final List<Runnable> operations = new ArrayList<>();
     private final ExecutorService ex;
     private final Random random = new Random();
     private final AtomicInteger messagesReceived = new AtomicInteger(0);

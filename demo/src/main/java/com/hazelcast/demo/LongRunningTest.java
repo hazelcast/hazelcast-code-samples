@@ -41,7 +41,7 @@ public final class LongRunningTest {
     private static final int STATS_SECONDS = 10;
     private static final Logger LOGGER = Logger.getLogger(LongRunningTest.class.getName());
 
-    private final List<TheNode> nodes = new CopyOnWriteArrayList<TheNode>();
+    private final List<TheNode> nodes = new CopyOnWriteArrayList<>();
     private final Random random;
     private int nodeIdGen;
     private int starts;

@@ -222,7 +222,7 @@ public class ClientCertCheckingLoginModule implements LoginModule {
             return Collections.emptySet();
         }
         LdapName ldapName = new LdapName(cert.getSubjectX500Principal().getName());
-        Set<String> values = new HashSet<String>();
+        Set<String> values = new HashSet<>();
         for (Rdn rdn : ldapName.getRdns()) {
             values.addAll(getAttributeValues(rdn.toAttributes(), attribute));
         }
@@ -230,7 +230,7 @@ public class ClientCertCheckingLoginModule implements LoginModule {
     }
 
     private static Collection<String> getAttributeValues(Attributes attributes, String attribute) throws NamingException {
-        Set<String> names = new HashSet<String>();
+        Set<String> names = new HashSet<>();
         Attribute attr = attribute != null && attributes != null ? attributes.get(attribute) : null;
         if (attr != null) {
             NamingEnumeration<?> values = attr.getAll();
