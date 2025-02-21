@@ -140,7 +140,6 @@ public class SimpleLdapServer {
     /**
      * Imports given LDIF files to the directory using given directory service and schema manager.
      *
-     * @param ldifFiles
      * @throws Exception
      */
     public void importLdifFiles(String... ldifFiles) throws Exception {
