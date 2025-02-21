@@ -97,10 +97,15 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
     this.status = status;
   }
 
-  public org.apache.avro.specific.SpecificData getSpecificData() { return MODEL$; }
-  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
-  // Used by DatumWriter.  Applications should not call.
-  public java.lang.Object get(int field$) {
+    @Override
+    public org.apache.avro.specific.SpecificData getSpecificData() { return MODEL$; }
+
+    @Override
+    public org.apache.avro.Schema getSchema() { return SCHEMA$; }
+
+    // Used by DatumWriter.  Applications should not call.
+    @Override
+    public java.lang.Object get(int field$) {
     switch (field$) {
     case 0: return name;
     case 1: return password;
@@ -110,9 +115,10 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
     }
   }
 
-  // Used by DatumReader.  Applications should not call.
-  @SuppressWarnings(value="unchecked")
-  public void put(int field$, java.lang.Object value$) {
+    // Used by DatumReader.  Applications should not call.
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: name = (java.lang.CharSequence)value$; break;
     case 1: password = (java.lang.CharSequence)value$; break;

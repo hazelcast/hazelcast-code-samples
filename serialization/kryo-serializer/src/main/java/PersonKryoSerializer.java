@@ -21,10 +21,12 @@ public class PersonKryoSerializer implements StreamSerializer<Person> {
         }
     };
 
+    @Override
     public int getTypeId() {
         return 2;
     }
 
+    @Override
     public void write(ObjectDataOutput objectDataOutput, Person product) throws IOException {
         Kryo kryo = KRYO_THREAD_LOCAL.get();
 
@@ -33,6 +35,7 @@ public class PersonKryoSerializer implements StreamSerializer<Person> {
         output.flush();
     }
 
+    @Override
     public Person read(ObjectDataInput objectDataInput) throws IOException {
         InputStream in = (InputStream) objectDataInput;
         Input input = new Input(in);
@@ -40,6 +43,7 @@ public class PersonKryoSerializer implements StreamSerializer<Person> {
         return kryo.readObject(input, Person.class);
     }
 
+    @Override
     public void destroy() {
     }
 }

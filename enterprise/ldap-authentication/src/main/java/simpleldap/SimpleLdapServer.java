@@ -222,6 +222,7 @@ public class SimpleLdapServer {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void init(String name) throws Exception {
             if ((directoryService != null) && directoryService.isStarted()) {
                 return;
@@ -284,6 +285,7 @@ public class SimpleLdapServer {
         /**
          * {@inheritDoc}
          */
+        @Override
         public DirectoryService getDirectoryService() throws Exception {
             return directoryService;
         }
@@ -291,6 +293,7 @@ public class SimpleLdapServer {
         /**
          * {@inheritDoc}
          */
+        @Override
         public PartitionFactory getPartitionFactory() throws Exception {
             return partitionFactory;
         }

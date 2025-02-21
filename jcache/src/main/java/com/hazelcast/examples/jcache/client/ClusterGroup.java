@@ -37,6 +37,7 @@ public class ClusterGroup extends AbstractApp {
         init();
     }
 
+    @Override
     public void shutdown() {
         Hazelcast.shutdownAll();
     }
