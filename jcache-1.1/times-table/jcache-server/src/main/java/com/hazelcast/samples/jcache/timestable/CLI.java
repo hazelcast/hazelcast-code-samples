@@ -51,7 +51,7 @@ public class CLI extends DefaultPromptProvider implements CommandMarker {
             log.info("Client => name '{}'", client);
         }
 
-        if (clients.size() > 0) {
+        if (!clients.isEmpty()) {
             log.info("-----------------------");
         }
         log.info("[{} client{}]",
@@ -81,7 +81,7 @@ public class CLI extends DefaultPromptProvider implements CommandMarker {
             }
         }
 
-        if (distributedObjects.size() > 0) {
+        if (!distributedObjects.isEmpty()) {
             log.info("-----------------------");
         }
         log.info("[{} distributed object{}]",

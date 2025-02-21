@@ -266,7 +266,7 @@ public class SimpleLdapServer {
             schemaPartition.setWrappedPartition(inMemorySchemaPartition);
             directoryService.setSchemaPartition(schemaPartition);
             List<Throwable> errors = schemaManager.getErrors();
-            if (errors.size() != 0) {
+            if (!errors.isEmpty()) {
                 throw new Exception(I18n.err(I18n.ERR_317, Exceptions.printErrors(errors)));
             }
 

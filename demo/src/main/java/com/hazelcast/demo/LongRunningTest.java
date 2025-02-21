@@ -85,7 +85,7 @@ public final class LongRunningTest {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 log("Shutting down " + nodes.size());
-                while (nodes.size() > 0) {
+                while (!nodes.isEmpty()) {
                     removeNode();
                 }
             }
