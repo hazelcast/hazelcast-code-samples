@@ -18,7 +18,6 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- these versions are set by the build profile, see the bottom of this file -->
         <hazelcast.version>${profile.hazelcast.version}</hazelcast.version>

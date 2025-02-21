@@ -9,7 +9,6 @@
     </parent>
 
     <artifactId>spring-boot-caching-hazelcast-cache-manager</artifactId>
-    <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Spring Boot Caching with Hazelcast Cache Manager</name>
 

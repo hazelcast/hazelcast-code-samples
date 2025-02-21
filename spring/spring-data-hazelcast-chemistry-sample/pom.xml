@@ -10,7 +10,6 @@
 
     <groupId>com.hazelcast.samples.spring.data.chemistry</groupId>
     <artifactId>spring-data-hazelcast-chemistry-sample</artifactId>
-    <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Spring Data Hazelcast Chemistry Parent (${project.packaging})</name>
@@ -19,7 +18,6 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <spring-data-hazelcast.version>2.4.0</spring-data-hazelcast.version>
         <spring-shell.version>3.4.0</spring-shell.version>

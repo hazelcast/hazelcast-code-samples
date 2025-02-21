@@ -4,7 +4,6 @@
     <artifactId>ocp-demo-frontend</artifactId>
     <name>ocp-demo-frontend</name>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
 
     <parent>
         <artifactId>client-apps</artifactId>
@@ -16,7 +15,6 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
