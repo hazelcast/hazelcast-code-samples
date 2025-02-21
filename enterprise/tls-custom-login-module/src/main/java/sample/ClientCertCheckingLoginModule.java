@@ -248,7 +248,7 @@ public class ClientCertCheckingLoginModule implements LoginModule {
 
     protected String getStringOption(String optionName, String defaultValue) {
         String option = getOptionInternal(optionName);
-        return option != null ? option.toString() : defaultValue;
+        return option != null ? option : defaultValue;
     }
 
     private String getOptionInternal(String optionName) {

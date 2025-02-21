@@ -73,7 +73,7 @@ public class CLI {
         if (flightsMap.containsKey(myKey)) {
             SeatReservationEntryProcessor seatReservationEntryProcessor = new SeatReservationEntryProcessor(name);
 
-            String seat = flightsMap.executeOnKey(myKey, seatReservationEntryProcessor).toString();
+            String seat = flightsMap.executeOnKey(myKey, seatReservationEntryProcessor);
 
             if (seat == null) {
                 return String.format("Flight '%s' is full, sorry.%n", myKey);
