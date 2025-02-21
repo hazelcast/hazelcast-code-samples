@@ -36,7 +36,7 @@ import com.hazelcast.examples.helper.LicenseUtils;
 class ClientCertCheckingLoginModuleTest {
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         HazelcastClient.shutdownAll();
         Hazelcast.shutdownAll();
     }

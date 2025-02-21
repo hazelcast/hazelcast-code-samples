@@ -11,7 +11,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class ApplicationTest {
+class ApplicationTest {
 
     @LocalServerPort
     private int port;
@@ -23,7 +23,7 @@ public class ApplicationTest {
     private HazelcastInstance hazelcastInstance;
 
     @Test
-    public void useCachedValue() {
+    void useCachedValue() {
         // given
         String isbn = "12345";
         String cachedValue = "cached-value";
