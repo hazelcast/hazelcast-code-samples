@@ -251,8 +251,6 @@ public final class LongRunningTest {
                             Stats currentStats = stats.getAndReset();
                             logger.info("Cluster size: " + clusterSize + ", Operations per second: "
                                     + (currentStats.total() / STATS_SECONDS));
-                        } catch (HazelcastInstanceNotActiveException e) {
-                            throw new RuntimeException(e);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
