@@ -5,7 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.hazelcast</groupId>
     <artifactId>jet-kafka-connect</artifactId>
-    <version>0.1-SNAPSHOT</version>
     <parent>
         <groupId>com.hazelcast.samples.jet</groupId>
         <artifactId>jet</artifactId>
@@ -13,7 +12,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
     </properties>

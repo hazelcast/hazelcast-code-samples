@@ -18,7 +18,6 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <spring-data-hazelcast.version>2.1</spring-data-hazelcast.version>
         <spring-shell.version>1.2.0.RELEASE</spring-shell.version>

@@ -19,7 +19,6 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <atomikos-version>3.9.3</atomikos-version>
     </properties>

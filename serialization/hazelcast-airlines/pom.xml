@@ -18,7 +18,6 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <hazelcast.version>5.5.0</hazelcast.version>
         <kryo.version>4.0.0</kryo.version>
