@@ -67,6 +67,7 @@
         <module>wordcount-compute-isolation</module>
         <module>cdc</module>
         <module>mongodb</module>
+        <module>operator-jet-job-snapshot/jet-pipelines</module>
     </modules>
 
     <properties>
