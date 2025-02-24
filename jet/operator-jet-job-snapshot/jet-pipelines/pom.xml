@@ -3,32 +3,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.examples.jet.snapshot</groupId>
     <artifactId>jet-pipelines</artifactId>
-    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <artifactId>jet</artifactId>
+        <groupId>com.hazelcast.samples.jet</groupId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
     <name>jet-pipelines</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <hazelcast-version>5.4.0</hazelcast-version>
-        <junit-jupiter-api-version>5.8.2</junit-jupiter-api-version>
-        <maven-surefire-plugin-version>3.0.0-M7</maven-surefire-plugin-version>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>${hazelcast-version}</version>
-            <scope>provided</scope>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit-jupiter-api-version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -38,7 +32,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin-version}</version>
             </plugin>
         </plugins>
     </build>
