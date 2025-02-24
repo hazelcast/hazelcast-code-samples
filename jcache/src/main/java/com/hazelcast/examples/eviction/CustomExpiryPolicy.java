@@ -83,7 +83,6 @@ public class CustomExpiryPolicy {
 
         /**
          * By default, new entries live for only two seconds
-         * @return
          */
         @Override
         public Duration getExpiryForCreation() {
@@ -92,7 +91,6 @@ public class CustomExpiryPolicy {
 
         /**
          * Access operations do not change expiry time
-         * @return
          */
         @Override
         public Duration getExpiryForAccess() {
@@ -101,7 +99,6 @@ public class CustomExpiryPolicy {
 
         /**
          * Update operations make the entry eternal
-         * @return
          */
         @Override
         public Duration getExpiryForUpdate() {

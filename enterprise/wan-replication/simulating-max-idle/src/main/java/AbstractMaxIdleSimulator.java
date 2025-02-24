@@ -307,7 +307,7 @@ abstract class AbstractMaxIdleSimulator {
                         Map<String, ExpiryData> keyToExpiryData,
                         IMap<String, String> mapA,
                         IMap<String, String> mapB) {
-        if (keyToExpiryData.keySet().size() < 1) {
+        if (keyToExpiryData.keySet().isEmpty()) {
             return;
         }
 

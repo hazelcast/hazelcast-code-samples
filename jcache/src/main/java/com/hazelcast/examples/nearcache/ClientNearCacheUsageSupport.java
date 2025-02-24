@@ -36,7 +36,7 @@ public abstract class ClientNearCacheUsageSupport {
     private static final int INVALIDATION_DELAY_SECONDS
             = 2 * parseInt(CACHE_INVALIDATION_MESSAGE_BATCH_FREQUENCY_SECONDS.getDefaultValue());
 
-    protected final List<HazelcastInstance> clients = new LinkedList<HazelcastInstance>();
+    protected final List<HazelcastInstance> clients = new LinkedList<>();
 
     private final InMemoryFormat inMemoryFormat;
     private final HazelcastInstance serverInstance;

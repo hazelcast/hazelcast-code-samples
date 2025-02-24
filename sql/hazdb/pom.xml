@@ -26,7 +26,6 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
         <docker.image.prefix>hazdb</docker.image.prefix>

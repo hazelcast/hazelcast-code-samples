@@ -65,7 +65,7 @@ public class AbstractApp {
      */
     protected Cache<String, Integer> initCache(String name, CacheManager cacheManager) {
         // configure the cache
-        MutableConfiguration<String, Integer> config = new MutableConfiguration<String, Integer>();
+        MutableConfiguration<String, Integer> config = new MutableConfiguration<>();
         config.setStoreByValue(true)
                 .setTypes(String.class, Integer.class)
                 .setExpiryPolicyFactory(AccessedExpiryPolicy.factoryOf(TEN_SEC))
@@ -80,7 +80,7 @@ public class AbstractApp {
      */
     protected Cache<String, Integer> initCache(String name, CacheManager cacheManager, Duration duration) {
         // configure the cache
-        MutableConfiguration<String, Integer> config = new MutableConfiguration<String, Integer>();
+        MutableConfiguration<String, Integer> config = new MutableConfiguration<>();
         config.setStoreByValue(true)
                 .setTypes(String.class, Integer.class)
                 .setExpiryPolicyFactory(AccessedExpiryPolicy.factoryOf(duration))

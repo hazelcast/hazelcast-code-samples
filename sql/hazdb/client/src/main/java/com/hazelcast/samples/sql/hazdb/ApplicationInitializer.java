@@ -70,8 +70,6 @@ public class ApplicationInitializer {
 
     /**
      * <p>Add CDC</p>
-     *
-     * @return
      */
     private boolean createCDCJobs() {
         // Destination needs to match Cdc.js
@@ -125,9 +123,6 @@ public class ApplicationInitializer {
      * <p>
      * Check for running jobs with similar name
      * </p>
-     *
-     * @param prefix
-     * @param jobName
      */
     private void checkJob(String prefix, String jobName) {
         for (Job job : this.hazelcastInstance.getJet().getJobs()) {

@@ -146,7 +146,7 @@ public final class SimpleCacheTest {
                 propertiesByInstanceItself(instance));
 
         // configure the cache
-        MutableConfiguration<String, Object> config = new MutableConfiguration<String, Object>();
+        MutableConfiguration<String, Object> config = new MutableConfiguration<>();
         config.setStoreByValue(true)
                 .setTypes(String.class, Object.class)
                 .setStatisticsEnabled(false);

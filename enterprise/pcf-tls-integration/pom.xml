@@ -6,7 +6,6 @@
 
     <groupId>com.hazelcast.samples</groupId>
     <artifactId>pcf-tls-integration</artifactId>
-    <version>0.1-SNAPSHOT</version>
     <description>A sample Spring Boot Application to demonstrate integration with Hazelcast for PCF with TLS enabled</description>
 
     <parent>
@@ -20,7 +19,6 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <!-- adding SpringBoot BOM -->

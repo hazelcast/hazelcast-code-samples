@@ -30,7 +30,7 @@ public class V5FlightSerializer implements StreamSerializer<V5Flight> {
      * serialize it.
      * </p>
      */
-    private static final ThreadLocal<Kryo> KRYO_THREAD_LOCAL = new ThreadLocal<Kryo>() {
+    private static final ThreadLocal<Kryo> KRYO_THREAD_LOCAL = new ThreadLocal<>() {
         @Override
         protected Kryo initialValue() {
             Kryo kryo = new Kryo();

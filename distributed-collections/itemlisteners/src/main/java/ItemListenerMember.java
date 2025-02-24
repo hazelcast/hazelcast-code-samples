@@ -14,10 +14,12 @@ public class ItemListenerMember {
     }
 
     private static class ItemListenerImpl<E> implements ItemListener<E> {
+        @Override
         public void itemAdded(ItemEvent<E> itemEvent) {
             System.out.println("Item added:" + itemEvent.getItem());
         }
 
+        @Override
         public void itemRemoved(ItemEvent<E> itemEvent) {
             System.out.println("Item removed:" + itemEvent.getItem());
         }

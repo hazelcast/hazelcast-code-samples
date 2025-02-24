@@ -9,10 +9,12 @@ public class SumTask implements Callable<Integer>, Serializable, HazelcastInstan
 
     private transient HazelcastInstance hz;
 
+    @Override
     public void setHazelcastInstance(HazelcastInstance hz) {
         this.hz = hz;
     }
 
+    @Override
     public Integer call() throws Exception {
         IMap<String, Integer> map = hz.getMap("map");
         int result = 0;

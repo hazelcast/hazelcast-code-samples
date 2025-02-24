@@ -43,7 +43,6 @@ public class ApplicationConfig {
      * object, used to create a client. There is a similar counterpart for servers.
      * </p>
      *
-     * @return
      * @throws IOException
      */
     @Bean

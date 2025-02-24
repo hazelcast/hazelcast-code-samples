@@ -21,10 +21,10 @@ import static org.junit.Assert.assertThat;
  * </p>
  */
 @Slf4j
-public class V5FlightTest {
+class V5FlightTest {
 
-	@Test
-	public void test_serialization() {
+    @Test
+    void test_serialization() {
 		V5Flight objectSent = FlightBuilder.buildV5();
 		Object objectReceived;
 		byte[] bytes;

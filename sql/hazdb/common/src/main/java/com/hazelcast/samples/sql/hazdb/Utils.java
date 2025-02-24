@@ -30,7 +30,6 @@ public class Utils {
      * </p>
      *
      * @param input May be null
-     * @return
      */
     public static String makeText(Object json) {
         String[] tokens = Objects.toString(json)

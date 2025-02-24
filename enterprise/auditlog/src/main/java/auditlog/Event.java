@@ -81,7 +81,7 @@ public final class Event implements AuditableEvent {
     public static final class Builder implements EventBuilder<Builder> {
         private String message;
         private String typeId;
-        private Map<String, Object> parameters = new HashMap<String, Object>();
+        private Map<String, Object> parameters = new HashMap<>();
         private Level level = Level.INFO;
         private Throwable cause;
         private long timestamp;

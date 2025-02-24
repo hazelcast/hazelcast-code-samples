@@ -8,7 +8,6 @@
 
     <artifactId>HazelcastSpring</artifactId>
     <groupId>HazelcastSpring</groupId>
-    <version>0.1-SNAPSHOT</version>
     <name>Hazelcast Spring Configuration Example</name>
     <url>http://hazelcast.org/</url>
 
@@ -21,7 +20,6 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <spring.version>5.2.24.RELEASE</spring.version>
     </properties>

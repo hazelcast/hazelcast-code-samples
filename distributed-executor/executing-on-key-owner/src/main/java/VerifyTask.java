@@ -13,10 +13,12 @@ public class VerifyTask implements Runnable, Serializable, HazelcastInstanceAwar
         this.key = key;
     }
 
+    @Override
     public void setHazelcastInstance(HazelcastInstance hz) {
         this.hz = hz;
     }
 
+    @Override
     public void run() {
         IMap map = hz.getMap("map");
         boolean localKey = map.localKeySet().contains(key);

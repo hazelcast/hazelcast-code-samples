@@ -27,7 +27,7 @@ public class UserCacheLoader implements CacheLoader<Integer, User>, Serializable
     @Override
     public Map<Integer, User> loadAll(Iterable<? extends Integer> keys) throws CacheLoaderException {
         // create the resulting map
-        Map<Integer, User> loaded = new HashMap<Integer, User>();
+        Map<Integer, User> loaded = new HashMap<>();
         // for every key in the given set of keys
         for (Integer key : keys) {
             // try to retrieve the user

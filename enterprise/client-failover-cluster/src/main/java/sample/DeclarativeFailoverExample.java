@@ -30,7 +30,7 @@ public class DeclarativeFailoverExample {
         //INFO: hz.client_0 [cluster1] [3.12] HazelcastClient 3.12 (20190205 - 3af10e3) is CLIENT_CHANGED_CLUSTER
         // user can listen the cluster change and take action
         client.getLifecycleService().addLifecycleListener(event -> {
-            if (LifecycleEvent.LifecycleState.CLIENT_CHANGED_CLUSTER.equals(event.getState())) {
+            if (LifecycleEvent.LifecycleState.CLIENT_CHANGED_CLUSTER == event.getState()) {
                 System.out.println("Client has switched to a new cluster");
             }
         });

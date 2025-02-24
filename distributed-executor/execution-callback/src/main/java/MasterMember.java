@@ -9,7 +9,7 @@ public class MasterMember {
         HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         IExecutorService executor = hz.getExecutorService("executor");
 
-        ExecutionCallback<Long> executionCallback = new ExecutionCallback<Long>() {
+        ExecutionCallback<Long> executionCallback = new ExecutionCallback<>() {
             public void onFailure(Throwable t) {
                 t.printStackTrace();
             }

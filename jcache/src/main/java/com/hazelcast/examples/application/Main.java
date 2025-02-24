@@ -51,7 +51,7 @@ public class Main {
         Cache<Integer, User> userCache = configureCache(userDao);
 
         // configure command mapping
-        Map<String, Command> commands = new LinkedHashMap<String, Command>();
+        Map<String, Command> commands = new LinkedHashMap<>();
 
         // general command mappings
         commands.put("help", new HelpCommand());

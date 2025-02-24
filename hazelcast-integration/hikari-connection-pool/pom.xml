@@ -16,10 +16,6 @@
 
     <properties>
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
-
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>

@@ -18,7 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = HazelcastApplication.class)
-public class CommandControllerIT {
+class CommandControllerIT {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -30,7 +30,7 @@ public class CommandControllerIT {
     private Map<String, String> keyValueMap;
 
     @Test
-    public void testPutRequest() {
+    void testPutRequest() {
         //when
         WebTestClient.ResponseSpec responseSpec = makePutRequest("key1", "value1");
 
@@ -46,7 +46,7 @@ public class CommandControllerIT {
     }
 
     @Test
-    public void testGetRequest() {
+    void testGetRequest() {
         //given
         makePutRequest("key1", "value1");
 
@@ -75,7 +75,7 @@ public class CommandControllerIT {
     }
 
     @Test
-    public void testHazelcastCluster() {
+    void testHazelcastCluster() {
         //given
         Config config = Config.load();
         var hz = Hazelcast.newHazelcastInstance(config);

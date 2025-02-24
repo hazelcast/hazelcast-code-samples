@@ -20,8 +20,6 @@ public class Util {
      * <p>A serialization service to serialize and deserialize
      * Hazelcast format objects.
      * </p>
-     *
-     * @return
      */
     private static SerializationService createSerializationService() {
 

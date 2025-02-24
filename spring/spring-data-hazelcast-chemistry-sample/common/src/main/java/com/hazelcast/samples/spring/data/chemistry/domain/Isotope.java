@@ -28,6 +28,7 @@ public class Isotope implements Comparable<Isotope>, Serializable {
     @Id
     private IsotopeKey isotopeKey;
 
+    @Override
     public int compareTo(Isotope that) {
         return this.compareTo(that);
     }

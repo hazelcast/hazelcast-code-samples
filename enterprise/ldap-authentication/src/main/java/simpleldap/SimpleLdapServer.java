@@ -140,7 +140,6 @@ public class SimpleLdapServer {
     /**
      * Imports given LDIF files to the directory using given directory service and schema manager.
      *
-     * @param ldifFiles
      * @throws Exception
      */
     public void importLdifFiles(String... ldifFiles) throws Exception {
@@ -222,6 +221,7 @@ public class SimpleLdapServer {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void init(String name) throws Exception {
             if ((directoryService != null) && directoryService.isStarted()) {
                 return;
@@ -266,7 +266,7 @@ public class SimpleLdapServer {
             schemaPartition.setWrappedPartition(inMemorySchemaPartition);
             directoryService.setSchemaPartition(schemaPartition);
             List<Throwable> errors = schemaManager.getErrors();
-            if (errors.size() != 0) {
+            if (!errors.isEmpty()) {
                 throw new Exception(I18n.err(I18n.ERR_317, Exceptions.printErrors(errors)));
             }
 
@@ -284,6 +284,7 @@ public class SimpleLdapServer {
         /**
          * {@inheritDoc}
          */
+        @Override
         public DirectoryService getDirectoryService() throws Exception {
             return directoryService;
         }
@@ -291,6 +292,7 @@ public class SimpleLdapServer {
         /**
          * {@inheritDoc}
          */
+        @Override
         public PartitionFactory getPartitionFactory() throws Exception {
             return partitionFactory;
         }

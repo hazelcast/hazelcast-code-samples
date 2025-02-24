@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("embedded")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class ApplicationEmbeddedTest {
+class ApplicationEmbeddedTest {
 
     @LocalServerPort
     private int port;
@@ -25,7 +25,7 @@ public class ApplicationEmbeddedTest {
     private HazelcastInstance hazelcastInstance;
 
     @Test
-    public void useCachedValue() {
+    void useCachedValue() {
         // given
         String isbn = "12345";
         String cachedValue = "cached-value";
