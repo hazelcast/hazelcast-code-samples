@@ -48,7 +48,7 @@ public class ClientController {
     @GetMapping("/")
     public List<URL> index() throws MalformedURLException {
 
-        List<URL> urls = new ArrayList<URL>();
+        List<URL> urls = new ArrayList<>();
 
         urls.add(new URL("http://localhost:8080/halogens"));
         urls.add(new URL("http://localhost:8080/neutrons"));

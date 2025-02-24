@@ -20,10 +20,10 @@ public class AvroTrade extends org.apache.avro.specific.SpecificRecordBase imple
   private static SpecificData MODEL$ = new SpecificData();
 
   private static final BinaryMessageEncoder<AvroTrade> ENCODER =
-      new BinaryMessageEncoder<AvroTrade>(MODEL$, SCHEMA$);
+      new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
 
   private static final BinaryMessageDecoder<AvroTrade> DECODER =
-      new BinaryMessageDecoder<AvroTrade>(MODEL$, SCHEMA$);
+      new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
@@ -37,7 +37,7 @@ public class AvroTrade extends org.apache.avro.specific.SpecificRecordBase imple
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
   public static BinaryMessageDecoder<AvroTrade> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<AvroTrade>(MODEL$, SCHEMA$, resolver);
+    return new BinaryMessageDecoder<>(MODEL$, SCHEMA$, resolver);
   }
 
   /** Serializes this AvroTrade to a ByteBuffer. */
@@ -77,9 +77,12 @@ public class AvroTrade extends org.apache.avro.specific.SpecificRecordBase imple
     this.price = price;
   }
 
-  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
-  // Used by DatumWriter.  Applications should not call.
-  public java.lang.Object get(int field$) {
+    @Override
+    public org.apache.avro.Schema getSchema() { return SCHEMA$; }
+
+    // Used by DatumWriter.  Applications should not call.
+    @Override
+    public java.lang.Object get(int field$) {
     switch (field$) {
     case 0: return time;
     case 1: return ticker;
@@ -89,9 +92,10 @@ public class AvroTrade extends org.apache.avro.specific.SpecificRecordBase imple
     }
   }
 
-  // Used by DatumReader.  Applications should not call.
-  @SuppressWarnings(value="unchecked")
-  public void put(int field$, java.lang.Object value$) {
+    // Used by DatumReader.  Applications should not call.
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: time = (java.lang.Long)value$; break;
     case 1: ticker = (java.lang.CharSequence)value$; break;

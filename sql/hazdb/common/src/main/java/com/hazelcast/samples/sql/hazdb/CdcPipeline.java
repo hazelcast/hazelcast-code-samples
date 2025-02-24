@@ -42,9 +42,7 @@ public class CdcPipeline {
      * value (not used) may be null if create. Both present for create.
      * </p>
      *
-     * @param mapName
      * @param observable Null allowed, if no clientside logging needed
-     * @return
      */
     @SuppressWarnings("rawtypes")
     public static Pipeline build(String mapName, Observable<Tuple3<String, String, String>> observable) {

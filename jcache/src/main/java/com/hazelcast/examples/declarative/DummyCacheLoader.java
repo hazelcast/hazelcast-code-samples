@@ -14,7 +14,7 @@ public class DummyCacheLoader implements CacheLoader<String, String> {
 
     @Override
     public Map<String, String> loadAll(Iterable<? extends String> keys) throws CacheLoaderException {
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         for (String key : keys) {
             map.put(key, load(key));
         }

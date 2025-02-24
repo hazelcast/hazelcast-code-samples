@@ -40,7 +40,7 @@ public class ChemistryService {
      * @return Entry counts for each type
      */
     public Map<String, Long> count() {
-        Map<String, Long> result = new HashMap<String, Long>();
+        Map<String, Long> result = new HashMap<>();
 
         result.put(Constants.KEYSPACE_ELEMENT, this.elementRepository.count());
         result.put(Constants.KEYSPACE_ISOTOPE, this.isotopeRepository.count());
@@ -55,7 +55,7 @@ public class ChemistryService {
      * @return Unique atomic weights, in ascending sequence
      */
     public Set<Integer> findAtomicWeights() {
-        Set<Integer> result = new TreeSet<Integer>();
+        Set<Integer> result = new TreeSet<>();
 
         for (Isotope isotope : this.isotopeRepository.findAll()) {
             result.add(isotope.getIsotopeKey().getAtomicWeight());
@@ -88,7 +88,7 @@ public class ChemistryService {
      * @return A possibly empty list of elements
      */
     public List<Element> findElementsByAtomicWeight(final int weight) {
-        ArrayList<Element> result = new ArrayList<Element>();
+        ArrayList<Element> result = new ArrayList<>();
 
         for (Isotope isotope : this.isotopeRepository.findByIsotopeKeyAtomicWeight(weight)) {
             this.elementRepository.findById(isotope.getIsotopeKey().getSymbol()).ifPresent(result::add);
@@ -104,13 +104,13 @@ public class ChemistryService {
      * @return For each symbol, the variants in the number of neutrons
      */
     public Map<String, Set<Integer>> neutrons() {
-        Map<String, Set<Integer>> result = new HashMap<String, Set<Integer>>();
+        Map<String, Set<Integer>> result = new HashMap<>();
 
         for (Element element : this.elementRepository.findAll()) {
             log.trace("neutrons(): {}", element);
             String symbol = element.getSymbol();
 
-            Set<Integer> neutrons = new TreeSet<Integer>();
+            Set<Integer> neutrons = new TreeSet<>();
             // Search isotopeRepository on part of the isotope key
             for (Isotope isotope : this.isotopeRepository.findByIsotopeKeySymbol(symbol)) {
                 log.trace("neutrons(): {}", isotope);

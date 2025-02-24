@@ -65,7 +65,7 @@ public class ApplicationInitializer implements CommandLineRunner {
 
             TreeSet<?> keys = new TreeSet<>(iMap.keySet());
 
-            if (keys.size() == 0) {
+            if (keys.isEmpty()) {
                 log.error("Map '{}' empty", name);
             } else {
                 Object key = keys.first();
@@ -104,7 +104,7 @@ public class ApplicationInitializer implements CommandLineRunner {
             log.error(sql, e);
         }
 
-        if (names.size() == 0) {
+        if (names.isEmpty()) {
             throw new RuntimeException("No results for: " + sql);
         }
 

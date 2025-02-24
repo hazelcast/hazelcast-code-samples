@@ -29,6 +29,7 @@ public class Element implements Comparable<Element>, Serializable {
     @Id
     private String symbol;
 
+    @Override
     public int compareTo(Element that) {
         return this.symbol.compareTo(that.getSymbol());
     }

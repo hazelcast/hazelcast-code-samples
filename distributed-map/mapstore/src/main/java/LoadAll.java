@@ -78,7 +78,7 @@ public class LoadAll {
 
     private static class SimpleStore implements MapStore<Integer, Integer> {
 
-        private ConcurrentMap<Integer, Integer> store = new ConcurrentHashMap<Integer, Integer>();
+        private ConcurrentMap<Integer, Integer> store = new ConcurrentHashMap<>();
 
         @Override
         public void store(Integer key, Integer value) {
@@ -117,7 +117,7 @@ public class LoadAll {
 
         @Override
         public Map<Integer, Integer> loadAll(Collection<Integer> keys) {
-            Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+            Map<Integer, Integer> map = new HashMap<>();
             for (Integer key : keys) {
                 Integer value = load(key);
                 map.put(key, value);

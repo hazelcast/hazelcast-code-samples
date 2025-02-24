@@ -19,6 +19,7 @@ public class SpringAwareAwareTask implements Callable<String>, ApplicationContex
         this.applicationContext = applicationContext;
     }
 
+    @Override
     public String call() throws Exception {
         System.out.println("Getting bean definition names from Spring Context");
         return String.join(",", applicationContext.getBeanDefinitionNames());

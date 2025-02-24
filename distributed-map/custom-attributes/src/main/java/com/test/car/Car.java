@@ -9,7 +9,7 @@ public class Car implements Serializable {
     private Map<String, Object> attributes;
 
     public Car(String name) {
-        attributes = new HashMap<String, Object>();
+        attributes = new HashMap<>();
         attributes.put("name", name);
         attributes.put("tripStart", 0);
         attributes.put("tripStop", 0);

@@ -64,6 +64,7 @@ public class ExecReplacer implements ConfigReplacer {
     private String argumentSeparator;
     private boolean requiresZeroExitCode;
 
+    @Override
     public void init(Properties properties) {
         argumentSeparator = properties.getProperty(PROPERTY_ARGUMENT_SEPARATOR, "\\s+");
         String property = properties.getProperty(PROPERTY_REQUIRES_ZERO_EXIT);

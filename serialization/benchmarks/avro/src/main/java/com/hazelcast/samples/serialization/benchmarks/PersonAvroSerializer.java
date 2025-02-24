@@ -25,8 +25,8 @@ public class PersonAvroSerializer implements StreamSerializer<PersonAvro> {
     private DatumWriter<PersonAvro> personDatumWriter;
 
     public PersonAvroSerializer() {
-        this.personDataReader = new SpecificDatumReader<PersonAvro>(PersonAvro.class);
-        this.personDatumWriter = new SpecificDatumWriter<PersonAvro>(PersonAvro.class);
+        this.personDataReader = new SpecificDatumReader<>(PersonAvro.class);
+        this.personDatumWriter = new SpecificDatumWriter<>(PersonAvro.class);
     }
 
     @Override

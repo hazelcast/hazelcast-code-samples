@@ -88,8 +88,6 @@ public class ApplicationInitializer {
      * <p>
      * Mappings define the data structure for querying.
      * </p>
-     *
-     * @return
      */
     public boolean createMappings() {
         String bundesligaBody = "("
@@ -155,10 +153,6 @@ public class ApplicationInitializer {
      * <p>
      * Apply a mapping, catch errors
      * </p>
-     *
-     * @param mapName
-     * @param mappingBody
-     * @return
      */
     private boolean defineMapping(String mapName, String mappingBody) {
         String mapping = "CREATE OR REPLACE MAPPING \"" + mapName + "\" " + mappingBody;
@@ -191,8 +185,6 @@ public class ApplicationInitializer {
      * Define views onto the mappings. View name is base map name with "{@code _v}"
      * suffix.
      * </p>
-     *
-     * @return
      */
     private boolean createViews() {
         String view1 = "CREATE OR REPLACE VIEW " + MyConstants.IMAP_NAME_LEADER + MyConstants.VIEW_SUFFIX
@@ -209,9 +201,6 @@ public class ApplicationInitializer {
      * <p>
      * Apply a view onto a single map, catch errors.
      * </p>
-     *
-     * @param view
-     * @return
      */
     private boolean defineMapView(String view) {
         try {
@@ -228,8 +217,6 @@ public class ApplicationInitializer {
      * <p>
      * Insert teams and stadiums, derive the leader of the league.
      * </p>
-     *
-     * @return
      */
     private boolean createTestData() {
         IMap<String, HazelcastJsonValue> bundesligaMap = this.hazelcastInstance
@@ -303,8 +290,6 @@ public class ApplicationInitializer {
      * <p>
      * Run some SQL to confirm everything is working.
      * </p>
-     *
-     * @return
      */
     private boolean queryTestData() {
         String sql1 = "SELECT * FROM " + MyConstants.IMAP_NAME_BUNDESLIGA + " ORDER BY points DESC LIMIT 3";

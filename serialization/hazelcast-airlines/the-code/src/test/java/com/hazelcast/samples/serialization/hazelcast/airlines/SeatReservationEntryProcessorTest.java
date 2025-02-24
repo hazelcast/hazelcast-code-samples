@@ -27,10 +27,10 @@ import static org.junit.Assert.assertThat;
  * </p>
  */
 @Slf4j
-public class SeatReservationEntryProcessorTest {
+class SeatReservationEntryProcessorTest {
 
     @Test
-    public void test_serialization() throws Exception {
+    void test_serialization() throws Exception {
         SeatReservationEntryProcessor objectSent = new SeatReservationEntryProcessor("junit");
         Object objectReceived = null;
         byte[] bytes;
@@ -65,7 +65,7 @@ public class SeatReservationEntryProcessorTest {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
-    public void test_business_logic_empty_plane() throws Exception {
+    void test_business_logic_empty_plane() throws Exception {
         SeatReservationEntryProcessor seatReservationEntryProcessor = new SeatReservationEntryProcessor("junit");
 
         AbstractFlight v1Flight = new V1Flight();
@@ -82,7 +82,7 @@ public class SeatReservationEntryProcessorTest {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
-    public void test_business_logic_full_plane() throws Exception {
+    void test_business_logic_full_plane() throws Exception {
         SeatReservationEntryProcessor seatReservationEntryProcessor = new SeatReservationEntryProcessor("junit");
 
         AbstractFlight v1Flight = new V1Flight();
@@ -105,7 +105,7 @@ public class SeatReservationEntryProcessorTest {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
-    public void test_business_logic_plane_with_spare_seats() throws Exception {
+    void test_business_logic_plane_with_spare_seats() throws Exception {
         SeatReservationEntryProcessor seatReservationEntryProcessor = new SeatReservationEntryProcessor("junit");
 
         AbstractFlight v1Flight = FlightBuilder.buildV1();

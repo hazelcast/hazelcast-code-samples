@@ -66,7 +66,7 @@ public class PipeliningDemo {
         long startMs = System.currentTimeMillis();
         Random random = new Random();
         for (int i = 0; i < iterations; i++) {
-            Pipelining<String> pipelining = new Pipelining<String>(depth);
+            Pipelining<String> pipelining = new Pipelining<>(depth);
             for (long k = 0; k < getsPerIteration; k++) {
                 int key = random.nextInt(keyDomain);
                 pipelining.add(map.getAsync(key));

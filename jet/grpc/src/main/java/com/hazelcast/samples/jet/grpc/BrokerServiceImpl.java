@@ -37,7 +37,7 @@ public class BrokerServiceImpl extends BrokerServiceImplBase {
     @Override
     public StreamObserver<BrokerInfoRequest> brokerInfo(StreamObserver<BrokerInfoReply> responseObserver) {
 
-        return new StreamObserver<BrokerInfoRequest>() {
+        return new StreamObserver<>() {
             @Override
             public void onNext(BrokerInfoRequest request) {
                 String brokerName = brokers.get(request.getId()).name();

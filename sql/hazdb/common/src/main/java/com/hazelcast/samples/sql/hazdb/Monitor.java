@@ -80,7 +80,7 @@ public class Monitor {
                 .filter(distributedObject -> !distributedObject.getName().startsWith("__"))
                 .map(distributedObject -> distributedObject.getName()).collect(Collectors.toCollection(TreeSet::new));
 
-        if (mapNames.size() == 0) {
+        if (mapNames.isEmpty()) {
             LOGGER.info("No maps");
         } else {
             mapNames.forEach(name -> {

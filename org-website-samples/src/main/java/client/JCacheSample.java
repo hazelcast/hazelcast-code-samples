@@ -17,7 +17,7 @@ public class JCacheSample {
         System.setProperty("hazelcast.jcache.provider.type", "client");
         // Create the JCache CacheManager
         CacheManager manager = Caching.getCachingProvider().getCacheManager();
-        MutableConfiguration<String, String> configuration = new MutableConfiguration<String, String>();
+        MutableConfiguration<String, String> configuration = new MutableConfiguration<>();
         // Expire entries after 1 minute
         configuration.setExpiryPolicyFactory(AccessedExpiryPolicy.factoryOf(Duration.ONE_MINUTE));
         // Get a Cache called "myCache" and configure with 1 minute expiry

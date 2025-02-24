@@ -97,7 +97,7 @@ public class CLI extends DefaultPromptProvider implements CommandMarker {
             }
         }
 
-        if (cacheNames.size() > 0) {
+        if (!cacheNames.isEmpty()) {
             log.info("-----------------------");
         }
         log.info("[{} cache{} visible]",

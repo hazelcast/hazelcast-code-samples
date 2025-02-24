@@ -48,11 +48,11 @@ public class PredicateMember {
         }
 
         System.out.println("Find name Peter and age 37, which doesn't exist");
-        System.out.println("Did we find it? " + (getWithNameAndAge("Peter", 37).size() != 0));
+        System.out.println("Did we find it? " + (!getWithNameAndAge("Peter", 37).isEmpty()));
     }
 
     private Set<Person> getWithNameNaive(String name) {
-        Set<Person> result = new HashSet<Person>();
+        Set<Person> result = new HashSet<>();
         for (Person person : personMap.values()) {
             if (person.getName().equals(name)) {
                 result.add(person);

@@ -20,7 +20,7 @@ import com.hazelcast.nio.serialization.StreamSerializer;
 public class PersonKryoSerializer implements StreamSerializer<PersonKryo> {
 
     // Kryo instance is not threadsafe, but expensive, so that is why it is placed in a ThreadLocal.
-    private static final ThreadLocal<Kryo> KRYO_THREAD_LOCAL = new ThreadLocal<Kryo>() {
+    private static final ThreadLocal<Kryo> KRYO_THREAD_LOCAL = new ThreadLocal<>() {
         @Override
         protected Kryo initialValue() {
             Kryo kryo = new Kryo();

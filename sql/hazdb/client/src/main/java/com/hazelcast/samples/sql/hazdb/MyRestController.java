@@ -52,9 +52,6 @@ public class MyRestController {
      * <p>
      * Use the {@link JdbcTemplate} to execute an SQL query.
      * </p>
-     *
-     * @param sql
-     * @return
      */
     @GetMapping(value = "/jdbcNoParam", produces = MediaType.APPLICATION_JSON_VALUE)
     public String jdbcNoParam(@RequestParam("sql") String sql) {
@@ -85,9 +82,6 @@ public class MyRestController {
      * Use the {@link JdbcTemplate} to execute an SQL query with one {@code String}
      * parameter.
      * </p>
-     *
-     * @param sql
-     * @return
      */
     @GetMapping(value = "/jdbc1StringParam", produces = MediaType.APPLICATION_JSON_VALUE)
     public String jdbc1StringParam(@RequestParam("sql") String sql, @RequestParam("param") String param) {
@@ -118,9 +112,6 @@ public class MyRestController {
      * Use the {@link JdbcTemplate} to execute an SQL query with one {@code Integer}
      * parameter.
      * </p>
-     *
-     * @param sql
-     * @return
      */
     @GetMapping(value = "/jdbc1IntegerParam", produces = MediaType.APPLICATION_JSON_VALUE)
     public String jdbc1IntegerParam(@RequestParam("sql") String sql, @RequestParam("param") int param) {
@@ -151,9 +142,6 @@ public class MyRestController {
      * Directly passes SQL query to Hazelcast, and wraps the result as JSON for web
      * display.
      * </p>
-     *
-     * @param sql
-     * @return
      */
     @GetMapping(value = "/sqlQuery", produces = MediaType.APPLICATION_JSON_VALUE)
     public String sqlQuery(@RequestParam("sql") String sql) {
@@ -195,9 +183,6 @@ public class MyRestController {
      * Object[] args = new String[] { "Bayern Munich" };
      * this.jdbcTemplate.update(sql, args);
      * </pre>
-     *
-     * @param sql
-     * @return
      */
     @GetMapping(value = "/sqlUpdate", produces = MediaType.APPLICATION_JSON_VALUE)
     public String sqlUpdate(@RequestParam("sql") String sql) {
@@ -228,7 +213,6 @@ public class MyRestController {
      *
      * @param iterator      Iterator on something, don't need the class as using
      *                      "{@code toString()}"
-     * @param stringBuilder
      */
     private static void formatResult(Iterator<?> iterator, StringBuilder stringBuilder) {
         // Worked, even if no rows found
@@ -258,8 +242,6 @@ public class MyRestController {
      * <p>
      * For Kubernetes readiness/liveness probe
      * </p>
-     *
-     * @return
      */
     @GetMapping("/k8s")
     public String k8s() {

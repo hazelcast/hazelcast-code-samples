@@ -41,8 +41,6 @@ public class ApplicationConfig {
      * This is a {@link com.hazelcast.config.Config Config} object, used to create a
      * server. There is a similar counterpart for clients.
      * </p>
-     *
-     * @return
      */
     @Bean
     public Config config() {

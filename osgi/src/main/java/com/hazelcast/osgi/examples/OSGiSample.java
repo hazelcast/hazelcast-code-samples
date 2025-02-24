@@ -30,7 +30,7 @@ public class OSGiSample {
         Bundle sampleBundle = null;
         try {
             FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
-            Map<String, String> frameworkConfigs = new HashMap<String, String>();
+            Map<String, String> frameworkConfigs = new HashMap<>();
             frameworkConfigs.put(Constants.FRAMEWORK_BOOTDELEGATION, "*");
             frameworkConfigs.put(Constants.FRAMEWORK_STORAGE_CLEAN, Constants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT);
             frameworkConfigs.put(Constants.FRAMEWORK_BUNDLE_PARENT, Constants.FRAMEWORK_BUNDLE_PARENT_APP);
@@ -40,7 +40,7 @@ public class OSGiSample {
             framework.start();
 
             bundleContext = framework.getBundleContext();
-            List<Bundle> installedBundles = new LinkedList<Bundle>();
+            List<Bundle> installedBundles = new LinkedList<>();
 
             // Find the Hazelcast jar which is OSGI bundle also
             String bundleLocation = Hazelcast.class.getProtectionDomain().getCodeSource().getLocation().toString();

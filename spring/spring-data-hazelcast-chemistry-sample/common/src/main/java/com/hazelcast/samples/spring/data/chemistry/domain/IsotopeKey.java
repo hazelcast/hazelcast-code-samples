@@ -16,6 +16,7 @@ public class IsotopeKey implements Comparable<IsotopeKey>, Serializable {
     private String symbol;
     private int atomicWeight;
 
+    @Override
     public int compareTo(IsotopeKey that) {
         int symbolCompare = this.symbol.compareTo(that.getSymbol());
         return (symbolCompare != 0 ? symbolCompare : (this.atomicWeight - that.getAtomicWeight()));

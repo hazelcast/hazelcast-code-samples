@@ -90,7 +90,6 @@ public class ApplicationRunner implements CommandLineRunner {
      * test for a named {@link com.hazelcast.core.IMap IMap}.
      * </p>
      *
-     * @param iMapName
      * @return Yes if there, but doesn't force created
      */
     private boolean testIfIMapExists(String iMapName) {
@@ -158,7 +157,7 @@ public class ApplicationRunner implements CommandLineRunner {
             System.out.println(result);
         }
 
-        if (results.size() == 0) {
+        if (results.isEmpty()) {
             System.out.println("*** No results ***");
         } else {
             System.out.printf("[ %d result%s]%n", results.size(), (results.size() == 1 ? "" : "s"));
