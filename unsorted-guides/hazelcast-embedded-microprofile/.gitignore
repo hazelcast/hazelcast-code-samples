@@ -1,0 +1,12 @@
+target/
+.idea/
+.settings/
+.classpath
+.directory
+.project
+.surefire-*
+.DS_Store
+*.iml
+*.ipr
+*.iws
+*.txt

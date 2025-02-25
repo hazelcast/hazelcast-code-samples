@@ -1,0 +1,57 @@
+////
+Make sure to rename this file to the name of your repository and add the filename to the README. This filename must not conflict with any existing tutorials.
+////
+
+// Describe the title of your article by replacing 'Tutorial template' with the page name you want to publish.
+= Tutorial template
+// Add required variables
+:page-layout: tutorial
+:page-product: // Required: Define the product filter for this tutorial. Add one of the following: platform, imdg, cloud, operator
+:page-categories: // Optional: Define the categories for this tutorial. Check the current categories on the tutorials homepage (https://docs.hazelcast.com/tutorials/). Add one or more of the existing categories or add new ones as a comma-separated list. Make sure that you use title case for all categories. 
+:page-lang: java // Optional: Define what Hazelcast client languages are supported by this tutorial. Leave blank or add one or more of: java, go, python, cplus, node, csharp.
+:page-enterprise: // Required: Define whether this tutorial requires an Enterprise license (true or blank)
+:page-est-time: // Required: Define the estimated number of time required to complete the tutorial in minutes. For example, 10 mins
+:description: // Required: Summarize what this tutorial is about in a sentence or two. What you put here is reused as the tutorial's first paragraph and included in HTML description tags. Start the sentence with an action verb such as 'Deploy' or 'Connect'.
+
+{description}
+
+// Give some context about the use case for this tutorial. What will the reader learn?
+== Context
+
+// Optional: What does the reader need before starting this tutorial? Think about tools or knowledge. Delete this section if your readers can dive straight into the lesson without requiring any prerequisite knowledge.
+== Before you Begin
+
+Before starting this tutorial, make sure that you meet the following prerequisites:
+
+* Prerequisite one
+* Prerequisite two
+* etc
+
+== Step 1. <Step Title>
+
+////
+Introduce what your audience will learn in each step, then continue to write the steps in the tutorial.
+You can choose one of these approaches to write your tutorial part:
+
+* In a narrative style if your parts are short or you are using screenshots to do most of the talking.   
+* In a "Goal > Steps > Outcome" structure to build a predictable flow in all your tutorial parts.
+
+Whatever option you choose when designing your tutorial should be carried through in subsequent parts.
+////
+
+== Step 2. <Step Title>
+
+////
+Continue the design approach you chose in the previous part and continue it through to the end of the tutorial.
+////
+
+== Summary
+
+////
+Summarise what knowledge the reader has gained by completing the tutorial, including a summary of each step's goals (this is a good way to validate whether your tutorial has covered all you need it to.)
+////
+
+
+== See Also
+
+// Optionally, add some links to resources, such as other related guides.

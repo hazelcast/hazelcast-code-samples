@@ -1,0 +1,14 @@
+hazelcast-client:
+  cluster-name: dev
+  instance-name: override-me
+  network:
+    cluster-members:
+      - hz:5701
+    smart-routing: true
+  connection-strategy:
+    async-start: false
+    reconnect-mode: ON
+  serialization:
+    portable-factories:
+      - factory-id: 1
+        class-name: hazelcast.platform.labs.machineshop.domain.MachineShopPortableFactory

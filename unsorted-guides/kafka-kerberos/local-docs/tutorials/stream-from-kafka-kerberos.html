@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Connect Hazelcast to Kafka Clusters Secured with Kerberos</title>
+    <link rel="canonical" href="http:localhost:3000/tutorials/stream-from-kafka-kerberos.html">
+    <meta name="description" content="Learn how to connect Hazelcast Jet pipelines to Kafka clusters that are secured with Kerberos authentication.">
+    <meta name="generator" content="Antora 3.1.1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+<!-- Apply the site styles after the docsearch ones -->
+<link rel="stylesheet" href="../_/css/site.css">
+<style>
+  .nav-item[data-depth="1"] {
+  color: #6d7480;
+}
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<meta name="google-site-verification" content="8R6s5prYCHuUDIJfpL-WfcRCcN-VYjG1ps1o-dKT7Ro" />
+<script src="https://kit.fontawesome.com/11f046e3f7.js" crossorigin="anonymous"></script>
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+    <header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://hazelcast.com/"><img src="../_/img/hazelcast-header.svg"></img></a>
+      <a class="navbar-item" id="documentation-header" href="../home">Home</img></a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-start">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#" onclick="return false">Manuals</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="../cloud/" onclick="window.open(this.href,'_blank');return false;">Hazelcast Viridian</a>
+            <a class="navbar-item" href="../hazelcast/latest/" onclick="window.open(this.href,'_blank');return false;">Hazelcast Platform</a> 
+            <a class="navbar-item" href="../management-center/latest/" onclick="window.open(this.href,'_blank');return false;">Management Center</a>
+            <a class="navbar-item" href="../operator/latest/" onclick="window.open(this.href,'_blank');return false;">Hazelcast Platform Kubernetes Operator</a>
+            <!--<a class="navbar-item" href="../clc/latest/" onclick="window.open(this.href,'_blank');return false;">Hazelcast Command-Line Client</a>-->
+          </div>
+        </div>
+          <div class="navbar-item">
+            <a class="navbar-item" href="../tutorials">Tutorials</a>
+          </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#" onclick="return false">API Reference</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item"href="https://docs.hazelcast.org/docs/latest/javadoc" onclick="window.open(this.href,'_blank');return false;">Java</a>
+            <a class="navbar-item"href="https://pkg.go.dev/github.com/hazelcast/hazelcast-go-client?tab=versions" onclick="window.open(this.href,'_blank');return false;">Go</a>
+            <a class="navbar-item"href="http://hazelcast.github.io/hazelcast-csharp-client/api-index.html" onclick="window.open(this.href,'_blank');return false;">C#</a>
+            <a class="navbar-item"href="http://hazelcast.github.io/hazelcast-cpp-client/api-index.html" onclick="window.open(this.href,'_blank');return false;">C++</a>
+            <a class="navbar-item" href="https://readthedocs.org/projects/hazelcast/" onclick="window.open(this.href,'_blank');return false;">Python</a>
+            <a class="navbar-item" href="http://hazelcast.github.io/hazelcast-nodejs-client/" onclick="window.open(this.href,'_blank');return false;">Node.js</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#" onclick="return false">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://training.hazelcast.com/" onclick="window.open(this.href,'_blank');return false;">Online Training</a>
+            <a class="navbar-item" href="https://hazelcast.com/hub/" onclick="window.open(this.href,'_blank');return false;">Integration Hub</a>
+            <a class="navbar-item" href="https://hazelcast.com/use-cases/" onclick="window.open(this.href,'_blank');return false;">Use Cases</a>
+            <a class="navbar-item" href="https://hazelcast.com/community/" onclick="window.open(this.href,'_blank');return false;">Community</a>
+            <a class="navbar-item" href="https://hazelcast.com/blog/" onclick="window.open(this.href,'_blank');return false;">Blog</a>
+          </div>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <div id="search-input" class="navbar-item searchbox">
+        </div>
+        <label class="filter checkbox">
+          <input id="facet" type="checkbox" onclick="applyFacetedSearch()"> Search all docs
+        </label>
+          <div class="navbar-item">
+            <a href="https://viridian.hazelcast.com/" onclick="window.open(this.href,'_blank');return false;">
+              <button class="button">Sign In</button>
+            </a>
+          </div>
+          <div class="navbar-item try-free">
+            <a href="https://viridian.hazelcast.com/sign-up" onclick="window.open(this.href,'_blank');return false;">
+              <button class="button green">Try Free</button>
+            </a>
+          </div>
+      </div>
+    </div>
+  </nav>
+  <div class="cookie-banner" id="cookie">
+<p>
+    This website uses cookies to give you the best experience.
+    <a href="https://hazelcast.com/privacy/">Learn more</a>
+  </p>
+<button class="close" id="cookie-close">Close</button>
+</div></header>
+    <div class="body tutorial">
+    <main class="article">
+  <div class="content tutorial">
+    <aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu">
+  </div>
+  </br>
+<div class="feedback-prompt">
+      <div class="source">
+        <a class="git" href="https://github.com/hazelcast-guides/kafka-kerberos/tree/kafka-with-kerberos">View source</a>
+      </div>
+    <div class="edit-this-page"><a class="git-pull" href="file:///Users/jakecahill/Documents/code-playground/kafka-kerberos/docs/modules/ROOT/pages/stream-from-kafka-kerberos.adoc" onclick="window.open(this.href,'_blank');return false;">Edit this page</a></div>
+  <form name="docs-feedback" id="feedback-form" netlify-honeypot="bot-field" method="POST" data-netlify="true">
+    <label>Was this page helpful?</label><br>
+    <p class="hidden">
+    <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+    </p>
+    <input type="radio" id="yes" name="helpful" value="yes" onclick="submitForm()">
+    <label for="yes" id="yes-button"><i class="far fa-check-circle"></i> Yes</label>
+    <input type="radio" id="no" name="helpful" value="no" onclick="submitForm()">
+    <label for="no" id="no-button"><i class="far fa-times-circle"></i> No</label><br>
+    </select>
+  </form>
+</div>
+<script>
+  function submitForm() {
+    document.getElementById("feedback-form").submit();
+  }
+</script>
+</aside>
+    <article class="doc">
+  <nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+      <h1 class="page beta">Connect Hazelcast to Kafka Clusters Secured with Kerberos</h1>
+    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Learn how to connect Hazelcast Jet pipelines to Kafka clusters that are secured with Kerberos authentication.</p>
+</div>
+<div class="paragraph interactive-button">
+<p><a href="https://gitpod.io/#https://github.com/hazelcast-guides/kafka-kerberos" target="_blank" rel="noopener">Try it in your browser</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="context"><a class="anchor" href="#context"></a>Context</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When Kafka brokers are secured with Kerberos authentication, your Hazelcast cluster must acquire session keys from the Kerberos server before the Hazelcast cluster can communicate with the Kafka brokers.</p>
+</div>
+<div class="paragraph">
+<p>In this example, you&#8217;ll learn how to configure the Hazelcast Kafka connector to connect to a Kafka broker that&#8217;s secured with Kerberos authentication.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="before-you-begin"><a class="anchor" href="#before-you-begin"></a>Before you Begin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before starting this tutorial, make sure that you have the following prerequisites:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.docker.com/compose/install/">Docker Compose</a></p>
+</li>
+<li>
+<p><a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">Git</a></p>
+</li>
+<li>
+<p><a href="#hazelcast:deploy:versioning-compatibility.adoc" class="xref unresolved">JDK 8 - 11</a></p>
+</li>
+<li>
+<p><a href="https://maven.apache.org/download.cgi">Maven</a></p>
+</li>
+<li>
+<p>Knowledge of <a href="https://en.wikipedia.org/wiki/Kerberos_(protocol)">Kerberos</a></p>
+</li>
+<li>
+<p>Knowledge of <a href="https://en.wikipedia.org/wiki/Apache_Kafka">Kafka</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="step-1-clone-the-project"><a class="anchor" href="#step-1-clone-the-project"></a>Step 1. Clone the Project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To set up the project, you need to download the code from GitHub.</p>
+</div>
+<div class="paragraph">
+<p>Clone the GitHub repository.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_https"></a>HTTPS</p>
+</li>
+<li>
+<p><a id="tabset1_ssh"></a>SSH</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_https">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/hazelcast-guides/kafka-kerberos.git
+cd kafka-kerberos</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_ssh">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone git@github.com:hazelcast-guides/kafka-kerberos.git
+cd kafka-kerberos</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="step-2-start-the-docker-containers"><a class="anchor" href="#step-2-start-the-docker-containers"></a>Step 2. Start the Docker Containers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this step, you&#8217;ll use Docker Compose to start all the Docker containers, including a Kafka broker, Kerberos server, Hazelcast Platform, and Management Center.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker compose up -d</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Docker containers are running in detatched mode. You can see that they are running, using the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">docker ps</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To see the logs of your Hazelcast member, use the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">docker logs hazelcast</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see that you have a single member running in the cluster.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Members {size:1, ver:1} [
+	Member [172.19.0.4]:5701 - 15116025-342b-43c0-83f7-a2a90f0281ce this
+]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="step-3-create-a-kafka-topic"><a class="anchor" href="#step-3-create-a-kafka-topic"></a>Step 3. Create a Kafka Topic</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create a Kafka topic, you&#8217;ll use the <code>kafka-console-producer</code> script that&#8217;s built into the Kafka broker.</p>
+</div>
+<div class="paragraph">
+<p>Create the <code>orders</code> topic and add some records to it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker exec -i broker kafka-console-producer --broker-list broker:9092 --topic orders &lt; orders.jsonl --producer.config /etc/kafka/kafka-client.properties</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>kafka-client.properties</code> file contains the Kafka client configuration that allows Kerberos to authenticate Kafka clients. The Kafka clients assume the <code>jduke@KERBEROS.EXAMPLE</code> SPN (service principal name), which is registered on the Kerberos server.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="step-4-connect-hazelcast-to-the-kafka-broker"><a class="anchor" href="#step-4-connect-hazelcast-to-the-kafka-broker"></a>Step 4. Connect Hazelcast to the Kafka Broker</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now that your Kafka topic has some records, you can configure the Kafka connector in Hazelcast to consume those records. In this step, you&#8217;ll create a Jet job that reads from the Kafka topic and writes the data to a Hazelcast map called <code>sink_orders</code>. This Kafka connector is configured to assume the same SPN as the producer in the previous step.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Change into the <code>jet-pipeline</code> directory.</p>
+</li>
+<li>
+<p>Package the Java file into a JAR.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn package</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Submit the JAR to your Hazelcast member. Replace the <code>$PATH_TO_PROJECT</code> placeholder with the absolute path to the <code>kafka-kerberos</code> directory.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --network kafka-kerberos_default -v $PATH_TO_PROJECT/jet-pipeline/target:/jars --rm hazelcast/hazelcast:5.1.4  hz-cli -t hazelcast:5701 submit -c com.example.hazelcast.jet.kafka.KafkaSourceWithClientServerHazelcast /jars/jet-kafka-1.0.0.jar</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You should see the following in the console:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Submitting JAR '/jars/jet-kafka-1.0.0.jar' with arguments []
+Orders added to map
+===================</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your Hazelcast cluster connects to the Kerberos server, acquires a session key and reads records from the <code>orders</code> topic. Your Hazelcast cluster now contains a map called <code>sink_orders</code> that contains the orders.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="step-5-verify-that-the-connection-succeeded"><a class="anchor" href="#step-5-verify-that-the-connection-succeeded"></a>Step 5. Verify that the Connection Succeeded</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this step, you&#8217;ll verify that the Kerberos server authenticated Hazelcast and the Kafka broker allowed the Hazelcast Kafka connector to read from the <code>orders</code> topic.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to <code>localhost:8080</code> and enable dev mode in Management Center.</p>
+</li>
+<li>
+<p>Open the SQL Browser.</p>
+</li>
+<li>
+<p>In the <strong>select a map</strong> dropdown, select <strong>sink_orders (No SQL Mapping)</strong> to auto-generate the <code>CREATE MAPPING</code> command.</p>
+</li>
+<li>
+<p>Click <strong>Execute Query</strong></p>
+</li>
+<li>
+<p>Delete the previous command from the SQL editor and enter the following:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SELECT * FROM sink_orders;</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Click <strong>Execute Query</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The <code>sink_orders</code> map contains all the records in the <code>orders</code> topic.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="related-resources"><a class="anchor" href="#related-resources"></a>Related Resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Kafka and Kerberos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>For details about how to configure Kafka clients with Kerberos, see the <a href="https://docs.confluent.io/platform/current/kafka/authentication_sasl/authentication_sasl_gssapi.html#clients">Confluent documentation</a>.</p>
+</li>
+<li>
+<p><a href="https://docs.confluent.io/platform/current/kafka/authentication_sasl/authentication_sasl_gssapi.html#configuring-gssapi">Configuring GSSAPI</a></p>
+</li>
+<li>
+<p><a href="https://developer.confluent.io/learn-kafka/security/authentication-ssl-and-sasl-ssl/">Kafka security course</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Hazelcast:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#hazelcast:sql:sql-overview.adoc" class="xref unresolved">hazelcast:sql:sql-overview.adoc</a></p>
+</li>
+<li>
+<p><a href="#hazelcast:sql:mapping-to-kafka.adoc" class="xref unresolved">hazelcast:sql:mapping-to-kafka.adoc</a></p>
+</li>
+<li>
+<p><a href="#hazelcast:sql:mapping-to-maps.adoc" class="xref unresolved">hazelcast:sql:mapping-to-maps.adoc</a></p>
+</li>
+<li>
+<p><a href="#hazelcast:sql:querying-streams.adoc" class="xref unresolved">hazelcast:sql:querying-streams.adoc</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+
+    </div>
+    <footer class="footer">
+  <a href="https://hazelcast.com/terms-of-use/">Terms of service</a>
+  <a href="https://hazelcast.com/privacy/">Privacy</a>
+  <a href="https://hazelcast.com/contact/">Contact us</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+
+<!-- SEARCH CONFIGURATIONS -->
+<!-- 404 is not a component, so we avoid reading the component versions and names from it -->
+  <!-- TUTORIALS -->
+  <!-- Filter tutorials by product using the query parameters in the URL -->
+    <script>
+      var queryParams = new URLSearchParams(window.location.search);
+      var product = queryParams.get("product");
+      if (product) {
+        params.product = product
+        document.getElementById(product).click()
+        updateCards(params)
+      }
+    </script>
+    <!-- Unused feature that displays multi-path tutorial steps as a stream of boxes -->
+    <script>
+      docsearch({
+        apiKey: 'ef7bd9485eafbd75d6e8425949eda1f5',
+        indexName: 'prod_hazelcast_docs',
+        appId: 'QK2EAH8GB0',
+        container: '#search-input',
+        // Set debug to true to inspect the dropdown
+        debug: false,
+        // Display 25 results in the dropdown
+        // and search only the current product
+        searchParameters: {  facetFilters: ["tags:tutorials"] },
+      });
+    </script>
+    <script>
+      function applyFacetedSearch(){
+          var checkbox = document.getElementById('facet')
+          if (checkbox.checked) {
+            // Search all products
+            docsearch({
+              apiKey: 'ef7bd9485eafbd75d6e8425949eda1f5',
+              indexName: 'prod_hazelcast_docs',
+              appId: 'QK2EAH8GB0',
+              container: '#search-input',
+              searchParameters:
+              {
+                
+                facetFilters: 
+                [["tags:tutorials", 
+                "tags:imdg-", 
+                "tags:hazelcast-", 
+                "tags:cloud"]] 
+              }
+            })
+          } else {
+            docsearch({
+              apiKey: 'ef7bd9485eafbd75d6e8425949eda1f5',
+              indexName: 'prod_hazelcast_docs',
+              appId: 'QK2EAH8GB0',
+              container: '#search-input',
+              searchParameters: 
+              {
+                
+                facetFilters: ["tags:tutorials"]
+              }
+            })
+          }
+        }
+    </script>
+  <!--HOME PAGE-->
+  </body>
+</html>

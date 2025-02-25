@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-sender
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: event-sender
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: event-sender
+    spec:
+      containers:
+        - args:
+            - python
+            - eventsender.py
+            - --dir
+            - data
+            - --tps
+            - "10"
+            - --hz-members
+            - automl-hazelcast
+          # image: us-central1-docker.pkg.dev/hazelcast-33/rmay/automl_event_sender:latest
+          image: wrmay/automl_event_sender:latest
+          name: event-sender
+          resources: {}
+      restartPolicy: Always
+status: {}

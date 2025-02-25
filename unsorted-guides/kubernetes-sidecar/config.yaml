@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hazelcast-configuration
+data:
+  hazelcast.yaml: |-
+    hazelcast:
+      network:
+        join:
+          multicast:
+            enabled: false
+          kubernetes:
+            enabled: true

@@ -1,0 +1,10 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: WanReplication
+metadata:
+  name: wan-replication
+spec:
+  resources:
+    - name: hazelcast-first
+      kind: Hazelcast
+  targetClusterName: dev
+  endpoints: "<SECOND-CLUSTER-EXTERNAL-IP>"

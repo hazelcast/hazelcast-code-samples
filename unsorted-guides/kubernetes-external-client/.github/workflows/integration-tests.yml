@@ -1,0 +1,183 @@
+name: Test on GKE
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_ZONE: europe-west1-b
+  GCP_NETWORK: tutorial-test-network 
+  HAZELCAST_VERSION: 4.2
+
+jobs:
+
+  run-tests:
+    name: Run Integration tests on GKE
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    outputs:
+      master_ip: ${{ steps.master-ip.outputs.ip }}
+      api_token: ${{ steps.secrets.outputs.apiToken }}
+      ca_certificate: ${{ steps.secrets.outputs.caCertificate }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Set up Golang
+      uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Authenticate to GCP
+      uses: 'google-github-actions/auth@v0.7.0'
+      with:
+        credentials_json: ${{ secrets.GKE_SA_KEY }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.6.0
+      with:
+        project_id: ${{ env.GCP_PROJECT_ID }}
+
+    - name: Create GKE cluster
+      id: set-cluster-name
+      run: |-
+        REPO_NAME=$(echo $GITHUB_REPOSITORY | awk -F/ '{print $NF}')
+        CLUSTER_NAME="$REPO_NAME-$GITHUB_RUN_NUMBER"
+        echo "CLUSTER_NAME=$CLUSTER_NAME" >> $GITHUB_ENV
+
+        gcloud container clusters create $CLUSTER_NAME \
+          --zone=${{ env.GKE_ZONE }} \
+          --project=${{ env.GCP_PROJECT_ID }} \
+          --network=${{ env.GCP_NETWORK }} \
+          --machine-type=n1-standard-2 \
+          --num-nodes=2
+        sleep 30
+
+    - name: Connect to the GKE cluster
+      run: |
+        gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
+          --zone ${{ env.GKE_ZONE }} \
+          --project ${{ env.GCP_PROJECT_ID }}
+
+    - name: Install Kubectl
+      run: |-
+        gcloud components install kubectl
+
+    - name: Deploy Hazelcast cluster
+      run: |-
+        kubectl apply -f https://raw.githubusercontent.com/hazelcast/hazelcast-kubernetes/master/rbac.yaml
+
+        kubectl create service loadbalancer hz-hazelcast-0 --tcp=5701
+        kubectl run hz-hazelcast-0 --image=hazelcast/hazelcast:$HAZELCAST_VERSION --port=5701 -l "app=hz-hazelcast-0,role=hazelcast"
+        kubectl create service loadbalancer hz-hazelcast-1 --tcp=5701
+        kubectl run hz-hazelcast-1 --image=hazelcast/hazelcast:$HAZELCAST_VERSION --port=5701 -l "app=hz-hazelcast-1,role=hazelcast"
+        kubectl create service loadbalancer hz-hazelcast-2 --tcp=5701
+        kubectl run hz-hazelcast-2 --image=hazelcast/hazelcast:$HAZELCAST_VERSION --port=5701 -l "app=hz-hazelcast-2,role=hazelcast"
+
+        kubectl create service loadbalancer hz-hazelcast --tcp=5701 -o yaml --dry-run=client | kubectl set selector --local -f - "role=hazelcast" -o yaml | kubectl create -f -
+
+    - name: Wait for deployment to finish
+      run: |-
+        kubectl wait --for=condition=ready pod/hz-hazelcast-0 --timeout=120s
+        kubectl wait --for=condition=ready pod/hz-hazelcast-1 --timeout=120s
+        kubectl wait --for=condition=ready pod/hz-hazelcast-2 --timeout=120s
+
+    - name: Wait for external IP to get assigned
+      run: |-
+        EXTERNAL_IP=$(kubectl get svc hz-hazelcast --output="jsonpath={.status.loadBalancer.ingress[0].ip}")
+        while [ "$EXTERNAL_IP" == "" ]; do
+          sleep 10
+          EXTERNAL_IP=$(kubectl get svc hz-hazelcast --output="jsonpath={.status.loadBalancer.ingress[0].ip}")
+        done
+
+        echo "EXTERNAL_IP=${EXTERNAL_IP}" >> $GITHUB_ENV
+
+    - name: Test Java Client
+      run: |-
+        EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+        cd java
+        sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" src/main/java/com/hazelcast/Main.java
+        mvn package
+        java -jar target/*jar-with-dependencies*.jar >> output-java.txt &
+        PID=$!
+        sleep 30
+        kill $PID
+
+        cat output-java.txt | grep 'Successful connection!' -q
+
+    - name: Test Node.js Client
+      run: |-
+        EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+        cd nodejs
+        sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" client.js
+        npm install
+        npm start >> output-nodejs.txt &
+        PID=$!
+        sleep 30
+        kill $PID
+
+        cat output-nodejs.txt | grep 'Successful connection!' -q
+
+    - name: Test Go Client
+      run: |-
+        EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+        cd go
+        sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" main.go
+        go mod download github.com/hazelcast/hazelcast-go-client
+        go run main.go >> output-go.txt &
+        PID=$!
+        sleep 30
+        kill $PID
+
+        cat output-go.txt | grep 'Successful connection!' -q
+
+    - name: Test Python Client
+      run: |-
+        EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+        cd python
+        sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" main.py
+        pip install -r requirements.txt
+        python -u main.py >> output-python.txt &
+        PID=$!
+        sleep 30
+        kill $PID
+
+        cat output-python.txt | grep 'Successful connection!' -q
+
+    - name: Test Cpp Client
+      run: |-
+        EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+        cd cpp
+        sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" main.cpp
+        cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+        cmake --build build
+        build/cpp >> output-cpp.txt &
+        PID=$!
+        sleep 30
+        kill $PID
+
+        cat output-cpp.txt | grep 'Successful connection!' -q
+
+    - name: Clean up
+      if: always()
+      run: |-
+        gcloud container clusters delete "$CLUSTER_NAME" --zone="$GKE_ZONE" --quiet

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm" version="2.4">
+
+    <entity name="ProductInv" class="com.hazelcast.cdc.pojo.ProductInv" >
+        <table name="ORCLPDB1.STRIIM.PRODUCT_INV"/>
+        <attributes>
+            <id name ="sku" attribute-type="Long"  >
+                <column nullable="false" name="SKU" />
+            </id>
+            <basic name="stock" attribute-type="double" >
+                <column nullable="false" name="STOCK"  />
+            </basic>
+            <basic name="name" attribute-type="String" >
+                <column  name="NAME" />
+            </basic>
+            <basic name="lastUpdated"  attribute-type="java.util.Date" >
+                <column name="LAST_UPDATED" />
+            </basic>
+        </attributes>
+    </entity>
+
+</entity-mappings>

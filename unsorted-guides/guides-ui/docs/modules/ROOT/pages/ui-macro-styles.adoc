@@ -1,0 +1,61 @@
+= UI Macro Styles
+
+Asciidoctor supports xref:antora:asciidoc:ui-macros.adoc[three UI element representations] out of the box, which are made from corresponding inline UI macros.
+
+* button (btn macro)
+* keybinding (kbd macro)
+* menu (menu macro)
+
+The UI elements are output using semantic HTML elements, so they inherit some default styling from the browser.
+However, to look proper, they require some additional styling.
+
+== Button
+
+A xref:antora:asciidoc:ui-macros.adoc#button[button] is meant to represent an on-screen button (`+btn:[Save]+`).
+However, it should not appear like an actual button as that could confuse the reader into thinking it's interactive.
+Therefore, a button is rendered as a bold text by default:
+
+[source,html]
+----
+<b class="button">Save</b>
+----
+
+Traditionally, a button reference is styled by surrounding the text with square brackets, as shown here:
+
+btn:[Save]
+
+== Keybinding
+
+A xref:antora:asciidoc:ui-macros.adoc#keybinding[keybinding] can be a single key (`+kbd:[F11]+`) or a sequence of keys (`+kbd:[Ctrl+F]`).
+Here's the HTML that's generated for these two forms.
+
+[source,html]
+----
+<kbd>F11</kbd>
+<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>F</kbd></span>
+----
+
+Here's how these might appear:
+
+[%hardbreaks]
+kbd:[F11]
+kbd:[Ctrl+F]
+
+== Menu
+
+A xref:antora:asciidoc:ui-macros.adoc#menu[menu] can be a top-level menu reference (`+menu:File[]+`) or a nested selection (`+menu:File[Save]+`).
+Here's the HTML that's generated for these two forms.
+
+[source,html]
+----
+<b class="menuref">File</b>
+<span class="menuseq"><b class="menu">File</b>&#160;<b class="caret">&#8250;</b> <b class="menuitem">Save</b></span>
+----
+
+This might be rendered as:
+
+menu:File[]
+
+menu:File[Save]
+
+The default styling applied to a menu reference is usually sufficient.

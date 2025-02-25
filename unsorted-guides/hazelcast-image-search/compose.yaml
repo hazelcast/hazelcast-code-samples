@@ -1,0 +1,106 @@
+services:
+
+  hz:
+    image: hazelcast/hazelcast-enterprise:5.5
+    environment:
+      HZ_LICENSEKEY: ${HZ_LICENSEKEY}
+      JAVA_OPTS: >
+        -Dhazelcast.config=/project/hazelcast.yaml 
+        -Dlog4j.configurationFile=/project/log4j2.properties  
+        --add-modules jdk.incubator.vector
+        -Xmx5g  -XX:+UseZGC
+    volumes:
+      - ".:/project"
+    networks:
+      - hznet
+
+  mc:
+    image: hazelcast/management-center:latest-snapshot
+    environment:
+      MC_DEFAULT_CLUSTER: dev
+      MC_DEFAULT_CLUSTER_MEMBERS: hz:5701
+    ports:
+      - "8080:8080"
+    networks:
+      - hznet
+
+  www:
+    image: python:3
+    volumes:
+      - ".:/project"
+    ports:
+      - "8000:8000"
+    command: python -m http.server 8000 -d /project/www
+    networks:
+      - hznet
+
+  jupyter:
+    build:
+      context: python-container
+    ports:
+      - "8888:8888"
+    volumes:
+      - ".:/project"
+    working_dir: /project/ui
+    environment:
+      PYTHONPATH: /root/hazelcast-python-client
+    command: jupyter notebook --allow-root --port=8888 --ip=* --no-browser
+    networks:
+      - hznet
+
+  submit-image-loader:
+    image: hazelcast/hazelcast-enterprise:5.5
+    volumes:
+      - ".:/project"
+    command: >
+      hz-cli submit 
+          -v 
+          -c=hazelcast.platform.labs.image.similarity.ImageIngestPipeline 
+          -t=dev@hz  
+          /project/image-ingest-pipeline/target/image-ingest-pipeline-1.0-SNAPSHOT.jar 
+          /project/www
+          .jpg
+          http://www:8000 
+          /project/image-embedding-service 
+          clip_image_encoder
+    networks:
+      - hznet
+    profiles:
+      - disabled
+
+  submit-image-loader-solution:
+    image: hazelcast/hazelcast-enterprise:5.5
+    volumes:
+      - ".:/project"
+    command: >
+      hz-cli submit 
+          -v 
+          -c=hazelcast.platform.labs.image.similarity.solution.ImageIngestPipelineSolution 
+          -t=dev@hz  
+          /project/image-ingest-pipeline/target/image-ingest-pipeline-1.0-SNAPSHOT.jar 
+          /project/www
+          .jpg
+          http://www:8000 
+          /project/image-embedding-service 
+          clip_image_encoder
+    networks:
+      - hznet
+    profiles:
+      - disabled
+
+  download-model:
+    build:
+      context: python-container
+    volumes:
+      - ".:/project"
+    working_dir:
+      /project/image-embedding-service
+    command: python model_downloader.py
+    networks:
+      - hznet
+    profiles:
+      - disabled
+
+networks:
+  hznet: 
+  

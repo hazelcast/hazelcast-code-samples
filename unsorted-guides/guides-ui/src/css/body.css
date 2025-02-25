@@ -1,0 +1,9 @@
+.body {
+  word-wrap: break-word; /* aka overflow-wrap; used when hyphens are disabled or don't do the trick */
+}
+
+@media screen and (min-width: 1024px) {
+  .body {
+    display: flex;
+  }
+}

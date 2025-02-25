@@ -1,0 +1,271 @@
+= Deploying Custom Classes With the User Code Namespace
+:page-layout: tutorial
+:page-product: operator
+:page-categories: Cloud Native
+:page-lang: java
+:page-enterprise: true
+:page-est-time: 15 mins
+:github-directory: https://github.com/hazelcast-guides/hazelcast-platform-operator-user-code-namespace
+:description: Learn how to deploy custom classes with the User Code Namespace
+
+{description}
+
+== Context
+
+In this tutorial, you'll do the following:
+
+- Deploy Hazelcast with userCodeNamespaces enabled.
+
+- Create a custom EntryListener class and package it into a JAR.
+
+- Upload the JAR file to cloud storage.
+
+- Apply a UserCodeNamespace resource, referencing the JAR in storage.
+
+- Create a Map resource with the EntryListener, setting userCodeNamespaces the same as the UserCodeNamespace object.
+
+== Before you Begin
+
+You need the following:
+
+* Running https://kubernetes.io/[Kubernetes] cluster
+* Kubernetes command-line tool, https://kubernetes.io/docs/tasks/tools/#kubectl[kubectl]
+* Maven command-line tool, https://maven.apache.org/download.cgi[mvn]
+* Deployed xref:operator:ROOT:index.adoc[Hazelcast Platform Operator version 5.12 or above]
+* Blob storage and access credentials on one of the following cloud providers: https://aws.amazon.com/s3/[AWS], https://cloud.google.com/storage/[GCP], https://azure.microsoft.com/en-us/services/storage/blobs/[Azure]
+
+== Step 1. Start the Hazelcast Cluster
+
+. Create a license secret
++
+Create a secret with your link:http://trialrequest.hazelcast.com/[Hazelcast Enterprise License].
++
+[source, shell]
+----
+kubectl create secret generic hazelcast-license-key --from-literal=license-key=<hz-license-key>
+----
+
+. Create the Hazelcast Cluster
++
+Run the following command to create the Hazelcast cluster with Persistence enabled using External type.
++
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-user-code-namespace/hazelcast.yaml[]
+EOF
+----
+
+. Check the Cluster Status
++
+Run the following commands to see the cluster status
++
+[source, shell]
+----
+$ kubectl get hazelcast hazelcast
+NAME        STATUS    MEMBERS
+hazelcast   Running   1/1
+----
++
+
+
+== Step 2. Deploy the EntryListener JAR to Cloud Storage
+
+In this step, you’ll build the EntryListener JAR from the tutorial’s GitHub repository, and upload it to your cloud provider.
+
+. Clone the sample project.
+
++
+[tabs]
+====
+HTTPS::
++
+--
+```bash
+git clone https://github.com/hazelcast-guides/hazelcast-platform-operator-user-code-namespace.git
+
+cd hazelcast-platform-operator-user-code-namespace
+```
+--
+SSH::
++
+--
+```bash
+git clone git@github.com:hazelcast-guides/hazelcast-platform-operator-user-code-namespace.git
+
+cd hazelcast-platform-operator-user-code-namespace
+```
+--
+====
+
++
+The sample code for this tutorial is in the link:{github-directory}/tree/master/simple-entry-listener/src/main/java/com/hazelcast/tutorial[`simple-entry-listener/src/main/java/com/hazelcast/tutorial/`] directory:
+
+. Build the SimpleEntryListener JAR.
+
++
+[source, shell]
+----
+mvn package -f ./simple-entry-listener
+----
+
+. Upload the SimpleEntryListener JAR to the storage blob/bucket of your cloud provider, replacing the placeholder values.
+
++
+[tabs]
+====
+
+S3::
++
+--
+[source,bash]
+----
+aws s3 cp simple-entry-listener/target/simple-entry-listener-1.0-SNAPSHOT.jar s3://<BUCKET_NAME>
+----
+--
+
+GCS::
++
+--
+[source,bash]
+----
+gsutil cp simple-entry-listener/target/simple-entry-listener-1.0-SNAPSHOT.jar gs://<BUCKET_NAME>
+----
+--
+
+ABS::
++
+--
+[source,bash]
+----
+az storage blob upload --account-name <ACCOUNT_NAME> --container-name <CONTAINER_NAME> --file simple-entry-listener/target/simple-entry-listener-1.0-SNAPSHOT.jar
+----
+--
+
+====
+
+. Create a secret for your cloud storage by running one of the following commands. Remember to replace the placeholder values.
+
++
+[tabs]
+====
+
+AWS::
++
+--
+[source,bash]
+----
+kubectl create secret generic <SECRET-NAME> --from-literal=region=<region> \
+	--from-literal=access-key-id=<access-key-id> \
+	--from-literal=secret-access-key=<secret-access-key>
+----
+--
+
+GCP::
++
+--
+[source,bash]
+----
+kubectl create secret generic <SECRET-NAME> --from-file=google-credentials-path=<service_account_json_file>
+----
+--
+
+Azure::
++
+--
+[source,bash]
+----
+kubectl create secret generic <SECRET-NAME> \
+	--from-literal=storage-account=<storage-account> \
+	--from-literal=storage-key=<storage-key>
+----
+--
+
+====
+
+== Step 3. Apply the UserCodeNamespace resource
+
+. Apply the UserCodeNamespace resource
++
+Run the following command to create the UserCodeNamespace, referencing to the bucket where the EntryLister JAR is located.
++
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-user-code-namespace/ucn.yaml[]
+EOF
+----
+
+. Check the status of the UserCodeNamespace resource
++
+Run the following command to check the status of the UserCodeNamespace resource
++
+[source, shell]
+----
+$ kubectl get ucn my-ucn
+NAME     STATUS
+my-ucn   Success
+----
+
++
+It verifies that:
+
+- The user code namespaces called `my-ucn` is created.
+
+- The jars in the bucket are downloaded into the members’ classpath.
+
+- The classes in the jars are added to the `my-ucn` namespace. 
+
+== Step 4. Create the Map with the EntryListener
+
+. Create the Map in a specific namespace
++
+Run the following command to create the Map with the SimpleEntryListener class in the `my-ucn` namespace.
++
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-user-code-namespace/map.yaml[]
+EOF
+----
+
+. Check the status of the Map
++
+Run the following command to check the status of the Map
++
+[source, shell]
+----
+$ kubectl get map my-map
+NAME     STATUS
+my-map   Success
+----
+
++
+The status of `my-map` is `Success`, indicating that the map was successfully created with the user code namespace `my-ucn` and includes one EntryListener class, `com.hazelcast.tutorial.SimpleEntryListener`.
++
+You can optionally put some entries to the map to observe the EntryListener in action.
++
+[source, shell]
+----
+$ kubectl logs hazelcast-0
+Entry Added:EntryEvent{entryEventType=ADDED, member=Member [10.80.2.23]:5702 - 237432e4-7a74-49ec-a2e5-d13ac9a8a41c this, name='my-map', key=gSMjgutLELKzZEEn, oldValue=null, value=LXqfGSOlYSIhMbTETLCNXgrYGbmdxCEpwmbPzmRkJjUCWUCu, mergingValue=null}
+Entry Added:EntryEvent{entryEventType=ADDED, member=Member [10.80.2.23]:5702 - 237432e4-7a74-49ec-a2e5-d13ac9a8a41c this, name='my-map', key=MehMxfDQQAzSlJHc, oldValue=null, value=GJTqmcmeSGPbRzQHjcSQDrQtttDxqwrFuginlqZRtxkUMCll, mergingValue=null}
+Entry Added:EntryEvent{entryEventType=ADDED, member=Member [10.80.2.23]:5702 - 237432e4-7a74-49ec-a2e5-d13ac9a8a41c this, name='my-map', key=YcSjQHklapAKVgZh, oldValue=null, value=QUmnTsqnTzivhROWpHlDujCuMwVnLzYSELwoNgWHkPEzwouL, mergingValue=null}
+Entry Added:EntryEvent{entryEventType=ADDED, member=Member [10.80.2.23]:5702 - 237432e4-7a74-49ec-a2e5-d13ac9a8a41c this, name='my-map', key=XeHNRdcizbNZQgZH, oldValue=null, value=SFuZPrNNDbhHCGwAHLQWZZVmTBLvCFcUAawGSKzyAetQOpEi, mergingValue=null}
+Entry Added:EntryEvent{entryEventType=ADDED, member=Member [10.80.2.23]:5702 - 237432e4-7a74-49ec-a2e5-d13ac9a8a41c this, name='my-map', key=mcPOBkUEmzBEkgXJ, oldValue=null, value=oTKCqSFoExFHuRKtzUcLjFdPbSPLihVBPfvafiQXppayJzom, mergingValue=null}
+----
+
+== Step 6. Clean Up
+
+To clean up the created resources remove the secrets and Hazelcast Custom Resources.
+
+[source, shell]
+----
+$ kubectl delete secret <external-bucket-secret-name>
+$ kubectl delete secret hazelcast-license-key
+$ kubectl delete hazelcast hazelcast
+----
+
+== See Also
+
+- xref:operator:ROOT:user-code-namespaces.adoc[]

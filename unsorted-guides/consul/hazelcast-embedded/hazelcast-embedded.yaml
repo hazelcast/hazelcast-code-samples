@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hazelcast-embedded
+spec:
+  serviceName: hazelcast-embedded
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hazelcast-embedded
+  template:
+    metadata:
+      labels:
+        app: hazelcast-embedded
+    spec:
+      containers:
+        - name: hazelcast-embedded
+          image: hazelcastguides/consul-embedded:1.0
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5701
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazelcast-embedded-headless
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: hazelcast-embedded
+  ports:
+    - name: tcp-hazelcast
+      port: 5701
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-service
+spec:
+  type: ClusterIP
+  selector:
+    app: hazelcast-embedded
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

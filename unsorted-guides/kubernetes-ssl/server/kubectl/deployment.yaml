@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hz-hazelcast-enterprise
+spec:
+  replicas: 3
+  serviceName: hz-hazelcast-enterprise
+  selector:
+    matchLabels:
+      app: hz-hazelcast-enterprise
+  template:
+    metadata:
+      labels:
+        app: hz-hazelcast-enterprise
+    spec:
+      containers:
+        - name: hz-hazelcast-enterprise
+          image: hazelcast/hazelcast-enterprise:latest
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5701
+          env:
+          - name: HZ_LICENSEKEY
+            valueFrom:
+              secretKeyRef:
+                name: hz-license-key
+                key: key
+          - name: JAVA_OPTS
+            value: "-Dhazelcast.config=/data/hazelcast/configuration/hazelcast.yaml -Djavax.net.ssl.keyStore=/data/hazelcast/secrets/keystore -Djavax.net.ssl.keyStorePassword=123456 -Djavax.net.ssl.trustStore=/data/hazelcast/secrets/truststore -Djavax.net.ssl.trustStorePassword=123456"
+          volumeMounts:
+          - name: hazelcast-configuration
+            mountPath: /data/hazelcast/configuration
+          - name: hazelcast-secrets
+            mountPath: /data/hazelcast/secrets
+      volumes:
+      - name: hazelcast-configuration
+        configMap:
+          name: hazelcast-configuration
+      - name: hazelcast-secrets
+        secret:
+          secretName: keystore
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hz-hazelcast-enterprise
+spec:
+  type: ClusterIP
+  selector:
+    app: hz-hazelcast-enterprise
+  ports:
+  - name: hazelcast
+    port: 5701

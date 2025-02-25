@@ -1,0 +1,37 @@
+hazelcast:
+  cluster-name: dev
+  jet:
+    enabled: true
+    resource-upload-enabled: true
+  network:
+    rest-api:
+      enabled: true
+      endpoint-groups:
+        CLUSTER_READ:
+          enabled: true
+        CLUSTER_WRITE:
+          enabled: true
+        HOT_RESTART:
+          enabled: true
+    join:
+      multicast:
+        enabled: false
+      tcp-ip:
+        connection-timeout-seconds: 1
+        enabled: true
+        member-list:
+          - 127.0.0.1
+  map:
+    trades:
+      in-memory-format: BINARY
+      indexes:
+        - type: HASH
+          attributes:
+            - "symbol"
+        - type: SORTED
+          attributes:
+            - "timestamp"
+    symbols:
+      in-memory-format: BINARY
+    query1_Results:
+      in-memory-format: BINARY

@@ -1,0 +1,25 @@
+{
+  "family": "hazelcast-embedded",
+  "networkMode": "awsvpc",
+  "taskRoleArn": "TASK_ROLE_ARN",
+  "executionRoleArn": "EXECUTION_ROLE_ARN",
+  "containerDefinitions": [
+    {
+      "name": "hazelcast-embedded",
+      "image": "hazelcastguides/hazelcast-embedded-ecs",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/hazelcast",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "1024"
+}

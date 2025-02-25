@@ -1,0 +1,10 @@
+== What you'll learn
+
+You will learn how to use Hazelcast distributed caching with {framework} and deploy to a local {kube} cluster.
+You will then create a Kubernetes Service which load balance between containers and verify that you can share data between Microservices.
+
+The microservice you will deploy is called `hazelcast-{framework-short}`. The `hazelcast-{framework-short}` microservice simply
+helps you put a data and read it back. As Kubernetes Service will send the request to different pod each time 
+you initiate the request, the data will be served by shared hazelcast cluster between `hazelcast-{framework-short}` pods.
+
+You will use a local single-node {kube} cluster. However, you can deploy this application on any kubernetes distributions.

@@ -1,0 +1,88 @@
+site:
+  title: Hazelcast Guides
+  url: https://guides.hazelcast.org
+  start_page: home::index.adoc
+  keys:
+    google_analytics: 'UA-3921306-4'
+urls:
+  html_extension_style: indexify
+content:
+  branches: master # ignore "v*" branches.
+  sources:
+    - url: . # home
+      branches: HEAD
+      start_path: home
+    - url: https://github.com/hazelcast-guides/adoc-templates.git
+      branches: antora-doc
+    - url: https://github.com/hazelcast-guides/hazelcast-embedded-springboot
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/springboot-hibernate
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/hibernate-jcache
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/istio
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/caching-micronaut
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/kubernetes-embedded
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/hazelcast-embedded-microprofile
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/hazelcast-client-quarkus
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/springboot-webfilter-session-replication
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/caching-springboot
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/ecs-embedded
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/striim-cdc
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/caching-springboot-jcache
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/springboot-tomcat-session-replication
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/vmware-tanzu
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/terraform-quickstarts
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/kubernetes-external-client
+      start_path: doc
+      branches: main
+    - url: https://github.com/hazelcast-guides/active-directory-authentication
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/kubernetes-sidecar
+      start_path: doc
+      branches: main
+    - url: https://github.com/hazelcast-guides/kubernetes-hpa
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/kubernetes-ssl
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/kubernetes-wan
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/kubernetes
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/spring-session-hazelcast
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/ec2-cluster
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/linkerd
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/consul
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/nodejs-client-getting-started
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/go-client-getting-started
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/openfaas-hz-client
+      start_path: doc
+    - url: https://github.com/hazelcast-guides/hazelcast-platform-operator-expose-externally
+      start_path: doc
+      branches: main
+asciidoc:
+  extensions:
+  - ./lib/tabs-block.js
+ui:
+  bundle:
+    url: https://github.com/hazelcast-guides/guides-ui/releases/download/v16/ui-bundle.zip
+    snapshot: true

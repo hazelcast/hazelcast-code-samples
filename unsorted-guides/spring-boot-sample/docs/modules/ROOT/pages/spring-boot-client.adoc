@@ -1,0 +1,157 @@
+= Create a Spring Boot Application for Hazelcast {hazelcast-cloud}
+:description: In this tutorial, you'll learn how to create a basic Spring Boot application that connects to a cluster.
+:page-product: cloud
+:page-layout: tutorial
+:page-categories: Spring Boot, Get Started
+:page-lang: java
+:page-est-time: 10 mins
+:url-spring-boot: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#getting-started
+:url-spring-hazelcast: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#io.hazelcast
+:github-directory: https://github.com/hazelcast-guides/spring-boot-sample 
+
+{description}
+
+== Context
+
+The Spring Framework is a Java framework for creating standalone applications that run on the Java Virtual Machine (JVM).
+
+Spring Boot is a tool that makes it easier and faster to develop applications with the Spring Framework by providing  many features, including autoconfiguration.
+
+If you're unfamiliar with Spring or Spring Boot, see the link:{url-spring-boot}[Spring Boot documentation].
+
+== Before you Begin
+
+You need the following:
+
+- A xref:cloud:ROOT:create-serverless-cluster.adoc[{hazelcast-cloud} Standard cluster].
+- link:https://git-scm.com/book/en/v2/Getting-Started-Installing-Git[Git]
+- link:https://maven.apache.org/install.html[Maven]
+- JDK 17 or later
+- `JAVA_HOME` environment variable set to the path of the JDK
+
+
+[[step-one]]
+== Step 1. Clone the Sample Project
+
+All the code for this project is available on GitHub. In this step, you'll clone the project and learn how it works.
+
+. Clone the GitHub repository.
++
+[tabs] 
+====
+HTTPS:: 
++ 
+--
+```bash
+git clone https://github.com/hazelcast-guides/spring-boot-sample.git
+
+cd spring-boot-sample
+```
+--
+SSH:: 
++ 
+--
+```bash
+git clone git@github.com:hazelcast-guides/spring-boot-sample.git
+
+cd spring-boot-sample
+```
+--
+====
+
+. Open the `src/main/resources/application.properties` file.
+
+. Add connection credentials for your cluster to the `application.properties` file. 
++
+NOTE: You can find these credentials in the {hazelcast-cloud} dashboard for your cluster; clusterID is provided in the *Cluster details*, and the other credentials in the *Advanced* option under *Connect Client*.
++
+- `clusterID`
+- `discoveryToken`
+- `keyStorePassword`
+- `trustStorePassword` (same as `keyStorePassword`)
+
+. Download the keystore and truststore files from the {hazelcast-cloud} console and add them to the `src/main/resources/` directory. You can find these files in the {hazelcast-cloud} dashboard for your cluster under *Connect Client* > *Advanced Setup*.
+
+.`pom.xml`
+[%collapsible]
+====
+If the Hazelcast client is on the classpath and a suitable configuration is found, Spring Boot automatically configures a `HazelcastInstance` that you can inject into your application.
+
+[source,xml,indent=0]
+----
+include::spring-boot-sample:example$pom.xml[tag=client]
+----
+
+link:{github-directory}/pom.xml[View source]
+====
+
+.`HzCloudDemoApplication.java`
+[%collapsible]
+====
+Spring Boot first attempts to create a Hazelcast client by checking the presence of a `com.hazelcast.client.config.ClientConfig` bean. This bean is configured using the information in the `application.properties` file.
+
+[source,java]
+----
+include::spring-boot-sample:example$src/main/java/sample/com/hazelcast/demo/cloud/HzCloudDemoApplication.java[tag=class]
+----
+
+link:{github-directory}/src/main/java/sample/com/hazelcast/demo/cloud/HzCloudDemoApplication.java[View source]
+====
+
+.`MapService.java`
+[%collapsible]
+====
+When the `com.hazelcast.client.config.ClientConfig` bean is present, a `HazelcastInstance` is injected into the application classes. This instance is a Hazelcast client with an established connection to the {hazelcast-cloud} Standard cluster.
+
+[source,java]
+----
+include::spring-boot-sample:example$src/main/java/sample/com/hazelcast/demo/cloud/MapService.java[tag=class]
+----
+
+link:{github-directory}/src/main/java/sample/com/hazelcast/demo/cloud/MapService.java[View source]
+====
+
+== Step 2. Connect the Client
+
+In the `spring-boot-sample/` directory, execute the following:
+
+[tabs] 
+====
+Linux and Mac:: 
++ 
+--
+```bash
+./mvnw spring-boot:run
+```
+--
+Windows:: 
++ 
+--
+```bash
+mvnw.cmd spring-boot:run
+```
+--
+====
+
+The client connects to the cluster and adds ten random entries to a map called `MyMap`.
+
+```
+...
+Authenticated with server
+...
+Map prepopulated [mapName=MyMap,size=10]
+...
+BUILD SUCCESS
+```
+
+== Summary
+
+In this tutorial, you learned how to set up a Spring Boot application to connect to a {hazelcast-cloud} Standard cluster.
+
+== Next Steps
+
+Use this boilerplate application as a foundation to start building your own application.
+
+See the xref:cloud:ROOT:overview.adoc[Hazelcast {hazelcast-cloud} documentation] to continue learning or try another tutorial.
+
+See the link:{url-spring-hazelcast}[Spring Boot] documentation for more about using Hazelcast with Spring.

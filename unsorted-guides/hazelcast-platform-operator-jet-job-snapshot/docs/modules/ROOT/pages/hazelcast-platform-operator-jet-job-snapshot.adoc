@@ -1,0 +1,241 @@
+= Saving the State of Jet Job with Hazelcast Platform Operator
+:page-layout: tutorial
+:page-product: operator
+:page-categories: Cloud Native
+:page-lang: go, java, node, python
+:page-est-time: 10 mins
+:github-directory: https://github.com/hazelcast-guides/hazelcast-platform-operator-jet-job-snapshot
+:description: Learn how to save the state of your data pipelines and initiate a data pipeline from an existing state using the Hazelcast Platform Operator.
+
+{description}
+
+== Context
+
+This tutorial will guide you through the process of saving the state of your data pipelines and creating new data pipelines initialized from the saved state. We will be following the steps below during the tutorial:
+
+- Deploy a Hazelcast cluster with the configured Jet engine.
+
+- Initiate the Jet pipeline.
+
+- Export a Snapshot from the Jet pipeline.
+
+- Start a new Jet pipeline initialized from the Snapshot.
+
+== Before you Begin
+
+Make sure you have the following:
+
+* Running https://kubernetes.io/[Kubernetes] cluster
+* Kubernetes command-line tool, https://kubernetes.io/docs/tasks/tools/#kubectl[kubectl]
+* Maven command-line tool, https://maven.apache.org/download.cgi[mvn]
+* Deployed xref:operator:ROOT:get-started.adoc[Hazelcast Platform Operator version 5.8 or above]
+* Blob storage and access credentials on one of the following cloud providers: https://aws.amazon.com/s3/[AWS], https://cloud.google.com/storage/[GCP], https://azure.microsoft.com/en-us/services/storage/blobs/[Azure]
+
+If you're unsure about how to submit JetJobs using the Hazelcast Platform Operator, it's recommended to start by following the xref:tutorials:ROOT:hazelcast-platform-operator-jet.adoc[Jet] tutorial first. That tutorial also covers the steps for deploying a custom Jet pipeline JAR to Cloud storage and provides guidance on managing JetJob resources using the Hazelcast Platform Operator.
+
+== Step 1. Start the Hazelcast Cluster
+
+Since Snapshot is an exclusive feature of the enterprise version, you'll need to set up an Enterprise Hazelcast cluster. This is why it's necessary to create a License Key secret first.
+
+. Run the following command to create a secret with your link:http://trialrequest.hazelcast.com/[Hazelcast Enterprise License], which will be referenced in the Hazelcast resource definition later:
+
++
+[source, shell]
+----
+kubectl create secret generic hazelcast-license-key --from-literal=license-key=<hz-license-key>
+----
+
+. Run the following command to create a Hazelcast cluster with the Jet engine configured.
+
++
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-jet-job-snapshot/hz.yaml[]
+EOF
+----
+
++
+NOTE: If you want to explicitly specify the Hazelcast version, it's important to note that you should use Hazelcast Enterprise version 5.3 or above for submitting JetJobs using the Hazelcast Platform Operator.
+
+. Now, verify the cluster's status to ensure that it is up and running.
+
++
+[source, shell]
+----
+$ kubectl get hazelcast hazelcast
+NAME        STATUS    MEMBERS
+hazelcast   Running   3/3
+----
+
+== Step 2. Run the Data Pipeline
+
+In the tutorial, we will walk through a practical example involving a 'transaction' map designed to store crucial transaction data. Our Hazelcast Jet setup will seamlessly retrieve these transactions from the map and process them. Firstly, we will submit a Jet Job that processes transactions from the 'transaction' map. To maintain simplicity in the example, the pipeline will only log the transactions. Then we will explore the process of saving the state of the Jet Job using the Hazelcast Platform Operator.
+
+Before submitting the Jet Job, you need to create a map from which the Jet Job will fetch the records. To utilize the map as a data source for a Jet Job, it's necessary to enable the Event Journal in the map.
+
+. Execute the following command to create the Map, which will serve as the source for the Jet Job.
+
++
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-jet-job-snapshot/map.yaml[]
+EOF
+----
+
++
+NOTE: It is important to configure the event journal in the map if it is being used as a data source for a Data Pipeline.
+
++
+You are all set to submit the Jet Job that processes transactions from the map. Below is the Java source code for the pipeline. This pipeline simply retrieves transaction entries from the map and logs them for the sake of simplicity. The code should be packaged and deployed to cloud storage. If you are unfamiliar with submitting JetJobs with the Hazelcast Platform Operator, you can also refer to xref:tutorials:ROOT:hazelcast-platform-operator-jet.adoc[Jet Tutorial].
+
++
+[source, java]
+----
+include::ROOT:example$/operator-jet-job-snapshot/jet-pipelines/src/main/java/org/examples/jet/snapshot/JobV1.java[]
+----
+
+. Run the following command to submit the Jet Job.
+
++
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-jet-job-snapshot/job-v1.yaml[]
+EOF
+----
+
+. Run the following command to check the status of the JetJob you have submitted.
+
++
+[source, shell]
+----
+$ kubectl get jetjob transaction-v1
+NAME             STATUS    ID                   SUBMISSIONTIME         COMPLETIONTIME
+transaction-v1   Running   741632319877545985   2023-08-09T12:22:04Z
+----
+
++
+As new entries are added to the 'transaction' map, the Jet Job will automatically retrieve and process them. To observe the executed transactions, examine the logs. In the provided log example below, three transactions are processed with keys 'transaction-1', 'transaction-2', and 'transaction-3'. The entry values are not a concern in this context.
+
++
+[source, shell]
+----
+$ kubectl logs -l app.kubernetes.io/name=hazelcast -c hazelcast | grep transaction-v1/Log
+{"time":"2023-08-09T12:24:59,753", "logger": "com.hazelcast.jet.impl.connector.WriteLoggerP", "level": "INFO", "msg": "[10.36.0.10]:5702 [dev] [5.4.0] [transaction-v1/Log Transactions#1] [Job V1] transaction:'transaction-1' payload:'{\"description\": \"Online Purchase\", \"amount\": 75.99, \"transactionDate\": \"2023-08-09T15:30:00Z\"}' "}
+{"time":"2023-08-09T12:33:32,784", "logger": "com.hazelcast.jet.impl.connector.WriteLoggerP", "level": "INFO", "msg": "[10.36.0.10]:5702 [dev] [5.4.0] [transaction-v1/Log Transactions#2] [Job V1] transaction:'transaction-2' payload:'{\"description\": \"Grocery Shopping\", \"amount\": 42.75, \"transactionDate\": \"2023-08-10T10:15:00Z\"}' "}
+{"time":"2023-08-09T12:33:44,997", "logger": "com.hazelcast.jet.impl.connector.WriteLoggerP", "level": "INFO", "msg": "[10.36.0.10]:5702 [dev] [5.4.0] [transaction-v1/Log Transactions#0] [Job V1] transaction:'transaction-3' payload:'{\"description\": \"Restaurant Dinner\", \"amount\": 120.50, \"transactionDate\": \"2023-08-11T20:00:00Z\"}' "}
+----
+
+== Step 3. Save the state of the Data Pipeline
+
+In data pipelines, saving and using computation process states is vital for accurate and reliable data processing. Jet's Snapshot feature lets you save and restore these processing states. A snapshot captures the state of a running Jet job at a specific time, giving you a reliable record of ongoing computations and processed data.
+
+. Run the following command to export a Snapshot from the Jet Job.
+
++
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-jet-job-snapshot/snapshot.yaml[]
+EOF
+----
+
+. Run the following command to check the status of the exported JetJobSnapshot.
+
++
+[source, shell]
+----
+$ kubectl get jetjobsnapshot transaction
+NAME          STATE      CREATIONTIME
+transaction   Exported   2023-08-09T13:07:51Z
+----
+
++
+NOTE: By configuring the 'spec.cancelJob' field to 'true', the Jet Job named 'transaction-v1' will be canceled after applying the JetJobSnapshot. This setting is particularly useful before submitting a new version of the existing data pipeline. With this approach, the snapshot will halt the ongoing job after preserving its current state.
+
+
+. The Jet Job should not be in the Running state anymore. You can verify this by using the following command.
+
++
+[source, shell]
+----
+$ kubectl get jetjob transaction-v1
+NAME             STATUS            ID                   SUBMISSIONTIME         COMPLETIONTIME
+transaction-v1   ExecutionFailed   741632319877545985   2023-08-09T12:22:04Z   2023-08-09T13:07:51Z
+----
+
+== Step 4. Submit Job initialized from Snapshot
+
+When creating a new version of a data pipeline, it's essential to initialize the new pipeline from the current state of the old one. Without this initialization, the new pipeline would start with an empty state and lack information about its predecessor's state. This situation could result in data loss or duplicate processing, which is not desirable, particularly for critical pipelines. To ensure proper initialization and prevent these issues, we can rely on the Snapshot.
+
+. Continuing with the example, we will now move forward to create a new version of the previous Jet Job. To maintain simplicity in the example, the new version so similar to the old one. It takes entries from the 'transaction' map and logs them.
+
++
+[source, java]
+----
+include::ROOT:example$/operator-jet-job-snapshot/jet-pipelines/src/main/java/org/examples/jet/snapshot/JobV2.java[]
+----
+
+. Differing from the previous JetJob definition, we will set the 'initialSnapshotResourceName' field to refer to the Snapshot exported in the preceding step. Execute the following command to submit the new Jet Job.
+
++
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-jet-job-snapshot/job-v2.yaml[]
+EOF
+----
+
++
+This Jet Job, named 'transaction-v2', will seamlessly resume processing entries from the state at which we exported the snapshot. In this way, we achieve to process each transaction entries only once within the pipeline.
+
+. Now check the new Jet job status
+
++
+[source, shell]
+----
+$ kubectl get jetjob transaction-v2
+NAME             STATUS    ID                   SUBMISSIONTIME         COMPLETIONTIME
+transaction-v2   Running   741650518446702593   2023-08-09T13:34:22Z
+----
+
++
+When you review the logs after submitting the pipeline, you will see the logs of only the transaction entries which are put after the time when we exported the Snapshot. Which means the new version of the transaction pipeline, named 'transaction-v2', won't executes the transactions which are already executed by the first version of the pipeline named 'transaction-v1'.
+
++
+[source, shell]
+----
+$ kubectl logs -l app.kubernetes.io/name=hazelcast -c hazelcast | grep transaction-v2/Log
+{"time":"2023-08-09T12:45:11,364", "logger": "com.hazelcast.jet.impl.connector.WriteLoggerP", "level": "INFO", "msg": "[10.36.0.10]:5702 [dev] [5.4.0] [transaction-v2/Log Transactions#1] [Job V2] transaction:'transaction-4' payload:'{\"description\": \"Movie Tickets\", \"amount\": 25.00, \"transactionDate\": \"2023-08-12T18:45:00Z\"}' "}
+{"time":"2023-08-09T12:47:53,791", "logger": "com.hazelcast.jet.impl.connector.WriteLoggerP", "level": "INFO", "msg": "[10.36.0.10]:5702 [dev] [5.4.0] [transaction-v2/Log Transactions#0] [Job V2] transaction:'transaction-5' payload:'{\"description\": \"Gasoline Refill\", \"amount\": 50.30, \"transactionDate\": \"2023-08-13T09:00:00Z\"}' "}
+----
+
++
+If the new version of the Jet Job, named 'transaction-v2', is not initialized from the exported Snapshot 'transaction', it will begin data processing from the start of the map. This is undesirable, as we have already processed certain transaction entries in the previous version of the pipeline.
+
++
+NOTE: If want to make your Snapshots to be persistent against outages or restarts, it would be enough to create a Hazelcast cluster with persistence enabled.
+
+== Step 5. Cleaning Up
+
+To clean up all the resources you created during the tutorial, and to remove the custom resources and secrets, run the following command:
+
+[source, shell]
+----
+kubectl delete $(kubectl get hazelcast -o name)
+kubectl delete secret hazelcast-license-key
+----
+
+NOTE: Deleting the Hazelcast CR will also delete the Jet Jobs and Jet Job Snapshots linked to it.
+
+== Summary
+
+Saving the current state of your data pipeline and initializing new pipelines from that snapshot could be essential in same cases as demonstrated the example in the tutorial. We have covered the process of managing the state of your data pipelines using the Hazelcast Platform Operator.
+
+== See Also
+
+- xref:operator:ROOT:jet-engine-configuration.adoc[]
+- xref:operator:ROOT:jet-job-configuration.adoc[]
+- xref:operator:ROOT:jet-job-snapshot.adoc[]

@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: com.hazelcast.app.source.Main
+Class-Path: /opt/hazelcast-5.2.0/*

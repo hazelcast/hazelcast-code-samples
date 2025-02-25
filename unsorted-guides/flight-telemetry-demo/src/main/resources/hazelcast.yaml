@@ -1,0 +1,25 @@
+hazelcast:
+  cluster-name: FlightTelemetry
+  jet:
+    enabled: true
+    resource-upload-enabled: true
+  network:
+    rest-api:
+      enabled: true
+      endpoint-groups:
+        DATA:
+          enabled: true
+        CLUSTER_READ:
+          enabled: true
+        CLUSTER_WRITE:
+          enabled: true
+        HOT_RESTART:
+          enabled: true
+    join:
+      multicast:
+        enabled: false
+      tcp-ip:
+        connection-timeout-seconds: 1
+        enabled: true
+        member-list:
+          - 127.0.0.1

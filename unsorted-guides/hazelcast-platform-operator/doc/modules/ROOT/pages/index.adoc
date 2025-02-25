@@ -1,0 +1,207 @@
+:github-address: https://github.com/hazelcast-guides/hazelcast-platform-operator
+:templates-url: templates:ROOT:page$/
+:hazelcast: Hazelcast IMDG
+:framework: Kubernetes Operator
+
+= Getting Started with Hazelcast Platform Operator
+
+This sample is a guideline on how to start and use Hazelcast Platform Operator.
+
+include::{templates-url}/link-to-repo.adoc[]
+
+== What You'll Learn
+
+In this guide, you will deploy a Hazelcast cluster to Kubernetes using Hazelcast Platform Operator.
+
+== Prerequisites
+
+* Up and running https://kubernetes.io/[Kubernetes] cluster (version 1.9 or higher)
+* Kubernetes command-line tool, https://kubernetes.io/docs/tasks/tools/#kubectl[kubectl]
+
+== Deploy Hazelcast Platform Operator
+
+To deploy Hazelcast Platform Operator, you need to apply `bundle.yaml` that includes all the operator components:
+
+[source, bash]
+----
+kubectl apply -f https://repository.hazelcast.com/operator/bundle.yaml
+----
+
+Check the CRDs to make sure they were successfully created:
+
+[source, bash]
+----
+$ kubectl get crd
+NAME                              CREATED AT
+hazelcasts.hazelcast.com          2021-11-15T14:37:36Z
+managementcenters.hazelcast.com   2021-11-15T14:37:36Z
+----
+
+Check that the operator is up and running:
+
+[source, bash]
+----
+$ kubectl get deployment
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+hazelcast-platform-controller-manager   1/1     1            1           14m
+----
+
+== Create Hazelcast cluster
+
+Hazelcast Platform Operator can create both Enterprise and Community Hazelcast clusters. To create the cluster, you need to apply the Hazelcast Custom Resource.
+
+[tabs]
+====
+
+Hazelcast Platform Enterprise cluster::
++
+--
+For the Hazelcast Platform Enterprise, you need to create a secret with the Hazelcast Enterprise license key.
+
+[source, shell]
+----
+kubectl create secret generic hazelcast-license-key --from-literal license-key=<hazelcast-license-key>
+----
+
+Then run the following command to create the cluster.
+[source, shell]
+----
+cat <<EOF | kubectl apply -f -
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+  name: my-hazelcast
+spec:
+  repository: 'docker.io/hazelcast/hazelcast-enterprise'
+EOF
+----
+--
+
+Hazelcast Platform cluster::
++
+--
+For the Hazelcast Platform, run the following command to create the cluster.
+[source, shell]
+----
+cat <<EOF | kubectl apply -f -
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+  name: my-hazelcast
+EOF
+----
+--
+
+====
+
+== Check Hazelcast cluster status
+
+To check that the Hazelcast cluster is formed, you can check the status of the Hazelcast Custom Resource.
+
+[source, shell]
+----
+$ kubectl get hazelcast my-hazelcast
+NAME        STATUS    MEMBERS
+hazelcast   Running   3/3
+----
+
+For a more detailed view, you can see the `yaml` format.
+
+[source, shell]
+----
+$ kubectl get hazelcast my-hazelcast -o=yaml
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+..................
+spec:
+  clusterName: dev
+  clusterSize: 3
+  exposeExternally: {}
+  licenseKeySecret: hazelcast-license-key
+  repository: docker.io/hazelcast/hazelcast-enterprise
+  version: "5.0-slim"
+status:
+  hazelcastClusterStatus:
+    readyMembers: 3/3
+  phase: Running
+----
+
+== Create ManagementCenter
+
+Hazelcast Platform Operator can also create ManagementCenter. For this, run the following command.
+
+[source, shell]
+----
+cat <<EOF | kubectl apply -f -
+apiVersion: hazelcast.com/v1alpha1
+kind: ManagementCenter
+metadata:
+  name: my-managementcenter
+spec:
+  repository: 'hazelcast/management-center'
+  version: '5.0'
+  licenseKeySecret: hazelcast-license-key
+EOF
+----
+
+It will create the ManagementCenter Custom Resource and will deploy the ManagementCenter application.
+Run the following command to check that the ManagementCenter was successfully deployed.
+
+[source, shell]
+----
+$ kubectl get managementcenter my-managementcenter
+NAME               STATUS
+managementcenter   Running
+----
+
+This configuration will expose ManagementCenter using LoadBalancer external IP.
+[source, shell]
+----
+$ kubectl get svc
+NAME               TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                        AGE
+hazelcast          ClusterIP      10.96.213.134   <none>        5701/TCP                       11m
+managementcenter   LoadBalancer   10.96.200.154   35.241.11.15  8080:31720/TCP,443:31858/TCP   2m57s
+----
+
+Open `[MANAGEMENT-CENTER-EXTERNAL-IP]:8080` in your browser to access the ManagementCenter UI.
+
+== Clean up
+
+To delete the Hazelcast cluster and ManagementCenter, delete the Custom Resources.
+[source, shell]
+----
+$ kubectl delete hazelcast my-hazelcast
+hazelcast.hazelcast.com "my-hazelcast" deleted
+
+$ kubectl delete managementcenter my-managementcenter
+managementcenter.hazelcast.com "my-managementcenter" deleted
+----
+
+[NOTE]
+====
+If you deployed the Hazelcast Platform Enterprise cluster, you might also want to delete the license secret.
+[source, shell]
+----
+kubectl delete secret hazelcast-license-key
+----
+====
+
+[NOTE]
+====
+Deletion of the `managementcenter` resource will not delete the `PersistentVolume` and the `PersistentVolumeClaim`. You will need to delete them manually.
+====
+
+Use `kubectl delete` command to undeploy the operator.
+[source, shell]
+----
+kubectl delete -f https://repository.hazelcast.com/operator/bundle.yaml
+----
+
+== Summary
+
+In this example, we have seen how to use Hazelcast Platform Operator to deploy and manage a Hazelcast Platform cluster and ManagementCenter.
+
+== See Also
+
+- xref:kubernetes:ROOT:index.adoc[Hazelcast for Kubernetes]

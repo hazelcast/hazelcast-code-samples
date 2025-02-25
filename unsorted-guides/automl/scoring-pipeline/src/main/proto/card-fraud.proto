@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.hzsamples.automl";
+option java_outer_classname = "CardFraud";
+
+// this version of the auth request input feature contains only strings but this will change
+message AuthRequestv01 {
+    string gender = 1;
+    string city = 2;
+    string state = 3;
+    string lat = 4;
+    string long = 5;
+    string city_pop = 6;
+    string job = 7;
+    string dob = 8;
+    string category = 9;
+    string amt = 10;
+    string merchant = 11;
+    string merch_lat = 12;
+    string merch_long = 13;
+}
+

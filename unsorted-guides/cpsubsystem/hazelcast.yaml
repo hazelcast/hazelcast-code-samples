@@ -1,0 +1,7 @@
+hazelcast:
+  license-key: AllFeatures#10Nodes#sB6C2JcGNjFfiH3EZRq4bQY58wKUpuPX0OLDMtz7h1IkyvWgdaA15100109911000111000509019110011116926113019010011992
+  cp-subsystem:
+    cp-member-count: 3
+    group-size: 3
+  management-center:
+    console-enabled: true

@@ -1,0 +1,593 @@
+= Connect to Hazelcast from Outside Kubernetes
+:templates-url: templates:ROOT:page$/
+:page-layout: tutorial
+:page-product: operator
+:page-categories: Caching, Cloud Native
+:page-lang: go, java, node, python
+:page-est-time: 5-10 mins
+:framework: Kubernetes Operator
+:description: In this tutorial, you'll connect to a Hazelcast cluster running in Kubernetes from outside of the Kubernetes environment.
+
+== What You’ll Learn
+
+{description}
+
+== Before you Begin
+
+* Up and running https://kubernetes.io/[Kubernetes] cluster
+* Kubernetes command-line tool, https://kubernetes.io/docs/tasks/tools/#kubectl[kubectl]
+* Deployed xref:operator:ROOT:get-started.adoc[Hazelcast Platform Operator]
+* Create a license secret:
++
+Create a secret with your link:http://trialrequest.hazelcast.com/[Hazelcast Enterprise License].
+
++
+[source, shell]
+----
+kubectl create secret generic hazelcast-license-key --from-literal=license-key=<hz-license-key>
+----
+
+NOTE: Starting with version 5.13, Hazelcast Platform Operator only supports Hazelcast Enterprise cluster creation. Even the feature can be used in Hazelcast Open Source clusters, Hazelcast Platform Operator requires license key to run a cluster.
+
+WARNING: This tutorial uses LoadBalancer services to connect to Hazelcast from outside of the Kubernetes cluster. Therefore, it is essential to ensure that your Kubernetes cluster can assign public IPs to LoadBalancer services. This is particularly important if you are using a local Kubernetes cluster such as Minikube or Kind.
+
+== Introduction
+
+There are two available options for Expose Externally feature of Hazelcast Platform Operator:
+
+- *Unisocket* - client requests are load balanced between Hazelcast members.
+
+- *Smart* - client connects to all members and sends requests directly to the members owning the data.
+
+Let’s see both approaches.
+
+== Unisocket
+
+The first option is to use the `Unisocket` type. This option will use the standard Kubernetes mechanism that automatically load balances the traffic to Hazelcast members.
+
+.Hazelcast Unisocket Client
+image::unisocket.jpg[Hazelcast Unisocket Client]
+
+=== Start the Hazelcast Cluster
+
+Run the following command to create the Hazelcast cluster with Expose Externally feature enabled using Unisocket type.
+
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-expose-externally/hazelcast-unisocket.yaml[]
+EOF
+----
+
+For `discoveryServiceType` you can use:
+
+* `LoadBalancer` - will create an external `LoadBalancer` for discovery service;
+* `NodePort` - will expose the discovery service via `NodePort`.
+
+
+=== Verify the Hazelcast Cluster
+
+Check the cluster status by running the following command.
+
+[source, shell]
+----
+$ kubectl get hazelcast my-hazelcast-unisocket
+NAME           STATUS    MEMBERS
+my-hazelcast   Running   3/3
+----
+
+After verifying that the cluster is `Running` and all the members are ready (`3/3`), run the following command to find the discovery address.
+
+[source, shell]
+----
+$ kubectl get hazelcastendpoint my-hazelcast-unisocket
+NAME                     TYPE        ADDRESS
+my-hazelcast-unisocket   Discovery   34.135.7.75:5701
+----
+
+The `ADDRESS` column displays the external address of your Hazelcast cluster.
+
+=== Connect Hazelcast Clients to the Cluster
+
+To access all sample clients, clone the following repository:
+
+[source,shell]
+----
+git clone https://github.com/hazelcast-guides/hazelcast-platform-operator-expose-externally.git
+cd hazelcast-platform-operator-expose-externally/docs/modules/ROOT/examples/operator-expose-externally
+----
+
+. The sample code(excluding CLC) for this tutorial is in the link:https://github.com/hazelcast-guides/hazelcast-platform-operator-expose-externally/tree/master/docs/modules/ROOT/examples/operator-expose-externally[`docs/modules/ROOT/examples/operator-expose-externally`] directory.
+
+Configure the Hazelcast client with the external address and disable smart routing to use the unisocket connection.
+
+[tabs]
+====
+
+CLC::
++
+--
+NOTE: Before using CLC, it should be installed in your system. Check the installation instructions for CLC: xref:clc:ROOT:install-clc.adoc[].
+
+Run the following command for adding the cluster config to the CLC.
+
+[source, bash]
+----
+clc config add hz cluster.name=dev cluster.address=<EXTERNAL-IP>
+----
+--
+
+Java::
++
+--
+[source, java]
+----
+include::ROOT:example$/operator-expose-externally/java-unisocket/src/main/java/com/hazelcast/Main.java[]
+----
+--
+
+NodeJS::
++
+--
+[source, javascript]
+----
+include::ROOT:example$/operator-expose-externally/nodejs-unisocket/client.js[]
+----
+--
+
+Go::
++
+--
+[source, go]
+----
+include::ROOT:example$/operator-expose-externally/go-unisocket/main.go[]
+----
+--
+
+Python::
++
+--
+[source, python]
+----
+include::ROOT:example$/operator-expose-externally/python-unisocket/main.py[]
+----
+--
+.NET::
++
+--
+[source, cs]
+----
+include::ROOT:example$/operator-expose-externally/dotnet-unisocket/csharp_example.cs[]
+----
+--
+====
+
+Now you can start the application.
+
+[tabs]
+====
+
+CLC::
++
+--
+Run the following command to fill a map.
+
+[source, bash]
+----
+for i in {1..10};
+do
+   clc -c hz map set --name map1 key-$i value-$i;
+done
+----
+
+Run the following command to check the map size.
+
+[source, bash]
+----
+clc -c hz map size --name map1
+----
+--
+
+Java::
++
+--
+[source, bash]
+----
+cd java-unisocket
+mvn package 
+java -jar target/*jar-with-dependencies*.jar
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+
+NodeJS::
++
+--
+[source, bash]
+----
+cd nodejs-unisocket
+npm install
+npm start
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+
+Go::
++
+--
+[source, bash]
+----
+cd go-unisocket
+go run main.go
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+
+Python::
++
+--
+[source, bash]
+----
+cd python-unisocket
+pip install -r requirements.txt
+python main.py
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+.NET::
++
+--
+[source, bash]
+----
+cd dotnet-unisocket
+dotnet build
+dotnet run
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+
+====
+
+== Smart Client
+
+The second option is to use the `Smart` type. With this option, each Hazelcast member will be exposed with its own service (it can be either `LoadBalancer` or `NodePort`). Hazelcast smart client is capable of mapping the given key with its owner member, which means that it sends the data directly to the member which contains the right data partition.
+
+.Hazelcast Smart Client
+image::smart.jpg[Hazelcast Smart Client]
+
+=== Start the Hazelcast Cluster
+
+Run the following command to create the Hazelcast cluster with Expose Externally feature enabled using Smart type.
+
+[source, shell]
+----
+kubectl apply -f - <<EOF
+include::ROOT:example$/operator-expose-externally/hazelcast-smart.yaml[]
+EOF
+----
+
+This will create the Hazelcast cluster and one `LoadBalancer` service for discovery and one `LoadBalancer` service for each pod.
+
+For `discoveryServiceType` you can use:
+
+* `LoadBalancer` - will create an external `LoadBalancer` for discovery service;
+* `NodePort` - will expose the discovery service via `NodePort`.
+
+For `memberAccess` you can use the following options:
+
+* `LoadBalancer` - lets the client access Hazelcast member with the `LoadBalancer` service;
+* `NodePortNodeName` - lets the client access Hazelcast member with the `NodePort` service and the node name;
+* `NodePortExternalIP` - lets the client access Hazelcast member with the `NodePort` service and the node external IP/hostname.
+
+=== Verify the Hazelcast Cluster
+
+Check the cluster status by running the following command.
+
+[source, shell]
+----
+$ kubectl get hazelcast my-hazelcast-smart
+NAME           STATUS    MEMBERS
+my-hazelcast   Running   3/3
+----
+
+After verifying that the cluster is `Running` and all the members are ready (`3/3`), run the following command to find the discovery and member addresses.
+
+[source, shell]
+----
+$ kubectl get hazelcastendpoint --selector="app.kubernetes.io/instance=my-hazelcast-smart"
+NAME               TYPE        ADDRESS
+my-hazelcast       Discovery   35.184.21.18:5701
+my-hazelcast-0     Member      34.121.197.134:5701
+my-hazelcast-1     Member      35.238.20.134:5701
+my-hazelcast-2     Member      34.30.60.128:5701
+my-hazelcast-wan   WAN         35.184.21.18:5701
+----
+
+The `ADDRESS` column displays the external addresses of your Hazelcast cluster and members.
+
+=== Connect Hazelcast Clients to the Cluster
+
+Configure the Hazelcast client to connect to the cluster external address.
+
+[tabs]
+====
+
+CLC::
++
+--
+NOTE: Before using CLC, it should be installed in your system. Check the installation instructions for CLC: xref:clc:ROOT:install-clc.adoc[].
+
+Run the following command for adding the cluster config to the CLC.
+
+[source, bash]
+----
+clc config add hz cluster.name=dev cluster.address=<EXTERNAL-IP>
+----
+--
+
+Java::
++
+--
+[source, java]
+----
+include::ROOT:example$/operator-expose-externally/java/src/main/java/com/hazelcast/Main.java[]
+----
+--
+
+NodeJS::
++
+--
+[source, javascript]
+----
+include::ROOT:example$/operator-expose-externally/nodejs/client.js[]
+----
+--
+
+Go::
++
+--
+[source, go]
+----
+include::ROOT:example$/operator-expose-externally/go/main.go[]
+----
+--
+
+Python::
++
+--
+[source, python]
+----
+include::ROOT:example$/operator-expose-externally/python/main.py[]
+----
+--
+.Net::
++
+--
+[source, cs]
+----
+include::ROOT:example$/operator-expose-externally/dotnet-unisocket/csharp_example.cs[]
+----
+--
+====
+
+
+Now you can start the application.
+
+[tabs]
+====
+
+CLC::
++
+--
+Run the following command to fill a map.
+
+[source, bash]
+----
+for i in {1..10};
+do
+   clc -c hz map set --name map1 key-$i value-$i;
+done
+----
+
+Run the following command to check the map size.
+
+[source, bash]
+----
+clc -c hz map size --name map1
+----
+--
+
+Java::
++
+--
+[source, bash]
+----
+cd java
+mvn package 
+java -jar target/*jar-with-dependencies*.jar
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+
+NodeJS::
++
+--
+[source, bash]
+----
+cd nodejs
+npm install
+npm start
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+
+Go::
++
+--
+[source, bash]
+----
+cd go
+go run main.go
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+
+Python::
++
+--
+[source, bash]
+----
+cd python
+pip install -r requirements.txt
+python main.py
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+.NET::
++
+--
+[source, bash]
+----
+cd dotnet
+dotnet build
+dotnet run
+----
+
+You should see the following output.
+
+[source, shell]
+----
+Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+....
+....
+----
+--
+
+====
+
+== Clean Up
+
+To clean up the created resources remove the Hazelcast Custom Resources.
+
+[source, shell]
+----
+kubectl delete hazelcast my-hazelcast-unisocket
+kubectl delete hazelcast my-hazelcast-smart
+----
+
+== See Also
+
+- xref:operator:ROOT:index.adoc[]
+- xref:kubernetes-external-client.adoc[]

@@ -1,0 +1,6 @@
+hazelcast:
+  network:
+    join:
+      gcp:
+        enabled: true
+        label: LABEL_KEY=LABEL_VALUE

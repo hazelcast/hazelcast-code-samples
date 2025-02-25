@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>microservices-demo</artifactId>
+        <groupId>com.hazelcast.solutions</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>routing-tools</artifactId>
+
+    <name>routing-tools</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>hazelcast.platform.solutions</groupId>
+            <artifactId>spring-hazelcast-pipeline-dispatcher</artifactId>
+            <version>${spring.hazelcast.pipeline.dispatcher.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-enterprise</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludeArtifactIds>hazelcast</excludeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

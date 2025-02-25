@@ -1,0 +1,577 @@
+= Deploy Hazelcast Cluster on AWS EC2
+:templates-url: templates:ROOT:page$/
+:aws-plugin-url: https://github.com/hazelcast/hazelcast-aws
+:tab-header-console: AWS Console
+:tab-header-cli: AWS CLI
+:page-layout: tutorial
+:page-product:
+:page-categories: Deployment, AWS
+:page-lang: 
+:page-est-time: 20 mins
+:description: In this tutorial, you will create two EC2 instances with Hazelcast members and see them connecting to each other and forming a cluster via Hazelcast AWS plugin.
+
+== What You’ll Learn
+
+{description}
+
+== Before you Begin
+
+Steps 1 to 4 cover the creation and the configuration of VPC, internet gateway, route table, subnet and IAM role.
+If you already have these configured you can skip them. However, make sure that you have these properties before
+creating instances:
+
+* [x] Have an IAM role with `ec2:DescribeInstances` permission
+* [x] Have a security group with at least port 5701 open
+* [x] Able to establish SSH connections to instances
+
+== 1. Create and Configure a VPC
+
+Let's start with creating a VPC on which our instances will run.
+
+=== 1.1. Create a VPC
+
+[tabs]
+====
+
+{tab-header-console}::
++
+--
+Under `VPC > Your VPCs` section of AWS console, create a new VPC and give it a name you can remember in the next steps:
+
+image::ss1-create-vpc.png[]
+--
+
+{tab-header-CLI}::
++
+--
+Create a VPC with a cidr block and note the *VpcId* to use afterwards:
+
+[source, shell]
+----
+$ aws ec2 create-vpc --cidr-block 10.0.0.0/16
+
+Vpc:
+  CidrBlock: 10.0.0.0/16
+  CidrBlockAssociationSet:
+  - AssociationId: vpc-cidr-assoc-***********
+    CidrBlock: 10.0.0.0/16
+    CidrBlockState:
+      State: associated
+  DhcpOptionsId: dopt-*******
+  InstanceTenancy: default
+  Ipv6CidrBlockAssociationSet: []
+  IsDefault: false
+  OwnerId: '***********'
+  State: pending
+  VpcId: vpc-***********
+----
+
+Then add a name tag you can remember in the next steps:
+[source, shell]
+----
+$ aws ec2 create-tags --resources vpc-*********** \
+    --tags Key=Name,Value=hazelcast-guide
+----
+--
+====
+
+==== 1.1.1. Create an Internet Gateway
+
+Now create an internet gateway to be attached to your VPC. You will need this gateway to establish SSH connections to
+instances:
+
+[tabs]
+====
+
+{tab-header-console}::
++
+--
+image::ss1.1.1-create-igw.png[]
+--
+
+{tab-header-CLI}::
++
+--
+
+Note the *InternetGatewayId* when it is created:
+
+[source, shell]
+----
+$ aws ec2 create-internet-gateway
+
+InternetGateway:
+  Attachments: []
+  InternetGatewayId: igw-**************
+  OwnerId: '**************'
+  Tags: []
+----
+
+Then add a name tag to make it distinguishable:
+[source, shell]
+----
+$ aws ec2 create-tags --resources igw-************** \
+    --tags Key=Name,Value=hazelcast-guide
+----
+--
+====
+
+==== 1.1.2. Attach the Internet Gateway
+
+After creating an internet gateway, attach it to your VPC.
+
+[tabs]
+====
+
+{tab-header-console}::
++
+--
+Navigate to `VPC > Internet gateways > Attach to VPC` section. Choose the VPC you just created among the available ones:
+
+image::ss1.1.2-attach-igw.png[]
+--
+
+{tab-header-CLI}::
++
+--
+
+Using their id's, attach the gateway to the VPC:
+
+[source, shell]
+----
+$ aws ec2 attach-internet-gateway \
+    --internet-gateway-id igw-*********** \
+    --vpc-id vpc-***********
+----
+--
+====
+
+=== 1.2. Add Default Route
+
+Now add the default route to the route table. This step will make you able to connect to instances via SSH.
+
+[tabs]
+====
+
+{tab-header-console}::
++
+--
+Under the VPC description, navigate to route table shown in the orange box:
+
+image::ss1.2.1-nav-to-routes.png[]
+
+Under `Routes` tab, you need the default one (`0.0.0.0/0`) listed. `Edit routes` to add this one:
+
+image::ss1.2.2-list-routes.png[]
+
+As the target, pick the internet gateway you created in section <<1.1.1. Create an Internet Gateway,1.1.1>> and save:
+
+image::ss1.2.3-add-route.png[]
+--
+
+{tab-header-CLI}::
++
+--
+To add a route, find the *RouteTableId* of the VPC first:
+
+[source, shell]
+----
+$ aws ec2 describe-route-tables \
+    --filters Name=vpc-id,Values=vpc-***********
+
+RouteTables:
+- Associations:
+  - AssociationState:
+      State: associated
+    Main: true
+    RouteTableAssociationId: rtbassoc-***********
+    RouteTableId: rtb-***********
+  OwnerId: '***********'
+  PropagatingVgws: []
+  RouteTableId: rtb-***********
+  Routes:
+  - DestinationCidrBlock: 10.0.0.0/16
+    GatewayId: local
+    Origin: CreateRouteTable
+    State: active
+  Tags: []
+  VpcId: vpc-***********
+----
+
+Then create the default route using the *InternetGatewayId*:
+
+[source, shell]
+----
+$ aws ec2 create-route --route-table-id rtb-*********** \
+    --destination-cidr-block 0.0.0.0/0 \
+    --gateway-id igw-***********
+----
+--
+====
+
+
+== 2. Create a Subnet in the VPC
+
+Let's continue with creating a subnet in the VPC.
+
+[tabs]
+====
+
+{tab-header-console}::
++
+--
+Under `VPC > Subnets` section, choose `Create Subnet`. Pick the proper
+VPC and give the subnet a recognizable name:
+
+image::ss2-create-subnet.png[]
+--
+
+{tab-header-CLI}::
++
+--
+Create a subnet in the VPC using the *VpcId* and note the *SubnetId* when created:
+
+[source, shell]
+----
+$ aws ec2 create-subnet --vpc-id vpc-*********** \
+    --cidr-block 10.0.0.0/16 \
+    --availability-zone us-east-1a
+
+Subnet:
+  AssignIpv6AddressOnCreation: false
+  AvailabilityZone: us-east-1a
+  AvailabilityZoneId: use1-az4
+  AvailableIpAddressCount: 65531
+  CidrBlock: 10.0.0.0/16
+  DefaultForAz: false
+  Ipv6CidrBlockAssociationSet: []
+  MapPublicIpOnLaunch: false
+  OwnerId: '***********'
+  State: available
+  SubnetArn: ***********
+  SubnetId: subnet-***********
+  VpcId: vpc-***********
+----
+
+Then add a name tag using the *SubnetId* you can remember in the next steps:
+
+[source, tag]
+----
+$ aws ec2 create-tags --resources subnet-*********** \
+    --tags Key=Name,Value=hazelcast-guide
+----
+--
+====
+
+
+== 3. Create an IAM Role
+
+The EC2 instances we will create need the IAM role to have `ec2:DescribeInstances` permission. This way, Hazelcast
+members are able to fetch other instance IPs and connect them dynamically. If you already have an IAM role, check
+the permissions. Otherwise, create a new one with the permission. For instance, `AmazonEC2ReadOnlyAccess` policy
+contains `DescribeInstances` permission and is enough to complete this guide.
+
+[tabs]
+====
+
+{tab-header-console}::
++
+--
+* Navigate to `IAM > Roles` and create a new role on `Access Management > Role > Create Role` section for EC2 use case:
+
+image::ss3-create-iam-role.png[]
+
+* Attach permission policies for the role:
+
+image::ss3-create-iam-with-permission.png[]
+--
+
+{tab-header-CLI}::
++
+--
+Create a role policy in `assume-role-policy.json` first:
+
+[source, shell]
+----
+$ cat <<EOT >> assume-role-policy.json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": "sts:AssumeRole",
+        "Principal": {
+          "Service": "ec2.amazonaws.com"
+        },
+        "Effect": "Allow",
+        "Sid": ""
+      }
+    ]
+}
+EOT
+----
+
+Then create a role with this policy:
+
+[source, shell]
+----
+$ aws iam create-role --role-name hazelcast-guide \
+    --assume-role-policy-document file://assume-role-policy.json
+
+Role:
+  Arn: ***********
+  AssumeRolePolicyDocument:
+    Statement:
+    - Action: sts:AssumeRole
+      Effect: Allow
+      Principal:
+        Service: ec2.amazonaws.com
+      Sid: ''
+    Version: '2012-10-17'
+  CreateDate: '2020-12-17T12:46:24+00:00'
+  Path: /
+  RoleId: ***********
+  RoleName: hazelcast-guide
+----
+
+Now attach `AmazonEC2ReadOnlyAccess` to the role:
+
+[source, shell]
+----
+$ aws iam attach-role-policy \
+    --policy-arn arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess \
+    --role-name hazelcast-guide
+----
+
+As the last step, create an instance profile and add the role created above to this profile:
+[source, shell]
+----
+$ aws iam create-instance-profile \
+    --instance-profile-name hazelcast-guide-EC2-Instance-Profile
+
+InstanceProfile:
+  Arn: ***********
+  CreateDate: '2020-12-17T13:44:47+00:00'
+  InstanceProfileId: ***********
+  InstanceProfileName: hazelcast-guide-EC2-Instance-Profile
+  Path: /
+  Roles: []
+
+$ aws iam add-role-to-instance-profile \
+    --role-name hazelcast-guide \
+    --instance-profile-name hazelcast-guide-EC2-Instance-Profile
+----
+--
+====
+
+== 4. Create a Security Group
+
+As the last step, create a security group in your VPC with the proper inbound rules
+for Hazelcast. Allow port 5701 among inbound rules as it's the default port of Hazelcast. If you plan to run more
+than one Hazelcast member on an EC2 Instance, then you should open more ports. Also, do not forget to allow SSH port:
+
+[tabs]
+====
+
+{tab-header-console}::
++
+--
+Navigate to `VPC > Security Groups` and create a new one:
+
+image::ss4-create-security-group.png[]
+--
+
+{tab-header-CLI}::
++
+--
+Create a security group with the *VpcId* and note the returned *GroupId*:
+
+[source, shell]
+----
+$ aws ec2 create-security-group \
+    --group-name hazelcast-guide \
+    --description "Hazelcast EC2 Guide" \
+    --vpc-id vpc-***********
+
+GroupId: sg-***********
+----
+
+Open the SSH port:
+
+[source, shell]
+----
+$ aws ec2 authorize-security-group-ingress \
+    --group-id sg-*********** \
+    --protocol tcp \
+    --port 22 \
+    --cidr 0.0.0.0/0
+----
+
+Open a port for Hazelcast:
+
+[source, shell]
+----
+$ aws ec2 authorize-security-group-ingress \
+    --group-id sg-*********** \
+    --protocol tcp \
+    --port 5701 \
+    --cidr 0.0.0.0/0
+----
+--
+====
+
+== 5. Create EC2 Instances
+
+[tabs]
+====
+
+{tab-header-console}::
++
+--
+Let's start creating our instances via `LaunchInstanceWizard` under `EC2 > Launch Instances` on AWS Console.
+
+* Choose an Amazon Machine Image (AMI). `Amazon Linux` is used in this guide:
+
+image::ss5.1-create-instance.png[]
+
+
+* Choose an instance type:
+
+image::ss5.2-create-instance.png[]
+
+
+* Now configure instance details with the *_VPC_, _subnet_ and _IAM roles_* you created above. Notice that the number
+of instances is 2. Also, enable `Auto-assign Public IP` to establish SSH connections later on.
+
+image::ss5.3-create-instance.png[]
+
+
+* Next, add a unique tag to the instances. This is optional but recommended if your AWS account has many running
+instances associated with:
+
+image::ss5.4-create-instance.png[]
+
+
+* Finally, select the security group you created above:
+
+image::ss5.5-create-instance.png[]
+
+As the last step, select your https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[key pair]
+for the instances and that's it. You can launch instances now.
+--
+
+{tab-header-CLI}::
++
+--
+Using the id's and the names you set above, now run two EC2 instances. In addition to the steps so far, you need to have
+a https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[key pair] and pass it via `--key-name` flag.
+The command below will start two Amazon Linux machines with type t2.micro and assign public IP addresses to each.
+Also a tag named "cluster-tag" with "guide-ec2-cluster" value will be assigned to the instances:
+
+[source, shell]
+----
+$ aws ec2 run-instances \
+    --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 \
+    --count 2 --instance-type t2.micro \
+    --key-name *********** \
+    --security-group-ids sg-*********** \
+    --subnet-id subnet-*********** \
+    --iam-instance-profile Name="hazelcast-guide-EC2-Instance-Profile" \
+    --associate-public-ip-address \
+    --tag-specifications 'ResourceType=instance,Tags=[{Key=cluster-tag,Value=guide-ec2-cluster}]'
+----
+
+Then fetch the instance id's filtered by their tags:
+[source, shell]
+----
+$ aws ec2 describe-instances \
+    --filters "Name=tag:cluster-tag,Values=guide-ec2-cluster" \
+    --query "Reservations[].Instances[].InstanceId"
+
+- i-xxxxxxxxxxxxxxxxx
+- i-yyyyyyyyyyyyyyyyy
+----
+
+Finally, fetch the public IPs of the instances to establish SSH connections in the next step:
+[source, shell]
+----
+$ aws ec2 describe-instances \
+    --instance-ids i-xxxxxxxxxxxxxxxxx i-yyyyyyyyyyyyyyyyy \
+    --query 'Reservations[*].Instances[*].PublicIpAddress'
+
+- 5.10.x.y
+- 6.12.x.y
+----
+--
+====
+
+== 6. Create a Hazelcast Cluster
+
+* Now that you have 2 instances running with the same IAM role, let's connect to each of them via SSH:
+
+[source, shell]
+----
+ssh -i "<your-key-pair>.pem" ec2-user@<instance-public-ip>
+----
+
+[NOTE]
+====
+If you encounter any problem regarding the SSH connection, see
+https://aws.amazon.com/tr/premiumsupport/knowledge-center/ec2-linux-ssh-troubleshooting/[SSH troubleshooting page]
+in AWS documentation.
+====
+
+* After SSH connection is established, install Hazelcast CLI to the instances:
+
+[source, shell]
+----
+wget https://repository.hazelcast.com/rpm/hazelcast-rpm.repo -O hazelcast-rpm.repo
+sudo mv hazelcast-rpm.repo /etc/yum.repos.d/
+sudo yum install hazelcast
+----
+
+* Now start Hazelcast members in both EC2 instances:
+
+[source, shell]
+----
+hz start
+----
+
+When Hazelcast members find each other, you will see a log similar to below for each instance:
+
+[source, shell]
+----
+Members {size:2, ver:2} [
+	Member [10.0.x.x]:5701 - 1cc76eb9-4032-4ba2-870c-43baba3cbd88
+	Member [10.0.y.y]:5701 - 3e8b66fc-52eb-4379-ae11-4b6e30549055 this
+]
+----
+
+[NOTE]
+====
+By default, Hazelcast will use the current region, the IAM Role attached to the EC2 instance and the port range 5701-5708
+to discover other Hazelcast members in other instances. You can configure Hazelcast such that it tries to connect
+to certain EC2 instances only. For instance, if you use the tag from `Section 5`, Hazelcast will filter the available
+instances based on this tag and won't attempt to connect if the tag does not match:
+
+[source, shell]
+----
+export HZ_NETWORK_JOIN_AWS_ENABLED=true
+export HZ_NETWORK_JOIN_AWS_TAGKEY=cluster-tag
+export HZ_NETWORK_JOIN_AWS_TAGVALUE=guide-ec2-cluster
+hz start
+----
+
+You can find all discovery configuration details on {aws-plugin-url}[Hazelcast AWS discovery plugin] documentation.
+====
+
+
+== Summary
+
+In this tutorial, you created all AWS components you need to form a Hazelcast cluster on EC2. Then you started
+two Hazelcast members on two different EC2 instances and saw them connecting each other and forming a cluster.
+If you created more EC2 instances and Hazelcast members in the same way, these members would also find each other
+and they all would form a single cluster.
+
+== See Also
+
+- xref:terraform-quickstarts.adoc[]
+- xref:ecs-embedded.adoc[]

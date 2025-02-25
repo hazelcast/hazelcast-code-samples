@@ -1,0 +1,2 @@
+confluent-kafka==2.3.0
+hazelcast-python-client==5.3.0

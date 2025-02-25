@@ -1,0 +1,13 @@
+hazelcast:
+  jet:
+    enabled: true
+    resource-upload-enabled: true
+  map:
+    auth_requests:
+      event-journal:
+        enabled: true
+        capacity: 100000
+      eviction:
+        eviction-policy: RANDOM
+        size: 1
+        max-size-policy: PER_PARTITION

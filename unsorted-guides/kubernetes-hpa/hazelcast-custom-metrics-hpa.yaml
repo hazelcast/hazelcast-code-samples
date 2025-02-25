@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: heap-based-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: hazelcast
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Object
+      object:
+        describedObject:
+          kind: Service
+          name: hazelcast-metrics
+        metric:
+          name: on_heap_ratio
+        target:
+          type: Value
+          value: 200m

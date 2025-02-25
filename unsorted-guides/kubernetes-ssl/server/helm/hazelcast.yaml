@@ -1,0 +1,25 @@
+  hazelcast:
+    advanced-network:
+      enabled: true
+      join:
+        kubernetes:
+          enabled: true
+          service-name: ${serviceName}
+          service-port: 5702
+          namespace: ${namespace}
+      member-server-socket-endpoint-config:
+        port:
+          port: 5702
+        ssl:
+          enabled: true
+      client-server-socket-endpoint-config:
+        port:
+          port: 5701
+        ssl:
+          enabled: true
+      rest-server-socket-endpoint-config:
+        port:
+          port: 5703
+        endpoint-groups:
+          HEALTH_CHECK:
+            enabled: true

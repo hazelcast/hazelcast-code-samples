@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Kubernetes HPA for Hazelcast cluster</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/kubernetes-hpa/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../_/img/hazelcast-logo-white.png 1x, ../_/img/hazelcast-logo-white@2x.png 2x, ../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../_/img/external-link.png 1x, ../_/img/external-link@2x.png 2x, ../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="kubernetes-hpa" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<h1 class="page">Kubernetes HPA for Hazelcast cluster</h1>
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/kubernetes-hpa/edit/master/doc/modules/ROOT/pages/index.adoc>See something wrong? Edit this page.</a></p>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide will show you how to set up Hazelcast with <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/">Kubernetes Horizontal Pod Autoscaler (HPA)</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can see the whole project <a href="https://github.com/hazelcast-guides/kubernetes-hpa">here.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_youll_learn"><a class="anchor" href="#_what_youll_learn"></a>What You’ll Learn</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide you will deploy Hazelcast to Kubernetes cluster and set up HPA using <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/#resource-metrics-pipeline">Resource Metrics</a> and <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/#full-metrics-pipeline">Custom Metrics</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>~15 minutes</p>
+</li>
+<li>
+<p>Kubernetes cluster with kubectl configured</p>
+</li>
+<li>
+<p><a href="https://helm.sh/">Helm 3</a> tool installed</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installing_hazelcast_helm_chart"><a class="anchor" href="#_installing_hazelcast_helm_chart"></a>Installing Hazelcast Helm Chart</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Helm is the package manager for Kubernetes, and we will use it throughout the document to install various software. This is the <a href="https://github.com/helm/helm#install">link</a> to install <code>helm</code> into your computer. Once you have a working <code>Helm 3</code> we can install <a href="https://github.com/hazelcast/charts/tree/master/stable/hazelcast">Hazelcast Helm Chart</a> by running the following commands:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ helm repo add hazelcast https://hazelcast-charts.s3.amazonaws.com/
+$ helm repo update
+$ helm install hazelcast hazelcast/hazelcast</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can verify that Hazelcast cluster is successfully deployed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get all
+NAME                        READY   STATUS    RESTARTS   AGE
+pod/hazelcast-0             1/1     Running   0          7m35s
+pod/hazelcast-1             1/1     Running   0          7m3s
+pod/hazelcast-2             1/1     Running   0          6m23s
+pod/hazelcast-mancenter-0   1/1     Running   0          7m35s
+
+NAME                          TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)                        AGE
+service/hazelcast             ClusterIP      None            &lt;none&gt;         5701/TCP                       7m35s
+service/hazelcast-mancenter   LoadBalancer   10.175.245.87   34.77.64.138   8080:30957/TCP,443:30042/TCP   7m35s
+service/kubernetes            ClusterIP      10.175.240.1    &lt;none&gt;         443/TCP                        25h
+
+NAME                                   READY   AGE
+statefulset.apps/hazelcast             3/3     7m35s
+statefulset.apps/hazelcast-mancenter   1/1     7m35s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details on installing and using Hazelcast Helm Chart you can see this <a href="https://hazelcast.com/blog/hazelcast-helm-chart/">blogpost</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_horizontal_pod_autoscaler_resource_metrics"><a class="anchor" href="#_horizontal_pod_autoscaler_resource_metrics"></a>Horizontal Pod AutoScaler (Resource Metrics)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As you can read the details from official Kubernetes documentation, <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/#resource-metrics-pipeline">Resource Metrics</a> provide CPU and Memory based metrics for pods and nodes in your Kubernetes Cluster. Those metrics are exposed via the metrics.k8s.io API and one implementation of that API is Metrics Server.</p>
+</div>
+<div class="paragraph">
+<p>Before moving forward, verify that Metrics Server is properly installed and visible in the list of API Registration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get apiservices.apiregistration.k8s.io | grep metrics-server
+v1beta1.metrics.k8s.io                 kube-system/metrics-server   True        26h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s create an HPA based on CPU usage.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl autoscale statefulset hazelcast --cpu-percent=50 --min=3 --max=10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This HPA will periodically check Hazelcast StatefulSet CPU usage and will decide the number of running pods between 3 and 10, based on some <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#algorithm-details">calculations</a>. The simplest way to put some cpu load on Hazelcast Pod is to execute <a href="https://en.wikipedia.org/wiki/Yes_(Unix)">yes tool</a>. This is just to show how HPA is triggered to scale up Hazelcast Cluster by printing yes in one of Hazelcast pods. You should use a proper load testing tool to test HPA in your Hazelcast Cluster. Before generating CPU load, you can open 2 new terminals to watch HPA target values and number of Hazelcast pods via watch <code>kubectl get pods</code> and watch <code>kubectl get hpa</code> commands. Let&#8217;s move on and execute the following command for 5-10 seconds and terminate via <strong>Ctrl + C</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Now that your HPA target is above 50%, you should see some new pods have been created. As the initial Hazelcast cluster was 3 members cluster, <code>hazelcast-3</code> and above are the new pods created by HPA.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get hpa
+NAME             REFERENCE                  TARGETS     MINPODS   MAXPODS   REPLICAS   AGE
+hazelcast        StatefulSet/hazelcast      282m/200m   3         5         5          18m
+
+$ kubectl get pods
+NAME                                    READY   STATUS        RESTARTS   AGE
+hazelcast-0                             1/1     Running       0          30m
+hazelcast-1                             1/1     Running       0          30m
+hazelcast-2                             1/1     Running       0          29m
+hazelcast-3                             1/1     Running       0          14m
+hazelcast-4                             1/1     Running       0          13m
+hazelcast-mancenter-0                   1/1     Running       1          30m</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cleanup"><a class="anchor" href="#_cleanup"></a>Cleanup</h3>
+<div class="paragraph">
+<p>As you successfully managed to use Resource Metrics with Hazelcast, we can clean up resources used up to that point.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ helm uninstall hazelcast
+release "hazelcast" uninstalled
+
+$ kubectl delete hpa hazelcast
+horizontalpodautoscaler.autoscaling "hazelcast" deleted</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_custom_metrics"><a class="anchor" href="#_custom_metrics"></a>Custom Metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the previous section, we have explained how to use Resource Metrics to autoscale your deployments based on CPU or Memory Metrics. Although that is fine for some architectures, those metrics are Kubernetes Pod or Node level so application-level autoscaling is not possible with Resource Metrics. Kubernetes introduced Custom Metrics API in order to fill in this gap. When using Custom Metrics API, each container exposes its own metrics and HPA uses those metrics to make autoscaling decisions. In this example, we will use <a href="https://prometheus.io/">Prometheus</a> as Metrics Storage and <a href="https://github.com/DirectXMan12/k8s-prometheus-adapter">Prometheus Adapter</a> as the Custom Metrics API Provider.</p>
+</div>
+<div class="sect2">
+<h3 id="_install_prometheus_and_prometheus_adapter"><a class="anchor" href="#_install_prometheus_and_prometheus_adapter"></a>Install Prometheus and Prometheus Adapter</h3>
+<div class="paragraph">
+<p>To install Prometheus, execute the following commands:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+"prometheus-community" has been added to your repositories
+
+$ kubectl create ns monitoring
+namespace/monitoring created
+
+$ helm install prometheus prometheus-community/prometheus --namespace=monitoring</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before installing Prometheus Adapter let&#8217;s take a look at the content of <code>prometheus-adapter-values.yaml</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">rules:
+  default: true
+  custom:
+  - seriesQuery: '{__name__=~"jvm_memory_bytes_(used|max)",area="heap",kubernetes_name=~"hazelcast.*"}'
+    seriesFilters:
+    - is: ^jvm_memory_bytes_(used|max)$
+    resources:
+      overrides:
+        kubernetes_pod_name: {resource: "pod"}
+        kubernetes_namespace: {resource: "namespace"}
+        kubernetes_name: {resource: "service"}
+    name:
+      matches: ^jvm_memory_bytes_(used|max)$
+      as: "on_heap_ratio"
+    metricsQuery: max(jvm_memory_bytes_used{&lt;&lt;.LabelMatchers&gt;&gt;}/jvm_memory_bytes_max{&lt;&lt;.LabelMatchers&gt;&gt;}) by (&lt;&lt;.GroupBy&gt;&gt;)
+prometheus:
+  url: http://prometheus-server # make sure the url is correct
+  port: 80</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This configuration will be passed to the helm chart while deploying Prometheus Adapter but let&#8217;s just go through each part before doing that. The config basically tells Prometheus Adapter:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>query only <code>jvm_memory_bytes_used</code> and <code>jvm_memory_bytes_max</code></p>
+</li>
+<li>
+<p>assign <code>kubernetes_*</code> based labels to resources to be able to query via REST URLs like <code>/apis/custom.metrics.k8s.io/v1beta1/namespaces/default/services/*/on_heap_ratio</code></p>
+</li>
+<li>
+<p>give a new, easier name (<code>on_heap_ratio</code>) to the metric that we expose via custom metrics adapter</p>
+</li>
+<li>
+<p>select max value out of all series provided by all PODs</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This example uses <code>max</code> function while creating <code>metricsQuery</code>, but you can basically use some other <a href="https://prometheus.io/docs/prometheus/latest/querying/operators/#aggregation-operators">aggregation operator</a> like <code>avg</code> in your own configuration. If you saved the file above, you can create a prometheus adapter based on that configuration.</p>
+</div>
+<div class="paragraph">
+<p>To install Prometheus Adapter run the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ helm install prometheus-adpter prometheus-community/prometheus-adapter --namespace=monitoring -f prometheus-adapter-values.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_install_metrics_enabled_hazelcast_cluster"><a class="anchor" href="#_install_metrics_enabled_hazelcast_cluster"></a>Install Metrics Enabled Hazelcast Cluster</h3>
+<div class="paragraph">
+<p>Let&#8217;s install a new 3 members Hazelcast cluster with metrics enabled. Each Hazelcast member container in this new deployment will expose their own metrics data under <code>/metrics</code> endpoint. This endpoint exposes metrics in Prometheus format because each Hazelcast container is started with Prometheus <a href="https://github.com/prometheus/jmx_exporter">JMX Exporter</a>. This is a feature provided by <a href="https://github.com/hazelcast/hazelcast-docker">Hazelcast Docker</a> Image. We also set <code>resources.limits.memory=512Mi</code> which sets each Hazelcast member JVM max heap size to <code>128Mi</code>. JVM by default grabs 25% of available memory as max heap size.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ helm install hazelcast hazelcast/hazelcast --set metrics.enabled=true,resources.limits.memory=512Mi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Verify that the custom rule we provided to Prometheus Adapter is functioning properly. If you see <code>"Error from server (NotFound): the server could not find the metric on_heap_ratio for services"</code>, you might need to wait some time because Prometheus might not have started scraping Hazelcast specific metrics.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/default/services/*/on_heap_ratio" | jq .
+{
+  "kind": "MetricValueList",
+  "apiVersion": "custom.metrics.k8s.io/v1beta1",
+  "metadata": {
+    "selfLink": "/apis/custom.metrics.k8s.io/v1beta1/namespaces/default/services/%2A/on_heap_ratio"
+  },
+  "items": [
+    {
+      "describedObject": {
+        "kind": "Service",
+        "namespace": "default",
+        "name": "hazelcast-metrics",
+        "apiVersion": "/v1"
+      },
+      "metricName": "on_heap_ratio",
+      "timestamp": "2020-11-13T12:57:23Z",
+      "value": "108m",
+      "selector": null
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The most important part in this output is "value": <code>108m</code>. The suffix <code>m</code> means milli-unit, and it is <a href="https://github.com/DirectXMan12/k8s-prometheus-adapter/blob/master/docs/walkthrough.md#quantity-values">kubernetes-style quantities</a> to define metric values. Milli-unit is equivalent to 1000ths of a unit so <code>108m</code> is actually referring to 3.3% which means <code>max</code> value of <code>on_heap_ratio</code> seen so far.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_install_horizontal_pod_autoscaler_custom_metrics"><a class="anchor" href="#_install_horizontal_pod_autoscaler_custom_metrics"></a>Install Horizontal Pod AutoScaler (Custom Metrics)</h3>
+<div class="paragraph">
+<p>As we have configured Hazelcast, Prometheus and Prometheus Adapter, let&#8217;s create a Horizontal Pod AutoScaler based on <code>on_heap_ratio</code> metric. <code>hazelcast-custom-metrics-hpa.yaml</code> tells HPA if <code>targetValue &gt; 200m</code> then scale up my cluster. <code>200m</code> as we explained above means actually 20%. You can change that number based on your own use case.</p>
+</div>
+<div class="paragraph">
+<p>See the content of hazelcast-custom-metrics-hpa.yaml file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: heap-based-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: hazelcast
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Object
+      object:
+        describedObject:
+          kind: Service
+          name: hazelcast-metrics
+        metric:
+          name: on_heap_ratio
+        target:
+          type: Value
+          value: 200m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Apply HPA to your cluster with <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl apply -f hazelcast-custom-metrics-hpa.yaml
+horizontalpodautoscaler.autoscaling/heap-based-hpa created</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generate_some_memory_load_for_hpa"><a class="anchor" href="#_generate_some_memory_load_for_hpa"></a>Generate some Memory Load for HPA</h3>
+<div class="paragraph">
+<p>Let&#8217;s have a look <code>TARGETS</code> part of HPA output</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get hpa heap-based-hpa
+NAME             REFERENCE               TARGETS     MINPODS   MAXPODS   REPLICAS   AGE
+heap-based-hpa   StatefulSet/hazelcast   180m/200m   3         10        10         11m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As we see, current HPA Target is 180m/200m so if we increase memory usage just 10%  by adding 10MB into the cluster, HPA should trigger a scale up event. I will use Hazelcast Java Client to put some data into cluster, but you can use your own language to implement the same functionality. You can see all Hazelcast supported programming languages <a href="https://hazelcast.org/imdg/clients-languages/">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s first port forward from our local machine to be able to connect remote k8s Hazelcast member pod.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl port-forward hazelcast-0 5701</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Execute following code snippet to put data into Hazelcast Cluster.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> // start Hazelcast Client with smartRouting disabled
+ClientConfig cfg = new ClientConfig();
+cfg.getNetworkConfig().setSmartRouting(false);
+HazelcastInstance client = HazelcastClient.newHazelcastClient(cfg);
+// create Hazelcast Distributed Map "numbers"
+IMap&lt;Object, Object&gt; numbers = client.getMap("numbers");
+
+// put 10000*1K = 10M to "numbers"
+int i=0;
+while (i++ &lt; 10000)
+    numbers.put(i,new byte[1024]);
+
+// check the size of "numbers"
+System.out.println("size:"+numbers.size());
+
+//clean up
+client.shutdown();</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can use the client application from <a href="../kubernetes-external-client/" class="page">External Smart Client</a> guide to connect to Hazelcast cluster.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When you start putting data into your Hazelcast cluster, you will see that new pods will be created and added to Hazelcast Cluster.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get po
+NAME                    READY   STATUS    RESTARTS   AGE
+hazelcast-0             1/1     Running   0          73m
+hazelcast-1             1/1     Running   0          72m
+hazelcast-2             1/1     Running   0          72m
+hazelcast-3             1/1     Running   0          16m
+hazelcast-4             1/1     Running   0          3m
+hazelcast-5             1/1     Running   0          3m
+hazelcast-6             1/1     Running   0          47s
+hazelcast-7             1/1     Running   0          41s
+hazelcast-8             1/1     Running   0          14s
+hazelcast-9             1/1     Running   0          13s
+hazelcast-mancenter-0   1/1     Running   0          73m</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion"><a class="anchor" href="#_conclusion"></a>Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Autoscaling is an important feature for enterprises to save money and to cope with unexpected traffic coming to your deployments. However, configuring autoscaling needs to be done carefully because you might end up unnecessary scale up/down operations which might cost some instability in your system. In this guide, we explained how you can use HPA with your Hazelcast Cluster based on Resource Metrics and Custom Metrics. If Kubernetes Pod/Node Level Cpu/Memory usage is fine for you then use Resource Metrics. If you have more specific requirements, and you need to have Hazelcast specific autoscaling capabilities, Custom Metrics is the answer.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_software_versions"><a class="anchor" href="#_software_versions"></a>Software Versions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is the list of software versions used in this guide.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ helm ls --all-namespaces
+NAME             	NAMESPACE 	REVISION	UPDATED                             	STATUS  	CHART                   	APP VERSION
+hazelcast        	default   	1       	2020-11-13 14:53:37.702621 +0200 EET	deployed	hazelcast-3.5.0         	4.1
+prometheus       	monitoring	1       	2020-11-13 14:35:50.630099 +0200 EET	deployed	prometheus-11.16.8      	2.21.0
+prometheus-adpter	monitoring	1       	2020-11-13 14:49:11.954809 +0200 EET	deployed	prometheus-adapter-2.7.0	v0.7.0</code></pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

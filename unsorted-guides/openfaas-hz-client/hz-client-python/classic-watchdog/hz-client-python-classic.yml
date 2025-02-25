@@ -1,0 +1,10 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  hz-client-python-classic:
+    lang: python3
+    handler: ./hz-client-python-classic
+    image: YOUR_DOCKER_HUB_USERNAME/hz-client-python-classic:latest
+

@@ -1,0 +1,284 @@
+= Configure MongoDB Atlas as an External Data Store for the Cluster with Hazelcast Platform Operator
+:page-layout: tutorial
+:page-product: operator
+:page-categories: Kubernetes
+:page-lang: java
+:page-enterprise: false
+:page-est-time: 20 mins
+:description: Learn how to keep data in sync across two Hazelcast clusters.
+
+== Context
+In this tutorial, you'll do the following:
+
+- Build and deploy a custom MapStore/MapLoader implementation to cloud storage.
+
+- Start Hazelcast cluster with classpath that includes MapStore/MapLoader JAR
+
+- Create a Hazelcast Map with MapStore/MapLoader configuration
+
+- Run Hazelcast Java client to manipulate data via populating all entries from MongoDB Atlas.
+
+
+== Before you Begin
+
+Before starting this tutorial, make sure that you meet the following prerequisites:
+
+* Up and running *public* https://kubernetes.io/[Kubernetes] cluster. Make sure the Kubernetes cluster is public.
+* Kubernetes command-line tool, https://kubernetes.io/docs/tasks/tools/#kubectl[kubectl]
+* Maven command-line tool, https://maven.apache.org/download.cgi[mvn]
+* MongoDB Atlas database, https://www.mongodb.com/docs/atlas/getting-started[Get Started with Atlas] (free-tier is suitable for completing this guide).
+* Created blob storage and access credentials in one of the cloud providers: https://aws.amazon.com/s3/[AWS] - https://cloud.google.com/storage/[GCP] - https://azure.microsoft.com/en-us/services/storage/blobs/[Azure]
+
+
+== Step 1. Add Node IPs in MongoDB Atlas whitelist 
+
+Hazelcast pods need access to the database. To allow Hazelcast pods to connect to the database you need to add the public IP addresses of the Kubernetes nodes to the whitelist in the Atlas dashboard.
+
+. Get external IPs of node(s) at the Kubernetes cluster:
+
++
+[source, shell]
+----
+kubectl get nodes -o wide
+
+NAME       STATUS        EXTERNAL-IP     
+gke-....   Ready   ...   34...           ...
+gke-....   Ready   ...   35...           ...
+gke-....   Ready   ...   34...           ...
+----
+
+. Add IPs into whitelist at Atlas dashboard:
+
+image::mongo-atlas-network-access.png[]
+
+
+== Step 2. Deploy MapStore/MapLoader JAR to external storage
+
+. Build MapStore/MapLoader JAR 
+
++
+[source, shell]
+----
+cd mapstore
+mvn package
+----
+
+. Upload the JAR to the cloud provider storage blob/bucket that you have already created:
+
++
+[tabs]
+====
+
+S3::
++
+--
+[source,bash]
+----
+aws s3 cp mapstore/target/mapstore-mongodb-1.0-SNAPSHOT.jar s3://<BUCKET_NAME>
+----
+--
+
+GCS::
++
+--
+[source,bash]
+----
+gsutil cp mapstore/target/mapstore-mongodb-1.0-SNAPSHOT.jar gs://<BUCKET_NAME>     
+----
+--
+
+ABS::
++
+--
+[source,bash]
+----
+az storage blob upload --account-name <ACCOUNT_NAME> --container-name <CONTAINER_NAME> --file mapstore/target/mapstore-mongodb-1.0-SNAPSHOT.jar
+----
+--
+
+====
+
+
+== Step 3. Start Hazelcast Cluster
+
+. Create Secret for Bucket credentials
++
+Run one of the following command to create the secret according to the cloud provider you want to backup.
+
++
+[tabs]
+====
+
+S3::
++
+--
+[source,bash]
+----
+kubectl create secret generic <secret-name> --from-literal=region=<region> \
+	--from-literal=access-key-id=<access-key-id> \
+	--from-literal=secret-access-key=<secret-access-key>
+----
+--
+
+GCS::
++
+--
+[source,bash]
+----
+kubectl create secret generic <secret-name> --from-file=google-credentials-path=<service_account_json_file>
+----
+--
+
+Azure::
++
+--
+[source,bash]
+----
+kubectl create secret generic <secret-name> \
+	--from-literal=storage-account=<storage-account> \
+	--from-literal=storage-key=<storage-key>
+----
+--
+
+====
+
+. Create the Hazelcast Cluster with MapStore/MapLoader JAR
++
+
+Run the following command to create the Hazelcast cluster with User Code Deployment configuration:
++
+[source, shell]
+----
+cat <<EOF | kubectl apply -f -
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+  name: hazelcast
+spec:
+  exposeExternally:
+    type: Unisocket
+    discoveryServiceType: LoadBalancer
+  userCodeDeployment:
+    bucketConfig:
+      secret: <SECRET_NAME>
+      bucketURI: "<BUCKET_URI>"
+EOF
+----
++
+
+
+.Sample bucket URIs:
+[NOTE]
+===============================
+   s3://hazelcast-mapstore
+   gs://hazelcast-mapstore
+   azblob://hazelcast-mapstore
+===============================
+
+NOTE: Exposing the cluster for unisocket clients is required for local client that you will run in next steps. 
+
+
+== Step 4. Create Hazelcast Map with MapStore/MapLoader configuration
+
+. Create secret for database properties 
++
+[source, shell]
+----
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-atlas-properties
+stringData:
+  mongo.url: "MONGODB_URL"
+  mongo.db: "DB_NAME"
+  mongo.collection: "supplements"
+EOF
+----
++
+
+TIP: Sample MongoDB Atlas URL -> mongodb+srv://<USERNAME>:<PASSWORD>@<DB_NAME>.mongodb.net/?retryWrites=true&w=majority
+
+. Create a Map with MapStore configuration:
++
+[source, shell]
+----
+cat <<EOF | kubectl apply -f -
+apiVersion: hazelcast.com/v1alpha1
+kind: Map
+metadata:
+  name: supplements
+spec:
+  hazelcastResourceName: hazelcast
+  mapStore:
+    className: com.operator.tutorial.mongodb.MongoMapStore
+    propertiesSecretName: mongodb-atlas-properties
+EOF
+----
++
+
+
+== Step 5. Run local Hazelcast client to manipulate data
+
+. Check external IP of the LoadBalancer:
++
+[source, shell]
+----
+kubectl get services                           
+NAME         TYPE           EXTERNAL-IP   PORT(S)
+hazelcast    LoadBalancer   34....   5701:30164/TCP
+----
++
+
+. Replace <EXTERNAL-IP> at *mapstore/src/main/java/com/hazelcast/tutorial/Client.java* with the LoadBalancer's external IP:
++
+[source, java]
+----
+ClientConfig config = new ClientConfig();
+config.getNetworkConfig().addAddress("<EXTERNAL-IP>")
+        .setSmartRouting(false);
+----
++
+
+. Run Hazelcast Java client that manipulates data
++
+--
+[source, bash]
+----
+cd mapstore
+mvn clean package -Pclient
+java -cp target/mapstore-mongodb-1.0-SNAPSHOT.jar com.hazelcast.tutorial.Client
+...
+Members [3] {
+        Member [10.164.0.8]:5701 - 8616cb8d-b0e0-48bd-996c-9e81c6ee98e0
+        Member [10.164.2.5]:5701 - 9c1179ae-a445-4051-83bc-5777a8feb15d
+        Member [10.164.1.8]:5701 - f40f5f5e-61dc-49e1-b511-eab616076f77
+}
+Initial map size:
+3
+Map size after eviction:
+0
+Loading entries form the Database...
+Map size:
+3
+----
+--
+
+. Check *supplements* collection which is populated by the application at MongoDB Atlas dashboard.
+
+image::mongo-atlas-supplements.png[]
+
+== Clean Up
+
+To clean up the created resources remove the all Custom Resources and secrets.
+
+[source, shell]
+----
+kubectl delete secret <secret-name> mongodb-atlas-properties hazelcast-license-key
+kubectl delete $(kubectl get hazelcast,map -o name)
+----
+
+== See Also
+
+- xref:operator:ROOT:user-code-deployment.adoc[]
+- xref:hazelcast-platform-operator-expose-externally.adoc[]

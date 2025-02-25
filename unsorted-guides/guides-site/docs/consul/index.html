@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Hazelcast with Consul Service Mesh</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/consul/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../_/img/hazelcast-logo-white.png 1x, ../_/img/hazelcast-logo-white@2x.png 2x, ../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../_/img/external-link.png 1x, ../_/img/external-link@2x.png 2x, ../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="consul" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<h1 class="page">Hazelcast with Consul Service Mesh</h1>
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/consul/edit/master/doc/modules/ROOT/pages/index.adoc>See something wrong? Edit this page.</a></p>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can see the whole project <a href="https://github.com/hazelcast-guides/consul.git">here.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_youll_learn"><a class="anchor" href="#_what_youll_learn"></a>What You’ll Learn</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide explains how to use Hazelcast in the Consul environment. You&#8217;ll learn how to set up a Hazelcast cluster and connect it with Hazelcast client. Then, you will also see how to deploy an application with embedded Hazelcast.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_kubernetes_cluster"><a class="anchor" href="#_kubernetes_cluster"></a>Kubernetes Cluster</h3>
+<div class="paragraph">
+<p>In this guide, a Google Kubernetes Engine is used but you can use any Kubernetes cluster you choose.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>gcloud container clusters create hazelcast-cluster --num-nodes=4</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_helm"><a class="anchor" href="#_helm"></a>Helm</h3>
+<div class="paragraph">
+<p>You will need Helm 3 to install Consul. Please see <a href="https://helm.sh/docs/intro/install/">here</a> to see Helm installation details.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_consul"><a class="anchor" href="#_consul"></a>Consul</h3>
+<div class="paragraph">
+<p>This code sample has been tested against HashiCorp Consul 1.9.4</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>Firstly, add the HashiCorp Helm Repository to the Helm repos:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ helm repo add hashicorp https://helm.releases.hashicorp.com
+"hashicorp" has been added to your repositories</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now install Consul with Connect feature enabled using the following command. Please note that this command will also enable auto-injection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>helm install consul hashicorp/consul --set "global.name=consul,connectInject.enabled=true,connectInject.default=true"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the installation, you should see the following services:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ kubectl get svc
+NAME                          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                                                                   AGE
+consul-connect-injector-svc   ClusterIP   10.4.10.29   &lt;none&gt;        443/TCP                                                                   17m
+consul-dns                    ClusterIP   10.4.7.191   &lt;none&gt;        53/TCP,53/UDP                                                             17m
+consul-server                 ClusterIP   None         &lt;none&gt;        8500/TCP,8301/TCP,8301/UDP,8302/TCP,8302/UDP,8300/TCP,8600/TCP,8600/UDP   17m
+consul-ui                     ClusterIP   10.4.3.181   &lt;none&gt;        80/TCP                                                                    17m
+kubernetes                    ClusterIP   10.4.0.1     &lt;none&gt;        443/TCP                                                                   14d</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now Consul is installed and we’re ready for the next step!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code_sample"><a class="anchor" href="#_code_sample"></a>Code Sample</h3>
+<div class="paragraph">
+<p>Clone this repository and apply RBAC. RBAC is needed by <a href="https://github.com/hazelcast/hazelcast-kubernetes">hazelcast-kubernetes</a> plugin discovery.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>git clone https://github.com/hazelcast-guides/consul.git
+cd consul
+kubectl apply -f https://raw.githubusercontent.com/hazelcast/hazelcast-kubernetes/master/rbac.yaml</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_hazelcast_consul_code_sample"><a class="anchor" href="#_hazelcast_consul_code_sample"></a>Hazelcast-Consul Code Sample</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The business logic in both examples are the same to keep it simple. <code>put</code> operation puts a key-value pair to Hazelcast and <code>get</code> operation returns the value together with the Kubernetes Pod name. <code>PodName</code> is used to show that the value is returned from any Pod inside the Kubernetes cluster to prove the true nature of distributed cache.</p>
+</div>
+<div class="sect2">
+<h3 id="_hazelcast_client_server"><a class="anchor" href="#_hazelcast_client_server"></a>Hazelcast Client Server</h3>
+<div class="paragraph">
+<p>Let&#8217;s first switch to the client-server directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cd hazelcast-client-server</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Client-Server code sample can be built and pushed to your own Docker Hub or some other registry via following command but that is optional.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mvn compile com.google.cloud.tools:jib-maven-plugin:3.0.0:build -Dimage=YOUR-NAME/consul-client:1.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead, you can use the already pre-built docker image <code>hazelcastguides/consul-client:1.0</code>.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>If you want to build your own image, then do not forget to update <code>hazelcast-client.yaml</code> with your own image.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Deploy Hazelcast Cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kubectl apply -f hazelcast-cluster.yaml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see that 3 member cluster has been initiated with 3 pods. <code>3/3</code> in <code>READY</code> column means that there are 3 containers running in each Pod. One is Hazelcast member and the others are Consul Connect sidecars.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ kubectl get pods
+NAME                  READY   STATUS    RESTARTS   AGE
+hazelcast-cluster-0   3/3     Running   0          60s
+hazelcast-cluster-1   3/3     Running   0          44s
+hazelcast-cluster-2   3/3     Running   0          27s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Deploy Spring Boot Application with Hazelcast Client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kubectl apply -f hazelcast-client.yaml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check logs and see that Spring Boot service is connected to the cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ kubectl logs hazelcast-client-0 hazelcast-client
+...
+Members [3] {
+	Member [10.16.2.14]:5701 - 51274b4d-dc7f-4647-9ceb-c32bfc922c95
+	Member [10.16.1.15]:5701 - 465cfefa-9b26-472d-a204-addf3b82d40a
+	Member [10.16.2.15]:5701 - 67fdf27a-e7b7-4ed7-adf1-c00f785d2325
+}
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s now run a container with curl installed and use it to make requests to the <code>springboot-service</code>.</p>
+</div>
+<div class="paragraph">
+<p>First, observe the Spring Boot Service is up and running:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ kubectl get svc springboot-service
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+springboot-service   ClusterIP   10.19.250.127   &lt;none&gt;        80/TCP    3m29s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Launch a <code>curl</code> container inside Kubernetes cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kubectl run curl --rm --image=radial/busyboxplus:curl -i --tty</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Put a value to the cluster using the service name:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ curl "springboot-service/put?key=1&amp;value=2"
+{"value":"2","podName":"hazelcast-client-2"}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Get the value from cluster in a loop and see that it is retrieved from different Pod names:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ while true; do curl "springboot-service/get?key=1"; sleep 2;echo; done
+{"value":"2","podName":"hazelcast-client-1"}
+{"value":"2","podName":"hazelcast-client-0"}
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this sample, you were able to deploy a Spring Boot based microservice with Hazelcast client-server topology in Consul Environment.</p>
+</div>
+<div class="paragraph">
+<p>Clean up the deployments with the following commands:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kubectl delete -f hazelcast-client.yaml
+kubectl delete -f hazelcast-cluster.yaml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hazelcast_embedded"><a class="anchor" href="#_hazelcast_embedded"></a>Hazelcast Embedded</h3>
+<div class="paragraph">
+<p>Switch to the embedded code sample directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cd hazelcast-embedded</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Embedded code sample can be built and pushed to your own Docker Hub or some other registry via following command but that is optional:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mvn compile com.google.cloud.tools:jib-maven-plugin:3.0.0:build -Dimage=YOUR-NAME/consul-embedded:1.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead, you can use the already pre-built docker image <code>hazelcastguides/consul-embedded:1.0</code>.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>If you want to build your own image, then do not forget to update <code>hazelcast-embedded.yaml</code> with your own image.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Deploy Hazelcast Embedded Sample:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ kubectl apply -f hazelcast-embedded.yaml
+statefulset.apps/hazelcast-embedded created
+service/hazelcast-embedded-headless created
+service/springboot-service created</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can check that the application started and Hazelcast successfully formed a cluster.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ kubectl logs pod/hazelcast-embedded-0 hazelcast-embedded
+...
+Members {size:3, ver:3} [
+        Member [10.12.1.6]:5701 - 644e6bbf-335a-410b-80ab-0cb648dbc772
+        Member [10.12.2.8]:5701 - 0ab13148-b6bb-477e-970b-0b5c226ed2aa this
+        Member [10.12.3.4]:5701 - 72f56c90-f55e-490c-b3c0-d40fe970557f
+]
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you list the services used, you will see that you have two Kubernetes Services: <code>hazelcast-embedded-headless</code> and <code>springboot-service</code>. <code>hazelcast-embedded-headless</code> is used to handle Hazelcast cluster discovery operation so it has no need to have an IP address. <code>springboot-service</code> is the loadbalancer that is used to receive http requests and forward them to one of the underlying pods to respond.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ kubectl get svc
+NAME                          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+hazelcast-embedded-headless   ClusterIP   None           &lt;none&gt;        5701/TCP   9s
+kubernetes                    ClusterIP   10.19.241.1    &lt;none&gt;        443/TCP    73m
+springboot-service            ClusterIP   10.19.252.76   &lt;none&gt;        80/TCP     9s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s now put a key-value pair into Hazelcast cluster through Spring Boot REST Service and then call get operation in a loop to see the value is returned from different Pods.</p>
+</div>
+<div class="paragraph">
+<p>Firstly, let&#8217;s run a container with <code>curl</code> installed and use it to make requests to the <code>springboot-service</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kubectl run curl --rm --image=radial/busyboxplus:curl -i --tty</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Put a value to the cluster using the service name:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ curl "springboot-service/put?key=1&amp;value=2"
+{"value":"2","podName":"hazelcast-embedded-2"}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Get the value from cluster in a loop and see that it is retrieved from different Pod names:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ while true; do curl "springboot-service/get?key=1"; sleep 2;echo; done
+{"value":"2","podName":"hazelcast-embedded-1"}
+{"value":"2","podName":"hazelcast-embedded-0"}
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this sample, you were able to deploy a Spring Boot based microservice with Hazelcast Embedded in Consul Environment. Let&#8217;s clean up the deployments with the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kubectl delete -f hazelcast-embedded.yaml</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide demonstrates how to use Hazelcast Embedded and Client-Server topology in Consul environment with automatic Consul Connect injection. Hazelcast continuously tries to support cloud native technologies and verifies those environments as they evolve.</p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

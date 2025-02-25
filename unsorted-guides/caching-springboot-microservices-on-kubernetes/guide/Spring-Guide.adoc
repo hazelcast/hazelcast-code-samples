@@ -1,0 +1,350 @@
+:minikube-ip: 192.168.99.100
+:kube: Kubernetes
+:project-id: kubernetes-caching-hazelcast-spring
+:project-folder: caching-springboot-microservices-on-kubernetes
+:hashtag: #
+:win: WINDOWS
+:mac: MAC
+:linux: LINUX
+:hazelcast: Hazelcast
+:framework: SpringBoot
+:framework-short: spring
+:github-address: https://github.com/hazelcast-guides/caching-springboot-microservices-on-kubernetes
+:templates-url: https://raw.githubusercontent.com/hazelcast-guides/adoc-templates/master
+
+= Caching SpringBoot Microservices with Hazelcast in Kubernetes
+
+include::{templates-url}/link-to-repo.adoc[]
+
+include::{templates-url}/what-will-learn-caching-ms.adoc[]
+
+include::{templates-url}/what-is-hz.adoc[]
+
+== Why Spring Boot?
+
+Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run".
+To learn more about Spring Boot, visit http://spring.io/projects/spring-boot[website.]
+
+include::{templates-url}/prereq-caching-ms.adoc[]
+
+include::{templates-url}/getting-started.adoc[]
+
+
+== Running Spring Application 
+
+The application in initial directory is a basic SpringBoot app having 3 endpoints:
+
+- *"/"* is the homepage returning "Welcome" string only
+- *"/put"* is the page where key and values can be put on a concurrent hash map.
+- *"/get"* is the page where the values in the map can be obtained by keys.
+
+Build the app using Maven in the `initial` directory:
+
+----
+$ > mvn package
+----
+
+Run the application:
+----
+$ > java -jar target/hazelcast-spring-app-0.1.0.jar
+----
+
+Now your app is runnning on localhost:8080. You can test by following requests:
+
+----
+$ > curl "localhost:8080"
+$ > curl "localhost:8080/put?key=key1&value=hazelcast"
+$ > curl "localhost:8080/get?key=key1"
+----
+
+This part was the introduction of the application. You can stop your application by CTRL + C.
+
+== Dockerizing the App
+
+To create the docker image of the application, add following line into pom.xml file.
+
+----
+<!-- add among other properties -->
+<properties> 
+ 	<docker.image.prefix>springio</docker.image.prefix>
+</properties>
+
+<!-- add among other plugins -->
+<plugins>
+<plugin>
+      <groupId>com.spotify</groupId>
+      <artifactId>dockerfile-maven-plugin</artifactId>
+      <version>${version.dockerfile-maven-plugin}</version>
+      <configuration>       
+         <repository>${docker.image.prefix}/${project.artifactId}</repository>
+      </configuration> 
+</plugin>
+</plugins>
+
+----
+
+Then create the Dockerfile under `initial` directory named "Dockerfile" containing the instructions for creating a docker image:
+
+----
+
+FROM openjdk:8-jdk-alpine
+
+VOLUME /tmp
+
+ARG JAR_FILE=target/hazelcast-spring-app-0.1.0.jar
+
+ADD ${JAR_FILE} hazelcast-spring-demo.jar
+
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/hazelcast-spring-demo.jar"]
+----
+
+Before creating the Docker image of the app, first rebuild the app: 
+----
+$ > mvn clean package
+----
+Then create image file:
+----
+$ > docker build -t hazelcast-spring-demo .
+----
+
+Now, the image must be seen among the docker images:
+----
+$ > docker images
+
+REPOSITORY                           TAG                 IMAGE ID            CREATED             SIZE
+hazelcast-spring-demo                latest              5f65a62b0aa0        19 seconds ago      122MB
+openjdk                              8-jdk-alpine        a3562aa0b991        5 weeks ago         105MB
+k8s.gcr.io/kube-proxy-amd64          v1.10.11            7387003276ac        6 months ago        98.3MB
+k8s.gcr.io/kube-apiserver-amd64      v1.10.11            e851a7aeb6e8        6 months ago        228MB
+----
+
+== Running the app in container
+
+Now that the Docker image is ready, check if the image runs properly:
+
+----
+$ > docker run -p 5000:8080 hazelcast-spring-demo 
+----
+
+Test the app on the port 5000:
+----
+$ > curl "localhost:5000"
+$ > curl "localhost:5000/put?key=key1&value=hazelcast"
+$ > curl "localhost:5000/get?key=key1"
+----
+
+If you see the same responses as the ones you get when the app is run without container, that means it’s all OK with the image.
+To stop the container, get the container ID first:
+----
+$ > docker ps
+----
+Then find the application's container ID and stop the container:
+----
+$ > docker stop [CONTAINER-ID]
+----
+
+include::{templates-url}/start-cluster.adoc[]
+
+include::{templates-url}/validate-kube-env.adoc[]
+
+After you’re sure that a master node is ready, create kubernetes.yaml under initial directory with the same content in the final/kubernetes.yaml file.
+This file defines two Kubernetes resources: one statefulset and one service. StatefulSet is preferred solution for Hazelcast because it enables controlled scale out/in of your microservices for easy data distribution. To learn more about StatefulSet, you can 
+visit https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/[Kubernetes documentation.]
+
+By default, we create 2 replicas of `hazelcast-spring` microservice behind the `hazelcast-spring-service` which forwards
+requests to one of the pods available in the kubernetes cluster.
+
+`MY_POD_NAME` is an environment variable made available to the pods so that each microservice knows which pod they are in.
+This is going to be used in this guide in order to show which pod is responding to the http request.
+
+Run the following command to deploy the resources as defined in kubernetes.yaml:
+----
+$ > kubectl apply -f kubernetes.yaml
+----
+Run the following command to check the status of your pods:
+----
+$ > kubectl get pods
+----
+
+You'll see an output similar to the following if all the pods are healthy and running:
+----
+NAME                             READY     STATUS    RESTARTS   AGE
+hazelcast-spring-statefulset-0   1/1       Running   0          7s
+hazelcast-spring-statefulset-1   1/1       Running   0          5s
+----
+
+Send request to port :31000 and see the pods responding.
+----
+$ > curl localhost:31000
+----
+
+And add a value to the map and then get the value:
+----
+
+$ > curl "localhost:31000/put?key=key1&value=hazelcast"
+
+{"value":"hazelcast","podName":"hazelcast-spring-statefulset-1"} --> the second pod's response
+
+$ > while true; do curl localhost:31000/get?key=key1;echo; sleep 2; done
+	
+{"value":"hazelcast","podName":"hazelcast-spring-statefulset-1"} --> the second pod's response
+{"value":null,"podName":"hazelcast-spring-statefulset-0"} --> the first pod's response
+{"value":"hazelcast","podName":"hazelcast-spring-statefulset-1"} --> the second pod's response
+{"value":null,"podName":"hazelcast-spring-statefulset-0"} --> the first pod's response
+----
+
+As can be seen, data is not shared between nodes. Here is where Hazelcast comes into action.
+Kill active pods under `initial` directory by:
+----
+$ > kubectl delete -f kubernetes.yaml
+----
+
+== Hazelcast Caching among Kubernetes pods
+
+Now we will use Hazelcast Caching among the pods. Update the pom.xml file by adding those dependencies:
+----
+<dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${version.hazelcast}</version>
+</dependency>
+<dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-kubernetes</artifactId>
+            <version>${version.hazelcast-kubernetes}</version>
+</dependency>
+----
+
+Then modify the CommandController.java such that Hazelcast is used in the map. Also add Hazelcast config to Application.java file and hazelcast libraries as well. 
+Those versions are the ones under `final` folder.
+
+Rebuild the app and create new image:
+
+----
+$ > mvn clean package
+$ > docker build -t hazelcast-spring-demo .
+----
+
+Before deploying on kubernetes, create rbac.yaml file as in the `final` directory. Role Based Access Controller(RBAC) configuration is used to give access to Kubernetes Master API from pods which runs microservices. Hazelcast requires a read access to autodiscover other hazelcast members and form hazelcast cluster.
+
+Run the following commands to deploy the resources as defined in kubernetes.yaml and rbac.yaml in the specified order:
+----
+$ > kubectl apply -f rbac.yaml
+$ > kubectl apply -f kubernetes.yaml
+----
+
+Run the following command to check the status of your pods:
+----
+$ > kubectl get pods
+----
+
+You should also check if hazelcast cluster is formed by checking one of the pod’s log file:
+----
+$ > kubectl logs hazelcast-spring-statefulset-1
+----
+You must see such a response at the end of the log:
+
+----
+Members {size:2, ver:2} [
+	Member [10.1.0.52]:5701 - ac54036d-c16f-40ae-9531-93e6f0683cf9 this
+	Member [10.1.0.53]:5701 - d963bb82-3842-49fd-a522-82c8543bdb9d
+]
+----
+If it's not seen, wait for  pods to be configured and try again.
+
+Now we expect all nodes to give the same value for the same key put on the map via one pod only. Let's try:
+
+----
+$ > curl "http://localhost:31000/put?key=key1&value=hazelcast"
+
+	{"value":"hazelcast","podName":"hazelcast-spring-statefulset-1"} --> pod1 responsed
+
+$ > while true; do curl localhost:31000/get?key=key1;echo; sleep 2; done
+
+	{"value":"hazelcast","podName":"hazelcast-spring-statefulset-1"} --> pod1 responsed
+	{"value":"hazelcast","podName":"hazelcast-spring-statefulset-1"} --> pod1 responsed
+	{"value":"hazelcast","podName":"hazelcast-spring-statefulset-0"} --> pod0 responsed
+
+----
+
+As can be seen, the insertion is made on hazelcast-spring-statefulset-1 but both nodes gives the same value for the key now.
+
+== Scaling with Hazelcast
+
+Scale the cluster with one more pod and see that you still retrieve the shared data.
+
+[role='command']
+```
+$ > kubectl scale statefulset hazelcast-spring-statefulset --replicas=3
+```
+
+Run following command to see the latest status of the pods
+[role='command']
+```
+$ > kubectl get pods
+```
+
+As you can see, a new pod `hazelcast-spring-statefulset-2` has joined to the cluster.
+[source, role="no_copy"]
+----
+NAME                              READY     STATUS    RESTARTS   AGE
+hazelcast-spring-statefulset-0   1/1       Running   0          8m
+hazelcast-spring-statefulset-1   1/1       Running   0          8m
+hazelcast-spring-statefulset-2   1/1       Running   0          31s
+----
+
+Run the following command again to see the output
+[role='command']
+```
+$ > while true; do curl http://localhost:31000/get?key=key1;echo; sleep 2; done
+```
+----
+{"value":"hazelcast","podName":"hazelcast-spring-statefulset-2"}
+{"value":"hazelcast","podName":"hazelcast-spring-statefulset-0"}
+{"value":"hazelcast","podName":"hazelcast-spring-statefulset-2"}
+{"value":"hazelcast","podName":"hazelcast-spring-statefulset-1"}
+----
+As you can see, `hazelcast-caching-statefulset-2` is returning correct data.
+
+== Testing microservices running on {kube}
+
+Create a testing class under `initial/src/test/java/it/io/spring/guides/hazelcast/`
+named `HazelcastCachingIT.java` .The contents of the test file is available under `final` directory.
+
+The test makes sure that the */put* endpoint is handled by one pod and */get* methods returns the same data from the other kubernetes pod.
+
+It first puts a key/value pair to hazelcast-spring microservice and keeps podname in the firstpod variable. In the second part, tests submits multiple */get* requests until to see that podname is different then the pod which initially handled */put* request.
+
+In order to run integration tests, you must have a running hazelcast-spring microservices in minikube environment. As you have gone through all previous steps, you already have it.
+
+Navigate back to `initial` directory and run the test:
+
+----
+$ > mvn -Dtest=HazelcastCachingIT test 
+----
+
+If the tests pass, you’ll see a similar output to the following:
+
+----
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running HazelcastCachingIT
+10:12:27.087 [Time-limited test] DEBUG org.springframework.web.client.RestTemplate - HTTP GET http://localhost:31000/put?key=key1&value=hazelcast-spring-guide
+10:12:27.175 [Time-limited test] DEBUG org.springframework.web.client.RestTemplate - Accept=[application/json, application/*+json]
+10:12:27.312 [Time-limited test] DEBUG org.springframework.web.client.RestTemplate - Response 200 OK
+...
+...
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.354 s - in HazelcastCachingIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+
+----
+
+include::{templates-url}/minikube-teardown.adoc[]
+
+include::{templates-url}/youre-done-caching-ms.adoc[]

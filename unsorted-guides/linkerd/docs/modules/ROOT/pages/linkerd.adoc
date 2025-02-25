@@ -1,0 +1,247 @@
+= Hazelcast with Linkerd Service Mesh
+:templates-url: templates:ROOT:page$/
+:page-layout: tutorial
+:page-product: imdg
+:page-categories: Deployment, Cloud Native
+:page-lang: java
+:page-est-time: 20 mins
+:description: Use Hazelcast in a Linkerd environment. 
+
+== Context
+
+You'll learn how to set up a Hazelcast cluster and connect a Hazelcast client to it. Then, you will also see how to deploy an application with embedded Hazelcast.
+
+== Before you Begin
+
+=== Kubernetes Cluster
+In this tutorial, a Google Kubernetes Engine is used but you can use any Kubernetes cluster you choose.
+----
+gcloud container clusters create hazelcast-cluster --num-nodes=4
+----
+
+=== Linkerd
+This code sample has been tested against Linkerd 2.10
+
+****
+
+Firstly, let's download Linkerd CLI and configure the path for `linkerd`. Remember to replace [USER_HOME] with your user home directory path:
+----
+curl -sL run.linkerd.io/install | sh
+export PATH=$PATH:$HOME/.linkerd2/bin
+----
+
+Once installed, verify the CLI is running correctly with:
+
+----
+linkerd version
+----
+
+To check that your cluster is ready to install Linkerd, run:
+
+----
+linkerd check --pre
+----
+
+If there are any checks that do not pass, make sure to follow the provided links and fix those issues before proceeding.
+
+Now that you have the CLI running locally and a cluster that is ready to go, it’s time to install the control plane.
+
+The first step is to install the control plane core. To do this, run:
+
+----
+linkerd install | kubectl apply -f -
+----
+
+Wait for the control plane to be ready (and verify your installation) by running:
+
+----
+linkerd check
+----
+
+Assuming everything is green, we’re ready for the next step!
+****
+
+=== Code Sample
+
+Clone this repository and apply RBAC. RBAC is needed by https://github.com/hazelcast/hazelcast-kubernetes[hazelcast-kubernetes] plugin discovery.
+----
+git clone https://github.com/hazelcast-guides/linkerd.git
+cd linkerd
+kubectl apply -f https://raw.githubusercontent.com/hazelcast/hazelcast-kubernetes/master/rbac.yaml
+----
+
+Linkerd automatically adds the data plane proxy to pods when the `linkerd.io/inject: enabled` annotation is present on a namespace or any workloads, such as deployments or pods. If you want to implement manual injection with the deployments then you need to use `linkerd inject`.
+----
+kubectl annotate namespace default linkerd.io/inject=enabled
+----
+
+== Hazelcast-Linkerd Code Sample
+
+The business logic in both examples are the same to keep it simple. `put` operation puts a key-value pair to Hazelcast and `get` operation returns the value together with the Kubernetes Pod name. `PodName` is used to show that the value is returned from any Pod inside the Kubernetes cluster to prove the true nature of distributed cache.
+
+=== Hazelcast Client Server
+
+Let's first switch to the client-server directory.
+
+----
+cd hazelcast-client-server
+----
+
+Client-Server code sample can be built and pushed to your own Docker Hub or some other registry via following command but that is optional.
+----
+mvn compile com.google.cloud.tools:jib-maven-plugin:1.8.0:build -Dimage=YOUR-NAME/linkerd-client:1.0
+----
+
+Instead, you can use the already pre-built docker image `hazelcastguides/linkerd-client:1.0`.
+
+****
+If you want to build your own image, then do not forget to update `hazelcast-client.yaml` with your own image.
+****
+
+Deploy Hazelcast Cluster:
+----
+kubectl apply -f hazelcast-cluster.yaml
+----
+
+You can see that 3 member cluster has been initiated with 3 pods. `2/2` in `READY` column means that there are 2 containers running in each Pod. One is Hazelcast member and the other is linkerd-proxy.
+
+----
+$ kubectl get pods
+NAME                  READY   STATUS    RESTARTS   AGE
+hazelcast-cluster-0   2/2     Running   0          60s
+hazelcast-cluster-1   2/2     Running   0          44s
+hazelcast-cluster-2   2/2     Running   0          27s
+----
+
+Deploy Spring Boot Application with Hazelcast Client:
+----
+kubectl apply -f hazelcast-client.yaml
+----
+
+Check logs and see that Spring Boot service is connected to the cluster:
+----
+$ kubectl logs hazelcast-client-0 hazelcast-client
+...
+Members [3] {
+	Member [10.16.2.14]:5701 - 51274b4d-dc7f-4647-9ceb-c32bfc922c95
+	Member [10.16.1.15]:5701 - 465cfefa-9b26-472d-a204-addf3b82d40a
+	Member [10.16.2.15]:5701 - 67fdf27a-e7b7-4ed7-adf1-c00f785d2325
+}
+...
+----
+
+Let's now run a container with curl installed and use it to make requests to the `springboot-service`.
+
+First, observe the Spring Boot Service is up and running:
+----
+$ kubectl get svc springboot-service
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+springboot-service   ClusterIP   10.19.250.127   <none>        80/TCP    3m29s
+----
+
+Launch a `curl` container inside Kubernetes cluster:
+----
+kubectl run curl --rm --image=radial/busyboxplus:curl -i --tty
+----
+
+Put a value to the cluster using the service name:
+----
+$ curl "springboot-service/put?key=1&value=2"
+{"value":"2","podName":"hazelcast-client-2"}
+----
+
+Get the value from cluster in a loop and see that it is retrieved from different Pod names:
+----
+$ while true; do curl "springboot-service/get?key=1"; sleep 2;echo; done
+{"value":"2","podName":"hazelcast-client-1"}
+{"value":"2","podName":"hazelcast-client-0"}
+...
+----
+
+In this sample, you were able to deploy a Spring Boot based microservice with Hazelcast client-server topology in Linkerd Environment.
+
+Clean up the deployments with the following commands:
+----
+kubectl delete -f hazelcast-client.yaml
+kubectl delete -f hazelcast-cluster.yaml
+----
+
+=== Hazelcast Embedded
+
+Switch to the embedded code sample directory:
+----
+cd hazelcast-embedded
+----
+
+Embedded code sample can be built and pushed to your own Docker Hub or some other registry via following command but that is optional:
+----
+mvn compile com.google.cloud.tools:jib-maven-plugin:1.8.0:build -Dimage=YOUR-NAME/linkerd-embedded:1.0
+----
+
+Instead, you can use the already pre-built docker image `hazelcastguides/linkerd-embedded:1.0`.
+
+****
+If you want to build your own image, then do not forget to update `hazelcast-embedded.yaml` with your own image.
+****
+
+Deploy Hazelcast Embedded Sample:
+----
+$ kubectl apply -f hazelcast-embedded.yaml
+statefulset.apps/hazelcast-embedded created
+service/hazelcast-embedded-headless created
+service/springboot-service created
+----
+
+You can check that the application started and Hazelcast successfully formed a cluster.
+
+----
+$ kubectl logs pod/hazelcast-embedded-0 hazelcast-embedded
+...
+Members {size:3, ver:3} [
+        Member [10.12.1.6]:5701 - 644e6bbf-335a-410b-80ab-0cb648dbc772
+        Member [10.12.2.8]:5701 - 0ab13148-b6bb-477e-970b-0b5c226ed2aa this
+        Member [10.12.3.4]:5701 - 72f56c90-f55e-490c-b3c0-d40fe970557f
+]
+...
+----
+
+
+When you list the services used, you will see that you have two Kubernetes Services: `hazelcast-embedded-headless` and `springboot-service`. `hazelcast-embedded-headless` is used to handle Hazelcast cluster discovery operation so it has no need to have an IP address. `springboot-service` is the loadbalancer that is used to receive http requests and forward them to one of the underlying pods to respond.
+----
+$ kubectl get svc
+NAME                          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+hazelcast-embedded-headless   ClusterIP   None           <none>        5701/TCP   9s
+kubernetes                    ClusterIP   10.19.241.1    <none>        443/TCP    73m
+springboot-service            ClusterIP   10.19.252.76   <none>        80/TCP     9s
+----
+
+Let's now put a key-value pair into Hazelcast cluster through Spring Boot REST Service and then call get operation in a loop to see the value is returned from different Pods.
+
+Firstly, let's run a container with `curl` installed and use it to make requests to the `springboot-service`.
+----
+kubectl run curl --rm --image=radial/busyboxplus:curl -i --tty
+----
+
+Put a value to the cluster using the service name:
+----
+$ curl "springboot-service/put?key=1&value=2"
+{"value":"2","podName":"hazelcast-embedded-2"}
+----
+
+Get the value from cluster in a loop and see that it is retrieved from different Pod names:
+----
+$ while true; do curl "springboot-service/get?key=1"; sleep 2;echo; done
+{"value":"2","podName":"hazelcast-embedded-1"}
+{"value":"2","podName":"hazelcast-embedded-0"}
+...
+----
+
+In this sample, you were able to deploy a Spring Boot based microservice with Hazelcast Embedded in Linkerd Environment. Let's clean up the deployments with the following command.
+
+----
+kubectl delete -f hazelcast-embedded.yaml
+----
+
+== Summary
+
+This tutorial demonstrates how to use Hazelcast Embedded and client/server topology in Linkerd environment with Automatic Sidecar Injection. Hazelcast continuously tries to support cloud native technologies and verifies those environments as they evolve.

@@ -1,0 +1,8 @@
+== What is {hazelcast}?
+
+Hazelcast is an open source In-Memory Data Grid (IMDG). It provides elastically scalable distributed In-Memory computing, 
+widely recognized as the fastest and most scalable approach to application performance.
+
+Hazelcast is designed to scale up to hundreds and thousands of members. 
+Simply add new members and they will automatically discover the cluster 
+and will linearly increase both memory and processing capacity.

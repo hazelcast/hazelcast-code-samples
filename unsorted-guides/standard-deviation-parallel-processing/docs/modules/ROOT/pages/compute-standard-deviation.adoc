@@ -1,0 +1,341 @@
+= Process Customer Satisfaction Scores on Hazelcast {hazelcast-cloud}
+:page-product: cloud
+:page-layout: tutorial
+:page-categories: In-Memory Computing
+:page-lang: java
+:page-est-time: 30 mins
+:description: In this tutorial, you'll build an application that calculates the standard deviation of customer satisfaction scores, using code that's executed on each member of a Hazelcast Cloud cluster.
+:github-directory: https://github.com/hazelcast-guides/standard-deviation-parallel-processing
+
+{description}
+
+== Context
+
+Knowing the center of a dataset (average, mean, or median) doesn't provide enough insight into the best and worse scores. To find out how the customer satisfaction scores are spread out, it is better to use link:https://en.wikipedia.org/wiki/Standard_deviation[standard deviation].
+
+Standard deviation is a statistical calculation that has been adopted for calculating how numbers deviate from the average. The business logic for standard deviation includes these steps:
+
+. Calculate the average of the input numbers.
+. Calculate the running total of the square of how much each number differs from the average.
+. Calculate the average of the running total.
+. Take the square root of the running total divided by the number of inputs and call it the standard deviation.
+
+The second step is open to *parallelism*. If you have more than one CPU, you can run this step for several numbers at once, as long as you have a way to combine these independent answers into the running total. *This is what you'll use Hazelcast for*.
+
+Here is an example of standard deviation for two sets of numbers.
+
+.First set of numbers
+[cols="4"]
+|===
+|Number |Difference from the average (3)|Square| Running total
+
+|1
+|2
+|4
+|4
+
+|2
+|1
+|1
+|5
+
+|3
+|0
+|0
+|5
+
+|4
+|1
+|1
+|6
+
+|5
+|2
+|4
+|10
+
+|===
+
+.Second set of numbers
+[cols="4"]
+|===
+|Number |Difference from the average (3)|Square| Running total
+
+|1
+|2
+|4
+|4
+
+|1
+|2
+|4
+|8
+
+|3
+|0
+|0
+|8
+
+|5
+|2
+|4
+|12
+
+|5
+|2
+|4
+|16
+
+|===
+Examples:
+
+- The running total for the first set is 10 and there were 5 numbers. 10 divided by 5 is 2. The square root of 2 gives the standard deviation of *1.41*.
+
+- The running total for the second set is 16 and there were 5 numbers. 16 divided by 5 is 3.2. The square root of 3.2 gives the standard deviation of *1.78*.
+
+The standard deviation results prove that the first set of numbers doesn't vary as much as the second set.
+
+In this tutorial, you'll deploy the following to a {hazelcast-cloud} Standard cluster:
+
+- A `Customer` class to store `Customer` objects in a map. The objects will include a customer satisfaction score.
+- An executor that the cluster will use to calculate the standard deviation of all customer satisfaction scores in the map.
+
+You'll then use a client to connect to the cluster, load some `Customer` objects into a map, and calculate the standard deviation of all customer satisfaction scores.
+
+The client code shows both the junior developer and senior developer approach. The junior developer approach does the processing on the client-side. The senior developer approach is more efficient because it offloads the processing to the {hazelcast-cloud} Standard cluster, using the executor.
+
+TIP: The code in this tutorial is available as a link:{github-directory}[sample app on GitHub].
+
+== Before you Begin
+
+You'll need the following to complete this tutorial:
+
+- A xref:cloud:ROOT:create-serverless-cluster.adoc[{hazelcast-cloud} Standard cluster].
+- link:https://git-scm.com/book/en/v2/Getting-Started-Installing-Git[Git]
+- link:https://maven.apache.org/install.html[Maven]
+- JDK 17 or later installed and set up as the `JAVA_HOME` environment variable.
+
+[[step-one]]
+== Step 1. Clone the Sample
+
+In this step, you'll clone the sample code from GitHub and learn how it works.
+
+Clone the GitHub repository.
+
+[tabs] 
+====
+HTTPS:: 
++ 
+--
+```bash
+git clone https://github.com/hazelcast-guides/standard-deviation-parallel-processing.git
+
+cd standard-deviation-parallel-processing
+```
+--
+SSH:: 
++ 
+--
+```bash
+git clone git@github.com:hazelcast-guides/standard-deviation-parallel-processing.git
+
+cd standard-deviation-parallel-processing
+```
+--
+====
+
+The code is separated into two parts:
+
+- The `client/` directory contains the client application that connects to the cluster and runs both the junior developer code and the senior developer code.
+- The `cluster-side/` directory contains the classes that need to be uploaded to the cluster to allow the cluster to store and process the standard deviation of customer satisfaction scores. Only the senior developer code triggers the processing of customer satisfaction scores on the cluster. The junior developer code processes them on the client side.
+
+The important part to understand is the difference between the junior developer code and the senior developer code.
+
+In each example, the cluster stores five `Customer` objects.
+
+The junior developer code requests five integers from the cluster in order to run the calculation. The senior developer code runs the calculation on the cluster, which returns one double from each member.
+
+Now imagine that you have 1,000,000 `Customer` objects stored in the cluster. The junior developer approach now requests 1,000,000 integers from the cluster across the network and the senior developer approach still returns one double from each member.
+
+It's clear that if data volumes increase, the cluster-side computation copes better. The same amount of data still has to be examined, but less data moves across the network.
+
+.Client `JuniorDeveloper.java`
+[%collapsible]
+====
+In this class, the average is calculated like this:
+
+[source,java,indent=0]
+----
+include::standard-deviation:example$client/src/main/java/your/company/name/JuniorDeveloper.java[tag=average]
+----
+
+This code is easy to understand, which is good for maintenance. However, it has three flaws:
+
+- The code requires every customer record to be moved from where the data is stored, in this case the Hazelcast cluster, to where the calculation is run. Even if a projection were added, this approach places a heavy load on the network.
+
+- The `keySet()` operation produces a collection that contains all the keys to iterate across. If this collection is large, it could result in memory overflow.
+
+- If the map is empty, the code results in a division by zero. A good unit test would find this.
+
+The sum of the square of the differences is calculated on the client-side like this:
+
+[source,java,indent=0]
+----
+include::standard-deviation:example$client/src/main/java/your/company/name/JuniorDeveloper.java[tag=stdev]
+----
+
+link:{github-directory}/tree/master/client/src/main/java/your/company/name/JuniorDeveloper.java[View source]
+====
+
+.Client `SeniorDeveloper.java`
+[%collapsible]
+====
+In this class, the average is calculated in one line. Hazelcast provides built-in functions for this type of calculation.
+
+[source,java,indent=0]
+----
+include::standard-deviation:example$client/src/main/java/your/company/name/SeniorDeveloper.java[tag=average]
+----
+
+
+The sum of the square of the differences is calculated on the cluster-side like this:
+
+[source,java,indent=0]
+----
+include::standard-deviation:example$client/src/main/java/your/company/name/SeniorDeveloper.java[tag=stdev]
+----
+
+The client uses the ExecutorService API to run a Callable task on each member in the cluster. The Callable class is named `TotalDifferenceSquaredCallable.java` and it runs the calculation on the Hazelcast member where it is invoked.
+
+Each member calculates a subtotal only for the data that member owns. If you have two members, the calculation takes half the time. If you have ten members, the calculation takes a tenth of the time. Each member runs its calculation independently, the runtime is dependent on how much data each member hosts rather than how much data exists as a whole.
+
+To do this, the task uses the `localKeySet()` method instead of the `keySet()` method. This `localKeySet()` method returns the keys that are held by the current process, and since the task is run on all processes, all the keys are included.
+
+Each member in the cluster only needs to work with the keys, and therefore entries, that it owns. As a result, members don't have to do any network calls to retrieve the keys from elsewhere.
+
+Finally, the task is submitted across each member in the cluster, which results in a collection of `Future` objects. One `Future` is returned for each member that runs the task, and the task needs to wait for them all to finish. This is not exactly difficult, since all members will have roughly the same amount of data. You can assume that the execution time is the same for all members and iterate across this collection running `Future.get()` to get the subtotal from each member.
+
+WARNING: The code in this example disregards concurrency. Step 1 calculates the average, then step 2 calculates the deviation from the average. It is possible that records are added or removed between step 1 and 2, which makes the calculation wrong.
+
+link:{github-directory}/tree/master/client/src/main/java/your/company/name/SeniorDeveloper.java[View source]
+====
+
+[[step-two]]
+== Step 2. Deploy the Classes to the Cluster
+
+In this step, you'll use the Hazelcast {hazelcast-cloud} Maven plugin to package the cluster-side modules into a single JAR file and upload that file to your cluster.
+
+. Open the `pom.xml` file in the `cluster-side/` directory.
+
+. Configure the Maven plugin with values for the following elements:
++
+[cols="1a,1a"]
+|===
+|Element|Location in {hazelcast-cloud} console
+
+|`<clusterName>`
+|Next to *Connect Client*, select any client and go to *Advanced setup*. The cluster name/ID is at the top of the list.
+
+|`<apiKey>` and `<apiSecret>`
+|
+include::cloud:ROOT:partial$create-api-key.adoc[tag=create]
+
+|===
++
+[source,xml,indent=0]
+----
+include::standard-deviation:example$cluster-side/pom.xml[tag=maven-plugin]
+----
+
+. Change into the `cluster-side/` directory.
+
+. Execute the following goal of the Maven plugin to package the project into a JAR file and deploy that file to your cluster:
++
+```bash
+mvn clean package hazelcast-cloud:deploy
+```
+
+The file is uploaded and is ready to be used:
+
+```bash
+[INFO] Artifact with custom classes standard-deviation-cluster-side-0.1-SNAPSHOT.jar was uploaded and is ready to be used
+```
+
+[[step-three]]
+== Step 3. Run the Client Application
+
+Now that the cluster-side modules are ready to use, you can run the client to trigger the process of calculating the standard deviation of customer satisfaction scores.
+
+. Open the link:{page-cloud-console}[{hazelcast-cloud} console].
+
+. Next to *Connect Client*, select any client.
+
+. Select *Advanced setup* and click *Download keystore file*.
+
+. Extract the files and copy the `client.keystore` and `client.truststore` files to the `client/src/main/resources` directory.
+
+. Leave the {hazelcast-cloud} console open. You'll need some of these details in next steps.
+
+. Change into the `client/` directory.
+
+. Execute the client.
++
+```bash
+mvn clean compile exec:java@standard-deviation -Dexec.cleanupDaemonThreads=false
+```
+
+. When prompted, enter the cluster name, keystore password, and discovery token for your cluster. These details are in the *Advanced setup* tab in the {hazelcast-cloud} console.
+
+The client connects to the cluster and calculates the standard deviation, using both the junior developer code and the senior developer code.
+
+```
+--------------------------------------------------
+Hazelcast client 'hz.client_1', using map 'your.company.name.Customer'
+--------------------------------------------------
+TestDataLoader.loadTestData('your.company.name.Customer')
+ -> 0 Customer [firstName=Brian, satisfaction=4]
+ -> 1 Customer [firstName=Mick, satisfaction=1]
+ -> 2 Customer [firstName=Keith, satisfaction=2]
+ -> 3 Customer [firstName=Bill, satisfaction=5]
+ -> 4 Customer [firstName=Charlie, satisfaction=3]
+
+Step 1 : ----------------
+Locally calculated average..: 3.0
+Remotely calculated average.: 3.0
+-------------------------
+Step 2 : ----------------
+Locally calculated total difference squared..: 10.0
+Remotely calculated total difference squared.: 10.0
+-------------------------
+Step 3 : ----------------
+Locally calculated average difference squared..: 2.0
+Remotely calculated average difference squared.: 2.0
+-------------------------
+Step 4 : ----------------
+Locally calculated STANDARD DEVIATION..: 1.4142135623730951
+Remotely calculated STANDARD DEVIATION.: 1.4142135623730951
+-------------------------
+--------------------------------------------------
+Disconnecting the Hazelcast client
+--------------------------------------------------
+```
+
+== Summary
+
+In this tutorial, you learned how to do the following:
+
+- Use an executor to process data in parallel on a {hazelcast-cloud} Standard cluster.
+- Deploy cluster-side modules to a {hazelcast-cloud} Standard cluster using the Hazelcast {hazelcast-cloud} Maven plugin.
+
+== Learn More
+
+Use these resources in the docs to continue learning:
+
+- xref:cloud:ROOT:cluster-side-modules.adoc[].
+
+- xref:cloud:ROOT:custom-classes-upload.adoc[].
+
+- xref:cloud:ROOT:maven-plugin-hazelcast.adoc[]
+
+- link:https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/core/IExecutorService.html[ExecutorService API]
+

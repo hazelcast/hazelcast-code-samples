@@ -1,0 +1,13 @@
+target/
+.idea/
+.settings/
+.classpath
+.directory
+.project
+.surefire-*
+.DS_Store
+*.iml
+*.ipr
+*.iws
+node_modules/
+package-lock.json

@@ -1,0 +1,103 @@
+/* ubuntu-300normal - latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src:
+    local('Ubuntu Light '),
+    local('Ubuntu-Light'),
+    url(~typeface-ubuntu/files/ubuntu-latin-300.woff2) format("woff2"),
+    url(~typeface-ubuntu/files/ubuntu-latin-300.woff) format("woff");
+}
+
+/* ubuntu-300italic - latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 300;
+  src:
+    local('Ubuntu Light italic'),
+    local('Ubuntu-Lightitalic'),
+    url(~typeface-ubuntu/files/ubuntu-latin-300italic.woff2) format("woff2"),
+    url(~typeface-ubuntu/files/ubuntu-latin-300italic.woff) format("woff");
+}
+
+/* ubuntu-400normal - latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:
+    local('Ubuntu Regular '),
+    local('Ubuntu-Regular'),
+    url(~typeface-ubuntu/files/ubuntu-latin-400.woff2) format("woff2"),
+    url(~typeface-ubuntu/files/ubuntu-latin-400.woff) format("woff");
+}
+
+/* ubuntu-400italic - latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src:
+    local('Ubuntu Regular italic'),
+    local('Ubuntu-Regularitalic'),
+    url(~typeface-ubuntu/files/ubuntu-latin-400italic.woff2) format("woff2"),
+    url(~typeface-ubuntu/files/ubuntu-latin-400italic.woff) format("woff");
+}
+
+/* ubuntu-500normal - latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src:
+    local('Ubuntu Medium '),
+    local('Ubuntu-Medium'),
+    url(~typeface-ubuntu/files/ubuntu-latin-500.woff2) format("woff2"),
+    url(~typeface-ubuntu/files/ubuntu-latin-500.woff) format("woff");
+}
+
+/* ubuntu-500italic - latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 500;
+  src:
+    local('Ubuntu Medium italic'),
+    local('Ubuntu-Mediumitalic'),
+    url(~typeface-ubuntu/files/ubuntu-latin-500italic.woff2) format("woff2"),
+    url(~typeface-ubuntu/files/ubuntu-latin-500italic.woff) format("woff");
+}
+
+/* ubuntu-700normal - latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src:
+    local('Ubuntu Bold '),
+    local('Ubuntu-Bold'),
+    url(~typeface-ubuntu/files/ubuntu-latin-700.woff2) format("woff2"),
+    url(~typeface-ubuntu/files/ubuntu-latin-700.woff) format("woff");
+}
+
+/* ubuntu-700italic - latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 700;
+  src:
+    local('Ubuntu Bold italic'),
+    local('Ubuntu-Bolditalic'),
+    url(~typeface-ubuntu/files/ubuntu-latin-700italic.woff2) format("woff2"),
+    url(~typeface-ubuntu/files/ubuntu-latin-700italic.woff) format("woff");
+}

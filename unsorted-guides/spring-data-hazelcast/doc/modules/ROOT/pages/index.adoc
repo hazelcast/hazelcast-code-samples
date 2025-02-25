@@ -1,0 +1,46 @@
+////
+This is the base template for Hazelcast integration module guides.
+
+You can clone this repository, work on it and create your guide, and then push to a new repository.
+////
+
+:github-address: [github-repo-address-of-your-guide]
+
+:templates-url: https://raw.githubusercontent.com/hazelcast-guides/adoc-templates/master
+
+// Use this relative url if you are going to publish the guide on the guides site.
+// Note that this url will not work locally and raise asciidoctor errors.
+// So, complete the guide with the above url and set the below one just before 
+// publishing on the guides site.
+//
+// :templates-url: templates:ROOT:page$/
+
+= Title
+
+// Content entered directly below the header but before the first section heading is called the preamble.
+
+include::{templates-url}/link-to-repo.adoc[]
+
+== What You’ll Learn
+
+// Define the problem and tell reader what he/she will learn from this guide.
+
+== Prerequisites
+
+// Define the prerequisites for the guide.
+
+////
+Write the steps in your guide here by making each step a different section
+////
+
+== Summary
+
+// Provide a quick summary
+
+== See Also
+
+// Add some links to resources, such as other related guides.
+// Use relative links used on the home page (see https://raw.githubusercontent.com/hazelcast-guides/guides-site/master/home/modules/ROOT/pages/index.adoc)
+
+- xref:hazelcast-embedded-springboot:ROOT:index.adoc[Hazelcast in SpringBoot]
+- xref:hazelcast-quarkus:ROOT:index.adoc[Hazelcast Client for Quarkus] 

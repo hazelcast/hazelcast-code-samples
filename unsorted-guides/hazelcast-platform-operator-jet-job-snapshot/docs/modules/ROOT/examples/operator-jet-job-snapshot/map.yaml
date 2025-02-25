@@ -1,0 +1,8 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: Map
+metadata:
+  name: transaction
+spec:
+  hazelcastResourceName: hazelcast
+  eventJournal:
+    capacity: 9000

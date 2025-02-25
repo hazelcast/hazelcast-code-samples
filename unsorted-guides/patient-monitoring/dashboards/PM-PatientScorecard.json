@@ -1,0 +1,1631 @@
+{
+  "__inputs": [
+    {
+      "name": "GRAPHITE",
+      "label": "Graphite",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "graphite",
+      "pluginName": "Graphite"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.1.0"
+    },
+    {
+      "type": "datasource",
+      "id": "graphite",
+      "name": "Graphite",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "patient_scorecard",
+      "tooltip": "",
+      "type": "link",
+      "url": ""
+    }
+  ],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "$patient",
+          "mappings": [
+            {
+              "options": {
+                "2": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "Oxygen"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 1,
+                  "text": "Air"
+                },
+                "to": 1
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 2,
+                  "text": "Air"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 3,
+          "min": 0,
+          "noValue": "Air",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 0
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {
+          "titleSize": 11
+        }
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "BREATHING.*.$id"
+        }
+      ],
+      "title": "Breathing",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "$patient",
+          "mappings": [
+            {
+              "options": {
+                "3": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "Not Alert"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 1,
+                  "text": "Alert"
+                },
+                "to": 2
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 2,
+                  "text": "Alert"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 4,
+          "min": 0,
+          "noValue": "Alert",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 0
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {
+          "titleSize": 11
+        }
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "CONSCIOUSNESS.*.$id"
+        }
+      ],
+      "title": "Consciousness",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "$patient",
+          "mappings": [
+            {
+              "options": {
+                "from": 30,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "High"
+                },
+                "to": 40
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 131,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 1,
+                  "text": "High"
+                },
+                "to": 140
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 111,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 2,
+                  "text": "Medium"
+                },
+                "to": 130
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 41,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 3,
+                  "text": "Low-Medium"
+                },
+                "to": 50
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 91,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 4,
+                  "text": "Low-Medium"
+                },
+                "to": 110
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 51,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 5,
+                  "text": "Low"
+                },
+                "to": 90
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 6,
+                  "text": "Low"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 140,
+          "min": 30,
+          "noValue": "Low",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 30
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 41
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 51
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 91
+              },
+              {
+                "color": "#EF843C",
+                "value": 111
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 131
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "text": {
+          "titleSize": 11
+        }
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "HEART.*.$id"
+        }
+      ],
+      "title": "Heart",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "$patient",
+          "mappings": [
+            {
+              "options": {
+                "from": 88,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "High"
+                },
+                "to": 91
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 92,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 1,
+                  "text": "Medium"
+                },
+                "to": 93
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 94,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 2,
+                  "text": "Low-Medium"
+                },
+                "to": 95
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 96,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 3,
+                  "text": "Low"
+                },
+                "to": 100
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 4,
+                  "text": "Low"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 88,
+          "noValue": "Low",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 88
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 92
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 94
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 96
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "text": {
+          "titleSize": 11
+        }
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "OXYGEN-SATURATION-ONE.*.$id"
+        }
+      ],
+      "title": "Oxygen Saturation One",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "$patient",
+          "mappings": [
+            {
+              "options": {
+                "from": 97,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "High"
+                },
+                "to": 100
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 80,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 1,
+                  "text": "High"
+                },
+                "to": 83
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 95,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 2,
+                  "text": "Medium"
+                },
+                "to": 96
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 84,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 3,
+                  "text": "Medium"
+                },
+                "to": 85
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 93,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 4,
+                  "text": "Low-Medium"
+                },
+                "to": 94
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 86,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 5,
+                  "text": "Low-Medium"
+                },
+                "to": 87
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 88,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 6,
+                  "text": "Low"
+                },
+                "to": 92
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 7,
+                  "text": "Low"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 80,
+          "noValue": "Low",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 80
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 84
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 86
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 88
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 93
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 95
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 97
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 0,
+        "y": 7
+      },
+      "id": 5,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "text": {
+          "titleSize": 11
+        }
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "OXYGEN-SATURATION-TWO.*.$id"
+        }
+      ],
+      "title": "Oxygen Saturation Two",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "$patient",
+          "mappings": [
+            {
+              "options": {
+                "from": 25,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "High"
+                },
+                "to": 30
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 5,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 1,
+                  "text": "High"
+                },
+                "to": 8
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 21,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 2,
+                  "text": "Medium"
+                },
+                "to": 24
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 9,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 3,
+                  "text": "Low-Medium"
+                },
+                "to": 11
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 12,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 4,
+                  "text": "Low"
+                },
+                "to": 20
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 5,
+                  "text": "Low"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 30,
+          "min": 5,
+          "noValue": "Low",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 5
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 9
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 12
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 21
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 25
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 6,
+        "y": 7
+      },
+      "id": 6,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "text": {
+          "titleSize": 11
+        }
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "RESPIRATORY.*.$id"
+        }
+      ],
+      "title": "Respiratory",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "$patient",
+          "mappings": [
+            {
+              "options": {
+                "from": 220,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "High"
+                },
+                "to": 240
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 80,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 1,
+                  "text": "High"
+                },
+                "to": 90
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 91,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 2,
+                  "text": "Medium"
+                },
+                "to": 100
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 101,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 3,
+                  "text": "Low-Medium"
+                },
+                "to": 110
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 111,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 4,
+                  "text": "Low"
+                },
+                "to": 219
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 5,
+                  "text": "Low"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 240,
+          "min": 80,
+          "noValue": "Low",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 80
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 91
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 101
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 111
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 220
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 12,
+        "y": 7
+      },
+      "id": 7,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "text": {
+          "titleSize": 11
+        }
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "SYSTOLIC-BLOOD-PRESSURE.*.$id"
+        }
+      ],
+      "title": "Systolic Blood Pressure",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "displayName": "$patient",
+          "mappings": [
+            {
+              "options": {
+                "from": 34,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "High"
+                },
+                "to": 35
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 39.1,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 1,
+                  "text": "Medium"
+                },
+                "to": 40
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 38.1,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 2,
+                  "text": "Low-Medium"
+                },
+                "to": 39
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 35.1,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 3,
+                  "text": "Low-Medium"
+                },
+                "to": 36
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 36.1,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 4,
+                  "text": "Low"
+                },
+                "to": 38
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 5,
+                  "text": "Low"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 40,
+          "min": 34,
+          "noValue": "Low",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 34
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 35.1
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 36.1
+              },
+              {
+                "color": "#EAB839",
+                "value": 38.1
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 39.1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 7
+      },
+      "id": 9,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "text": {
+          "titleSize": 11
+        }
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "TEMPERATURE.*.$id"
+        }
+      ],
+      "title": "Temperature",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 7,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "High"
+                },
+                "to": 500
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 5,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 1,
+                  "text": "Medium"
+                },
+                "to": 6
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 4,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 2,
+                  "text": "Low-Medium"
+                },
+                "to": 4
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 3,
+                  "text": "Low"
+                },
+                "to": 3
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 4,
+                  "text": "Low"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Low",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 0
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 4
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 5
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 7
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 9,
+        "x": 0,
+        "y": 14
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "timezones": [
+          "utc"
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "aliasByNode(RESULTS.*.$id, 0)"
+        }
+      ],
+      "title": "RESULTS STREAM - $patient",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 15,
+        "x": 9,
+        "y": 14
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "timezones": [
+          "utc"
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "refId": "A",
+          "target": "exclude(aliasByNode(*.*.$id, 0), 'RESULTS')"
+        }
+      ],
+      "title": "DEVICE STREAM - $patient",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [
+    "patient_scorecard"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "graphite",
+          "uid": "GRAPHITE"
+        },
+        "definition": "",
+        "hide": 2,
+        "includeAll": false,
+        "label": "",
+        "multi": false,
+        "name": "device",
+        "options": [],
+        "query": {
+          "queryType": "Default",
+          "refId": "A",
+          "target": "*"
+        },
+        "refresh": 1,
+        "regex": "/^(?!.*RESULT|.*carbon|.*dummy|.*stats|.*stats_counts|.*stats).*$/",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "graphite",
+          "uid": "GRAPHITE"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Patient",
+        "multi": false,
+        "name": "patient",
+        "options": [],
+        "query": {
+          "queryType": "Default",
+          "refId": "A",
+          "target": "$device.*"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 4,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "graphite",
+          "uid": "GRAPHITE"
+        },
+        "definition": "",
+        "hide": 2,
+        "includeAll": false,
+        "label": "",
+        "multi": false,
+        "name": "id",
+        "options": [],
+        "query": {
+          "queryType": "Default",
+          "refId": "A",
+          "target": "$device.$patient.*"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": false,
+    "refresh_intervals": [
+      "5s"
+    ]
+  },
+  "timezone": "utc",
+  "title": "PM : Patient Scorecard",
+  "uid": "gBSt16W4z",
+  "version": 154,
+  "weekStart": "monday"
+}

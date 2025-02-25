@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Getting Started with Embedded Hazelcast on ECS</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/ecs-embedded/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../_/img/hazelcast-logo-white.png 1x, ../_/img/hazelcast-logo-white@2x.png 2x, ../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../_/img/external-link.png 1x, ../_/img/external-link@2x.png 2x, ../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="ecs-embedded" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<h1 class="page">Getting Started with Embedded Hazelcast on ECS</h1>
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/ecs-embedded/edit/master/doc/modules/ROOT/pages/index.adoc>See something wrong? Edit this page.</a></p>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide will get you started to use Embedded Hazelcast on the ECS (both based on EC2 and Fargate) environment.</p>
+</div>
+<div class="paragraph">
+<p>You can see the whole project <a href="https://github.com/hazelcast-guides/ecs-embedded">here.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_youll_learn"><a class="anchor" href="#_what_youll_learn"></a>What You’ll Learn</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide, you&#8217;ll deploy an application with embedded Hazelcast into an ECS cluster. Hazelcast instances from each application replica will automatically discover themselves and form one consistent Hazelcast cluster. Thanks to <a href="https://github.com/hazelcast/hazelcast-aws">Hazelcast AWS discovery plugin</a>, there is no static configuration needed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>~15 minutes</p>
+</li>
+<li>
+<p><a href="https://docs.docker.com/install/">Docker</a> (<a href="https://www.docker.com/products/docker-desktop">Docker for Desktop</a> is good enough)</p>
+</li>
+<li>
+<p>AWS Account</p>
+</li>
+<li>
+<p><a href="https://aws.amazon.com/cli/">AWS command line tool</a></p>
+</li>
+<li>
+<p><a href="https://git-scm.com/">Git</a></p>
+</li>
+<li>
+<p>JDK 1.8+</p>
+</li>
+<li>
+<p>Apache Maven 3.2+</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_an_application"><a class="anchor" href="#_create_an_application"></a>Create an Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can embed Hazelcast into any JVM-based application and use any web framework you want. As the sample for this guide, let&#8217;s use the application from <a href="https://github.com/hazelcast-guides/hazelcast-embedded-springboot">Getting Started with Hazelcast using Spring Boot</a> guide. To download it, execute the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>git clone https://github.com/hazelcast-guides/hazelcast-embedded-springboot.git</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_use_hazelcast_aws_ecs_configuration"><a class="anchor" href="#_use_hazelcast_aws_ecs_configuration"></a>Use Hazelcast AWS ECS Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hazelcast provides the dedicated <a href="https://github.com/hazelcast/hazelcast-aws">Hazelcast AWS plugin</a> which allows to automatically form Hazelcast cluster in the AWS environment. It supports both EC2 discovery and ECS discovery. To enabled it, use the following Hazelcast configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">hazelcast:
+  network:
+    interfaces:
+      enabled: true
+      interfaces:
+        - 10.0.*.*
+    join:
+      multicast:
+        enabled: false
+      aws:
+        enabled: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that you need to change <code>10.0.*.*</code> to the VPC you plan to use for your ECS Tasks. To list all your available VPCs, execute the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ec2 describe-vpcs --query 'Vpcs[*].[VpcId,CidrBlock]'
+[
+    [
+        "vpc-0ae005a4a2835bbb5",
+        "172.18.0.0/16"
+    ],
+    [
+        "vpc-0681043d6f49b039a",
+        "10.0.0.0/16"
+    ]
+]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the next steps, let&#8217;s assume that we always use the VPC with ID <code>vpc-0681043d6f49b039a</code> (CIDR <code>vpc-10.0.0.0/16</code>). For the sake of simplicity, let&#8217;s put it as an environment variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export VPC_ID='vpc-0681043d6f49b039a'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To include <code>hazelcast.yaml</code> inside your Spring Boot project, copy it into <code>hazelcast-embedded-springboot/src/main/resources/</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cp hazelcast.yaml hazelcast-embedded-springboot/src/main/resources/</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, you can build the project with the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mvn package -f hazelcast-embedded-springboot/pom.xml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As an output, the JAR file with our application should be created at <code>hazelcast-embedded-springboot/target/*.jar</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_containerize_the_application"><a class="anchor" href="#_containerize_the_application"></a>Containerize the Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To containerize the application, you need to have Docker installed. Then, you can use the following <code>Dockerfile</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-dockerfile hljs" data-lang="dockerfile">FROM openjdk:8-jre-alpine
+COPY hazelcast-embedded-springboot/target/*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to build the Docker image, run the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>docker build -t hazelcastguides/hazelcast-embedded-ecs .</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you build the image by yourself, then you need to use your Docker Hub account instead of <code>hazelcastguides</code>. Then, you can push the image into your Docker Hub registry with the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>docker push hazelcastguides/hazelcast-embedded-ecs</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to use your image in the following steps, please also make sure your Docker Hub registry is public. However, for the purpose of this guide, you can also use the already built <code>hazelcastguides/hazelcast-embedded-ecs</code> Docker image.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_aws_ecs_cluster"><a class="anchor" href="#_create_aws_ecs_cluster"></a>Create AWS ECS Cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Assuming you have an AWS Account and AWS command line tool configured, you can create an ECS cluster with the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ecs create-cluster --cluster-name test-cluster</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We will use this cluster for all further steps in this guide.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_aws_security_group"><a class="anchor" href="#_create_aws_security_group"></a>Create AWS Security Group</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, Hazelcast uses port 5701 for all the communication. Therefore, we need to create an appropriate security group.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ec2 create-security-group \
+  --group-name hazelcast-security-group \
+  --description "Hazelcast Security Group" \
+  --vpc-id ${VPC_ID}
+{
+    "GroupId": "sg-0cf1116753b96cdce"
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s define the security group id as an environment variable.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export SECURITY_GROUP_ID='sg-0cf1116753b96cdce'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, we need to open port 5701 for the TCP communication.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ec2 authorize-security-group-ingress \
+  --group-id ${SECURITY_GROUP_ID} \
+  --protocol tcp \
+  --port 5701 \
+  --cidr 0.0.0.0/0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That is enough for the Hazelcast communication, however if you also want to play with the Spring Boot service, then you need to whitelist its port 8080.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ec2 authorize-security-group-ingress \
+  --group-id ${SECURITY_GROUP_ID} \
+  --protocol tcp \
+  --port 8080 \
+  --cidr 0.0.0.0/0</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_iam_role"><a class="anchor" href="#_create_iam_role"></a>Create IAM Role</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hazelcast ECS Discovery uses AWS API to discover Hazelcast members. That is why we need to grant certain permissions. Here are the commands to create an IAM Role we will later use by ECS tasks.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws iam create-policy \
+  --policy-name hazelcast-ecs-policy \
+  --policy-document file://policy.json
+{
+    "Policy": {
+        "PolicyName": "hazelcast-ecs-policy",
+        "PolicyId": "ANPAZV4HIPQ4QUIH45BXB",
+        "Arn": "arn:aws:iam::665466731577:policy/hazelcast-ecs-policy",
+        "Path": "/",
+        "DefaultVersionId": "v1",
+        "AttachmentCount": 0,
+        "PermissionsBoundaryUsageCount": 0,
+        "IsAttachable": true,
+        "CreateDate": "2020-06-29T09:52:05Z",
+        "UpdateDate": "2020-06-29T09:52:05Z"
+    }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s define this policy ARN as an environment variable.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export POLICY_ARN='arn:aws:iam::665466731577:policy/hazelcast-ecs-policy'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, let&#8217;s define a new IAM Role.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws iam create-role \
+  --role-name hazelcast-ecs-role \
+  --assume-role-policy-document file://role-policy.json
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "hazelcast-ecs-role",
+        "RoleId": "AROAZV4HIPQ47NJGCHJ2A",
+        "Arn": "arn:aws:iam::665466731577:role/hazelcast-ecs-role",
+        "CreateDate": "2020-06-29T09:58:06Z",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "ecs-tasks.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }
+    }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Define an environment variable with the role ARN.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export TASK_ROLE_ARN='arn:aws:iam::665466731577:role/hazelcast-ecs-role'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, let&#8217;s attach the defined policy to the created role.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws iam attach-role-policy --role-name hazelcast-ecs-role --policy-arn ${POLICY_ARN}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configure_aws_cloudwatch"><a class="anchor" href="#_configure_aws_cloudwatch"></a>Configure AWS CloudWatch</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to read logs from your application, then you need to create AWS CloudWatch Group. Note that this step is not required, but highly recommended. If you skip it, you also need to remove CloudWatch entry from <code>task-definition.json</code> and then, in the further steps, you won&#8217;t be able to see any logs from your application.</p>
+</div>
+<div class="paragraph">
+<p>To create CloudWatch group, execute the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws logs create-log-group --log-group-name /ecs/hazelcast</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To allow ECS task to write to CloudWatch log group, you also need to create the following ECS role.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws iam create-role \
+  --role-name ecs-execution-role \
+  --assume-role-policy-document file://role-policy.json
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "ecs-execution-role",
+        "RoleId": "AROAZV4HIPQ4SGDIWGYRK",
+        "Arn": "arn:aws:iam::665466731577:role/ecs-execution-role",
+        "CreateDate": "2020-06-29T10:44:01Z",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "ecs-tasks.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }
+    }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Export this role as an environment variable.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export EXECUTION_ROLE_ARN='arn:aws:iam::665466731577:role/ecs-execution-role'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, attach <code>AmazonECSTaskExecutionRolePolicy</code> to the created role.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws iam attach-role-policy \
+  --role-name ecs-execution-role \
+  --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_task_definition"><a class="anchor" href="#_create_task_definition"></a>Create Task Definition</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create ECS task definition, you need first to update <code>task-definition.json</code> with the following values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>TASK_ROLE_ARN</code> - ARN of the role created in the "Create IAM Role" step</p>
+</li>
+<li>
+<p><code>EXECUTION_ROLE_ARN</code> - ARN of the Role created in the "Configure AWS CloudWatch" step</p>
+</li>
+<li>
+<p><code>REGION</code> - Region that you use for your CloudWatch and ECS Cluster</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export ECS_REGION=$(aws configure get region)
+
+sed -i.bak "s~TASK_ROLE_ARN~${TASK_ROLE_ARN}~g" task-definition.json
+sed -i.bak "s~EXECUTION_ROLE_ARN~${EXECUTION_ROLE_ARN}~g" task-definition.json
+sed -i.bak "s~REGION~${ECS_REGION}~g" task-definition.json
+
+rm task-definition.json.bak</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, you can create task definition with the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ecs register-task-definition --cli-input-json file://task-definition.json</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_ecs_service"><a class="anchor" href="#_create_ecs_service"></a>Create ECS Service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Finally, when all is set and done, we can start an ECS service which in turn creates ECS tasks. First, choose the subnet in which your service should operate.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ec2 describe-subnets \
+  --filters "Name=vpc-id,Values=${VPC_ID}" \
+  --query 'Subnets[*].[SubnetId,CidrBlock]'
+[
+    [
+        "subnet-0f042c997bad8e2b9",
+        "10.0.1.0/24"
+    ]
+]
+
+export SUBNET_ID='subnet-0f042c997bad8e2b9'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, create a service with 3 application replicas.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ecs create-service --cluster test-cluster \
+  --service-name hazelcast-embedded \
+  --task-definition hazelcast-embedded \
+  --launch-type=FARGATE \
+  --network-configuration "awsvpcConfiguration={subnets=["${SUBNET_ID}"],securityGroups=["${SECURITY_GROUP_ID}"],assignPublicIp=ENABLED}" \
+  --desired-count 3</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can check that the related tasks were created. If you don&#8217;t see any tasks, then wait a moment and check the tasks again.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ecs list-tasks --cluster test-cluster --service hazelcast-embedded
+{
+    "taskArns": [
+        "arn:aws:ecs:eu-central-1:665466731577:task/2154b675-df19-459e-a95e-8466f5d4bb59",
+        "arn:aws:ecs:eu-central-1:665466731577:task/7c3adb1d-6850-4f86-9eb1-7eed5bc75235",
+        "arn:aws:ecs:eu-central-1:665466731577:task/99de6977-949d-489c-9c5a-44c763edfaaf"
+    ]
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also examine the logs of one of the tasks and you should see that Hazelcast cluster was successfully formed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws logs get-log-events \
+  --log-group-name /ecs/hazelcast \
+  --log-stream-name ecs/hazelcast-embedded/2154b675-df19-459e-a95e-8466f5d4bb59 \
+  --output text --query 'events[*].[message]'
+
+...
+Members {size:3, ver:3} [
+        Member [10.0.1.4]:5701 - dae44d3d-882b-4f3a-aff3-09721b737276
+        Member [10.0.1.6]:5701 - 3874314e-30f9-4f10-9f7d-11a0a32dc16b
+        Member [10.0.1.220]:5701 - 9009d19a-63b1-4e90-b4de-48e877bb7086 this
+]
+...</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing_the_application"><a class="anchor" href="#_testing_the_application"></a>Testing the Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To test that the application works correctly, you can check the public IPs of your tasks and make REST calls to the application replicas.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ecs list-tasks --cluster test-cluster --service hazelcast-embedded
+{
+    "taskArns": [
+        "arn:aws:ecs:eu-central-1:665466731577:task/2154b675-df19-459e-a95e-8466f5d4bb59",
+        "arn:aws:ecs:eu-central-1:665466731577:task/7c3adb1d-6850-4f86-9eb1-7eed5bc75235",
+        "arn:aws:ecs:eu-central-1:665466731577:task/99de6977-949d-489c-9c5a-44c763edfaaf"
+    ]
+}
+
+aws ecs describe-tasks --cluster test-cluster \
+  --tasks 2154b675-df19-459e-a95e-8466f5d4bb59 \
+          7c3adb1d-6850-4f86-9eb1-7eed5bc75235 \
+          99de6977-949d-489c-9c5a-44c763edfaaf \
+  --query "tasks[*].attachments[*].details"
+[
+    [
+        [
+            {
+                "name": "subnetId",
+                "value": "subnet-0f042c997bad8e2b9"
+            },
+            {
+                "name": "networkInterfaceId",
+                "value": "eni-0464651cd2cdf1b45"
+            },
+            {
+                "name": "macAddress",
+                "value": "02:e3:4b:c3:53:04"
+            },
+            {
+                "name": "privateIPv4Address",
+                "value": "10.0.1.220"
+            }
+        ]
+    ],
+    [
+        [
+            {
+                "name": "subnetId",
+                "value": "subnet-0f042c997bad8e2b9"
+            },
+            {
+                "name": "networkInterfaceId",
+                "value": "eni-061b0e2414cfb1440"
+            },
+            {
+                "name": "macAddress",
+                "value": "02:e6:04:12:00:70"
+            },
+            {
+                "name": "privateIPv4Address",
+                "value": "10.0.1.4"
+            }
+        ]
+    ],
+    [
+        [
+            {
+                "name": "subnetId",
+                "value": "subnet-0f042c997bad8e2b9"
+            },
+            {
+                "name": "networkInterfaceId",
+                "value": "eni-0050d027099aeb812"
+            },
+            {
+                "name": "macAddress",
+                "value": "02:47:51:40:b2:72"
+            },
+            {
+                "name": "privateIPv4Address",
+                "value": "10.0.1.6"
+            }
+        ]
+    ]
+]
+
+aws ec2 describe-network-interfaces \
+  --network-interface-ids eni-0050d027099aeb812 \
+                          eni-061b0e2414cfb1440 \
+                          eni-0464651cd2cdf1b45 \
+  --query "NetworkInterfaces[*].Association.PublicIp"
+[
+    "3.123.22.224",
+    "18.185.12.209",
+    "18.184.248.123"
+]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Knowing the public IPs of tasks, we can make calls to the application replicas.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>curl --data "key=key1&amp;value=hazelcast" "3.123.22.224:8080/put"
+{"value":"hazelcast"}
+
+curl "18.185.12.209:8080/get?key=key1"
+{"value":"hazelcast"}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tearing_down_the_deployment"><a class="anchor" href="#_tearing_down_the_deployment"></a>Tearing Down the Deployment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To delete the service, execute the following commands.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ecs update-service \
+  --cluster test-cluster \
+  --service hazelcast-embedded \
+  --desired-count 0
+aws ecs delete-service \
+  --cluster test-cluster \
+  --service hazelcast-embedded</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To delete all other resources we created in the guide, execute the following commands.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ecs deregister-task-definition --task-definition hazelcast-embedded:1
+aws iam detach-role-policy \
+  --role-name ecs-execution-role \
+  --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+aws iam delete-role --role-name ecs-execution-role
+aws logs delete-log-group --log-group-name /ecs/hazelcast
+aws iam detach-role-policy --role-name hazelcast-ecs-role --policy-arn ${POLICY_ARN}
+aws iam delete-role --role-name hazelcast-ecs-role
+aws iam delete-policy --policy-arn ${POLICY_ARN}
+aws ec2 delete-security-group --group-id ${SECURITY_GROUP_ID}
+aws ecs delete-cluster --cluster test-cluster</pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

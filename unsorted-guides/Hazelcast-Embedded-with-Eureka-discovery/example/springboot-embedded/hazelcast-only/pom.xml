@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hazelcast.samples.eureka</groupId>
+        <artifactId>springboot-embedded</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>hazelcast-only</artifactId>
+    <groupId>com.hazelcast.samples.eureka.embedded</groupId>
+    <version>0.1-SNAPSHOT</version>
+
+    <name>Eureka Spring Boot Embedded - Hazelcast Only</name>
+    <description>Spring Boot Application using Embedded Hazelcast</description>
+
+    <properties>
+        <hazelcast.version>5.3.0</hazelcast.version>
+        <hazelcast-eureka-two.version>3.0.0</hazelcast-eureka-two.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-eureka-two</artifactId>
+            <version>${hazelcast-eureka-two.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

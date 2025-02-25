@@ -1,0 +1,29 @@
+hazelcast-client:
+  config-replacers:
+    fail-if-value-missing: false
+    replacers:
+      - class-name: hazelcast.platform.labs.EnvironmentConfigReplacer
+        properties: {}
+  properties:
+    hazelcast.client.cloud.url: https://api.viridian.hazelcast.com
+  cluster-name: $ENV{VIRIDIAN_CLUSTER_ID}
+  network:
+    hazelcast-cloud:
+      enabled: true
+      discovery-token: $ENV{VIRIDIAN_DISCOVERY_TOKEN}
+    ssl:
+      enabled: true
+      properties:
+        keyStore: $ENV{VIRIDIAN_SECRETS_DIR}/client.keystore
+        keyStorePassword: $ENV{VIRIDIAN_PASSWORD}
+        trustStore: $ENV{VIRIDIAN_SECRETS_DIR}/client.truststore
+        trustStorePassword: $ENV{VIRIDIAN_PASSWORD}
+  metrics:
+    enabled: true
+  connection-strategy:
+    async-start: false
+    reconnect-mode: ON
+  serialization:
+    portable-factories:
+      - factory-id: 1
+        class-name: hazelcast.platform.labs.machineshop.domain.MachineShopPortableFactory

@@ -1,0 +1,4 @@
+.env
+hzcloud*keys/
+.vscode/
+.DS_Store

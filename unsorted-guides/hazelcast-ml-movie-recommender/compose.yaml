@@ -1,0 +1,79 @@
+services:
+
+  hz:
+    image: wrmay/hazelcast_ds:5.2.1
+    environment:
+      JAVA_OPTS: -Dhazelcast.config=/project/config/hazelcast.yaml
+    volumes:
+      - "./config:/project/config"
+    networks:
+      - hznet
+
+  mc:
+    image: hazelcast/management-center:5.2.1
+    environment:
+      MC_DEFAULT_CLUSTER: dev
+      MC_DEFAULT_CLUSTER_MEMBERS: hz:5701
+    ports:
+      - "8080:8080"
+    networks:
+      - hznet
+
+  submit-job:
+    image: wrmay/hazelcast_ds:5.2.1
+    environment:
+      HZ_CLUSTER_NAME: dev
+      HZ_MEMBERS: hz
+      AWAIT_MAP: SYSTEM
+      AWAIT_KEY: LOADED
+      AWAIT_VALUE: "TRUE"  # don't remove these quotes
+    volumes:
+      - ".:/project"
+    # WARNING: formatting on the command below is outrageously finicky
+    command: >
+      bash -c "java -jar /project/map-waiter/target/map-waiter-1.0-SNAPSHOT.jar 
+      && hz-cli submit -c=hazelcast.platform.solutions.recommender.RecommenderPipeline \\
+        -t=dev@hz \\
+        -n=recommender \\
+       /project/recommender-pipeline/target/recommender-pipeline-1.0-SNAPSHOT.jar /project/python-recommender"
+
+    networks:
+      - hznet
+
+  recommender-service:
+    image: openjdk:11
+    command: java -jar /project/recommender-service/target/recommender-service-1.0.1-SNAPSHOT.jar
+    environment:
+      hazelcast.pipeline.dispatcher.hazelcast_config_file: /project/config/hazelcast-client.yaml
+      hazelcast.pipeline.dispatcher.request_timeout_ms: "1000"
+    volumes:
+      - ".:/project"
+    ports:
+      - "8888:8080"
+    networks:
+      - hznet
+
+  refdata-loader:
+    build: 
+      context: refdata-loader
+    environment:
+      HZ_CLUSTER_NAME: dev
+      HZ_MEMBERS: "hz:5701"
+      MOVIE_POSTER_FILE: movie_poster.csv
+    networks:
+      - hznet
+      
+  ui:
+    build: 
+      context: ui
+    environment:
+      RECOMMENDER_SERVICE_URL: "http://recommender-service:8080/recommendations"
+    ports:
+      - "80:5000"
+    networks:
+      - hznet
+    
+
+networks:
+  hznet:
+  

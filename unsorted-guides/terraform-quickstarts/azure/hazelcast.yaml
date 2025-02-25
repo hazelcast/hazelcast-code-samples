@@ -1,0 +1,6 @@
+hazelcast:
+  network:
+    join:
+      azure:
+        enabled: true
+        tag: TAG_KEY=TAG_VALUE

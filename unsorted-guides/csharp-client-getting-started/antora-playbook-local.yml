@@ -1,0 +1,31 @@
+site:
+  title: Documentation
+  start_page: tutorials::index.adoc
+  url: http:localhost:3000
+  keys:
+    docsearch_id: 'QK2EAH8GB0'
+    docsearch_api: 'ef7bd9485eafbd75d6e8425949eda1f5'
+    docsearch_index: 'prod_hazelcast_docs'
+content:
+  sources: 
+  - url: https://github.com/hazelcast/hazelcast-docs
+    branches: main
+    start_paths: [tutorials, home]
+  - url: https://github.com/hazelcast-guides/adoc-templates.git
+    branches: antora-doc
+  - url: .
+    branches: master
+    start_paths: docs
+ui: 
+  bundle:
+    url: https://github.com/hazelcast/hazelcast-docs-ui/releases/latest/download/ui-bundle.zip
+    snapshot: true
+asciidoc:
+  attributes:
+    page-pagination: true@
+    # Allows us to use UI macros. See https://docs.asciidoctor.org/asciidoc/latest/macros/ui-macros/
+    page-experimental: true
+    idprefix: ''
+    idseparator: '-'
+  extensions:
+    - ./lib/tabs-block.js

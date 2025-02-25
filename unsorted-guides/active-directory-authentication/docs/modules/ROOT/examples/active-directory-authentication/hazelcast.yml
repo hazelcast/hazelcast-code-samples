@@ -1,0 +1,69 @@
+hazelcast:
+  license-key: "PUT_THE_LICENSE_KEY_HERE"
+  network:
+    join:
+      multicast:
+        enabled: false
+      tcp-ip:
+        enabled: true
+        member-list:
+          - 10.0.0.10
+          - 10.0.0.11
+  security:
+    enabled: true
+    realms:
+      - name: kerberosRealm
+        authentication:
+          kerberos:
+            relax-flags-check: true
+            use-name-without-realm: true
+            security-realm: krb5Acceptor
+            ldap:
+              url: ldap://DC1.acme.com/
+              system-authentication: GSSAPI
+              security-realm: krb5Initiator
+              skip-authentication: true
+              user-context: DC=acme,DC=com
+              user-filter: "(|(sAMAccountName={login})(servicePrincipalName={login}))"
+              role-mapping-mode: direct
+              role-mapping-attribute: memberOf
+              role-recursion-max-depth: 5
+              role-name-attribute: CN
+              parse-dn: false
+        identity:
+          kerberos:
+            realm: ACME.COM
+            security-realm: krb5Initiator
+      - name: krb5Acceptor
+        authentication:
+          jaas:
+            - class-name: com.sun.security.auth.module.Krb5LoginModule
+              usage: REQUIRED
+              properties:
+                isInitiator: false
+                useTicketCache: false
+                doNotPrompt: true
+                useKeyTab: true
+                storeKey: true
+                principal: hz/10.0.0.11@ACME.COM
+                keyTab: hz-app1.keytab
+      - name: krb5Initiator
+        authentication:
+          jaas:
+            - class-name: com.sun.security.auth.module.Krb5LoginModule
+              usage: REQUIRED
+              properties:
+                isInitiator: true
+                useTicketCache: false
+                doNotPrompt: true
+                useKeyTab: true
+                storeKey: true
+                principal: hz/10.0.0.11@ACME.COM
+                keyTab: hz-app1.keytab
+    member-authentication:
+      realm: kerberosRealm
+    client-authentication:
+      realm: kerberosRealm
+    client-permissions:
+      all:
+        principal: "Acme Cache"

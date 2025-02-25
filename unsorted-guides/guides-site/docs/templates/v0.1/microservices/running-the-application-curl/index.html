@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/templates/v0.1/microservices/running-the-application-curl/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../../../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../../../../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../../../../_/img/hazelcast-logo-white.png 1x, ../../../../_/img/hazelcast-logo-white@2x.png 2x, ../../../../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../../../../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../../../../_/img/external-link.png 1x, ../../../../_/img/external-link@2x.png 2x, ../../../../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="templates" data-version="v0.1">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/adoc-templates/edit/antora-doc/modules/ROOT/pages/microservices/running-the-application-curl.adoc>See something wrong? Edit this page.</a></p>
+<div class="paragraph">
+<p>Now, you can make calls to application endpoints to put data and get it back. Firstly, run the following command to put the data into Hazelcast distributed map:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>curl --data "key=key1&amp;value=hazelcast" "{application-ip-address}:8080/put"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will see the value in the output. Then run the command below to get the data back. Please note that the call is made to the other application instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>curl "{application-ip-address}:8081/get?key=key1"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Again, you will see the value in the output since the data is distributed among Hazelcast cluster instances and can be accessed from any of them.</p>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../../../../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../../../../_/js/site.js"></script>
+<script async src="../../../../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

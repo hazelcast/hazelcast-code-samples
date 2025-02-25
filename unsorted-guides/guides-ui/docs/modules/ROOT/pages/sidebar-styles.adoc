@@ -1,0 +1,29 @@
+= Sidebar Styles
+
+This page describes the in-page sidebar block styles, not the styles for the navigation sidebar.
+
+== Sidebar blocks
+
+xref:antora:asciidoc:sidebar.adoc[Sidebars] can contain any type of content.
+The sidebar title is specified by the block class title.
+Here's an AsciiDoc source example that produces a sidebar with a title:
+
+[source,asciidoc]
+----
+.Optional Title
+****
+This is a paragraph in a sidebar.
+****
+----
+
+[source,html]
+----
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Optional Title</div>
+<div class="paragraph">
+<p>This is a paragraph in a sidebar.</p>
+</div>
+</div>
+</div>
+----

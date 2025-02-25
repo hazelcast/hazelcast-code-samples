@@ -1,0 +1,59 @@
+= UI Development Prerequisites
+// Settings:
+:idprefix:
+:idseparator: -
+// URIs:
+:url-nvm: https://github.com/creationix/nvm
+:url-node: https://nodejs.org
+:url-gulp: http://gulpjs.com
+:url-git: https://git-scm.com
+:url-git-dl: {url-git}/downloads
+:url-node-releases: https://nodejs.org/en/about/releases/
+// These prerequisite instructions are less detailed than Antora's prerequisite instructions, I don't know if this is a concern or not.
+
+An Antora UI project is based on tools built atop Node.js, namely:
+
+* {url-node}[Node.js] (commands: `node` and `npm`)
+ ** {url-nvm}[nvm] (optional, but strongly recommended)
+* {url-gulp}[Gulp CLI] (command: `gulp`)
+
+You also need {url-git}[git] (command: `git`) to pull down the project and push updates to it.
+
+== git
+
+First, make sure you have git installed.
+
+ $ git --version
+
+If not, {url-git-dl}[download and install] the git package for your system.
+
+== Node.js
+
+You need Node.js installed on your machine to use Antora, including the default UI.
+Antora follows the Node.js release schedule, so we advise that you choose an active long term support (LTS) release of Node.js.
+We recommend using the latest active Node.js LTS version.
+While you can use other versions of Node.js, Antora is only tested against LTS releases.
+
+To check whether you have Node.js installed, and which version, open a terminal and type:
+
+ $ node --version
+
+You should see a version string, such as:
+
+ v10.15.3
+
+If the command fails with an error, it means you don't have Node.js installed.
+The best way to install Node.js is to use nvm (Node Version Manager).
+Refer to xref:antora:install:linux-requirements.adoc#install-nvm[Install nvm and Node.js (Linux)], xref:antora:install:macos-requirements.adoc#install-nvm[Install nvm and Node.js (macOS)], or xref:antora:install:windows-requirements.adoc#install-nvm[Install nvm and Node.js (Windows)] for instructions.
+
+Once you have Node.js installed, you can proceed with installing the Gulp CLI.
+
+== Gulp CLI
+
+Next, you'll need the Gulp CLI (aka wrapper).
+This package provides the `gulp` command which executes the version of Gulp declared by the project.
+You should install the Gulp CLI globally (which resolves to a location in your user directory if you're using nvm) using the following command:
+
+ $ npm install -g gulp-cli
+
+Now that you have Node.js and Gulp installed, you're ready to set up the project.

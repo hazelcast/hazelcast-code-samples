@@ -1,0 +1,19 @@
+secretsMountName: keystore
+hazelcast:
+  licenseKeySecretName: hz-license-key
+  javaOpts: '-Djavax.net.ssl.keyStore=/data/secrets/keystore -Djavax.net.ssl.keyStorePassword=123456 -Djavax.net.ssl.trustStore=/data/secrets/truststore -Djavax.net.ssl.trustStorePassword=123456'
+  existingConfigMap: hazelcast-configuration
+livenessProbe:
+  port: 5703
+readinessProbe:
+  port: 5703
+mancenter:
+  secretsMountName: keystore
+  yaml:
+    hazelcast-client:
+      network:
+        ssl:
+          enabled: true
+  javaOpts: '-Djavax.net.ssl.keyStore=/secrets/keystore -Djavax.net.ssl.keyStorePassword=123456 -Djavax.net.ssl.trustStore=/secrets/truststore -Djavax.net.ssl.trustStorePassword=123456'
+
+      

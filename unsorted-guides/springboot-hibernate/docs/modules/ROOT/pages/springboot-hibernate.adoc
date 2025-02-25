@@ -1,0 +1,107 @@
+= Get Started with Hazelcast and Hibernate Second-Level Cache
+:templates-url: templates:ROOT:page$/
+:page-layout: tutorial
+:page-product: imdg
+:page-categories: Caching, Getting Started, Hibernate
+:page-lang: java
+:page-edition: 
+:page-est-time: 10 mins
+:framework: Spring Boot
+:description: In this tutorial, you'll learn how to quickly set up a Spring Boot application using Hazelcast as a Hibernate second-level cache.
+
+== What You’ll Learn
+
+{description}
+
+== Before you Begin
+
+include::{templates-url}/microservices/prerequisites.adoc[]
+
+In order to run the code sample, make sure to have PostgresSQL database accessible and configured properly in the `application.properties` file.
+
+[TIP]
+====
+You can spin-up a PostgreSQL instance easily using Docker:
+----
+docker run --name 2lc-postgres --publish 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:13
+----
+====
+
+== Configuration
+
+In order to enable JPA, you need to add a dedicated Spring Boot Starter:
+
+[source,xml,indent=0]
+----
+include::ROOT:example$springboot-hibernate/pom.xml[tag=spring-boot-starter]
+----
+
+In order to configure Hazelcast as a second-level cache provider, you need to add two dependencies:
+
+[source,xml,indent=0]
+----
+include::ROOT:example$springboot-hibernate/pom.xml[tags=hazelcast-hibernate;hazelcast-dep]
+----
+
+And then, you need to configure the Hazelcast member setting by adding a standard `hazelcast.xml` file into `src/main/resources` directory.
+
+Keep in mind that this might trigger the autoconfiguration of another Hazelcast member so you might want to disable Hazelcast autoconfiguration:
+
+[source,java,indent=0]
+----
+include::ROOT:example$springboot-hibernate/src/main/java/com/hazelcast/hibernate/springhibernate2lc/SpringHibernate2lcApplication.java[tag=doc-exclude]
+----
+
+The last step involves turning on second-level cache by adding two properties in the `application.properties` file:
+
+[source,properties]
+----
+include::ROOT:example$springboot-hibernate/src/main/resources/application.properties[tag=doc-second-level]
+----
+
+And now, after you annotate your entity as `@Cacheable`, it will be cached in Hazelcast member:
+
+[source,java]
+----
+include::ROOT:example$springboot-hibernate/src/main/java/com/hazelcast/hibernate/springhibernate2lc/persistence/Book.java[tag=doc-cachable]
+----
+
+== Running the Application
+
+Run the application by executing the following command.
+
+----
+mvn spring-boot:run
+----
+
+You should see in logs that Hazelcast members started successfully.
+
+----
+Members {size:1, ver:1} [
+        Member [172.21.28.181]:5701 - f3984396-0ec9-40c8-861e-cb34f14d7204 this
+]
+----
+
+What happens then is that an object is saved to the database and then fetched. In the meantime, the object is stored in the second level cache. `SecondLevelCacheVisualizer` prints out the L2C content in every 10 seconds. 
+
+----
+20:56:46.937644
+size: 1
+    com.hazelcast.hibernate.springhibernate2lc.persistence.Book#1:read-write Item(CacheEntry(com.hazelcast.hibernate.springhibernate2lc.persistence.Book))
+
+20:56:56.997365
+size: 1
+    com.hazelcast.hibernate.springhibernate2lc.persistence.Book#1:read-write Item(CacheEntry(com.hazelcast.hibernate.springhibernate2lc.persistence.Book))
+----
+
+The object is then evicted from the L2C after 30 seconds, which is the configured time-to-live in `hazelcast.xml`.
+
+----
+20:57:17.028600
+size: 0
+----
+
+== Summary
+
+In this guide, you bootstrapped a Spring Boot application to use Hazelcast as a Hibernate second-level cache.
+

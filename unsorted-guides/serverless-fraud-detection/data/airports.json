@@ -1,0 +1,22 @@
+[
+  {"code": "AMS", "description":  "Amsterdam", "latitude": 52.3105, "longitude": 4.7683},
+  {"code": "BCN", "description":  "Barcelona", "latitude": 41.2974, "longitude": 2.0833},
+  {"code": "BRU", "description":  "Brussels", "latitude": 50.9010, "longitude": 4.4856},
+  {"code": "CDG", "description":  "Paris Charles De Gaulle", "latitude": 49.0097, "longitude": 2.5479},
+  {"code": "CPT", "description":  "Cape Town International", "latitude": -33.9715, "longitude": 18.6021},
+  {"code": "DCA", "description":  "Washington National", "latitude": 38.8512, "longitude": -77.0402},
+  {"code": "EWR", "description":  "New York Newark", "latitude": 40.6895, "longitude": -74.1745},
+  {"code": "FRA", "description":  "Frankfurt", "latitude": 50.0379, "longitude": 8.5622},
+  {"code": "GVA", "description":  "Geneva", "latitude": 46.2370, "longitude": 6.1092},
+  {"code": "IAD", "description":  "Washington Dulles", "latitude": 38.9531, "longitude": -77.4565},
+  {"code": "JFK", "description":  "New York John F Kennedy", "latitude": 40.6413, "longitude": -73.7781},
+  {"code": "LCY", "description":  "London City", "latitude": 51.5048, "longitude": 0.0495},
+  {"code": "LHR", "description":  "London Heathrow", "latitude": 51.47, "longitude": -0.4543},
+  {"code": "LGA", "description":  "New York LaGuardia", "latitude": 40.7769, "longitude": -73.8740},
+  {"code": "LGW", "description":  "London Gatwick", "latitude": 51.1537, "longitude": -0.1821},
+  {"code": "LTN", "description":  "London Luton", "latitude": 51.8763, "longitude": -0.3717},
+  {"code": "MAD", "description":  "Madrid", "latitude": 40.4839, "longitude": -3.5680},
+  {"code": "MUC", "description":  "Munich", "latitude": 48.3537, "longitude": 11.7750},
+  {"code": "STN", "description":  "London Stansted", "latitude": 51.8860, "longitude": 0.2389},
+  {"code": "ZRH", "description":  "Zurich", "latitude": 47.4582, "longitude": 8.5555}
+]

@@ -1,0 +1,145 @@
+---
+version: "3"
+
+services:
+
+  graphite:
+    image: graphiteapp/graphite-statsd
+    hostname: graphite
+    container_name: graphite
+    restart: always
+    ports:
+      - "80:80"
+      - "81:81"
+      - "2003-2004:2003-2004"
+      - "2023-2024:2023-2024"
+      - "8125:8125"
+      - "8126:8126"
+
+  grafana:
+    image: grafana/grafana
+    hostname: grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      GF_AUTH_DISABLE_LOGIN_FORM: true
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/PM-AlertList.json
+      GF_DASHBOARDS_MIN_REFRESH_INTERVAL: 5s
+      GF_DATASOURCE_NAME: GRAPHITE
+      GF_DATASOURCE_TYPE: graphite
+      GF_DATASOURCE_URL: http://graphite:80
+      GF_PATHS_CONFIG: /etc/grafana/grafana.ini
+      GF_PATHS_DATA: /var/lib/grafana
+      GF_PATHS_HOME: /usr/share/grafana
+      GF_PATHS_LOGS: /var/log/grafana
+      GF_PATHS_PLUGINS: /var/lib/grafana/plugins
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
+      GF_ORG_NAME: HAZELCAST
+      GF_ORG_ROLE: EDITOR
+#      GF_SERVER_ROOT_URL: http://hazelcast.talabs.local:3000
+    volumes:
+      - "./dashboards:/var/lib/grafana/dashboards"
+      - "./config/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml"
+      - "./config/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml"
+
+  hazelcast-oss-one:
+    build: .
+    hostname: hazelcast-oss-one
+    container_name: hazelcast-oss-one
+    restart: always
+    ports:
+      - "5701-5703:5701-5703"
+    environment:
+      HZ_CLUSTERNAME: dev
+      CLASSPATH: /project/patient-monitoring/common/target/patient-monitoring-common-0.0.1-SNAPSHOT.jar:/project/patient-monitoring/sink/target/patient-monitoring-sink-0.0.1-SNAPSHOT.jar
+    volumes:
+      - ".:/project/patient-monitoring"
+    command: ./bin/hz start
+
+  management-center:
+    image: hazelcast/management-center:5.2.0
+    hostname: management-center
+    container_name: hz-mc
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      MC_DEFAULT_CLUSTER: dev
+      MC_DEFAULT_CLUSTER_MEMBERS: hazelcast-oss-one:5701
+
+  app:
+    image: amazoncorretto:11
+    depends_on:
+      - hazelcast-oss-one
+    volumes:
+      - ".:/project/patient-monitoring"
+      - "./data:/project/patient-monitoring/data"
+    command: java -jar /project/patient-monitoring/app/target/patient-monitoring-app-0.0.1-SNAPSHOT.jar
+
+  pipeline:
+    image: amazoncorretto:11
+    depends_on:
+      - app
+    volumes:
+      - ".:/project/patient-monitoring"
+      - "./data:/project/patient-monitoring/data"
+    command: java -jar /project/patient-monitoring/pipeline/target/patient-monitoring-pipeline-0.0.1-SNAPSHOT.jar
+
+  rulesengine:
+    image: amazoncorretto:11
+    depends_on:
+      - pipeline
+    volumes:
+      - ".:/project/patient-monitoring"
+      - "./data:/project/patient-monitoring/data"
+    command: java -jar /project/patient-monitoring/rulesengine/target/patient-monitoring-rulesengine-0.0.1-SNAPSHOT.jar
+
+  zookeeper1:
+    image: confluentinc/cp-zookeeper:7.3.0
+    hostname: zookeeper1
+    container_name: zookeeper1
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: "zookeeper1:2888:3888"
+
+  broker1:
+    image: confluentinc/cp-kafka:7.3.0
+    hostname: broker1
+    container_name: broker1
+    restart: always
+    depends_on:
+      - zookeeper1
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+      - "9999:9999"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:9092
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_BROKER_ID: 1
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
+      KAFKA_JMX_PORT: 9999
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper1:2181"
+
+  source:
+    image: amazoncorretto:11
+    depends_on:
+      - broker1
+    volumes:
+      - ".:/project/patient-monitoring"
+      - "./data:/project/patient-monitoring/data"
+    command: java -Xmx12g -jar /project/patient-monitoring/source/target/patient-monitoring-source-0.0.1-SNAPSHOT.jar

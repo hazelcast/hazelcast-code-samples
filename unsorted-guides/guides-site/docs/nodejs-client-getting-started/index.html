@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Getting Started with Hazelcast Node.js Client</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/nodejs-client-getting-started/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../_/img/hazelcast-logo-white.png 1x, ../_/img/hazelcast-logo-white@2x.png 2x, ../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../_/img/external-link.png 1x, ../_/img/external-link@2x.png 2x, ../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="nodejs-client-getting-started" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<h1 class="page">Getting Started with Hazelcast Node.js Client</h1>
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/nodejs-client-getting-started/edit/master/doc/modules/ROOT/pages/index.adoc>See something wrong? Edit this page.</a></p>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide will get you started with Hazelcast Node.js Client. You can see the whole project <a href="https://github.com/hazelcast-guides/nodejs-client-getting-started">here.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_youll_learn"><a class="anchor" href="#_what_youll_learn"></a>What You&#8217;ll Learn</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide, you will learn:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Starting a Hazelcast Member</p>
+</li>
+<li>
+<p>Installing Hazelcast Node.js Client</p>
+</li>
+<li>
+<p>Starting Node.js Client</p>
+</li>
+<li>
+<p>Using Map</p>
+</li>
+<li>
+<p>Adding a Listener to the map</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>~5-10 minutes</p>
+</li>
+<li>
+<p>A text editor or IDE</p>
+</li>
+<li>
+<p>Docker</p>
+</li>
+<li>
+<p>Node.js 10.4+</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_starting_a_hazelcast_member"><a class="anchor" href="#_starting_a_hazelcast_member"></a>Starting a Hazelcast Member</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We will use the 4.2 version of Hazelcast for this guide.</p>
+</div>
+<div class="paragraph">
+<p>In this guide, we will use Docker for simplicity. You can find the different installation methods <a href="https://docs.hazelcast.com/imdg/4.2/installation/installing-upgrading.html">here.</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -p 5701:5701 hazelcast/hazelcast:4.2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will start a new Hazelcast member at port 5701. Now, we have a Hazelcast cluster with just one member.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installing_hazelcast_node_js_client"><a class="anchor" href="#_installing_hazelcast_node_js_client"></a>Installing Hazelcast Node.js Client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new folder and navigate to it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>mkdir nodejs-client-getting-started
+cd nodejs-client-getting-started</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Initialize a new npm package:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">npm init</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Install Hazelcast Node.js client&#8217;s latest version:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">npm install --save hazelcast-client</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_starting_node_js_client"><a class="anchor" href="#_starting_node_js_client"></a>Starting Node.js Client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a JavaScript file named “index.js” and put the following code inside it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const { Client } = require('hazelcast-client');
+(async () =&gt; {
+    const client = await Client.newHazelcastClient();
+})().catch(err =&gt; {
+    console.log(`An error occured: ${err}`);
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run this Node.js script, use the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">node index.js</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The majority of the client methods return promises, so we used the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">async/await</a> syntax here,
+but you can use the regular <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then">then</a> / <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch">catch</a>
+syntax, too.</p>
+</div>
+<div class="paragraph">
+<p>The following line creates and starts a new Hazelcast client with the default configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const client = await Client.newHazelcastClient();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client automatically connects to the Hazelcast member available on the local machine.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_map"><a class="anchor" href="#_using_map"></a>Using Map</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Hazelcast map is a distributed key-value store, similar to JavaScript Map class or plain objects. You can store key-value pairs in a map.
+In the following example, we will work with map entries where the keys are session ids and the values are emails.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const { Client } = require('hazelcast-client');
+
+(async () =&gt; {
+    const client = await Client.newHazelcastClient();
+    const map = await client.getMap('someMap');
+    await map.set('sid12345', 'example1@email.com');
+    await map.set('sid12346', 'example2@email.com');
+    console.log(await map.get('sid12345'));
+    console.log(await map.get('sid12346'));
+})().catch(err =&gt; {
+    console.log(`An error occured: ${err}`);
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output of this snippet is given below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">example1@email.com
+example2@email.com</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following line returns a map proxy object for the 'someMap' map:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const map = await client.getMap('someMap');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the map called “someMap” does not exist in the Hazelcast cluster, it will be automatically created. All the clients that connect to the same cluster will have access to the same map.</p>
+</div>
+<div class="paragraph">
+<p>With these two lines, the Node.js client adds data to the map. The first parameter is the key of the entry, the second one is the value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript"> await map.set('sid12345', 'example1@email.com');
+ await map.set('sid12346', 'example2@email.com');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, we get the values we added to the map with the get method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">console.log(await map.get('sid12345'));
+console.log(await map.get('sid12346'));</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_adding_a_listener_to_the_map"><a class="anchor" href="#_adding_a_listener_to_the_map"></a>Adding a Listener to the Map</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can add an entry listener using the “addEntryListener” method available on map proxy object.
+This will allow you to listen to certain events that happen in the map across the cluster.</p>
+</div>
+<div class="paragraph">
+<p>The first argument to the “addEntryListener” method is an object that is used to define listeners.
+In this example, we registered listeners for the “added”, “removed" and “updated” events.</p>
+</div>
+<div class="paragraph">
+<p>The second argument in the addEntryListener method is key. It stands for the key to listen for.
+When it is set to “undefined” (or omitted, which is the same), the listener will be fired for all entries in the map.
+In this example, we will set it to “undefined” to listen to events from all keys.</p>
+</div>
+<div class="paragraph">
+<p>The third argument in the addEntryListener method is includeValue. It is a boolean parameter, and if it is true, the entry event contains the entry value.
+In this example, it will be true.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const { Client } = require('hazelcast-client');
+
+(async () =&gt; {
+    const client = await Client.newHazelcastClient();
+    const map = await client.getMap('someMap');
+    map.addEntryListener({
+        added: (event) =&gt; {
+            console.log(`Entry added. Key: ${event.key} Value: ${event.value}`)
+        },
+        removed: (event) =&gt; {
+            console.log(`Entry removed. Key: ${event.key}`);
+        },
+        updated: (event) =&gt; {
+            console.log(`Entry updated. Key: ${event.key} Value change: ${event.oldValue} -&gt; ${event.value}`)
+        },
+    }, undefined, true);
+
+    await map.clear();
+
+    await map.set('sid12345', 'example1@email.com');
+    await map.set('sid12346', 'example2@email.com');
+
+    let email1 = await map.get('sid12345');
+    let email2 = await map.get('sid12346');
+
+    console.log(`Email1: ${email1}`);
+    console.log(`Email2: ${email2}`);
+
+    await map.delete('sid12345');
+    await map.set('sid12346', 'example1@email.com');
+
+    email1 = await map.get('sid12345');
+    email2 = await map.get('sid12346');
+
+    console.log(`Email1: ${email1}`);
+    console.log(`Email2: ${email2}`);
+})().catch(err =&gt; {
+    console.log(`An error occured: ${err}`);
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>First, the map is cleared to fire events even if there are some entries in the map. Then, two session entries are added, and they are logged.
+After that, we remove one of the entries and update the other one. Then, we log the session entries again.</p>
+</div>
+<div class="paragraph">
+<p>The output is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Entry added. Key: sid12345 Value: example1@email.com
+Entry added. Key: sid12346 Value: example2@email.com
+Email1: example1@email.com
+Email2: example2@email.com
+Entry removed. Key: sid12345
+Entry updated. Key: sid12346 Value change: example2@email.com -&gt; example1@email.com
+Email1: null
+Email2: example1@email.com</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The value of the first entry becomes “null” since it is removed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide, you learned how to get started with Hazelcast Node.js Client using a distributed map.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see_also"><a class="anchor" href="#_see_also"></a>See Also</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are a lot of things that you can do with the Node.js client. For more, such as how you can query a map with predicates and SQL,
+check out our <a href="https://github.com/hazelcast/hazelcast-nodejs-client">Node.js client repository.</a></p>
+</div>
+<div class="paragraph">
+<p>If you have any questions, suggestions, or feedback please do not hesitate to reach out to us via <a href="https://slack.hazelcast.com/">Hazelcast Community Slack.</a>
+Also, please take a look at <a href="https://github.com/hazelcast/hazelcast-nodejs-client/issues">the issue list</a> if you would like to contribute to the client.</p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

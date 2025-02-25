@@ -1,0 +1,32 @@
+= Serverless Fraud Detection
+:experimental: true
+
+This is an example of how to use a Viridian Serverless cluster as a fast cache for static data that is used by an AWS Lambda function to contextualize transactions and detect fraud.
+
+TIP: For step-by-step instructions of how to run this app, see the link:https://docs.hazelcast.com/tutorials/serverless-fraud-detection[tutorial].
+
+== Internal Hazelcast Developers
+
+If you want to try this tutorial in the UAT or DEV environment, edit the `hazelcast.js` file to include the following settings:
+
+```js
+let createClientConfig = () => {
+    return {
+        network: {
+            ...
+            },
+            ssl: {
+                ...
+                sslOptions: {
+                    ...
+                }
+            }
+        },
+        properties: {
+            // For DEV, use https://test.dev.hazelcast.cloud
+            'hazelcast.client.cloud.url': 'https://uat.hazelcast.cloud',
+            ...
+        }
+    }
+};
+```

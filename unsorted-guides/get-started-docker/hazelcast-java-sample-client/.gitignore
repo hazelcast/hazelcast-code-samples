@@ -1,0 +1,51 @@
+.mvn/
+
+# Created by .ignore support plugin (hsz.mobi)
+### Java template
+# Compiled class file
+*.class
+hazelcastcontainer/hazelcastcontainer.iml
+bootconfig/bootconfig
+# Log file
+*.log
+bootconfig/.idea
+coordinator/.surefire*
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.iml
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+.idea/*
+*/.idea
+hazelcast-cloud-metrics-exporter/managed-services
+coordinator/target
+coordinator/coordinator.iml
+managed-services.iml
+**/node_modules
+**/dist
+**/build
+**/.surefire-*
+**/target
+**/*.iml
+**/*.cer
+**/*.jks
+**/output/**
+**/vendor
+
+*/.terraform
+*.terraform.*
+*.tfstate
+**/modules.xml

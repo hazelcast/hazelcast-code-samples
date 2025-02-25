@@ -1,0 +1,12 @@
+eureka:
+  instance:
+    # Network card to use
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    # Client doesn't cache registry
+    fetchRegistry: false
+
+# Standard port for Eureka
+server:
+  port: 8761

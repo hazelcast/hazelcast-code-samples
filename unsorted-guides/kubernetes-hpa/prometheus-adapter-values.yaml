@@ -1,0 +1,18 @@
+rules:
+  default: true
+  custom:
+  - seriesQuery: '{__name__=~"jvm_memory_bytes_(used|max)",area="heap",kubernetes_name=~"hazelcast.*"}'
+    seriesFilters:
+    - is: ^jvm_memory_bytes_(used|max)$
+    resources: 
+      overrides:
+        kubernetes_pod_name: {resource: "pod"}
+        kubernetes_namespace: {resource: "namespace"}
+        kubernetes_name: {resource: "service"}
+    name:
+      matches: ^jvm_memory_bytes_(used|max)$
+      as: "on_heap_ratio"
+    metricsQuery: max(jvm_memory_bytes_used{<<.LabelMatchers>>}/jvm_memory_bytes_max{<<.LabelMatchers>>}) by (<<.GroupBy>>)
+prometheus:
+  url: http://prometheus-server # make sure the url is correct
+  port: 80

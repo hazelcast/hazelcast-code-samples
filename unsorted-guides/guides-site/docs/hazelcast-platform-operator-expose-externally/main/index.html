@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Connect to Hazelcast from Outside Kubernetes</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/hazelcast-platform-operator-expose-externally/main/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../../_/img/hazelcast-logo-white.png 1x, ../../_/img/hazelcast-logo-white@2x.png 2x, ../../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../../_/img/external-link.png 1x, ../../_/img/external-link@2x.png 2x, ../../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="hazelcast-platform-operator-expose-externally" data-version="main">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<h1 class="page">Connect to Hazelcast from Outside Kubernetes</h1>
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/hazelcast-platform-operator-expose-externally/edit/main/doc/modules/ROOT/pages/index.adoc>See something wrong? Edit this page.</a></p>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide will explain how to use Expose Externally feature of Hazelcast Platform Operator to connect to Hazelcast clusters running on Kubernetes from outside.</p>
+</div>
+<div class="paragraph">
+<p>You can see the whole project <a href="https://github.com/hazelcast-guides/hazelcast-platform-operator-expose-externally">here.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_youll_learn"><a class="anchor" href="#_what_youll_learn"></a>What You’ll Learn</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide, you will learn how to enable and use Expose Externally feature of Hazelcast Platform Operator.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Up and running <a href="https://kubernetes.io/">Kubernetes</a> cluster</p>
+</li>
+<li>
+<p>Kubernetes command-line tool, <a href="https://kubernetes.io/docs/tasks/tools/#kubectl">kubectl</a></p>
+</li>
+<li>
+<p>Deployed <a href="#hazelcast-platform-operator:ROOT:index.adoc" class="page unresolved">Hazelcast Platform Operator</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are two available options for Expose Externally feature of Hazelcast Platform Operator:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Unisocket</strong> - client requests are load balanced between Hazelcast members.</p>
+</li>
+<li>
+<p><strong>Smart</strong> - client connects to all members and sends requests directly to the members owning the data.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let’s see both approaches.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_unisocket"><a class="anchor" href="#_unisocket"></a>Unisocket</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The first option is to use the <code>Unisocket</code> type. This option will use the standard Kubernetes mechanism that automatically load balances the traffic to Hazelcast members.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/unisocket.jpg" alt="Hazelcast Unisocket Client">
+</div>
+<div class="title">Figure 1. Hazelcast Unisocket Client</div>
+</div>
+<div class="sect2">
+<h3 id="_starting_hazelcast_cluster"><a class="anchor" href="#_starting_hazelcast_cluster"></a>Starting Hazelcast cluster</h3>
+<div class="paragraph">
+<p>Run the following command to create the Hazelcast cluster with Expose Externally feature enabled using Unisocket type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+  name: my-hazelcast
+spec:
+  exposeExternally:
+    type: Unisocket
+    discoveryServiceType: LoadBalancer
+EOF</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For <code>discoveryServiceType</code> you can use:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>LoadBalancer</code> - will create an external <code>LoadBalancer</code> for discovery serivce;</p>
+</li>
+<li>
+<p><code>NodePort</code> - will expose the discovery service via <code>NodePort</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verifying_hazelcast_cluster"><a class="anchor" href="#_verifying_hazelcast_cluster"></a>Verifying Hazelcast cluster</h3>
+<div class="paragraph">
+<p>Check the cluster status by running the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get hazelcast my-hazelcast
+NAME        STATUS    MEMBERS
+hazelcast   Running   3/3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After verifying that the cluster is <code>Running</code> and all the members are ready (<code>3/3</code>), run the following command to find the discovery service address.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get service my-hazelcast
+NAME           TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)          AGE
+my-hazelcast   LoadBalancer   10.43.240.23   35.240.113.74   5701:30218/TCP   65s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The field <code>EXTERNAL-IP</code> is the address of your Hazelcast cluster.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_connecting_with_hazelcast_client"><a class="anchor" href="#_connecting_with_hazelcast_client"></a>Connecting with Hazelcast Client</h3>
+<div class="paragraph">
+<p>Configure the Hazelcast client with the external address and disable smart routing to use the unisocket connection.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_java"></a>Java</p>
+</li>
+<li>
+<p><a id="tabset1_nodejs"></a>NodeJS</p>
+</li>
+<li>
+<p><a id="tabset1_go"></a>Go</p>
+</li>
+<li>
+<p><a id="tabset1_python"></a>Python</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_java">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ClientConfig config = new ClientConfig();
+config.getNetworkConfig().addAddress("&lt;EXTERNAL-IP&gt;")
+                         .setSmartRouting(false);</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_nodejs">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const { Client } = require('hazelcast-client');
+
+const clientConfig = {
+    network: {
+        clusterMembers: [
+            '&lt;EXTERNAL-IP&gt;'
+        ],
+        smartRouting: false
+    }
+};
+const client = await Client.newHazelcastClient(clientConfig);</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_go">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-go hljs" data-lang="go">import (
+	"log"
+
+	"github.com/hazelcast/hazelcast-go-client"
+)
+
+func main() {
+	config := hazelcast.Config{}
+	cc := &amp;config.Cluster
+	cc.Network.SetAddresses("&lt;EXTERNAL-IP&gt;")
+	cc.Unisocket = true
+	ctx := context.TODO()
+	client, err := hazelcast.StartNewClientWithConfig(ctx, config)
+	if err != nil {
+		panic(err)
+	}
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_python">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">import logging
+import hazelcast
+
+logging.basicConfig(level=logging.INFO)
+
+client = hazelcast.HazelcastClient(
+    cluster_members=["&lt;EXTERNAL-IP&gt;"],
+    use_public_ip=True,
+    smart_routing=False,
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can start the application.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_java"></a>Java</p>
+</li>
+<li>
+<p><a id="tabset2_nodejs"></a>NodeJS</p>
+</li>
+<li>
+<p><a id="tabset2_go"></a>Go</p>
+</li>
+<li>
+<p><a id="tabset2_python"></a>Python</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_java">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd java-unisocket
+mvn package
+java -jar target/*jar-with-dependencies*.jar</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_nodejs">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd nodejs-unisocket
+npm install
+npm start</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_go">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd go-unisocket
+go run main.go</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_python">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd python-unisocket
+pip install -r requirements.txt
+python main.py</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see the following output.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+Current map size: 5
+Current map size: 6
+Current map size: 7
+Current map size: 8
+Current map size: 9
+Current map size: 10</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_smart_client"><a class="anchor" href="#_smart_client"></a>Smart Client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The second option is to use the <code>Smart</code> type. With this option, each Hazelcast member will be exposed with its own service (it can be either <code>LoadBalancer</code> or <code>NodePort</code>). Hazelcast smart client is capable of mapping the given key with its owner member, which means that it sends the data directly to the member which contains the right data partition.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/smart.jpg" alt="Hazelcast Smart Client">
+</div>
+<div class="title">Figure 2. Hazelcast Smart Client</div>
+</div>
+<div class="sect2">
+<h3 id="_starting_hazelcast_cluster_2"><a class="anchor" href="#_starting_hazelcast_cluster_2"></a>Starting Hazelcast cluster</h3>
+<div class="paragraph">
+<p>Run the following command to create the Hazelcast cluster with Expose Externally feature enabled using Smart type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+  name: my-hazelcast
+spec:
+  exposeExternally:
+    type: Smart
+    discoveryServiceType: LoadBalancer
+    memberAccess: LoadBalancer
+EOF</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will create the Hazelcast cluster and one <code>LoadBalancer</code> service for discovery and one <code>LoadBalancer</code> service for each pod.</p>
+</div>
+<div class="paragraph">
+<p>For <code>discoveryServiceType</code> you can use:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>LoadBalancer</code> - will create an external <code>LoadBalancer</code> for discovery serivce;</p>
+</li>
+<li>
+<p><code>NodePort</code> - will expose the discovery service via <code>NodePort</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For <code>memberAccess</code> you can use the following options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>LoadBalancer</code> - lets the client access Hazelcast member with the <code>LoadBalancer</code> service;</p>
+</li>
+<li>
+<p><code>NodePortNodeName</code> - lets the client access Hazelcast member with the <code>NodePort</code> service and the node name;</p>
+</li>
+<li>
+<p><code>NodePortExternalIP</code> - lets the client access Hazelcast member with the <code>NodePort</code> service and the node external IP/hostname.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verifying_hazelcast_cluster_2"><a class="anchor" href="#_verifying_hazelcast_cluster_2"></a>Verifying Hazelcast cluster</h3>
+<div class="paragraph">
+<p>Check the cluster status by running the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get hazelcast my-hazelcast
+NAME        STATUS    MEMBERS
+hazelcast   Running   3/3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After verifying that the cluster is <code>Running</code> and all the members are ready (<code>3/3</code>), run the following command to find the discovery service address.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ kubectl get service my-hazelcast
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP       PORT(S)          AGE
+hz-hazelcast   LoadBalancer   10.108.141.178   10.96.184.178     5701:31434/TCP   5m44s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The field <code>EXTERNAL-IP</code> is the address of your Hazelcast cluster.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_connecting_with_hazelcast_client_2"><a class="anchor" href="#_connecting_with_hazelcast_client_2"></a>Connecting with Hazelcast Client</h3>
+<div class="paragraph">
+<p>Configure the Hazelcast client to connect to the cluster external address.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_java"></a>Java</p>
+</li>
+<li>
+<p><a id="tabset3_nodejs"></a>NodeJS</p>
+</li>
+<li>
+<p><a id="tabset3_go"></a>Go</p>
+</li>
+<li>
+<p><a id="tabset3_python"></a>Python</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_java">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ClientConfig config = new ClientConfig();
+config.getNetworkConfig().addAddress("&lt;EXTERNAL-IP&gt;");</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_nodejs">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const { Client } = require('hazelcast-client');
+
+const clientConfig = {
+    network: {
+        clusterMembers: [
+            '&lt;EXTERNAL-IP&gt;'
+        ]
+    }
+};
+const client = await Client.newHazelcastClient(clientConfig);</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_go">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-go hljs" data-lang="go">import (
+	"log"
+
+	"github.com/hazelcast/hazelcast-go-client"
+)
+
+func main() {
+	config := hazelcast.Config{}
+	cc := &amp;config.Cluster
+	cc.Network.SetAddresses("&lt;EXTERNAL-IP&gt;")
+	ctx := context.TODO()
+	client, err := hazelcast.StartNewClientWithConfig(ctx, config)
+	if err != nil {
+		panic(err)
+	}
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_python">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">import logging
+import hazelcast
+
+logging.basicConfig(level=logging.INFO)
+
+client = hazelcast.HazelcastClient(
+    cluster_members=["&lt;EXTERNAL-IP&gt;"],
+    use_public_ip=True,
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can start the application.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_java"></a>Java</p>
+</li>
+<li>
+<p><a id="tabset4_nodejs"></a>NodeJS</p>
+</li>
+<li>
+<p><a id="tabset4_go"></a>Go</p>
+</li>
+<li>
+<p><a id="tabset4_python"></a>Python</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_java">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd java
+mvn package
+java -jar target/*jar-with-dependencies*.jar</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_nodejs">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd nodejs
+npm install
+npm start</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_go">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd go
+go run main.go</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_python">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd python
+pip install -r requirements.txt
+python main.py</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see the following output.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Successful connection!
+Starting to fill the map with random entries.
+Current map size: 2
+Current map size: 3
+Current map size: 4
+Current map size: 5
+Current map size: 6
+Current map size: 7
+Current map size: 8
+Current map size: 9
+Current map size: 10</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_clean_up"><a class="anchor" href="#_clean_up"></a>Clean Up</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To clean up the created resources remove the Hazelcast Custom Resource.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">kubectl delete hazelcast my-hazelcast</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see_also"><a class="anchor" href="#_see_also"></a>See Also</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#hazelcast-platform-operator:ROOT:index.adoc" class="page unresolved">Connect External Hazelcast Client to Kubernetes</a></p>
+</li>
+<li>
+<p><a href="../../kubernetes-external-client/" class="page">Getting Started with Hazelcast Platform Operator</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

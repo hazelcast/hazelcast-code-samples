@@ -1,0 +1,51 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.App-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.App-title {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-light-blue);
+  text-transform: uppercase;
+}
+
+.App-subtitle {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  color: var(--color-dark-blue);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.App-link {
+  font-size: inherit;
+  color: var(--color-light-blue);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 8rem 0;
+}
+
+.error-message {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-light-blue);
+  text-transform: uppercase;
+}

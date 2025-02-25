@@ -1,0 +1,5 @@
+// {framework} -> The name of the microservices framework
+
+In this guide, you will learn how to use Hazelcast IMDG within {framework} microservices.
+
+The {framework} application contains two REST controllers which helps you to put data and read it back. The application initializes a single Hazelcast IMDG member instance which is used to keep the data. When you run the application multiple times, Hazelcast IMDG instances build a cluster and share the data.

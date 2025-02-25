@@ -1,0 +1,3 @@
+[submodule "spring-hazelcast-pipeline-dispatcher"]
+	path = spring-hazelcast-pipeline-dispatcher
+	url = https://github.com/hazelcast-guides/spring-hazelcast-pipeline-dispatcher.git

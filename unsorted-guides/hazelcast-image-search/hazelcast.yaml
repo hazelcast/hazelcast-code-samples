@@ -1,0 +1,15 @@
+hazelcast:
+  properties:
+    hazelcast.logging.type: log4j2
+    hazelcast.partition.count: 13
+
+  jet:
+    enabled: True
+    resource-upload-enabled: True
+
+  vector-collection:
+    images:
+      indexes:
+        - name: semantic-search
+          dimension: 512
+          metric: COSINE

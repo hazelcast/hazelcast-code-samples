@@ -1,0 +1,3 @@
+- A text editor or IDE
+- JDK 1.8+
+- Apache Maven 3.2+

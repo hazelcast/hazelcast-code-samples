@@ -1,0 +1,151 @@
+= Get Started with Hazelcast Enterprise in VMware Tanzu
+:templates-url: templates:ROOT:page$/
+:page-layout: tutorial
+:page-product: imdg
+:page-categories: Caching, Spring Boot, Cloud Native
+:page-lang: java
+:page-enterprise: true
+:page-est-time: 30 mins
+:framework: VMware Tanzu Application Service
+:description: Install Hazelcast Enterprise in VMware Tanzu Application Service(TAS), create a cluster, and run a client.
+
+== What You’ll Learn
+
+In this tutorial, you'll learn how to:
+
+- Install and configure the *Hazelcast IMDG Enterprise* tile in VMware Tanzu Application Service(TAS).
+- Create a Hazelcast IMDG Enterprise cluster via service instances in TAS.
+- Use a client application to add some data to a map in the Hazelcast cluster.
+
+== Before you Begin
+
+- https://docs.cloudfoundry.org/cf-cli/[cf cli]
+- VMware Tanzu Application Service and Ops Manager environments
+- Git
+- JDK 1.8+
+- Apache Maven 3.2+
+
+== Step 1. Install and Configure Hazelcast IMDG Enterprise for VMware Tanzu
+
+Complete the following steps to download and install the Hazelcast IMDG Enterprise for VMware Tanzu tile on Ops Manager.
+
+. Download the product file from https://network.pivotal.io/products/hazelcast[VMware Tanzu Network].
+
+. Go to your _Ops Manager_ dashboard at the pre-installed _VMware Tanzu Application Service_ environment.
+
+. Navigate to the Ops Manager Installation Dashboard and click *Import a Product* to upload the product file.
+
+. Click *Add* next to the uploaded Hazelcast IMDG Enterprise for VMware Tanzu tile in the Ops Manager *Available Products* view to add it to your staging area.
+
+. Click the newly added *Hazelcast IMDG Enterprise for VMware Tanzu* tile.
+
++
+image:tile.png[]
++
+
+. Click *Assign AZs and Networks*. In the *AZ and Network Assignments* pane, do the following:
+.. Select the **Network** in which to deploy the Hazelcast Service Broker.
+.. Select the **Service Network** in which to create VMs for Hazelcast.
+.. Click **Save**.
+
++
+image:az.png[]
++
+
+. Click **First On-demand plan**. In the **Hazelcast on-demand plan** pane, do the following:
+.. Enter a **Plan name**.
+.. Enter a **Plan description**.
+   For an example of how the plan name and description appear on the command line, see <<Using Hazelcast IMDG Enterprise for VMware Tanzu,Step 1>> in the _Using Hazelcast IMDG Enterprise for VMware Tanzu_ topic.
+
+. Specify the number of **Hazelcast instances** for this plan. This property defines the number of Hazelcast instances to be created. It can be overridden for each service instance when creating a service instance by using `instanceCount` parameter. See <<Using Hazelcast IMDG Enterprise for VMware Tanzu,Step 2>> in the _Using Hazelcast IMDG Enterprise for VMware Tanzu_ topic for more information.
+
+. Select a **Hazelcast VM type**. Choose a suitable VM type according to your data size and processing power requirements.
+
+.  If you are planning on using features like https://docs.hazelcast.org/docs/latest/manual/html-single/#hot-restart-persistence[Hot Restart] that require a persistent disk, select a **Hazelcast Disk type**. Otherwise, you can leave this option empty because Hazelcast, by default, does not require a persistent disk.
+
+. Select a **Management Center VM type**.
+
+. If you are planning on migrating Management Center between service instances and deployments that require a persistent disk, select a **Management Center VM type**. Otherwise, you can leave this option empty because Management Center, by default, does not require a persistent disk.
+
+. Select the **Hazelcast availability zone(s)** in which to create VMs for this plan.
+
+. Click **Save**.
++
+image:first_plan.png[]
++
+
+. If you want to modify the additional Hazelcast IMDG Enterprise for VMware Tanzu plans, repeat the step above to configure the second and third on-demand plans.
+
+. Click **Errands** and ensure that both **Register on-demand broker** and **Deregister on-demand broker** are selected. These are necessary to create and destroy Hazelcast service instances. You can disable **smoke-tests** errand to decrease installation time.
++
+image:errands.png[]
++
+
+. Click **Resource Config** and review the IaaS resources used by the Hazelcast IMDG Enterprise for VMware Tanzu components. Do not modify these default settings.
++
+image:resource_config.png[]
++
+
+. Return to the Ops Manager Installation Dashboard and click **Apply Changes** to complete the installation of Hazelcast IMDG Enterprise for VMware Tanzu. Installation porcess takes 15 minutes approximately.
+
+== Step 2. Use Hazelcast IMDG Enterprise for VMware Tanzu
+
+After your VMware Tanzu operator installs the Hazelcast IMDG Enterprise for VMware Tanzu tile, it automatically registers itself to the Marketplace.
+
+. Login with the CLI to _TAS_ environment:
+[source,bash]
+    $ cf login -a API-URL -u USERNAME -p PASSWORD -o ORG -s SPACE --skip-ssl-validation
+
+. To check availability of Hazelcast IMDG Enterprise for VMware Tanzu, run the following command:
+[source,bash]
+    $ cf marketplace
+    Getting services from marketplace in org system / space system as admin...
+    OK
+    service         plans                            description
+    hazelcast       small, medium, large    Hazelcast Service
+
+
+. Clone the project to get JSON file containing service-specific configuration parameters:
+[source,bash]
+    $ git clone https://github.com/hazelcast-guides/vmware-tanzu.git
+
+. To create a 3 nodes Hazelcast IMDG cluster and Management Center that coonnects to it, run the following command:
+[source,bash]
+    $ cf create-service hazelcast PLAN SERVICE_INSTANCE_NAME -c /path/to/project/hazelcast-mancenter.json
+
+    - Replace _PUT_LICENSE_KEY_HERE_ with the active Hazelcast IMDG Enterprise License or a trial license.
+
+NOTE: You can create Hazelcast IMDG cluster without Management Center via following one line command as well <<Installing and Configuring Hazelcast IMDG Enterprise for VMware Tanzu>>:
+[source,bash]
+    $ cf cs hazelcast PLAN SERVICE_INSTANCE_NAME -c '{"hazelcast": {"license-key": "PUT_LICENSE_KEY_HERE"}}'
+
+
+[start=5]
+. After the services are created, you can build sample client application that utilizes `VCAP_SERVICES` environment variable at project path:
+[source,bash]
+    $ mvn clean install
+
+. To push application and , run following commands:
+[source,bash]
+    $ cf push APP_NAME -m 2G -i 1 -p /path/to/project/target/tanzu-sample-client-app-0.1.jar --no-manifest --no-start
+
+. Now you can bind Hazelcast IMDG services to the application and start it:
+[source,bash]
+    $ cf bind-service APP_NAME SERVICE_INSTANCE_NAME
+    $ cf start APP_NAME
+
+. To put/get data into Hazelcast IMDG map, run following commands:
+[source,bash]
+    $ export APP_ROUTE=`cf app APP_NAME | grep routes | awk '{ print $2 }'`
+    $ curl -s "http://${APP_ROUTE}/put?key=1&value=1"
+    $ curl -s "http://${APP_ROUTE}/get?key=1"
+
+. You can reach Management Center dashboard via http://mancenter.YOUR_APPS_DOMAIN[] URL. Replace _YOUR_APPS_DOMAIN_ with the output of following command:
+[source,bash]
+    $ cf domains | grep -i apps.*.cf-app.com | awk '{ print $1 }'
+
+== See Also
+
+You can check other use cases for the tile like _WAN Replication_, _Rolling Upgrade_ at https://docs.pivotal.io/partners/hazelcast/using.html[official documentation].
+
+

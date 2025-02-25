@@ -1,0 +1,5 @@
+Copyright hazelcast all rights reserved. And then software to be used in conjunction with the license provided to you by Hazelcast.
+
+We have Master License Agreements with companies. They are usually custom. So those licenses cannot be embedded in a directory in the bundle.
+
+The license key, either trial or subscription, also needs to be added to the software at runtime.

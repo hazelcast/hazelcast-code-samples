@@ -1,0 +1,15 @@
+hazelcast:
+  map:
+    machine_events:
+      event-journal: 
+        enabled: true
+        capacity: 3600000
+    "*_request":
+      event-journal:
+        enabled: true
+        capacity: 60000
+
+  jet: 
+    enabled: true
+    resource-upload-enabled: true
+

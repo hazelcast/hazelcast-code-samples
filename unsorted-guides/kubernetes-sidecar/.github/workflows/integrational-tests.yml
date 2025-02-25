@@ -1,0 +1,57 @@
+name: Integrational tests
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+
+jobs:
+  run-tests:
+    name: Run Intergrational tests using Kind
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: "v0.11.1"
+
+      - name: Deploy to Kuberenetes
+        run: |-
+          kubectl apply -f rbac.yaml
+          kubectl apply -f config.yaml
+          kubectl apply -f deployment.yaml
+
+      - name: Test for successful Deployment
+        run: |-
+          kubectl wait --for=condition=ready pod/hazelcast-sidecar-0 --timeout=150s
+          kubectl wait --for=condition=ready pod/hazelcast-sidecar-1 --timeout=120s
+
+      - name: Test application
+        id: app_query
+        run: |-
+
+          kubectl create job curl-put --image=curlimages/curl -- curl "http://hazelcast-sidecar:5000/put?key=someKey&value=someValue"
+          kubectl wait --for=condition=complete job/curl-put --timeout=200s
+
+          kubectl create job curl-get --image=curlimages/curl -- curl "http://hazelcast-sidecar:5000/get?key=someKey"
+          kubectl wait --for=condition=complete job/curl-get --timeout=200s
+
+          value=$(kubectl logs job/curl-get | grep "someValue")
+          echo "::set-output name=value::$value"
+
+      - name: Assert value
+        if: (!contains(steps.app_query.outputs.value, 'someValue'))
+        run: |-
+          echo "No value read from application"
+          exit 1
+
+      - name: Log status on failure
+        if: ${{ failure() }}
+        run: |-
+          kubectl describe pod/hazelcast-sidecar-0
+          kubectl describe pod/hazelcast-sidecar-1
+          exit 1

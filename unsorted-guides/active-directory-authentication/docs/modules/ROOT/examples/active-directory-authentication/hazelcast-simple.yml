@@ -1,0 +1,28 @@
+hazelcast:
+  license-key: "PUT_THE_LICENSE_KEY_HERE"
+  network:
+    join:
+      multicast:
+        enabled: false
+      tcp-ip:
+        enabled: true
+        member-list:
+          - 10.0.0.10
+          - 10.0.0.11
+  security:
+    enabled: true
+    realms:
+      - name: kerberosRealm
+        authentication:
+          kerberos:
+            relax-flags-check: true
+            use-name-without-realm: true
+            principal: hz/10.0.0.11@ACME.COM
+            keytab-file: hz-app1.keytab
+        identity:
+          kerberos:
+            realm: ACME.COM
+            principal: hz/10.0.0.11@ACME.COM
+            keytab-file: hz-app1.keytab
+    member-authentication:
+      realm: kerberosRealm

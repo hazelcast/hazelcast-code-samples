@@ -1,0 +1,37 @@
+services:
+
+  hz:
+    image: hazelcast/hazelcast:5.3.1
+    environment:
+      JAVA_OPTS: -Dhazelcast.config=/project/hazelcast.yaml
+    volumes:
+      - ".:/project"
+    networks:
+      - hznet
+
+  mc:
+    image: hazelcast/management-center:5.3.1
+    environment:
+      MC_DEFAULT_CLUSTER: dev
+      MC_DEFAULT_CLUSTER_MEMBERS: hz:5701
+    ports:
+      - "8080:8080"
+    networks:
+      - hznet
+
+  sample-client:
+    image: amazoncorretto:11
+    command: java -jar /project/hazelcast-java-sample-client/target/hazelcast-java-sample-client-1.0.0.jar
+    environment:
+      HZ_SERVERS: hz
+      HZ_CLUSTER_NAME: dev
+    volumes:
+      - ".:/project"
+    networks:
+      - hznet
+    profiles:
+      - disabled
+
+networks:
+  hznet: 
+  

@@ -1,0 +1,145 @@
+= Get Started with Hazelcast as a Hibernate Second-Level Cache with JCache
+:page-layout: tutorial
+:page-product: imdg
+:page-categories: Caching, Getting Started, Hibernate, JCache
+:page-lang: java
+:page-edition: 
+:page-est-time: 15 mins
+:templates-url: templates:ROOT:page$/
+:plugin-gh-address: https://github.com/hazelcast/hazelcast-hibernate
+:description: pass:q[In this tutorial, you will learn how to use Hazelcast as a Hibernate second-level cache by leveraging Hibernate's JCache (JSR 107) support. You will also learn how to integrate Hazelcast with Hibernate without using the `hazelcast-hibernate` integration.]
+
+== What You’ll Learn
+
+{description}
+
+== Prerequisites
+
+- JDK 8+
+- Apache Maven 3.2+
+
+== Required Dependencies
+
+First, you need to add the required dependencies.
+
+Include the `hibernate-jcache` and `hibernate-core` dependencies. Keep in mind that both should have the same version:
+
+.pom.xml
+[source,xml,indent=0]
+----
+include::ROOT:example$hibernate-jcache/pom.xml[tag=doc-hibernate-deps]
+----
+
+Make sure to include the `hazelcast` dependency as well:
+
+.pom.xml
+[source,xml,indent=0]
+----
+include::ROOT:example$hibernate-jcache/pom.xml[tag=doc-hazelcast-dep]
+----
+
+== Configure Hibernate JCache RegionFactory
+
+Now, tell Hibernate to use JCache's region factory.
+
+For Hibernate 5.2.x, you need to add a full class name:
+
+[source, xml]
+----
+<property name="hibernate.cache.region.factory_class">
+   org.hibernate.cache.jcache.JCacheRegionFactory
+</property>
+----
+
+
+For Hibernate 5.3.x+, it's enough to mention _jcache_:
+
+.hibernate.cfg.xml
+[source,xml,indent=0]
+----
+include::ROOT:example$hibernate-jcache/src/main/resources/hibernate.cfg.xml[tag=doc-hibernate-factory]
+----
+
+== Configure the Cache Provider
+
+You can choose to either use an embedded Hazelcast instance, or connect to an external server using a Hazelcast client.
+
+****
+`EMBEDDED`: For creating an embedded Hazelcast instance with an application. This instance cannot be scaled up or
+down unless you run or shutdown another Hibernate application with the same server config.
+
+`CLIENT`: For connecting to an existing Hazelcast cluster that can scale up or down independently from your app.
+
+- You can learn more about the differences between client and embedded topologies https://docs.hazelcast.org/docs/latest/manual/html-single/#hazelcast-topology[here.]
+****
+
+Now, configure the provider.
+
+To use native client:
+
+[source, xml]
+----
+<property name="hibernate.javax.cache.provider">
+   com.hazelcast.client.cache.impl.HazelcastClientCachingProvider
+</property>
+<property name="hibernate.javax.cache.uri">
+   hazelcast-client.xml
+</property>
+----
+
+To use embedded Hazelcast:
+
+[source, xml]
+----
+<property name="hibernate.javax.cache.provider">
+   com.hazelcast.cache.impl.HazelcastServerCachingProvider
+</property>
+<property name="hibernate.javax.cache.uri">
+   hazelcast.xml
+</property>
+----
+
+
+== Configure the Cache
+
+Configure the cache via `hazelcast.xml` and the `<cache>` part:
+
+[source, xml]
+----
+<cache name="custom.cache.region.name">
+    <statistics-enabled>true</statistics-enabled>
+    <management-enabled>true</management-enabled>
+    <eviction size="10000" max-size-policy="ENTRY_COUNT" eviction-policy="LRU" />
+</cache>
+----
+
+NOTE: To track the cache statistics on Hazelcast Management Center, you have to enable the statistics
+(disabled by default) for the cache configuration of the Hazelcast instance.
+
+NOTE: If client mode is used, cache configurations must be set on the server configuration (`hazelcast.xml`), not on the client-side (`hazelcast-client.xml`).
+
+TIP: If you do not define a specific region name, the default cache configuration is going to be
+used. Hence it will not be visible on Hazelcast Management Center. To apply
+a config to all regions, you can use a wildcard for `name` property (e.g., `name="*"`).
+
+For other cache configuration properties, see cache configuration section on the documentation
+https://docs.hazelcast.org/docs/latest/manual/html-single/index.html#icache-configuration[here].
+Eviction size and policy properties might be useful for this case.
+
+== Run the Application
+
+The samples consist of three classes demonstrating various types of Hibernate caches:
+
+- `com.hazelcast.hibernate.jcache.CollectionCache`
+- `com.hazelcast.hibernate.jcache.EntityCache`
+- `com.hazelcast.hibernate.jcache.QueryCache`
+
+All of them are running using an in-memory H2 instance and can be run using their `main()` methods.
+
+== Summary
+
+You've configured an application to use a Hibernate second-level cache with Hazelcast.
+
+== Related Resources
+
+- {plugin-gh-address}[Hazelcast Hibernate Second Level Cache Plugin]

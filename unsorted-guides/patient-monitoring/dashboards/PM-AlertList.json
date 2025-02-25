@@ -1,0 +1,284 @@
+{
+  "__inputs": [
+    {
+      "name": "GRAPHITE",
+      "label": "Graphite",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "graphite",
+      "pluginName": "Graphite"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.1.0"
+    },
+    {
+      "type": "datasource",
+      "id": "graphite",
+      "name": "Graphite",
+      "version": "1.0.0"
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "GRAPHITE"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "targetBlank": false,
+              "title": "patient_scorecard",
+              "url": "/d/gBSt16W4z/patient-scorecard?orgId=1&refresh=5s&var-patient=${__series.name}﻿&﻿${__url_time_range}"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "from": 7,
+                "result": {
+                  "color": "semi-dark-red",
+                  "index": 0,
+                  "text": "High"
+                },
+                "to": 500
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 5,
+                "result": {
+                  "color": "semi-dark-orange",
+                  "index": 1,
+                  "text": "Medium"
+                },
+                "to": 6
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 4,
+                "result": {
+                  "color": "semi-dark-yellow",
+                  "index": 2,
+                  "text": "Low-Medium"
+                },
+                "to": 4
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 3,
+                  "text": "Low"
+                },
+                "to": 3
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "semi-dark-green",
+                  "index": 4,
+                  "text": "Low"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Low",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 0
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 4
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 5
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 7
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "displayMode": "basic",
+        "minVizHeight": 11,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "9.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GRAPHITE"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByTags(aliasSub(sortBy(RESULTS.*.*, 'last', true), 'RESULTS.', ''), 0)",
+          "textEditor": false
+        }
+      ],
+      "title": "Scores",
+      "transparent": true,
+      "type": "bargauge"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [
+    "alert_list"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "graphite",
+          "uid": "GRAPHITE"
+        },
+        "definition": "",
+        "hide": 2,
+        "includeAll": false,
+        "label": "",
+        "multi": false,
+        "name": "patient",
+        "options": [],
+        "query": {
+          "queryType": "Default",
+          "refId": "A",
+          "target": "RESULTS.*"
+        },
+        "refresh": 2,
+        "regex": "/^(?!.*carbon|.*dummy|.*stats|.*stats_counts|.*stats).*$/",
+        "skipUrlSync": false,
+        "sort": 4,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "graphite",
+          "uid": "GRAPHITE"
+        },
+        "definition": "",
+        "hide": 2,
+        "includeAll": false,
+        "label": "",
+        "multi": false,
+        "name": "id",
+        "options": [],
+        "query": {
+          "queryType": "Default",
+          "refId": "A",
+          "target": "RESULTS.$patient.*"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": false,
+    "refresh_intervals": [
+      "5s"
+    ]
+  },
+  "timezone": "utc",
+  "title": "PM : Alert List",
+  "uid": "DedZ6C04z",
+  "version": 4,
+  "weekStart": "monday"
+}

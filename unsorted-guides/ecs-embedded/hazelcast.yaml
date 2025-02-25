@@ -1,0 +1,11 @@
+hazelcast:
+  network:
+    interfaces:
+      enabled: true
+      interfaces:
+        - 10.0.*.*
+    join:
+      multicast:
+        enabled: false
+      aws:
+        enabled: true

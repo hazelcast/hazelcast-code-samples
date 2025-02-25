@@ -1,0 +1,14 @@
+hazelcast:
+  user-code-namespaces:
+    enabled: true
+    card-ns: []
+
+  jet:
+    enabled: true
+    resource-upload-enabled: true
+
+  map:
+    cards:
+      user-code-namespace: card-ns
+
+

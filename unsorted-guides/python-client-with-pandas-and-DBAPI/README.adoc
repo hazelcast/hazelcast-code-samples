@@ -1,0 +1,3 @@
+// Replace <filename> with the name of your repository, and replace <tutorial name> with the title of the tutorial.
+// For guidance on using this template, see .github/CONTRIBUTING.adoc
+This repository hosts the documentation and code samples for the link:https://docs.hazelcast.com/tutorials/<filename>[<tutorial name> tutorial].

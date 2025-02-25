@@ -1,0 +1,1 @@
+These images are a subset of the publicly available CalTech 101 data set (https://data.caltech.edu/records/mzrjq-6wc02).

@@ -1,0 +1,199 @@
+
+= Tutorial template
+
+:page-layout: tutorial
+:page-product: platform, cloud
+:page-categories: migration
+:page-lang: 
+:page-enterprise: true
+:page-est-time: 30 min
+:description: In this tutorial, you will use the Hazelcast Data Migration Tool to migrate data from a source cluster running in Docker to a target cluster running on Viridian. 
+
+{description}
+
+image::clusterconnections.png[DMT clusters diagram]
+
+== Context
+You can use the Data Migration Tool (DMT) to migrate your data from version 4.x or 5.x Open Source and Enterprise Edition Hazelcast clusters when upgrading to 5.3.x or later versions of Enterprise Edition, or moving to the latest Viridian Cloud release. The DMT can also be used for infrastructure consolidation or separation with selective migration of application data between clusters.
+
+
+== Before you Begin
+
+Before starting this tutorial, make sure that you meet the following prerequisites:
+
+* https://docs.docker.com/get-docker/[Docker Desktop] installed on your device
+* https://docs.hazelcast.com/clc/5.3.5/install-clc[Hazelcast Command Line Client] (CLC) installed on your device
+* A {hazelcast-cloud} cluster up and running 
+
+
+== Step 1: Set Up the Source Cluster
+
+You will begin by creating a Hazelcast cluster running in Docker. This cluster will be your source cluster for migration. Once it is up, you will use the CLC to create a map and populate it with data. 
+
+. In a terminal window, launch a Docker instance of Hazelcast IMDG 4.2.7 using the following command.
++
+[shell]
+```
+docker run -d -p 127.0.0.1:5701:5701 -e HZ_CLUSTERNAME=source hazelcast/hazelcast:4.2.7
+```
++ 
+This command starts the cluster using the address 127.0.0.1:5701. The Docker container containing the cluster uses 172.12.0.1:5701 (the Docker default).
+
+. Verify that the container is running using the `docker container ls` command. You should see output similar to the following:
++
+[shell]
+```
+CONTAINER ID   IMAGE                       COMMAND                  CREATED              STATUS              PORTS                      NAMES
+aa549fb787cb   hazelcast/hazelcast:4.2.7   "/opt/hazelcast/star…"   About a minute ago   Up About a minute   127.0.0.1:5701->5701/tcp   condescending_shaw
+```
+
+. Configure CLC to connect to the Docker cluster.
++
+[shell]
+```
+clc config add source cluster.name=source cluster.address=localhost:5701
+```
+
+. Verify that CLC can connect to the Docker instance by creating an IMap and writing a single entry.
++
+[shell]
+```
+clc -c source map --name my-map set key-1 value-1
+```
++
+If the write is successful, you will see the following output:
++
+[shell]
+```
+    OK Set the value into the Map 'my-map'.
+```
++
+If it is not successful, confirm the following:
+
+* The port mapping is correct
+* The source cluster container is running
+* The configuration in $HOME/.hazelcast/source/config.yaml is correct (this file was created with the `clc config add` command above)
+
+. Populate the map 'my-map' with 1000 entries.
++
+==== 
+macOS and Linux:: 
++ 
+-- 
+[source,shell]
+----
+for i in {1..1000}; do clc -c source map --name my-map set key-$i value-$i --quiet; done && echo OK
+----
+--
+
+Windows::
++
+[source,shell]
+----
+for /l %x in (1, 1, 1000) do clc -c source map --name my-map set key-%x value-%x --quiet
+----
+--
+====
+
+. Repeat the above step to create a second map called second-map with 500 entries.
+
+
+== Step 2: Set up the Data Migration Tool
+
+In this step, you'll download the DMT. You'll then configure the source and target hazelcast-client.yaml files. The migration cluster will use these configurations to connect as a client to the source and target clusters. 
+
+. Download the DMT package for your operating system and CPU from https://repository.hazelcast.com/data-migration/com/hazelcast/hazelcast-enterprise-distribution/5.3.5-DM-1/[the code repository].
+
+. Extract the package to any folder on your system.
+
+. Open the _migration_config/source/hazelcast.yaml_ file in your favorite editor. Set the configuration parameters for a client to connect to the source cluster running in Docker. (These are the same values you set for the CLC.) Save the file.
++
+[shell]
+```
+hazelcast-client:
+  cluster-name: source
+  network:
+    cluster-members:
+      - 127.0.0.1:5701
+```
+. Open the _migration_config/data/imap_names.txt file in your favorite editor. List the names of the IMaps to be migrated, one per line. Save the file.
++
+[shell]
+```
+my-map
+second-map
+``` 
+
+. For the target client configuration, you will need to collect the parameters from your Viridian cluster. Go to your cluster dashboard, and in the Connect Client list, select CLI.
++
+image::cli-button.png[CLI button]
++
+Under the Advanced setup tab, reveal the discovery token and the keystore/truststore password.
++
+image::cli-advanced.png[Advanced setup window]
++
+Download the keystore and unzip it in the _migration_config/target_ directory.
+
+. Open the _migration_config/target/hazelcast.yaml_ file in your favorite editor. Set the configuration parameters for a client to connect to your target cluster in Viridian. Save the file.
++
+[shell]
+```
+hazelcast-client:
+  cluster-name: <cluster-ID>
+  network:
+    hazelcast-cloud:
+      enabled: true
+      discovery-token: <token>
+    ssl:
+      enabled: true
+      properties:
+        keyStore: client.keystore
+        keyStorePassword: <password>
+        trustStore: client.truststore
+        trustStorePassword: <password>
+```
+
+== Step 3: Migrate the Data
+
+. In your terminal window, navigate to the directory where you extracted the DMT package.
+
+. Start the migration cluster with the following command:
+
++
+[shell]
+```
+HZ_NETWORK_PORT_PORT=5702 HZ_CLUSTERNAME=migration ./bin/hz start 
+```
+
+. Verify that your cluster started using port 5702.
+
+image::migration_cluster_start.png[Finding the startup port]
+
+[NOTE]
+If your cluster started on a different port, edit the file _migration.yaml_ and change the port number to the port in use.
+
+. Start the data migration with the following command, replacing `<platform>` and `<arch>` with the OS and process architecture for your system:
++
+[shell]
+```
+./bin/dmt_<platform>_<arch> --config migration.yaml start migration_config --yes --log.path migration.log
+```
++
+You can find the available DMT binaries in the _bin_ folder of the extracted DMT package. The binaries are in the format `dmt_<platform>_<arch>`.  Use the ``arm64`` binary for ARM, and the `amd64` binary for Intel.
+
+[NOTE]
+====
+. `--log.path migration.log` specifies that the migration logs are saved to the _migration.log_ file on completion of the migration. For further information on viewing the migration details, see the xref:migrate:data-migration-tool.adoc#view-result[View Migration Results]
+. The DMT will attempt to connect to the migration cluster indefinitely. This means that it can appear to hang if unable to connect. To avoid this, you can set a timeout for the connection attempt using the `--timeout` flag.  For further information on the `--timeout` flag, refer to the https://docs.hazelcast.com/clc/5.3.5/configuration#clc-configuration-with-command-line-parameters[CLC Configuration with Command-line Parameters^] section of the Hazelcast CLC documentation. 
+. On MacOS, you might need to allow the `dmt*` binary to run. If the command is rejected, go to the *Privacy & Security* settings on your device and update them to allow the binary. After updating the settings, retry the command, and select *Open* when prompted
+====
+== Summary
+
+////
+Summarise what knowledge the reader has gained by completing the tutorial, including a summary of each step's goals (this is a good way to validate whether your tutorial has covered all you need it to.)
+////
+
+
+== See Also
+
+// Optionally, add some links to resources, such as other related guides.

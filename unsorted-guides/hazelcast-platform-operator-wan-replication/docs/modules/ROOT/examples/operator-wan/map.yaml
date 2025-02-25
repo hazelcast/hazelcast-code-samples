@@ -1,0 +1,13 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: Map
+metadata:
+  name: map-1
+spec:
+  hazelcastResourceName: hazelcast-first
+---
+apiVersion: hazelcast.com/v1alpha1
+kind: Map
+metadata:
+  name: map-2
+spec:
+  hazelcastResourceName: hazelcast-first

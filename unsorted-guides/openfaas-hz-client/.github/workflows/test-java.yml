@@ -1,0 +1,116 @@
+name: Test Java Client
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "hz-client-java/**"
+  
+
+jobs:
+  test-java:
+    name: Test Java Client
+    defaults:
+      run:
+        shell: bash
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install OpenFaaS CLI
+        run: |
+           curl -sSL https://cli.openfaas.com | sudo -E sh
+
+      - name: Install Hey
+        run: |
+          wget https://hey-release.s3.us-east-2.amazonaws.com/hey_linux_amd64
+          chmod +x hey_linux_amd64
+          sudo mv hey_linux_amd64 /bin/hey
+
+      - name: Checkout to guide
+        uses: actions/checkout@v2
+        with:
+          path: openfaas-hz-guide
+
+      - name: Start Minikube
+        run: |
+          minikube start
+
+      - name: Deploy OpenFaaS
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/namespaces.yml
+          
+          helm repo add openfaas https://openfaas.github.io/faas-netes/
+
+          helm repo update \
+          && helm upgrade openfaas --install openfaas/openfaas \
+          --namespace openfaas  \
+          --set functionNamespace=openfaas-fn \
+          --set generateBasicAuth=true
+
+      - name: Log-in to OpenFaaS
+        run: |
+          kubectl rollout status -n openfaas deploy/gateway
+
+          export OPENFAAS_URL=$(minikube service gateway-external -n openfaas --url=true)
+          echo OPENFAAS_URL=${OPENFAAS_URL} >> $GITHUB_ENV
+
+          export PASSWORD=$(kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode; echo)
+          echo PASSWORD=${PASSWORD} >> $GITHUB_ENV
+
+          echo -n $PASSWORD | faas-cli login --username admin --password-stdin
+
+      - name: Deploy Hazelcast Cluster
+        run: |
+          helm repo add hazelcast https://hazelcast-charts.s3.amazonaws.com/
+          helm repo update
+          helm install hz-hazelcast hazelcast/hazelcast
+        
+      - name: Create Function
+        working-directory: openfaas-hz-guide/hz-client-java/of-watchdog
+        run: |
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          echo -n $PASSWORD | faas-cli login --username admin --password-stdin
+
+          sed -i "s|gateway: .*|gateway: ${OPENFAAS_URL}|" hz-client-java-ofwatchdog.yml
+          sed -i "s/YOUR_DOCKER_HUB_USERNAME/${DOCKERHUB_USERNAME}/" hz-client-java-ofwatchdog.yml
+
+          faas-cli up -f hz-client-java-ofwatchdog.yml
+        env:
+          DOCKERHUB_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
+          DOCKERHUB_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
+
+      - name: Test Function
+        working-directory: openfaas-hz-guide/hz-client-java/of-watchdog
+        run: |
+          kubectl get all -n openfaas-fn
+
+          kubectl rollout status -n openfaas-fn deployment.apps/hz-client-java-ofwatchdog 
+
+          echo -n $PASSWORD | faas-cli login --username admin --password-stdin
+
+          hey -n 100 -c 1 ${OPENFAAS_URL}/function/hz-client-java-ofwatchdog
+
+          size=$(curl ${OPENFAAS_URL}/function/hz-client-java-ofwatchdog)
+
+          echo $size
+
+          if [[ $size -le 101 ]] && [[ $size -ge 100 ]];
+          then
+            exit 0
+          else
+            exit 1
+          fi
+
+
+  slack_notify:
+    name: Slack Notify
+    needs: test-java 
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: 8398a7/action-slack@f3635935f58910a6d6951b73efe9037c960c8c04
+        if: needs.test-java.result != 'success'
+        with:
+          fields: repo,commit,author,action,eventName,workflow
+          status: ${{ needs.test-java.result }}
+          channel: '#github-actions-log'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

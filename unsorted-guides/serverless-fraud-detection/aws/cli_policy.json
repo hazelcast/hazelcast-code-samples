@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateFunction",
+        "lambda:AddPermission",
+        "lambda:UpdateFunctionConfiguration",
+        "s3:CreateBucket",
+        "s3:PutBucketNotification",
+        "s3:PutObject",
+        "iam:CreateRole",
+        "iam:PutRolePolicy",
+        "iam:PassRole"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

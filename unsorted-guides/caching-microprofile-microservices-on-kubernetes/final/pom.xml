@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.wasdev.wlp.maven.parent</groupId>
+        <artifactId>liberty-maven-app-parent</artifactId>
+        <version>2.7</version>
+    </parent>
+
+    <groupId>hazelcast.guides</groupId>
+    <artifactId>hazelcast-microprofile</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- Plugins -->
+        <version.maven-war-plugin>3.3.0</version.maven-war-plugin>
+        <version.dockerfile-maven-plugin>1.4.12</version.dockerfile-maven-plugin>
+
+        <!-- Hazelcast Versions -->
+        <version.hazelcast>3.12.6</version.hazelcast>
+        <version.hazelcast-kubernetes>1.5.1</version.hazelcast-kubernetes>
+
+        <!-- OpenLiberty runtime -->
+        <version.openliberty-runtime>RELEASE</version.openliberty-runtime>
+        <http.port>9080</http.port>
+        <https.port>9443</https.port>
+        <packaging.type>usr</packaging.type>
+        <app.name>${project.artifactId}</app.name>
+        <package.file>${project.build.directory}/${app.name}.zip</package.file>
+    </properties>
+
+    <!-- Profiles for temporarily switching packaging types -->
+    <profiles>
+        <profile>
+            <id>runnable-package</id>
+            <properties>
+                <package.file>
+                    ${project.build.directory}/${app.name}.jar
+                </package.file>
+                <packaging.type>runnable</packaging.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>minify-runnable-package</id>
+            <properties>
+                <package.file>
+                    ${project.build.directory}/${app.name}.jar
+                </package.file>
+                <packaging.type>minify,runnable</packaging.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>docker-image</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>${version.dockerfile-maven-plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>build-docker-image</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <repository>openliberty-${project.artifactId}</repository>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.openliberty.features</groupId>
+                <artifactId>features-bom</artifactId>
+                <version>20.0.0.7</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Hazelcast Dependencies -->
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${version.hazelcast}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-kubernetes</artifactId>
+            <version>${version.hazelcast-kubernetes}</version>
+        </dependency>
+        <!-- Open Liberty Features -->
+        <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>jaxrs-2.1</artifactId>
+            <type>esa</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>jsonp-1.1</artifactId>
+            <type>esa</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>cdi-2.0</artifactId>
+            <type>esa</type>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>mpMetrics-1.1</artifactId>
+            <type>esa</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>mpHealth-1.0</artifactId>
+            <type>esa</type>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- Test dependencies -->
+        <dependency>	
+            <groupId>junit</groupId>	
+            <artifactId>junit</artifactId>	
+            <version>4.13</version>	
+            <scope>test</scope>	
+        </dependency>	
+        <dependency>	
+            <groupId>org.apache.cxf</groupId>	
+            <artifactId>cxf-rt-rs-client</artifactId>	
+            <version>3.3.6</version>	
+            <scope>test</scope>	
+        </dependency>	
+        <dependency>	
+            <groupId>org.apache.cxf</groupId>	
+            <artifactId>cxf-rt-rs-extension-providers</artifactId>	
+            <version>3.3.6</version>	
+            <scope>test</scope>	
+        </dependency>	
+        <dependency>	
+            <groupId>org.glassfish</groupId>	
+            <artifactId>javax.json</artifactId>	
+            <version>1.1.4</version>	
+            <scope>test</scope>	
+        </dependency>	
+       
+        <!-- Support for JDK 9 and above -->
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${version.maven-war-plugin}</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <packagingExcludes>pom.xml</packagingExcludes>
+                </configuration>
+            </plugin>
+            <!-- Enable liberty-maven plugin -->
+            <plugin>
+                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <configuration>
+                    <assemblyArtifact>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-runtime</artifactId>
+                        <version>${version.openliberty-runtime}</version>
+                        <type>zip</type>
+                    </assemblyArtifact>
+                    <serverName>GettingStartedServer</serverName>
+                    <stripVersion>true</stripVersion>
+                    <configFile>src/main/liberty/config/server.xml</configFile>
+                    <looseApplication>true</looseApplication>
+                    <packageFile>${package.file}</packageFile>
+                    <include>${packaging.type}</include>
+                    <bootstrapProperties>
+                        <default.http.port>${http.port}</default.http.port>
+                        <default.https.port>${https.port}</default.https.port>
+                        <app.context.root>${app.name}</app.context.root>
+                    </bootstrapProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

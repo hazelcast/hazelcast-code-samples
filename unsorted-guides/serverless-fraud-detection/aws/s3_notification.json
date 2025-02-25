@@ -1,0 +1,10 @@
+{
+"LambdaFunctionConfigurations": [
+    {
+      "Id": "hazelcast-viridian-s3-event-configuration",
+      "LambdaFunctionArn": "$FUNCTION_ARN",
+      "Events": [ "s3:ObjectCreated:Put" ]
+    }
+  ]
+}
+

@@ -1,0 +1,14 @@
+hazelcast-client:
+  cluster-name: dev
+  instance-name: recommendation-service
+  network:
+    cluster-members:
+      - hz:5701
+    smart-routing: true
+  connection-strategy:
+    async-start: true
+    reconnect-mode: ASYNC
+  serialization:
+    compact-serialization:
+      serializers:
+        - serializer: hazelcast.platform.solutions.recommender.RecommendationSerializer

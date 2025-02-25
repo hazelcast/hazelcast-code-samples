@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Hazelcast Documentation</title>
+    <link rel="canonical" href="http:localhost:3000/home/index.html">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+<!-- Apply the site styles after the docsearch ones -->
+<link rel="stylesheet" href="../_/css/site.css">
+<style>
+  .nav-item[data-depth="1"] {
+  color: #6d7480;
+}
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<meta name="google-site-verification" content="8R6s5prYCHuUDIJfpL-WfcRCcN-VYjG1ps1o-dKT7Ro" />
+<script src="https://kit.fontawesome.com/11f046e3f7.js" crossorigin="anonymous"></script>
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://hazelcast.com/"><img src="../_/img/hazelcast-header.svg"></img></a>
+      <a class="navbar-item" id="documentation-header" href="../home">Home</img></a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-start">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#" onclick="return false">Manuals</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="../cloud/" onclick="window.open(this.href,'_blank');return false;">Hazelcast Viridian</a>
+            <a class="navbar-item" href="../hazelcast/latest/" onclick="window.open(this.href,'_blank');return false;">Hazelcast Platform</a> 
+            <a class="navbar-item" href="../management-center/latest/" onclick="window.open(this.href,'_blank');return false;">Management Center</a>
+            <a class="navbar-item" href="../operator/latest/" onclick="window.open(this.href,'_blank');return false;">Hazelcast Platform Kubernetes Operator</a>
+            <!--<a class="navbar-item" href="../clc/latest/" onclick="window.open(this.href,'_blank');return false;">Hazelcast Command-Line Client</a>-->
+          </div>
+        </div>
+          <div class="navbar-item">
+            <a class="navbar-item" href="../tutorials">Tutorials</a>
+          </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#" onclick="return false">API Reference</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item"href="https://docs.hazelcast.org/docs/latest/javadoc" onclick="window.open(this.href,'_blank');return false;">Java</a>
+            <a class="navbar-item"href="https://pkg.go.dev/github.com/hazelcast/hazelcast-go-client?tab=versions" onclick="window.open(this.href,'_blank');return false;">Go</a>
+            <a class="navbar-item"href="http://hazelcast.github.io/hazelcast-csharp-client/api-index.html" onclick="window.open(this.href,'_blank');return false;">C#</a>
+            <a class="navbar-item"href="http://hazelcast.github.io/hazelcast-cpp-client/api-index.html" onclick="window.open(this.href,'_blank');return false;">C++</a>
+            <a class="navbar-item" href="https://readthedocs.org/projects/hazelcast/" onclick="window.open(this.href,'_blank');return false;">Python</a>
+            <a class="navbar-item" href="http://hazelcast.github.io/hazelcast-nodejs-client/" onclick="window.open(this.href,'_blank');return false;">Node.js</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#" onclick="return false">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://training.hazelcast.com/" onclick="window.open(this.href,'_blank');return false;">Online Training</a>
+            <a class="navbar-item" href="https://hazelcast.com/hub/" onclick="window.open(this.href,'_blank');return false;">Integration Hub</a>
+            <a class="navbar-item" href="https://hazelcast.com/use-cases/" onclick="window.open(this.href,'_blank');return false;">Use Cases</a>
+            <a class="navbar-item" href="https://hazelcast.com/community/" onclick="window.open(this.href,'_blank');return false;">Community</a>
+            <a class="navbar-item" href="https://hazelcast.com/blog/" onclick="window.open(this.href,'_blank');return false;">Blog</a>
+          </div>
+        </div>
+      </div>
+      <div class="navbar-end">
+          <div class="navbar-item"></div>
+            <a href="https://hazelcast.com/get-started" onclick="window.open(this.href,'_blank');return false;">
+              <button class="button">Get Hazelcast</button>
+            </a>
+          </div>
+      </div>
+    </div>
+  </nav>
+  <div class="cookie-banner" id="cookie">
+<p>
+    This website uses cookies to give you the best experience.
+    <a href="https://hazelcast.com/privacy/">Learn more</a>
+  </p>
+<button class="close" id="cookie-close">Close</button>
+</div></header>
+<div class="home">
+  <div class="home-background">
+    <h1>Hazelcast Documentation</h1>
+    <div id="search-input" class="search-container">
+    </div>
+  </div>
+	<main data-ceiling="topbar">
+		<article class="article">
+			<div class="cards">
+				<div class="row landing">
+
+					<div class="card">
+						<h3 class="card-header"><a href="../cloud/">Hazelcast Viridian Cloud Managed Services</a>
+						<button disabled class="new">beta</button>
+						</h3>
+						<p class="card-summary">
+							Simplify the development and deployment of your applications with a cloud managed service based on Hazelcast Platform. Start for free and pay as you grow.
+						</p>
+						<div class="section-content-columns">
+							<div class="section-content-column">
+								<h4 class="section-content-title">Get Started</h4>
+								<ul class="section-content-list">
+									<li class="section-content-list-item">
+										<a href="../cloud/get-started">Hello World</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../cloud/serverless-cluster">About Viridian Serverless</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../cloud/tutorials">Tutorials</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../cloud/support">Support</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../cloud/release-notes">Release Notes</a>
+									</li>
+								</ul>
+							</div>
+							<div class="section-content-column">
+								<h4 class="section-content-title">Quick Links</h4>
+								<ul class="section-content-list">
+									<li class="section-content-list-item">
+										<a href="../cloud/create-account">Create an Account</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../cloud/multi-factor-authentication">Multi-Factor Authentication</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../cloud/payment-methods">Billing and Payments</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../cloud/developer-guide">Developer Guide</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../cloud/wan-replication">Replicate Data Between Clusters</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="card">
+						<h3 class="card-header"><a href="../hazelcast/latest/">Hazelcast Platform</a>
+						</h3>
+						<p class="card-summary">
+							Manually deploy and manage a Hazelcast Platform cluster on your own hardware or in a public cloud environment.
+						</p>
+						<div class="section-content-columns">
+							<div class="section-content-column">
+								<h4 class="section-content-title">Get Started</h4>
+								<ul class="section-content-list">
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/getting-started/install-hazelcast">Install Open Source</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/getting-started/install-enterprise">Install Enterprise</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/getting-started/enterprise-overview">Explore Enterprise Features</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/getting-started/support">Support</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/release-notes/releases">Release Notes</a>
+									</li>
+								</ul>
+							</div>
+							<div class="section-content-column">
+								<h4 class="section-content-title">Quick Links</h4>
+								<ul class="section-content-list">
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/sql/sql-overview">SQL</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/production-checklist">Production Checklist</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../operator/latest/">Kubernetes Operator Deployment Guide</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/data-structures/map">Map Data Structure</a>
+									</li>
+									<li class="section-content-list-item">
+										<a href="../hazelcast/latest/clients/java">Java Client</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row landing">
+					<div class="card clients-first">
+						<h3 class="card-header">Hazelcast Client Libraries
+						</h3>
+						<p class="card-summary">
+							Connect your applications to Hazelcast clusters.
+						</p>
+					</div>
+					<div class="card clients">
+						<figure class="item">
+								<a href="https://hazelcast.com/clients/java/"><img src="../_/img/language-logo-java.png">
+								<figcaption class="caption">Java</figcaption></a>
+						</figure>
+						<figure class="item">
+								<a href="https://hazelcast.com/clients/dotnet/"><img src="../_/img/dotnet.png">
+								<figcaption class="caption">.Net</figcaption></a>
+						</figure>
+						<figure class="item">
+								<a href="https://hazelcast.com/clients/cplusplus/"><img src="../_/img/cpp.svg"/>
+								<figcaption class="caption">C++</figcaption></a>
+						</figure>
+						<figure class="item">
+								<a href="https://hazelcast.com/clients/node-js/"><img src="../_/img/language-logo-node.png"/>
+								<figcaption class="caption">Node.js</figcaption></a>
+						</figure>
+						<figure class="item">
+								<a href="https://hazelcast.com/clients/python/"><img src="../_/img/language-logo-python.png"/>
+								<figcaption class="caption">Python</figcaption></a>
+						</figure>
+						<figure class="item">
+								<a href="https://hazelcast.com/clients/go/"><img src="../_/img/go.png"/>
+								<figcaption class="caption">Go</figcaption></a>
+						</figure>
+					</div>
+					<div class="card mc">
+					<h3 class="card-header"><a href="../management-center/latest/">Management Center</a>
+					</h3>
+					<p class="card-summary">
+						Monitor your Hazelcast clusters.
+					</p>
+					<ul class="section-content-list">
+						<li class="get-started-home section-content-list-item">
+							<a href="../management-center/latest/getting-started.html">Get Started <img src="../home/_images/right-arrow.svg"></a>
+						</li>
+					</ul>
+					</div>
+					<div class="card">
+						<a href="../management-center/latest/"><img style="max-width: 250px;" src="../_/img/mc-dashboard.svg"></a>
+					</div>
+				</div>
+
+				<div class="row landing end seealso">
+					<div class="card">
+					<h3 class="card-header">See Also
+					</h3>
+						<a href="https://hazelcast.com/hub/">Integration Hub: </a>Explore our connectors and plugins for integrating Hazelcast with various data systems, application frameworks, and cloud runtimes.</li>
+					</div>
+					<div class="card">
+						<a href="../tutorials">Tutorials: </a>Explore tutorials and sample apps that show you how to use Hazelcast for different use cases.</li>
+					</div>
+					<div class="card">
+						<a href="https://training.hazelcast.com/">Online Training: </a>Learn Hazelcast by following self-paced online training courses.</li>
+					</div>
+				</div>
+			</div>
+		</article>
+	</main>
+</div>
+<footer class="footer">
+  <a href="https://hazelcast.com/terms-of-use/">Terms of service</a>
+  <a href="https://hazelcast.com/privacy/">Privacy</a>
+  <a href="https://hazelcast.com/contact/">Contact us</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+
+<!-- SEARCH CONFIGURATIONS -->
+<!-- 404 is not a component, so we avoid reading the component versions and names from it -->
+  <!-- TUTORIALS -->
+  <script>
+  docsearch({
+    apiKey: 'ef7bd9485eafbd75d6e8425949eda1f5',
+    indexName: 'prod_hazelcast_docs',
+    appId: 'QK2EAH8GB0',
+    container: '#search-input',
+    // Set debug to true to inspect the dropdown
+    debug: false,
+    // Display 25 results in the dropdown
+    // and search only the current product
+    searchParameters: { 
+       
+      facetFilters: 
+      [["tags:hazelcast-", 
+      "tags:management-center-", 
+      "tags:imdg-", 
+      "tags:cloud"]] },
+  });
+  </script>
+  <!--DEAL WITH SPECIAL CASES -->
+  </body>
+</html>

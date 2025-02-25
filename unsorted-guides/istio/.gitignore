@@ -1,0 +1,10 @@
+.DS_Store
+*.txt
+/target
+## File-based project format
+.ipr
+*.iml
+.iws
+**/.idea/**/*.xml
+target/
+

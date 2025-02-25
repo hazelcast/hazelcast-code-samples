@@ -1,0 +1,100 @@
+= Get Started with Hazelcast using Spring Boot
+:templates-url: templates:ROOT:page$/
+:page-layout: tutorial
+:page-product: imdg
+:page-categories: Caching, Getting Started, Spring Boot, Microservices
+:page-lang: java
+:page-edition: 
+:page-est-time: 15 mins
+:framework: Spring Boot
+:description: This tutorial will get you started with Hazelcast in a Spring Boot application.
+
+== What You’ll Learn
+
+{description}
+
+== Before you Begin
+
+include::{templates-url}/microservices/prerequisites.adoc[]
+
+== The Spring Boot Application Structure
+
+include::{templates-url}/microservices/application-structure.adoc[]
+
+== Use Hazelcast in the Application
+
+If Hazelcast is on the classpath and a suitable configuration is found, Spring Boot auto-configures a `HazelcastInstance` that you can inject into your application. In the `pom.xml` file, you can see Hazelcast is added as a dependency:
+
+[source,xml,indent=0]
+----
+include::ROOT:example$hazelcast-embedded-springboot/pom.xml[tag=hazelcast-dep]
+----
+
+Hazelcast configuration (`hazelcast.yaml`) is placed in the `src/main/resources/` directory. You only need to auto-wire the `HazelcastInstance` bean in the `CommandController` and use it to access to Hazelcast data structures:
+
+[source,java,indent=0]
+----
+include::ROOT:example$hazelcast-embedded-springboot/src/main/java/guides/hazelcast/springboot/CommandController.java[]
+----
+
+== Run the Sample Application
+
+Run the application using Maven in a terminal:
+
+----
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=8080"
+----
+
+Then, rerun the application in another terminal.
+
+NOTE: Notice the different value for the `server.port` argument.
+
+----
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=8081"
+----
+
+After both application instances are initialized, you should see that the Hazelcast cluster is formed:
+
+```bash
+Members {size:2, ver:2} [
+	Member [192.168.1.64]:5701 - 520aec3f-58a6-4fcb-a3c7-498dcf37d8ff
+	Member [192.168.1.64]:5702 - 5c03e467-d457-4847-b49a-745a335db557 this
+]
+```
+
+Now, you can issue HTTP requests to put and get data back. Run the following command to put the data into a Hazelcast distributed map:
+
+```bash
+curl --data "key=key1&value=hazelcast" "localhost:8080/put"
+```
+
+You will see the value in the output. Then run the command below to get the data back. Please note that the call is made to the other application instance:
+
+```bash
+curl "localhost:8081/get?key=key1"
+```
+
+Again, you will see the value in the output since the data is distributed among Hazelcast cluster instances and can be accessed from any of them.
+
+== Test the Application
+
+To run the integration tests, run the following command in terminal. But before, make sure to kill the running application instances.
+
+----
+mvn verify -Ptests
+----
+
+If the tests pass, you’ll see a similar output to the following:
+
+----
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+----
+
+== Summary
+
+In this guide, you developed a simple Spring Boot application that stores the data in a Hazelcast member. You started two application instances, and they formed a Hazelcast cluster. You pushed data to an application instance, and since the data was shared among Hazelcast cluster members, you could access it from both application instances.

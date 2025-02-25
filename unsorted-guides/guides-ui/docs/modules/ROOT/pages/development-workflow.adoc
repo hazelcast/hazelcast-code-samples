@@ -1,0 +1,34 @@
+= UI Development Workflow
+// Settings:
+:idprefix:
+:idseparator: -
+
+// This section provides information about some of the UI files you'll be modifying and how to prepare and submit those changes.
+
+All changes pushed to a UI project's master branch can trigger a new release (not described here).
+Therefore, you want to make your changes to a development branch and submit it as a pull request (PR) to be approved.
+(Even better would be to issue the PR from a fork).
+Only when the PR is approved and merged will the new release be triggered.
+
+== git steps
+
+Use the following command to create a local development branch named `name-me`:
+
+ $ git checkout -b name-me -t origin/master
+
+You'll then apply your changes to the UI files.
+Once you're done making changes, commit those changes to the local branch:
+
+ $ git commit -a -m "describe your change"
+
+Then, push your branch to the remote repository:
+
+ $ git push origin name-me
+
+Finally, navigate to your UI project in your browser and create a new pull request from this branch.
+
+The maintainer of the UI should review the changes.
+If the changes are acceptable, the maintainer will merge the pull request.
+As soon as the pull request is merged into master, an automated process will take over to publish a new release for the site generator to use.
+
+Now that you've got the process down, let's review some of the files you'll be working with in more detail.

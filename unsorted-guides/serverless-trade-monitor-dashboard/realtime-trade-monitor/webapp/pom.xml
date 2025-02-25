@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>jar</packaging>
+    <artifactId>webapp</artifactId>
+
+    <parent>
+        <groupId>com.hazelcast.demos</groupId>
+        <artifactId>realtime-trade-monitor</artifactId>
+        <version>5.0</version>
+    </parent>
+
+    <properties>
+        <frontend.app.dir>${project.basedir}/src/main/app</frontend.app.dir>
+        <node.version>v16.19.0</node.version>
+        <yarn.version>v1.13.0</yarn.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <transformers>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                    </transformers>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <compress>true</compress>
+                        <manifest>
+                            <mainClass>WebServer</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.7.6</version>
+                <configuration>
+                    <nodeVersion>${node.version}</nodeVersion>
+                    <yarnVersion>${yarn.version}</yarnVersion>
+                    <workingDirectory>${frontend.app.dir}</workingDirectory>
+                    <installDirectory>${project.build.directory}</installDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-frontend-tools</id>
+                        <goals>
+                            <goal>install-node-and-yarn</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>yarn-install</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build-frontend</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <arguments>build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+                This resources plugin is a very important step, its job is to take the client application artifacts
+                built by the frontend plugin and copy them to the "right place".
+                The "right place" to copy the artifacts to, and where to copy them from, can change depending on which
+                client framework is being used.
+                For all client frameworks:
+                    - client application root is "src/main/app"
+                    - install directory is the Maven ${project.build.directory} which will translate to "target/classes"
+                Note that "app" is an arbitrary choice, it could be something else if you wanted - so long as you change
+                it everywhere.
+                For ReactJS:
+                    - react-scripts build default output directory is "<app-root>/build", so "src/main/app/build"
+                    - directory to copy the built application to is "target/classes/app"
+                    - the Java router code uses this "app" directory on the classpath
+                The "app" directory on the classpath is used so as to partition the client application from any other
+                classes and resources that may be part of the application. Again, the choice of "app" here is arbitrary
+                and you can choose something else if you want - so long as you change the Java routing configuration.
+            -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>position-react-build</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/app</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${frontend.app.dir}/build</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-enterprise</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast.jet</groupId>
+            <artifactId>hazelcast-jet-kafka</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>3.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
+        </dependency>
+        <dependency>
+            <groupId>com.j2html</groupId>
+            <artifactId>j2html</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.10</version>
+        </dependency>
+    </dependencies>
+</project>

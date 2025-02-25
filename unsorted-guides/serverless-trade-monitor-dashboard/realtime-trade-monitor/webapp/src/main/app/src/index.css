@@ -1,0 +1,111 @@
+@font-face {
+  font-family: 'DIN Next LT Pro';
+  src: url('/fonts/DINNextLTPro-Regular.eot');
+  src: local('DIN Next LT Pro Regular'), local('DINNextLTPro-Regular'),
+      url('/fonts/DINNextLTPro-Regular.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/DINNextLTPro-Regular.woff') format('woff'),
+      url('/fonts/DINNextLTPro-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DIN Next LT Pro';
+  src: url('/fonts/DINNextLTPro-Medium.eot');
+  src: local('DIN Next LT Pro Medium'), local('DINNextLTPro-Medium'),
+      url('/fonts/DINNextLTPro-Medium.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/DINNextLTPro-Medium.woff') format('woff'),
+      url('/fonts/DINNextLTPro-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DIN Next LT Pro';
+  src: url('/fonts/DINNextLTPro-Bold.eot');
+  src: local('DIN Next LT Pro Bold'), local('DINNextLTPro-Bold'),
+      url('/fonts/DINNextLTPro-Bold.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/DINNextLTPro-Bold.woff') format('woff'),
+      url('/fonts/DINNextLTPro-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DIN Next LT Pro';
+  src: url('/fonts/DINNextLTPro-Heavy.eot');
+  src: local('DIN Next LT Pro Heavy'), local('DINNextLTPro-Heavy'),
+      url('/fonts/DINNextLTPro-Heavy.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/DINNextLTPro-Heavy.woff') format('woff'),
+      url('/fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+:root {
+  box-sizing: border-box;
+
+  --color-bg: #02061c;
+  --color-midnight-blue: #030824;
+  --color-deep-blue: #010830;
+  --color-light-blue: #a7b5ff;
+  --color-dark-blue: #293574;
+  --color-mid-blue: #43519c;
+  --color-body: rgba(255, 255, 255, 0.5);
+
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: 'DIN Next LT Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+
+  background-color: var(--color-bg);
+  font-size: 0.75rem;
+  color: var(--color-body);
+  /* font rendering optimalizations */
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+}
+
+button, input, textarea {
+  font-family: 'DIN Next LT Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  font-size: 0.75rem;
+  /* font rendering optimalizations */
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.hazelcastLogo {
+  width: 5.6rem;
+
+}
+
+.sr-only {
+  position: absolute;
+  opacity: 0;
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  word-wrap: normal;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  overflow: hidden;
+}

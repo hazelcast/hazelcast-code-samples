@@ -1,0 +1,32 @@
+= Spring Boot Application for Hazelcast Cloud
+:experimental: true
+
+This is an example of how to use Spring Boot with Hazelcast {hazelcast-cloud}.
+
+TIP: For step-by-step instructions of how to run this app, see the link:https://docs.hazelcast.com/tutorials/spring-boot-client[tutorial].
+
+== Quickstart
+
+. Add the required properties to `spring-sample/src/main/resources/application.properties`:
+
+- `clusterId`
+- `discoveryToken`
+- `keyStorePassword`
+- `trustStorePassword` (same as `keyStorePassword`)
+
+. Add the keystore and truststore for your cluster to `spring-sample/src/main/resources`.
+
+. Execute the following to run the sample:
+
+```
+./mvnw spring-boot:run
+```
+
+== Internal Hazelcast Developers
+
+If you want to try this application in the UAT or DEV environment, edit the `src/main/java/sample/com/hazelcast/demo/cloud/HzCloudDemoApplication.java` file to include the environment URL:
+
+```java
+// For DEV, use https://test.dev.hazelcast.cloud
+config.setProperty("hazelcast.client.cloud.url", "https://uat.hazelcast.cloud");
+```

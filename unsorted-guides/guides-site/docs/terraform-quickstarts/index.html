@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Deploying Hazelcast Cluster on Cloud using Terraform</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/terraform-quickstarts/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../_/img/hazelcast-logo-white.png 1x, ../_/img/hazelcast-logo-white@2x.png 2x, ../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../_/img/external-link.png 1x, ../_/img/external-link@2x.png 2x, ../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="terraform-quickstarts" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<h1 class="page">Deploying Hazelcast Cluster on Cloud using Terraform</h1>
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/terraform-quickstarts/edit/master/doc/modules/ROOT/pages/index.adoc>See something wrong? Edit this page.</a></p>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide will get you started with using Terraform to deploy Hazelcast clusters on cloud.</p>
+</div>
+<div class="paragraph">
+<p>You can see the whole project <a href="https://github.com/hazelcast-guides/terraform-quickstarts">here.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_youll_learn"><a class="anchor" href="#_what_youll_learn"></a>What You’ll Learn</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You will learn how to deploy a Hazelcast cluster and Hazelcast Management Center on AWS, Azure, and GCP using Terraform. Terraform files have the necessary resources defined and all you need to do is setting your credentials to give Terraform permissions for creating resources on your behalf. After you run Terraform and create a cluster on cloud, you will be able to monitor the cluster using Hazelcast Management Center. You can modify the Terraform files to create new resources or destroy the whole cluster.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.terraform.io/downloads.html#undefined">Terraform v0.13+</a></p>
+</li>
+<li>
+<p>Access to one of AWS, Azure or GCP. The account must have permissions to create resources.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_giving_access_to_terraform"><a class="anchor" href="#_giving_access_to_terraform"></a>Giving Access to Terraform</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Cloud providers offer different ways of authenticating Terraform to create resources. Below you can see some of them.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_aws"></a>AWS</p>
+</li>
+<li>
+<p><a id="tabset1_azure"></a>Azure</p>
+</li>
+<li>
+<p><a id="tabset1_gcp"></a>GCP</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_aws">
+<div class="paragraph">
+<p>You can set environment variables <code>AWS_ACCESS_KEY_ID</code> and  <code>AWS_SECRET_ACCESS_KEY</code>. Terraform will use these environment variables to create resources. Run the following commands.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ export AWS_ACCESS_KEY_ID="XXXXXXXXXXXX"
+$ export AWS_SECRET_ACCESS_KEY="XXXXXXXXXXXXXXXX"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can find other ways of providing credentials at <a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs#authentication">Terraform AWS authentication</a>.</p>
+</div>
+<div class="paragraph">
+<p>The account you use in Terraform should have the following permissions assigned to it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>"iam:CreateRole",
+"iam:DeleteRole",
+"iam:CreateInstanceProfile",
+"iam:DeleteInstanceProfile",
+"iam:DeleteRolePolicy",
+"iam:AddRoleToInstanceProfile",
+"iam:RemoveRoleFromInstanceProfile",
+"iam:PutRolePolicy",
+"iam:PassRole",
+"iam:GetRole",
+"iam:GetInstanceProfile",
+"iam:GetPolicy",
+"iam:GetRolePolicy"
+"ec2:*"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>iam</code> permissions are necessary to create and delete a role using Terraform in <code>aws/main.tf</code>. Created role <code>aws_iam_role.discovery_role</code> will be used by Hazelcast instances to find each other.</p>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_azure">
+<div class="paragraph">
+<p>If you are using a user account, you can login with <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest#install">Azure CLI</a>. Run the following command to authenticate. Terraform will be able to detect your account.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ az login</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have multiple subscriptions or tenants you can choose one by adding following lines to <code>azure/main.tf</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">provider "azurerm" {
+  version = "=2.23.0"
+  features {}
+
+  subscription_id = "00000000-0000-0000-0000-000000000000"
+  tenant_id       = "11111111-1111-1111-1111-111111111111"
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to authenticate through service principals, please refer to <a href="https://www.terraform.io/docs/providers/azurerm/index.html#authenticating-to-azure">Authenticating to Azure</a>.</p>
+</div>
+<div class="paragraph">
+<p>The account or service principal you use should have the role <code>Owner</code> assigned to it.</p>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_gcp">
+<div class="paragraph">
+<p>You can use service accounts to authenticate Terraform. Get a service account key file, you can create key files on <a href="https://console.cloud.google.com/apis/credentials/serviceaccountkey">Google Console</a>. After you have created a key file, put its path  in <code>gcp/main.tf</code> as follows.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-terraform hljs" data-lang="terraform">provider "google" {
+  version = "3.5.0"
+
+  credentials = file("KEY-FILE-PATH/YOUR-KEY-FILE.json")
+  batching {
+    enable_batching = "false"
+  }
+  project = var.project_id
+  region  = var.region
+  zone    = var.zone
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The service account you use should have the following roles assigned to it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Compute Admin
+Role Administrator
+Security Admin
+Service Account Admin
+Service Account User</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuring_terraform_for_connection"><a class="anchor" href="#_configuring_terraform_for_connection"></a>Configuring Terraform for Connection</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now that Terraform has access to your credentials, we need to supply some variables to configure Terraform so that resources can be created correctly.</p>
+</div>
+<div class="paragraph">
+<p>Terraform will need a public-private key pair to be able to provision files and execute commands on the remote machines. For this purpose, you can use one of your existing key pairs or create a new one with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ ssh-keygen -f ~/.ssh/YOUR-KEY-NAME -t rsa</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command will create two key files: <code>YOUR-KEY-NAME.pub</code> and <code>YOUR-KEY-NAME</code>, public and private keys respectively. Terraform will use them to access VMs.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_aws"></a>AWS</p>
+</li>
+<li>
+<p><a id="tabset2_azure"></a>Azure</p>
+</li>
+<li>
+<p><a id="tabset2_gcp"></a>GCP</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_aws">
+<div class="paragraph">
+<p>In <code>aws/terraform.tfvars</code>, you need to provide values for two variables.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>aws_key_name:</code> This is the name of the public-private key pair we created earlier.</p>
+</li>
+<li>
+<p><code>local_key_path:</code> This is the path we created the key pair at.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In this guide we use an Ubuntu image and AWS creates a user with name <code>ubuntu</code> by default. So if you want to connect to your VMs via <code>ssh</code> you will have to use <code>ubuntu</code>. If you want to use another Linux distribution, please refer to <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managing-users.html">AWS EC2 Managing users</a> and change the variable <code>aws_ssh_user</code> accordingly.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The configuration defined in <code>aws/main.tf</code> assumes you have a default VPC in the region defined in <code>var.region</code>. AWS creates a default VPC for each activated region.  If you didn&#8217;t delete it you can skip this note. Otherwise, please refer to <a href="https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html#create-default-vpc">AWS Creating Default VPC</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_azure">
+<div class="paragraph">
+<p>In <code>azure/terraform.tfvars</code>, you need to provide values for two variables.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>azure_key_name:</code> This is the name of the public-private key pair we created earlier.</p>
+</li>
+<li>
+<p><code>local_key_path:</code> This is the path we created the key pair at.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_gcp">
+<div class="paragraph">
+<p>In <code>gcp/terraform.tfvars</code>, you need to provide values for three variables.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>gcp_key_name:</code> This is the name of the public-private key pair we created earlier.</p>
+</li>
+<li>
+<p><code>local_key_path:</code> This is the path we created the key pair at.</p>
+</li>
+<li>
+<p><code>project_id:</code> This is the id of the project you will use.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploying_the_cluster"><a class="anchor" href="#_deploying_the_cluster"></a>Deploying the Cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After you have authenticated your preferred cloud provider and provided necessary variables, <code>cd</code> into the directory of that provider.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you are using a paid subscription, you may be charged for the resources that will be created in this guide. However you can complete the guide using free tier subscriptions provided by <a href="https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&amp;all-free-tier.sort-order=asc">AWS</a>, <a href="https://azure.microsoft.com/en-us/free/">Azure</a> and <a href="https://cloud.google.com/free">GCP</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Initialize Terraform.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ terraform init</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the following to create an execution plan. This command will not create any resources but only show what actions Terraform will perform to reach the desired state defined in Terraform files.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ terraform plan</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Apply your Terraform configuration. It should take a couple of minutes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ terraform apply</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the resources are created, the output should be similar to following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mancenter_public_ip = 3.92.204.153
+members_public_ip = [
+  "3.82.226.227",
+  "3.87.211.122",
+]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you deployed 2 Hazelcast cluster members and a Hazelcast Management Center. You can monitor the state of your cluster from the following address:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>mancenter_public_ip:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can change the input variables in <code>variables.tf</code> file by updating <code>terraform.tfvars</code>. After your changes the new desired state will be applied by <code>terraform apply</code>. You can use <code>ssh</code> to examine VMs by using the IPs provided in the output of <code>terraform apply</code>. If you cannot find the outputs you can run 'terraform show' to see the current state of your configuration.</p>
+</div>
+<div class="paragraph">
+<p>When you are done with the guide, run the following to delete all the resources created.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ terraform destroy</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide we used Terraform to create Hazelcast cluster on cloud. We defined the state we wanted in <code>main.tf</code> and Terraform applied our desired state on our cloud provider. Then we used Hazelcast Management Center to monitor the state of our cluster. We changed the desired state by updating <code>terraform.tfvars</code> file and Terraform applied our changes when we run <code>terraform apply</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see_also"><a class="anchor" href="#_see_also"></a>See Also</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="../kubernetes-embedded/" class="page">Embedded Hazelcast on Kubernetes</a></p>
+</li>
+<li>
+<p><a href="../istio/" class="page">Hazelcast with Istio Service Mesh</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

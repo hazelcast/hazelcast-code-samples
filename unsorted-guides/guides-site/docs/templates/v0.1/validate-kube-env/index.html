@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/templates/v0.1/validate-kube-env/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../../../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../../../_/img/hazelcast-logo-white.png 1x, ../../../_/img/hazelcast-logo-white@2x.png 2x, ../../../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../../../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../../../_/img/external-link.png 1x, ../../../_/img/external-link@2x.png 2x, ../../../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="templates" data-version="v0.1">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/adoc-templates/edit/antora-doc/modules/ROOT/pages/validate-kube-env.adoc>See something wrong? Edit this page.</a></p>
+<div class="sect2">
+<h3 id="_validate_kube_environment"><a class="anchor" href="#_validate_kube_environment"></a>Validate {kube} environment</h3>
+<div class="paragraph">
+<p>Next, validate that you have a healthy {kube} environment by running the following command from the command line.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>$ &gt; kubectl get nodes</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command should return a <code>Ready</code> status for the master node.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p><span class="system"><strong>Windows</strong> | <strong>Mac</strong></span></p>
+</div>
+<div class="paragraph">
+<p>You do not need to do any other step.</p>
+</div>
+<div class="paragraph">
+<p><span class="system"><strong>Linux</strong></span></p>
+</div>
+<div class="paragraph">
+<p>Run the following command to configure the Docker CLI to use Minikube&#8217;s Docker daemon.
+After you run this command, you will be able to interact with Minikube&#8217;s Docker daemon and build new
+images directly to it from your host machine:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>$ &gt; eval $(minikube docker-env)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../../../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

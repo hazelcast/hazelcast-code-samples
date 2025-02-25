@@ -1,0 +1,4 @@
+name: guide-name    # a brief module name. This will be included in the guide url.
+title: Guide Title  # a brief module title. This will not show up on the website.
+version: master
+

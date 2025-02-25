@@ -1,0 +1,8 @@
+user_id,movie_id_ml,rating,user_age,user_gender,user_occupation
+2,9731,4,31,M,writer
+2,100,1,31,M,writer
+2,800,3,31,M,writer
+2,49,2,31,M,writer
+2,302,4,31,M,writer
+2,105,5,31,M,writer
+2,542,3,31,M,writer

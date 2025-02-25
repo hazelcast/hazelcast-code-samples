@@ -1,0 +1,185 @@
+= Hazelcast WAN Replication in Kubernetes
+:templates-url: templates:ROOT:page$/
+:page-layout: tutorial
+:page-product: imdg
+:page-categories: Deployment, Cloud Native
+:page-lang:
+:page-enterprise: true
+:page-est-time: 30 mins
+:framework: Kubernetes
+:description: Synchronize data in two Hazelcast clusters that are hosted in different Kubernetes environments, using WAN Replication.
+
+{description}
+
+== Before you Begin
+
+This tutorial focuses on the WAN Replication feature and assumes that you have some general knowledge about Hazelcast in Kubernetes. Here are some resources:
+
+* https://hazelcast.com/product-features/wan-replication/[Hazelcast WAN Replication]
+* https://docs.hazelcast.com/hazelcast/latest/kubernetes/deploying-in-kubernetes[Hazelcast Kubernetes Doc]
+* xref:kubernetes.adoc[]
+* xref:kubernetes-embedded.adoc[]
+
+The tutorial also assumes that you have two running Kubernetes clusters, and the `kubectl` tool installed. For all the commands the term _receiver_ means that `kubectl` uses the context of the receiver cluster, and the term _publisher_ means that `kubectl` uses the context of the publisher cluster.
+
+[NOTE]
+====
+The code samples present WAN Replication via LoadBalancer, which may result in the communication over only one of the target members. If you need higher performance, see xref:kubernetes-external-client.adoc[External Smart Client] and use such a configuration in the WAN Replication part.
+====
+
+== 1. Create Receiver Cluster
+
+Hazelcast uses Kubernetes API for the member discovery and it therefore requires granting view permission to certain resources.
+
+[source, shell]
+----
+(Receiver) $ kubectl apply -f https://raw.githubusercontent.com/hazelcast/hazelcast/master/kubernetes-rbac.yaml
+----
+
+Then, create a secret with the Hazelcast Enterprise license key.
+
+[source, shell]
+----
+(Receiver) $ kubectl create secret generic hz-license-key --from-literal key=<hz-license-key>
+----
+
+Now, you can create the cluster with the following command.
+
+[source, shell]
+----
+(Receiver) $ kubectl apply -f receiver/statefulset.yaml
+----
+
+[NOTE]
+====
+If you use Minikube, you need to execute minikube tunnel now in order to get LoadBalancer External IPs assigned.
+====
+
+Check that the cluster works correctly and note its External Load Balancer IP.
+
+[source, shell]
+----
+(Receiver) $ kubectl get all
+NAME              READY   STATUS    RESTARTS   AGE
+pod/hazelcast-0   1/1     Running   0          2m21s
+pod/hazelcast-1   1/1     Running   0          2m11s
+pod/hazelcast-2   1/1     Running   0          2m1s
+
+NAME                 TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)          AGE
+service/hazelcast    LoadBalancer   10.171.245.205   35.240.109.13   5701:31092/TCP   2m22s
+service/kubernetes   ClusterIP      10.171.240.1     <none>          443/TCP          38m
+
+NAME                         READY   AGE
+statefulset.apps/hazelcast   3/3     2m22s
+----
+
+The external IP of the Hazelcast cluster is: *35.240.109.13*.
+
+== 2. Create Publisher Cluster
+
+Again, we need to grant Kubernetes API resource permissions.
+
+[source, shell]
+----
+(Publisher) $ kubectl apply -f https://raw.githubusercontent.com/hazelcast/hazelcast/master/kubernetes-rbac.yaml
+----
+
+Then, update the WAN Replication configuration in publisher/hazelcast.yaml with the external IP of the Receiver cluster.
+
+[source, yaml]
+----
+wan-replication:
+  my-wan-replication:
+    batch-publisher:
+      my-publisher:
+        cluster-name: dev
+        target-endpoints: 35.240.109.13
+----
+
+Create ConfigMap with the Hazelcast configuration.
+
+[source, shell]
+----
+(Publisher) $ kubectl create configmap hazelcast-configuration --from-file=publisher/hazelcast.yaml
+----
+
+Again, we need to create a secret with the Hazelcast Enterprise license key.
+
+[source, shell]
+----
+(Publisher) $ kubectl create secret generic hz-license-key --from-literal key=<hz-license-key>
+----
+
+Finally, we can start the publisher Hazelcast cluster.
+
+[source, shell]
+----
+(Publisher) $ kubectl apply -f publisher/statefulset.yaml
+----
+
+Your two Hazelcast clusters are set up with the WAN Replication. Now, we can check if everything works correctly.
+
+== 3. Verify WAN Replication
+
+Insert data into the publisher Hazelcast cluster
+
+NOTE: Before using CLC, it should be installed in your system. Check the installation instructions for CLC: xref:clc:ROOT:install-clc.adoc[].
+
+Run the following command for adding the publisher cluster config to the CLC.
+
+[source, bash]
+----
+clc config add hz-publisher cluster.name=dev cluster.address=<PUBLISHER-CLUSTER-EXTERNAL-IP>
+----
+
+Run the following command for inserting data into the map called `rep`
+
+[source, bash]
+----
+for i in {1..10};
+do
+   clc -c hz-publisher map set --name rep key-$i value-$i;
+done
+----
+
+Check that the data was replicated to the receiver Hazelcast cluster.
+
+Run the following command for adding the receiver cluster config to the CLC.
+
+[source, bash]
+----
+clc config add hz-receiver cluster.name=dev cluster.address=<RECEIVER-CLUSTER-EXTERNAL-IP>
+----
+
+Run the following command for checking the corresponding map's size.
+
+[source, bash]
+----
+clc -c hz-receiver map size --name rep
+----
+
+== 4. Clean up
+
+To delete all created resources, execute the following commands.
+
+(Receiver)
+[source, shell]
+----
+kubectl delete -f https://raw.githubusercontent.com/hazelcast/hazelcast/master/kubernetes-rbac.yaml
+kubectl delete secret hz-license-key
+kubectl delete -f receiver/statefulset.yaml
+----
+
+(Publisher)
+[source, shell]
+----
+kubectl delete -f https://raw.githubusercontent.com/hazelcast/hazelcast/master/kubernetes-rbac.yaml
+kubectl delete secret hz-license-key
+kubectl delete configmap hazelcast-configuration
+kubectl delete -f publisher/statefulset.yaml
+----
+
+== Summary
+
+In this tutorial, you have seen how to use Hazelcast WAN replication features that can be used to keep multiple Hazelcast clusters in sync. WAN replication can be very useful for https://hazelcast.com/resources/multi-cloud-deployments-run-hazelcast-anywhere-and-everywhere/[Multi-Cloud Deployments].
+

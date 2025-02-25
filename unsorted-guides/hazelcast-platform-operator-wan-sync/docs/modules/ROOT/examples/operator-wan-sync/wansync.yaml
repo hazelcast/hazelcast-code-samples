@@ -1,0 +1,6 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: WanSync
+metadata:
+  name: wan-sync
+spec:
+  wanReplicationResourceName: wan-replication

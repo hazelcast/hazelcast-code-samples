@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Spring Session Hazelcast</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/spring-session-hazelcast/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../_/img/hazelcast-logo-white.png 1x, ../_/img/hazelcast-logo-white@2x.png 2x, ../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../_/img/external-link.png 1x, ../_/img/external-link@2x.png 2x, ../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="spring-session-hazelcast" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<h1 class="page">Spring Session Hazelcast</h1>
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/spring-session-hazelcast/edit/master/doc/modules/ROOT/pages/index.adoc>See something wrong? Edit this page.</a></p>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide will get you started to use Spring Session Hazelcast for session replication.</p>
+</div>
+<div class="paragraph">
+<p>You can see the whole project <a href="https://github.com/hazelcast-guides/spring-session-hazelcast">here.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_youll_learn"><a class="anchor" href="#_what_youll_learn"></a>What You’ll Learn</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide, you will deploy two Spring Boot applications that use Hazelcast as HTTP session store and hence share sessions among each other.</p>
+</div>
+<div class="paragraph">
+<p>Spring Session manages users' session information and supports clustered sessions rather than an application
+container-specific solution only. That is, more than one application instance can use the same store for user
+sessions. You can find more details on
+<a href="https://docs.spring.io/spring-session/docs/current/reference/html5/#introduction">Spring Session Documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>~10 minutes</p>
+</li>
+<li>
+<p>JDK 1.8+</p>
+</li>
+<li>
+<p>Apache Maven 3.2+</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_enabling_hazelcasthttpsession"><a class="anchor" href="#_enabling_hazelcasthttpsession"></a>Enabling HazelcastHttpSession</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before using Hazelcast session repository, let&#8217;s add the required dependencies:</p>
+</div>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.hazelcast&lt;/groupId&gt;
+    &lt;artifactId&gt;hazelcast&lt;/artifactId&gt;
+    &lt;version&gt;${hazelcast.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.session&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-session-core&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.session&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-session-hazelcast&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now configure the app to use Hazelcast as HTTP session store:</p>
+</div>
+<div class="listingblock">
+<div class="title">SessionConfiguration.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Configuration
+@EnableHazelcastHttpSession
+class SessionConfiguration {
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you may extend <code>HazelcastHttpSessionConfiguration</code> to have more advanced configurations
+rather than using annotation based configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Configuration
+class SessionConfiguration extends HazelcastHttpSessionConfiguration {
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_hazelcast_instance_bean"><a class="anchor" href="#_creating_hazelcast_instance_bean"></a>Creating Hazelcast Instance Bean</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After enabling Hazelcast HTTP Session, you need to provide a Hazelcast instance to be used by
+the session repository. This instance can be either a Hazelcast client or an embedded Hazelcast instance.
+You can see the details of client and embedded modes <a href="https://docs.hazelcast.org/docs/latest/manual/html-single/#hazelcast-topology">here</a> on the documentation.</p>
+</div>
+<div class="paragraph">
+<p>Notice some <code>Hazelcast4</code> prefixes in the class names. If you use an older Hazelcast version (3.x), you
+need to drop these <code>"4"</code> s. For instance, use <code>HazelcastIndexedSessionRepository</code> instead of
+<code>Hazelcast4IndexedSessionRepository</code>:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_embedded"></a>Embedded</p>
+</li>
+<li>
+<p><a id="tabset1_client"></a>Client</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_embedded">
+<div class="listingblock">
+<div class="title">SessionConfiguration.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@SpringSessionHazelcastInstance
+public HazelcastInstance hazelcastInstance() {
+    Config config = new Config();
+    config.setClusterName("spring-session-cluster");
+
+    // Add this attribute to be able to query sessions by their PRINCIPAL_NAME_ATTRIBUTE's
+    AttributeConfig attributeConfig = new AttributeConfig()
+            .setName(Hazelcast4IndexedSessionRepository.PRINCIPAL_NAME_ATTRIBUTE)
+            .setExtractorClassName(Hazelcast4PrincipalNameExtractor.class.getName());
+
+    // Configure the sessions map
+    config.getMapConfig(SESSIONS_MAP_NAME)
+            .addAttributeConfig(attributeConfig).addIndexConfig(
+            new IndexConfig(IndexType.HASH, Hazelcast4IndexedSessionRepository.PRINCIPAL_NAME_ATTRIBUTE));
+
+    // Use custom serializer to de/serialize sessions faster. This is optional.
+    SerializerConfig serializerConfig = new SerializerConfig();
+    serializerConfig.setImplementation(new HazelcastSessionSerializer()).setTypeClass(MapSession.class);
+    config.getSerializationConfig().addSerializerConfig(serializerConfig);
+
+    return Hazelcast.newHazelcastInstance(config);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_client">
+<div class="listingblock">
+<div class="title">SessionConfiguration.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@SpringSessionHazelcastInstance
+public HazelcastInstance hazelcastInstance() {
+    ClientConfig clientConfig = new ClientConfig();
+
+    // Configure cluster member addresses to be connected.
+    clientConfig.getNetworkConfig().addAddress("127.0.0.1:5701");
+
+    // If spring-session packages do not present in Hazelcast member's classpath,
+    // these classes need to be deployed over the client. This is required since
+    // Hazelcast updates sessions via entry processors.
+    clientConfig.getUserCodeDeploymentConfig().setEnabled(true).addClass(Session.class)
+            .addClass(MapSession.class).addClass(Hazelcast4SessionUpdateEntryProcessor.class);
+
+    return HazelcastClient.newHazelcastClient(clientConfig);
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You need to have a running Hazelcast cluster before starting a client. Also, to use all
+session repository functionalities (e.g. findByPrincipalName), Hazelcast members in a cluster
+must have the map configuration shown in the <code>Embedded</code> tab before they start. See the next
+section for starting a Hazelcast cluster.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You need to enable user code deployment in member configurations as well:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;user-code-deployment enabled="true"&gt;
+    &lt;class-cache-mode&gt;ETERNAL&lt;/class-cache-mode&gt;
+    &lt;provider-mode&gt;LOCAL_AND_CACHED_CLASSES&lt;/provider-mode&gt;
+&lt;/user-code-deployment&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_starting_hazelcast_cluster"><a class="anchor" href="#_starting_hazelcast_cluster"></a>Starting Hazelcast Cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you use Hazelcast client, you need to have a running cluster first. You can start Hazelcast members with one
+of the following methods:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_hazelcast-cloud"></a>Hazelcast Cloud</p>
+</li>
+<li>
+<p><a id="tabset2_docker-image"></a>Docker Image</p>
+</li>
+<li>
+<p><a id="tabset2_hazelcast-cli"></a>Hazelcast CLI</p>
+</li>
+<li>
+<p><a id="tabset2_download-packages"></a>Download Packages</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_hazelcast-cloud">
+<div class="paragraph">
+<p>You can easily create a Hazelcast cluster on <a href="https://cloud.hazelcast.com">Hazelcast Cloud</a> with just a few clicks. See <a href="https://docs.cloud.hazelcast.com/docs/getting-started">Getting Started</a> documentation for details.</p>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_docker-image">
+<div class="paragraph">
+<p>You can start members inside Docker containers. See the <a href="https://github.com/hazelcast/hazelcast-docker">documentation</a> for details.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ docker run hazelcast/hazelcast:$HAZELCAST_VERSION</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_hazelcast-cli">
+<div class="paragraph">
+<p>You can start members via Hazelcast CLI. See the <a href="https://github.com/hazelcast/hazelcast-command-line">documentation</a> for the installation instructions and details.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ hz start</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_download-packages">
+<div class="paragraph">
+<p>You can start members via <code>start</code> script in <a href="https://hazelcast.org/imdg/download">IMDG bundle</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sh bin/start.sh</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can find other ways of starting Hazelcast members and forming a cluster
+<a href="https://docs.hazelcast.org/docs/latest/manual/html-single/#installing-hazelcast-imdg">here</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_an_existing_instance"><a class="anchor" href="#_using_an_existing_instance"></a>Using an Existing Instance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s say you already have a Hazelcast instance created elsewhere in your application. You can configure Spring
+Session to use that instance instead of creating a new one:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_embedded"></a>Embedded</p>
+</li>
+<li>
+<p><a id="tabset3_client"></a>Client</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_embedded">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@SpringSessionHazelcastInstance
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.getHazelcastInstanceByName("existing-instance-name");
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_client">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@SpringSessionHazelcastInstance
+public HazelcastInstance hazelcastInstance() {
+    return HazelcastClient.getHazelcastClientByName("existing-client-name");
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_customizing_session_repository"><a class="anchor" href="#_customizing_session_repository"></a>Customizing Session Repository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now that you have provided a Hazelcast instance, let&#8217;s configure the session repository further.
+Note that these configurations are optional and they will fall back to the defaults when not provided:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_annotation"></a>Annotation</p>
+</li>
+<li>
+<p><a id="tabset4_config-extension"></a>Config Extension</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_annotation">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Configuration
+@EnableHazelcastHttpSession
+class SessionConfiguration {
+
+    @Bean
+    public SessionRepositoryCustomizer&lt;Hazelcast4IndexedSessionRepository&gt; customize() {
+        return (sessionRepository) -&gt; {
+            sessionRepository.setFlushMode(FlushMode.IMMEDIATE);
+            sessionRepository.setSaveMode(SaveMode.ALWAYS);
+            sessionRepository.setSessionMapName(SESSIONS_MAP_NAME);
+            sessionRepository.setDefaultMaxInactiveInterval(900);
+        };
+    }
+
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_config-extension">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Configuration
+class SessionConfiguration extends HazelcastHttpSessionConfiguration {
+
+    SessionConfiguration() {
+        setFlushMode(FlushMode.IMMEDIATE);
+        setSaveMode(SaveMode.ALWAYS);
+        setSessionMapName(SESSIONS_MAP_NAME);
+        setMaxInactiveIntervalInSeconds(900);
+    }
+
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_interactions_with_user_sessions"><a class="anchor" href="#_interactions_with_user_sessions"></a>Interactions with User Sessions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once you completed the configurations, you can reach to the session repository by autowiring it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Autowired
+Hazelcast4IndexedSessionRepository sessionRepository;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Although you do not need to reach this repository explicitly to store or load sessions, some of the methods might be
+needed such as <code>findByIndexNameAndIndexValue</code> or <code>findByPrincipalName</code>. Other than these, the following snippet will
+load and store the sessions for you:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@GetMapping("/check")
+public String check(HttpServletRequest request) {
+    HttpSession session = request.getSession(false);
+    if (session == null) {
+        return "No session found.";
+    } else {
+        session.setAttribute("attr1", 1);
+        session.setMaxInactiveInterval(300);
+        return "Session found: " + session.getId();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And we are ready to test Hazelcast session store now!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_endpoints"><a class="anchor" href="#_creating_endpoints"></a>Creating Endpoints</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To test our session store behavior, create a few endpoints.</p>
+</div>
+<div class="paragraph">
+<p>In <code>SessionController.java</code> you can find 3 of them all of which are <code>GET</code> mappings for simplicity:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/create</code>: If there is no session associated with the request, creates a new one with the principal attribute sent as the request parameter.</p>
+</li>
+<li>
+<p><code>/info</code>: Gives the session details if the request has a session.</p>
+</li>
+<li>
+<p><code>/list</code>: Lists all the sessions with the same principalName of the request&#8217;s session.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_starting_applications"><a class="anchor" href="#_starting_applications"></a>Starting applications</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s now start two application instances to verify that both use the same session store:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">SERVER_PORT=8080 mvn spring-boot:run
+SERVER_PORT=8081 mvn spring-boot:run</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing_the_applications"><a class="anchor" href="#_testing_the_applications"></a>Testing the Applications</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Create a new session on the port 8080:</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ss1.png" alt="ss1">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>See session info on the port 8081:</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ss2.png" alt="ss2">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Now create another session with the same principal. But be aware that you need to use a different browser
+or use the private mode of your browser to use separate cookies:</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ss3.png" alt="ss3">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Let&#8217;s list all the sessions with the principal <code>hazelcast</code>. You can imagine this scenario - for example, finding
+all the active sessions of a user:</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ss4.png" alt="ss4">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_whats_more"><a class="anchor" href="#_whats_more"></a>What&#8217;s more?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can check other session replication guides that serve the same purpose but with different integrations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="../springboot-webfilter-session-replication/" class="page">SpringBoot WebFilter Based Session Replication</a></p>
+</li>
+<li>
+<p><a href="../springboot-tomcat-session-replication/" class="page">SpringBoot Tomcat Session Replication</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

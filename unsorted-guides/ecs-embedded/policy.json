@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "ec2:DescribeNetworkInterfaces",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "ecs:ListTasks",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "ecs:DescribeTasks",
+      "Resource": "*"
+    }
+  ]
+}

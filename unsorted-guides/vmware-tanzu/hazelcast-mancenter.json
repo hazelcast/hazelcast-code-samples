@@ -1,0 +1,12 @@
+{
+  "hazelcast-pcf": {
+    "instanceCount": 3,
+    "management-center": {
+      "enabled": true,
+      "appName": "mancenter"
+    }
+  },
+  "hazelcast": {
+    "license-key": "PUT_LICENSE_KEY_HERE"
+  }
+}

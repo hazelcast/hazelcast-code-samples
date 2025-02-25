@@ -1,0 +1,186 @@
+= Work with the Handlebars Templates
+// Settings:
+:idprefix:
+:idseparator: -
+
+Antora combines the Handlebars templates with the converted AsciiDoc content and other UI model data to make the pages in the site.
+These "`logic-less`" templates are mostly HTML with some special mustache tags sprinkled in where content should be inserted.
+
+== What do the templates do?
+
+The layout templates, which are stored in [.path]_src/layouts/_, provide the main page structure.
+The partial templates, in [.path]_src/partials/_, fill in different regions of a page, such as the navigation and footer.
+
+The templates read from a model that's populated by Antora.
+The model can be accessed by enclosing path expressions in mustaches, which are `{{` and `}}` or `{{{` and `}}}` (e.g., `+{{{page.title}}}+`).
+The double mustaches escape the value for HTML, whereas triple mustaches insert the value as is.
+
+WARNING: If the mustaches are preceded by a backslash (e.g, `\{{`), the expression will be disabled.
+This often comes up when constructing URLs.
+To avoid this problem, you should use forward slashes in URLs instead of backslashes.
+
+When `{{` is immediately followed by `>`, that invokes a partial (from the partials directory) and inserts the result (e.g., `+{{> head}}+`.
+In other words, that's not a model reference like the other mustache expressions.
+
+=== Template variables
+
+CAUTION: This model is not final.
+Variable names and purposes may change.
+
+Here's an overview of the available UI model:
+
+.Variables available to the Handlebars templates (top-level variables in bold)
+[#template-variables-table,cols="1m,2"]
+|===
+| Name | Description
+
+s| [[site]]site
+| Information about the site.
+
+| site.url
+| The base URL of the site, if specified in the playbook.
+
+| site.path
+| The pathname (i.e., subpath) of the site.url under which the site is hosted (e.g., /docs).
+This value is empty if site.url is not defined, has no path segment, or matches /.
+Can be removed from the site.url value using a helper (e.g., `deleteSuffix site.url site.path`)
+(since Antora 2.1)
+
+| site.title
+| The title of the site.
+
+| site.components
+| A map of all the components in the site, keyed by component name.
+Properties of each component include name, title, url, latest, and versions.
+Properties of each version include name (since 2.3), version, displayVersion, prerelease (if set), title, url, asciidoc (since 2.3), and navigation.
+The navigation property on each version provides access to the navigation menu for that component version.
+
+| site.ui
+| Information about the site UI.
+
+| site.ui.defaultLayout
+| The default page layout used for this site.
+
+| site.ui.url
+| The absolute base URL of the UI.
+
+s| [[page]]page
+| Information about the current page.
+
+| page.title
+| The page title in HTML format (often used as the primary heading).
+This value may include inline HTML elements and XML character references.
+
+| page.contents
+| The main article content in HTML format.
+Sourced from AsciiDoc and converted to HTML by the Asciidoctor processor.
+
+| page.attributes
+| Any AsciiDoc document attribute prefixed with `page-`.
+The `page-` prefix is dropped from the name used in this model.
+For example, the value of the document attribute named `page-support-phone` can be accessed via the UI model using `page.attributes.support-phone`.
+Page attributes can be defined per page in the AsciiDoc document header (e.g., `:page-support-phone: +1 212-555-1234`) or globally in the playbook under the key `asciidoc.attributes`.
+The `page-` prefix is used to isolate page-related attributes from the numerous other document attributes in AsciiDoc.
+
+| page.description
+| The text of the description attribute in the AsciiDoc header, if specified.
+
+| page.keywords
+| A comma-separated list of keywords defined in the AsciiDoc header, if specified.
+
+| page.component
+| Information about the component for the current page.
+Properties include name, title, url, latest, and versions.
+
+| page.componentVersion
+| Information about the component version for the current page.
+Properties include name (since 2.3), version, displayVersion, prerelease (if set), title, url, and asciidoc (since 2.3).
+
+| page.module
+| The name of the module for the current page.
+
+| page.version
+| The name of the version for the current page.
+
+| page.displayVersion
+| The name of the display version for the current page.
+
+| page.versions
+| All versions of the current page, including the current page.
+Each entry has the properties url, string, and missing.
+
+| page.breadcrumbs
+| An array of breadcrumb items that represent the current selection in the navigation tree.
+Includes text-only and external items.
+
+| page.navigation
+| The hierarchical navigation menu for the component version of the current page.
+Each navigation item contains the property `content` as well as the optional properties `url` and (child) `items`.
+
+| page.url
+| The URL for the current page.
+This value is a root-relative path.
+It's often used as the base URL to generate relative URLs from this page.
+
+| page.canonicalUrl
+| The canonical URL for the current page.
+The canonicalUrl is only set if site.url is set.
+If there are multiple versions of the component, the canonical URL is the qualified URL of the most recent version of the page (excluding any prerelease versions).
+If there's only a single version of the component, the canonical URL is the qualified URL of the current page.
+
+| page.editUrl
+| The URL to edit the current page (typically a web-based editor on the git host).
+The only hosts supported right now are github.com, gitlab.com, pagure.io, and bitbucket.org.
+
+| page.origin.private
+| This value will be true if the repository requires authentication or the repository URL embeds credentials.
+In the default UI, if this value is `true`, the "Edit this Page" link is disabled.
+A quick way to force this property to be `true` (even if the repository is public) is to begin the content source URL in the playbook with empty credentials, as in `\https://@`.
+Then, the "Edit the Page" link will not appear.
+
+| page.home
+| Indicates whether the current page is the home page of the site.
+
+| page.layout
+| The page layout for the current page.
+
+| page.next
+| The next reachable page in the navigation tree (skips past text-only and external items).
+
+| page.previous
+| The previous reachable page in the navigation tree (skips past text-only and external items).
+
+| page.parent
+| The parent page in the navigation tree (skips past text-only and external items).
+
+s| env
+| The map of environment variables (sourced from `process.env`).
+
+s| siteRootPath
+| The relative path to the root of the published site.
+
+s| uiRootPath
+| The relative path to the root directory of the UI.
+
+s| antoraVersion
+| The version of Antora used to build the site (specifically the version of the @antora/page-composer package).
+|===
+
+This model is likely to grow over time.
+
+== Modify a template
+
+Let's consider the case when you want to add a new meta tag inside the HTML head.
+
+First, make sure you have set up the project and created a development branch.
+Next, open the file [.path]_templates/partials/head.hbs_ and add your tag.
+
+[source,html]
+----
+<meta class="swiftype" name="title" data-type="string" content="{{page.title}}">
+----
+
+Each template file has access to the template model, which exposes information about the current page through variable names.
+The variables currently available are listed in <<template-variables-table>>.
+
+Save the file, commit it to git, push the branch, and allow the approval workflow to play out.

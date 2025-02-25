@@ -1,0 +1,34 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hazelcast.app</groupId>
+	<artifactId>patient-monitoring</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Patient Monitoring</name>
+	<packaging>pom</packaging>
+	<properties>
+		<confluent.version>5.5.3</confluent.version>
+		<exec.maven.plugin.version>1.6.0</exec.maven.plugin.version>
+		<hazelcast.version>5.2.0</hazelcast.version>
+		<kafka.version>3.3.1</kafka.version>
+		<junit.jupiter.version>5.9.0</junit.jupiter.version>
+		<jython.version>2.7.3</jython.version>
+		<log4j2.version>2.19.0</log4j2.version>
+		<maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<maven.jar.plugin.version>3.1.0</maven.jar.plugin.version>
+		<maven.shade.plugin.version>3.1.1</maven.shade.plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<scala.version>2.13</scala.version>
+	</properties>
+	<modules>
+		<module>app</module>
+		<module>common</module>
+		<module>pipeline</module>
+		<module>rulesengine</module>
+		<module>sink</module>
+		<module>source</module>
+	</modules>
+</project>

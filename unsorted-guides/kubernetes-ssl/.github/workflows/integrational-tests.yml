@@ -1,0 +1,79 @@
+name: Integrational tests
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+
+jobs:
+  run-tests:
+    name: Run Intergrational tests using Kind
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment-type: [ 'helm', 'kubectl' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: "v0.11.1"
+
+      - name: Create Secrets
+        run: |-
+          kubectl create secret generic keystore --from-file=server/keystore --from-file=server/truststore         
+          kubectl create secret generic hz-license-key --from-literal key=${{ secrets.LICENSE }}
+
+      - name: Deploy Hazelcast Cluster (Helm)
+        if: startsWith(matrix.deployment-type, 'helm')
+        run: |-
+          helm repo add hazelcast https://hazelcast-charts.s3.amazonaws.com/
+          helm repo update
+          kubectl create configmap hazelcast-configuration --from-file=server/helm/hazelcast.yaml
+          helm install hz -f server/helm/values.yaml hazelcast/hazelcast-enterprise
+
+      - name: Deploy Hazelcast Cluster (Kubectl)
+        if: startsWith(matrix.deployment-type, 'kubectl')
+        run: |-
+          kubectl apply -f https://raw.githubusercontent.com/hazelcast/hazelcast/master/kubernetes-rbac.yaml
+          kubectl create configmap hazelcast-configuration --from-file=server/kubectl/hazelcast.yaml
+          kubectl apply -f server/kubectl/deployment.yaml
+
+      - name: Wait for Hazelcast Cluster to start
+        run: |-
+          kubectl wait --for=condition=ready pod/hz-hazelcast-enterprise-0 --timeout=300s
+          kubectl wait --for=condition=ready pod/hz-hazelcast-enterprise-1 --timeout=300s
+          kubectl wait --for=condition=ready pod/hz-hazelcast-enterprise-2 --timeout=300s
+          sleep 10
+
+      - name: Check for SSL enabled
+        id: ssl_check
+        run: |-
+          sslEnabledLog=$(kubectl logs pod/hz-hazelcast-enterprise-0 | grep "BasicSSLContextFactory")
+          echo "::set-output name=ssl_log::$sslEnabledLog"
+
+      - name: Deploy client
+        id: client
+        run: |-
+          kubectl apply -f client/deployment.yaml
+          podName=$(kubectl get pods --selector='app=hazelcast-client' --output=jsonpath={.items..metadata.name})
+          kubectl wait --for=condition=ready pod/$podName --timeout=200s
+          # sleep for 10 seconds so that Spring application is started
+          sleep 10
+          members=$(kubectl logs pod/$podName | grep "Members")
+          echo "::set-output name=members::$members"
+
+      - name: Fail if SSL not enabled
+        if: (!contains(steps.ssl_check.outputs.ssl_log, 'BasicSSLContextFactory'))
+        run: |-
+          echo "SSL not enabled"
+          exit 1
+
+      - name: Faild if Hazelcast cluster is not formed
+        if: (!contains(steps.client.outputs.members, 'Members [3]'))
+        run: |-
+          echo "Hazelcast cluster is not formed"
+          exit 1

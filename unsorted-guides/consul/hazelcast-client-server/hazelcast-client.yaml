@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hazelcast-client
+spec:
+  serviceName: hazelcast-client
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hazelcast-client
+  template:
+    metadata:
+      labels:
+        app: hazelcast-client
+    spec:
+      containers:
+        - name: hazelcast-client
+          image: hazelcastguides/consul-client:1.0
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5701
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-service
+spec:
+  type: ClusterIP
+  selector:
+    app: hazelcast-client
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+

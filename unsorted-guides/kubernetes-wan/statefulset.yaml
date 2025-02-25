@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hazelcast
+spec:
+  replicas: 3
+  serviceName: hazelcast
+  selector:
+    matchLabels:
+      app: hazelcast
+  template:
+    metadata:
+      labels:
+        app: hazelcast
+    spec:
+      containers:
+        - name: hazelcast
+          image: hazelcast/hazelcast-enterprise:4.1
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 5701
+          env:
+          - name: HZ_LICENSE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: hz-license-key
+                key: license
+          - name: JAVA_OPTS
+            value: "-Dhazelcast.config=/data/hazelcast/configuration/hazelcast.yaml"
+          volumeMounts:
+          - name: hazelcast-configuration
+            mountPath: /data/hazelcast/configuration
+      volumes:
+      - name: hazelcast-configuration
+        configMap:
+          name: hazelcast-configuration
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazelcast
+spec:
+  type: LoadBalancer
+  selector:
+    app: hazelcast
+  ports:
+  - name: hazelcast
+    port: 5701

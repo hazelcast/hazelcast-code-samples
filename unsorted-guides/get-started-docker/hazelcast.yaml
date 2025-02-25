@@ -1,0 +1,5 @@
+hazelcast:
+  jet: 
+    enabled: true
+    resource-upload-enabled: true
+

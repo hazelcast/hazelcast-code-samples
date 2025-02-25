@@ -1,0 +1,8 @@
+hazelcast:
+  network:
+    join:
+      kubernetes:
+        enabled: true
+        service-name: hz-hazelcast-enterprise
+    ssl:
+      enabled: true

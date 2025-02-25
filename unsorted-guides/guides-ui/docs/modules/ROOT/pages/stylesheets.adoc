@@ -1,0 +1,32 @@
+= Work with the CSS Stylesheets
+// Settings:
+:idprefix:
+:idseparator: -
+
+The stylesheets are written in CSS.
+These stylesheets utilize CSS variables to keep the CSS DRY and easy to customize.
+
+== Stylesheet organization and processing
+
+Within the default UI project, the stylesheet files are separated into modules to help organize the rules and make them easier to find.
+The UI build combines and minifies these files into a single file named [.path]_site.css_.
+During the build, the CSS is enhanced using PostCSS in much the same way as a CSS preprocessor works, only the modifications are made to the CSS directly.
+The modifications mostly center around injecting vendor prefixes for compatibility or backporting new features to more broadly supported syntax.
+
+== Add a new CSS rule
+
+Let's consider the case when you want to modify the font size of a section title.
+
+First, make sure you have set up the project and created a development branch.
+Next, open the file [.path]_src/css/doc.css_ and modify the rule for the section title.
+
+[source,css]
+----
+.doc h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  margin-top: 2rem
+}
+----
+
+Save the file, commit it to git, push the branch, and allow the approval workflow to play out.

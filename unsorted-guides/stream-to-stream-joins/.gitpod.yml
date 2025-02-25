@@ -1,0 +1,3 @@
+tasks:
+  - name: Welcome
+    before: echo "Use this virtual environment to complete the steps in the tutorial."

@@ -1,0 +1,6 @@
+// {framework} -> The name of the microservices framework
+
+The application is a basic {framework} app having 2 endpoints defined in `CommandController`:
+
+- `/put` is the page where key and values can be put on a Hazelcast distributed map. It takes `key` and `value` as query parameters and returns the entry in JSON format.
+- `/get` is the page where the values in the Hazelcast distributed map can be obtained by keys. It takes `key` as query parameter and returns the found entry in JSON format.

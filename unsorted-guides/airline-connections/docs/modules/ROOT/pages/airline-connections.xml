@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+
+<article lang="en">
+<articleinfo>
+    <title>Airline Connections Demo/Tutorial</title>
+</articleinfo>
+<simpara>This tutorial provides detailed information and instruction for the Airline Connections demo built in to Viridian Trial.</simpara>
+<section id="_context">
+<title>Context</title>
+<simpara>This demo/tutorial creates an application that uses streaming data about flight arrival and departure times, and correlates it with stored data about connecting flights, airport gates, and gate-to-gate travel times to determine whether there&#8217;s enough time to make a particular flight connection.</simpara>
+<simpara><inlinemediaobject>
+  <imageobject>
+  <imagedata fileref="../images/AirlineConnectionIntro.jpg"/>
+  </imageobject>
+  <textobject><phrase>Connections Diagram</phrase></textobject>
+</inlinemediaobject></simpara>
+<simpara>Specifically, you will learn how to
+* Connect to external data sources and sinks
+* Use SQL to search and display streaming data
+* Use SQL import data from an external database
+* Configure late event handling for streaming data
+* Join streaming and stored data to generate continually-updated results</simpara>
+<simpara>When you launch the demo in Viridian, you may see a step-by-step guide appear in conjunction with the demo. This tutorial is designed to supplement that guide, providing additional context and detail as well as links to reference materials.</simpara>
+</section>
+<section id="_before_you_begin">
+<title>Before you Begin</title>
+<simpara>Before starting this tutorial, make sure that you meet the following prerequisites:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+You have a running cluster in Viridian Trial
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+You&#8217;ve downloaded and connected the Command Line Client to your cluster
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+For the client, you will need Java 11 or greater
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+(Optional) Java IDE to view client code
+</simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section id="_step_1_review_what_8217_s_already_set_up">
+<title>Step 1. Review What&#8217;s Already Set Up</title>
+<simpara>Begin by selecting the Airline Connections demo from the Viridian dashboard. This launches a pre-set configuration and opens the SQL browser window.</simpara>
+<simpara>The pre-set configuration includes the following elements:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+Connections to a Kafka server and a Postgres database
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mappings for streaming data
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Mappings for IMaps to hold contextual data
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Data imported from Postgres to local IMaps
+</simpara>
+</listitem>
+</itemizedlist>
+<simpara>The best way to build connections to external sources is to use the Connection Wizard. The wizard walks you through the steps of connecting to the external data source, then setting up the mapping so that the external data is available to the Hazelcast SQL engine</simpara>
+<simpara><inlinemediaobject>
+  <imageobject>
+  <imagedata fileref="../images/connectwiz.gif"/>
+  </imageobject>
+  <textobject><phrase>Walkthrough of Connection Wizard</phrase></textobject>
+</inlinemediaobject></simpara>
+<simpara>The SQL code for each element is below.</simpara>
+<simpara>Mappings for streaming data:
+```sql
+CREATE OR REPLACE MAPPING "arrivals"
+--topic name from Kafka
+EXTERNAL NAME "viridiantrial.flights.arrivals" (
+    --fields in topic
+  event_time timestamp with time zone,
+  "day" date,
+  flight varchar,
+  airport varchar,
+  arrival_gate varchar,
+  arrival_time timestamp
+)
+DATA CONNECTION "ViridianTrialKafka"
+OPTIONS (
+    <emphasis>keyFormat</emphasis> = <emphasis>varchar</emphasis>,
+    <emphasis>valueFormat</emphasis> = <emphasis>json-flat</emphasis>
+);
+```
+```sql
+CREATE OR REPLACE MAPPING "departures"
+--topic name in Kafka
+EXTERNAL NAME "viridiantrial.flights.departures" (
+    --fields in topic
+  event_time timestamp with time zone,
+  "day" date,
+  flight varchar,
+  airport varchar,
+  departure_gate varchar,
+  departure_time timestamp
+)
+DATA CONNECTION "ViridianTrialKafka"
+OPTIONS (
+    <emphasis>keyFormat</emphasis> = <emphasis>varchar</emphasis>,
+    <emphasis>valueFormat</emphasis> = <emphasis>json-flat</emphasis>
+);
+```
+Mappings for data in Postgres:
+```sql
+CREATE OR REPLACE MAPPING "connections"
+--name of data store in Postgres
+EXTERNAL NAME "public"."connections" (
+  arriving_flight varchar,
+  departing_flight varchar
+)
+DATA CONNECTION "ViridianTrialPostgres";
+```
+```sql
+CREATE OR REPLACE MAPPING "minimum_connection_times"
+EXTERNAL NAME "public"."minimum_connection_times" (
+  airport varchar,
+  arrival_terminal varchar,
+  departure_terminal varchar,
+  minutes integer
+)
+DATA CONNECTION "ViridianTrialPostgres";
+```
+Local storage for data from Postgres:
+```sql
+CREATE OR REPLACE MAPPING local_mct(
+  airport varchar,
+  arrival_terminal varchar,
+  departure_terminal varchar,
+  minutes integer
+)
+Type IMap
+OPTIONS (
+    <emphasis>keyFormat</emphasis> = <emphasis>varchar</emphasis>,
+  <emphasis>valueFormat</emphasis> = <emphasis>json-flat</emphasis>
+);
+```
+```sql
+CREATE OR REPLACE MAPPING local_connections(
+  arriving_flight varchar,
+  departing_flight varchar
+)
+Type IMap
+OPTIONS (
+    <emphasis>keyFormat</emphasis> = <emphasis>varchar</emphasis>,
+  <emphasis>valueFormat</emphasis> = <emphasis>json-flat</emphasis>
+);
+```
+Import Postgres data into local storage:
+```sql
+--In order to ensure a clean write, we make sure the map is empty
+DELETE FROM local_mct;
+--now we copy all the data from the external store
+INSERT INTO local_mct(<emphasis>key, airport, arrival_terminal, departure_terminal, minutes)
+SELECT airport||arrival_terminal||departure_terminal, airport, arrival_terminal, departure_terminal, minutes
+FROM minimum_connection_times;
+```
+```sql
+DELETE FROM local_connections;
+INSERT INTO local_connections(</emphasis>key, arriving_flight, departing_flight)
+SELECT arriving_flight || departing_flight, arriving_flight, departing_flight FROM "connections";
+```</simpara>
+<note>
+<simpara>Why are we copying the Postgres data into local storage? We are using the data to enrich real-time streaming data. Having the data co-located means there&#8217;s no read delay in accessing the enriching data.</simpara>
+</note>
+<simpara>IMap to store output of JOIN job:
+```sql
+CREATE OR REPLACE MAPPING live_connections(
+  arriving_flight varchar,
+  arrival_gate varchar,
+  arrival_time timestamp,
+  departing_flight varchar,
+  departure_gate varchar,
+  departure_time timestamp,
+  connection_minutes integer,
+  mct integer,
+  connection_status varchar
+)
+Type IMap
+OPTIONS (
+    <emphasis>keyFormat</emphasis> = <emphasis>varchar</emphasis>,
+  <emphasis>valueFormat</emphasis> = <emphasis>json-flat</emphasis>
+);
+```
+== Step 2. Build and Test JOIN
+Now that the storage framework and streaming maps are set up, now we can look at the actual data streams.</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>
+Examine the data in the <literal>arrivals</literal> and <literal>departures</literal> streams.
+</simpara>
+<simpara>```sql
+SELECT * FROM arrivals;
+```</simpara>
+<simpara>```sql
+SELECT * FROM departures;
+```
+. When you are dealing with streaming data, you need to accommodate the possibility that data will arrive late or not at all. You do not want these late or missing events to slow down your jobs. In order to prevent this, you will use an IMPOSE_ORDER statement to define a threshold (lag) for how late events can be before they are ignored.</simpara>
+<simpara>Because you will be using this ordered data in a subsequent JOIN statement, you need to create a view that holds the ordered data. In this demo, both the arrivals and departures data needs to be ordered. The departures data is already done, so run this code to impose order on the arrivals data.</simpara>
+<simpara>```sql
+CREATE OR REPLACE VIEW arrivals_ordered AS
+SELECT * FROM TABLE (
+  IMPOSE_ORDER(
+     TABLE arrivals,
+     DESCRIPTOR(event_time),
+     INTERVAL <emphasis>1</emphasis> HOUR
+  )
+);
+```</simpara>
+</listitem>
+</orderedlist>
+</section>
+<section id="_step_3_command_line_client_setup">
+<title>Step 3. Command Line Client setup</title>
+<simpara>If you have not already set up the Command Line Client (CLC), you need to do so now. If you already have it set up, skip to <link linkend="Submit-Job">Step 4. Submit Job</link>.</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>
+Click on the Dashboard icon on the left of your screen.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Select the CLI icon.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Follow the steps
+</simpara>
+</listitem>
+</orderedlist>
+</section>
+<section id="_step_4_submit_job">
+<title>Step 4. Submit Job</title>
+</section>
+<section id="_step_4_download_and_run_client">
+<title>Step 4. Download and Run Client</title>
+</section>
+<section id="_summary">
+<title>Summary</title>
+</section>
+<section id="_see_also">
+<title>See Also</title>
+</section>
+</article>

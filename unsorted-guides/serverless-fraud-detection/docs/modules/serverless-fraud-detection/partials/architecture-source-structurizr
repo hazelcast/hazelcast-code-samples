@@ -1,0 +1,91 @@
+workspace "Serverless fraud detection application" {
+
+    model {
+        fraudDetection = softwaresystem "Serverless Fraud Detection" "Validates transactions made at airports." {
+            bankingApp = container "Banking Application" "Sends transaction events for validation" "" "App"
+            apiGateway = container "API Gateway" "Exposes the ValidateFn Lambda function to the /validate endpoint"
+            s3Bucket = container "S3 Bucket" "Stores the source of truth for the airport data in the airports.json file"
+            lambdaFunctionValidate = container "ValidateFn" ""
+            lambdaFunctionImport = container "ImportAirportsFn" ""
+            hazelcast = container "Hazelcast Cloud Cluster" "Caches the airport data for fast reads" "" "Hazelcast"
+        }
+
+        # relationships
+        bankingApp -> apiGateway "POST /validate" "" "tag"
+        apiGateway -> lambdaFunctionValidate "Passes the transaction event to the Lambda function for validation" "" "tag"
+        lambdaFunctionValidate -> hazelcast "Reads the airport data from the cache" "" "tag"
+        s3Bucket -> lambdaFunctionImport "Sends a notification of new airport data" "" "tag"
+        lambdaFunctionImport -> hazelcast "Ingests the new airport data into the cluster" "" "tag"
+
+        live = deploymentEnvironment "Live" {
+            deploymentNode "Banking Application" {
+            containerInstance bankingApp
+            }
+
+            deploymentNode "Amazon Web Services" {
+
+                region = deploymentNode "US-West-2" {
+                    tags "Amazon Web Services - Region"
+                    
+                    containerInstance hazelcast
+                    
+                    deploymentNode "API Gateway" "" "" "Amazon Web Services - Amazon API Gateway" {
+                        containerInstance apiGateway
+                    }
+                    
+                    deploymentNode "S3 Bucket" "" "" "Amazon Web Services - Simple Storage Service S3 Standard" {
+                        containerInstance s3Bucket
+                    }
+                    
+                    deploymentNode "ImportAirportsFn" "" "" "Amazon Web Services - Lambda" {
+                        containerInstance lambdaFunctionImport
+                    }
+                    
+                    deploymentNode "ValidateFn" "" "" "Amazon Web Services - Lambda" {
+                        containerInstance lambdaFunctionValidate
+                    }  
+                }
+            }
+        }
+    }
+    views {
+        deployment "fraudDetection" "Live" "AmazonWebServicesDeployment" {
+            include *
+            autolayout lr
+        }
+        styles {
+            element "Element" {
+                shape roundedbox
+                background #ffffff
+            }
+            element "Hazelcast" {
+                fontSize 22
+                background #00e1e1
+            }
+            element "App" {
+                fontSize 22
+                shape MobileDevicePortrait
+            }
+            element "Infrastructure Node" {
+                shape roundedbox
+            }
+            element "Amazon Web Services - Amazon API Gateway" {
+                stroke #d72b6c
+                color #d72b6c
+            }
+            element "Amazon Web Services - Simple Storage Service S3 Standard" {
+                stroke #3f8624
+                color #3f8624
+            }
+            element "Amazon Web Services - Lambda" {
+                stroke #e2730e
+                color #e2730e
+            }
+            relationship "tag" {
+                thickness 2
+                fontSize 30
+            }
+        }
+        themes https://static.structurizr.com/themes/amazon-web-services-2022.04.30/theme.json
+    }
+}

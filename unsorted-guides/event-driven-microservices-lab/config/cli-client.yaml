@@ -1,0 +1,10 @@
+hazelcast-client:
+  cluster-name: dev
+  instance-name: cli
+  network:
+    cluster-members:
+      - hz:5701
+    smart-routing: true
+  connection-strategy:
+    async-start: false
+    reconnect-mode: ON

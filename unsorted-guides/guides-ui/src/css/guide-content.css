@@ -1,0 +1,688 @@
+.guide-content {
+  color: var(--doc-font-color);
+  font-size: var(--doc-font-size);
+  hyphens: auto;
+  line-height: var(--doc-line-height);
+  margin: var(--doc-margin);
+  max-width: var(--doc-max-width);
+  padding: 0 1rem 4rem;
+}
+
+.guide-content .videoblock {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .guide-content {
+    flex: auto;
+    font-size: var(--doc-font-size--desktop);
+    margin: var(--doc-margin--desktop);
+    /* max-width: var(--doc-max-width--desktop); */
+    max-width: 65%;
+    min-width: 0;
+    margin-bottom: 5rem;
+  }
+}
+
+@media screen and (min-width: 2048px) {
+  .guide-content {
+    max-width: 1330px;
+  }
+}
+
+.guide-content h1 {
+  color: var(--guide-main-header-color);
+  font-weight: var(--guide-main-header-font-weight);
+  hyphens: none;
+  line-height: 1.3;
+  margin: 1rem 0 0;
+}
+
+.guide-content h2 {
+  color: var(--guide-section-header-color);
+  font-weight: normal;
+  font-size: 1.4rem;
+  hyphens: none;
+  line-height: 1.3;
+  margin: 1rem 0 0;
+}
+
+.guide-content h3,
+.guide-content h4,
+.guide-content h5,
+.guide-content h6 {
+  color: var(--heading-font-color);
+  font-weight: var(--heading-font-weight);
+  hyphens: none;
+  line-height: 1.3;
+  margin: 1rem 0 0;
+}
+
+.guide-content > h1.page:first-child {
+  font-size: calc(36 / var(--rem-base) * 0.9rem);
+  margin: 1.5rem 0;
+}
+
+.guide-content .edit-page {
+  margin-bottom: 2rem;
+}
+
+.guide-content > p.edit-page {
+  font-style: italic;
+  font-size: calc(14 / var(--rem-base) * 1rem);
+  color: #8e8e8e;
+}
+
+.guide-content .edit-page a {
+  color: #8e8e8e;
+}
+
+.guide-content .edit-page a:hover {
+  color: #595959;
+}
+
+@media screen and (min-width: 769px) {
+  .guide-content > h1.page:first-child {
+    margin-top: 2.5rem;
+  }
+}
+
+.guide-content h1.sect0 {
+  background: var(--abstract-background);
+  font-size: 1.8em;
+  margin: 1.5rem -1rem 0;
+  padding: 0.5rem 1rem;
+}
+
+.guide-content h2:not(.discrete) {
+  border-bottom: 1px solid var(--section-divider-color);
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding: 0.4rem 1rem 0.1rem;
+}
+
+.guide-content h3:not(.discrete) {
+  font-weight: var(--alt-heading-font-weight);
+}
+
+.guide-content h1 .anchor,
+.guide-content h2 .anchor,
+.guide-content h3 .anchor,
+.guide-content h4 .anchor,
+.guide-content h5 .anchor,
+.guide-content h6 .anchor {
+  position: absolute;
+  text-decoration: none;
+  width: 1.75ex;
+  margin-left: -1.5ex;
+  visibility: hidden;
+  font-size: 0.8em;
+  font-weight: normal;
+  padding-top: 0.05em;
+}
+
+.guide-content h1 .anchor::before,
+.guide-content h2 .anchor::before,
+.guide-content h3 .anchor::before,
+.guide-content h4 .anchor::before,
+.guide-content h5 .anchor::before,
+.guide-content h6 .anchor::before {
+  content: "\00a7";
+}
+
+.guide-content h1:hover .anchor,
+.guide-content h2:hover .anchor,
+.guide-content h3:hover .anchor,
+.guide-content h4:hover .anchor,
+.guide-content h5:hover .anchor,
+.guide-content h6:hover .anchor {
+  visibility: visible;
+}
+
+.guide-content p {
+  margin: 0;
+}
+
+.guide-content .tableblock p {
+  font-size: inherit;
+}
+
+.guide-content a {
+  color: var(--link-font-color);
+}
+
+.guide-content a:hover {
+  color: var(--link_hover-font-color);
+}
+
+.guide-content a.unresolved {
+  color: var(--link_unresolved-font-color);
+}
+
+.guide-content i.fa {
+  font-style: normal;
+}
+
+.guide-content p code,
+.guide-content thead code {
+  color: var(--code-font-color);
+  background: #eee;
+  border-radius: 0.25em;
+  font-size: 0.95em;
+  padding: 0.125em 0.25em;
+}
+
+.guide-content pre {
+  font-size: calc(16 / var(--rem-base) * 1rem);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.guide-content blockquote {
+  margin: 0;
+}
+
+.guide-content .right {
+  float: right;
+}
+
+.guide-content .left {
+  float: left;
+}
+
+.guide-content .underline {
+  text-decoration: underline;
+}
+
+.guide-content .line-through {
+  text-decoration: line-through;
+}
+
+.guide-content .paragraph,
+.guide-content .dlist,
+.guide-content .olist,
+.guide-content .ulist,
+.guide-content .exampleblock,
+.guide-content .imageblock,
+.guide-content .listingblock,
+.guide-content .literalblock,
+.guide-content .sidebarblock,
+.guide-content .verseblock,
+.guide-content .quoteblock,
+.guide-content .partintro {
+  margin: 1rem 0 0;
+}
+
+.guide-content table.tableblock {
+  border-collapse: collapse;
+  font-size: calc(15 / var(--rem-base) * 1rem);
+  margin: 2rem 0;
+  /* enable table-layout: fixed if you want the table width to be enforced strictly */
+  /* alternative is to wrap table in div and set overflow-x: auto on the wrapper */
+  /* table-layout: fixed; */
+}
+
+.guide-content table.stretch {
+  width: 100%;
+}
+
+.guide-content table.tableblock thead th {
+  border-bottom: 2.5px solid var(--table-border-color);
+  padding: 0.5rem;
+}
+
+.guide-content table.tableblock td,
+.guide-content table.tableblock > :not(thead) th {
+  border-top: 1px solid var(--table-border-color);
+  border-bottom: 1px solid var(--table-border-color);
+  padding: 0.5rem;
+}
+
+.guide-content .halign-left {
+  text-align: left;
+}
+
+.guide-content .halign-right {
+  text-align: right;
+}
+
+.guide-content .halign-center {
+  text-align: center;
+}
+
+.guide-content .valign-top {
+  vertical-align: top;
+}
+
+.guide-content .valign-bottom {
+  vertical-align: bottom;
+}
+
+.guide-content .valign-middle {
+  vertical-align: middle;
+}
+
+.guide-content .admonitionblock {
+  margin: 1.4rem 0 0;
+}
+
+.guide-content .admonitionblock p,
+.guide-content .admonitionblock td.content {
+  font-size: calc(16 / var(--rem-base) * 1rem);
+}
+
+.guide-content .admonitionblock td.content > :first-child {
+  margin: 0;
+}
+
+.guide-content .admonitionblock pre {
+  font-size: calc(15 / var(--rem-base) * 1rem);
+}
+
+.guide-content .admonitionblock > table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  position: relative;
+  width: 100%;
+}
+
+.guide-content .admonitionblock td.content {
+  padding: 1rem 1rem 0.75rem;
+  background: var(--admonition-background);
+  width: 100%;
+}
+
+.guide-content .admonitionblock .icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: calc(15 / var(--rem-base) * 1rem);
+  padding: 0 0.5rem;
+  height: 1.25rem;
+  line-height: 1;
+  font-weight: var(--admonition-label-font-weight);
+  text-transform: uppercase;
+  border-radius: 0.45rem;
+  transform: translate(-0.5rem, -50%);
+}
+
+.guide-content .admonitionblock.caution .icon {
+  background-color: var(--caution-color);
+  color: var(--caution-on-color);
+}
+
+.guide-content .admonitionblock.important .icon {
+  background-color: var(--important-color);
+  color: var(--important-on-color);
+}
+
+.guide-content .admonitionblock.note .icon {
+  background-color: var(--note-color);
+  color: var(--note-on-color);
+}
+
+.guide-content .admonitionblock.tip .icon {
+  background-color: var(--tip-color);
+  color: var(--tip-on-color);
+}
+
+.guide-content .admonitionblock.warning .icon {
+  background-color: var(--warning-color);
+  color: var(--warning-on-color);
+}
+
+.guide-content .admonitionblock .icon i {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}
+
+.guide-content .admonitionblock .icon i::after {
+  content: attr(title);
+}
+
+.guide-content .imageblock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.guide-content .imageblock img {
+  display: block;
+}
+
+.guide-content .imageblock img,
+.guide-content .image > img {
+  height: auto;
+  max-width: 100%;
+}
+
+#preamble .abstract blockquote {
+  background: var(--abstract-background);
+  border-left: 5px solid var(--abstract-border-color);
+  color: var(--abstract-font-color);
+  font-size: calc(16 / var(--rem-base) * 1rem);
+  padding: 0.75em 1em;
+}
+
+.guide-content .quoteblock {
+  background: var(--quote-background);
+  border-left: 5px solid var(--quote-border-color);
+  color: var(--quote-font-color);
+  padding: 0.25rem 2rem 1.25rem;
+}
+
+.guide-content .quoteblock .attribution {
+  color: var(--quote-attribution-font-color);
+  font-size: calc(15 / var(--rem-base) * 1rem);
+  margin-top: 0.75rem;
+}
+
+.guide-content .quoteblock blockquote {
+  margin-top: 1rem;
+}
+
+.guide-content .quoteblock .paragraph {
+  font-style: italic;
+}
+
+.guide-content .quoteblock cite {
+  padding-left: 1em;
+}
+
+.guide-content table.tableblock .paragraph {
+  margin: 0;
+  padding: 0;
+}
+
+.guide-content table.tableblock .admonitionblock,
+.guide-content .ulist .admonitionblock,
+.guide-content .olist .admonitionblock {
+  padding: 0;
+}
+
+.guide-content ol,
+.guide-content ul {
+  margin: 0;
+  /* padding: 0 0 0 2rem; */
+}
+
+.guide-content ol.arabic {
+  list-style-type: decimal;
+}
+
+.guide-content ol.decimal {
+  list-style-type: decimal-leading-zero;
+}
+
+.guide-content ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+
+.guide-content ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+
+.guide-content ol.lowerroman {
+  list-style-type: lower-roman;
+}
+
+.guide-content ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+.guide-content ol.lowergreek {
+  list-style-type: lower-greek;
+}
+
+.guide-content ul.checklist {
+  padding-left: 0.5rem;
+  list-style: none;
+}
+
+.guide-content ul.checklist p > i.fa-check-square-o:first-child,
+.guide-content ul.checklist p > i.fa-square-o:first-child {
+  display: inline-flex;
+  justify-content: center;
+  width: 1.25rem;
+}
+
+.guide-content ul.checklist i.fa-check-square-o::before {
+  content: "\2713";
+}
+
+.guide-content ul.checklist i.fa-square-o::before {
+  content: "\274f";
+}
+
+.guide-content .dlist .dlist,
+.guide-content .dlist .olist,
+.guide-content .dlist .ulist,
+.guide-content .olist .dlist,
+.guide-content .olist .olist,
+.guide-content .olist .ulist,
+.guide-content .ulist .dlist,
+.guide-content .ulist .olist,
+.guide-content .ulist .ulist {
+  margin-top: 0.5rem;
+}
+
+.guide-content .olist li,
+.guide-content .ulist li {
+  margin-bottom: 0.5rem;
+}
+
+.guide-content .ulist .listingblock,
+.guide-content .olist .listingblock,
+.guide-content .admonitionblock .listingblock {
+  padding: 0;
+}
+
+.guide-content .admonitionblock .title,
+.guide-content .exampleblock .title,
+.guide-content .imageblock .title,
+.guide-content .literalblock .title,
+.guide-content .listingblock .title,
+.guide-content .openblock .title,
+.guide-content .tableblock caption {
+  color: var(--caption-font-color);
+  font-size: calc(16 / var(--rem-base) * 1rem);
+  font-weight: var(--caption-font-weight);
+  font-style: italic;
+  hyphens: none;
+  letter-spacing: 0.01em;
+  padding-bottom: 0.075rem;
+  text-align: left;
+}
+
+.guide-content .imageblock .title {
+  margin-top: 0.5rem;
+  padding-bottom: 0;
+}
+
+.guide-content .admonitionblock .title + .paragraph {
+  margin-top: 0;
+}
+
+.guide-content .exampleblock > .content {
+  background: var(--example-background);
+  border: 0.25rem solid var(--example-border-color);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.guide-content .exampleblock > .content > :first-child {
+  margin-top: 0;
+}
+
+.guide-content .sidebarblock {
+  background: var(--sidebar-background);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.guide-content .sidebarblock > .content > .title {
+  font-size: calc(22.5 / var(--rem-base) * 1rem);
+  font-weight: var(--alt-heading-font-weight);
+  line-height: 1.3;
+  margin-bottom: -0.3em;
+  text-align: center;
+}
+
+.guide-content .sidebarblock > .content > :not(.title):first-child {
+  margin-top: 0;
+}
+
+/* NEEDS REVIEW prevent pre in table from causing article to exceed bounds */
+.guide-content .tableblock pre,
+.guide-content .listingblock.wrap pre {
+  white-space: pre-wrap;
+}
+
+.guide-content pre:not(.highlight),
+.guide-content pre.highlight code {
+  background: var(--pre-background);
+  box-shadow: inset 0 0 1.75px var(--pre-border-color);
+  display: block;
+  overflow-x: auto;
+  padding: 0.75rem;
+}
+
+/* NOTE assume pre.highlight contains code[data-lang] */
+.guide-content pre.highlight {
+  position: relative;
+}
+
+.guide-content .listingblock code[data-lang]::before {
+  content: attr(data-lang);
+  display: none;
+  color: var(--pre-annotation-font-color);
+  font-size: calc(13.5 / var(--rem-base) * 1rem);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-transform: uppercase;
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+}
+
+.guide-content .listingblock:hover code[data-lang]::before {
+  display: block;
+}
+
+.guide-content .dlist dt {
+  font-style: italic;
+}
+
+.guide-content .dlist dd {
+  margin: 0 0 0.3rem 1.5rem;
+}
+
+.guide-content .colist {
+  font-size: calc(16 / var(--rem-base) * 1rem);
+  margin: 0.25rem 0 -0.25rem;
+}
+
+.guide-content .colist > table > tr > :first-child,
+.guide-content .colist > table > tbody > tr > :first-child {
+  padding: 0.25em 0.5rem 0;
+  vertical-align: top;
+}
+
+.guide-content .colist > table > tr > :last-child,
+.guide-content .colist > table > tbody > tr > :last-child {
+  padding: 0.25rem 0;
+}
+
+.guide-content .conum[data-value] {
+  border: 1px solid currentColor;
+  border-radius: 100%;
+  display: inline-block;
+  font-family: var(--body-font-family);
+  font-size: calc(13.5 / var(--rem-base) * 1rem);
+  font-style: normal;
+  height: 1.25em;
+  line-height: 1.2;
+  text-align: center;
+  width: 1.25em;
+  letter-spacing: -0.25ex;
+  text-indent: -0.25ex;
+}
+
+.guide-content .conum[data-value]::after {
+  content: attr(data-value);
+}
+
+.guide-content .conum[data-value] + b {
+  display: none;
+}
+
+.guide-content b.button {
+  white-space: nowrap;
+}
+
+.guide-content b.button::before {
+  content: "[";
+  padding-right: 0.25em;
+}
+
+.guide-content b.button::after {
+  content: "]";
+  padding-left: 0.25em;
+}
+
+.guide-content kbd {
+  display: inline-block;
+  font-size: calc(12 / var(--rem-base) * 1rem);
+  background: var(--kbd-background);
+  border: 1px solid var(--kbd-border-color);
+  border-radius: 0.25em;
+  box-shadow: 0 1px 0 var(--kbd-border-color), 0 0 0 0.1em var(--body-background) inset;
+  padding: 0.25em 0.5em;
+  vertical-align: text-bottom;
+  white-space: nowrap;
+}
+
+.guide-content kbd,
+.guide-content .keyseq {
+  line-height: 1;
+}
+
+.guide-content .keyseq {
+  font-size: calc(16 / var(--rem-base) * 1rem);
+}
+
+.guide-content .keyseq kbd {
+  margin: 0 0.125em;
+}
+
+.guide-content .keyseq kbd:first-child {
+  margin-left: 0;
+}
+
+.guide-content .keyseq kbd:last-child {
+  margin-right: 0;
+}
+
+.guide-content .menuseq i.caret::before {
+  content: "\203a";
+  font-size: 1.1em;
+  font-weight: var(--body-font-weight-bold);
+  line-height: calc(1 / 1.1);
+}
+
+.guide-content a.bare,
+.guide-content b.button,
+.guide-content code,
+.guide-content .path,
+.guide-content kbd,
+.guide-content .menuseq,
+.guide-content .icon i::after {
+  hyphens: none;
+}
+
+.guide-content th.tableblock,
+.guide-content td.tableblock {
+  word-break: break-word; /* overflow-wrap for table cells; gives space higher precedence than hyphen opportunity */
+}

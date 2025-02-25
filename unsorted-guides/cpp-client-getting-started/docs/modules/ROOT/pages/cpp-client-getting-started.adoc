@@ -1,0 +1,418 @@
+= Getting Started with the Hazelcast C++ Client
+:page-layout: tutorial
+:page-product: platform
+:page-categories: Get Started
+:page-lang: cplus
+:page-enterprise:
+:page-est-time: 5-10 mins
+:description: This tutorial will get you started with the Hazelcast C++ client and manipulate a map.
+
+== What You'll Learn
+
+{description}
+
+== Before you Begin
+
+* C++ 11 or above
+* https://hazelcast.com/products/viridian/[Hazelcast Viridian Cloud Account]
+* A text editor or IDE
+
+== Start a Hazelcast Viridian Cloud Cluster
+
+1. Sign up for a Hazelcast Viridian Cloud account (free trial is available).
+2. Log in to your Hazelcast Viridian Cloud account and start your trial by filling in the welcome questionnaire.
+3. A Viridian cluster will be created automatically when you start your trial.
+4. Press the Connect Cluster dialog and switch over to the Advanced setup tab for connection information needed below.
+5. From the Advanced setup tab, download the keystore files and take note of your Cluster ID, Discovery Token and Password as you will need them later.
+
+== Setup a Hazelcast Client
+
+Create a new folder and navigate to it:
+
+[source]
+----
+mkdir hazelcast-cpp-example
+cd hazelcast-cpp-example
+----
+
+Download and install Vcpkg: +
+
+for Windows;
+[source,bash]
+----
+git clone https://github.com/microsoft/vcpkg
+.\vcpkg\bootstrap-vcpkg.bat
+----
+
+for non-Windows;
+[source,bash]
+----
+git clone https://github.com/microsoft/vcpkg
+./vcpkg/bootstrap-vcpkg.sh
+----
+
+Download and install hazelcast-cpp-client: +
+
+for Windows;
+[source,bash]
+----
+.\vcpkg\vcpkg.exe install "hazelcast-cpp-client[openssl]" --recurse
+----
+
+for non-Windows;
+[source,bash]
+----
+./vcpkg/vcpkg install "hazelcast-cpp-client[openssl]" --recurse
+----
+
+NOTE: Avoid directory names in your path that contain spaces or other non-standard characters.
+
+Extract the keystore files you downloaded from Viridian into this directory. The files you need for this tutorial are:
+
+[source,bash]
+----
+ca.pem
+cert.pem
+key.pem
+----
+
+Create a CMake file in this directory, named "CMakeLists.txt" as follows:
+
+[source,bash]
+----
+cmake_minimum_required(VERSION 3.10)
+
+project(HazelcastCloud)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(hazelcast-cpp-client CONFIG REQUIRED)
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/example.cpp)
+    add_executable(example example.cpp)
+    target_link_libraries(example PRIVATE hazelcast-cpp-client::hazelcast-cpp-client)
+endif()
+----
+
+You should have the following entries in the directory:
+[source,bash]
+----
+CMakeLists.txt
+ca.pem
+cert.pem
+key.pem
+vcpkg
+----
+
+== Understanding the C++ Client
+
+The following section creates and starts a Hazelcast client with default configuration, connects to your Viridian cluster before shutting the client down at the end.
+
+Create a C++ file named “example.cpp” and put the following code inside it:
+
+[source,cpp]
+----
+#include <string>
+#include <hazelcast/client/hazelcast_client.h>
+
+int
+main(int argc, char** argv)
+{
+    hazelcast::client::client_config config;
+
+    // Viridian Cluster Name and Token
+    config.set_cluster_name("<YOUR_CLUSTER_ID>");
+    auto& cloud_configuration = config.get_network_config().get_cloud_config();
+    cloud_configuration.enabled = true;
+    cloud_configuration.discovery_token = "<YOUR_DISCOVERY_TOKEN>";
+
+    // configure SSL
+    boost::asio::ssl::context ctx(boost::asio::ssl::context::tlsv12);
+
+    try {
+        ctx.load_verify_file("ca.pem");
+        ctx.use_certificate_file("cert.pem", boost::asio::ssl::context::pem);
+        ctx.set_password_callback(
+          [&](std::size_t max_length,
+              boost::asio::ssl::context::password_purpose purpose) {
+              return "<YOUR_CERTIFICATE_PASSWORD>";
+          });
+        ctx.use_private_key_file("key.pem", boost::asio::ssl::context::pem);
+    } catch (std::exception& e) {
+        std::cerr << "You should copy ca.pem, cert.pem and key.pem files to "
+                     "the working directory, exception cause "
+                  << e.what() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    config.get_network_config().get_ssl_config().set_context(std::move(ctx));
+
+    // Connect to your Hazelcast Cluster
+    auto client = hazelcast::new_client(std::move(config)).get();
+
+    // take actions
+    std::cout << "Welcome to your Hazelcast Viridian Cluster!" << std::endl;
+
+    // Shutdown the client connection
+    client.shutdown().get();
+}
+----
+
+Compile using CMake as follows:
+
+[source,bash]
+----
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake --build build
+----
+
+Once complete, run the example:
+
+[source,bash]
+----
+./build/example
+----
+
+For more information about Vcpkg installation check https://github.com/hazelcast/hazelcast-cpp-client/blob/master/Reference_Manual.md#112-vcpkg-users[here].
+In this tutorial we use CMake for compilation, for other options you can check https://github.com/hazelcast/hazelcast-cpp-client/blob/master/Reference_Manual.md#13-compiling-your-project[here].
+
+To understand and use the client, review the https://hazelcast.github.io/hazelcast-cpp-client/api-index.html[C++ API documentation] to better understand what is possible.
+
+== Understanding the Hazelcast SQL API
+
+Hazelcast SQL API is a Calcite SQL based interface to allow you to interact with Hazelcast much like any other datastore.
+
+In the following example, we will create a map and insert into it, entries where the keys are ids and the values are defined as an object representing a city.
+
+[source,cpp]
+----
+#include <string>
+#include <hazelcast/client/hazelcast_client.h>
+
+void
+create_mapping(hazelcast::client::hazelcast_client client);
+void
+insert_cities(hazelcast::client::hazelcast_client client);
+void
+fetch_cities(hazelcast::client::hazelcast_client client);
+
+struct CityDTO
+{
+    std::string cityName;
+    std::string country;
+    int population;
+};
+
+// CityDTO serializer
+namespace hazelcast {
+namespace client {
+namespace serialization {
+
+template<>
+struct hz_serializer<CityDTO> : compact::compact_serializer
+{
+    static void write(const CityDTO& object, compact::compact_writer& out)
+    {
+        out.write_int32("population", object.population);
+        out.write_string("city", object.cityName);
+        out.write_string("country", object.country);
+    }
+
+    static CityDTO read(compact::compact_reader& in)
+    {
+        CityDTO c;
+
+        c.population = in.read_int32("population");
+        boost::optional<std::string> city = in.read_string("city");
+
+        if (city) {
+            c.cityName = *city;
+        }
+
+        boost::optional<std::string> country = in.read_string("country");
+
+        if (country) {
+            c.country = *country;
+        }
+
+        return c;
+    }
+
+    static std::string type_name() { return "CityDTO"; }
+};
+
+} // namespace serialization
+} // namespace client
+} // namespace hazelcast
+
+int
+main(int argc, char** argv)
+{
+    hazelcast::client::client_config config;
+
+    // Viridian Cluster Name and Token
+    config.set_cluster_name("<YOUR_CLUSTER_ID>");
+    auto& cloud_configuration = config.get_network_config().get_cloud_config();
+    cloud_configuration.enabled = true;
+    cloud_configuration.discovery_token = "<YOUR_DISCOVERY_TOKEN>";
+
+    // configure SSL
+    boost::asio::ssl::context ctx(boost::asio::ssl::context::tlsv12);
+
+    try {
+        ctx.load_verify_file("ca.pem");
+        ctx.use_certificate_file("cert.pem", boost::asio::ssl::context::pem);
+        ctx.set_password_callback(
+          [&](std::size_t max_length,
+              boost::asio::ssl::context::password_purpose purpose) {
+            return "<YOUR_CERTIFICATE_PASSWORD>";
+          });
+        ctx.use_private_key_file("key.pem", boost::asio::ssl::context::pem);
+    } catch (std::exception& e) {
+        std::cerr << "You should copy ca.pem, cert.pem and key.pem files to "
+                     "the working directory, exception cause "
+                  << e.what() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    config.get_network_config().get_ssl_config().set_context(std::move(ctx));
+
+    // Connect to your Hazelcast Cluster
+    auto client = hazelcast::new_client(std::move(config)).get();
+
+    // take actions
+    create_mapping(client);
+    insert_cities(client);
+    fetch_cities(client);
+
+    // Shutdown the client connection
+    client.shutdown().get();
+}
+
+void
+create_mapping(hazelcast::client::hazelcast_client client)
+{
+    // Mapping is required for your distributed map to be queried over SQL.
+    // See: https://docs.hazelcast.com/hazelcast/latest/sql/mapping-to-maps
+
+    std::cout << "Creating the mapping...";
+
+    auto sql = client.get_sql();
+
+    auto result = sql
+                    .execute(R"(CREATE OR REPLACE MAPPING
+                                    cities (
+                                        __key INT,
+                                        country VARCHAR,
+                                        city VARCHAR,
+                                        population INT) TYPE IMAP
+                                    OPTIONS (
+                                        'keyFormat' = 'int',
+                                        'valueFormat' = 'compact',
+                                        'valueCompactTypeName' = 'CityDTO'))")
+                    .get();
+
+    std::cout << "OK." << std::endl;
+}
+
+void
+insert_cities(hazelcast::client::hazelcast_client client)
+{
+    auto sql = client.get_sql();
+
+    try {
+        sql.execute("DELETE FROM cities").get();
+
+        std::cout << "Inserting data...";
+
+        // Create mapping for the integers. This needs to be done only once per
+        // map.
+        auto result = sql
+                        .execute(R"(INSERT INTO cities
+                    (__key, city, country, population) VALUES
+                    (1, 'London', 'United Kingdom', 9540576),
+                    (2, 'Manchester', 'United Kingdom', 2770434),
+                    (3, 'New York', 'United States', 19223191),
+                    (4, 'Los Angeles', 'United States', 3985520),
+                    (5, 'Istanbul', 'Türkiye', 15636243),
+                    (6, 'Ankara', 'Türkiye', 5309690),
+                    (7, 'Sao Paulo ', 'Brazil', 22429800))")
+                        .get();
+
+        std::cout << "OK." << std::endl;
+    } catch (hazelcast::client::exception::iexception& e) {
+        // don't panic for duplicated keys.
+        std::cerr << "FAILED, duplicated keys " << e.what() << std::endl;
+    }
+}
+
+void
+fetch_cities(hazelcast::client::hazelcast_client client)
+{
+    std::cout << "Fetching cities...";
+
+    auto result =
+      client.get_sql().execute("SELECT __key, this FROM cities").get();
+
+    std::cout << "OK." << std::endl;
+    std::cout << "--Results of 'SELECT __key, this FROM cities'" << std::endl;
+
+    std::printf("| %-4s | %-20s | %-20s | %-15s |\n",
+                "id",
+                "country",
+                "city",
+                "population");
+
+    for (auto itr = result->iterator(); itr.has_next();) {
+        auto page = itr.next().get();
+
+        for (auto const& row : page->rows()) {
+
+            auto id = row.get_object<int32_t>("__key");
+            auto city = row.get_object<CityDTO>("this");
+            std::printf("| %-4d | %-20s | %-20s | %-15d |\n",
+                        *id,
+                        city->country.c_str(),
+                        city->cityName.c_str(),
+                        city->population);
+        }
+    }
+
+    std::cout
+      << "\n!! Hint !! You can execute your SQL queries on your Viridian "
+         "cluster over the management center. \n 1. Go to 'Management Center' "
+         "of your Hazelcast Viridian cluster. \n 2. Open the 'SQL Browser'. \n "
+         "3. Try to execute 'SELECT * FROM cities'.\n";
+}
+----
+
+The output of this code is given below:
+
+[source,bash]
+----
+Creating the mapping...OK.
+Inserting data...OK.
+Fetching cities...OK.
+--Results of 'SELECT __key, this FROM cities'
+|   id | country              | city                 | population      |
+|    2 | United Kingdom       | Manchester           | 2770434         |
+|    6 | Turkiye              | Ankara               | 5309690         |
+|    1 | United Kingdom       | London               | 9540576         |
+|    7 | Brazil               | Sao Paulo            | 22429800        |
+|    4 | United States        | Los Angeles          | 3985520         |
+|    5 | Turkiye              | Istanbul             | 15636243        |
+|    3 | United States        | New York             | 19223191        |
+----
+
+NOTE: Ordering of the keys is NOT enforced and results may NOT correspond to insertion order.
+
+== Summary
+
+In this tutorial, you learned how to get started with the Hazelcast C++ Client, connect to a Viridian instance and put data into a distributed map.
+
+== See Also
+
+There are a lot of things that you can do with the C++ Client. For more, such as how you can query a map with predicates and SQL,
+check out our https://github.com/hazelcast/hazelcast-cpp-client[C++ Client repository] and our https://hazelcast.github.io/hazelcast-cpp-client/api-index.html[C++ API documentation] to better understand what is possible.
+
+If you have any questions, suggestions, or feedback please do not hesitate to reach out to us via https://slack.hazelcast.com/[Hazelcast Community Slack].
+Also, please take a look at https://github.com/hazelcast/hazelcast-cpp-client/issues[the issue list] if you would like to contribute to the client.

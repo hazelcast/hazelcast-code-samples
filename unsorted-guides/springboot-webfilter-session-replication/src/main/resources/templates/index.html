@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<body>
+		<h3>Session Id</h3>
+		<p th:text="${#httpSession.id}"/>
+		<h3>Hits</h3>
+		<p th:text="${#httpSession.getAttribute('hits')}"/>
+	</body>
+</html>

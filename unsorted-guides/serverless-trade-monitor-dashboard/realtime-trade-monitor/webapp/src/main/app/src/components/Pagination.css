@@ -1,0 +1,109 @@
+.Pagination {
+  color: var(--color-mid-blue);
+  height: 3.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  font-weight: 500;
+}
+
+.Pagination-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: stretch;
+  min-width: 20%;
+}
+.Pagination-center {
+  align-self: stretch;
+  flex: 2 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Pagination-right {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 20%;
+}
+
+.Pagination-button {
+  background-color: transparent;
+  border: 0;
+  padding: 0 2rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  color: var(--color-mid-blue);
+  font-weight: 500;
+}
+
+.Pagination-button:focus {
+  outline: 0;
+}
+.Pagination-button:hover {
+  cursor: pointer;
+}
+
+.Pagination-buttonPrev {
+  justify-content: flex-start;
+}
+.Pagination-buttonPrev img {
+  display: block;
+  margin-right: 0.75rem;
+}
+
+.Pagination-buttonNext {
+  justify-content: flex-end;
+}
+.Pagination-buttonNext img {
+  display: block;
+  margin-left: 0.75rem;
+}
+
+.Pagination-input {
+  background-color: transparent;
+  border: 1px solid #383e60;
+  border-radius: 3px;
+  height: 1.875rem;
+  padding: 0 0.5rem;
+  color: var(--color-mid-blue);
+  font-weight: 500;
+  /* width: 3rem; */
+}
+
+.Pagination-pageSelector {
+  -moz-appearance:textfield; /* Firefox */
+  width: 2.5rem;
+}
+.Pagination-pageSelector::-webkit-outer-spin-button,
+.Pagination-pageSelector::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.Pagination-pages {
+  margin-right: 2rem;
+}
+
+.Pagination-pageSize {
+  width: 5rem;
+  padding-right: 1.5rem;
+  -moz-appearance: none;
+	-webkit-appearance: none;
+  appearance: none;
+  display: flex;
+  align-items: center;
+  background: url('/images/arrow-down.png') right 0.5rem center no-repeat;
+}
+
+.Pagination option {
+  color: black;
+}

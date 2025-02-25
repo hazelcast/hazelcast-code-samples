@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Caching with Spring Boot and Hazelcast</title>
+    <link rel="canonical" href="https://guides.hazelcast.org/caching-springboot/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3921306-4"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-3921306-4')</script>
+    <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img
+        class="logo"
+        alt="Hazelcast"
+        srcset="../_/img/hazelcast-logo-white.png 1x, ../_/img/hazelcast-logo-white@2x.png 2x, ../_/img/hazelcast-logo-white@3x.png 3x"
+      />
+      <a class="navbar-item" href="../home/">Hazelcast Guides</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://hazelcast.org/">
+          hazelcast.org
+           <img
+              class="external-link"
+              alt="Hazelcast"
+              srcset="../_/img/external-link.png 1x, ../_/img/external-link@2x.png 2x, ../_/img/external-link@3x.png 3x"
+            />
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+
+<div class="nav-container" data-component="caching-springboot" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+    </div>
+  </aside>
+</div>
+<!--
+nav is included to make toc visible only.
+It's not visible on the page. It needs to
+be removed after toc is made independent
+from nav.
+-->
+
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+</div>
+  <div class="content">
+<article class="guide-content">
+<h1 class="page">Caching with Spring Boot and Hazelcast</h1>
+<p class="edit-page"><a href=https://github.com/hazelcast-guides/caching-springboot/edit/master/doc/modules/ROOT/pages/index.adoc>See something wrong? Edit this page.</a></p>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide will get you started to use Hazelcast as a cache manager for your Spring Boot application.</p>
+</div>
+<div class="paragraph">
+<p>You can see the whole project <a href="https://github.com/hazelcast-guides/caching-springboot">here.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_youll_learn"><a class="anchor" href="#_what_youll_learn"></a>What You’ll Learn</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide, you&#8217;ll deploy a Spring Boot application that uses Hazelcast as a cache manager.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>~5 minutes</p>
+</li>
+<li>
+<p>JDK 1.8+</p>
+</li>
+<li>
+<p>Apache Maven 3.2+</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spring_boot_application"><a class="anchor" href="#_spring_boot_application"></a>Spring Boot Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To use caching in your Spring Boot application, you need to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>add <code>org.springframework.boot:spring-boot-starter-cache</code> dependency</p>
+</li>
+<li>
+<p>add <code>@EnableCaching</code> annotation to your main class</p>
+</li>
+<li>
+<p>add <code>@Cacheable("books")</code> annotation to every method you want to cache</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For more explanation on the Spring Boot cache topic, please check the official Spring Guide: <a href="https://spring.io/guides/gs/caching/">Caching Data with Spring</a>.</p>
+</div>
+<div class="paragraph">
+<p>In our case, let&#8217;s have a simple web service with two classes defined as follows.</p>
+</div>
+<div class="listingblock">
+<div class="title">BookController.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@RestController
+@RequestMapping("/books")
+public class BookController {
+
+    private final BookService bookService;
+
+    BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @GetMapping("/{isbn}")
+    public String getBookNameByIsbn(@PathVariable("isbn") String isbn) {
+        return bookService.getBookNameByIsbn(isbn);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">BookService.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Service
+public class BookService {
+    @Cacheable("books")
+    public String getBookNameByIsbn(String isbn) {
+        return findBookInSlowSource(isbn);
+    }
+
+    private String findBookInSlowSource(String isbn) {
+        // some long processing
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+        return "Sample Book Name";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we started the application, then every call to the endpoint <code>/books/&lt;isbn&gt;</code> would go to the method <code>findBookNameByIsbn()</code>, which in turn would first check the cache.</p>
+</div>
+<div class="paragraph">
+<p>Only if it does not find value in the cache, the method <code>findBookInSlowSource()</code> would be executed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_hazelcast_as_cache_manager"><a class="anchor" href="#_using_hazelcast_as_cache_manager"></a>Using Hazelcast as Cache Manager</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We want to use Hazelcast as the cache manager. The good news is that all you have to do it to add Hazelcast to your classpath.</p>
+</div>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre>&lt;dependency&gt;
+    &lt;groupId&gt;com.hazelcast&lt;/groupId&gt;
+    &lt;artifactId&gt;hazelcast-all&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, you need to add Hazelcast configuration using one of the below options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Add <code>hazelcast.yaml</code> configuration OR</p>
+</li>
+<li>
+<p>Add <code>hazelcast.xml</code> configuration OR</p>
+</li>
+<li>
+<p>Define <code>@Bean</code> with Hazelcast configuration in the source code</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let’s use the first option and add the following file into <code>src/main/resources</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">hazelcast.yaml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">hazelcast:
+  network:
+    join:
+      multicast:
+        enabled: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>No more configuration needed, Hazelcast is already used as the cache manager for your project!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_starting_the_application"><a class="anchor" href="#_starting_the_application"></a>Starting the Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To start the application, run the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mvn spring-boot:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see in the logs that embedded Hazelcast has started:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Members {size:1, ver:1} [
+        Member [172.30.63.9]:5701 - 75cd0b19-ee36-4e0a-9d9c-38c49f67f842 this
+]</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing_the_application"><a class="anchor" href="#_testing_the_application"></a>Testing the Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can test the application by executing the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>curl localhost:8080/books/12345
+Sample Book Name</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first time you execute this command, it should take some time to get the response. However, when you try it again, it should be instant. That means that the cache is used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>curl localhost:8080/books/12345
+Sample Book Name</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_whats_more"><a class="anchor" href="#_whats_more"></a>What&#8217;s more?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to use Hazelcast in the client-server topology, then it&#8217;s enough to place <code>hazelcast-client.yaml</code> file instead of <code>hazelcast.yaml</code> on your classpath. And that&#8217;s it! You configured a Hazelcast client.</p>
+</div>
+<div class="paragraph">
+<p>If you want to read more, check out the official documentation <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-hazelcast">Spring Boot: Hazelcast</a>.</p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+  </body>
+  <footer class="footer">
+<footer class="footer">
+  <a href="https://www.hazelcast.org" class="icon">
+    <img src="../_/img/hazelcast.png" alt="Hazelcast">
+  </a>
+  <a href="https://slack.hazelcast.com" class="slack-button">Join Us On Slack</a>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </footer>
+</html>

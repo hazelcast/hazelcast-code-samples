@@ -1,0 +1,28 @@
+hazelcast-client:
+  network:
+    kubernetes:
+      enabled: true
+      namespace: default
+      use-public-ip: true
+      kubernetes-master: https://35.233.44.52
+      api-token: eyJhbGciOiJSUzI1NiIsImtpZCI6InNfRVBNNHg1dFRlWHY1VmVNdVJtaHY3ZzZ6aEhQWWxZT2ZzNXQwcklSYzQifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImhhemVsY2FzdC1zZXJ2aWNlLWFjY291bnQtdG9rZW4tbThwODIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiaGF6ZWxjYXN0LXNlcnZpY2UtYWNjb3VudCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjhjNzJhYmU3LTgzMjYtNDk5ZC04Yzc2LWU2MzMzMDAwNzYzYyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmhhemVsY2FzdC1zZXJ2aWNlLWFjY291bnQifQ.af6PWcxOV3IN3C-SwSa6hbgW9TlernWC3b5K1dNLVplzBdnJKI-NjacgMfd03BcVnXNLpXHFxr5gbwwguv9ZjeOAz0FrrQvs7rLRnXcQaE0x7EcG1lyfQ8utwzUvSodEQN6kbzjBF0WWClGJXdtdQvVn9lcFqDjfC6Jugk7dDEaD9W_mDjIXZEaeEtUIR5tnivGwRxG0dEpYb0nj9xAC9fjq40BTHWlbuVoFBhVl3-kPZreIiYHQYurOx30wuszuu0Ba16MbxyPB4rvzufngb8ej5S-KtUllxHiuYA4Gp01zbjb8RIsnB-OM02fCfIgG-YyyQjjD0K-BEEyuihs-0g
+      ca-certificate: |
+        -----BEGIN CERTIFICATE-----
+        MIIDKjCCAhKgAwIBAgIQHJPQGLRW659SCjtRVEF23TANBgkqhkiG9w0BAQsFADAv
+        MS0wKwYDVQQDEyQzMjU5YmE1ZC03MWVhLTRiNGYtODZmNi0yOGFmNzYzZTg0NWYw
+        HhcNMjAxMTA5MTE1MjU1WhcNMjUxMTA4MTI1MjU1WjAvMS0wKwYDVQQDEyQzMjU5
+        YmE1ZC03MWVhLTRiNGYtODZmNi0yOGFmNzYzZTg0NWYwggEiMA0GCSqGSIb3DQEB
+        AQUAA4IBDwAwggEKAoIBAQDCGVpermveJbIvrTcyHtC9zax+87cSPQCz7lfbI8gB
+        75JpeDZy/32RUwG7xRFZ58gynqvkMG4z/ZjguXJsp8g9dT8qMLf01CbqyQscoVnL
+        cyiicGNjnaMeQul8W3XN4uXlqTubFHYcA/quX02CJhRyES8JNliRdygQJdWF8aKs
+        OirX2A0Vncoq6eGsr3yCJYTvxZQLNM/3wxCvUJPLJcYbKgIZUNZbvC8ovFG7ChAk
+        G0V+Bw726eiiHGCMFAkz42f3/T+wxMdIAm2SKunT3OTyO9/6SCuJflPMB9/kPQRE
+        yxH2H5FdW2p+qC2o2T5pgslmPkaJ7qck5JsgwoOgvwzhAgMBAAGjQjBAMA4GA1Ud
+        DwEB/wQEAwICBDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRtxNC8UAR7mXjC
+        fXOV58kmMg7T8zANBgkqhkiG9w0BAQsFAAOCAQEAAJHer6jqoPGMEdjRSBxgW7yw
+        DPU210ffOmWWuqGAHCbuAhcVZG5dce9KjTzKc/sWqI0qR3zrZhMpP06cce2NIsHr
+        VbViVgPT0/K4oNP4l4BBaseLKNgfywOSUtmTtwyKbQJTHElwFwbMzBZF9kihZMah
+        l0zhm5JizXwmBsE38r3+soS9mIvjASGcGp7exTftPyMP8xMuBUvg28Z9w8wxfHv4
+        oZ/yor2Cp4bdGDGQvwKt/WqXfxIk4LW5jKUupoZ+2kkl8eYEE314PFIhayWcTrIf
+        bnDp6Qq8bRQ6acz6CI5AaZROUQmRYmN8Aaz3THJmkfGcejzvbYux/GiD7Nxlkw==
+        -----END CERTIFICATE-----

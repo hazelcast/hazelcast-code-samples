@@ -1,0 +1,16 @@
+hazelcast-client:
+  cluster-name: dev
+  instance-name: override-me
+  network:
+    cluster-members:
+      - hz:5701
+    smart-routing: true
+  connection-strategy:
+    async-start: false
+    reconnect-mode: ON
+  serialization:
+    compact-serialization:
+      serializers:
+        - serializer: hazelcast.platform.labs.machineshop.domain.StatusServiceResponse$Serializer
+        - serializer: hazelcast.platform.labs.machineshop.domain.MachineStatusSummary$Serializer
+        - serializer: hazelcast.platform.labs.machineshop.domain.MachineProfile$Serializer

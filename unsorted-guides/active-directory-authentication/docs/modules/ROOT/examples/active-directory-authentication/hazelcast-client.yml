@@ -1,0 +1,18 @@
+hazelcast-client:
+  network:
+    cluster-members:
+      - 10.0.0.10
+      - 10.0.0.11
+  security:
+    kerberos:
+      security-realm: krb5Initiator
+    realms:
+      - name: krb5Initiator
+        authentication:
+          jaas:
+            - class-name: com.sun.security.auth.module.Krb5LoginModule
+              usage: REQUIRED
+              properties:
+                isInitiator: true
+                useTicketCache: true
+                doNotPrompt: true

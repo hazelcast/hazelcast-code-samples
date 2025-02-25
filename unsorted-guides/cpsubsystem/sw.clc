@@ -1,0 +1,6 @@
+\map -n starwars set 1 "Luke Skywalker"
+\map -n starwars set 2 "Leia Organa"
+\map -n starwars set 3 "Han Solo"
+\map -n starwars set 4 "R2-D2"
+\map -n starwars set 5 "C-3PO"
+\map -n starwars set 6 "Chewbacca"

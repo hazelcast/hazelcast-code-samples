@@ -1,0 +1,145 @@
+= Session Replication with Spring Boot and Hazelcast
+:templates-url: templates:ROOT:page$/
+:page-layout: tutorial
+:page-product: imdg
+:page-categories: Caching, Spring Boot, Session Replication
+:page-lang: java
+:page-edition: 
+:page-est-time: 5 mins
+:framework: Spring Boot
+:description: In this tutorial, you'll deploy two Spring Boot applications which use Hazelcast for session replication.
+
+== What You’ll Learn
+
+{description}
+
+== Before you Begin
+
+- JDK 1.8+
+- Apache Maven 3.2+
+
+== Spring Boot Application
+
+Let's have a simple web application with the following controller and the HTML template.
+
+.WebController.java
+[source,java]
+----
+@Controller
+@RequestMapping("/")
+public class WebController {
+
+    @RequestMapping(value = "/")
+    public String index(HttpSession httpSession) {
+        Integer hits = (Integer) httpSession.getAttribute("hits");
+        if (hits == null) {
+            hits = 0;
+        }
+        httpSession.setAttribute("hits", ++hits);
+
+        return "index";
+    }
+}
+----
+
+.index.html
+[source,html]
+----
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<body>
+		<h3>Session Id</h3>
+		<p th:text="${#httpSession.id}"/>
+		<h3>Hits</h3>
+		<p th:text="${#httpSession.getAttribute('hits')}"/>
+	</body>
+</html>
+----
+
+When you start the application and open the browser at http://localhost:8080, you should see a piece of information with the current session ID and the number of hits (number of times you refreshed the browser).
+
+Now, the problem is that if you start two instances of your application, then the counts for each of them would be completely separate. That is because each Spring Boot application replica stores its sessions separately. What's more, if the application crashes, the session data stored in that instance will be lost. That is what we want to change with the use of Hazelcast.
+
+== Using Hazelcast for Sessions Replication
+
+To use Hazelcast for session replication in your Spring Boot application, you need to:
+
+- add `hazelcast-all` dependency
+- add Hazelcast configuration
+- add `WebFilter` configuration bean
+
+Here are the added parts in `pom.xml` and `Application.java`.
+
+.pom.xml
+----
+<dependency>
+    <groupId>com.hazelcast</groupId>
+    <artifactId>hazelcast-all</artifactId>
+    <version>${version.hazelcast}</version>
+</dependency>
+----
+
+.Application.java
+[source,java]
+----
+@Bean
+public Config config() {
+    return new Config();
+}
+
+@Bean
+public WebFilter webFilter(HazelcastInstance hazelcastInstance) {
+
+    Properties properties = new Properties();
+    properties.put("instance-name", hazelcastInstance.getName());
+    properties.put("sticky-session", "false");
+
+    return new WebFilter(properties);
+}
+----
+
+This way, we defined a Hazelcast configuration and used an embedded Hazelcast instance to enable session replication.
+
+== Starting the Application
+
+To start two replicas of the application, run the following commands.
+
+[source,bash]
+----
+mvn spring-boot:run
+SERVER_PORT=8081 mvn spring-boot:run
+----
+
+You should see in the logs that both embedded Hazelcast instances formed a cluster.
+
+----
+Members {size:2, ver:2} [
+        Member [172.24.148.110]:5702 - e01c5b53-4dd8-492c-974c-7f4a7e195fb8 this
+        Member [172.24.148.110]:5701 - 27305639-b75c-4f41-84e5-6cd87995511b
+]
+----
+
+== Test the Application
+
+Open the browser at http://localhost:8080. You should see the following content.
+
+image::application-1.png[]
+
+Now, open the browser at http://localhost:8081. You should see that the hit has increased.
+
+image::application-2.png[]
+
+That means both applications share the same session data store.
+
+== See Also
+
+Spring Boot is integrated well with Hazelcast. You can check other Spring Boot guides:
+
+- xref:caching-springboot.adoc[]
+- xref:springboot-hibernate.adoc[]
+
+You can also set up your Hazelcast in the client/server topology instead of using embedded Hazelcast.
+
+
+
+
