@@ -1,6 +1,0 @@
-.vscode/
-target/
-*.iml
-.idea/
-__pycache__/
-venv/

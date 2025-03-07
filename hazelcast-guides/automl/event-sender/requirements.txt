@@ -1,2 +1,0 @@
-hazelcast-python-client==5.1
-protobuf==4.21.9

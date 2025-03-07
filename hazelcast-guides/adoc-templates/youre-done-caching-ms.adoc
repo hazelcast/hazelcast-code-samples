@@ -1,3 +1,0 @@
-== Great work! You’re done!
-
-You have just run a {framework} application and created its Docker image. First you runned the app on a container and then deployed it to Kubernetes. You then added Hazelcast caching to the hazelcast-{framework-short}, tested with a simple curl command. You also scaled out the microservices and saw that data is shared between microservices. As a last step, you ran integration tests against hazelcast-{framework-short} that was deployed in a Kubernetes cluster.

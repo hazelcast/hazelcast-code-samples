@@ -1,8 +1,0 @@
-user_id,movie_id_ml,rating,user_age,user_gender,user_occupation
-4,1211,4,26,M,educator
-4,411,1,26,M,educator
-4,658,1,26,M,educator
-4,49,2,26,M,educator
-4,25,2,26,M,educator
-4,101,3,26,M,educator
-4,509,2,26,M,educator

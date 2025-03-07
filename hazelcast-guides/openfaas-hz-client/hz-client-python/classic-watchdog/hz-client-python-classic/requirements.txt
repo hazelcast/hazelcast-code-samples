@@ -1,1 +1,0 @@
-hazelcast-python-client

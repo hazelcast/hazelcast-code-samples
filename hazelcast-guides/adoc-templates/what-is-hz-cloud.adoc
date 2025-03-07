@@ -1,3 +1,0 @@
-== What is Hazelcast Cloud?
-
-Hazelcast Cloud delivers enterprise-grade Hazelcast software in the cloud, deployed as a fully managed service. Leveraging over a decade of experience and best practices, Hazelcast Cloud delivers a high-throughput, low-latency service that scales to your needs while remaining simple to deploy.

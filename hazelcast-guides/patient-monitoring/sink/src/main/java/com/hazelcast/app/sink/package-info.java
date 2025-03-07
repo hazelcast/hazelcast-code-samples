@@ -1,1 +1,0 @@
-package com.hazelcast.app.sink;

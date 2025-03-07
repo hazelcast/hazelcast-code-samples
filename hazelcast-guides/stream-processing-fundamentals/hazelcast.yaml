@@ -1,9 +1,0 @@
-hazelcast:
-  map:
-    machine_profiles:
-      in-memory-format: OBJECT
-
-  jet:
-    enabled: true
-    resource-upload-enabled: true
-

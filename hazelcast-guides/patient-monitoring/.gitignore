@@ -1,8 +1,0 @@
-*.iml
-.DS_Store
-workspace.xml
-.apt_generated_tests/
-.apt_generated/
-.idea/
-.run/
-target/

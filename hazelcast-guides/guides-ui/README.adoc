@@ -1,3 +1,0 @@
-= Hazelcast Guides UI (deprecated)
-
-This repository is deprecated. The UI project for tutorials is now hosted in the link:https://github.com/hazelcast/hazelcast-docs-ui[`hazelcast/hazelcast-docs-ui` repository].

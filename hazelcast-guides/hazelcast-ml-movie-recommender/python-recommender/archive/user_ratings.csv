@@ -1,8 +1,0 @@
-user_id,movie_id_ml,rating,user_age,user_gender,user_occupation
-1,300,2,19,F,student
-1,190,5,19,F,student
-1,234,3,19,F,student
-1,40,2,19,F,student
-1,99,1,19,F,student
-1,999,2,19,F,student
-1,832,4,19,F,student

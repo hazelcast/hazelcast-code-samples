@@ -1,6 +1,0 @@
-{
-  "reverse": {
-      "versions" : ["v1","v2"],
-      "percentages" : [0.5, 1.0]
-    }
-}

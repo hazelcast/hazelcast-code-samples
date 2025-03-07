@@ -1,4 +1,0 @@
-hazelcast:
-  cache:
-    books:
-      management-enabled: true

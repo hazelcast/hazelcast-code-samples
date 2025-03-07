@@ -1,1 +1,0 @@
-../../../../code/validate.js

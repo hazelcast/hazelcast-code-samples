@@ -1,6 +1,0 @@
-== Great work! You’re done!
-
-You have just run a {framework} application then connected it to your Hazelcast Cloud account. 
-Then you stored data using your app and Hazelcast Cloud. When you shut down the app, containerized it and run again on Docker, 
-you saw the data is not lost. Then you deployed the app to Kubernetes and saw that data is shared between microservices.
-As a last step, you ran integration tests against hazelcast-{framework-short} that was deployed in a Kubernetes cluster.
