@@ -77,6 +77,7 @@
         <module>osgi</module>
         <module>partition</module>
         <module>pipeline</module>
+        <module>platform-operator</module>
         <module>replicated-map</module>
         <module>querying</module>
         <module>serialization</module>
