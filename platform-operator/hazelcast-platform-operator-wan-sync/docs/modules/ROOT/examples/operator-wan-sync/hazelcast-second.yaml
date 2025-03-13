@@ -1,0 +1,9 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+  name: hazelcast-second
+spec:
+  licenseKeySecretName: hazelcast-license-key
+  exposeExternally:
+    type: Unisocket
+    discoveryServiceType: LoadBalancer

@@ -1,0 +1,12 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: JetJob
+metadata:
+  name: transaction-v1
+spec:
+  hazelcastResourceName: hazelcast
+  state: Running
+  jarName: jet-pipelines-1.0-SNAPSHOT.jar
+  mainClass: org.examples.jet.snapshot.JobV1
+  bucketConfig:
+    bucketURI: '<BUCKET-URI>'
+    secretName: '<SECRET-NAME>'

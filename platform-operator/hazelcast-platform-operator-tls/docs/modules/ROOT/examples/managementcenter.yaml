@@ -1,0 +1,14 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: ManagementCenter
+metadata:
+  name: managementcenter
+spec:
+  repository: 'hazelcast/management-center'
+  licenseKeySecretName: hazelcast-license-key
+  externalConnectivity:
+    type: LoadBalancer
+  hazelcastClusters:
+    - address: hazelcast
+      name: dev
+      tls:
+        secretName: example
