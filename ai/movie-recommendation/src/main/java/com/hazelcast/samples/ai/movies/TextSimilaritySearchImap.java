@@ -32,8 +32,11 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.Reader;
+import java.io.Serial;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Collection;
@@ -77,7 +80,7 @@ public class TextSimilaritySearchImap {
         // ingest
         // in tests use a subset of movies to ingest data faster
         loadSummaries(movies, args.length > 0 ? 1000 : Integer.MAX_VALUE);
-        generateEmbeddings(movies, embeddingModel);
+        generateEmbeddings(movies);
 
         // read user input from console and search matches
         Reader in = args.length > 0 ? new StringReader(args[0]) : new InputStreamReader(System.in);
@@ -193,29 +196,23 @@ public class TextSimilaritySearchImap {
     }
     //endregion
 
-    public static void generateEmbeddings(IMap<String, MovieMetadata> movies, EmbeddingModel embeddingModel) {
+    public static void generateEmbeddings(IMap<String, MovieMetadata> movies) {
         long start = Timer.nanos();
         System.out.println("Generating embeddings for " + movies.size() + " plot summaries");
         int embeddings;
 
         if (OFFLOADED) {
             // offloading is not supported in executeOnEntries, so in order not to block the partition thread
-            // the invocations have to be one by one.
-            embeddings = movies.keySet().parallelStream().map(movieId -> movies.executeOnKey(movieId, offloadable(entry -> {
-                MovieMetadata value = entry.getValue();
-                if (value.plotSummary != null) {
-                    value.vector = embeddingModel.embed(value.plotSummary).content().vector();
-                    entry.setValue(value);
-                    return 1;
-                }
-                return 0;
-            }))).mapToInt(i -> i).sum();
+            // the invocations have to performed be one by one.
+            embeddings = movies.keySet().parallelStream()
+                    .map(movieId -> movies.executeOnKey(movieId, new MovieEmbeddingEntryProcessor()))
+                    .mapToInt(i -> i).sum();
         } else {
             // simpler version without offloading that can block partition thread for a long time
             embeddings = movies.executeOnEntries(entry -> {
                 MovieMetadata value = entry.getValue();
                 if (value.plotSummary != null) {
-                    value.vector = embeddingModel.embed(value.plotSummary).content().vector();
+                    value.vector = new AllMiniLmL6V2EmbeddingModel().embed(value.plotSummary).content().vector();
                     entry.setValue(value);
                     return 1;
                 }
@@ -255,10 +252,16 @@ public class TextSimilaritySearchImap {
         // query vector
         private final float[] query;
         // cache distances to avoid repeated evaluation during sorting
-        private final transient Map<K, Float> distanceCache;
+        private transient Map<K, Float> distanceCache;
 
         public MovieDistanceComparator(float[] query) {
             this.query = query;
+            this.distanceCache = new ConcurrentHashMap<>(1024);
+        }
+
+        @Serial
+        private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+            in.defaultReadObject();
             this.distanceCache = new ConcurrentHashMap<>(1024);
         }
 
@@ -309,39 +312,51 @@ public class TextSimilaritySearchImap {
         }
     }
 
-    /**
-     * Makes entry processor {@link Offloadable} using default {@link Offloadable#OFFLOADABLE_EXECUTOR} executor.
-     * <p>
-     * This method assumes that the processor can modify the entry. The returned entry processor is not
-     * {@link com.hazelcast.core.ReadOnly}.
-     */
-    private static <K, V, R> EntryProcessor<K, V, R> offloadable(EntryProcessor<K, V, R> entryProcessor) {
-        class OffloadableEntryProcessor implements EntryProcessor<K, V, R>, Offloadable {
-            @Override
-            public String getExecutorName() {
-                return OFFLOADABLE_EXECUTOR;
-            }
+    private static class MovieEmbeddingEntryProcessor implements EntryProcessor<String, MovieMetadata, Integer>, Offloadable {
+        private transient float[] lastVector;
 
-            @Override
-            public R process(Map.Entry<K, V> entry) {
-                return entryProcessor.process(entry);
+        @Override
+        public Integer process(Map.Entry<String, MovieMetadata> entry) {
+            MovieMetadata value = entry.getValue();
+            if (value.plotSummary != null) {
+                value.vector = new AllMiniLmL6V2EmbeddingModel().embed(value.plotSummary).content().vector();
+                lastVector = value.vector;
+                entry.setValue(value);
+                return 1;
             }
-
-            @Nullable
-            @Override
-            public EntryProcessor<K, V, R> getBackupProcessor() {
-                // backup entry processors are not offloaded
-                return entryProcessor.getBackupProcessor();
-            }
+            return 0;
         }
 
-        if (entryProcessor == null) {
+        @Nullable
+        @Override
+        public EntryProcessor<String, MovieMetadata, Integer> getBackupProcessor() {
+            // pass computed embedding to backup entry processor to avoid recomputation on backup
+            return new MovieEmbeddingBackupEntryProcessor(lastVector);
+        }
+
+        @Override
+        public String getExecutorName() {
+            return OFFLOADABLE_EXECUTOR;
+        }
+    }
+
+    private static class MovieEmbeddingBackupEntryProcessor implements EntryProcessor<String, MovieMetadata, Integer> {
+        private final float[] vector;
+
+        private MovieEmbeddingBackupEntryProcessor(float[] vector) {
+            this.vector = vector;
+        }
+
+        @Override
+        public Integer process(Map.Entry<String, MovieMetadata> entry) {
+            MovieMetadata value = entry.getValue();
+            if (value != null && value.plotSummary != null) {
+                value.vector = vector;
+                entry.setValue(value);
+            }
+
+            // return value does not matter
             return null;
         }
-        if (entryProcessor instanceof Offloadable) {
-            throw new IllegalArgumentException("entryProcessor is already Offloadable");
-        }
-
-        return new OffloadableEntryProcessor();
     }
 }
