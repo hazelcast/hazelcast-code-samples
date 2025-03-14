@@ -21,16 +21,21 @@ import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.Offloadable;
 import com.hazelcast.internal.util.Timer;
+import com.hazelcast.map.EntryProcessor;
 import com.hazelcast.map.IMap;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
@@ -54,6 +59,7 @@ import java.util.regex.Pattern;
  */
 public class TextSimilaritySearchImap {
 
+    static boolean OFFLOADED = true;
     static Map<String, String> movieIdToPlotSummary = new ConcurrentHashMap<>();
     static Map<String, MovieMetadata> movieIdToMeta = new ConcurrentHashMap<>();
 
@@ -69,15 +75,20 @@ public class TextSimilaritySearchImap {
 //        movies.addIndex(IndexType.SORTED, "releaseDate");
 
         // ingest
-        loadSummaries(movies);
+        // in tests use a subset of movies to ingest data faster
+        loadSummaries(movies, args.length > 0 ? 1000 : Integer.MAX_VALUE);
         generateEmbeddings(movies, embeddingModel);
 
         // read user input from console and search matches
-        try (BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in))) {
+        Reader in = args.length > 0 ? new StringReader(args[0]) : new InputStreamReader(System.in);
+        try (BufferedReader consoleReader = new BufferedReader(in)) {
             while (true) {
                 // read user input
                 System.out.println("Enter release date pattern followed by search string:");
                 String line = consoleReader.readLine();
+                if (line == null) {
+                    break;
+                }
                 var parts = line.split(" ", 2);
                 if (parts.length != 2) {
                     System.out.println("Invalid search string");
@@ -122,6 +133,8 @@ public class TextSimilaritySearchImap {
                 });
             }
         }
+
+        Hazelcast.shutdownAll();
     }
 
     /**
@@ -130,7 +143,8 @@ public class TextSimilaritySearchImap {
     private static IMap<String, MovieMetadata> startHzAndGetMovieImap() {
         Config config = new Config();
         HazelcastInstance member = Hazelcast.newHazelcastInstance(config);
-        member.getConfig().addMapConfig(new MapConfig().setName("movies").setInMemoryFormat(InMemoryFormat.OBJECT));
+        member.getConfig().addMapConfig(new MapConfig().setName("movies")
+                .setInMemoryFormat(InMemoryFormat.OBJECT));
         return member.getMap("movies");
     }
 
@@ -144,9 +158,9 @@ public class TextSimilaritySearchImap {
     }
 
     //region data loading
-    private static void loadSummaries(IMap<String, MovieMetadata> movies) {
+    private static void loadSummaries(IMap<String, MovieMetadata> movies, int limit) {
         // read files
-        preparePlotSummaries();
+        preparePlotSummaries(limit);
 
         long start = Timer.nanos();
         System.out.println("Loading " + movieIdToMeta.size() + " plot summaries");
@@ -157,7 +171,7 @@ public class TextSimilaritySearchImap {
     /**
      * Reads the movie & plot summary data
      */
-    public static void preparePlotSummaries() {
+    public static void preparePlotSummaries(int limit) {
         Scanner scanner = new Scanner(TextSimilaritySearchImap.class.getResourceAsStream("plot_summaries.txt"));
         Pattern pattern = Pattern.compile("(\\d+)\t(.*)\n");
         scanner.findAll(pattern)
@@ -169,6 +183,7 @@ public class TextSimilaritySearchImap {
         scanner = new Scanner(TextSimilaritySearchImap.class.getResourceAsStream("movie.metadata.tsv"));
         pattern = Pattern.compile("(\\d+)\t[^\t]*\t([^\t]*)\t([^\t]*)\t.*\n");
         scanner.findAll(pattern)
+                .limit(limit)
                 .forEach(matchResult -> {
                     String id = matchResult.group(1);
                     String name = matchResult.group(2);
@@ -181,16 +196,33 @@ public class TextSimilaritySearchImap {
     public static void generateEmbeddings(IMap<String, MovieMetadata> movies, EmbeddingModel embeddingModel) {
         long start = Timer.nanos();
         System.out.println("Generating embeddings for " + movies.size() + " plot summaries");
+        int embeddings;
 
-        int embeddings = movies.executeOnEntries(entry -> {
-            MovieMetadata value = entry.getValue();
-            if (value.plotSummary != null) {
-                value.vector = embeddingModel.embed(value.plotSummary).content().vector();
-                entry.setValue(value);
-                return 1;
-            }
-            return 0;
-        }).values().stream().mapToInt(i -> i).sum();
+        if (OFFLOADED) {
+            // offloading is not supported in executeOnEntries, so in order not to block the partition thread
+            // the invocations have to be one by one.
+            embeddings = movies.keySet().parallelStream().map(movieId -> movies.executeOnKey(movieId, offloadable(entry -> {
+                MovieMetadata value = entry.getValue();
+                if (value.plotSummary != null) {
+                    value.vector = embeddingModel.embed(value.plotSummary).content().vector();
+                    entry.setValue(value);
+                    return 1;
+                }
+                return 0;
+            }))).mapToInt(i -> i).sum();
+        } else {
+            // simpler version without offloading that can block partition thread for a long time
+            embeddings = movies.executeOnEntries(entry -> {
+                MovieMetadata value = entry.getValue();
+                if (value.plotSummary != null) {
+                    value.vector = embeddingModel.embed(value.plotSummary).content().vector();
+                    entry.setValue(value);
+                    return 1;
+                }
+                return 0;
+            }).values().stream().mapToInt(i -> i).sum();
+        }
+
         System.out.println("Generating embeddings for " + embeddings + " plot summaries took " + Timer.secondsElapsed(start) + " seconds");
     }
 
@@ -275,5 +307,41 @@ public class TextSimilaritySearchImap {
         private static float cosineScore(float[] a, float[] b) {
             return (1 + cosineDistance(a, b)) / 2;
         }
+    }
+
+    /**
+     * Makes entry processor {@link Offloadable} using default {@link Offloadable#OFFLOADABLE_EXECUTOR} executor.
+     * <p>
+     * This method assumes that the processor can modify the entry. The returned entry processor is not
+     * {@link com.hazelcast.core.ReadOnly}.
+     */
+    private static <K, V, R> EntryProcessor<K, V, R> offloadable(EntryProcessor<K, V, R> entryProcessor) {
+        class OffloadableEntryProcessor implements EntryProcessor<K, V, R>, Offloadable {
+            @Override
+            public String getExecutorName() {
+                return OFFLOADABLE_EXECUTOR;
+            }
+
+            @Override
+            public R process(Map.Entry<K, V> entry) {
+                return entryProcessor.process(entry);
+            }
+
+            @Nullable
+            @Override
+            public EntryProcessor<K, V, R> getBackupProcessor() {
+                // backup entry processors are not offloaded
+                return entryProcessor.getBackupProcessor();
+            }
+        }
+
+        if (entryProcessor == null) {
+            return null;
+        }
+        if (entryProcessor instanceof Offloadable) {
+            throw new IllegalArgumentException("entryProcessor is already Offloadable");
+        }
+
+        return new OffloadableEntryProcessor();
     }
 }
