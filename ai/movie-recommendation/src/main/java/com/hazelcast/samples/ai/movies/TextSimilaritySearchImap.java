@@ -90,7 +90,7 @@ public class TextSimilaritySearchImap {
                     break;
                 }
                 var parts = line.split(" ", 2);
-                if (parts.length != 2) {
+                if (parts.length < 2) {
                     System.out.println("Invalid search string");
                     continue;
                 }
