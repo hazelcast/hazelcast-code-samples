@@ -2,7 +2,6 @@ package com.hazelcast.samples.spring.data.chemistry;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.shell.command.annotation.CommandScan;
 import org.springframework.shell.command.annotation.EnableCommand;
 
 /**

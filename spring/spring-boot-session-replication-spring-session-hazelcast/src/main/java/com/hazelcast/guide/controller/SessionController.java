@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @RestController
 public class SessionController {
 
-    private static final String principalIndexName = HazelcastIndexedSessionRepository.PRINCIPAL_NAME_INDEX_NAME;
-    private static final DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+    private static final String PRINCIPAL_INDEX_NAME = HazelcastIndexedSessionRepository.PRINCIPAL_NAME_INDEX_NAME;
+    private static final DateFormat FORMATTER = new SimpleDateFormat("HH:mm:ss");
 
     /**
      * Alternatively you can use {@link HazelcastIndexedSessionRepository} directly, then you need to define
@@ -42,11 +42,12 @@ public class SessionController {
      *
      */
     @GetMapping("/create")
-    public String createSession(@RequestParam("principal") String principal, HttpServletRequest request, HttpServletResponse response) {
+    public String createSession(@RequestParam("principal") String principal, HttpServletRequest request,
+                                HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         if (session == null) {
             session = request.getSession();
-            session.setAttribute(principalIndexName, principal);
+            session.setAttribute(PRINCIPAL_INDEX_NAME, principal);
             return "Session created: " + session.getId();
         } else {
             return "Session already exists: " + session.getId();
@@ -54,9 +55,9 @@ public class SessionController {
     }
 
     /**
-     * Lists all the sessions with the same {@link #principalIndexName} of the request's session.
+     * Lists all the sessions with the same {@link #PRINCIPAL_INDEX_NAME} of the request's session.
      *
-     * @return All sessions associated with this session's {@link #principalIndexName}.
+     * @return All sessions associated with this session's {@link #PRINCIPAL_INDEX_NAME}.
      */
     @GetMapping(value = "/list", produces = MediaType.TEXT_HTML_VALUE)
     public String listSessionsByPrincipal(HttpServletRequest request) {
@@ -64,11 +65,11 @@ public class SessionController {
         if (session == null) {
             return "<html>No session found.</html>";
         }
-        String principal = (String) session.getAttribute(principalIndexName);
+        String principal = (String) session.getAttribute(PRINCIPAL_INDEX_NAME);
         Map<String, ? extends Session> sessions = sessionRepository.findByPrincipalName(principal);
         return toHtmlTable(sessions.entrySet().stream().collect(Collectors.toMap(
                 e -> e.getKey().substring(0, 8),
-                e -> "Principal: " + session.getAttribute(principalIndexName))
+                e -> "Principal: " + session.getAttribute(PRINCIPAL_INDEX_NAME))
         ));
     }
 
@@ -85,9 +86,9 @@ public class SessionController {
         }
         Map<String, Object> attributes = new LinkedHashMap<>();
         attributes.put("sessionId", session.getId());
-        attributes.put("principal", session.getAttribute(principalIndexName));
-        attributes.put("created", formatter.format(new Date(session.getCreationTime())));
-        attributes.put("last accessed", formatter.format(new Date(session.getLastAccessedTime())));
+        attributes.put("principal", session.getAttribute(PRINCIPAL_INDEX_NAME));
+        attributes.put("created", FORMATTER.format(new Date(session.getCreationTime())));
+        attributes.put("last accessed", FORMATTER.format(new Date(session.getLastAccessedTime())));
         return toHtmlTable(attributes);
     }
 
