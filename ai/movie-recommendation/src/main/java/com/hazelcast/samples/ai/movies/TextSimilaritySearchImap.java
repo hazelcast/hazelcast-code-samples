@@ -204,7 +204,7 @@ public class TextSimilaritySearchImap {
 
         if (offloaded) {
             // offloading is not supported in executeOnEntries, so in order not to block the partition thread
-            // the invocations have to performed be one by one.
+            // the invocations have to be performed one by one.
             embeddings = movies.keySet().parallelStream()
                     .map(movieId -> movies.executeOnKey(movieId, new MovieEmbeddingEntryProcessor()))
                     .mapToInt(i -> i).sum();
