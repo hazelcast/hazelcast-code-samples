@@ -62,7 +62,7 @@ import java.util.regex.Pattern;
  */
 public class TextSimilaritySearchImap {
 
-    static boolean OFFLOADED = true;
+    static boolean offloaded = true;
     static Map<String, String> movieIdToPlotSummary = new ConcurrentHashMap<>();
     static Map<String, MovieMetadata> movieIdToMeta = new ConcurrentHashMap<>();
 
@@ -168,7 +168,8 @@ public class TextSimilaritySearchImap {
         long start = Timer.nanos();
         System.out.println("Loading " + movieIdToMeta.size() + " plot summaries");
         movies.putAll(movieIdToMeta);
-        System.out.println("Loading " + movieIdToMeta.size() + " plot summaries took " + Timer.millisElapsed(start) + " milliseconds");
+        System.out.println("Loading " + movieIdToMeta.size() + " plot summaries "
+                + "took " + Timer.millisElapsed(start) + " milliseconds");
     }
 
     /**
@@ -201,7 +202,7 @@ public class TextSimilaritySearchImap {
         System.out.println("Generating embeddings for " + movies.size() + " plot summaries");
         int embeddings;
 
-        if (OFFLOADED) {
+        if (offloaded) {
             // offloading is not supported in executeOnEntries, so in order not to block the partition thread
             // the invocations have to performed be one by one.
             embeddings = movies.keySet().parallelStream()
@@ -220,7 +221,8 @@ public class TextSimilaritySearchImap {
             }).values().stream().mapToInt(i -> i).sum();
         }
 
-        System.out.println("Generating embeddings for " + embeddings + " plot summaries took " + Timer.secondsElapsed(start) + " seconds");
+        System.out.println("Generating embeddings for " + embeddings + " plot summaries "
+                + "took " + Timer.secondsElapsed(start) + " seconds");
     }
 
     public static class MovieMetadata implements Serializable {

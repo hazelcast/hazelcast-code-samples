@@ -21,13 +21,13 @@ class TextSimilaritySearchImapTest {
 
     @Test
     void testMainOffloaded() throws Exception {
-        TextSimilaritySearchImap.OFFLOADED = true;
+        TextSimilaritySearchImap.offloaded = true;
         TextSimilaritySearchImap.main(new String[]{"200% cars " + System.lineSeparator()});
     }
 
     @Test
     void testMainNotOffloaded() throws Exception {
-        TextSimilaritySearchImap.OFFLOADED = false;
+        TextSimilaritySearchImap.offloaded = false;
         TextSimilaritySearchImap.main(new String[]{"200% cars " + System.lineSeparator()});
     }
 }
