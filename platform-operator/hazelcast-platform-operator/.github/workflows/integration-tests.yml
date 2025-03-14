@@ -1,0 +1,101 @@
+name: Integration tests
+on: push
+
+jobs:
+  run-tests:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: "v0.11.1"
+
+      - name: Deploy Hazelcast Platform Operator
+        run: |
+          kubectl apply -f https://repository.hazelcast.com/operator/bundle.yaml
+          kubectl wait --for=condition=available --timeout=600s deployment/hazelcast-platform-controller-manager
+
+      - name: Create Hazelcast Platform Enterprise cluster
+        run: |
+          kubectl create secret generic hazelcast-license-key --from-literal license-key=${{ secrets.LICENSE }}
+          cat <<EOF | kubectl apply -f -
+          apiVersion: hazelcast.com/v1alpha1
+          kind: Hazelcast
+          metadata:
+            name: my-hazelcast
+          spec:
+            clusterSize: 3
+            repository: 'docker.io/hazelcast/hazelcast-enterprise'
+            version: '5.0-slim'
+            licenseKeySecret: hazelcast-license-key
+          EOF
+          sleep 30
+          kubectl wait --for=condition=ready pod/my-hazelcast-0 --timeout=5m
+          kubectl wait --for=condition=ready pod/my-hazelcast-1 --timeout=150s
+          kubectl wait --for=condition=ready pod/my-hazelcast-2 --timeout=150s
+          sleep 5
+
+      - name: Assert Hazelcast Status
+        uses: actions/github-script@v5
+        with:
+          script: |
+            let readyMembers = '';
+            let phase = '';
+            const phaseOptions = {};
+            phaseOptions.listeners = {
+              stdout: (data) => {
+                phase += data.toString();
+              },
+              stderr: (data) => {
+              }
+            };
+            const readyMembersOptions = {};
+            readyMembersOptions.listeners = {
+              stdout: (data) => {
+                readyMembers += data.toString();
+              },
+              stderr: (data) => {
+              }
+            };
+            await exec.exec('kubectl', ['get', 'hazelcast', 'my-hazelcast', '-o=jsonpath={.status.phase}'], phaseOptions);
+            await exec.exec('kubectl', ['get', 'hazelcast', 'my-hazelcast', '-o=jsonpath={.status.hazelcastClusterStatus.readyMembers}'], readyMembersOptions);
+            if (phase !== "Running") {
+              core.setFailed(`Unexpected phase: ${phase}`)
+            } 
+            if (readyMembers !== "3/3") {
+              core.setFailed(`Unexpected ready members: ${readyMembers}`)
+            }
+
+      - name: Create ManagementCenter
+        run: |
+          cat <<EOF | kubectl apply -f -
+          apiVersion: hazelcast.com/v1alpha1
+          kind: ManagementCenter
+          metadata:
+            name: my-managementcenter
+          spec:
+            repository: 'hazelcast/management-center'
+            version: '5.0'
+            licenseKeySecret: hazelcast-license-key
+          EOF
+          sleep 5
+          kubectl wait --for=condition=ready pod/my-managementcenter-0 --timeout=5m
+
+      - name: Assert ManagementCenter Status
+        uses: actions/github-script@v5
+        with:
+          script: |
+            let phase = '';
+            const phaseOptions = {};
+            phaseOptions.listeners = {
+              stdout: (data) => {
+                phase += data.toString();
+              },
+              stderr: (data) => {
+              }
+            };
+            await exec.exec('kubectl', ['get', 'managementcenter', 'my-managementcenter', '-o=jsonpath={.status.phase}'], phaseOptions);
+            if (phase !== "Running") {
+              core.setFailed(`Unexpected phase: ${phase}`)
+            }
+

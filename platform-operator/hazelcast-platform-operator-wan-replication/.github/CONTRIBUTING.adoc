@@ -1,0 +1,82 @@
+= Contributing to Hazelcast Tutorials
+
+This guide covers how to use this template to contribute to Hazelcast tutorials.
+
+== Repository Structure
+
+All tutorials follow the same structure:
+
+- `.github/workflows/build-site.yml`: A build hook that builds the documentation site when a change is merged.
+- `docs/`: Source content in the link:https://docs.antora.org/antora/latest/standard-directories/[standard Antora file and directory structure].
+- `create.sh`: A script that converts the Asciidoc files in the `docs/` directory to a PDF. This script requires the link:https://docs.asciidoctor.org/asciidoctor/latest/cli/[Asciidoctor CLI] to be installed.
+- `antora-playbook-local.yml`: An Antora playbook that builds the tutorials subsite locally.
+- `lib/`: Asciidoc extensions that are needed to generate the tutorials subsite locally.
+- `package.json`: Scripts for building the tutorials subsite locally as well as checking links and serving the files.
+
+== Adding a New Tutorial
+ 
+. Create a new repository, using this link:https://github.com/hazelcast-guides/base-guide[template].
++
+TIP: Use a brief name for the new repository as it will be the endpoint of the tutorial when it's published.
+
+. Rename the file in `docs/modules/ROOT/pages` to the name of your repository.
+
+. Add the filename to the template in the README.
+
+. Write your tutorial by following the instructions in the file.
+
+. Submit a pull request against the `develop` branch of the link:https://github.com/hazelcast/hazelcast-docs[`hazelcast-docs` repository] to append your tutorial repository to the `content.sources` field in the `antora-playbook.yml` and `antora-playbook-local.yml` files.
++
+For example:
++
+```yaml
+content:
+  sources:
+    - url: https://github.com/hazelcast-guides/<your-repo>
+    branches: main
+    start_path: docs
+```
++
+After the pull request is merged, your tutorial will be available on the documentation site in ~10 minutes.
+
+== Previewing a Tutorial
+
+To preview your content in a local version of the tutorials subsite, do the following:
+
+. Append your tutorial repository to the `content.sources` field in the `antora-playbook-local.yml` file at the root of this repository.
++
+For example:
++
+```yaml
+content:
+  sources:
+    - url: https://github.com/hazelcast-guides/<your-repo>
+    branches: <your branch name>
+    start_path: docs
+```
+
+. Install the required dependencies by running `npm i` at the root of this repository.
+
+. Build the site.
++
+```bash
+npm run-script build-local
+```
++
+You should see the following:
++
+`Site generation complete!`
+
+. Serve the site locally.
++
+```bash
+npm run-script serve
+```
++
+This script automatically copies the local URL to your clipboard.
+
+. In a web browser, paste the URL into the address bar.
+
+You can browse the site for your tutorial, or you can append the name of your tutorial's filename to the end of the URL. For example: http://localhost:3000/tutorials/<your tutorial>.
+
+NOTE: Search does not work locally. The search bar displays results only for tutorials that are already published on docs.hazelcast.com.

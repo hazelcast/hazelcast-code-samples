@@ -1,0 +1,13 @@
+{
+  "name": "hazelcast",
+  "version": "1.0.0",
+  "description": "",
+  "main": "example.js",
+  "scripts": {
+    "start": "node example.js"
+  },
+  "author": "",
+  "dependencies": {
+    "hazelcast-client": "^5.0"
+  }
+}

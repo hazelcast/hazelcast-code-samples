@@ -1,0 +1,6 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: Map
+metadata:
+  name: map-sync
+spec:
+  hazelcastResourceName: hazelcast-first

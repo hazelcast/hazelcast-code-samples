@@ -1,0 +1,22 @@
+{
+  "name": "hazelcast-docs-playbook",
+  "version": "1.0.0",
+  "description": "Script for working with Hazelcast tutorials locally",
+  "author": "Jake Cahill",
+  "license": "ISC",
+  "scripts": {
+    "build-local": "antora --to-dir local-docs --fetch --generator @antora/site-generator-default antora-playbook-local.yml",
+    "check-links-local": "antora --generator @antora/xref-validator antora-playbook-local.yml",
+    "serve": "serve local-docs",
+    "expose": "ngrok http 5000"
+  },
+  "devDependencies": {
+    "@antora/cli": "^3.0.0",
+    "@antora/site-generator-default": "^3.0.0",
+    "@antora/xref-validator": "gitlab:antora/xref-validator",
+    "@djencks/antora-aggregate-collector": "^0.1.0-beta.1",
+    "asciidoctor-kroki": "^0.10.0",
+    "ngrok": "^4.2.2",
+    "serve": "^13.0.2"
+  }
+}

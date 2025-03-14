@@ -1,0 +1,1 @@
+This repository hosts the documentation and code samples for the link:https://docs.hazelcast.com/tutorials/hazelcast-platform-operator-user-code-namespace[hazelcast-platform-operator-user-code-namespace tutorial].

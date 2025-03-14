@@ -1,0 +1,9 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: UserCodeNamespace
+metadata:
+  name: my-ucn
+spec:
+  hazelcastResourceName: hazelcast
+  bucketConfig:
+    secretName: <SECRET_NAME>
+    bucketURI: <BUCKET_URI>

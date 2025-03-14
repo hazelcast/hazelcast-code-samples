@@ -1,0 +1,250 @@
+name: Test on GKE
+on:
+  push:
+    paths-ignore:
+      - "docs/**"
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_ZONE: europe-west1-b
+  GCP_NETWORK: tutorial-test-network
+  EXAMPLES_DIR: docs/modules/ROOT/examples/operator-expose-externally
+
+jobs:
+  create-gke-cluster:
+    name: Create GKE cluster
+    runs-on: ubuntu-latest
+    outputs:
+      CLUSTER_NAME: ${{ steps.cluster.outputs.CLUSTER_NAME }}
+
+    steps:
+      - name: Authenticate to GCP
+        uses: "google-github-actions/auth@v0.7.0"
+        with:
+          credentials_json: ${{ secrets.GKE_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.6.0
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Create GKE cluster
+        id: cluster
+        run: |-
+          CLUSTER_NAME="hpo-ex-ex-$GITHUB_RUN_NUMBER"
+          echo "CLUSTER_NAME=$CLUSTER_NAME" >> $GITHUB_ENV
+          echo "::set-output name=CLUSTER_NAME::${CLUSTER_NAME}"
+
+          gcloud container clusters create $CLUSTER_NAME \
+            --zone=${{ env.GKE_ZONE }} \
+            --project=${{ env.GCP_PROJECT_ID }} \
+            --network=${{ env.GCP_NETWORK }} \
+            --machine-type=n1-standard-2 \
+            --num-nodes=2
+          sleep 30
+
+      - name: Connect to the GKE cluster
+        run: |
+          gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
+            --zone ${{ env.GKE_ZONE }} \
+            --project ${{ env.GCP_PROJECT_ID }}
+
+      - name: Install Kubectl
+        run: |-
+          gcloud components install kubectl
+
+      - name: Deploy operator
+        run: |-
+          helm repo add hazelcast https://hazelcast-charts.s3.amazonaws.com/
+          helm repo update
+          helm install operator hazelcast/hazelcast-platform-operator --set installCRDs=true,phoneHomeEnabled=false
+
+  run-tests:
+    name: Run Integration tests on GKE
+    runs-on: ubuntu-latest
+    needs: create-gke-cluster
+    env:
+      CLUSTER_NAME: ${{ needs.create-gke-cluster.outputs.CLUSTER_NAME }}
+
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        include:
+          - type: smart
+            suffix: ""
+          - type: unisocket
+            suffix: "-unisocket"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: "adopt"
+          cache: "maven"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Set up Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.17.2"
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          cache: "pip"
+
+      - name: Authenticate to GCP
+        uses: "google-github-actions/auth@v0.7.0"
+        with:
+          credentials_json: ${{ secrets.GKE_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.6.0
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Install Kubectl
+        run: |-
+          gcloud components install kubectl
+
+      - name: Connect to the GKE cluster
+        run: |
+          gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
+            --zone ${{ env.GKE_ZONE }} \
+            --project ${{ env.GCP_PROJECT_ID }}
+
+      - name: Deploy Hazelcast cluster
+        run: |-
+          kubectl apply -f $EXAMPLES_DIR/hazelcast${{matrix.suffix}}.yaml
+
+      - name: Waith for Hazelcast cluster to be ready
+        run: |-
+          kubectl wait --for='jsonpath={.status.phase}=Running' hazelcast/my-hazelcast${{matrix.suffix}} --timeout 300s
+
+      - name: Wait for external IP to get assigned
+        timeout-minutes: 5
+        run: |-
+          serviceType=$(kubectl get svc my-hazelcast${{matrix.suffix}} --output="jsonpath={.spec.type}")
+          if [ "$serviceType" != "LoadBalancer" ]; then
+            exit 1
+          fi
+          EXTERNAL_IP=$(kubectl get svc my-hazelcast${{matrix.suffix}} --output="jsonpath={.status.loadBalancer.ingress[0].ip}")
+          while [ "$EXTERNAL_IP" == "" ]; do
+            sleep 10
+            EXTERNAL_IP=$(kubectl get svc my-hazelcast${{matrix.suffix}} --output="jsonpath={.status.loadBalancer.ingress[0].ip}")
+          done
+
+          echo "EXTERNAL_IP=${EXTERNAL_IP}" >> $GITHUB_ENV
+
+      - name: Wait for Smart type member IPs to get assigned
+        if: matrix.type == 'smart'
+        timeout-minutes: 5
+        run: |-
+          for i in {0..2}; do
+            SVC_NAME="my-hazelcast${{matrix.suffix}}-${i}"
+            SVC_EXTERNAL_IP=$(kubectl get svc "${SVC_NAME}" --output="jsonpath={.status.loadBalancer.ingress[0].ip}")
+            while [ "$SVC_EXTERNAL_IP" == "" ]; do
+              sleep 10
+              SVC_EXTERNAL_IP=$(kubectl get svc "${SVC_NAME}" --output="jsonpath={.status.loadBalancer.ingress[0].ip}")
+            done
+          done
+
+      - name: Test Java Client
+        run: |-
+          EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+          cd $EXAMPLES_DIR/java${{matrix.suffix}}
+          sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" src/main/java/com/hazelcast/Main.java
+          mvn package
+          java -jar target/*jar-with-dependencies*.jar >> output-java.txt &
+          PID=$!
+          sleep 30
+          kill $PID
+
+          cat output-java.txt | grep 'Successful connection!' -q
+
+      - name: Test Node.js Client
+        run: |-
+          EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+          cd $EXAMPLES_DIR/nodejs${{matrix.suffix}}
+          sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" client.js
+          npm install
+          npm start >> output-nodejs.txt &
+          PID=$!
+          sleep 30
+          kill $PID
+
+          cat output-nodejs.txt | grep 'Successful connection!' -q
+
+      - name: Test Go Client
+        run: |-
+          EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+          cd $EXAMPLES_DIR/go${{matrix.suffix}}
+          sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" main.go
+          go run main.go >> output-go.txt &
+          PID=$!
+          sleep 30
+          kill $PID
+
+          cat output-go.txt | grep 'Successful connection!' -q
+
+      - name: Test Python Client
+        run: |-
+          EXTERNAL_IP="${{ env.EXTERNAL_IP }}"
+          cd $EXAMPLES_DIR/python${{matrix.suffix}}
+          sed -i "s/<EXTERNAL-IP>/$EXTERNAL_IP/g" main.py
+          pip install -r requirements.txt
+          python main.py >> output-python.txt &
+          PID=$!
+          sleep 30
+          kill $PID
+
+          cat output-python.txt | grep 'Successful connection!' -q
+
+      - name: Clean up
+        if: ${{ always() }}
+        run: |-
+          kubectl delete hazelcast my-hazelcast${{matrix.suffix}}
+          kubectl wait --for=delete pod/my-hazelcast${{matrix.suffix}}-0 --timeout=2m
+          kubectl get svc my-hazelcast${{matrix.suffix}} || exit 0
+          kubectl wait --for=delete svc/my-hazelcast${{matrix.suffix}} --timeout=5m
+
+      - name: Clean up Smart services
+        if: ${{ always() && matrix.type == 'smart' }}
+        run: |-
+          kubectl get svc my-hazelcast${{matrix.suffix}}-0 || exit 0
+          kubectl wait --for=delete svc/my-hazelcast${{matrix.suffix}}-0 --timeout=5m
+
+  clean-up:
+    name: Clean up GKE cluster
+    runs-on: ubuntu-latest
+    needs: [run-tests, create-gke-cluster]
+    if: ${{ always() }}
+    env:
+      CLUSTER_NAME: ${{ needs.create-gke-cluster.outputs.CLUSTER_NAME }}
+    steps:
+      - name: Authenticate to GCP
+        uses: "google-github-actions/auth@v0.7.0"
+        with:
+          credentials_json: ${{ secrets.GKE_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.6.0
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      # Clean up
+      - name: Delete cluster
+        run: |-
+          gcloud container clusters delete "$CLUSTER_NAME" --zone="$GKE_ZONE" --quiet

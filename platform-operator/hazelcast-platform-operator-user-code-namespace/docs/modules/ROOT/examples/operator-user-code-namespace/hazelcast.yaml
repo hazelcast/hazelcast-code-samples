@@ -1,0 +1,10 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: Hazelcast
+metadata:
+  name: hazelcast
+spec:
+  clusterSize: 1
+  repository: "docker.io/hazelcast/hazelcast-enterprise"
+  version: "5.4.0"
+  licenseKeySecretName: hazelcast-license-key
+  userCodeNamespaces: {}

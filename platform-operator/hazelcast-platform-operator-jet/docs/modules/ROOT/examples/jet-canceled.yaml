@@ -1,0 +1,11 @@
+apiVersion: hazelcast.com/v1alpha1
+kind: JetJob
+metadata:
+  name: my-jet-job
+spec:
+  hazelcastResourceName: my-hazelcast
+  state: Canceled
+  jarName: jet-pipeline-run-1.0.0.jar
+  bucketConfig:
+    bucketURI: "<BUCKET-URI>"
+    secretName: <SECRET-NAME>
