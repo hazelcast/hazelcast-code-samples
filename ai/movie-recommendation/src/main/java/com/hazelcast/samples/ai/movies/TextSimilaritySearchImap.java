@@ -314,7 +314,7 @@ public class TextSimilaritySearchImap {
         }
     }
 
-    private static class MovieEmbeddingEntryProcessor implements EntryProcessor<String, MovieMetadata, Integer>, Offloadable {
+    static class MovieEmbeddingEntryProcessor implements EntryProcessor<String, MovieMetadata, Integer>, Offloadable {
         private transient float[] lastVector;
 
         @Override
