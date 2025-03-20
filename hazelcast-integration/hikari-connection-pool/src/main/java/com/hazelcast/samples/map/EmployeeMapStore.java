@@ -4,7 +4,11 @@ import com.hazelcast.map.MapLoader;
 import com.hazelcast.map.MapStore;
 import com.hazelcast.samples.model.Employee;
 
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

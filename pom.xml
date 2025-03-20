@@ -161,12 +161,12 @@
                                     <message>Must depend on publically available, released dependencies</message>
                                     <failWhenParentIsSnapshot>false</failWhenParentIsSnapshot>
                                     <excludes>
-                                      <!-- 
-                                        Ignore modules inside this project
-                                        This _should_ work out of the box already
-                                        https://issues.apache.org/jira/browse/MENFORCER-304
-                                      -->
-                                      <exclude>com.hazelcast.samples*</exclude>
+                                        <!--
+                                          Ignore modules inside this project
+                                          This _should_ work out of the box already
+                                          https://issues.apache.org/jira/browse/MENFORCER-304
+                                        -->
+                                        <exclude>com.hazelcast.samples*</exclude>
                                     </excludes>
                                 </requireReleaseDeps>
                             </rules>
@@ -258,6 +258,9 @@
     <profiles>
         <profile>
             <id>checkstyle</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
