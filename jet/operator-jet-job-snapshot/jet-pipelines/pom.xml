@@ -36,4 +36,8 @@
         </plugins>
     </build>
 
+    <properties>
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
+    </properties>
 </project>

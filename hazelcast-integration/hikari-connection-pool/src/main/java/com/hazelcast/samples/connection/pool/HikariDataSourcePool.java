@@ -11,8 +11,7 @@ import java.sql.SQLException;
  * Implement this class as thread-safe in multithreading environment
  */
 public class HikariDataSourcePool {
-    private static HikariDataSource hikariDataSource = null;
-    private static final HikariDataSourcePool hikariDataSourcePool = null;
+    private static HikariDataSource hikariDataSource;
 
     private HikariDataSourcePool() {
         if (null != hikariDataSource) {

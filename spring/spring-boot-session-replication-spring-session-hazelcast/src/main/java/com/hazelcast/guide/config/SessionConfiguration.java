@@ -26,7 +26,7 @@ import java.time.Duration;
 @EnableHazelcastHttpSession
 class SessionConfiguration {
 
-    private final String SESSIONS_MAP_NAME = "spring-session-map-name";
+    private static final String SESSIONS_MAP_NAME = "spring-session-map-name";
 
     @Bean
     public SessionRepositoryCustomizer<HazelcastIndexedSessionRepository> customize() {
