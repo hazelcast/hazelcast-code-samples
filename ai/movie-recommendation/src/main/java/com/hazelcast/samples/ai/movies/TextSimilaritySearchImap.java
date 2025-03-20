@@ -62,6 +62,9 @@ import java.util.regex.Pattern;
  */
 public class TextSimilaritySearchImap {
 
+    /**
+     * Enables offloaded {@link EntryProcessor} invocation for embeddings calculation.
+     */
     static boolean offloaded = true;
     static Map<String, String> movieIdToPlotSummary = new ConcurrentHashMap<>();
     static Map<String, MovieMetadata> movieIdToMeta = new ConcurrentHashMap<>();
@@ -103,17 +106,6 @@ public class TextSimilaritySearchImap {
 
                 // transform user input to vector
                 float[] query = embeddingModel.embed(userInput).content().vector();
-
-                // find & output top 10 similar matches of plot summary to given text
-                // this invocation uses the prototype nearestNeighbours predicate.
-//                Collection<MovieMetadata> results = movies.values(VectorPredicates.<String, MovieMetadata>nearestNeighbours(10)
-//                        .to(query)
-//                        .withMetric(Metric.COSINE)
-//                        // some movies lack plot summary
-//                        .withOptionalEmbedding("vector")
-//                        // release date sometimes is only a year, sometimes full yyyy-mm-dd
-//                        .matching(Predicates.like("releaseDate", yearPattern))
-//                        .build());
 
                 // find & output top 10 similar matches of plot summary to given text
                 // this invocation uses already available Predicate API predicates.

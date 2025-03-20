@@ -25,5 +25,4 @@ public class MovieEmbeddingEntryProcessorTest extends HazelcastTestSupport {
         IMap<String, TextSimilaritySearchImap.MovieMetadata> map1 = instances[1].getMap("map");
         assertThat(map1.get(key).getVector()).as("Embedding should be replicated to backup").hasSize(384);
     }
-
 }
