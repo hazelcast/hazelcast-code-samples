@@ -11,6 +11,7 @@ If the sample has a README file, follow the instructions. A lot of samples have 
 Included sample folders
 -----------------------
 
+*   **/ai** - Code samples for use of different Hazelcast features in AI use cases. 
 *   **/clients** — Includes sample code that shows how to create a Hazelcast client, put a message on a queue by this client and receive that message by a Hazelcast node. Further how to set up client's near cache, deploy user code to member, communicate via REST or populate client statistics to member.
 *   **/cluster** — cluster state managements and shutdown
 *   **/cluster-split-brain-protection** — setting up cluster split brain protection programatically

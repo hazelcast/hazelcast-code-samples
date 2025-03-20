@@ -87,6 +87,7 @@
         <module>variable-replacers</module>
         <module>generic-record</module>
         <module>sql</module>
+        <module>ai</module>
     </modules>
 
     <build>
