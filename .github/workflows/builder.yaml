@@ -42,7 +42,6 @@ jobs:
             --batch-mode \
             --errors \
             --no-transfer-progress \
-            -Pcheckstyle \
             ${RUNNER_DEBUG:+--show-version} \
             "-Dhazelcast.enterprise.license.key=${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}" \
            verify
