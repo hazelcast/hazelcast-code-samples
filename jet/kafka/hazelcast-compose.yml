@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   hazelcast:
     image: hazelcast/hazelcast:5.1.1
