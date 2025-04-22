@@ -2,7 +2,7 @@
 name: Test Failure report
 about: Template for test failures
 title: INSERT_FULL_TEST_NAME_HERE
-labels: ['Type: Test-Failure']
+labels: ['Type: Test Failure']
 assignees: ''
 ---
 
