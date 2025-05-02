@@ -13,7 +13,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jaxb.api.version>2.3.0</jaxb.api.version>
+        <jaxb.api.version>4.0.5</jaxb.api.version>
     </properties>
 
     <parent>
