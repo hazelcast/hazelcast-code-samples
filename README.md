@@ -34,6 +34,7 @@ Included sample folders
 *   **/near-cache** — Shows the benefits of Near Caches, local subsets of data that track the master copy in the grid. Further extends the _/clients_ examples.
 *   **/network-configuration** — Shows what options Hazelcast configuration has regarding to network (e.g. partition grouping, multicast, ports, outbound ports, etc.)
 *   **/osgi** — Demonstrates how to use Hazelcast's OSGI support
+*   **/platform-operator** - Code samples for Platform Operator (migrated from hazelcast-guides)
 *   **/replicated-map** — Code samples to show how to get a replicated map and create an entry listener.
 *   **/serialization** — Includes code samples that implement various serialization interfaces like DataSerializable, IdentifiedDataSerializable, Externalizable and Portable. It also has code samples to show how to plug a custom serializer using StreamSerializer and ByteArraySerializer interfaces and usage of Kryo and Protobuf serializers.
 *   **/spi** — Includes code samples that create a simple counter application using Hazelcast’s Service Provider Interface (SPI).
