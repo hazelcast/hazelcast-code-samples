@@ -4,6 +4,7 @@ import com.hazelcast.jet.pipeline.Pipeline
 import com.hazelcast.jet.pipeline.ServiceFactories.sharedService
 import com.hazelcast.jet.pipeline.Sinks
 import com.hazelcast.jet.pipeline.StreamSource
+import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.milliseconds
 
 /*
@@ -29,35 +30,30 @@ class PaymentsJetPipeline(
 
     override fun describePipeline(): String {
         return """
-           This Jet pipeline consumes payment requests in JSON format from the
-           Kafka stream source, maps them from JSON to a payment request
-           object, and uses a groupingKey to distribute the payment requests across
-           the nodes according to merchant ID. The node responsible for the given
-           merchant then transfers its assigned payment requests to its local
-           payment processing service for payment. That service completes the
-           payment after a random delay (simulating the processing of the payment
-           IRL), and returns a receipt. The receipt is then stored in the payment
-           receipt map.
+           This Jet pipeline consumes payment requests in JSON format from
+           Kafka, maps them from JSON to a payment request object, and uses a
+           groupingKey to distribute the payment requests across the nodes
+           according to merchant ID. The node assigned for the given merchant
+           then uses its local payment processing service to process the
+           merchant's payments. That service completes the payment after a
+           random delay (simulating a real payment processing service), and
+           returns a payment receipt. The receipt is then stored in the 
+           payment receipt map.
            """.trimIndent()
     }
 
-    override val pipeline = Pipeline.create().apply {
+    override val pipeline: Pipeline = Pipeline.create().apply {
         readFrom(streamSource).withoutTimestamps().map { entry ->
-            entry.value.toPaymentRequest() // convert JSON string to payment req
+            Json.Default.decodeFromString<PaymentRequest>(entry.value)
         }.groupingKey { it.merchantId } /* distribute/group by merchant ID */
             .mapUsingServiceAsync(
                 sharedService { ctx ->
                     PaymentProcessingService(ctx.hazelcastInstance())
                 }) { service, _, pmt ->
                 service.processPaymentAsync(pmt) // pay it!
-            }.writeTo(
-                Sinks.map( // add to our receipt map
-                    paymentReceiptMap,
-                    { receipt -> receipt.paymentId },
-                    { receipt -> receipt })
-            )
+            }.writeTo(Sinks.map(paymentReceiptMap, { it.paymentId }, { it }))
     }
 
-    override fun unitsLeft() =
+    override fun unitsLeft(): Int =
         (numPayments - paymentReceiptMap.size).coerceAtLeast(0)
 }

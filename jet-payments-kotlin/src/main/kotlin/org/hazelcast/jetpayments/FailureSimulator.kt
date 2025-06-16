@@ -15,7 +15,7 @@ import kotlin.time.Duration
  */
 internal class FailureSimulator(
     private val client: HzCluster.ClientInstance,
-    private val getNodesInUse: () -> List<Int>
+    private val getNodesInUse: () -> Set<Int>
 ) {
     private val logger = ElapsedTimeLogger("FailSim")
 
@@ -118,7 +118,7 @@ internal class FailureSimulator(
          */
         while (pipelineHasTimeLeft(AppConfig.failureCycleTime)) {
             delay(AppConfig.steadyStateTime) // steadyStateTime
-            val memberToKill = getNodesInUse().toSet().let { available ->
+            val memberToKill = getNodesInUse().let { available ->
                 if (available.isEmpty()) {
                     (0 until client.originalClusterSize).random(seededRandom)
                 } else {

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
  */
 class ClientMembershipListener(private val originalNumMembers: Int) :
     MembershipListener {
-    val numMembersFlow = MutableStateFlow(originalNumMembers)
+    val numMembersFlow: MutableStateFlow<Int> = MutableStateFlow(originalNumMembers)
 
     override fun memberRemoved(membershipEvent: MembershipEvent?) {
         numMembersFlow.update { it - 1 }

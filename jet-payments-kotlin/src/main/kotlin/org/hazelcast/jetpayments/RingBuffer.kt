@@ -14,10 +14,10 @@ class RingBuffer<T>(val capacity: Int = 10) : Iterable<T> {
     private var head = 0 // read index; oldest end
     private var tail = 0 // write index of where to write next (_after_ last item)
     private var newest = 0 // points to newest item in queue (last item)
-    var size = 0 // how many items in queue
+    var size: Int = 0 // how many items in queue
         private set
 
-    fun isEmpty() = size == 0
+    fun isEmpty(): Boolean = size == 0
 
     /* Operates at head--oldest end */
     fun remove(): T {
@@ -88,7 +88,7 @@ class RingBuffer<T>(val capacity: Int = 10) : Iterable<T> {
         private var readIndex = head
         private var itemCount = size
 
-        override fun hasNext() = itemCount > 0
+        override fun hasNext(): Boolean = itemCount > 0
         override fun next(): T {
             val toReturn = arrayList[readIndex]
             readIndex = (readIndex + 1) % capacity

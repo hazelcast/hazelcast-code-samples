@@ -1,5 +1,6 @@
 package org.hazelcast.jetpayments
 
+import java.util.SortedMap
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -103,7 +104,7 @@ class MerchantGenerator(
             .map { ('0'..'9').random(seededRandom) }.joinToString("")
     }
 
-    val merchantMap = merchantPairs.associate { (prefix, suffix) ->
+    val merchantMap: SortedMap<String, Merchant> = merchantPairs.associate { (prefix, suffix) ->
         val name = prefix + suffix
         val shortName = prefix.take(1).uppercase() + suffix.take(1).uppercase()
         val id = createMerchantIdFromName(shortName)

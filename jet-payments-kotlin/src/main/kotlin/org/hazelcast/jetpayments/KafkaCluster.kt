@@ -70,8 +70,7 @@ class KafkaCluster<K, V>(
     }
 
     private val topicCreateJob: Job
-    private val createTopicScope =
-        CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val createTopicScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     // Automatically create the topic. Keep track of Job so others can wait on it.
     init {
@@ -106,25 +105,16 @@ class KafkaCluster<K, V>(
      * Create a Kotlin Flow for consuming from the topic, waiting for topic to be
      * created first.
      */
-    suspend fun <T> consumeAsFlow(
-        consumerGroup: String, numElements: Int, convert: (V) -> T
-    ): Flow<T> {
+    fun <T> consume(consumerGroup: String, convert: (V) -> T): Flow<T> = flow {
         topicCreateJob.join()
-        return flow {
-            val consumer = KafkaConsumer<K, V>(consumerPropsWithCG(consumerGroup))
+        KafkaConsumer<K, V>(consumerPropsWithCG(consumerGroup)).use { consumer ->
+            val timeout = AppConfig.kafkaPollTimeout.toJavaDuration()
             consumer.subscribe(listOf(topicName))
-
-            repeat(numElements) {
-                val records =
-                    consumer.poll(AppConfig.kafkaPollTimeout.toJavaDuration())
-                for (record in records) {
-                    record.value()?.let { value ->
-                        emit(convert(value))
-                    }
+            while (true) {
+                consumer.poll(timeout).map { convert(it.value()) }.forEach {
+                    emit(it)
                 }
             }
-
-            consumer.close()
         }
     }
 

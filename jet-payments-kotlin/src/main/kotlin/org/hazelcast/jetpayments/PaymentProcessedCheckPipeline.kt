@@ -1,6 +1,7 @@
 package org.hazelcast.jetpayments
 
 import com.hazelcast.jet.pipeline.*
+import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.seconds
 
 /*
@@ -35,19 +36,19 @@ internal class PaymentProcessedCheckPipeline(
     }
 
     override val pipeline = Pipeline.create().apply {
-        readFrom(source).withoutTimestamps()
-            .map { entry -> entry.value.toPaymentRequest() }.hashJoin(
-                readFrom(Sources.map<Int, PaymentReceipt?>(AppConfig.paymentReceiptMapName)),
-                JoinClause.onKeys(
-                    { request -> request.paymentId },
-                    { receiptEntry -> receiptEntry?.value?.paymentId })
-            ) { paymentRequest, (_, receipt) ->
-                receipt?.let { receipt ->
-                    TimeRange(
-                        if (receipt.isPaid) "✓" else "×", receipt.timePaid
-                    )
-                } ?: TimeRange("×", paymentRequest.timeIssued)
-            }.writeTo(Sinks.list(paymentProcessedCheckList))
+        readFrom(source).withoutTimestamps().map { entry ->
+            Json.Default.decodeFromString<PaymentRequest>(entry.value)
+        }.hashJoin(
+            readFrom(Sources.map<Int, PaymentReceipt?>(AppConfig.paymentReceiptMapName)),
+            JoinClause.onKeys(
+                { request -> request.paymentId },
+                { receiptEntry -> receiptEntry?.value?.paymentId })
+        ) { paymentRequest, (_, receipt) ->
+            receipt?.let { receipt ->
+                val marker = if (receipt.isPaid) "✓" else "×"
+                TimeRange(marker, receipt.timePaid)
+            } ?: TimeRange("×", paymentRequest.timeIssued)
+        }.writeTo(Sinks.list(paymentProcessedCheckList))
     }
 
     // How many PaymentRequets remain unverified?

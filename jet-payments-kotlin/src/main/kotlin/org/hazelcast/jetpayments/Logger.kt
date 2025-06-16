@@ -1,20 +1,18 @@
 package org.hazelcast.jetpayments
 
+import java.io.Serializable
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ofPattern
 
 /*
  * A very simple Logger class that allows for some simple formatting goodies.
  */
 open class Logger(
     private val label: String, private val addTimestamp: Boolean = true
-) : java.io.Serializable {
-    companion object {
-        private val formatter: DateTimeFormatter =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-    }
+) : Serializable {
 
-    protected open fun getFormattedTime() = LocalDateTime.now().format(formatter)!!
+    protected open fun getFormattedTime(): String =
+        LocalDateTime.now().format(ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
 
     fun log(vararg strings: String) {
         require(strings.isNotEmpty())
@@ -26,7 +24,7 @@ open class Logger(
         strings.forEach { println("$prefix$it") }
     }
 
-    fun log(s: Collection<String>) = log(*s.toTypedArray())
+    fun log(s: Collection<String>): Unit = log(*s.toTypedArray())
 }
 
 internal fun Collection<String>.log(logger: Logger) = logger.log(this)

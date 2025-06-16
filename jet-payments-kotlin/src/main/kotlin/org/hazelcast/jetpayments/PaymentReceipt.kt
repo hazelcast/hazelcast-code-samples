@@ -5,11 +5,11 @@ import kotlin.time.Duration
 
 /*
  * This Kotlin data class represents a payment *receipt*, which we create when the
- * payment processor finishes processing a payment. It links with the payment
- * request via the paymentId field. If the payment was successful, then this record
- * will exist *and* isPaId will be true. The timestamp from when the payment
- * processor completed the payment is marked in the timePaid field. The member on
- * which the payment was processed is recorded in onMember.
+ * payment processor finishes processing a payment. It links with the payment request
+ * via the paymentId field. If the payment was successful, then this record will exist
+ * *and* isPaId will be true. The timestamp from when the payment processor completed
+ * the payment is marked in the timePaid field. The member on which the payment was
+ * processed is recorded in onMember.
  */
 @Serializable
 data class PaymentReceipt(
@@ -34,6 +34,6 @@ data class PaymentReceipt(
         memberIndex
     )
 
-    override fun compareTo(other: PaymentReceipt) =
+    override fun compareTo(other: PaymentReceipt): Int =
         this.timePaid.compareTo(other.timePaid)
 }

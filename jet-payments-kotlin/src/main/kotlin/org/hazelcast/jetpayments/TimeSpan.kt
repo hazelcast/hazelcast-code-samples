@@ -10,8 +10,9 @@ internal class TimeSpan(
     val timeRanges: List<TimeRange>,
 ) : Comparable<TimeSpan> {
     init {
-        require(!doRangesOverlap(timeRanges)) { "Overlapping ranges" }
-        require(timeRanges.isNotEmpty()) { "Empty timeranges" }
+        require(timeRanges.isNotEmpty()) { "Must supply some TimeRanges" }
+        require(!doRangesOverlap(timeRanges)) { "TimeRanges must be non-overlapping" }
+        require(timeRanges.isSorted()) { "TimeRanges must be sorted by start time" }
     }
 
     val minTime = timeRanges.first().start

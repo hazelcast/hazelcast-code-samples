@@ -2,6 +2,9 @@ package org.hazelcast.jetpayments
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
+import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.milliseconds
 
 /*
@@ -32,9 +35,14 @@ class PaymentsRun() : AutoCloseable {
     private val kafkaProcessCG = AppConfig.kafkaProcessPaymentsCG.uniqify()
     private val kafkaVerifyCG = AppConfig.kafkaVerifyPaymentsCG.uniqify()
 
-    // Create the list of merchants we'll use throughout the payment runs.
+    // Create the list of merchants we'll use throughout the payment run.
     private val merchantMap =
         MerchantGenerator(AppConfig.numMerchants, seededRandom).merchantMap
+
+    // Create a PaymentGenerator that will synthesise new PaymentRequests for us.
+    private val paymentGenerator = PaymentGenerator(
+        seededRandom, merchantMap
+    ) { nextPaymentRequestDelay() }
 
     private fun calculateNumPayments(numFailureCycles: Int): Int {
         val failureTime = AppConfig.failureCycleTime * numFailureCycles
@@ -92,24 +100,17 @@ class PaymentsRun() : AutoCloseable {
     // Take the payments from our payments generator, and publish them to Kafka.
     private suspend fun issuePaymentsToKafka(
         numPayments: Int, countNewPayment: () -> Unit
-    ) {/*
-         * Create a sequence of numPayments randomly-generated payments. Inject
-         * delays into the stream as well.
-         */
-        val paymentRequestSeq =
-            PaymentGenerator(seededRandom, merchantMap).newPaymentRequestSeq()
-        val delaySeq = generateSequence { paymentRequestDelayNext() }
+    ) {
 
-        (paymentRequestSeq zip delaySeq).take(numPayments)
-            .forEach { (paymentReq, issueDelay) ->
-                // Timestamp and publish each payment, and delay afterward
-                paymentReq.copy(timeIssued = Epoch.timeNow())
-                    .let { stampedPayment ->
-                        kafka.publish(stampedPayment.toJsonString())
-                    }
-                delay(issueDelay) // Simulate delay
-                countNewPayment() // Count new payment sent to Kafka
-            }
+        /* Create a flow of numPayments randomly-generated payments with
+         * inbuilt delays simulating the delays with real payments coming in.
+         */
+        paymentGenerator.newPaymentRequestFlow().take(numPayments).map { paymentReq ->
+            Json.Default.encodeToString<PaymentRequest>(paymentReq)
+        }.collect { jsonPaymentRequest ->
+            kafka.publish(jsonPaymentRequest)
+            countNewPayment() // Count new payment sent to Kafka
+        }
     }
 
     // Show that everything got paid correctly (and some stats).
@@ -124,7 +125,7 @@ class PaymentsRun() : AutoCloseable {
         Canvas(paid + byMerchant + uptimeSpans).draw().log(logger)
     }
 
-    internal fun validationCheck(
+    private fun validationCheck(
         test: Boolean, succeedMsg: String, failedMsg: String
     ) = (if (test) "CHECK SUCCEEDED: $succeedMsg"
     else "CHECK FAILED: $failedMsg").let {
@@ -182,18 +183,20 @@ class PaymentsRun() : AutoCloseable {
      */
     private suspend fun showPaymentsDistributedByMerchant(): List<TimeSpan> {
 
-        /* Step I: Run a batch Jet job to show, for each merchant, on which members
-         * their payments were paid at any given moment. The resulting map is keyed
-         * off merchantId, and the values are lists of 0-width TimeRanges with the
-         * marker being the node on which the payment was processed.
+        /* Step I: Run a batch Jet job to show, for each merchant, on which
+         * members their payments were paid at any given moment. The resulting
+         * map is keyed off merchantId, and the values are lists of 0-width
+         * TimeRanges with the marker being the node on which the payment was
+         * processed.
          */
         PaymentMemberCheckPipeline(hzClientDeferred.await()).use { it.run() }
 
-        /* Step II: Collect the TimeRanges (payment receipts) for each merchant back
-         * from the jet job and fold the contiguous ones together, separating by the
-         * node selected for processing. For each merchant, we should see that none
-         * of the TimeRanges should overlap, because that would indicate a case
-         * where the same merchant was being serviced from two different nodes. */
+        /* Step II: Collect the TimeRanges (payment receipts) for each merchant
+         * back from the jet job and fold the contiguous ones together,
+         * separating by the node selected for processing. For each merchant, we
+         * should see that none of the TimeRanges should overlap, because that
+         * would indicate a case where the same merchant was being serviced from
+         * two different nodes. */
         val paymentOnOneNodeCheckMap = hzClientDeferred.await()
             .getMap<String, List<TimeRange>>(AppConfig.paymentOnOneNodeCheckMapName)
         val timeRangesByMerchant =
@@ -214,56 +217,52 @@ class PaymentsRun() : AutoCloseable {
             val prefix = merchantMap[merchantName]!!.name
             TimeSpan(prefix, timeRanges.map { range ->
                 TimeRange(
-                    fontEtched(range.marker.toInt()),
-                    range.start,
-                    range.endInclusive
+                    fontEtched(range.marker.toInt()), range.start, range.endInclusive
                 )
             })
         }.sorted() // sort TimeSpans by start time
     }
 
     /*
-     * PaymentsRun entry point. Do the payments run, and verify afterwards. This is
-     * a _suspend_ method, meaning it must be called from a coroutine, and that
-     * coroutine might suspend at some point. Coroutines, if you're not familiar
-     * with them, are a way of writing asynchronous code that's easier to
-     * understand, and that aren't as heavyweight as threads. They require some
-     * degree of cooperation and planning to work, but Kotlin provides language
-     * support for understanding and managing coroutine concurrency.
+     * PaymentsRun entry point. Do the payments run, and verify afterwards. This
+     * is a _suspend_ method, meaning it must be called from a coroutine, and
+     * that coroutine might suspend at some point. Coroutines, if you're not
+     * familiar with them, are a way of writing asynchronous code that's easier
+     * to understand, and that aren't as heavyweight as threads. They require
+     * some degree of cooperation and planning to work, but Kotlin provides
+     * language support for understanding and managing coroutine concurrency.
      */
-    internal suspend fun run(numFailureCycles: Int) =
-        withContext(Dispatchers.Default) {
-            val client = hzClientDeferred.await()
-            val numPayments = calculateNumPayments(numFailureCycles)
-            showPaymentRunParameters(numFailureCycles, numPayments)
+    internal suspend fun run(numFailureCycles: Int) = withContext(Dispatchers.Default) {
+        val client = hzClientDeferred.await()
+        val numPayments = calculateNumPayments(numFailureCycles)
+        showPaymentRunParameters(numFailureCycles, numPayments)
 
-            // Create a counter for the number of payments we've issued.
-            MutableStateFlow(0).let { numIssued ->
-                // First start the payments flow into Kafka, from which Jet will read
-                launch { issuePaymentsToKafka(numPayments) { numIssued.value++ } }
-                // A service that monitors completed receipts, summarizes and logs them.
-                ReceiptWatcher(client, numPayments, merchantMap) { numIssued.value }
-            }.use { watcher -> /* Like try-with-resources */
+        // Create a counter for the number of payments we've issued.
+        MutableStateFlow(0).let { numIssued ->
+            // First start the payments flow into Kafka, from which Jet will read
+            launch { issuePaymentsToKafka(numPayments) { numIssued.value++ } }
+            // A service that monitors completed receipts, summarizes and logs them.
+            ReceiptWatcher(client, numPayments, merchantMap) { numIssued.value }
+        }.use { watcher ->
 
-                // A service that simulates failures of individual nodes in the cluster.
-                val failSim = FailureSimulator(client) { watcher.nodesInUse.value }
+            // A service that simulates failures of individual nodes in the cluster.
+            val failSim = FailureSimulator(client) { watcher.nodesInUse.value }
 
-                // Read from Kafka, distribute to members, process payments
-                PaymentsJetPipeline(
-                    client, kafka.consumerJetSource(kafkaProcessCG), numPayments
-                ).use { pipeline ->
-                    launch { pipeline.run() } // Start Jet streaming pipeline.
+            // Read from Kafka, distribute to members, process payments
+            PaymentsJetPipeline(
+                client, kafka.consumerJetSource(kafkaProcessCG), numPayments
+            ).use { pipeline ->
+                launch { pipeline.run() } // Start Jet streaming pipeline.
 
-                    coroutineScope {
-                        launch { watcher.startReceiptsLog() }
-                        async {
-                            failSim.runSimulations(
-                                pipeline.jetSchedulerStateFlow,
-                                pipeline::hasTimeLeft
-                            )
-                        }
-                    }.await()
-                } // We hit close() on pipeline, which stops the Jet job.
-            }.also { uptimeSpans -> verifyPayments(numPayments, uptimeSpans) }
-        }
+                coroutineScope {
+                    launch { watcher.startReceiptsLog() }
+                    async {
+                        failSim.runSimulations(
+                            pipeline.jetSchedulerStateFlow, pipeline::hasTimeLeft
+                        )
+                    }
+                }.await()
+            } // We hit close() on pipeline, which stops the Jet job.
+        }.also { uptimeSpans -> verifyPayments(numPayments, uptimeSpans) }
+    }
 }

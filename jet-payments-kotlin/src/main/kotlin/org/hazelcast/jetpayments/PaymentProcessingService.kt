@@ -79,7 +79,7 @@ internal class PaymentProcessingService(private val instance: HazelcastInstance)
      */
     fun processPaymentAsync(paymentRequest: PaymentRequest) = scope.future {
         // Simulate the delay inherent in request-respond to payment processor
-        delay(paymentProcessingDelayNext())
+        delay(nextPaymentProcessingDelay())
         PaymentReceipt(
             paymentRequest, paymentSucceeded.value, memberIndexDeferred.await()
         )

@@ -51,7 +51,7 @@ internal class TextBox(
     }
 
     val width: Int get() = if (borderStyle == BorderStyle.NONE) textWidth else textWidth + 4
-    val height: Int get() = if (borderStyle == BorderStyle.NONE) lines.size else lines.size + 2
+    private val height: Int get() = if (borderStyle == BorderStyle.NONE) lines.size else lines.size + 2
 
     fun toStrings() = if (borderStyle == BorderStyle.NONE) lines else boxText()
 
@@ -118,29 +118,18 @@ internal class TextBox(
         return TextBox(wrappedLines, newWidth, borderStyle)
     }
 
-    enum class Bias {
-        LEFT, RIGHT, CENTER
-    }
-
-    fun justify(
-        bias: Bias = Bias.LEFT, widenTo: Int = textWidth
+    fun center(
+        widenTo: Int = textWidth
     ): TextBox {
         require(widenTo >= textWidth) { "widenTo must be greater than width." }
         val newTextWidth = widenTo
-        val newLines = when (bias) {
-            Bias.LEFT -> lines.map { it.padEnd(newTextWidth) }
-            Bias.RIGHT -> lines.map { it.padStart(newTextWidth) }
-            Bias.CENTER -> lines.map { str ->
-                val len = str.numCodepoints()
-                val leftpad = (newTextWidth - len) / 2
-                str.padStart(leftpad + len).padEnd(newTextWidth)
-            }
+        val newLines = lines.map { str ->
+            val len = str.numCodepoints()
+            val leftpad = (newTextWidth - len) / 2
+            str.padStart(leftpad + len).padEnd(newTextWidth)
         }
         return TextBox(newLines, newTextWidth, borderStyle)
     }
-
-    fun center(widenTo: Int = textWidth): TextBox =
-        justify(bias = Bias.CENTER, widenTo = widenTo)
 
     /*
      * The border is normally an attribute, not part of the internal representation
@@ -158,7 +147,7 @@ internal class TextBox(
      * internal representation of the text, permanently.
      */
 
-    fun verticalCenter(widenTo: Int): TextBox {
+    private fun verticalCenter(widenTo: Int): TextBox {
         if (this.height >= widenTo) return this
         val withBorder = this.absorbBorder()
         val spacer = " ".repeat(withBorder.width)

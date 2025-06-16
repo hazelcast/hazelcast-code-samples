@@ -1,7 +1,6 @@
 package org.hazelcast.jetpayments
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import kotlin.time.Duration
 
 /*
@@ -19,6 +18,3 @@ data class PaymentRequest(
     val merchantId: String,
     val merchantName: String,
 ) : java.io.Serializable
-
-fun String.toPaymentRequest() = Json.Default.decodeFromString<PaymentRequest>(this)
-fun PaymentRequest.toJsonString(): String = Json.Default.encodeToString(this)

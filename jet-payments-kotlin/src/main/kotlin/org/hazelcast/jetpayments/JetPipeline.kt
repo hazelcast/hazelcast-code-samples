@@ -22,7 +22,7 @@ abstract class JetPipeline(
     private val client: HzCluster.ClientInstance,
     private val jobName: String,
 ) : AutoCloseable {
-    protected val logger = ElapsedTimeLogger("JetPipeline")
+    private val logger = ElapsedTimeLogger("JetPipeline")
     private var jetJob: HzJob? = null
     private val jetJobStateFlow = MutableStateFlow(JobStatus.RUNNING)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -47,7 +47,7 @@ abstract class JetPipeline(
         object WaitingForJetToAddNode : JetSchedulerState()
 
         companion object {
-            val initialState = Running as JetSchedulerState
+            val initialState: JetSchedulerState = Running as JetSchedulerState
         }
 
         override fun toString(): String = this::class.simpleName ?: super.toString()
@@ -88,11 +88,11 @@ abstract class JetPipeline(
     }
 
     /*
-     * This first StateFlow simply captures a combination of the Jet job status and
-     * the number of members in the cluster, both captured together at the same
-     * instant. We also have embedded a tracking object here for debugging, which
-     * captures the historical record of JetStateFlow. The last map drops the
-     * tracker, as we only want to emit the JetState to the subsequent flow.
+     * This first StateFlow simply captures a combination of the Jet job status
+     * and the number of members in the cluster, both captured together at the
+     * same instant. We also have embedded a tracking object here for debugging,
+     * which captures the historical record of JetStateFlow. The last map drops
+     * the tracker, as we only want to emit the JetState to the subsequent flow.
      */
     private val jetStateFlow = combine(
         jetJobStateFlow, client.membershipListener.numMembersFlow
@@ -109,13 +109,14 @@ abstract class JetPipeline(
     )
 
     /*
-     * This next StateFlow takes the JetState from the previous StateFlow, and uses
-     * it to transition the state machine above. It is used by the Failure Simulator
-     * to track the time period between the initiation of the shutdown or
-     * restoration of a node, and the moment that Jet has responded to this by
-     * rebalancing work to exclude the failed node or add in the recovered node.
+     * This next StateFlow takes the JetState from the previous StateFlow, and
+     * uses it to transition the state machine above. It is used by the Failure
+     * Simulator to track the time period between the initiation of the shutdown
+     * or restoration of a node, and the moment that Jet has responded to this
+     * by rebalancing work to exclude the failed node or add in the recovered
+     * node.
      */
-    val jetSchedulerStateFlow =
+    val jetSchedulerStateFlow: StateFlow<JetSchedulerState> =
         jetStateFlow.scan(JetSchedulerState.initialState) { state, jetState ->
             state.transition(
                 jetState.jobStatus == JobStatus.RUNNING,

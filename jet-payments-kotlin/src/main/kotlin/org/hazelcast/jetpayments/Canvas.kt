@@ -17,7 +17,7 @@ internal open class Canvas(
     private val canvasMinTime = timespans.minOf { it.minTime }
     private val canvasMaxTime = timespans.maxOf { it.maxTime }
     private val maxPrefixLen: Int = timespans.maxOf { it.prefix.numCodepoints() }
-    val totalCanvasTime = canvasMaxTime - canvasMinTime
+    private val totalCanvasTime = canvasMaxTime - canvasMinTime
     val timePerUnit = totalCanvasTime / canvasSize
     private val spans =
         listOf(generateTimescaleCanvasSpan()) + timespans.map { timespan ->

@@ -48,10 +48,11 @@ internal object AppConfig {
 
     // Following items generally needn't be changed. Modify with care!
     val steadyStateTime = 30.seconds
-    val jetMeanRescheduleTime = 10.seconds
+    private val jetMeanRescheduleTime = 10.seconds
     val failureCycleTime = (steadyStateTime + jetMeanRescheduleTime) * 2
     val jetStateHistorySize = 4
     val logPrefixLen = 24
+    val displayWidth = screenWidth - logPrefixLen
 }
 
 internal val explainer = bold("EXPLAINER") + """
@@ -69,13 +70,25 @@ internal val explainer = bold("EXPLAINER") + """
         towards the left, as the newly scheduled node appears on the right.
     """
 
+internal fun getJavaParams(): List<String> {
+    return buildList {
+        add(System.getProperty("java.vm.name"))
+        add(System.getProperty("java.vendor"))
+        add(System.getProperty("java.version"))
+    }.let { list ->
+        TextBox(list).center().addBorder().toStrings()
+    }
+}
+
 // Main entry point. This is where the PaymentsRun is started.
 fun main() {
-    // Display a helpful explainer about this demo.
-    TextBox(
+    val logger = ElapsedTimeLogger("Main")
+
+    // Show which VM we're using; display a helpful explainer about this demo.
+    logger.log(getJavaParams())
+    logger.log(TextBox(
         text = explainer.lines(), borderStyle = TextBox.BorderStyle.DOUBLE
-    ).rewrap(AppConfig.screenWidth - AppConfig.logPrefixLen)
-        .log(ElapsedTimeLogger("Main"))
+    ).rewrap(AppConfig.screenWidth - AppConfig.logPrefixLen).toStrings())
 
     /* Start the PaymentsRun demo. Simulate two down/up failure cycles. runBlocking
      * is used to bridge between coroutines and the main thread. It will suspend
@@ -86,13 +99,12 @@ fun main() {
     }
 }
 
-internal fun paymentRequestDelayNext() =
-    paymentRequestDelayRand.getValue().milliseconds
+internal fun nextPaymentRequestDelay() = paymentRequestDelayRand.getValue().milliseconds
 
-internal fun paymentProcessingDelayNext() =
+internal fun nextPaymentProcessingDelay() =
     paymentProcessingDelayRand.getValue().milliseconds
 
-internal fun paymentAmountNext() = paymentAmountRand.getValue().absoluteValue
+internal fun nextPaymentAmount() = paymentAmountRand.getValue().absoluteValue
 
 /*
  * Randomness -> We want a single seed that we choose once, for all randomness
@@ -134,8 +146,7 @@ internal fun Duration.toWholeSecStr() =
  */
 internal abstract class ComparableClosedRange<T : Comparable<T>> : ClosedRange<T>,
     Comparable<ClosedRange<T>> {
-    override fun compareTo(other: ClosedRange<T>) =
-        this.start.compareTo(other.start)
+    override fun compareTo(other: ClosedRange<T>) = this.start.compareTo(other.start)
 }
 
 // Does this ClosedRange overlap with the other?
@@ -147,6 +158,39 @@ internal fun <T : Comparable<T>> doRangesOverlap(ranges: Iterable<ComparableClos
     ranges.sorted().zipWithNext().any { (first, second) ->
         first.overlaps(second)
     }
+
+// Is this Collection already sorted?
+internal fun <T : Comparable<T>> Collection<T>.isSorted() =
+    zipWithNext { a, b -> a <= b }.all { it }
+
+/*
+ * Generalized function for combining a list of items into a condensed list.
+ */
+internal fun <T> List<T>.combine(
+    isCombinable: (T, T) -> Boolean,
+    combineWith: (T, T) -> T,
+): List<T> {
+    if (this.isEmpty()) return emptyList()
+    val initial = mutableListOf(this.first())
+    val rest = this.drop(1)
+    return rest.fold(initial) { acc, curr ->
+        acc.apply {
+            val last = last()
+            val toAdd = if (isCombinable(last, curr)) {
+                removeLast()
+                combineWith(last, curr)
+            } else curr
+            add(toAdd)
+        }
+    }
+}
+
+/*
+ * Fold consecutive TimeRanges into a condensed set.
+ */
+internal fun foldTimeRanges(
+    sortedTimeRanges: List<TimeRange>,
+) = sortedTimeRanges.combine(TimeRange::isMergeable, TimeRange::merge)
 
 /*
  * Use Java's Random class to create a normal distribution.
@@ -167,8 +211,7 @@ internal class RandomNormalDist(
 // Write this digit using an etched font.
 internal fun fontEtched(digit: Int): String {
     require(digit in 0..9)
-    val etched =
-        listOf("𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡").toTypedArray()
+    val etched = listOf("𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡").toTypedArray()
     return etched[digit % etched.size]
 }
 
@@ -216,10 +259,9 @@ internal fun underline(str: String) = "\u001B[4m$str\u001B[0m"
  * a lot for Unicode strings in place of the length property of the String. In order
  * to count correctly, remove any escape sequences present first.
  */
-internal fun String.numCodepoints() =
-    this.replace("\u001B\\[\\d+m".toRegex(), "").let {
-        it.codePointCount(0, it.length)
-    }
+internal fun String.numCodepoints() = this.replace("\u001B\\[\\d+m".toRegex(), "").let {
+    it.codePointCount(0, it.length)
+}
 
 /*
  * Create our own versions of pad and trim functions. These already exist in
@@ -235,4 +277,4 @@ internal fun String.trimStart(length: Int): String {
     else this.substring(this.offsetByCodePoints(0, numCodepoints - length))
 }
 
-fun tabsToSpaces(s: String) = s.replace("\t", "    ")
+fun tabsToSpaces(s: String): String = s.replace("\t", "    ")

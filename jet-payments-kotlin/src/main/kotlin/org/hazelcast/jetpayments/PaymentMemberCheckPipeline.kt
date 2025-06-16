@@ -31,7 +31,7 @@ class PaymentMemberCheckPipeline(client: HzCluster.ClientInstance) :
         """.trimIndent()
     }
 
-    override val pipeline = Pipeline.create().apply {
+    override val pipeline: Pipeline = Pipeline.create().apply {
         readFrom(source).map { it.value }
             .groupingKey { receipt: PaymentReceipt -> receipt.merchantId }
             .aggregate(AggregateOperations.toList())
