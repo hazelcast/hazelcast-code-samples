@@ -27,6 +27,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
     testImplementation("io.kotest:kotest-property:5.8.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
     // For testing coroutines
     testImplementation("io.kotest:kotest-assertions-core-jvm:5.8.0")
 
@@ -71,13 +72,11 @@ tasks.withType<Test> {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(javaVersion)
-        vendor = JvmVendorSpec.ORACLE
     }
 }
 
 kotlin {
     jvmToolchain {
         languageVersion = JavaLanguageVersion.of(javaVersion)
-        vendor = JvmVendorSpec.ORACLE
     }
 }
