@@ -8,8 +8,8 @@ import kotlin.test.Test
 import kotlin.time.Duration.Companion.microseconds
 import kotlin.time.Duration.Companion.seconds
 
-class PaymentsTest {
-    private val logger = ElapsedTimeLogger("PaymentsTest")
+class PaymentsFlowDurationTest {
+    private val logger = ElapsedTimeLogger("PaymentsFlowDurationTest")
     private val context = Dispatchers.Default + SupervisorJob()
 
     @Test
