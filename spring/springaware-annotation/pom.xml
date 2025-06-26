@@ -16,7 +16,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
 
-        <spring.version>5.2.24.RELEASE</spring.version>
+        <spring.version>6.1.14</spring.version>
     </properties>
 
     <dependencies>
