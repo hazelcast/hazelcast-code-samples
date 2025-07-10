@@ -54,7 +54,7 @@ As the next step we need to create AWS image which will be used for the Autoscal
         unzip hazelcast.zip && rm -f hazelcast.zip
         wget https://raw.githubusercontent.com/hazelcast/hazelcast-code-samples/master/hazelcast-integration/aws-autoscaling/hazelcast.yaml
     
-4. Update Hazelcast configuration `/opt/hazelcast/hazlecast.yaml` with `YOUR_AWS_ACCESS_KEY` and `YOUR_AWS_SECRET_KEY` (alternatively you can assign the needed IAM Role to the EC2 Instance)
+4. Update Hazelcast configuration `/opt/hazelcast/hazelcast.yaml` with `YOUR_AWS_ACCESS_KEY` and `YOUR_AWS_SECRET_KEY` (alternatively you can assign the needed IAM Role to the EC2 Instance)
 5. Download [lifecycle_hook_listener.sh](lifecycle_hook_listener.sh)
 
         sudo apt install -y jq
