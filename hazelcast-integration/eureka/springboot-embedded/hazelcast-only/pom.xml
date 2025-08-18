@@ -41,7 +41,7 @@
                 <artifactId>spring-boot-starter-parent</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
-                <version>2.0.6.RELEASE</version>
+                <version>3.5.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
