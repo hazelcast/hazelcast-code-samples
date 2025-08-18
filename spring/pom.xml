@@ -46,7 +46,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.basedir}</main.basedir>
 
-        <spring.boot.version>3.4.2</spring.boot.version>
+        <spring.boot.version>3.5.4</spring.boot.version>
     </properties>
 
     <modules>
