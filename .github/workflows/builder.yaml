@@ -22,7 +22,7 @@ jobs:
     needs: check_for_membership
     steps:
       - name: Detect untrusted community PR
-        if: ${{ needs.check_for_membership.outputs.check-result == 'false' }}
+        if: ${{ needs.check_for_membership.outputs.check-result == 'false' && github.actor != 'dependabot[bot]' }}
         run: |
           echo "::error::ERROR: Untrusted external PR. Must be reviewed and executed by Hazelcast" 1>&2;
           exit 1
