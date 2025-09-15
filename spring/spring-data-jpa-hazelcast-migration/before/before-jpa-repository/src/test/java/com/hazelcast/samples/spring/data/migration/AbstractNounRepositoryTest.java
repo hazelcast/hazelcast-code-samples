@@ -25,7 +25,7 @@ public abstract class AbstractNounRepositoryTest {
 
 	protected static Noun cat;
 
-	private Logger log;
+	protected Logger log;
 	private CrudRepository<Noun, Integer> nounRepository;
 
 	@BeforeClass

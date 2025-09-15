@@ -19,4 +19,5 @@ springHibernateDB
 osgi/felix-cache/
 .java-version
 *.code-workspace
+dependency-reduced-pom.xml
 /enterprise/tls-rbac-demo/keymaterial/
