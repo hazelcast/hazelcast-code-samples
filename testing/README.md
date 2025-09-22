@@ -1,7 +1,7 @@
 # Testing samples
 
-Testing applications that use Hazelcast (IMDG and Streaming) requires care to validate the behaviour at various levels - from
-unit to system tests - given Hazelcast’s distributed, eventually consistent and asynchronous behaviour.
+Testing applications that use Hazelcast (for caching, co-located compute and streaming) requires care to validate the behaviour at various levels - from
+unit to system tests - given Hazelcast’s distributed, eventually/strongly consistent and asynchronous behaviour.
 
 Hazelcast provides tools to simplify writing unit/component/integration tests of such applications.
 
@@ -9,11 +9,9 @@ This project demonstrates the use of these tools. Full documentation to setup an
 
 ## Testing complex test scenarios
 
-The following examples show how to test complex applications using Hazelcast to cache data or process data streams.
-The application consists of an Order service and a Customer service integrated. The sample code in the project illustrates different methods for testing 
-the services in isolation and in combination.
+The sample code in this project illustrates how to test applications that use Hazelcast for caching and stream processing. It includes two services: `Order` and `Customer` and it demonstrates testing each service independently and together.
 
-Examples in both JUnit4 and JUnit5 are provided, as well as a `com.hazelcast.samples.testing.samples` test package with basic API usage examples.
+Tests are available in both JUnit4 and JUnit5. The `com.hazelcast.samples.testing.samples` package contains basic testing support API usage examples.
 
 ### Testing the integration of two services
 
@@ -97,6 +95,7 @@ execution of a listener:
         // Update the order so hazelcast triggers the event
         sut.updateOrder(order.confirm());
         
+        // Verify that only mockConsumer#accept(Order) has been invoked, within 100ms
         verify(mockConsumer, timeout(100).only()).accept(any(Order.class));
     }
 ```

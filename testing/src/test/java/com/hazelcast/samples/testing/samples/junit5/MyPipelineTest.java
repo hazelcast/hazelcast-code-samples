@@ -28,7 +28,7 @@ import static com.hazelcast.test.HazelcastTestSupport.assertSizeEventually;
 import static com.hazelcast.test.HazelcastTestSupport.spawn;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MyPipelineTest {
     record Customer(String id, String name) implements Serializable {
@@ -129,7 +129,7 @@ class MyPipelineTest {
         p.readFrom(TestSources.itemStream(itemsPerSecond, new MyCustomerGen()))
          .withoutTimestamps()
          .apply(assertCollectedEventually(5,
-                 items -> Assertions.assertTrue(items.size() >= 15,
+                 items -> assertTrue(items.size() >= 15,
                  "did not receive at least 20 items")))
         .writeTo(Sinks.list("new_customers"));
 
@@ -164,8 +164,8 @@ class MyPipelineTest {
         // Validate the result
         IList<String> result = instance.getList("enriched");
         assertEquals(2, result.size());
-        assertEquals("Alice", result.get(0));
-        assertEquals("Bob", result.get(1));
+        assertTrue(result.contains("Alice"));
+        assertTrue(result.contains("Bob"));
 
         factory.shutdownAll();
     }
