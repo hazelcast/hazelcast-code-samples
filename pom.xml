@@ -88,6 +88,7 @@
         <module>generic-record</module>
         <module>sql</module>
         <module>ai</module>
+        <module>testing</module>
     </modules>
 
     <build>

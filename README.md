@@ -39,6 +39,7 @@ Included sample folders
 *   **/spi** — Includes code samples that create a simple counter application using Hazelcast’s Service Provider Interface (SPI).
 *   **/sql** — Examples of using SQL directly, or via JDBC.
 *   **/transactions** — Code samples showing how to use the TransactionalMap and TransactionalTask interfaces.
+*   **/testing** — Code samples showing how to use Hazelcast test support classes for unit/system/integration testing Hazelcast powered applications.
 
 Included helper folders
 -----------------------
