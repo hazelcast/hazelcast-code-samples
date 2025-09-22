@@ -31,5 +31,4 @@ public class HzCustomerService
     private IMap<String, Customer> customerMap() {
         return instance.getMap("customers");
     }
-
 }
