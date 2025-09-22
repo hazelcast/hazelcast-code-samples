@@ -52,16 +52,13 @@ public class SQLCustomerMapStore
 
     @Override
     public void storeAll(Map<String, Customer> map) {
-
     }
 
     @Override
     public void delete(String s) {
-
     }
 
     @Override
     public void deleteAll(Collection<String> collection) {
-
     }
 }
