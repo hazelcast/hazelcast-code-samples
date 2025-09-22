@@ -50,5 +50,4 @@ public class OrderServiceWithListenerTest {
 
         verify(mockConsumer, timeout(100).only()).accept(any(Order.class));
     }
-
 }
