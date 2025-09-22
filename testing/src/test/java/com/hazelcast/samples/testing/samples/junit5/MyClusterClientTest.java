@@ -34,5 +34,4 @@ public class MyClusterClientTest {
         member1.shutdown();
         member2.shutdown();
     }
-
 }
