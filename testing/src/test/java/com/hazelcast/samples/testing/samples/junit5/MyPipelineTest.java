@@ -82,7 +82,6 @@ class MyPipelineTest {
         jet.newJob(p).join();
 
         factory.shutdownAll();
-
     }
 
     @Test
