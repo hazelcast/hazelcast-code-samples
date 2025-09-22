@@ -34,7 +34,7 @@ public class OrderEnrichmentPipelineTest {
     private Config config;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         factory = new TestHazelcastFactory();
         config = new Config();
         config.setJetConfig(new JetConfig().setEnabled(true));
@@ -42,14 +42,14 @@ public class OrderEnrichmentPipelineTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         if (factory != null) {
             factory.shutdownAll();
         }
     }
 
     @Test
-    public void testJetOrderEnrichmentWithHazelcastState() {
+    void testJetOrderEnrichmentWithHazelcastState() {
         HazelcastInstance instance = factory.newHazelcastInstance(config);
         JetService jet = instance.getJet();
 
@@ -69,7 +69,7 @@ public class OrderEnrichmentPipelineTest {
     }
 
     @Test
-    public void streamingEnrichmentWithInlineAssertion() {
+    void streamingEnrichmentWithInlineAssertion() {
         HazelcastInstance instance = factory.newHazelcastInstance(config);
         IMap<String, Customer> customerMap = instance.getMap("customers");
         customerMap.put("c1", new Customer("c1", "Alice"));

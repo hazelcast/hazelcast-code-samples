@@ -59,7 +59,7 @@ public class MyClusterFailureTest {
     }
 
     @Test
-    public void testClusterFailure() {
+    void testClusterFailure() {
         assertClusterSizeEventually(2, client);
         member1.getMap("testMap").put("key1", "value1");
         assertEqualsEventually(() -> client.getMap("testMap").get("key1"), "value1");

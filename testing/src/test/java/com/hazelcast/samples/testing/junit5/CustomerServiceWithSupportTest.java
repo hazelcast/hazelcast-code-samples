@@ -28,7 +28,7 @@ public class CustomerServiceWithSupportTest {
     }
 
     @Test
-    public void findCustomerSingleNode() {
+    void findCustomerSingleNode() {
         HazelcastInstance instance = factory.newHazelcastInstance();
         instance.getMap("customers").put("123", new Customer("123", "Alice"));
         HzCustomerService sut = new HzCustomerService(instance);
@@ -36,7 +36,7 @@ public class CustomerServiceWithSupportTest {
     }
 
     @Test
-    public void findCustomerTwoNodes() {
+    void findCustomerTwoNodes() {
         HazelcastInstance[] cluster = factory.newInstances(new Config().setClusterName(randomName()), 2);
         HazelcastInstance node1 = cluster[0];
         HazelcastInstance node2 = cluster[1];

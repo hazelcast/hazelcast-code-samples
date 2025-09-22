@@ -26,7 +26,7 @@ public class CustomerServiceMockitoTest {
     HzCustomerService service;
 
     @Test
-    public void findCustomerWithMock() {
+    void findCustomerWithMock() {
         //noinspection unchecked,rawtypes
         when(hzInstance.getMap("customers")).thenReturn((IMap) customerMap);
         when(customerMap.get("123")).thenReturn(new Customer("123", "Alice"));

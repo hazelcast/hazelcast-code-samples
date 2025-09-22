@@ -30,7 +30,7 @@ public class IsolatedClustersTest {
     private HazelcastInstance client;
 
     @Before
-    public void setUp() {
+    void setUp() {
         String clusterName = HazelcastTestSupport.randomName();
         Config serverConfig = new Config().setClusterName(clusterName);
         ClientConfig clientConfig = new ClientConfig().setClusterName(clusterName);
@@ -41,7 +41,7 @@ public class IsolatedClustersTest {
     }
 
     @After
-    public void tearDown()
+    void tearDown()
             throws InterruptedException {
         for (HazelcastInstance instance : members) {
             instance.shutdown();
@@ -50,7 +50,7 @@ public class IsolatedClustersTest {
     }
 
     @Test
-    public void isolatedClustersDontInterfere_clusterA() {
+    void isolatedClustersDontInterfere_clusterA() {
 
         // Custom business logic
         IMap<String, Integer> map = client.getMap("isolatedMap");
@@ -63,7 +63,7 @@ public class IsolatedClustersTest {
     }
 
     @Test
-    public void isolatedClustersDontInterfere_clusterB() {
+    void isolatedClustersDontInterfere_clusterB() {
         // Custom business logic
         IMap<String, Integer> map = client.getMap("isolatedMap");
         map.put("key", 1);

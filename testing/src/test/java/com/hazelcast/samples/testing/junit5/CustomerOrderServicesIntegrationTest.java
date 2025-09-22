@@ -19,19 +19,19 @@ public class CustomerOrderServicesIntegrationTest {
     private TestHazelcastFactory factory;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         factory = new TestHazelcastFactory();
     }
 
     @AfterEach
-    public void tearDown() {
+     void tearDown() {
         if (factory != null) {
             factory.shutdownAll();
         }
     }
 
     @Test
-    public void customerAndOrderServicesIntegration() {
+     void customerAndOrderServicesIntegration() {
         // Create a shared Hazelcast instance
         HazelcastInstance instance = factory.newHazelcastInstance();
 

@@ -22,19 +22,19 @@ public class OrderServiceWithListenerTest {
     private TestHazelcastFactory factory;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         factory = new TestHazelcastFactory();
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         if (factory != null) {
             factory.shutdownAll();
         }
     }
 
     @Test
-    public void orderServiceListenerIsInvoked() {
+    void orderServiceListenerIsInvoked() {
         HazelcastInstance instance = factory.newHazelcastInstance();
         // set a customer
         instance.getMap("customers").put("c1", new Customer("c1", "Alice"));

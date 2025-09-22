@@ -50,7 +50,7 @@ public class CustomerServiceComponentTest {
     }
 
     @AfterEach
-    public void teardown()
+    void teardown()
             throws SQLException {
         if (conn != null) {
             conn.createStatement().execute(DROP_TABLE_SQL);
@@ -62,7 +62,7 @@ public class CustomerServiceComponentTest {
     }
 
     @Test
-    public void customerServiceWithMapStoreInteractions() {
+    void customerServiceWithMapStoreInteractions() {
 
         // Configure Hazelcast with MapStore implementation using the H2 connection
         Config config = new Config();
@@ -90,7 +90,7 @@ public class CustomerServiceComponentTest {
     }
 
     @Test
-    public void customerServiceWithMapStoreFailure() {
+    void customerServiceWithMapStoreFailure() {
 
         // Create a mock MapStore that throws an exception when load is called
         MapStore<String, Customer> failingMapStore = (MapStore<String, Customer>) mock(MapStore.class);

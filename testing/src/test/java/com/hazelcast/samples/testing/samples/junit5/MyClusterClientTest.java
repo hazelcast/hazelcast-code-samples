@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MyClusterClientTest {
 
     @Test
-    public void testClientPutAndGetAcrossCluster() {
+    void testClientPutAndGetAcrossCluster() {
         // given: a 2-node in-process cluster with client
         TestHazelcastFactory factory = new TestHazelcastFactory(2);
         HazelcastInstance member1 = factory.newHazelcastInstance();
