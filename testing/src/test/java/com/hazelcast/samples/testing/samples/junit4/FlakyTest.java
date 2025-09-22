@@ -36,6 +36,10 @@ public class FlakyTest
         }
     }
 
+    /**
+     * This is a deliberately flaky test that will always fail in its form, hence it's Ignored.
+     * To "fix" the test, set alwaysFail to true.
+     */
     @Repeat(5)
     @Ignore
     @Test
@@ -44,8 +48,13 @@ public class FlakyTest
         IMap<String, Integer> map = member1.getMap("map");
         map.put("key", 0);
 
-        // simulate intermittent behavior: succeed only half the time
-        if (System.nanoTime() % 2 == 0) {
+        boolean alwaysFail = true;
+        if(alwaysFail) {
+            // simulate intermittent behavior: succeed only half the time
+            if (System.nanoTime() % 2 == 0) {
+                map.put("key", counter.incrementAndGet());
+            }
+        } else {
             map.put("key", counter.incrementAndGet());
         }
 
