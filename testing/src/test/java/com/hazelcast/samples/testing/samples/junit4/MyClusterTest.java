@@ -5,7 +5,9 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.test.HazelcastParallelClassRunner;
 import com.hazelcast.test.HazelcastTestSupport;
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -16,14 +18,14 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(HazelcastParallelClassRunner.class)
-public class MyClusterTest
-        extends HazelcastTestSupport {
+public class MyClusterTest extends HazelcastTestSupport {
 
     // Atomic timestamps to verify overlapping execution
     private static final AtomicLong test1Start = new AtomicLong();
     private static final AtomicLong test1End = new AtomicLong();
     private static final AtomicLong test2Start = new AtomicLong();
     private static final AtomicLong test2End = new AtomicLong();
+    private HazelcastInstance[] instances;
 
     @AfterClass
     public static void verifyParallelExecution() {
@@ -43,67 +45,55 @@ public class MyClusterTest
         System.out.printf("Test1 ran from %d to %d, Test2 from %d to %d\n", start1, end1, start2, end2);
     }
 
-    @Test
-    public void testMapPutAndGetAcrossCluster()
-            throws Exception {
-
+    @Before
+    public void setUp() {
         Config config = new Config();
         config.setClusterName(randomName());
         // given: a 2-node in-process cluster
-        HazelcastInstance[] instances = createHazelcastInstances(config, 2);
-        HazelcastInstance member1 = instances[0];
-        HazelcastInstance member2 = instances[1];
+        instances = createHazelcastInstances(config, 2);
+    }
 
-        test1Start.set(System.currentTimeMillis());
-        // simulate workload
-        Thread.sleep(100);
-
-        // when: put an entry on member1
-        IMap<String, String> mapOnMember1 = member1.getMap("testMap");
-        mapOnMember1.put("hello", "world");
-
-        // then: cluster forms and the entry is visible on member2
-        assertClusterSizeEventually(2, member1);
-        IMap<String, String> mapOnMember2 = member2.getMap("testMap");
-        assertEquals("world", mapOnMember2.get("hello"));
-
-        test1End.set(System.currentTimeMillis());
-
+    @After
+    public void tearDown() {
         for (HazelcastInstance instance : instances) {
             instance.shutdown();
         }
     }
 
     @Test
-    public void testMapRemoveAcrossCluster()
-            throws Exception {
+    public void testMapPutAndGetAcrossCluster() {
+        test1Start.set(System.currentTimeMillis());
+        // simulate workload
+        sleepMillis(100);
 
-        Config config = new Config();
-        config.setClusterName(randomName());
-        // given: a 2-node in-process cluster
-        HazelcastInstance[] instances = createHazelcastInstances(config, 2);
-        HazelcastInstance member1 = instances[0];
-        HazelcastInstance member2 = instances[1];
+        // when: put an entry on member1
+        IMap<String, String> mapOnMember1 = instances[0].getMap("testMap");
+        mapOnMember1.put("hello", "world");
 
+        // then: cluster forms and the entry is visible on member2
+        assertClusterSizeEventually(2, instances[0]);
+        IMap<String, String> mapOnMember2 = instances[1].getMap("testMap");
+        assertEquals("world", mapOnMember2.get("hello"));
+
+        test1End.set(System.currentTimeMillis());
+    }
+
+    @Test
+    public void testMapRemoveAcrossCluster() throws Exception {
         test2Start.set(System.currentTimeMillis());
         // simulate workload
         Thread.sleep(100);
 
         // when: put and then remove an entry on member1
-        IMap<String, String> mapOnMember1 = member1.getMap("testMap");
+        IMap<String, String> mapOnMember1 = instances[0].getMap("testMap");
         mapOnMember1.put("tempKey", "tempValue");
         mapOnMember1.remove("tempKey");
 
         // then: cluster forms and the entry is removed on member2
-        assertClusterSizeEventually(2, member1);
-        IMap<String, String> mapOnMember2 = member2.getMap("testMap");
+        assertClusterSizeEventually(2, instances[0]);
+        IMap<String, String> mapOnMember2 = instances[1].getMap("testMap");
         assertTrueEventually(() -> assertNull(mapOnMember2.get("tempKey")));
 
         test2End.set(System.currentTimeMillis());
-
-        for (HazelcastInstance instance : instances) {
-            instance.shutdown();
-        }
-
     }
 }

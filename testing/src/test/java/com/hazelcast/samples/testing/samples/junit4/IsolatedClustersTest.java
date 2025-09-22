@@ -1,4 +1,4 @@
-package com.hazelcast.samples.testing.samples.junit5;
+package com.hazelcast.samples.testing.samples.junit4;
 
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.test.TestHazelcastFactory;
@@ -17,10 +17,10 @@ import static com.hazelcast.test.HazelcastTestSupport.assertClusterSizeEventuall
 import static com.hazelcast.test.HazelcastTestSupport.assertEqualsEventually;
 
 /**
- * This test shows how I can run multiple tests in parallel and in isolation, to test
+ * This test shows how multiple tests can be run in parallel and in isolation, to test
  * business logic on Hazelcast data structures.
- * By running tests in parallel I can expedite their execution.
- * Isolation can be achieved by by assigning random names to the
+ * By running tests in parallel their execution can be expedited.
+ * Isolation can be achieved by assigning random names to the
  * cluster so each test doesn't interfere with the other.
  */
 @RunWith(HazelcastParallelClassRunner.class)
@@ -30,7 +30,7 @@ public class IsolatedClustersTest {
     private HazelcastInstance client;
 
     @Before
-    void setUp() {
+    public void setUp() {
         String clusterName = HazelcastTestSupport.randomName();
         Config serverConfig = new Config().setClusterName(clusterName);
         ClientConfig clientConfig = new ClientConfig().setClusterName(clusterName);
@@ -41,7 +41,7 @@ public class IsolatedClustersTest {
     }
 
     @After
-    void tearDown()
+    public void tearDown()
             throws InterruptedException {
         for (HazelcastInstance instance : members) {
             instance.shutdown();
@@ -50,7 +50,7 @@ public class IsolatedClustersTest {
     }
 
     @Test
-    void isolatedClustersDontInterfere_clusterA() {
+    public void isolatedClustersDontInterfere_clusterA() {
 
         // Custom business logic
         IMap<String, Integer> map = client.getMap("isolatedMap");
@@ -63,7 +63,7 @@ public class IsolatedClustersTest {
     }
 
     @Test
-    void isolatedClustersDontInterfere_clusterB() {
+    public void isolatedClustersDontInterfere_clusterB() {
         // Custom business logic
         IMap<String, Integer> map = client.getMap("isolatedMap");
         map.put("key", 1);

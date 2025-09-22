@@ -4,16 +4,16 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.samples.testing.Customer;
 import com.hazelcast.samples.testing.HzCustomerService;
 import com.hazelcast.map.IMap;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CustomerServiceMockitoTest {
 
     @Mock

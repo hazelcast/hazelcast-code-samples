@@ -3,6 +3,7 @@ package com.hazelcast.samples.testing.samples.junit5;
 import com.hazelcast.client.test.TestHazelcastFactory;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
+import com.hazelcast.test.HazelcastTestSupport;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,13 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MyClusterTest {
 
+    private static final TestHazelcastFactory factory = new TestHazelcastFactory(2);
     private static HazelcastInstance member1;
     private static HazelcastInstance member2;
     private static HazelcastInstance client;
 
     @BeforeAll
     static void setupCluster() {
-        TestHazelcastFactory factory = new TestHazelcastFactory(2);
         member1 = factory.newHazelcastInstance();
         member2 = factory.newHazelcastInstance();
         client = factory.newHazelcastClient();
@@ -30,17 +31,7 @@ class MyClusterTest {
 
     @AfterAll
     static void tearDownCluster() {
-        client.shutdown();
-        member1.shutdown();
-        member2.shutdown();
-    }
-
-    private static void sleep(int millis) {
-        try {
-            Thread.sleep(millis);   // artificial delay
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        factory.shutdownAll();
     }
 
     @Test
@@ -68,9 +59,9 @@ class MyClusterTest {
             IMap<Integer, String> map = member1.getMap("map");
             // your async logic here
             map.put(1, "one");
-            sleep(50);
+            HazelcastTestSupport.sleepMillis(50);
             map.put(2, "two");
-            sleep(100);
+            HazelcastTestSupport.sleepMillis(100);
         };
 
         Thread t = new Thread(task);

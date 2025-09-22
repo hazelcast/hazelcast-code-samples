@@ -12,7 +12,9 @@ import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.test.GeneratorFunction;
 import com.hazelcast.jet.pipeline.test.TestSources;
 import com.hazelcast.map.IMap;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -31,6 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MyPipelineTest {
+    private HazelcastInstance instance;
+    private TestHazelcastFactory factory;
+    private JetService jet;
+
     record Customer(String id, String name) implements Serializable {
     }
 
@@ -41,16 +47,22 @@ class MyPipelineTest {
         }
     }
 
-    @Test
-    void testSimplePipeline() {
-        TestHazelcastFactory factory = new TestHazelcastFactory();
-
+    @BeforeEach
+    void setUp() {
+        factory = new TestHazelcastFactory();
         Config config = new Config();
         config.setJetConfig(new JetConfig().setEnabled(true));
-        HazelcastInstance instance = factory.newHazelcastInstance(config);
+        instance = factory.newHazelcastInstance(config);
+        jet = instance.getJet();
+    }
 
-        JetService jet = instance.getJet();
+    @AfterEach
+    void tearDown() {
+        factory.shutdownAll();
+    }
 
+    @Test
+    void testSimplePipeline() {
         Pipeline p = Pipeline.create();
         p.readFrom(TestSources.items(1, 2, 3)).writeTo(Sinks.list("out"));
 
@@ -59,19 +71,10 @@ class MyPipelineTest {
         IList<Integer> result = instance.getList("out");
         assertEquals(3, result.size());
 
-        factory.shutdownAll();
     }
 
     @Test
     void assertPipelines() {
-        TestHazelcastFactory factory = new TestHazelcastFactory();
-
-        Config config = new Config();
-        config.setJetConfig(new JetConfig().setEnabled(true));
-        HazelcastInstance instance = factory.newHazelcastInstance(config);
-
-        JetService jet = instance.getJet();
-
         Pipeline p = Pipeline.create();
         p.readFrom(TestSources.items(1, 2, 3))
          .apply(assertAnyOrder("unexpected", List.of(3, 2, 1)))
@@ -80,20 +83,10 @@ class MyPipelineTest {
          .writeTo(Sinks.logger());
 
         jet.newJob(p).join();
-
-        factory.shutdownAll();
     }
 
     @Test
     void  assertPipelinesWithTimestamp() {
-        TestHazelcastFactory factory = new TestHazelcastFactory();
-
-        Config config = new Config();
-        config.setJetConfig(new JetConfig().setEnabled(true));
-        HazelcastInstance instance = factory.newHazelcastInstance(config);
-
-        JetService jet = instance.getJet();
-
         int itemsPerSecond = 3;
 
         Pipeline p = Pipeline.create();
@@ -109,20 +102,10 @@ class MyPipelineTest {
 
         // this blocks until join throws cancellation job from the Runnable
         assertThrows(CancellationException.class, job::join);
-
-        factory.shutdownAll();
     }
 
     @Test
     void  assertPipelinesWithoutTimestamp() {
-        TestHazelcastFactory factory = new TestHazelcastFactory();
-
-        Config config = new Config();
-        config.setJetConfig(new JetConfig().setEnabled(true));
-        HazelcastInstance instance = factory.newHazelcastInstance(config);
-
-        JetService jet = instance.getJet();
-
         int itemsPerSecond = 3;
 
         Pipeline p = Pipeline.create();
@@ -135,19 +118,10 @@ class MyPipelineTest {
 
         Job job = jet.newJob(p);
         assertThrows(CompletionException.class, job::join);
-
-        factory.shutdownAll();
     }
 
     @Test
     void testEnrichmentPipeline() {
-        TestHazelcastFactory factory = new TestHazelcastFactory();
-
-        Config config = new Config();
-        config.setJetConfig(new JetConfig().setEnabled(true));
-        HazelcastInstance instance = factory.newHazelcastInstance(config);
-        JetService jet = instance.getJet();
-
         // Set up customer map entries
         IMap<String, Customer> customers = instance.getMap("customers");
         customers.put("c1", new Customer("c1", "Alice"));
@@ -166,7 +140,5 @@ class MyPipelineTest {
         assertEquals(2, result.size());
         assertTrue(result.contains("Alice"));
         assertTrue(result.contains("Bob"));
-
-        factory.shutdownAll();
     }
 }

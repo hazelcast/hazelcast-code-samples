@@ -48,5 +48,4 @@ public class CustomerServiceWithSupportTest {
         HzCustomerService sut2 = new HzCustomerService(node2);
         assertEquals("Alice", sut2.findCustomer("123").name());
     }
-
 }

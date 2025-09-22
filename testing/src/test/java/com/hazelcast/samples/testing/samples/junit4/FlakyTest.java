@@ -44,7 +44,7 @@ public class FlakyTest extends HazelcastTestSupport {
         map.put("key", 0);
 
         // simulate intermittent behavior: succeed only half the time
-        if (System.currentTimeMillis() % 2 == 0) {
+        if (System.nanoTime() % 2 == 0) {
             map.put("key", counter.incrementAndGet());
         }
 
