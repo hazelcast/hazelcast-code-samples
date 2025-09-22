@@ -8,23 +8,24 @@ import com.hazelcast.map.listener.EntryUpdatedListener;
 import java.io.Serializable;
 import java.util.function.Consumer;
 
-class OrderUpdatedListener
-        implements EntryUpdatedListener<String, Order>, Serializable {
-
-    private final Consumer<Order> listener;
-
-    OrderUpdatedListener(Consumer<Order> listener) {
-        this.listener = listener;
-    }
-
-    @Override
-    public void entryUpdated(EntryEvent<String, Order> event) {
-        listener.accept(event.getValue());
-    }
-}
-
 public class HzOrderService
         implements OrderService {
+
+    static class OrderUpdatedListener
+            implements EntryUpdatedListener<String, Order>, Serializable {
+
+        private final Consumer<Order> listener;
+
+        OrderUpdatedListener(Consumer<Order> listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void entryUpdated(EntryEvent<String, Order> event) {
+            listener.accept(event.getValue());
+        }
+    }
+
     private final HazelcastInstance instance;
 
     public HzOrderService(HazelcastInstance hz) {
