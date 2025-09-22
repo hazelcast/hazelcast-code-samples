@@ -26,14 +26,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * <p>
  * Why This is a Component Test:
  * <ul>
  *  <li>Involves the component under test (HzCustomerService) and its private dependencies (SQLCustomerMapStore via Hazelcast)</li>
  *  <li>Uses a real external dependency (H2) and real Hazelcast instance (not mocked)</li>
  *  <li>Tests distributed behaviour: eviction, load and reload, failure of downstream dependencies</li>
  * </ul>
- * </p>
  */
 @RunWith(JUnit4.class)
 public class CustomerServiceComponentTest
