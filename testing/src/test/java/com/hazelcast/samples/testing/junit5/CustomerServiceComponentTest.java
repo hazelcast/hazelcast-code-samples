@@ -59,7 +59,6 @@ public class CustomerServiceComponentTest {
         if (factory != null) {
             factory.shutdownAll();
         }
-
     }
 
     @Test
