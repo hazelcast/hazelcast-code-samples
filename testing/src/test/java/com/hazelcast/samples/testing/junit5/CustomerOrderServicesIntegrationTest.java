@@ -24,14 +24,14 @@ public class CustomerOrderServicesIntegrationTest {
     }
 
     @AfterEach
-     void tearDown() {
+    void tearDown() {
         if (factory != null) {
             factory.shutdownAll();
         }
     }
 
     @Test
-     void customerAndOrderServicesIntegration() {
+    void customerAndOrderServicesIntegration() {
         // Create a shared Hazelcast instance
         HazelcastInstance instance = factory.newHazelcastInstance();
 

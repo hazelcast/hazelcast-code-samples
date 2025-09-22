@@ -1,17 +1,21 @@
 # Testing samples
 
-Testing applications that use Hazelcast (for caching, co-located compute and streaming) requires care to validate the behavior at various levels - from
+Testing applications that use Hazelcast (for caching, co-located compute and streaming) requires care to validate the behavior at
+various levels - from
 unit to system tests - given Hazelcast’s distributed, eventually/strongly consistent and asynchronous behaviour.
 
 Hazelcast provides tools to simplify writing unit/component/integration tests of such applications.
 
-This project demonstrates the use of these tools. Full documentation to setup and configure your dependencies is available in the [Hazelcast official documentation](https://docs.hazelcast.com/hazelcast/latest/test/testing-apps).
+This project demonstrates the use of these tools. Full documentation to setup and configure your dependencies is available in
+the [Hazelcast official documentation](https://docs.hazelcast.com/hazelcast/latest/test/testing-apps).
 
 ## Testing complex test scenarios
 
-The sample code in this project illustrates how to test applications that use Hazelcast for caching and stream processing. It includes two services: `Order` and `Customer` and it demonstrates testing each service independently and together.
+The sample code in this project illustrates how to test applications that use Hazelcast for caching and stream processing. It
+includes two services: `Order` and `Customer` and it demonstrates testing each service independently and together.
 
-Tests are available in both JUnit4 and JUnit5. The `com.hazelcast.samples.testing.samples` package contains basic testing support API usage examples.
+Tests are available in both JUnit4 and JUnit5. The `com.hazelcast.samples.testing.samples` package contains basic testing support
+API usage examples.
 
 ### Testing the integration of two services
 
@@ -103,7 +107,8 @@ execution of a listener:
 ### Testing streaming applications
 
 Test streaming applications is also supported - this is done extending `JetTestSupport` (itself an extension
-of `HazelcastTestSupport`). The [Hazelcast docs](https://docs.hazelcast.com/hazelcast/latest/test/testing-streaming) provide further details.
+of `HazelcastTestSupport`). The [Hazelcast docs](https://docs.hazelcast.com/hazelcast/latest/test/testing-streaming) provide
+further details.
 
 To use `JetTestSupport` the following dependencies must be included:
 

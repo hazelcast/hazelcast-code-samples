@@ -4,10 +4,6 @@ import com.hazelcast.client.test.TestHazelcastFactory;
 import com.hazelcast.collection.IList;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.samples.testing.Customer;
-import com.hazelcast.samples.testing.EnrichedOrder;
-import com.hazelcast.samples.testing.Order;
-import com.hazelcast.samples.testing.OrderEnrichmentPipeline;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JetConfig;
@@ -18,6 +14,10 @@ import com.hazelcast.jet.pipeline.test.AssertionCompletedException;
 import com.hazelcast.jet.pipeline.test.Assertions;
 import com.hazelcast.jet.pipeline.test.TestSources;
 import com.hazelcast.map.IMap;
+import com.hazelcast.samples.testing.Customer;
+import com.hazelcast.samples.testing.EnrichedOrder;
+import com.hazelcast.samples.testing.Order;
+import com.hazelcast.samples.testing.OrderEnrichmentPipeline;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,8 +82,7 @@ public class OrderEnrichmentPipelineTest {
         });
 
         Pipeline pipeline = Pipeline.create();
-        OrderEnrichmentPipeline.enrich(pipeline, source).apply(Assertions.assertCollectedEventually(5,
-                list -> assertTrue(list.size() >= 10, "Expected at least 10 enriched orders")));
+        OrderEnrichmentPipeline.enrich(pipeline, source).apply(Assertions.assertCollectedEventually(5, list -> assertTrue(list.size() >= 10, "Expected at least 10 enriched orders")));
 
         Job job = instance.getJet().newJob(pipeline);
 

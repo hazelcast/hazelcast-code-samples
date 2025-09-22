@@ -72,8 +72,7 @@ class MyMapStoreTest {
 
         // Configure and start another instance for the store test
         Config config = new Config().setClusterName("store-test");
-        config.getMapConfig("storeMap").getMapStoreConfig().setEnabled(true)
-              .setWriteDelaySeconds(1) // async write to MapStore after 1s
+        config.getMapConfig("storeMap").getMapStoreConfig().setEnabled(true).setWriteDelaySeconds(1) // async write to MapStore after 1s
               .setImplementation(mockMapStore);
 
         HazelcastInstance storeHz = factory.newHazelcastInstance(config);

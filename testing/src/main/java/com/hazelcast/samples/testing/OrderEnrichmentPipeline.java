@@ -25,7 +25,6 @@ public class OrderEnrichmentPipeline {
 
     public static StreamStage<EnrichedOrder> enrich(Pipeline p, StreamSource<Order> source) {
         // Here you can use "with timestamps" if using event time
-        return p.readFrom(source).withoutTimestamps()
-                .mapUsingIMap("customers", Order::customerId, getEnrichment());
+        return p.readFrom(source).withoutTimestamps().mapUsingIMap("customers", Order::customerId, getEnrichment());
     }
 }

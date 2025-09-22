@@ -19,7 +19,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(HazelcastParallelClassRunner.class)
-public class MyClusterTest extends HazelcastTestSupport {
+public class MyClusterTest
+        extends HazelcastTestSupport {
 
     // Atomic timestamps to verify overlapping execution
     private static final AtomicLong test1Start = new AtomicLong();
@@ -41,15 +42,9 @@ public class MyClusterTest extends HazelcastTestSupport {
 
         // Verify intervals overlapped
 
-        assertThat(start1)
-                .withFailMessage("Expected overlap but got [start1=%s, end1=%s, start2=%s, end2=%s]",
-                        start1, end1, start2, end2)
-                .isLessThan(end2);
+        assertThat(start1).withFailMessage("Expected overlap but got [start1=%s, end1=%s, start2=%s, end2=%s]", start1, end1, start2, end2).isLessThan(end2);
 
-        assertThat(start2)
-                .withFailMessage("Expected overlap but got [start1=%s, end1=%s, start2=%s, end2=%s]",
-                        start1, end1, start2, end2)
-                .isLessThan(end1);
+        assertThat(start2).withFailMessage("Expected overlap but got [start1=%s, end1=%s, start2=%s, end2=%s]", start1, end1, start2, end2).isLessThan(end1);
     }
 
     @Before
@@ -86,7 +81,8 @@ public class MyClusterTest extends HazelcastTestSupport {
     }
 
     @Test
-    public void testMapRemoveAcrossCluster() throws Exception {
+    public void testMapRemoveAcrossCluster()
+            throws Exception {
         test2Start.set(System.currentTimeMillis());
         // simulate workload
         Thread.sleep(100);

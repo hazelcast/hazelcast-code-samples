@@ -3,12 +3,12 @@ package com.hazelcast.samples.testing.junit5;
 import com.hazelcast.client.test.TestHazelcastFactory;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.MapStore;
 import com.hazelcast.samples.testing.Customer;
 import com.hazelcast.samples.testing.CustomerService;
 import com.hazelcast.samples.testing.HzCustomerService;
 import com.hazelcast.samples.testing.SQLCustomerMapStore;
 import com.hazelcast.samples.testing.ServiceException;
-import com.hazelcast.map.MapStore;
 import com.hazelcast.sql.HazelcastSqlException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,8 +92,7 @@ public class CustomerServiceComponentTest {
 
         // Create a mock MapStore that throws an exception when load is called
         MapStore<String, Customer> failingMapStore = (MapStore<String, Customer>) mock(MapStore.class);
-        when(failingMapStore.load("c1")).thenThrow(
-                new HazelcastSqlException("Injected failure", new SQLException("downstream DB error")));
+        when(failingMapStore.load("c1")).thenThrow(new HazelcastSqlException("Injected failure", new SQLException("downstream DB error")));
 
         // Configure Hazelcast with the failing MapStore
         Config config = new Config();

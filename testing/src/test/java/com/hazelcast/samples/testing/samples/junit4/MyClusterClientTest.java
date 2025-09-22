@@ -11,7 +11,8 @@ import org.junit.runners.JUnit4;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class MyClusterClientTest extends HazelcastTestSupport {
+public class MyClusterClientTest
+        extends HazelcastTestSupport {
 
     @Test
     public void testClientPutAndGetAcrossCluster() {

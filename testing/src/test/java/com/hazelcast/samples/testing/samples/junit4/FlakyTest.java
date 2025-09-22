@@ -17,7 +17,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(HazelcastSerialClassRunner.class)
-public class FlakyTest extends HazelcastTestSupport {
+public class FlakyTest
+        extends HazelcastTestSupport {
 
     private static final AtomicInteger run = new AtomicInteger();
     private static final AtomicInteger counter = new AtomicInteger();

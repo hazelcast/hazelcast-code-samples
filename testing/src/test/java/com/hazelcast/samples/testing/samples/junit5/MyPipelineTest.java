@@ -13,7 +13,6 @@ import com.hazelcast.jet.pipeline.test.GeneratorFunction;
 import com.hazelcast.jet.pipeline.test.TestSources;
 import com.hazelcast.map.IMap;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,24 +27,14 @@ import static com.hazelcast.jet.pipeline.test.Assertions.assertContains;
 import static com.hazelcast.jet.pipeline.test.Assertions.assertOrdered;
 import static com.hazelcast.test.HazelcastTestSupport.assertSizeEventually;
 import static com.hazelcast.test.HazelcastTestSupport.spawn;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MyPipelineTest {
     private HazelcastInstance instance;
     private TestHazelcastFactory factory;
     private JetService jet;
-
-    record Customer(String id, String name) implements Serializable {
-    }
-
-    static class MyCustomerGen implements Serializable, GeneratorFunction<Customer> {
-        @Override
-        public Customer generate(long timestamp, long nextId) {
-            return new Customer("ID_" + timestamp, "NAME_" + nextId);
-        }
-    }
 
     @BeforeEach
     void setUp() {
@@ -76,23 +65,17 @@ class MyPipelineTest {
     @Test
     void assertPipelines() {
         Pipeline p = Pipeline.create();
-        p.readFrom(TestSources.items(1, 2, 3))
-         .apply(assertAnyOrder("unexpected", List.of(3, 2, 1)))
-         .apply(assertOrdered("unexpected", List.of(1, 2, 3)))
-         .apply(assertContains("unexpected", List.of(1, 2)))
-         .writeTo(Sinks.logger());
+        p.readFrom(TestSources.items(1, 2, 3)).apply(assertAnyOrder("unexpected", List.of(3, 2, 1))).apply(assertOrdered("unexpected", List.of(1, 2, 3))).apply(assertContains("unexpected", List.of(1, 2))).writeTo(Sinks.logger());
 
         jet.newJob(p).join();
     }
 
     @Test
-    void  assertPipelinesWithTimestamp() {
+    void assertPipelinesWithTimestamp() {
         int itemsPerSecond = 3;
 
         Pipeline p = Pipeline.create();
-        p.readFrom(TestSources.itemStream(itemsPerSecond, new MyCustomerGen()))
-         .withNativeTimestamps(0)
-         .writeTo(Sinks.list("new_customers"));
+        p.readFrom(TestSources.itemStream(itemsPerSecond, new MyCustomerGen())).withNativeTimestamps(0).writeTo(Sinks.list("new_customers"));
 
         Job job = jet.newJob(p);
         spawn((Runnable) () -> {
@@ -105,16 +88,11 @@ class MyPipelineTest {
     }
 
     @Test
-    void  assertPipelinesWithoutTimestamp() {
+    void assertPipelinesWithoutTimestamp() {
         int itemsPerSecond = 3;
 
         Pipeline p = Pipeline.create();
-        p.readFrom(TestSources.itemStream(itemsPerSecond, new MyCustomerGen()))
-         .withoutTimestamps()
-         .apply(assertCollectedEventually(5,
-                 items -> assertTrue(items.size() >= 15,
-                 "did not receive at least 20 items")))
-        .writeTo(Sinks.list("new_customers"));
+        p.readFrom(TestSources.itemStream(itemsPerSecond, new MyCustomerGen())).withoutTimestamps().apply(assertCollectedEventually(5, items -> assertTrue(items.size() >= 15, "did not receive at least 20 items"))).writeTo(Sinks.list("new_customers"));
 
         Job job = jet.newJob(p);
         assertThrows(CompletionException.class, job::join);
@@ -129,10 +107,7 @@ class MyPipelineTest {
 
         // Build and run the pipeline
         Pipeline p = Pipeline.create();
-        p.readFrom(TestSources.items("c1", "c2"))
-         .mapUsingIMap("customers",
-                 id -> id, (c, customer) -> ((Customer) customer).name())
-         .writeTo(Sinks.list("enriched"));
+        p.readFrom(TestSources.items("c1", "c2")).mapUsingIMap("customers", id -> id, (c, customer) -> ((Customer) customer).name()).writeTo(Sinks.list("enriched"));
         jet.newJob(p).join();
 
         // Validate the result
@@ -140,5 +115,17 @@ class MyPipelineTest {
         assertEquals(2, result.size());
         assertTrue(result.contains("Alice"));
         assertTrue(result.contains("Bob"));
+    }
+
+    record Customer(String id, String name)
+            implements Serializable {
+    }
+
+    static class MyCustomerGen
+            implements Serializable, GeneratorFunction<Customer> {
+        @Override
+        public Customer generate(long timestamp, long nextId) {
+            return new Customer("ID_" + timestamp, "NAME_" + nextId);
+        }
     }
 }

@@ -25,6 +25,14 @@ public class MyClusterFailureTest {
     private HazelcastInstance member2;
     private MembershipListener mockListener;
 
+    private static Config getConfig(String v) {
+        MemberAttributeConfig mAttr = new MemberAttributeConfig();
+        mAttr.setAttribute("m", v);
+        Config config = new Config();
+        config.setMemberAttributeConfig(mAttr);
+        return config;
+    }
+
     @BeforeEach
     void setupCluster() {
         TestHazelcastFactory factory = new TestHazelcastFactory(2);
@@ -37,14 +45,6 @@ public class MyClusterFailureTest {
         listenerConfig.setImplementation(mockListener);
         clientConfig.addListenerConfig(listenerConfig);
         client = factory.newHazelcastClient(clientConfig);
-    }
-
-    private static Config getConfig(String v) {
-        MemberAttributeConfig mAttr = new MemberAttributeConfig();
-        mAttr.setAttribute("m", v);
-        Config config = new Config();
-        config.setMemberAttributeConfig(mAttr);
-        return config;
     }
 
     @AfterEach

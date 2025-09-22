@@ -3,10 +3,6 @@ package com.hazelcast.samples.testing.junit4;
 import com.hazelcast.collection.IList;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.samples.testing.Customer;
-import com.hazelcast.samples.testing.EnrichedOrder;
-import com.hazelcast.samples.testing.Order;
-import com.hazelcast.samples.testing.OrderEnrichmentPipeline;
 import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JetConfig;
@@ -18,6 +14,10 @@ import com.hazelcast.jet.pipeline.test.AssertionCompletedException;
 import com.hazelcast.jet.pipeline.test.Assertions;
 import com.hazelcast.jet.pipeline.test.TestSources;
 import com.hazelcast.map.IMap;
+import com.hazelcast.samples.testing.Customer;
+import com.hazelcast.samples.testing.EnrichedOrder;
+import com.hazelcast.samples.testing.Order;
+import com.hazelcast.samples.testing.OrderEnrichmentPipeline;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,9 +62,7 @@ public class OrderEnrichmentPipelineTest
 
         IList<EnrichedOrder> result = instance.getList("enriched-orders");
         assertEquals(2, result.size());
-        assertThat(result)
-                .extracting(EnrichedOrder::customerName)
-                .containsExactlyInAnyOrder("Alice", "Bob");
+        assertThat(result).extracting(EnrichedOrder::customerName).containsExactlyInAnyOrder("Alice", "Bob");
     }
 
     @Test
@@ -80,13 +78,11 @@ public class OrderEnrichmentPipelineTest
         });
 
         Pipeline pipeline = Pipeline.create();
-        OrderEnrichmentPipeline.enrich(pipeline, source).apply(Assertions.assertCollectedEventually(5,
-                list -> assertTrue("Expected at least 10 enriched orders", list.size() >= 10)));
+        OrderEnrichmentPipeline.enrich(pipeline, source).apply(Assertions.assertCollectedEventually(5, list -> assertTrue("Expected at least 10 enriched orders", list.size() >= 10)));
 
         Job job = instance.getJet().newJob(pipeline);
 
         // The assertion will stop the job automatically via AssertionCompletedException by assertCollectedEventually
-        assertThatThrownBy(job::join)
-                .hasRootCauseInstanceOf(AssertionCompletedException.class);
+        assertThatThrownBy(job::join).hasRootCauseInstanceOf(AssertionCompletedException.class);
     }
 }
