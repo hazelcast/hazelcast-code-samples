@@ -170,5 +170,4 @@ class MyPipelineTest {
 
         factory.shutdownAll();
     }
-
 }
