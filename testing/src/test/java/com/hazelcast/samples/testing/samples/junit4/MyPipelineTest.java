@@ -37,5 +37,4 @@ public class MyPipelineTest
 
         instance.shutdown();
     }
-
 }
