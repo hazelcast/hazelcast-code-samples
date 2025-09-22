@@ -38,6 +38,7 @@ public class OrderServiceWithListenerTest
         // Update the order so hazelcast triggers the event
         sut.updateOrder(order.confirm());
 
+        // verifying that only mockConsumer#accept(Order) is called within a lag of 100ms
         verify(mockConsumer, timeout(100).only()).accept(any(Order.class));
     }
 
