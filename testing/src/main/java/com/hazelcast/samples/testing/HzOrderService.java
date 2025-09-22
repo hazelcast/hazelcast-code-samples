@@ -65,6 +65,5 @@ public class HzOrderService
     public void updateOrder(Order order) {
         orderMap().put(order.id(), order);
     }
-
 }
 
