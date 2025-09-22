@@ -46,7 +46,7 @@ following:
 
 ### Testing a component integration with its dependencies
 
-Another typical scenario consist of testing the integration of a component, in isolation, but integrated with its dependencies:
+Another typical scenario consists of testing the integration of a component, in isolation, but integrated with its dependencies:
 
 ```java
     @Test
