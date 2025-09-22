@@ -71,4 +71,3 @@ class MyClusterTest {
         assertTrueEventually(() -> assertFalse(member2.getMap("map").containsKey("3")));
     }
 }
-
