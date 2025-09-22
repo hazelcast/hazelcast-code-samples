@@ -2,7 +2,7 @@
 
 Testing applications that use Hazelcast (for caching, co-located compute and streaming) requires care to validate the behavior at
 various levels - from
-unit to system tests - given Hazelcast’s distributed, eventually/strongly consistent and asynchronous behaviour.
+unit to system tests - given Hazelcast’s distributed, eventually/strongly consistent and asynchronous behavior.
 
 Hazelcast provides tools to simplify writing unit/component/integration tests of such applications.
 
