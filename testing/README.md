@@ -17,7 +17,7 @@ Examples in both JUnit4 and JUnit5 are provided, as well as a `com.hazelcast.sam
 
 ### Testing the integration of two services
 
-In the following example, two services (`Customer`and `Order` share state via Hazelcast.) Functionality can be tested as
+In the following example, two services (`Customer`and `Order`) share state via Hazelcast. Functionality can be tested as
 following:
 
 ```java
