@@ -37,4 +37,3 @@ class MyClusterNameTest {
         assertEqualsEventually(() -> member2.getConfig().getClusterName(), clusterName);
     }
 }
-
