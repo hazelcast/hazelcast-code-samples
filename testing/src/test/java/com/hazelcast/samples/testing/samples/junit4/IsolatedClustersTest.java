@@ -41,8 +41,7 @@ public class IsolatedClustersTest {
     }
 
     @After
-    public void tearDown()
-            throws InterruptedException {
+    public void tearDown() {
         for (HazelcastInstance instance : members) {
             instance.shutdown();
         }
