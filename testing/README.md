@@ -190,4 +190,4 @@ For example, here we inject a data source and assert on the number of received i
     }
 ```
 
-More assertions are available and [documented](https://docs.hazelcast.com/hazelcast/5.5/test/testing#assertions). 
+More assertions are available and [documented](https://docs.hazelcast.com/hazelcast/latest/test/testing#assertions). 
