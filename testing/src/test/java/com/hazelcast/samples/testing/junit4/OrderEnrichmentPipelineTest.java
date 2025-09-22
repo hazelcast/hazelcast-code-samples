@@ -24,9 +24,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.concurrent.CompletionException;
-
-import static com.hazelcast.jet.core.test.JetAssert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -63,8 +62,9 @@ public class OrderEnrichmentPipelineTest
 
         IList<EnrichedOrder> result = instance.getList("enriched-orders");
         assertEquals(2, result.size());
-        assertTrue(result.stream().anyMatch(o -> o.customerName().equals("Alice")));
-        assertTrue(result.stream().anyMatch(o -> o.customerName().equals("Bob")));
+        assertThat(result)
+                .extracting(EnrichedOrder::customerName)
+                .containsExactlyInAnyOrder("Alice", "Bob");
     }
 
     @Test
@@ -86,23 +86,7 @@ public class OrderEnrichmentPipelineTest
         Job job = instance.getJet().newJob(pipeline);
 
         // The assertion will stop the job automatically via AssertionCompletedException by assertCollectedEventually
-        try {
-            job.join();
-            fail("Expected job to terminate with AssertionCompletedException");
-        } catch (CompletionException e) {
-            if (!causedBy(e, AssertionCompletedException.class)) {
-                throw e; // rethrow if it wasn't the expected assertion exit
-            }
-        }
-    }
-
-    private boolean causedBy(Throwable t, Class<? extends Throwable> target) {
-        while (t != null) {
-            if (target.isInstance(t)) {
-                return true;
-            }
-            t = t.getCause();
-        }
-        return false;
+        assertThatThrownBy(job::join)
+                .hasRootCauseInstanceOf(AssertionCompletedException.class);
     }
 }
