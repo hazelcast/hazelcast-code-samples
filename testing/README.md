@@ -103,7 +103,7 @@ execution of a listener:
 
 ### Testing streaming applications
 
-Hazelcast releases also support for testing streaming applications. This is done extending `JetTestSupport` (itself an extension
+Test streaming applications is also supported - this is done extending `JetTestSupport` (itself an extension
 of `HazelcastTestSupport`). The [Hazelcast docs](https://docs.hazelcast.com/hazelcast/5.5/test/testing-streaming) provide further details.
 
 To use `JetTestSupport` the following dependencies must be included:
