@@ -5,7 +5,7 @@ unit to system tests - given Hazelcast’s distributed, eventually consistent an
 
 Hazelcast provides tools to simplify writing unit/component/integration tests of such applications.
 
-This project demonstrates the use of these tools. Full documentation to setup and configure your dependencies is available in the [Hazelcast official documentation](https://docs.hazelcast.com/hazelcast/5.5/test/testing-apps#hide-nav).
+This project demonstrates the use of these tools. Full documentation to setup and configure your dependencies is available in the [Hazelcast official documentation](https://docs.hazelcast.com/hazelcast/latest/test/testing-apps).
 
 ## Testing complex test scenarios
 
