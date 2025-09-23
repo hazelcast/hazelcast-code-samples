@@ -19,7 +19,7 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
 
-        <version.jboss.maven.plugin>7.1.1.Final</version.jboss.maven.plugin>
+        <version.jboss.maven.plugin>7.9.Final</version.jboss.maven.plugin>
         <version.jboss.spec.javaee.6.0>3.0.2.Final</version.jboss.spec.javaee.6.0>
         <version.war.plugin>3.3.2</version.war.plugin>
     </properties>
