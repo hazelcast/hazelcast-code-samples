@@ -29,7 +29,7 @@
     </parent>
 
     <properties>
-        <confluent.version>5.5.3</confluent.version>
+        <confluent.version>8.0.0</confluent.version>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
     </properties>
