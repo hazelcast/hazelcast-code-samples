@@ -36,7 +36,7 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
 
         <testcontainers.version>1.18.0</testcontainers.version>
-        <log4j2.version>2.20.0</log4j2.version>
+        <log4j2.version>2.25.1</log4j2.version>
     </properties>
 
     <dependencies>
