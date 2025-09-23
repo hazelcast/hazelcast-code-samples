@@ -35,6 +35,17 @@ jobs:
           java-version: 17
           distribution: temurin
           cache: maven
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'
+      - name: Get Secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: |
+            HZ_LICENSE_KEY,CN/HZ_LICENSE_KEY
       - name: Build and test
         run: |
           ${RUNNER_DEBUG:+set -x}
@@ -43,5 +54,5 @@ jobs:
             --errors \
             --no-transfer-progress \
             ${RUNNER_DEBUG:+--show-version} \
-            "-Dhazelcast.enterprise.license.key=${{ secrets.HAZELCAST_ENTERPRISE_KEY_V7 }}" \
+            "-Dhazelcast.enterprise.license.key=${HZ_LICENSE_KEY}" \
            verify
