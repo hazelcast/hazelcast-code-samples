@@ -23,7 +23,7 @@
 
         <log4j.version>1.2.17</log4j.version>
         <slf4j.api.version>2.0.17</slf4j.api.version>
-        <slf4j-log4j12.version>1.6.6</slf4j-log4j12.version>
+        <slf4j-log4j12.version>1.7.33</slf4j-log4j12.version>
     </properties>
 
     <dependencies>
