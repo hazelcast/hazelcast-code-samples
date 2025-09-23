@@ -28,6 +28,7 @@ public class IsolatedClustersTest {
 
     private HazelcastInstance[] members;
     private HazelcastInstance client;
+    private TestHazelcastFactory factory;
 
     @Before
     public void setUp() {
@@ -35,17 +36,14 @@ public class IsolatedClustersTest {
         Config serverConfig = new Config().setClusterName(clusterName);
         ClientConfig clientConfig = new ClientConfig().setClusterName(clusterName);
 
-        TestHazelcastFactory factory = new TestHazelcastFactory(2);
+        factory = new TestHazelcastFactory(2);
         members = factory.newInstances(serverConfig, 2);
         client = factory.newHazelcastClient(clientConfig);
     }
 
     @After
     public void tearDown() {
-        for (HazelcastInstance instance : members) {
-            instance.shutdown();
-        }
-        client.shutdown();
+        factory.shutdownAll();
     }
 
     @Test

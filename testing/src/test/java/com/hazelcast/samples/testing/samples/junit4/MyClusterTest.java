@@ -58,7 +58,9 @@ public class MyClusterTest
 
     @After
     public void tearDown() {
-        Arrays.stream(instances).forEach(HazelcastInstance::shutdown);
+        for (HazelcastInstance instance : instances) {
+            instance.shutdown();
+        }
     }
 
     @Test
