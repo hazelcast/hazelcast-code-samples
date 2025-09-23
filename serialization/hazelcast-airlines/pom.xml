@@ -20,7 +20,7 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
 
         <hazelcast.version>5.5.0</hazelcast.version>
-        <kryo.version>4.0.0</kryo.version>
+        <kryo.version>5.6.2</kryo.version>
         <spring-shell.version>3.4.0</spring-shell.version>
     </properties>
 
