@@ -11,21 +11,6 @@ import java.util.function.Consumer;
 public class HzOrderService
         implements OrderService {
 
-    static class OrderUpdatedListener
-            implements EntryUpdatedListener<String, Order>, Serializable {
-
-        private final Consumer<Order> listener;
-
-        OrderUpdatedListener(Consumer<Order> listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        public void entryUpdated(EntryEvent<String, Order> event) {
-            listener.accept(event.getValue());
-        }
-    }
-
     private final HazelcastInstance instance;
 
     public HzOrderService(HazelcastInstance hz) {
@@ -65,6 +50,21 @@ public class HzOrderService
     @Override
     public void updateOrder(Order order) {
         orderMap().put(order.id(), order);
+    }
+
+    static class OrderUpdatedListener
+            implements EntryUpdatedListener<String, Order>, Serializable {
+
+        private final Consumer<Order> listener;
+
+        OrderUpdatedListener(Consumer<Order> listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void entryUpdated(EntryEvent<String, Order> event) {
+            listener.accept(event.getValue());
+        }
     }
 }
 

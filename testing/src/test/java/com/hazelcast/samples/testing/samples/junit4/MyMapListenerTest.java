@@ -38,7 +38,7 @@ public class MyMapListenerTest
             // verify the listener received the update
             verify(mockListener, timeout(1000).times(1)).entryUpdated(any(EntryEvent.class));
         } finally {
-            if(instance != null) {
+            if (instance != null) {
                 instance.shutdown();
             }
         }

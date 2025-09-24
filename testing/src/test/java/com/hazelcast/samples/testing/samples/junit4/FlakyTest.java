@@ -49,7 +49,7 @@ public class FlakyTest
         map.put("key", 0);
 
         boolean alwaysFail = true;
-        if(alwaysFail) {
+        if (alwaysFail) {
             // simulate intermittent behavior: succeed only half the time
             if (System.nanoTime() % 2 == 0) {
                 map.put("key", counter.incrementAndGet());

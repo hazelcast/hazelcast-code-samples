@@ -85,7 +85,6 @@ public class OrderEnrichmentPipelineTest {
         Job job = instance.getJet().newJob(pipeline);
 
         // The assertion will stop the job automatically via AssertionCompletedException by assertCollectedEventually
-        assertThatThrownBy(job::join)
-                .hasRootCauseInstanceOf(AssertionCompletedException.class);
+        assertThatThrownBy(job::join).hasRootCauseInstanceOf(AssertionCompletedException.class);
     }
 }
