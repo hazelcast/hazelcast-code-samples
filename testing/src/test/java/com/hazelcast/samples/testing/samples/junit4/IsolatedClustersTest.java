@@ -43,7 +43,9 @@ public class IsolatedClustersTest {
 
     @After
     public void tearDown() {
-        factory.shutdownAll();
+        if (factory != null) {
+            factory.shutdownAll();
+        }
     }
 
     @Test

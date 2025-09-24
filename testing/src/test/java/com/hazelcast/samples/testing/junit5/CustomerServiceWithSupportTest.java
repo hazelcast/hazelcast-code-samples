@@ -22,7 +22,9 @@ public class CustomerServiceWithSupportTest {
 
     @AfterEach
     void tearDown() {
-        factory.shutdownAll();
+        if (factory != null) {
+            factory.shutdownAll();
+        }
     }
 
     @Test
