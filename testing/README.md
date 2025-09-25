@@ -20,7 +20,7 @@ API usage examples.
 ### Testing the integration of two services
 
 In the following example, two services (`Customer` and `Order`) share state via Hazelcast. Functionality can be tested as
-following:
+follows:
 
 ```java
     @Test
