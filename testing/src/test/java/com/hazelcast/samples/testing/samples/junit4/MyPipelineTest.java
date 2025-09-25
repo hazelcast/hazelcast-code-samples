@@ -16,8 +16,7 @@ import org.junit.runners.JUnit4;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class MyPipelineTest
-        extends JetTestSupport {
+public class MyPipelineTest extends JetTestSupport {
 
     @Test
     public void testSimplePipeline() {
@@ -25,16 +24,20 @@ public class MyPipelineTest
         config.setJetConfig(new JetConfig().setEnabled(true));
 
         HazelcastInstance instance = createHazelcastInstance(config);
-        JetService jet = instance.getJet();
+        try {
+            JetService jet = instance.getJet();
 
-        Pipeline p = Pipeline.create();
-        p.readFrom(TestSources.items(1, 2, 3)).writeTo(Sinks.list("out"));
+            Pipeline p = Pipeline.create();
+            p.readFrom(TestSources.items(1, 2, 3)).writeTo(Sinks.list("out"));
 
-        jet.newJob(p).join();
+            jet.newJob(p).join();
 
-        IList<Integer> result = instance.getList("out");
-        assertEquals(3, result.size());
-
-        instance.shutdown();
+            IList<Integer> result = instance.getList("out");
+            assertEquals(3, result.size());
+        } finally {
+            if (instance != null) {
+                instance.shutdown();
+            }
+        }
     }
 }

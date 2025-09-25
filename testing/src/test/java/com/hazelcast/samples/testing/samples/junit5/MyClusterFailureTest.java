@@ -24,6 +24,7 @@ public class MyClusterFailureTest {
     private HazelcastInstance member1;
     private HazelcastInstance member2;
     private MembershipListener mockListener;
+    private TestHazelcastFactory factory;
 
     private static Config getConfig(String v) {
         MemberAttributeConfig mAttr = new MemberAttributeConfig();
@@ -35,7 +36,7 @@ public class MyClusterFailureTest {
 
     @BeforeEach
     void setupCluster() {
-        TestHazelcastFactory factory = new TestHazelcastFactory(2);
+        factory = new TestHazelcastFactory(2);
         member1 = factory.newHazelcastInstance(getConfig("1"));
         member2 = factory.newHazelcastInstance(getConfig("2"));
 
@@ -49,12 +50,8 @@ public class MyClusterFailureTest {
 
     @AfterEach
     void tearDownCluster() {
-        client.shutdown();
-        if (member1 != null) {
-            member1.shutdown();
-        }
-        if (member2 != null) {
-            member2.shutdown();
+        if (factory != null) {
+            factory.shutdownAll();
         }
     }
 

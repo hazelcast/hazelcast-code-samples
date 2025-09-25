@@ -104,6 +104,8 @@ execution of a listener:
     }
 ```
 
+The test class this method is extracted from is [OrderServiceWithListenerTest](src/test/java/com/hazelcast/samples/testing/junit4/OrderServiceWithListenerTest.java).
+
 ### Testing streaming applications
 
 Test streaming applications is also supported - this is done extending `JetTestSupport` (itself an extension
