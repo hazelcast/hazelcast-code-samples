@@ -23,18 +23,18 @@ public class MyClusterClientTest
 
         HazelcastInstance client = factory.newHazelcastClient();
 
-        member2.getMap("map").put("key0", "value0");
-        // when: client puts an entry
-        IMap<String, String> clientMap = client.getMap("map");
-        clientMap.put("key1", "value1");
+        try {
+            member2.getMap("map").put("key0", "value0");
+            // when: client puts an entry
+            IMap<String, String> clientMap = client.getMap("map");
+            clientMap.put("key1", "value1");
 
-        // then: client and cluster see the entry
-        assertClusterSizeEventually(2, member1);
-        assertTrueEventually(() -> assertEquals("value0", clientMap.get("key0")));
-        assertTrueEventually(() -> assertEquals("value1", clientMap.get("key1")));
-
-        client.shutdown();
-        member1.shutdown();
-        member2.shutdown();
+            // then: client and cluster see the entry
+            assertClusterSizeEventually(2, member1);
+            assertTrueEventually(() -> assertEquals("value0", clientMap.get("key0")));
+            assertTrueEventually(() -> assertEquals("value1", clientMap.get("key1")));
+        } finally {
+            factory.shutdownAll();
+        }
     }
 }
