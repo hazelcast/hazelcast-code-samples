@@ -41,9 +41,7 @@ public class MyClusterTest
         assertTrue("Test2 did not record timing", start2 > 0 && end2 > start2);
 
         // Verify intervals overlapped
-
         assertThat(start1).withFailMessage("Expected overlap but got [start1=%s, end1=%s, start2=%s, end2=%s]", start1, end1, start2, end2).isLessThan(end2);
-
         assertThat(start2).withFailMessage("Expected overlap but got [start1=%s, end1=%s, start2=%s, end2=%s]", start1, end1, start2, end2).isLessThan(end1);
     }
 
