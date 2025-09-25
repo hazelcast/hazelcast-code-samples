@@ -12,6 +12,11 @@ import org.junit.jupiter.api.Test;
 import static com.hazelcast.test.HazelcastTestSupport.randomName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Tests {@link HzCustomerService} using multiple Hazelcast members.
+ *
+ * <p>Single vs two-node scenarios with newInstances(...) to test cluster access patterns and state propagation.
+ */
 public class CustomerServiceWithSupportTest {
     private TestHazelcastFactory factory;
 
@@ -27,6 +32,10 @@ public class CustomerServiceWithSupportTest {
         }
     }
 
+    /**
+     * Verify that a customer stored in a single node can be retrieved
+     * via the service.
+     */
     @Test
     void findCustomerSingleNode() {
         HazelcastInstance instance = factory.newHazelcastInstance();
@@ -35,6 +44,10 @@ public class CustomerServiceWithSupportTest {
         assertEquals("Alice", sut.findCustomer("123").name());
     }
 
+    /**
+     * Verify that data written on one node is visible on another,
+     * confirming cluster-wide state propagation.
+     */
     @Test
     void findCustomerTwoNodes() {
         HazelcastInstance[] cluster = factory.newInstances(new Config().setClusterName(randomName()), 2);

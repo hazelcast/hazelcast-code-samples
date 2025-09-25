@@ -14,6 +14,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Integration test to verify {@link CustomerService} and {@link OrderService}
+ * interact correctly when backed by the same Hazelcast cluster.
+ *
+ * <p>Uses TestHazelcastFactory in JUnit 5 to validate cross-service state on a shared member.
+ */
 public class CustomerOrderServicesIntegrationTest {
 
     private TestHazelcastFactory factory;
@@ -30,24 +36,23 @@ public class CustomerOrderServicesIntegrationTest {
         }
     }
 
+    /**
+     * Verify that a customer can be created and an order
+     * placed against it, with consistent state across both services.
+     */
     @Test
     void customerAndOrderServicesIntegration() {
-        // Create a shared Hazelcast instance
         HazelcastInstance instance = factory.newHazelcastInstance();
 
-        // Instantiate both services using same cluster
         CustomerService customerService = new HzCustomerService(instance);
         OrderService orderService = new HzOrderService(instance);
 
-        // Add customer
         Customer alice = new Customer("c1", "Alice");
         customerService.save(alice);
 
-        // Place an order for Alice
         Order order = new Order("o1", "c1", "Laptop");
         orderService.placeOrder(order);
 
-        // Verify state across services
         assertEquals("Alice", customerService.findCustomer("c1").name());
         assertEquals("Laptop", orderService.getOrder("o1").product());
     }

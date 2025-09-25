@@ -13,6 +13,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit test for {@link HzCustomerService} using Mockito.
+ *
+ * <p>This test isolates the service logic from a real Hazelcast cluster. Pure unit style: mock HazelcastInstance/IMap to test service logic without a real cluster.
+ */
+
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceMockitoTest {
 
@@ -25,6 +31,9 @@ public class CustomerServiceMockitoTest {
     @InjectMocks
     HzCustomerService service;
 
+    /**
+     * Verify that a customer can be retrieved when the map is mocked.
+     */
     @Test
     void findCustomerWithMock() {
         //noinspection unchecked,rawtypes

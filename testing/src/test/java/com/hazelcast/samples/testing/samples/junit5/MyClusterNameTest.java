@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static com.hazelcast.test.HazelcastTestSupport.assertEqualsEventually;
 
+/**
+ * Verifies that members in a cluster share the same configured cluster name. This is a simple pattern for
+ * isolating clusters via random names and asserting configuration consistency across members.
+ */
 class MyClusterNameTest {
 
     private static HazelcastInstance member1;
@@ -31,6 +35,9 @@ class MyClusterNameTest {
         member1.shutdown();
     }
 
+    /**
+     * Assert that both members see the same configured cluster name.
+     */
     @Test
     void testClusterName() {
         assertEqualsEventually(() -> member1.getConfig().getClusterName(), clusterName);

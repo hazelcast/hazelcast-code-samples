@@ -18,30 +18,46 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
+/**
+ * Verifies that {@link HzOrderService} correctly registers and triggers
+ * an update listener on order changes.
+ *
+ * <p>Shows how to register an entry listener and verify cluster events with Mockito using a real member.
+ */
 @RunWith(MockitoJUnitRunner.class)
-public class OrderServiceWithListenerTest
-        extends HazelcastTestSupport {
+public class OrderServiceWithListenerTest extends HazelcastTestSupport {
+
     @Mock
     private Consumer<Order> mockConsumer;
+
     private HazelcastInstance instance;
 
+    /**
+     * Place and update an order, and verify that the listener is
+     * triggered exactly once within the expected time window.
+     */
     @Test
     public void testOrderServiceListener() {
         instance = createHazelcastInstance();
-        // set a customer
+
+        // Add a customer so orders can be validated
         instance.getMap("customers").put("c1", new Customer("c1", "Alice"));
 
         OrderService sut = new HzOrderService(instance, mockConsumer);
 
         Order order = new Order("o1", "c1", "Laptop");
         sut.placeOrder(order);
-        // Update the order so hazelcast triggers the event
+
+        // Trigger listener by updating the order
         sut.updateOrder(order.confirm());
 
-        // verifying that only mockConsumer#accept(Order) is called within a lag of 100ms
+        // Verify callback fired exactly once within 100ms
         verify(mockConsumer, timeout(100).only()).accept(any(Order.class));
     }
 
+    /**
+     * Shut down the Hazelcast instance after test completion.
+     */
     @After
     public void tearDown() {
         if (instance != null) {

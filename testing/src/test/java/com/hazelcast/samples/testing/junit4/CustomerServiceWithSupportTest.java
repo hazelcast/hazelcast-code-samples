@@ -13,12 +13,20 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests {@link HzCustomerService} using helpers from {@link HazelcastTestSupport}.
+ *
+ * <p>Shows single-node vs multi-node setups via createHazelcastInstance(s) and validates data visibility across members.
+ */
 @RunWith(JUnit4.class)
-public class CustomerServiceWithSupportTest
-        extends HazelcastTestSupport {
+public class CustomerServiceWithSupportTest extends HazelcastTestSupport {
     private HazelcastInstance instance;
     private HazelcastInstance[] cluster;
 
+    /**
+     * Verify that a customer stored in a single node can be retrieved
+     * through the service.
+     */
     @Test
     public void findCustomerSingleNode() {
         instance = createHazelcastInstance();
@@ -27,6 +35,10 @@ public class CustomerServiceWithSupportTest
         assertEquals("Alice", sut.findCustomer("123").name());
     }
 
+    /**
+     * Verify that a customer stored on one node can be read from another,
+     * confirming cluster-wide data visibility.
+     */
     @Test
     public void findCustomerTwoNodes() {
         cluster = createHazelcastInstances(2);
@@ -38,9 +50,13 @@ public class CustomerServiceWithSupportTest
 
         // data retrieved from node2
         HzCustomerService sut2 = new HzCustomerService(node2);
+
         assertEquals("Alice", sut2.findCustomer("123").name());
     }
 
+    /**
+     * Shut down any Hazelcast members started for the tests.
+     */
     @After
     public void tearDown() {
         if (instance != null) {

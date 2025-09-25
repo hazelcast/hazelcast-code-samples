@@ -16,9 +16,29 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+/**
+ * Example of a deliberately flaky test, left {@link Ignore}d to avoid polluting builds.
+ *
+ * <p>Illustrates the use of Hazelcast’s JUnit 4 test support to
+ * spin up members and control test execution.
+ *
+ * <p><strong>HazelcastTestSupport illustrated:</strong>
+ * <ul>
+ *   <li>{@link HazelcastTestSupport#createHazelcastInstance()} to create a member</li>
+ * </ul>
+ *
+ * <p><strong>HazelcastSerialClassRunner illustrated:</strong>
+ * <ul>
+ *   <li>Ensures tests in this class are run serially rather than in parallel</li>
+ * </ul>
+ *
+ * <p><strong>@Repeat annotation illustrated:</strong>
+ * <ul>
+ *   <li>{@link Repeat} to re-run a test method multiple times</li>
+ * </ul>
+ */
 @RunWith(HazelcastSerialClassRunner.class)
-public class FlakyTest
-        extends HazelcastTestSupport {
+public class FlakyTest extends HazelcastTestSupport {
 
     private static final AtomicInteger run = new AtomicInteger();
     private static final AtomicInteger counter = new AtomicInteger();
@@ -37,20 +57,24 @@ public class FlakyTest
     }
 
     /**
-     * This is a deliberately flaky test that will always fail in its form, hence it's Ignored.
-     * To "fix" the test, set alwaysFail to false.
+     * Demonstrates a test that fails intermittently by design.
+     *
+     * <p>The test is repeated 5 times with {@link Repeat}, but since
+     * {@code alwaysFail} is {@code true}, the counter will not increment
+     * reliably and the final assertion will fail.
+     *
+     * <p>To "fix" the test, set {@code alwaysFail} to {@code false}.
      */
     @Repeat(5)
     @Ignore
     @Test
     public void testFlakyBehavior() {
-
         IMap<String, Integer> map = member1.getMap("map");
         map.put("key", 0);
 
         boolean alwaysFail = true;
         if (alwaysFail) {
-            // simulate intermittent behavior: succeed only half the time
+            // simulate intermittent behaviour: succeed only half the time
             if (System.nanoTime() % 2 == 0) {
                 map.put("key", counter.incrementAndGet());
             }
@@ -60,11 +84,10 @@ public class FlakyTest
 
         System.out.println("> run=" + run.incrementAndGet() + ", value=" + map.get("key"));
 
-        // then: assert that the map put worked only half of the time
         Integer v = map.get("key");
         assertNotNull("Map should have a value", v);
-        // since this test is repeated 5 times, the value of the counter should be 5
-        // in reality, since this is a flaky test, it'll fail with a value less than 5.
+        // Since the test is repeated 5 times, we expect the counter to equal the run count.
+        // In reality, because it's flaky, the assertion will fail.
         assertEquals("Map increments should match number of runs", (int) v, run.get());
     }
 }

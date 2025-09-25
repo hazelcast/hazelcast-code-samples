@@ -15,6 +15,9 @@ import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Minimal Jet pipeline test writing a few integers to a distributed list.
+ */
 @RunWith(JUnit4.class)
 public class MyPipelineTest extends JetTestSupport {
 

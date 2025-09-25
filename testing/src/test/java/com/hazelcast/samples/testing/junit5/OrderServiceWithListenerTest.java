@@ -17,6 +17,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
+/**
+ * Tests {@link HzOrderService} with an update listener.
+ *
+ * <p>Verifies listener registration and delivery with a real member plus Mockito’s timeout verification.
+ */
 public class OrderServiceWithListenerTest {
 
     private TestHazelcastFactory factory;
@@ -33,6 +38,10 @@ public class OrderServiceWithListenerTest {
         }
     }
 
+    /**
+     * Verify that placing and updating an order triggers the
+     * registered listener exactly once within the expected time window.
+     */
     @Test
     void orderServiceListenerIsInvoked() {
         HazelcastInstance instance = factory.newHazelcastInstance();

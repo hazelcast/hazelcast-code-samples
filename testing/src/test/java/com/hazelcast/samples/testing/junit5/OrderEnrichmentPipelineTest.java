@@ -26,6 +26,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests the {@link OrderEnrichmentPipeline} using Hazelcast Jet enabled members.
+ *
+ * <p>Shows Jet in JUnit 5: TestSources for input, inline Assertions for streaming termination, and checking enriched output.
+ */
 public class OrderEnrichmentPipelineTest {
 
     private TestHazelcastFactory factory;
@@ -46,6 +51,10 @@ public class OrderEnrichmentPipelineTest {
         }
     }
 
+    /**
+     * Verify that orders are enriched with customer data
+     * and written to the target list in a batch pipeline.
+     */
     @Test
     void testJetOrderEnrichmentWithHazelcastState() {
         HazelcastInstance instance = factory.newHazelcastInstance(config);
@@ -66,6 +75,12 @@ public class OrderEnrichmentPipelineTest {
         assertTrue(result.stream().anyMatch(o -> o.customerName().equals("Bob")));
     }
 
+    /**
+     * Verify enrichment in a streaming pipeline with inline assertions.
+     *
+     * <p>The job is expected to terminate with
+     * {@link AssertionCompletedException} once the assertion passes.
+     */
     @Test
     void streamingEnrichmentWithInlineAssertion() {
         HazelcastInstance instance = factory.newHazelcastInstance(config);

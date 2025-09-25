@@ -18,6 +18,9 @@ import static com.hazelcast.test.HazelcastTestSupport.assertEqualsEventually;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+/**
+ * Verifies client behaviour during a member shutdown and captures the membership event.
+ */
 public class MyClusterFailureTest {
 
     private HazelcastInstance client;
@@ -45,6 +48,7 @@ public class MyClusterFailureTest {
         ListenerConfig listenerConfig = new ListenerConfig(mockListener);
         listenerConfig.setImplementation(mockListener);
         clientConfig.addListenerConfig(listenerConfig);
+
         client = factory.newHazelcastClient(clientConfig);
     }
 
@@ -55,18 +59,31 @@ public class MyClusterFailureTest {
         }
     }
 
+    /**
+     * Shut down one member and verify:
+     * <ul>
+     *   <li>Cluster size drops from 2 to 1</li>
+     *   <li>Previously written map data remains readable</li>
+     *   <li>A {@code memberRemoved} event is received for the correct member (attribute {@code m=1})</li>
+     * </ul>
+     */
     @Test
     void testClusterFailure() {
         assertClusterSizeEventually(2, client);
+
         member1.getMap("testMap").put("key1", "value1");
         assertEqualsEventually(() -> client.getMap("testMap").get("key1"), "value1");
+
         member1.shutdown();
         assertClusterSizeEventually(1, client);
         member1 = null;
+
         assertEqualsEventually(() -> client.getMap("testMap").get("key1"), "value1");
+
         ArgumentCaptor<MembershipEvent> membershipCaptor = ArgumentCaptor.forClass(MembershipEvent.class);
         verify(mockListener).memberRemoved(membershipCaptor.capture());
         MembershipEvent membershipEvent = membershipCaptor.getValue();
+
         assertEqualsEventually(() -> membershipEvent.getMember().getAttribute("m"), "1");
     }
 }

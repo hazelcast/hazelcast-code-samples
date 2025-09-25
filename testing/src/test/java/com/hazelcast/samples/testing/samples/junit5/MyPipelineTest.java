@@ -31,6 +31,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Minimal Jet pipeline test writing a few integers to a distributed list JUnit5 version.
+ *
+ * <p>Smallest Jet example: enable Jet, run a pipeline, and assert sink contents—great starter for pipeline testing.
+ */
 class MyPipelineTest {
     private HazelcastInstance instance;
     private TestHazelcastFactory factory;

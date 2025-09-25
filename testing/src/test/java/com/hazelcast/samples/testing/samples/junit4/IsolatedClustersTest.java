@@ -17,11 +17,10 @@ import static com.hazelcast.test.HazelcastTestSupport.assertClusterSizeEventuall
 import static com.hazelcast.test.HazelcastTestSupport.assertEqualsEventually;
 
 /**
- * This test shows how multiple tests can be run in parallel and in isolation, to test
- * business logic on Hazelcast data structures.
- * By running tests in parallel their execution can be expedited.
- * Isolation can be achieved by assigning random cluster names to the
- * config so each test doesn't interfere with the other.
+ * Demonstrates running multiple Hazelcast clusters in parallel
+ * to test business logic in isolation.
+ *
+ * <p>Illustrates running isolated, parallel test clusters using randomName(), HazelcastParallelClassRunner, and client+member provisioning.
  */
 @RunWith(HazelcastParallelClassRunner.class)
 public class IsolatedClustersTest {
@@ -48,27 +47,32 @@ public class IsolatedClustersTest {
         }
     }
 
+    /**
+     * Verify that business logic increments a map value,
+     * and that the isolated cluster processes state correctly.
+     */
     @Test
     public void isolatedClustersDontInterfere_clusterA() {
-
-        // Custom business logic
         IMap<String, Integer> map = client.getMap("isolatedMap");
         map.put("key", 1);
-        map.executeOnKey("key", (EntryProcessor<String, Integer, Integer>) entry -> entry.setValue(entry.getValue() + 1));
+        map.executeOnKey("key",
+                (EntryProcessor<String, Integer, Integer>) entry -> entry.setValue(entry.getValue() + 1));
 
-        // verify cluster formed and data is available
         assertClusterSizeEventually(2, members[0]);
         assertEqualsEventually(() -> map.get("key"), 2);
     }
 
+    /**
+     * Verify that business logic decrements a map value,
+     * and that the isolated cluster processes state correctly.
+     */
     @Test
     public void isolatedClustersDontInterfere_clusterB() {
-        // Custom business logic
         IMap<String, Integer> map = client.getMap("isolatedMap");
         map.put("key", 1);
-        map.executeOnKey("key", (EntryProcessor<String, Integer, Integer>) entry -> entry.setValue(entry.getValue() - 1));
+        map.executeOnKey("key",
+                (EntryProcessor<String, Integer, Integer>) entry -> entry.setValue(entry.getValue() - 1));
 
-        // verify cluster formed and data is processed
         assertClusterSizeEventually(2, members[0]);
         assertEqualsEventually(() -> map.get("key"), 0);
     }

@@ -16,6 +16,11 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * Tests Hazelcast integration with a mocked {@link MapStore}.
+ *
+ * <p>Exercises mocked MapStore for load success/failure and verifies write-behind (writeDelaySeconds) with timed verification.
+ */
 class MyMapStoreTest {
 
     private static TestHazelcastFactory factory;
@@ -25,15 +30,17 @@ class MyMapStoreTest {
     static void setup() {
         factory = new TestHazelcastFactory();
 
-        // Create a mock MapStore that throws on load
-        @SuppressWarnings("unchecked") MapStore<String, String> mockMapStore = mock(MapStore.class);
+        @SuppressWarnings("unchecked")
+        MapStore<String, String> mockMapStore = mock(MapStore.class);
         when(mockMapStore.load("fail")).thenThrow(new RuntimeException("Simulated failure"));
         when(mockMapStore.load("key1")).thenReturn("value1");
 
-        // Configure Hazelcast to use the mock MapStore
         Config config = new Config();
         config.setClusterName("mock-mapstore-test");
-        config.getMapConfig("testMap").getMapStoreConfig().setEnabled(true).setImplementation(mockMapStore);
+        config.getMapConfig("testMap")
+              .getMapStoreConfig()
+              .setEnabled(true)
+              .setImplementation(mockMapStore);
 
         hz = factory.newHazelcastInstance(config);
     }
@@ -43,33 +50,42 @@ class MyMapStoreTest {
         factory.shutdownAll();
     }
 
+    /**
+     * Verify a successful load from the mock MapStore.
+     */
     @Test
     void testSuccessfulLoadFromMock() {
         IMap<String, String> map = hz.getMap("testMap");
-
-        // This triggers MapStore.load("key1")
         String result = map.get("key1");
         assertEquals("value1", result);
     }
 
+    /**
+     * Verify that an exception thrown from MapStore.load is propagated.
+     */
     @Test
     void testLoadFailureHandled() {
         IMap<String, String> map = hz.getMap("testMap");
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
-            map.get("fail"); // triggers MapStore.load("fail")
-        });
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> map.get("fail")); // triggers MapStore.load("fail")
 
         assertEquals("Simulated failure", ex.getMessage());
     }
 
+    /**
+     * Verify that asynchronous store is invoked after write-delay.
+     */
     @Test
     void testAsyncStoreIsInvoked() {
+        @SuppressWarnings("unchecked")
         MapStore<String, String> mockMapStore = mock(MapStore.class);
 
-        // Configure and start another instance for the store test
         Config config = new Config().setClusterName("store-test");
-        config.getMapConfig("storeMap").getMapStoreConfig().setEnabled(true).setWriteDelaySeconds(1) // async write to MapStore after 1s
+        config.getMapConfig("storeMap")
+              .getMapStoreConfig()
+              .setEnabled(true)
+              .setWriteDelaySeconds(1) // async write after 1s
               .setImplementation(mockMapStore);
 
         HazelcastInstance storeHz = factory.newHazelcastInstance(config);
@@ -77,7 +93,7 @@ class MyMapStoreTest {
 
         storeMap.put("k2", "v2");
 
-        // Verify that store was called with a timeout larger than the setWriteDelaySeconds
+        // Verify store() was invoked within expected delay
         verify(mockMapStore, timeout(1500)).store("k2", "v2");
 
         storeHz.shutdown();
