@@ -20,8 +20,8 @@ import static com.hazelcast.test.HazelcastTestSupport.assertEqualsEventually;
  * This test shows how multiple tests can be run in parallel and in isolation, to test
  * business logic on Hazelcast data structures.
  * By running tests in parallel their execution can be expedited.
- * Isolation can be achieved by assigning random names to the
- * cluster so each test doesn't interfere with the other.
+ * Isolation can be achieved by assigning random cluster names to the
+ * config so each test doesn't interfere with the other.
  */
 @RunWith(HazelcastParallelClassRunner.class)
 public class IsolatedClustersTest {
