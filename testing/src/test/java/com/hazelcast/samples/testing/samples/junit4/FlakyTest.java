@@ -38,7 +38,7 @@ public class FlakyTest
 
     /**
      * This is a deliberately flaky test that will always fail in its form, hence it's Ignored.
-     * To "fix" the test, set alwaysFail to true.
+     * To "fix" the test, set alwaysFail to false.
      */
     @Repeat(5)
     @Ignore
