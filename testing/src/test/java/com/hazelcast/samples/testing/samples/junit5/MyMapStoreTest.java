@@ -40,9 +40,6 @@ class MyMapStoreTest {
 
     @AfterAll
     static void teardown() {
-        if (hz != null) {
-            hz.shutdown();
-        }
         factory.shutdownAll();
     }
 
