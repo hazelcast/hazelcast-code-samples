@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 public class OrderServiceWithListenerTest
         extends HazelcastTestSupport {
     @Mock
-    Consumer<Order> mockConsumer;
+    private Consumer<Order> mockConsumer;
     private HazelcastInstance instance;
 
     @Test
