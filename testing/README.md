@@ -127,7 +127,7 @@ To use `JetTestSupport` the following dependencies must be included:
     </dependency>
 ```
 
-With `JetTestSupport` utility methods available, one can test distributed jobs like:
+With `JetTestSupport`, utility methods available and distributed jobs can be tested as follows:
 
 ```java
     @Test
@@ -159,6 +159,8 @@ The approach shown in the previous example doesn't work in cases where streams a
 In this case, an approach based on a set of `assert*` utilities that can be injected in the pipeline is preferable.
 
 For example, here we inject a data source and assert on the number of received items in the output stream.
+
+The full test class is [OrderEnrichmentPipelineTest](src/test/java/com/hazelcast/samples/testing/junit5/OrderEnrichmentPipelineTest.java).
 
 ```java
     @Test
