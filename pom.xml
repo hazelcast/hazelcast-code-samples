@@ -88,6 +88,7 @@
         <module>generic-record</module>
         <module>sql</module>
         <module>ai</module>
+        <module>testing</module>
     </modules>
 
     <build>
@@ -230,6 +231,13 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-bom</artifactId>
+                <version>5.20.0</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -262,7 +270,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.8.0</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
