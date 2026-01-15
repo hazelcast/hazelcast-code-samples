@@ -7,6 +7,7 @@
         <artifactId>spring</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
+    <packaging>war</packaging>
 
     <artifactId>spring-session-servlet</artifactId>
 
@@ -42,6 +43,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
+            <version>7.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
             <version>7.0.2</version>
         </dependency>
         <dependency>

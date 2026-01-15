@@ -30,7 +30,7 @@ import org.springframework.security.core.userdetails.User;
 public class SecurityConfig {
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
         auth.inMemoryAuthentication()
             .withUser(User.withUsername("user").password("{noop}password").roles("USER").build());
     }
