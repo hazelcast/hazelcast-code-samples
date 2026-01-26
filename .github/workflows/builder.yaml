@@ -22,6 +22,8 @@ jobs:
   pr-builder:
     runs-on: ubuntu-latest
     needs: check_for_membership
+    permissions:
+      id-token: write
     steps:
       - name: Detect untrusted community PR
         if: ${{ needs.check_for_membership.outputs.check-result == 'false' && github.actor != 'dependabot[bot]' }}
