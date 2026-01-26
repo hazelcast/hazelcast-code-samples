@@ -1,7 +1,7 @@
 Hazelcast Code Samples Readme
 =============================
 
-The folder **/code-samples** in your package contains an extensive collection of code samples which you can use to learn how to use Hazelcast features. From distributed primitives to Service Provider Interface (SPI), you can see Hazelcast in action readily.
+The folder **/code-samples** in your package contains an extensive collectiocnncbn of code samples which you can use to learn how to use Hazelcast features. From distributed primitives to Service Provider Interface (SPI), you can see Hazelcast in action readily.
 
 How to run
 ----------
