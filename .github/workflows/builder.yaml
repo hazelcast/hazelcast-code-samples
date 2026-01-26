@@ -6,8 +6,6 @@ on:
 jobs:
   check_for_membership:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
     name: Check PR author membership
     outputs:
       check-result: ${{ steps.composite.outputs.check-result }}
@@ -21,6 +19,8 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
   pr-builder:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     needs: check_for_membership
     steps:
       - name: Detect untrusted community PR
