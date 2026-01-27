@@ -1,12 +1,12 @@
 package com.hazelcast.guide.controller;
 
+import com.hazelcast.spring.session.HazelcastIndexedSessionRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.MediaType;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
-import org.springframework.session.hazelcast.HazelcastIndexedSessionRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -104,7 +104,7 @@ public class SessionController {
                 """;
         String rows = attributes.entrySet().stream()
                                 .map(e -> addHtmlTableRow(e.getKey(), e.getValue()))
-                                .collect(Collectors.joining("%n"));
+                                .collect(Collectors.joining("\n"));
         return html.formatted(rows);
     }
 
