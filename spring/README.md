@@ -16,3 +16,5 @@
     Spring Boot Hazelcast Integration Example via [Spring Framework Caching Abstraction](https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#cache).
 - <h3>springboot-http</h3>
     Spring Boot style HTTP session replication, using embedded web container in standalone Jar.    
+  - <h3>spring-session-servlet</h3>
+    Hazelcast Spring Session example without the usage of Spring Boot, only pure Servlets.
