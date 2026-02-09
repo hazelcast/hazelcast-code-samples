@@ -7,7 +7,6 @@ import org.jspecify.annotations.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public record Basket (String principalName, List<BasketItem> items) implements Serializable {
@@ -19,7 +18,7 @@ public record Basket (String principalName, List<BasketItem> items) implements S
         public Basket read(CompactReader compactReader) {
             String principalName1 = compactReader.readString("principalName");
             BasketItem[] items1 = compactReader.readArrayOfCompact("items", BasketItem.class);
-            return new Basket(principalName1, new ArrayList<>(Arrays.asList(items1)));
+            return new Basket(principalName1, new ArrayList<>(List.of(items1)));
         }
 
         @Override
