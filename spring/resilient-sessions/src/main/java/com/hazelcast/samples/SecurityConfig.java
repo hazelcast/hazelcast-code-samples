@@ -71,5 +71,4 @@ public class SecurityConfig {
             .withUser(User.withUsername("user2").password("{noop}password2").roles("USER").build())
         ;
     }
-
 }

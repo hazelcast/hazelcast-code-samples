@@ -26,7 +26,7 @@ import java.util.List;
 import static com.hazelcast.samples.ShopConfiguration.SESSION_MAP_NAME;
 import static com.hazelcast.spring.session.HazelcastSessionConfiguration.applySerializationConfig;
 
-@EnableAutoConfiguration(exclude = {HazelcastObjectExtractionConfiguration.class})
+@EnableAutoConfiguration(exclude = HazelcastObjectExtractionConfiguration.class)
 @Configuration
 @EnableHazelcastHttpSession(sessionMapName = SESSION_MAP_NAME, flushMode = FlushMode.IMMEDIATE)
 public class ShopConfiguration {
@@ -91,9 +91,7 @@ public class ShopConfiguration {
     @Bean
     @ConditionalOnExpression("${use.wan.replication:false} == false")
     public SessionMapCustomizer customizeRepository() {
-        return mapConfig -> {
-                mapConfig.setBackupCount(1);
-        };
+        return mapConfig -> mapConfig.setBackupCount(1);
     }
 
     @Bean

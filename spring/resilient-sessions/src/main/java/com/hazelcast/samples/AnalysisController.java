@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -60,10 +58,9 @@ public class AnalysisController {
                     var basket = s.getAttribute("basket").deserialize(hz, Basket.class);
 
                     Instant lastAccessedTime = s.getLastAccessedTime();
-                    String timeStatus = "OK";
-                    if (Instant.now().isAfter(lastAccessedTime.plusSeconds(30))) {
-                        timeStatus = "STALE";
-                    }
+                    String timeStatus = Instant.now().isAfter(lastAccessedTime.plusSeconds(30))
+                            ? "STALE"
+                            : "OK";
 
                     BigDecimal totalValue = basket.items().stream()
                                                   .map(item -> item.orderPrice().multiply(new BigDecimal(item.quantity())))
