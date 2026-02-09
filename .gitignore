@@ -21,3 +21,5 @@ osgi/felix-cache/
 *.code-workspace
 dependency-reduced-pom.xml
 /enterprise/tls-rbac-demo/keymaterial/
+
+**/licensekey.env
