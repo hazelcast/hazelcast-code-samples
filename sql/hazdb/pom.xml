@@ -32,7 +32,7 @@
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <dockerfile.skip>true</dockerfile.skip>
         <frontend-maven-plugin.version>1.15.4</frontend-maven-plugin.version>
-        <hazelcast.version>5.1</hazelcast.version>
+        <hazelcast.version>5.5.0</hazelcast.version>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss</maven.build.timestamp.format>
         <my.cluster.name>${docker.image.prefix}</my.cluster.name>
         <node.version>v17.8.0</node.version>
