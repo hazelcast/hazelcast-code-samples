@@ -31,9 +31,6 @@ import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-/**
- * @author Rob Winch
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
