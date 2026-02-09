@@ -58,6 +58,7 @@
         <module>spring-boot-caching-jcache</module>
         <module>spring-boot-session-replication-spring-session-hazelcast</module>
         <module>spring-session-servlet</module>
+        <module>resilient-sessions</module>
     </modules>
 
     <dependencies>

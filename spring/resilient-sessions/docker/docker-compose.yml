@@ -1,0 +1,33 @@
+name: resilient-sessions
+
+services:
+  london-cluster:
+    image: hazelcast/hazelcast-enterprise:latest
+    hostname: london-cluster-1
+    ports:
+      - "5701:5701"
+    volumes:
+      - ./conf-lon:/opt/hazelcast/config
+    env_file:
+      - licensekey.env
+    environment:
+      - HAZELCAST_CONFIG=/opt/hazelcast/config/config.yml
+
+  nyc-cluster:
+    image: hazelcast/hazelcast-enterprise:latest
+    hostname: nyc-cluster-1
+    ports:
+      - "5702:5701"
+    volumes:
+      - ./conf-newyork:/opt/hazelcast/config
+    env_file:
+      - licensekey.env
+    environment:
+      - HAZELCAST_CONFIG=/opt/hazelcast/config/config.yml
+
+  management-center:
+    image: hazelcast/management-center:latest
+    ports:
+      - "8180:8080"
+    env_file:
+      - licensekey.env
