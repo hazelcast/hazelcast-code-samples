@@ -61,7 +61,7 @@ public class AnalysisController {
 
                     Instant lastAccessedTime = s.getLastAccessedTime();
                     String timeStatus = "OK";
-                    if (Instant.now().isAfter(lastAccessedTime.plus(Duration.of(30, ChronoUnit.SECONDS)))) {
+                    if (Instant.now().isAfter(lastAccessedTime.plusSeconds(30))) {
                         timeStatus = "STALE";
                     }
 
