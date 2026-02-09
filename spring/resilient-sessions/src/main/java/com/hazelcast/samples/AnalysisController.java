@@ -31,6 +31,10 @@ import static com.hazelcast.samples.ShopConfiguration.SESSION_MAP_NAME;
 @RestController
 public class AnalysisController {
 
+    /**
+     * Example value of minimal price to send the notification.
+     * Typically in production use it would come from some environment configuration.
+     */
     private static final BigDecimal MINIMAL_PRICE_FOR_NOTIF = new BigDecimal(100);
 
     private final HazelcastInstance hazelcastInstance;
@@ -80,5 +84,4 @@ public class AnalysisController {
         analyzeResults.destroy();
         return stats.toString();
     }
-
 }
