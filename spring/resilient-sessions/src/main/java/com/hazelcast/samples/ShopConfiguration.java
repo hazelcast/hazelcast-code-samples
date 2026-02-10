@@ -98,5 +98,4 @@ public class ShopConfiguration {
     public IMap<Long, ProductDto> products(HazelcastInstance hazelcastInstance) {
         return hazelcastInstance.getMap("products");
     }
-
 }
