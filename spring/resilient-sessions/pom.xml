@@ -39,10 +39,11 @@
     </repositories>
 
     <dependencies>
+        <!-- TODO update post-release -->
         <dependency>
             <groupId>com.hazelcast.spring</groupId>
             <artifactId>hazelcast-spring-session</artifactId>
-            <version>${spring-boot.version}-SNAPSHOT</version>
+            <version>4.0.0-RC1</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.hazelcast</groupId>
