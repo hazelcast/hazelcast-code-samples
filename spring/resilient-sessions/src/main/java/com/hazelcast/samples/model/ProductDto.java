@@ -7,6 +7,12 @@ import org.jspecify.annotations.NonNull;
 
 import java.math.BigDecimal;
 
+/**
+ * A product definition.
+ * @param id some unique id
+ * @param name name of the product, shown on the UI
+ * @param listPrice list price, in {@link BigDecimal} to make floating-point errors in calculations less likely.
+ */
 public record ProductDto(long id, String name, BigDecimal listPrice) {
 
     public static class Serializer implements CompactSerializer<ProductDto> {

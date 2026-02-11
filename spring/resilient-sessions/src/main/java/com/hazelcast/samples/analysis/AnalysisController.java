@@ -1,4 +1,4 @@
-package com.hazelcast.samples;
+package com.hazelcast.samples.analysis;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetService;
@@ -11,13 +11,13 @@ import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
 import com.hazelcast.map.IMap;
 import com.hazelcast.samples.model.Basket;
-import com.hazelcast.samples.model.BasketItem;
 import com.hazelcast.spring.session.BackingMapSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +37,17 @@ public class AnalysisController {
      */
     private static final BigDecimal MINIMAL_PRICE_FOR_NOTIF = new BigDecimal(100);
 
+    /**
+     * Duration after which session is marked as "Stale".
+     * Intentionally very low, to make testing easier.
+     */
+    private static final Duration MAX_INACTIVE_DURATION = Duration.ofSeconds(10);
+
     private final HazelcastInstance hazelcastInstance;
 
     @Autowired
     public AnalysisController(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
-    }
-
-    record SessionReminderDto(String sessionId, String userId, String timeStatus, List<BasketItem> items, BigDecimal totalPrice) {
     }
 
     @RequestMapping("/basket/analyze")
@@ -62,7 +65,8 @@ public class AnalysisController {
                     var basket = s.getAttribute("basket").deserialize(hz, Basket.class);
 
                     Instant lastAccessedTime = s.getLastAccessedTime();
-                    String timeStatus = Instant.now().isAfter(lastAccessedTime.plusSeconds(30))
+                    Duration howLongInactive = Duration.between(lastAccessedTime, Instant.now());
+                    String timeStatus = howLongInactive.compareTo(MAX_INACTIVE_DURATION) > 0
                             ? "STALE"
                             : "OK";
 
@@ -71,7 +75,7 @@ public class AnalysisController {
                                                   .reduce(BigDecimal.ZERO, BigDecimal::add);
                     return new SessionReminderDto(s.getId(), s.getPrincipalName(), timeStatus, basket.items(), totalValue);
                 })
-                .filter(dto -> dto.totalPrice.compareTo(MINIMAL_PRICE_FOR_NOTIF) > 0 && dto.timeStatus().equals("STALE"))
+                .filter(dto -> dto.totalPrice().compareTo(MINIMAL_PRICE_FOR_NOTIF) > 0 && dto.timeStatus().equals("STALE"))
                 .peek()
                 .writeTo(Sinks.observable(analyzeResults));
 
