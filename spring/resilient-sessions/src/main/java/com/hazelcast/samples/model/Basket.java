@@ -14,7 +14,7 @@ import java.util.List;
  * @param principalName username of the user that's logged into the shop and is putting items in the basket.
  * @param items a collection of items, added by the user
  */
-public record Basket (String principalName, List<BasketItem> items) implements Serializable {
+public record Basket(String principalName, List<BasketItem> items) implements Serializable {
 
     public static class Serializer implements CompactSerializer<Basket> {
 

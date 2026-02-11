@@ -14,7 +14,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.6.1</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -46,7 +46,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.3.0</version>
+            <version>3.6.1</version>
             <executions>
               <execution>
                 <phase>package</phase>
@@ -139,7 +139,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.24.2</version>
+      <version>3.27.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

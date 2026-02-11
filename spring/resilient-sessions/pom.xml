@@ -19,6 +19,9 @@
         <spring.version>7.0.2</spring.version>
         <hazelcast.version>5.6.0</hazelcast.version>
         <spring-boot.version>4.0.0</spring-boot.version>
+
+        <!-- needed for checkstyle/findbugs -->
+        <main.basedir>${project.parent.parent.basedir}</main.basedir>
     </properties>
 
     <repositories>

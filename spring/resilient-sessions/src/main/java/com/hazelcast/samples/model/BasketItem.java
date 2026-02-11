@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * @param orderPrice order price of the item; {@link BigDecimal} to make floating-point errors in calculations less likely.
  * @param quantity number of given products in this item.
  */
-public record BasketItem (ProductDto product, BigDecimal orderPrice, int quantity) {
+public record BasketItem(ProductDto product, BigDecimal orderPrice, int quantity) {
 
     public static class Serializer implements CompactSerializer<BasketItem> {
 
