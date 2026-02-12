@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.hazelcast.spring</groupId>
             <artifactId>hazelcast-spring-session</artifactId>
-            <version>4.0.0-RC1</version>
+            <version>4.0.0-RC2</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.hazelcast</groupId>
