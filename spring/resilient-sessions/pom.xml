@@ -12,6 +12,7 @@
     </parent>
 
     <properties>
+        <hazelcast.version>5.6.0</hazelcast.version>
         <spring.version>7.0.2</spring.version>
         <spring-boot.version>4.0.0</spring-boot.version>
 
