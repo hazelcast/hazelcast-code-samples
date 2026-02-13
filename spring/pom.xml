@@ -58,14 +58,10 @@
         <module>spring-boot-caching-jcache</module>
         <module>spring-boot-session-replication-spring-session-hazelcast</module>
         <module>spring-session-servlet</module>
+        <module>resilient-sessions</module>
     </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>com.hazelcast.samples</groupId>
-            <artifactId>helper</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>

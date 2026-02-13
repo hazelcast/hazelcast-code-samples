@@ -1,0 +1,32 @@
+hazelcast:
+  cluster-name: london-cluster
+  network:
+    port:
+      port-count: 20
+      auto-increment: true
+      port:
+        5701
+    join:
+      multicast:
+        enabled: false
+      tcp-ip:
+        enabled: true
+        member-list:
+          - london-cluster-1
+  wan-replication:
+    replicate-to-nyc:
+      batch-publisher:
+        nycPublisher:
+          cluster-name: nyc-cluster
+          target-endpoints: "nyc-cluster-1:5701"
+  map:
+    shopSessions:
+      wan-replication-ref:
+        replicate-to-nyc:
+          merge-policy-class-name: PutIfAbsentMergePolicy
+      backup-count: 1
+      # because we are modifying IMap's config not via sessionMapConfigCustomizer, we need to add the index manually
+      indexes:
+        - type: HASH
+          attributes:
+            - "principalName"
