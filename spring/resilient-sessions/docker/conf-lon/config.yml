@@ -30,3 +30,8 @@ hazelcast:
         - type: HASH
           attributes:
             - "principalName"
+    products:
+      wan-replication-ref:
+        replicate-to-nyc:
+          merge-policy-class-name: PutIfAbsentMergePolicy
+      backup-count: 1

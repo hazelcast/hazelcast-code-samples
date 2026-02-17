@@ -3,10 +3,12 @@ package guides.hazelcast.springboot;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.web.servlet.client.RestTestClient;
 
 import java.time.Duration;
 import java.util.Map;
@@ -20,8 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = HazelcastApplication.class)
 class CommandControllerIT {
 
-    @Autowired
-    private WebTestClient webTestClient;
+    private RestTestClient restTestClient;
 
     @Autowired
     private HazelcastInstance hazelcastInstance;
@@ -29,10 +30,18 @@ class CommandControllerIT {
     @Autowired
     private Map<String, String> keyValueMap;
 
+    @LocalServerPort
+    private int port;
+
+    @BeforeEach
+    public void setUp() {
+        restTestClient = RestTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
+    }
+
     @Test
     void testPutRequest() {
         //when
-        WebTestClient.ResponseSpec responseSpec = makePutRequest("key1", "value1");
+        RestTestClient.ResponseSpec responseSpec = makePutRequest("key1", "value1");
 
         //then
         responseSpec.expectStatus()
@@ -51,7 +60,7 @@ class CommandControllerIT {
         makePutRequest("key1", "value1");
 
         //when
-        WebTestClient.ResponseSpec responseSpec = webTestClient
+        RestTestClient.ResponseSpec responseSpec = restTestClient
                 .get()
                 .uri("/get?key={key}", "key1")
                 .header(ACCEPT, APPLICATION_JSON_VALUE)
@@ -66,8 +75,8 @@ class CommandControllerIT {
                     .jsonPath("$.value").isEqualTo("value1");
     }
 
-    private WebTestClient.ResponseSpec makePutRequest(Object... parameters) {
-        return webTestClient
+    private RestTestClient.ResponseSpec makePutRequest(Object... parameters) {
+        return restTestClient
                 .post()
                 .uri("/put?key={key}&value={value}", parameters)
                 .header(ACCEPT, APPLICATION_JSON_VALUE)

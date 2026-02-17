@@ -45,7 +45,7 @@
         <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
 
         <lombok.version>1.18.40</lombok.version>
-        <spring.boot.version>3.5.4</spring.boot.version>
+        <spring.boot.version>4.0.0</spring.boot.version>
     </properties>
 
     <modules>
