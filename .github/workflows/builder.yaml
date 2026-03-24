@@ -55,7 +55,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_HAZELCAST_OIDC_GITHUB_ACTIONS_ROLE_ARN }}
           aws-region: 'us-east-1'
       - name: Get Secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        uses: aws-actions/aws-secretsmanager-get-secrets@v3
         with:
           secret-ids: |
             HZ_LICENSE_KEY,CN/HZ_LICENSE_KEY
