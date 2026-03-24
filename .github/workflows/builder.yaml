@@ -40,7 +40,7 @@ jobs:
           large-packages: false
           docker-images: false
           swap-storage: true
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
       - name: Set up Java
