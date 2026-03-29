@@ -22,7 +22,7 @@
         <main.basedir>${project.parent.parent.basedir}</main.basedir>
 
         <jclouds.version>1.9.1</jclouds.version>
-        <hazelcast.version>3.12.6</hazelcast.version>
+        <hazelcast.version>5.5.0</hazelcast.version>
     </properties>
 
     <dependencies>

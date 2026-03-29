@@ -130,7 +130,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <profile.hazelcast.version>3.9.2</profile.hazelcast.version>
+                <profile.hazelcast.version>5.5.0</profile.hazelcast.version>
                 <profile.jsr107.version>1.0.0</profile.jsr107.version>
             </properties>
         </profile>
