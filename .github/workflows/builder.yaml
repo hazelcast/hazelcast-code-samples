@@ -14,8 +14,9 @@ jobs:
         id: composite
         uses: hazelcast/hazelcast-tpm/membership@main
         with:
+          organization-name: 'hazelcast'
           member-name: ${{ github.actor }}
-          token: ${{ github.token }}
+          token: ${{ secrets.GH_TOKEN }}
   pr-builder:
     runs-on: ubuntu-latest
     permissions:
@@ -25,8 +26,7 @@ jobs:
       - name: Detect untrusted community PR
         if: ${{ needs.check_for_membership.outputs.check-result == 'false' && github.event.pull_request.user.login != 'dependabot[bot]' }}
         run: |
-          source /dev/stdin <<< "$(curl --silent https://raw.githubusercontent.com/hazelcast/github-actions-common-scripts/main/logging.functions.sh)"
-          echoerr "Untrusted external PR. Must be reviewed and executed by Hazelcast"
+          echo "::error::ERROR: Untrusted external PR. Must be reviewed and executed by Hazelcast" 1>&2;
           exit 1
       # Default GitHub runners have very little free disk space causing build failures
       # This operation can be intensive, so remove as little as possible to gain useful space
