@@ -14,7 +14,7 @@ jobs:
         id: composite
         uses: hazelcast/hazelcast-tpm/membership@main
         with:
-          member-name: ${{ github.actor }}
+          member-name: ${{ github.triggering_actor }}
           token: ${{ secrets.GH_TOKEN }}
   pr-builder:
     runs-on: ubuntu-latest
