@@ -52,7 +52,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: ${{ secrets.AWS_HAZELCAST_OIDC_GITHUB_ACTIONS_ROLE_ARN }}
+          role-to-assume: ${{ vars.AWS_HAZELCAST_OIDC_GITHUB_ACTIONS_ROLE_ARN }}
           aws-region: 'us-east-1'
       - name: Get Secrets
         uses: aws-actions/aws-secretsmanager-get-secrets@v3
