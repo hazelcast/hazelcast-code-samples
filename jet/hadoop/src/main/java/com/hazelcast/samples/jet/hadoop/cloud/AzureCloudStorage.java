@@ -41,8 +41,9 @@ public class AzureCloudStorage {
     private static final String CONTAINER_NAME = "jet-azure-hdfs-example-container";
 
     public static void main(String[] args) throws Exception {
-        Path inputPath = new Path("abfs://" + CONTAINER_NAME + "@" + ACCOUNT_NAME + ".dfs.core.windows.net/");
-        Path outputPath = new Path("abfs://" + CONTAINER_NAME + "@" + ACCOUNT_NAME + ".dfs.core.windows.net/results");
+        String base = "abfs://" + CONTAINER_NAME + "@" + ACCOUNT_NAME + ".dfs.core.windows.net/";
+        Path inputPath = new Path(base);
+        Path outputPath = new Path(base + "results");
 
         JobConf jobConf = new JobConf();
         jobConf.set("fs.azure.account.auth.type." + ACCOUNT_NAME + ".dfs.core.windows.net", "SharedKey");
