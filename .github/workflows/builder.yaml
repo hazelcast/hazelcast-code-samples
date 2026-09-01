@@ -2,6 +2,8 @@ name: Builder
 
 on:
   pull_request_target:
+    branches:
+      - master
 
 jobs:
   check_for_membership:
