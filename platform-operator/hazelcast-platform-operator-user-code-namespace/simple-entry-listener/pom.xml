@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>5.4.0</version>
+            <version>5.7.0</version>
         </dependency>
     </dependencies>
 
