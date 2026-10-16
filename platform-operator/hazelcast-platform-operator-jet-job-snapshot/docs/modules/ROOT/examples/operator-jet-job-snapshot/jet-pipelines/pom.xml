@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <hazelcast-version>5.4.0</hazelcast-version>
+        <hazelcast-version>5.7.0</hazelcast-version>
         <junit-jupiter-api-version>5.8.2</junit-jupiter-api-version>
         <maven-surefire-plugin-version>3.0.0-M7</maven-surefire-plugin-version>
     </properties>
