@@ -1,7 +1,6 @@
 # Connectivity to the database
 spring:
   datasource:
-    continue-on-error: true
     driver-class-name: org.hsqldb.jdbc.JDBCDriver
     password: ''
     url:  'jdbc:hsqldb:hsql://localhost/mydatabase'
@@ -9,8 +8,7 @@ spring:
 
 # Configuration for Hazelcast
 hazelcast:
-  group:
-    name: 'jsongrid'
+  cluster-name: jsongrid
   network:
     port:
       port: 9701

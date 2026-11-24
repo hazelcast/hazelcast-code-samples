@@ -4,6 +4,7 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientFailoverConfig;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.EventJournalConfig;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -11,7 +12,7 @@ import com.hazelcast.map.IMap;
 import com.hazelcast.samples.model.Basket;
 import com.hazelcast.samples.model.BasketItem;
 import com.hazelcast.samples.model.ProductDto;
-import com.hazelcast.spring.HazelcastObjectExtractionConfiguration;
+import com.hazelcast.samples.sql.BasketItemDto;
 import com.hazelcast.spring.session.SessionMapCustomizer;
 import com.hazelcast.spring.session.config.annotation.SpringSessionHazelcastInstance;
 import com.hazelcast.spring.session.config.annotation.web.http.EnableHazelcastHttpSession;
@@ -26,7 +27,7 @@ import java.util.List;
 import static com.hazelcast.samples.ShopConfiguration.SESSION_MAP_NAME;
 import static com.hazelcast.spring.session.HazelcastSessionConfiguration.applySerializationConfig;
 
-@EnableAutoConfiguration(exclude = HazelcastObjectExtractionConfiguration.class)
+@EnableAutoConfiguration
 @Configuration
 @EnableHazelcastHttpSession(sessionMapName = SESSION_MAP_NAME, flushMode = FlushMode.IMMEDIATE)
 public class ShopConfiguration {
@@ -41,15 +42,19 @@ public class ShopConfiguration {
     @ConditionalOnExpression("${use.wan.replication:false} == false")
     public HazelcastInstance hazelcastInstance() {
         Config config = new Config();
-        config.getJetConfig().setEnabled(true);
+        config.setClusterName("dev");
+        config.setLicenseKey(System.getenv("HZ_LICENSEKEY"));
+        config.getJetConfig().setEnabled(true).setResourceUploadEnabled(true);
         config.getSerializationConfig().getCompactSerializationConfig()
               .addSerializer(new BasketItem.Serializer())
               .addSerializer(new Basket.Serializer())
-              .addSerializer(new ProductDto.Serializer());
+              .addSerializer(new ProductDto.Serializer())
+              .addSerializer(new BasketItemDto.Serializer());
 
         // Note: map configuration should be done via SessionRepositoryCustomizer!
 
         config.addMapConfig(new MapConfig("products"));
+        config.addMapConfig(new MapConfig("shopSessions").setEventJournalConfig(new EventJournalConfig().setEnabled(true)));
         applySerializationConfig(config);
         return Hazelcast.newHazelcastInstance(config);
     }

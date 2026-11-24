@@ -21,11 +21,7 @@ So to configure Hazelcast from YAML, you might have a file named
 
 ```
 hazelcast:
-  group:
-    name: 'jsongrid'
-  management-center:
-    enabled: true
-    url: 'http://localhost:8080/hazelcast-mancenter'
+  cluster-name: jsongrid
   network:
     port:
       port: 9701
@@ -42,11 +38,7 @@ This would replace old XML style,
 
 ```
 <hazelcast>
-     <group>
-          <name>jsongrid</name>
-     </group>
-
-     <management-center enabled="true">http://localhost:8080/hazelcast-mancenter</management-center>
+     <cluster-name>jsongrid</cluster-name>
      <network>
           <port>9701</port>
           <join>

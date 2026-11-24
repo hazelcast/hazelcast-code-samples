@@ -1,5 +1,8 @@
 hazelcast:
   cluster-name: london-cluster
+  jet:
+    enabled: true
+    resource-upload-enabled: true
   network:
     port:
       port-count: 20
