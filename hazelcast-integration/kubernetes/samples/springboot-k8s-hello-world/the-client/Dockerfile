@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:17-jre
 
 # Copy from Maven build output
 ARG JAR_FILE
