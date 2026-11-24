@@ -54,9 +54,7 @@ public class AnalysisController {
         //noinspection DataFlowIssue
         var basket = s.getAttribute("basket").deserialize(hz, Basket.class);
 
-        Instant lastAccessedTime = s.getLastAccessedTime();
-        Duration howLongInactive = Duration.between(lastAccessedTime, Instant.now());
-        String timeStatus = howLongInactive.compareTo(MAX_INACTIVE_DURATION) > 0
+        String timeStatus = Instant.now().isAfter(s.getLastAccessedTime().plus(MAX_INACTIVE_DURATION))
                 ? "STALE"
                 : "OK";
 

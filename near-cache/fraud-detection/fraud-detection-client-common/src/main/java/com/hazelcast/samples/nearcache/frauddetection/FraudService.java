@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 
 import static java.lang.Long.parseLong;
 import static java.lang.String.format;
@@ -87,9 +86,10 @@ public class FraudService {
         airportsMap = hazelcastInstance.getMap(MyConstants.MAP_NAME_AIRPORTS);
         IMap<Integer, User> usersMap = hazelcastInstance.getMap(MyConstants.MAP_NAME_USERS);
 
-        // Ensure only one clients run at a time as they interfere on usersMap
-        Lock lock = hazelcastInstance.getCPSubsystem().getLock("client");
-        if (!lock.tryLock(1, TimeUnit.SECONDS)) {
+        // Only one client can reset and update usersMap during a run.
+        IMap<String, Boolean> benchmarkLocks = hazelcastInstance.getMap("benchmark-locks");
+        String lockKey = MyConstants.MAP_NAME_USERS;
+        if (!benchmarkLocks.tryLock(lockKey, 1, TimeUnit.SECONDS)) {
             System.err.printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %n");
             System.err.printf("!!!           E R R O R           !!! %n");
             System.err.printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %n");
@@ -142,7 +142,7 @@ public class FraudService {
             } catch (Exception e) {
                 log.error("test()", e);
             } finally {
-                lock.unlock();
+                benchmarkLocks.unlock(lockKey);
             }
         }
     }
