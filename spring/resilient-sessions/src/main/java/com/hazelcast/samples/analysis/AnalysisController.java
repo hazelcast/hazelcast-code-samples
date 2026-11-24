@@ -50,6 +50,22 @@ public class AnalysisController {
         this.hazelcastInstance = hazelcastInstance;
     }
 
+    private static SessionReminderDto applyAnalysis(HazelcastInstance hz, BackingMapSession s) {
+        //noinspection DataFlowIssue
+        var basket = s.getAttribute("basket").deserialize(hz, Basket.class);
+
+        Instant lastAccessedTime = s.getLastAccessedTime();
+        Duration howLongInactive = Duration.between(lastAccessedTime, Instant.now());
+        String timeStatus = howLongInactive.compareTo(MAX_INACTIVE_DURATION) > 0
+                ? "STALE"
+                : "OK";
+
+        BigDecimal totalValue = basket.items().stream()
+                                      .map(item -> item.orderPrice().multiply(new BigDecimal(item.quantity())))
+                                      .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new SessionReminderDto(s.getId(), s.getPrincipalName(), timeStatus, basket.items(), totalValue);
+    }
+
     @RequestMapping("/basket/analyze")
     public String analyze()
             throws ExecutionException, InterruptedException {
@@ -60,21 +76,7 @@ public class AnalysisController {
         ServiceFactory<?, HazelcastInstance> serviceFactory = nonSharedService(ProcessorMetaSupplier.Context::hazelcastInstance);
         pipeline.readFrom(Sources.map(sessions))
                 .map(Map.Entry::getValue)
-                .mapUsingService(serviceFactory, (hz, s) -> {
-                    //noinspection DataFlowIssue
-                    var basket = s.getAttribute("basket").deserialize(hz, Basket.class);
-
-                    Instant lastAccessedTime = s.getLastAccessedTime();
-                    Duration howLongInactive = Duration.between(lastAccessedTime, Instant.now());
-                    String timeStatus = howLongInactive.compareTo(MAX_INACTIVE_DURATION) > 0
-                            ? "STALE"
-                            : "OK";
-
-                    BigDecimal totalValue = basket.items().stream()
-                                                  .map(item -> item.orderPrice().multiply(new BigDecimal(item.quantity())))
-                                                  .reduce(BigDecimal.ZERO, BigDecimal::add);
-                    return new SessionReminderDto(s.getId(), s.getPrincipalName(), timeStatus, basket.items(), totalValue);
-                })
+                .mapUsingService(serviceFactory, AnalysisController::applyAnalysis)
                 .filter(dto -> dto.totalPrice().compareTo(MINIMAL_PRICE_FOR_NOTIF) > 0 && dto.timeStatus().equals("STALE"))
                 .peek()
                 .writeTo(Sinks.observable(analyzeResults));
