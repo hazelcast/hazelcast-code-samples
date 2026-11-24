@@ -20,9 +20,6 @@
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.parent.basedir}</main.basedir>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <spring.version>4.3.7.RELEASE</spring.version>
-        <spring.boot.version>3.5.4</spring.boot.version>
     </properties>
 
     <modules>

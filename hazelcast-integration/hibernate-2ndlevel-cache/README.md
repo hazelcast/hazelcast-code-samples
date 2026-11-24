@@ -1,7 +1,7 @@
 # Hibernate 2nd Level Cache with Hazelcast
 
 In this repository, you can find a sample usage of Hibernate 2nd level cache with Hazelcast. You can also find 
-detailed explanation about the plugin at the [repository](https://github.com/hazelcast/hazelcast-hibernate). 
+details about [Hibernate’s JCache integration](https://docs.hibernate.org/orm/7.2/userguide/html_single/Hibernate_User_Guide.html#caching-provider-jcache).
 
 ## Prerequisites
 
@@ -26,10 +26,9 @@ mvn exec:java -Dexec.mainClass="com.hazelcast.hibernate.QueryCache"
 ```
 
 - Hibernate and Hazelcast configuration can be set on xml files under `resources` directory. For instance,
-if you want to use the L2C with Hazelcast client, then you need to set the corresponding property in    
-`hibernate.cfg.xml` such that:
+to use a Hazelcast client for the second-level cache, change the provider in `hibernate.cfg.xml`:
 ```
-<property name="hibernate.cache.hazelcast.use_native_client">false</property>
+<property name="hibernate.javax.cache.provider">com.hazelcast.client.cache.HazelcastClientCachingProvider</property>
 ```
 
 Keep in mind that if Hazelcast client is used, then there must be a Hazelcast instance up and running. The

@@ -22,9 +22,9 @@ public class QueryCache {
         session = HibernateUtil.createNewSession();
         tx = session.getTransaction();
         tx.begin();
-        session.save(new Item("New Hazelcast Item-0", 100));
-        session.save(new Item("New Hazelcast Item-1", 101));
-        session.save(new Item("New Hazelcast Item-2", 102));
+        session.persist(new Item("New Hazelcast Item-0", 100));
+        session.persist(new Item("New Hazelcast Item-1", 101));
+        session.persist(new Item("New Hazelcast Item-2", 102));
         tx.commit();
         session.close();
 
@@ -63,7 +63,7 @@ public class QueryCache {
         Transaction tx;
         tx = session.getTransaction();
         tx.begin();
-        return (List<Item>) session.createQuery(query)
+        return session.createSelectionQuery(query, Item.class)
                 .setMaxResults(10).setCacheable(true).setCacheRegion(QUERY_CACHE_REGION).list();
     }
 }

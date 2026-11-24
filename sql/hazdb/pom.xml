@@ -37,7 +37,7 @@
         <my.cluster.name>${docker.image.prefix}</my.cluster.name>
         <node.version>v17.8.0</node.version>
         <npm.version>8.5.4</npm.version>
-        <springdoc.version>1.6.7</springdoc.version>
+        <springdoc.version>3.0.3</springdoc.version>
     </properties>
 
     <dependencies>
@@ -61,13 +61,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-hazelcast</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
+                <artifactId>spring-boot-dependencies</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
                 <version>${spring.boot.version}</version>
@@ -75,7 +79,7 @@
 
             <dependency>
                 <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${springdoc.version}</version>
             </dependency>
         </dependencies>

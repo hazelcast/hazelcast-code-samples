@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast xmlns="http://www.hazelcast.com/schema/config">
+    <cluster-name>hibernate-2lc-test</cluster-name>
+    <network>
+        <join>
+            <auto-detection enabled="false"/>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="false"/>
+        </join>
+    </network>
+</hazelcast>

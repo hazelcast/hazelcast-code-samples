@@ -1,7 +1,5 @@
 package com.hazelcast.hibernate.springhibernate2lc;
 
-import com.hazelcast.core.DistributedObject;
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.hibernate.springhibernate2lc.persistence.Book;
 import com.hazelcast.hibernate.springhibernate2lc.persistence.BookRepository;
 import jakarta.persistence.EntityManager;
@@ -10,11 +8,9 @@ import org.hibernate.stat.Statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.Collection;
+import javax.cache.CacheManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,19 +20,12 @@ class Runner implements CommandLineRunner {
 
     private final BookRepository repository;
 
-    private final HazelcastInstance hazelcastInstance;
-
-    private final TransactionTemplate transactionTemplate;
-
     private final CacheManager cacheManager;
 
     private final EntityManager entityManager;
 
-    Runner(BookRepository repository, HazelcastInstance hazelcastInstance,
-                  TransactionTemplate transactionTemplate, CacheManager cacheManager, EntityManager entityManager) {
+    Runner(BookRepository repository, CacheManager cacheManager, EntityManager entityManager) {
         this.repository = repository;
-        this.hazelcastInstance = hazelcastInstance;
-        this.transactionTemplate = transactionTemplate;
         this.cacheManager = cacheManager;
         this.entityManager = entityManager;
     }
@@ -72,8 +61,6 @@ class Runner implements CommandLineRunner {
         // query cache hit
         findAllBooks();
 
-        printCachesFromHazelcast();
-
         Session session = (Session) entityManager.getDelegate();
 
         printCachesFromCacheManager();
@@ -83,17 +70,9 @@ class Runner implements CommandLineRunner {
     }
 
     private void printCachesFromCacheManager() {
-        Collection<String> cacheNames = cacheManager.getCacheNames();
         LOGGER.info("Caches from cacheManager:");
-        for (String cacheName : cacheNames) {
-            LOGGER.info(" - " + cacheName);
-        }
-    }
-
-    private void printCachesFromHazelcast() {
-        LOGGER.info("Caches from hazelcast:");
-        for (DistributedObject distributedObject : hazelcastInstance.getDistributedObjects()) {
-            LOGGER.info(" - {}", distributedObject.getName());
+        for (String cacheName : cacheManager.getCacheNames()) {
+            LOGGER.info(" - {}", cacheName);
         }
     }
 

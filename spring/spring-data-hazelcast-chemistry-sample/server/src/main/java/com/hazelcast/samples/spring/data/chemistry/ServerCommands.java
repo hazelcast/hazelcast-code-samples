@@ -4,7 +4,7 @@ import com.hazelcast.samples.spring.data.chemistry.service.ChemistryService;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Map;
 import java.util.Set;
 

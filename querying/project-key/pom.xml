@@ -68,7 +68,7 @@
             <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html#using-boot-maven-without-a-parent -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
+                <artifactId>spring-boot-dependencies</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
                 <version>${spring.boot.version}</version>

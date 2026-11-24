@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>com.hazelcast.samples</groupId>
+        <artifactId>hazelcast-integration</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
     <artifactId>aws-ecs</artifactId>
     <groupId>com.hazelcast.samples</groupId>
     <version>0.1-SNAPSHOT</version>
@@ -21,10 +27,10 @@
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
+                <artifactId>spring-boot-dependencies</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
-                <version>3.5.4</version>
+                <version>${spring.boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -32,7 +38,11 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hazelcast</artifactId>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
@@ -60,20 +70,13 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>0.9.13</version>
+                <version>3.5.2</version>
                 <configuration>
+                    <from>
+                        <image>eclipse-temurin:17-jre</image>
+                    </from>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
                 </configuration>
             </plugin>

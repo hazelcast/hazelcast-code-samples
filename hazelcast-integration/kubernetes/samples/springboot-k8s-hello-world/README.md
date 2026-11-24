@@ -511,7 +511,7 @@ with names containing the word *"kubernetes"*.
 In the same window, run these three commands.
 
 ```
-docker pull library/openjdk:11-jre-slim
+docker pull eclipse-temurin:17-jre
 docker pull library/busybox
 docker pull hazelcast/management-center:4.0.1
 ```

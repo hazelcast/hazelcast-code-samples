@@ -6,8 +6,10 @@
 
     <cluster-name>dev</cluster-name>
 
-    <!-- Entity-specific cache configuration    -->
-    <map name="com.hazelcast.hibernate.springhibernate2lc.persistence.Book">
-        <time-to-live-seconds>30</time-to-live-seconds>
-    </map>
+    <!-- The cache name matches the Hibernate entity region. -->
+    <cache name="com.hazelcast.hibernate.springhibernate2lc.persistence.Book">
+        <expiry-policy-factory>
+            <timed-expiry-policy-factory expiry-policy-type="CREATED" duration-amount="30" time-unit="SECONDS"/>
+        </expiry-policy-factory>
+    </cache>
 </hazelcast>

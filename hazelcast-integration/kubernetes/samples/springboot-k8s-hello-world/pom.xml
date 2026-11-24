@@ -57,7 +57,11 @@
         <!-- All executable jars are HTTP port 8080 enabled -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-hazelcast</artifactId>
         </dependency>
     </dependencies>
 
@@ -66,7 +70,7 @@
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
+                <artifactId>spring-boot-dependencies</artifactId>
                 <type>pom</type>
                 <scope>import</scope>
                 <version>${spring.boot.version}</version>

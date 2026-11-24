@@ -19,7 +19,7 @@ package com.hazelcast.samples.jet.sessionwindow;
 import com.hazelcast.jet.Traverser;
 import com.hazelcast.jet.core.AbstractProcessor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;

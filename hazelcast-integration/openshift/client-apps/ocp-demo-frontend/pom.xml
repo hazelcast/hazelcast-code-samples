@@ -15,10 +15,22 @@
     <properties>
         <!-- needed for checkstyle/findbugs -->
         <main.basedir>${project.parent.parent.parent.parent.basedir}</main.basedir>
+        <jkube.java.version>${java.version}</jkube.java.version>
     </properties>
 
-    <dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
+    <dependencies>
         <dependency>
             <groupId>com.hazelcast.samples.openshift.client-apps</groupId>
             <artifactId>ocp-entry-processor</artifactId>
@@ -34,32 +46,22 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot.version}</version>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <version>${spring.boot.version}</version>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring.boot.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -80,7 +82,7 @@
             <plugin>
                 <groupId>org.eclipse.jkube</groupId>
                 <artifactId>openshift-maven-plugin</artifactId>
-                <version>1.0.0-rc-1</version>
+                <version>1.20.0</version>
                 <configuration>
                     <generator>
                         <includes>

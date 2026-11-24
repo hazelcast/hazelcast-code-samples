@@ -1,12 +1,11 @@
 <server>
 
     <featureManager>
-        <feature>servlet-3.1</feature>
+        <feature>servlet-6.0</feature>
         <feature>distributedMap-1.0</feature>
         <feature>webCache-1.0</feature>
-        <!-- hazelcast-dynacache depends on this -->
-        <feature>javaee-7.0</feature>
-        <feature>hazelcast-dynacache</feature>
+        <!-- Install the Hazelcast DynaCache ESA as a Liberty user feature. -->
+        <feature>usr:hazelcast-dynacache</feature>
     </featureManager>
 
     <httpEndpoint id="defaultHttpEndpoint"

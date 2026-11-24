@@ -28,7 +28,7 @@ import com.hazelcast.jet.pipeline.Sources;
 import com.hazelcast.jet.pipeline.StreamSource;
 import com.hazelcast.jet.pipeline.WindowDefinition;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;

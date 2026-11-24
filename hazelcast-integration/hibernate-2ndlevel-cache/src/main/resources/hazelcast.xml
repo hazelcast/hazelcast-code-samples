@@ -19,11 +19,11 @@
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
            http://www.hazelcast.com/schema/config/hazelcast-config-5.5.xsd">
 
-    <!-- Hibernate regions can be configured here using the map names. -->
-    <map name="custom_region_name">
-        <time-to-live-seconds>100</time-to-live-seconds>
-        <max-idle-seconds>50</max-idle-seconds>
-        <eviction eviction-policy="NONE" max-size-policy="PER_NODE" size="0"/>
-    </map>
+    <!-- The cache name matches the Hibernate entity region. -->
+    <cache name="hazelcast-region.Item-Cache">
+        <expiry-policy-factory>
+            <timed-expiry-policy-factory expiry-policy-type="CREATED" duration-amount="100" time-unit="SECONDS"/>
+        </expiry-policy-factory>
+    </cache>
 
 </hazelcast>

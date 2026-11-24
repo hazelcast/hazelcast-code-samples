@@ -28,17 +28,32 @@ You can see that Eureka Sever started correctly by opening the browser at: http:
 
 The first project `hazelcast-only` presents how to use the Eureka-based Hazelcast discovery if you don't need to register your Spring Boot application at the same time.
 
-The simplest Hazelcast configuration looks as follows.
+Configure Hazelcast with a dedicated Eureka client that uses Jakarta Jersey.
 
 ```java
 @Bean
 public Config hazelcastConfig() {
+    // The plugin can reuse a client supplied by the application. Use the Jakarta Jersey transport.
+    String namespace = "hazelcast";
+    String instanceId = UUID.randomUUID().toString();
+    MyDataCenterInstanceConfig instanceConfig = new MyDataCenterInstanceConfig(namespace) {
+        @Override
+        public String getInstanceId() {
+            return instanceId;
+        }
+    };
+    DiscoveryClient client = new DiscoveryClient(new ApplicationInfoManager(instanceConfig),
+            new DefaultEurekaClientConfig(namespace), Jersey3TransportClientFactories.getInstance());
+    EurekaOneDiscoveryStrategyFactory.setEurekaClient(client);
+
     Config config = new Config();
+    config.getNetworkConfig().setPort(hazelcastPort);
     config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
     config.getNetworkConfig().getJoin().getEurekaConfig()
           .setEnabled(true)
           .setProperty("self-registration", "true")
-          .setProperty("namespace", "hazelcast");
+          .setProperty("namespace", namespace)
+          .setProperty("use-metadata-for-host-and-port", "true");
     return config;
 }
 ```
@@ -49,6 +64,7 @@ You also need to configure the Eureka Client specific properties in the `eureka-
 hazelcast.shouldUseDns=false
 hazelcast.name=hazelcast-only
 hazelcast.serviceUrl.default=http://localhost:8761/eureka/
+hazelcast.client.refresh.interval=5
 ```
 
 With such configuration you can start two Spring Boot applications.
@@ -77,7 +93,7 @@ That is the simplest Eureka-based Hazelcast discovery. Sometimes, however, you n
 
 If you need to have your application registered in Eureka as well, then the simplest way is to use separate Eureka clients. Then, Hazelcast is registered completely separately and it's visible in Eureka as a separate application.
 
-To achieve this effect, your Hazelcast configuration is exactly the same as in the previous point, but you need to add the Eureka Client configuration for your Spring Boot Application. You can do it by adding `@EnableDiscoveryClient` to your `Application` class and defining the following `bootstrap.properties` file.
+To achieve this effect, your Hazelcast configuration is exactly the same as in the previous point, but you need to add the Eureka Client configuration for your Spring Boot Application. You can do it by adding `@EnableDiscoveryClient` to your `Application` class and defining the following `application.properties` file.
 
 ```properties
 spring.application.name=spring-boot-application

@@ -1,6 +1,9 @@
 package com.hazelcast.samples.jcache.timestable;
 
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.shell.Bootstrap;
 
 /**
@@ -10,6 +13,11 @@ import org.springframework.shell.Bootstrap;
  */
 @SpringBootApplication
 public class Application {
+
+    @Bean(destroyMethod = "shutdown")
+    public HazelcastInstance hazelcastInstance() {
+        return Hazelcast.newHazelcastInstance();
+    }
 
     /**
      * Set Hazelcast logging type and let

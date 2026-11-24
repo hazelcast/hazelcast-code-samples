@@ -73,7 +73,7 @@ The domain objects and elsewhere use the [Lombok](https://projectlombok.org) uti
 if Lombok isn't part of your IDE classpath, then the IDE will not know that these are generated and complain that
 the code is faulty. You need to add Lombok to the IDE classpath to make these messages go away, see  [`Running Lombok`](https://projectlombok.org/features).
 
-Although Hazelcast doesn't depend on Java 8, some of the Spring Data dependencies do, so you need to use a Java 8 JDK to build.
+Use JDK 17 or later to build the Spring Boot 4 samples.
 
 ## Before - Architecture
 Refer to the following diagram:
