@@ -1,3 +1,5 @@
+> This sample requires a Java EE server. The published Hazelcast JCA resource adapter uses the `javax.resource` SPI, which requires a compatible server and application API.
+
 # ABOUT
 A simple example of Hazelcast JCA connection.
  

@@ -1,4 +1,4 @@
-eureka: 
+eureka:
   instance:
     # Network card to use
     hostname: localhost

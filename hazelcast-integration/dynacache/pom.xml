@@ -23,22 +23,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ibm.websphere.appserver.api</groupId>
-            <artifactId>com.ibm.websphere.appserver.api.basics</artifactId>
-            <version>1.2.9</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ibm.tools.target</groupId>
-            <artifactId>was-liberty</artifactId>
-            <version>8.5.x.6</version>
-            <type>pom</type>
+            <artifactId>com.ibm.websphere.appserver.api.distributedMap</artifactId>
+            <version>2.0.119</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -59,7 +52,7 @@
                     <configuration>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
                         <packagingExcludes>
-                            WEB-INF/lib/hazelcast-all-*.jar,
+                            WEB-INF/lib/hazelcast-*.jar,
                             WEB-INF/lib/helper-*.jar
                         </packagingExcludes>
                     </configuration>
@@ -67,11 +60,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <repositories>
-        <repository>
-            <id>wasdev</id>
-            <url>https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/maven/repository/</url>
-        </repository>
-    </repositories>
 </project>

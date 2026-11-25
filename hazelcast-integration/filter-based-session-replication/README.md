@@ -4,7 +4,7 @@ This project is prepared to serve as a sample application for Hazelcast, the lea
 
 ## Requirements
 
-You should have installed Tomcat or Jetty and Apache Maven on your system. There are other requirements already in this repo.
+Use Apache Maven and a Jakarta Servlet 6.1 container such as Tomcat 11 or Jetty 12.1 with the `ee11-deploy` and `ee11-jsp` modules.
 
 ### Load Balancing With Tomcat or Jetty
 
@@ -26,6 +26,6 @@ https://tomcat.apache.org/connectors-doc/reference/workers.html
 
 # Jetty Deployment
 
-* `cp target/session-replication.war $JETTY_HOME/webapps/` - Copy war to Jetty
+* `cp target/session-replication.war $JETTY_BASE/webapps/` - Copy war to Jetty
 * Browse to `http://localhost:8080/session-replication/hazelcast`
 

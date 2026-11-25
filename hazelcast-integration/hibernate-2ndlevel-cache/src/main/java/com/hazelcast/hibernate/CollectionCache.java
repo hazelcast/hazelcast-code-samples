@@ -61,7 +61,7 @@ public class CollectionCache {
 
         Transaction tx = session.beginTransaction();
 
-        session.save(item1);
+        session.persist(item1);
 
         tx.commit();
         session.close();

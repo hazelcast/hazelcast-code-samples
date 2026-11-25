@@ -18,7 +18,7 @@ public class EntityCache {
         session = HibernateUtil.createNewSession();
         tx = session.getTransaction();
         tx.begin();
-        session.save(new Item("item-1", 1));
+        session.persist(new Item("item-1", 1));
         tx.commit();
         session.close();
 

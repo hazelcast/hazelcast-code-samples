@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import com.atomikos.datasource.xa.XATransactionalResource;
+import com.atomikos.icatch.config.Configuration;
 import com.atomikos.icatch.jta.UserTransactionManager;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -22,7 +24,7 @@ import com.hazelcast.transaction.HazelcastXAResource;
 import com.hazelcast.transaction.TransactionContext;
 import com.hazelcast.transaction.TransactionalMap;
 
-import javax.transaction.Transaction;
+import jakarta.transaction.Transaction;
 import javax.transaction.xa.XAResource;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -35,24 +37,35 @@ public class XATransaction {
         HazelcastInstance instance = Hazelcast.newHazelcastInstance();
         HazelcastXAResource xaResource = instance.getXAResource();
 
+        // Atomikos needs a named resource to associate the XA branch with recovery.
+        Configuration.addResource(new XATransactionalResource("hazelcast") {
+            @Override
+            protected XAResource refreshXAConnection() {
+                return xaResource;
+            }
+        });
         UserTransactionManager tm = new UserTransactionManager();
-        tm.begin();
+        try {
+            tm.begin();
 
-        Transaction transaction = tm.getTransaction();
-        transaction.enlistResource(xaResource);
-        TransactionContext context = xaResource.getTransactionContext();
-        TransactionalMap<Object, Object> map = context.getMap("map");
-        map.put("key", "val");
-        transaction.delistResource(xaResource, XAResource.TMSUCCESS);
+            Transaction transaction = tm.getTransaction();
+            transaction.enlistResource(xaResource);
+            TransactionContext context = xaResource.getTransactionContext();
+            TransactionalMap<Object, Object> map = context.getMap("map");
+            map.put("key", "val");
+            transaction.delistResource(xaResource, XAResource.TMSUCCESS);
 
-        tm.commit();
+            tm.commit();
 
-        IMap<Object, Object> m = instance.getMap("map");
-        Object val = m.get("key");
-        System.out.println("value: " + val);
+            IMap<Object, Object> m = instance.getMap("map");
+            Object val = m.get("key");
+            System.out.println("value: " + val);
 
+        } finally {
+            tm.close();
+            Hazelcast.shutdownAll();
+        }
         cleanAtomikosLogs();
-        Hazelcast.shutdownAll();
     }
 
     private static void cleanAtomikosLogs() {

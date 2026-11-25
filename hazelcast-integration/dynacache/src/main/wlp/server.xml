@@ -1,13 +1,15 @@
 <server>
 
     <featureManager>
-        <feature>servlet-3.1</feature>
+        <feature>servlet-6.0</feature>
         <feature>distributedMap-1.0</feature>
         <feature>webCache-1.0</feature>
-        <!-- hazelcast-dynacache depends on this -->
-        <feature>javaee-7.0</feature>
-        <feature>hazelcast-dynacache</feature>
+        <!-- Install the Hazelcast 5.7 DynaCache ESA built from upstream source. -->
+        <feature>usr:hazelcast-dynacache</feature>
     </featureManager>
+
+    <distributedMap id="some-hz-map" jndiName="services/cache/some-hz-map"
+                    cacheProviderName="hazelcast" memorySizeInEntries="1000"/>
 
     <httpEndpoint id="defaultHttpEndpoint"
                   host="*"

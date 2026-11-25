@@ -18,20 +18,15 @@
         <property name="hibernate.cache.use_minimal_puts">true</property>
         <property name="hibernate.cache.use_query_cache">true</property>
 
-        <property name="hibernate.cache.hazelcast.use_native_client">false</property>
-
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
 
         <!-- Enable second level cache -->
         <property name="hibernate.cache.use_second_level_cache">true</property>
 
-        <!-- Configure Hazelcast Region Factory -->
-        <property name="hibernate.cache.region.factory_class">com.hazelcast.hibernate.HazelcastCacheRegionFactory</property>
-
-        <!-- to use local cache, use LocalCacheRegionFactory
-        <property name="hibernate.cache.region.factory_class">com.hazelcast.hibernate.HazelcastLocalCacheRegionFactory</property>
-        -->
+        <property name="hibernate.cache.region.factory_class">jcache</property>
+        <property name="hibernate.javax.cache.provider">com.hazelcast.cache.HazelcastMemberCachingProvider</property>
+        <property name="hibernate.javax.cache.missing_cache_strategy">create</property>
 
         <!-- Display all executed SQL to stdout -->
         <property name="show_sql">true</property>
