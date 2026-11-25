@@ -4,9 +4,12 @@
         <feature>servlet-6.0</feature>
         <feature>distributedMap-1.0</feature>
         <feature>webCache-1.0</feature>
-        <!-- Install the Hazelcast DynaCache ESA as a Liberty user feature. -->
+        <!-- Install the Hazelcast 5.7 DynaCache ESA built from upstream source. -->
         <feature>usr:hazelcast-dynacache</feature>
     </featureManager>
+
+    <distributedMap id="some-hz-map" jndiName="services/cache/some-hz-map"
+                    cacheProviderName="hazelcast" memorySizeInEntries="1000"/>
 
     <httpEndpoint id="defaultHttpEndpoint"
                   host="*"

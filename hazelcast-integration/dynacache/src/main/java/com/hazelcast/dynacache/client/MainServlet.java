@@ -18,7 +18,7 @@ public class MainServlet extends HttpServlet {
         try {
             InitialContext ic = new InitialContext();
 
-            DistributedMap map = (DistributedMap) ic.lookup("some-hz-map");
+            DistributedMap map = (DistributedMap) ic.lookup("services/cache/some-hz-map");
             System.out.println("Found 'some-hz-map' via JNDI: " + map);
 
             Object putResult = map.put("the key", "the value", 1000, 1000, EntryInfo.SHARED_PUSH_PULL,
@@ -49,7 +49,7 @@ public class MainServlet extends HttpServlet {
             SomeClass someObjectRetrieved = (SomeClass) map.get("key1");
             resp.getWriter().write(someObjectRetrieved.toString());
         } catch (NamingException e) {
-            e.printStackTrace();
+            throw new ServletException("Unable to look up the DynaCache distributed map", e);
         }
     }
 }

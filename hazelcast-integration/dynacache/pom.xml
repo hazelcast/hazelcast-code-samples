@@ -52,7 +52,7 @@
                     <configuration>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
                         <packagingExcludes>
-                            WEB-INF/lib/hazelcast-all-*.jar,
+                            WEB-INF/lib/hazelcast-*.jar,
                             WEB-INF/lib/helper-*.jar
                         </packagingExcludes>
                     </configuration>
